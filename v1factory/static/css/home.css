@@ -1,0 +1,28 @@
+.IN-widget {
+  display: inline-block;
+  padding: 5px;
+}
+
+.pane p {
+  font-size: 16px;
+  vertical-align: bottom;
+}
+
+h2 {
+  font-size: 42px;
+  line-height: 50px;
+}
+
+.login.pane .line {
+  height: 42px;
+}
+
+
+.login.pane form input[type="password"], input[type="text"] {
+  width: 120px;
+  float: right;
+}
+
+input[type="password"], input[type="text"] {
+  height: 32px;
+}

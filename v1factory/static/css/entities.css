@@ -1,0 +1,104 @@
+.entity .pane {
+  padding: 30px 20px;
+  min-height: 160px;
+}
+
+.sub-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.property-list {
+  list-style: circle;
+}
+
+.add-entity {
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  float: none;
+}
+
+.add-entity .pane {
+  background-color: transparent;
+  border: 5px solid #2b3545;
+  color: #2b3545;
+  font-size: 18px;
+  text-align: center;
+}
+
+input[type="text"].property-name-input {
+  height: 34px;
+  padding-left: 10px;
+}
+
+input[type="text"] {
+  height: 32px;
+  padding: 10px;
+}
+
+ul.entity-list {
+  display: inline-block;
+  min-height: 80px;
+}
+
+select {
+  width: 100px;
+  display: block;
+}
+
+.cross {
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  font-size: 24px;
+  line-height: 24px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.cross:hover {
+  color: #2b3545;
+  background-color: #fff;
+}
+
+.plus {
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-right: 4px;
+}
+
+.add-property-button {
+  cursor: pointer;
+}
+
+.add-property-button:hover .plus {
+  color: #2b3545;
+  background-color: #fff;
+}
+
+ul.property-list li {
+  margin-top: 10px;
+  padding-top: 10px;
+  list-style-position: inside;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.cross.small {
+  vertical-align: top;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-bottom: 4px;
+}

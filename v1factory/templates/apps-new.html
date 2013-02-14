@@ -1,0 +1,17 @@
+<html>
+  <body>
+    <p>Welcome {{ user }}.</p>
+    <p>To get started with you new Heap Engine app, we need to know how far along you already are.</p>
+    <p>Do you need a domain name?</p>
+    <p>Do you already have designs, do you already have web hosting? Lorem ipsum</p>
+    <p>Cool! Now let's build your idea and make you millions.</p>
+    <form method="post" action="{% url v1factory.views.app_new %}">
+      {% csrf_token %}
+      <button type='submit'>Make it!</button>
+    </form>
+    <br>
+    <br>
+    <br>
+    <a href="{% url v1factory.views.app_list %}">I changed my mind. Back to my apps.</a>
+  </body>
+</html>

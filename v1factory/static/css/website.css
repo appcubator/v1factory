@@ -1,0 +1,119 @@
+* {
+  box-sizing:border-box;
+  -moz-box-sizing:border-box; /* Firefox */
+  -webkit-box-sizing:border-box; /* Safari */
+}
+
+body {
+  font: normal 14px/20px "proxima-nova", Arial, sans-serif;
+  font-weight: lighter;
+  background-color: #efefef;
+  padding-bottom: 60px;
+}
+
+h2 {  
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h1.name {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 40px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.pane {
+  position: relative;
+  display: inline-block;
+  background-color: #2b3545 ;
+  border-radius: 6px;
+  color: #fff;
+  box-shadow: 0 1px 3px #b9bbbe;
+  width: 100%;
+}
+
+.pane.inset {
+  box-shadow: inset 0 0 3px #b9bbbe;
+  border: 1px solid #bbb;
+  color: #000;
+  background-color: transparent;
+}
+
+.logo {
+  display: inline-block;
+  position: relative;
+  float: right;
+  height: 220px;
+  width: 220px;
+  vertical-align: top;
+  top:10px;
+  right: 0px;
+}
+
+.engine1 {
+  position: absolute;
+  right: 60px;
+  top: 0px;
+  width: 140px;
+  height: 140px;
+  background-image: url('../img/engine.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+}
+
+.engine2 {
+  position: absolute;
+  right: 0px;
+  top: 100px;
+  width: 100px;
+  height: 100px;
+  background-image: url('../img/engine.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+}
+
+.block {
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+}
+
+a:visited {
+  color: inherit;
+}
+
+.t-border {
+  border-top: 1px solid #ccc;
+  padding-top: 2px;
+}
+
+.b-border {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 2px;
+}
+
+.tb-border {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.buttons {
+  padding-top: 14px;
+}
+
+.btn {
+  margin-left: 4px;
+}
