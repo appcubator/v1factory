@@ -168,6 +168,8 @@ var EntitiesEditorView = Backbone.View.extend({
   },
   initialize: function() {
     _.bindAll(this, 'render', 'clickedAdd', 'formSubmitted', 'serializeEntities');
+
+    $('#save-entities').on('click', this.serializeEntities);
   },
   render : function() {
 
