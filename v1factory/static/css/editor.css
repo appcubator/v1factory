@@ -225,9 +225,11 @@
 .widget {
   z-index: 1001;
   cursor: pointer;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
-.widget .meta {
+.widget .meta, .widgets-container .meta {
   position: absolute;
   bottom: 0;
   height: 0;
@@ -243,7 +245,7 @@
   border: 1px solid #ccc;
 }
 
-.widget .meta .delete {
+.widget .meta .delete, .widgets-container .meta .delete {
   position: absolute;
   display: inline-block;
   z-index: 1002;
@@ -253,8 +255,19 @@
   border:1px solid red;
 }
 
-.widget:hover .meta {
+.widget:hover .meta, .widgets-container:hover .meta {
   height: 30px;
+}
+
+
+.widgets-container {
+  z-index: 1002;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.widgets-container:hover {
+  border:1px solid blue;
 }
 
 /* Element Selector */
