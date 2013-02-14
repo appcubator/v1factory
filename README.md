@@ -11,15 +11,15 @@ If you know python and have a sense of design, you can make a web app.
 Installation
 ------------
 
-0. Start a virtualenv
+Start a virtualenv
     virtualenv --distribute venv
     . venv/bin/activate
 
-1. Install dependencies
+Install dependencies
     pip install -r requirements.txt
 
-3. Tell django which settings to use (set and forget)
+Tell django which settings to use (set and forget)
     export DJANGO_SETTINGS_MODULE=v1factory.settings.dev
 
-3. Go
+Go
     python manage.py runserver 0.0.0.0:8000
