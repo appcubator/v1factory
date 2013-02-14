@@ -12,14 +12,22 @@ Installation
 ------------
 
 Start a virtualenv
+```
     virtualenv --distribute venv
     . venv/bin/activate
+```
 
 Install dependencies
+```
     pip install -r requirements.txt
+```
 
 Tell django which settings to use (set and forget)
+```
     export DJANGO_SETTINGS_MODULE=v1factory.settings.dev
+```
 
 Go
+```
     python manage.py runserver 0.0.0.0:8000
+```
