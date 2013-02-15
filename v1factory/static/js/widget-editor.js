@@ -116,6 +116,8 @@ var WidgetView = Backbone.View.extend({
   render: function(widget) {
     this.el.innerHTML = '';
 
+    /* TODO: Make a better way to fetch these once we have
+       the gallery set up */
     var element = document.getElementById(widget.get('type')).firstChild.cloneNode(true);
     var width = widget.get('width');
     var height = widget.get('height');
@@ -126,6 +128,7 @@ var WidgetView = Backbone.View.extend({
     element.className = 'widget span'+width;
     element.style.height = (height * GRID_HEIGHT) + 'px';
     element.id = 'widget-' + this.collection.length;
+    element.innerHTML = widget.get('text') || "BLANK TEXT";
 
     meta = document.createElement('div');
     meta.className = 'meta';
@@ -192,8 +195,8 @@ var EntityUIContainer = WidgetView.extend({
   initialize: function(item, entity, action) {
     _.bindAll(this, 'render', 
                     'placeWidget', 
-                    'placeCreateWidgets', 
-                    'placeShowWidgets', 
+                    'placeCreateWidgets',
+                    'placeShowWidgets',
                     'placeUpdateWidgets');
     
     this.model = item;
@@ -201,6 +204,7 @@ var EntityUIContainer = WidgetView.extend({
     // this.model.bind("change:width", this.changedWidth, this);
     // this.model.bind("change:height", this.changedHeight, this);
     // this.model.bind("change:coordinates", this.changedCoordinates, this);
+    console.log(item);
     this.entity = entity;
     this.collection = new WidgetCollection();
     this.render(item);
@@ -212,6 +216,7 @@ var EntityUIContainer = WidgetView.extend({
       this.placeCreateWidgets();
       break;
     case "show":
+      console.log("hey");
       this.placeShowWidgets();
       break;
     case "update":
@@ -260,9 +265,26 @@ var EntityUIContainer = WidgetView.extend({
   },
 
   placeShowWidgets: function() {
-    _(this.entity.attributes.fields).each(function(val, key, item) {
+    var nmrAttributes = 0;
+    var self = this;
+    _(this.entity.attributes.attributes).each(function(val, key, item, ind) {
       console.log(key + ':' + val);
-    })
+      var coordinates = widgetEditor.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 4, y: 1 + ((nmrAttributes+1) * 3)});
+      var type = 'widget-3';
+      var widgetProps = {
+        id : self.collection.length + 1,
+        top : coordinates.topLeft.y,
+        left : coordinates.topLeft.x,
+        type : type,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y + 1,
+        text : '{{' + self.entity.attributes.name + '_' + key + '}}'
+      };
+      var widget = new Widget(widgetProps);
+      self.collection.push(widget);
+      nmrAttributes++;
+      widgetCollection.push(widget, {'silent' : true});
+    });
     // var coordinates = widgetEditor.unite({x: 1, y: 1}, {x: 4, y:4});
     // var type = 'widget-1';
     // var widgetProps = {
@@ -419,7 +441,8 @@ var WidgetEntityView = Backbone.View.extend({
     var coordinates = widgetEditor.unite({x: 6, y:2}, {x: 16, y: 10});
     var widget = {
       id : widgetCollection + 1,
-      coordinates : coordinates,
+      top : coordinates.topLeft.y,
+      left : coordinates.topLeft.x,
       type : 'create-container',
       width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
       height: coordinates.bottomRight.y - coordinates.topLeft.y + 1
@@ -438,8 +461,9 @@ var WidgetEntityView = Backbone.View.extend({
     var coordinates = widgetEditor.unite({x: 6, y:2}, {x: 16, y: 10});
     var widget = {
       id : widgetCollection + 1,
-      coordinates : coordinates,
-      type : 'create-container',
+      top : coordinates.topLeft.y,
+      left : coordinates.topLeft.x,
+      type : 'show-container',
       width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
       height: coordinates.bottomRight.y - coordinates.topLeft.y + 1
     };
@@ -491,11 +515,14 @@ var WidgetEditorView = Backbone.View.extend({
     _.bindAll(this, 'render',
                     'addWidget',
                     'unite',
-                    'placeWidget');
+                    'placeWidget',
+                    'serializeWidgets');
 
     this.collection = widgetCollection;
     this.collection.bind('add', this.placeWidget);
     //this.render();
+
+    $('#save').on('click', this.serializeWidgets);
 
   },
 
@@ -549,6 +576,10 @@ var WidgetEditorView = Backbone.View.extend({
   placeWidget: function(widget) {
     var curWidget = new WidgetView(widget);
     this.widgetsContainer.appendChild(curWidget.el);
+  },
+
+  serializeWidgets: function() {
+    
   }
 });
 

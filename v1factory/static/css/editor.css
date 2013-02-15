@@ -39,6 +39,15 @@
   background-position: 6px center;
   background-repeat: no-repeat;
   background-size: auto 50%;
+  cursor: pointer;
+}
+
+.editor ul li:hover {
+  background-color: #3b4555;
+}
+
+.editor ul li:active {
+  background-color: #1b2535;
 }
 
 .editor > * {
@@ -80,12 +89,43 @@
   display: block;
   overflow: hidden;
   font-size: 12px;
+  cursor: pointer;
 }
 .entity-view-li .buttons span {
   display: inline-block;
   text-align: center;
   width: 33%;
+  border-radius: 3px;
+  cursor: pointer;
 }
+
+.entity-view-li .buttons span:hover {
+  background-color: #3b4555;
+}
+
+
+/* Right Info View */
+.entities-list input[type="text"] {
+  width: 60px;
+  height: 30px;
+  margin-bottom: 0px;
+}
+
+.subtle-menu {
+  font-weight: bold;
+  display: inline-block;
+  position: fixed;
+  width: 60px;
+  height: 90px;
+  bottom: 10px;
+  left: 20px;
+  font-size: 42px;
+  line-height: 50px;
+  color: rgba(60, 60, 60, 0.4);
+  text-align: left;
+  z-index: 1032;
+}
+
 /* --- */
 
 
@@ -141,8 +181,8 @@
   margin: 0;
 }
 
-.right-editor ul.entities-list li {
-  
+.right-editor ul.entities-list li:hover {
+  background-color: #2b3545;
 }
 
 .right-editor ul.entities-list .sub-title {
@@ -261,7 +301,7 @@
 
 
 .widgets-container {
-  z-index: 1002;
+  z-index: 1000;
   cursor: pointer;
   border-radius: 3px;
 }

@@ -16,6 +16,12 @@ h2 {
   font-weight: bold;
 }
 
+a.pane:hover {
+  color: #fff;
+  text-transform: none;
+  text-decoration: none;
+}
+
 h1.name {
   display: block;
   font-size: 24px;
@@ -33,6 +39,7 @@ h1.name {
   color: #fff;
   box-shadow: 0 1px 3px #b9bbbe;
   width: 100%;
+  overflow: hidden;
 }
 
 .pane.inset {
@@ -40,6 +47,21 @@ h1.name {
   border: 1px solid #bbb;
   color: #000;
   background-color: transparent;
+}
+
+.pane img {
+  position: absolute;
+  right: -30px;
+  bottom: -50px;
+  opacity: 0.4;
+  transition: opacity 0.6s;
+  -moz-transition: opacity 0.6s; /* Firefox 4 */
+  -webkit-transition: opacity 0.6s; /* Safari and Chrome */
+  -o-transition: opacity 0.6s; /* Opera */
+}
+
+.pane:hover img {
+  opacity: 0.9;
 }
 
 .logo {
