@@ -89,8 +89,9 @@ class Template(models.Model):
 # may contain dynamic fields which can be filled in with a context
   html = models.TextField()
 
-  def render_to_response(self, context):
-    return HttpResponse(self.html)
+  def render_to_html(self, context):
+    # rendering engine goes here
+    return self.html
 
 # for fetching DB data
 class Query(models.Model):
