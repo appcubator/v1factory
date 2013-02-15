@@ -5,6 +5,7 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from django.core import serializers
 from v1factory.models import App
+from app_builder.models import Class
 import requests
 
 @login_required
@@ -112,5 +113,5 @@ def sync_schema(request, app_id):
   def add_app_class_relation(cls):
     app.classes.add(cls)
 
-  sync_classes(classes, add_app_class_relation)
+  Class.sync_classes(classes, add_app_class_relation)
   return HttpResponse("ok")

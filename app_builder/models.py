@@ -39,6 +39,32 @@ class Class(models.Model):
       d['fields'].update({ f.name: f.type})
     return d
 
+  @staticmethod
+  def sync_classes(classes, new_class_hook=None):
+    for c in classes:
+# find or create the class
+      if not Class.objects.filter(name=c['name']).exists():
+        cls = Class(name=c['name'])
+        cls.full_clean()
+        cls.save()
+        if new_class_hook is not None:
+          new_class_hook(cls)
+      else:
+        cls = Class.objects.get(name=c['name'])
+# create new fields
+      current_field_names = cls.attributes.values_list('name', flat=True)
+      for f, type in c['fields'].items():
+        if f not in current_field_names:
+          new_field = Attribute(_class=cls, name=f, type=type)
+          new_field.full_clean()
+          new_field.save()
+# delete old fields
+      orphan_field_names = set(current_field_names).difference(set(c['fields'].keys()))
+      for f in orphan_field_names:
+        a = cls.attributes.get(name=f)
+        a.delete()
+
+
 class Attribute(models.Model):
   _class = models.ForeignKey(Class, related_name="attributes")
   name = models.CharField(max_length=100)
