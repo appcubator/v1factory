@@ -36,10 +36,33 @@ def app_page(request, app_id):
   app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
   return render(request, 'app-show.html', {'app' : app, 'title' : 'The Office' })
 
+@login_required
+def app_template(request, app_id, page_name):
+  if request.method == 'GET':
+    app = get_object_or_404(App, id=app_id, owner=request.user)
+    page = get_object_or_404(App.templates, name__iexact=page_name)
+    return HttpResponse(page.html)
+  elif request.method == 'POST':
+    return app_save_page(request, app_id, page_name)
+  else:
+    return HttpResponse("", status_code=405)
+    
 @require_POST
 @login_required
-def app_save_page(request, app_id, page_id):
-  app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
+def app_save_page(request, app_id, page_name):
+  if 'content' not in request.POST:
+    return HttpResponse("you must supply \"content\" as a field", status_code=400)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  page = app.templates.get_or_create(name__iexact=page_name, defaults={ 'name': page_name })
+  page.html = request.POST['content']
+  try:
+    page.full_clean()
+  except Exception:
+    return HttpResponse("error validating the template object", status_code=400)
+  page.save()
+  app.templates.add(page) # associate with this app
+  return HttpResponse("ok")
+
 
 @require_POST
 @login_required
