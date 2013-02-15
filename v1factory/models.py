@@ -29,3 +29,18 @@ class App(models.Model):
     for c in commands:
       print "Running `{}`".format(c)
       subprocess.call(c.split(' '), cwd=tmp_project_dir, env=os.environ.copy(), stdout=sys.stdout, stderr=sys.stderr)
+
+class AbstractUIElement(models.Model):
+  name = models.CharField(max_length=100)
+  html = models.TextField()
+  css = models.TextField(blank=True)
+
+  class Meta:
+    abstract=True
+
+class LibUIElement(AbstractUIElement):
+  pass
+
+class UIElement(AbstractUIElement):
+  src_lib_element = models.ForeignKey(LibUIElement)
+  user = models.ForeignKey(User)

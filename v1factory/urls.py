@@ -17,9 +17,12 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/$', 'app_list'),
     url(r'^app/new/$', 'app_new'),
     url(r'^app/(\d+)/$', 'app_page'),
+    # entities
     url(r'^app/(\d+)/entities/$', 'entities'),
     url(r'^app/(\d+)/syncschema/$', 'sync_schema'),
+    # editor
     url(r'^app/(\d+)/page/([a-zA-Z_]+)/$', 'app_template'),
+    # the rest
     url(r'^app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^app/(\d+)/design/$', 'app_design'),
     url(r'^app/(\d+)/editor/$', 'app_editor'),

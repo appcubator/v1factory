@@ -45,34 +45,23 @@ def app_template(request, app_id, page_name):
   elif request.method == 'POST':
     return app_save_page(request, app_id, page_name)
   else:
-    return HttpResponse("", status_code=405)
+    return HttpResponse("", status=405)
     
 @require_POST
 @login_required
 def app_save_page(request, app_id, page_name):
   if 'content' not in request.POST:
-    return HttpResponse("you must supply \"content\" as a field", status_code=400)
+    return HttpResponse("you must supply \"content\" as a field", status=400)
   app = get_object_or_404(App, id=app_id, owner=request.user)
   page = app.templates.get_or_create(name__iexact=page_name, defaults={ 'name': page_name })
   page.html = request.POST['content']
   try:
     page.full_clean()
   except Exception:
-    return HttpResponse("error validating the template object", status_code=400)
+    return HttpResponse("error validating the template object", status=400)
   page.save()
   app.templates.add(page) # associate with this app
   return HttpResponse("ok")
-
-
-@require_POST
-@login_required
-def app_create_page(request, app_id):
-  if name not in request.POST:
-    return HttpResponse("you must supply the name of the new page", status_code=400)
-  app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
-  page = Template(name=request.POST['name'])
-  page.save()
-  app.templates.add(page)
 
 def app_design(request, app_id):
   app_id = long(app_id)
@@ -84,6 +73,7 @@ def app_editor(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Editor' }
+  # get schema of app
   schema = [ c.to_dict() for c in app.classes.all() ]
   page_context['schema'] = simplejson.dumps(schema)
   return render(request, 'editor.html', page_context)
@@ -111,9 +101,6 @@ def account(request, app_id):
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Account Info' }
   return render(request, 'app-account.html', page_context)
-
-
-
 
 @require_GET
 @login_required
