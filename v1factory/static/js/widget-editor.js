@@ -556,17 +556,33 @@ var WidgetEditorView = Backbone.View.extend({
     console.log(widgetCollection.models);
     uiElements = this.serializeCollection(widgetCollection.models);
     console.log(uiElements);
+
+    $.ajax({
+      type: "POST",
+      url: '/app/1/page/homepage/',
+      data: {
+        content: uiElements
+      },
+      success: function() {
+
+      },
+      dataType: "JSON"
+    });
+
     return false;
   },
 
   serializeCollection: function(coll) {
+    console.log(coll);
     var uiElements = [];
     var self = this;
     _(coll).each(function(item, key) {
       if(item.attributes.type == 'container') {
-        // var elems = {
-        //   "container" : self.serializeCollection(item.collection.models)
-        // }
+        console.log(item);
+        var elems = { };
+        var key = String(item.get('type') + '-' + item.get('action'))
+        elems[key] = self.serializeCollection(item.get('childCollection').models);
+        uiElements.push(elems);
       }
       else {
         var elem = item.attributes;
