@@ -16,13 +16,13 @@ def app_list(request):
     return redirect(app_page, request.user.apps.all()[0].id)
   else:
     page_context = { 'apps': request.user.apps.all() }
-    return render(request, 'apps-show.html', page_context)
+    return render(request, 'dev/apps-show.html', page_context)
 
 
 @login_required
 def app_new(request):
   if request.method == 'GET':
-    return render(request, 'apps-new.html')
+    return render(request, 'dev/apps-new.html')
   elif request.method == 'POST':
     a = App(name="YOLO app", owner=request.user)
     a.save()
@@ -34,7 +34,7 @@ def app_new(request):
 @login_required
 def app_page(request, app_id):
   app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
-  return render(request, 'app-show.html', {'app' : app, 'title' : 'The Office' })
+  return render(request, 'dev/app-show.html', {'app' : app, 'title' : 'The Office' })
 
 @login_required
 def app_template(request, app_id, page_name):
@@ -67,7 +67,7 @@ def app_design(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Design' }
-  return render(request, 'app-design.html', page_context)
+  return render(request, 'dev/app-design.html', page_context)
 
 def app_editor(request, app_id):
   app_id = long(app_id)
@@ -76,31 +76,31 @@ def app_editor(request, app_id):
   # get schema of app
   schema = [ c.to_dict() for c in app.classes.all() ]
   page_context['schema'] = simplejson.dumps(schema)
-  return render(request, 'editor.html', page_context)
+  return render(request, 'dev/editor.html', page_context)
 
 def app_analytics(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app , 'title' : 'Analytics' }
-  return render(request, 'app-analytics.html', page_context)
+  return render(request, 'dev/app-analytics.html', page_context)
 
 def app_data(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app , 'title' : 'Data' }
-  return render(request, 'app-data.html', page_context)
+  return render(request, 'dev/app-data.html', page_context)
 
 def app_finances(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app , 'title' : 'Finances' }
-  return render(request, 'app-finances.html', page_context)
+  return render(request, 'dev/app-finances.html', page_context)
 
 def account(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Account Info' }
-  return render(request, 'app-account.html', page_context)
+  return render(request, 'dev/app-account.html', page_context)
 
 @require_GET
 @login_required
@@ -110,7 +110,7 @@ def entities(request, app_id):
   page_context = { 'app': app, 'title' : 'Entities' }
   schema = [ c.to_dict() for c in app.classes.all() ]
   page_context['schema'] = simplejson.dumps(schema)
-  return render(request, 'app-entities.html', page_context)
+  return render(request, 'dev/app-entities.html', page_context)
 
 @require_POST
 @login_required
