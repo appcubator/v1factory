@@ -47,4 +47,6 @@ urlpatterns += patterns('v1factory.dev_views',
     url(r'^dev/app/(\d+)/data/$', 'app_data'),
     url(r'^dev/app/(\d+)/finances/$', 'app_finances'),
     url(r'^dev/app/(\d+)/account/$', 'account'),
+
+    url(r'^dev/app/(\d+)/tempshow/([a-zA-Z_]+)/$', 'generate_html'),
 )

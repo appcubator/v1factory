@@ -1,3 +1,12 @@
+* {
+  -webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
 .editor {
   position: fixed;
   width: 220px;
@@ -125,6 +134,9 @@
   text-align: left;
   z-index: 1032;
 }
+
+
+
 
 /* --- */
 
@@ -309,6 +321,44 @@
 .widgets-container:hover {
   border:1px solid blue;
 }
+
+.top-extend {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  cursor: n-resize;
+}
+
+.left-extend {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 4px;
+  cursor: w-resize;
+}
+
+.right-extend {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 4px;
+  cursor: e-resize;
+}
+
+.bottom-extend {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  cursor: s-resize;
+}
+
+
 
 /* Element Selector */
 

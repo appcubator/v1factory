@@ -53,8 +53,25 @@ var Widget = Backbone.Model.extend({
 
   select: function() {
     this.collection.unselectAll();
+    this.collection.selected = this;
     this.set('selected', true);
     widgetInfoView.show(this);
+  },
+
+  moveLeft: function() {
+    this.set('left', this.get('left') - 1);
+  },
+
+  moveRight: function() {
+    this.set('left', this.get('left') + 1);
+  },
+
+  moveUp: function() {
+    this.set('top', this.get('top') - 1);
+  },
+
+  moveDown: function() {
+    this.set('top', this.get('top') + 1);
   }
 });
 
@@ -77,6 +94,7 @@ var WidgetCollection = Backbone.Collection.extend({
   selectWidgetById: function(id) {
     this.collection.get(id).select();
     this.selectedElement = this.collection.get(id);
+    console.log(this.selectedElement);
   }
 });
 
@@ -122,13 +140,14 @@ var WidgetView = Backbone.View.extend({
     var width = widget.get('width');
     var height = widget.get('height');
     
-    element.setAttribute("style","position:absolute;");
+    element.setAttribute("style","position:relative;");
     element.style.top = (GRID_HEIGHT * (widget.get('top')-1)) + 'px';
     element.style.left = (GRID_HEIGHT * (widget.get('left')-1)) + 'px';
     element.className = 'widget span'+width;
     element.style.height = (height * GRID_HEIGHT) + 'px';
     element.id = 'widget-' + this.collection.length;
-    element.innerHTML = widget.get('text') || "BLANK TEXT";
+    if(widget.get('type') != 'widget-5')
+      element.innerHTML = widget.get('text') || "BLANK TEXT";
 
     meta = document.createElement('div');
     meta.className = 'meta';
@@ -136,6 +155,20 @@ var WidgetView = Backbone.View.extend({
     deleteBtn.className = 'delete';
     deleteBtn.appendChild(document.createTextNode('delete'));
     meta.appendChild(deleteBtn);
+
+    var elementTop = document.createElement('div');
+    elementTop.className = 'top-extend';
+    var elementLeft = document.createElement('div');
+    elementLeft.className = 'left-extend';
+    var elementRight = document.createElement('div');
+    elementRight.className = 'right-extend';
+    var elementBottom = document.createElement('div');
+    elementBottom.className = 'bottom-extend';
+
+    element.appendChild(elementTop);
+    element.appendChild(elementLeft);
+    element.appendChild(elementRight);
+    element.appendChild(elementBottom);
 
     element.appendChild(meta);
     this.widget = element;
@@ -260,7 +293,25 @@ var EntityUIContainer = Backbone.View.extend({
   },
 
   placeCreateWidgets: function() {
-
+    var nmrAttributes = 0;
+    var self = this;
+    var widgets = [];
+    _(self.entity.attributes.attributes).each(function(val, key, item, ind) {
+      var coordinates = widgetEditor.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
+      var type = 'widget-5';
+      var widgetProps = {
+        id : self.model.get('childCollection').length + 1,
+        top : coordinates.topLeft.y,
+        left : coordinates.topLeft.x,
+        type : type,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y + 1,
+        text : '{{' + self.entity.attributes.name + '_' + key + '}}'
+      };
+      var widget = new Widget(widgetProps);
+      self.model.get('childCollection').push(widget);
+      nmrAttributes++;
+    });
   },
 
   placeShowWidgets: function() {
@@ -483,14 +534,15 @@ var WidgetEditorView = Backbone.View.extend({
                     'unite',
                     'placeWidget',
                     'serializeWidgets',
-                    'serializeCollection');
+                    'serializeCollection',
+                    'keydown');
 
     this.collection = widgetCollection;
     this.collection.bind('add', this.placeWidget);
     //this.render();
 
     $('#save').on('click', this.serializeWidgets);
-
+    window.addEventListener('keydown', this.keydown);
   },
 
   render: function() {
@@ -555,13 +607,13 @@ var WidgetEditorView = Backbone.View.extend({
   serializeWidgets: function(e) {
     console.log(widgetCollection.models);
     uiElements = this.serializeCollection(widgetCollection.models);
-    console.log(uiElements);
+    console.log(JSON.stringify(uiElements));
 
     $.ajax({
       type: "POST",
       url: '/app/1/page/homepage/',
       data: {
-        content: uiElements
+        content: JSON.stringify(uiElements)
       },
       success: function() {
 
@@ -580,8 +632,10 @@ var WidgetEditorView = Backbone.View.extend({
       if(item.attributes.type == 'container') {
         console.log(item);
         var elems = { };
-        var key = String(item.get('type') + '-' + item.get('action'))
-        elems[key] = self.serializeCollection(item.get('childCollection').models);
+        var key = String(item.get('type') + '-' + item.get('action'));
+        elems[key] = {}
+        elems[key]['entity'] = item.get('entity').get('name');
+        elems[key]['elements'] = self.serializeCollection(item.get('childCollection').models);
         uiElements.push(elems);
       }
       else {
@@ -591,6 +645,24 @@ var WidgetEditorView = Backbone.View.extend({
     });
 
     return uiElements;
+  },
+
+  keydown: function(e) {
+    e.preventDefault();
+    switch(e.keyCode) {
+      case 37:
+        widgetCollection.selected.moveLeft();
+        break;
+      case 38:
+        widgetCollection.selected.moveUp();
+        break;
+      case 39:
+        widgetCollection.selected.moveRight();
+        break;
+      case 40:
+        widgetCollection.selected.moveDown();
+        break;
+    }
   }
 });
 

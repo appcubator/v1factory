@@ -40,7 +40,7 @@ def app_page(request, app_id):
 def app_template(request, app_id, page_name):
   if request.method == 'GET':
     app = get_object_or_404(App, id=app_id, owner=request.user)
-    page = get_object_or_404(App.templates, name__iexact=page_name)
+    page = get_object_or_404(app.templates, name__iexact=page_name)
     return HttpResponse(page.html)
   elif request.method == 'POST':
     return app_save_page(request, app_id, page_name)
@@ -53,7 +53,7 @@ def app_save_page(request, app_id, page_name):
   if 'content' not in request.POST:
     return HttpResponse("you must supply \"content\" as a field", status=400)
   app = get_object_or_404(App, id=app_id, owner=request.user)
-  page = app.templates.get_or_create(name__iexact=page_name, defaults={ 'name': page_name })
+  page = app.templates.get_or_create(name__iexact=page_name, defaults={ 'name': page_name })[0]
   page.html = request.POST['content']
   try:
     page.full_clean()

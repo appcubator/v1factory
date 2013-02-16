@@ -27,15 +27,16 @@
     <div class="elements-inside-container" id="widgets-container"></div>
   </div>
   <div class="container editing" id="body-container">
-    {% include "widget-gallery.html" %}
+    {% include "dev/widget-gallery.html" %}
   </div>
-  {% include "left-editor.html" %}
-  {% include "right-editor.html" %}
+  {% include "dev/left-editor.html" %}
+  {% include "dev/right-editor.html" %}
 {% endblock %}
 
 {% block js %}
   <script type="text/javascript">
     var initialEntities = {{ schema|safe }}
+    var initialUIElements = {{ uielements|safe }}
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/widget-editor.js"></script>
