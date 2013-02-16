@@ -30,3 +30,21 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/finances/$', 'app_finances'),
     url(r'^app/(\d+)/account/$', 'account'),
 )
+
+urlpatterns += patterns('v1factory.dev_views',
+    url(r'^dev/app/$', 'app_list'),
+    url(r'^dev/app/new/$', 'app_new'),
+    url(r'^dev/app/(\d+)/$', 'app_page'),
+    # entities
+    url(r'^dev/app/(\d+)/entities/$', 'entities'),
+    url(r'^dev/app/(\d+)/syncschema/$', 'sync_schema'),
+    # editor
+    url(r'^dev/app/(\d+)/page/([a-zA-Z_]+)/$', 'app_template'),
+    # the rest
+    url(r'^dev/app/(\d+)/analytics/$', 'app_analytics'),
+    url(r'^dev/app/(\d+)/design/$', 'app_design'),
+    url(r'^dev/app/(\d+)/editor/$', 'app_editor'),
+    url(r'^dev/app/(\d+)/data/$', 'app_data'),
+    url(r'^dev/app/(\d+)/finances/$', 'app_finances'),
+    url(r'^dev/app/(\d+)/account/$', 'account'),
+)
