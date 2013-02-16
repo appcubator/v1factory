@@ -44,7 +44,7 @@
     <div class="span9 offset1 parent-span">
       <div class="login pane inset hi6">
       {% if user.is_authenticated %}
-        <a href="{% url v1factory.views.app_list %}">Logged In</a>
+        <a href="{% url v1factory.dev_views.app_list %}">Logged In</a>
       {% else %}
         {% include "registration/login.html" %}
       {% endif %}</div>
