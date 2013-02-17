@@ -69,6 +69,17 @@ def app_design(request, app_id):
   page_context = { 'app': app, 'title' : 'Design' }
   return render(request, 'dev/app-design.html', page_context)
 
+def app_urls(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  page_context = { 'app': app, 'title' : 'URLs'}
+  # get schema of app
+  schema = [ c.to_dict() for c in app.classes.all() ]
+  page_context['schema'] = schema
+  list_of_pages =  [c.name for c in app.templates.all() ]
+  page_context['pages'] = list_of_pages
+  return render(request, 'dev/app-urls.html', page_context)
+
 def app_editor(request, app_id, page_name):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)

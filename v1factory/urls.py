@@ -43,6 +43,7 @@ urlpatterns += patterns('v1factory.dev_views',
     # the rest
     url(r'^dev/app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^dev/app/(\d+)/design/$', 'app_design'),
+    url(r'^dev/app/(\d+)/urls/$', 'app_urls'),
     url(r'^dev/app/(\d+)/editor/([a-zA-Z_]+)/$', 'app_editor'),
     url(r'^dev/app/(\d+)/data/$', 'app_data'),
     url(r'^dev/app/(\d+)/finances/$', 'app_finances'),
