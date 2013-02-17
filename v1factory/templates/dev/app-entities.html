@@ -49,6 +49,7 @@
 
 <div id="entities-init">
 <script>
+  var appState = {{ app.state|safe }};
   var initialEntities = {{ schema|safe }};
   var entitiesLibrary = [
                   {

@@ -37,95 +37,44 @@ def app_page(request, app_id):
   return render(request, 'dev/app-show.html', {'app' : app, 'title' : 'The Office' })
 
 @login_required
-def app_template(request, app_id, page_name):
+def app_state(request, app_id):
+  app = get_object_or_404(App, id=app_id)
   if request.method == 'GET':
-    app = get_object_or_404(App, id=app_id, owner=request.user)
-    page = get_object_or_404(app.templates, name__iexact=page_name)
-    return HttpResponse(page.html)
+    state = app_get_state(request, app)
+    return state
   elif request.method == 'POST':
-    return app_save_page(request, app_id, page_name)
+    status, message = app_save_state(request, app)
+    return HttpResponse(message, status=status)
   else:
-    return HttpResponse("", status=405)
+    return HttpResponse("GET or POST only", status=405)
+
+@require_GET
+@login_required
+def app_get_state(request, app):
+  return app.state
 
 @require_POST
 @login_required
-def app_save_page(request, app_id, page_name):
-  if 'content' not in request.POST:
-    return HttpResponse("you must supply \"content\" as a field", status=400)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page = app.templates.get_or_create(name__iexact=page_name, defaults={ 'name': page_name })
-  page.html = request.POST['content']
+def app_save_state(request, app):
+  app._state_json = request.body
   try:
-    page.full_clean()
-  except Exception:
-    return HttpResponse("error validating the template object", status=400)
-  page.save()
-  app.templates.add(page) # associate with this app
-  return HttpResponse("ok")
-
-@login_required
-def app_sync_urls(request, app_id, page_name):
-  if request.method == 'GET':
-    app = get_object_or_404(App, id=app_id, owner=request.user)
-    route = get_object_or_404(app.urls, page__iexact=page_name)
-    return HttpResponse(route.url_parts)
-  elif request.method == 'POST':
-    return app_save_route(request, app_id, page)
-  else:
-    return HttpResponse("", status=405)
-
-@require_POST
-@login_required
-def app_save_route(request, app_id, page_name):
-  if 'url_parts' not in request.POST:
-    return HttpResponse("you must supply \"url_parts\" as a field", status=400)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  route = app.urls.get_or_create(page__iexact=page_name, defaults={ 'page': page_name })
-  route.url_parts = request.POST['url_parts']
-  try:
-    route.full_clean()
-  except Exception:
-    return HttpResponse("error validating the route object", status=400)
-  route.save()
-  app.urls.add(route) # associate with this app
-  return HttpResponse("ok")
-
-def app_design(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Design' }
-  return render(request, 'dev/app-design.html', page_context)
-def app_design(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Design' }
-  return render(request, 'dev/app-design.html', page_context)
+    app.full_clean()
+  except Exception, e:
+    return (400, str(e))
+  app.save()
+  return (200, 'ok')
 
 def app_urls(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'URLs'}
-  # get schema of app
-  schema = [ c.to_dict() for c in app.classes.all() ]
-  page_context['schema'] = schema
-  list_of_pages =  [c.name for c in app.templates.all() ]
-  page_context['pages'] = list_of_pages
   return render(request, 'dev/app-urls.html', page_context)
 
-def app_editor(request, app_id, page_name):
+def app_design(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Editor', 'page_name' : page_name }
-  # get schema of app
-  schema = [ c.to_dict() for c in app.classes.all() ]
-  page_context['schema'] = simplejson.dumps(schema)
-
-  page = get_object_or_404(app.templates, name__iexact=page_name)
-  page_context['uielements'] = page.html
-
-  list_of_pages =  [c.name for c in app.templates.all() ]
-  page_context['pages'] = list_of_pages
-  return render(request, 'dev/editor.html', page_context)
+  page_context = { 'app': app, 'title' : 'Design' }
+  return render(request, 'dev/app-design.html', page_context)
 
 def app_analytics(request, app_id):
   app_id = long(app_id)
@@ -157,24 +106,17 @@ def entities(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Entities' }
-  schema = [ c.to_dict() for c in app.classes.all() ]
-  page_context['schema'] = simplejson.dumps(schema)
   return render(request, 'dev/app-entities.html', page_context)
 
-@require_POST
+@require_GET
 @login_required
-def sync_schema(request, app_id):
+def app_editor(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  classes = simplejson.loads(request.raw_post_data)
+  page_context = { 'app': app, 'title' : 'Editor' }
+  return render(request, 'dev/editor.html', page_context)
 
-  # function to execute for each new class
-  def add_app_class_relation(cls):
-    app.classes.add(cls)
-
-  Class.sync_classes(classes, add_app_class_relation)
-  return HttpResponse("ok")
-
+# IN THE WORKS
 def generate_html(request, app_id, page_name):
   app = get_object_or_404(App, id=app_id)
   page = get_object_or_404(app.templates, name__iexact='homepage')
