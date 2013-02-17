@@ -2,8 +2,9 @@
   <div class="section">
   <span class="title">Pages</span>
   <ul>
-    <li>Homepage</li>
-    <li>Profile</li>
+    {% for page in pages %}
+      <li>{{ page }}</li>
+    {% endfor %}
   </ul>
   </div>
   <div class="section">

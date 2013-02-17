@@ -1,0 +1,46 @@
+.pane.add-url {
+  background-color: transparent;
+  border: 5px solid #2b3545;
+  color: #2b3545;
+  font-size: 18px;
+  text-align: center;
+}
+
+.url {
+  margin-top: 14px;
+  margin-left: 14px;
+}
+
+.slash {
+  font-weight: bold;
+  font-size: 30px;
+  margin-right: 8px;
+  margin-left: 8px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+select.id {
+  width: 100px;
+  height: 32px;
+  margin: 0;
+}
+
+select.page {
+  width: 140px;
+  height: 32px;
+  margin: 0;
+}
+
+div.pages {
+  margin: 0;
+  margin-top: 14px;
+  vertical-align: middle;
+}
+
+div.pages.arrow {
+  font-size: 32px;
+  font-weight: bold;
+  height: 32px;
+  margin-top: 18px;
+}

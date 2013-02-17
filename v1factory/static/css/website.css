@@ -139,3 +139,8 @@ a:visited {
 .btn {
   margin-left: 4px;
 }
+
+input[type="text"] {
+  height: 32px;
+  margin: 0;
+}

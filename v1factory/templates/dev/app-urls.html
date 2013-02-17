@@ -1,0 +1,80 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/urls.css">
+{% endblock %}
+
+{% block topbar %}
+<div class="row">
+  <div class="offset2 toppanel span22 hi2">
+  <h1 class="name"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  </div>
+  <div class="span8 right buttons">
+    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-urls">Save</a>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block page %}
+<div class="container" id="urls-page">
+  <div class="row top-buttons offset1 span30 tb-border">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </div>
+  <div id="urls-editor">
+    
+  </div>
+  <div class="row span30 offset1 hoff1">
+    <div class="pane add-url hi2" id="create-url">
+      + Create a new URL
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/html" id="template-url">
+      <div class="pane hi2">
+        <div class="span22 url">
+        <% var endsWithEnt = 0;
+           _.each(urls, function(url, i) { %>
+          <span class="slash">/</span>
+          {% for entity in schema %}
+          <% if( url == '\{\{'+ '{{ entity.name }}' + '\}\}') { %>
+            <select class="id url-part" id="inp-<%= i %>">
+              <option selected> <%= url.replace('{{','').replace('\}\}','_id') %></option>
+            </select>
+          <% endsWithEnt = 1; return false; } %>
+          {% endfor %}
+          <input type="text" class="url-part" placeholder="url_string" id="inp-<%= i %>" value='<%= url %>'>
+        <% }); %>
+
+        <% if(!endsWithEnt) {%>
+          <span class="slash">/</span>
+          <select class="id url-part" id="inp-new" %>>
+            <option>Add ID</option>
+          {% for entity in schema %}
+            <option>{{ entity.name }}_id</option>
+          {% endfor %}
+          </select>
+        <% } else {%>
+          <span class="slash">/</span>
+          <input type="text" class="url-part" id="inp-new" placeholder="url_string" value=''>
+        <% } %>
+        </div>
+        <div class="pages span1 arrow">»</div>
+        <div class="pages right span6 offset1">
+          <select class="page">
+            {% for page in pages %}
+            <option>{{ page }}</option>
+            {% endfor %}
+            <option>+ Create a new page</option>
+          </select>
+        </div>
+      </div>
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/urls-editor.js"></script>
+{% endblock %}
