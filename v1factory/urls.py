@@ -20,7 +20,7 @@ urlpatterns += patterns('v1factory.dev_views',
     # entities
     url(r'^dev/app/(\d+)/entities/$', 'entities'),
     # editor
-    url(r'^dev/app/(\d+)/editor/([a-zA-Z_]+)/$', 'app_editor'),
+    url(r'^dev/app/(\d+)/editor/$', 'app_editor'),
     # urls
     url(r'^dev/app/(\d+)/urls/$', 'app_urls'),
     # getting/setting state
