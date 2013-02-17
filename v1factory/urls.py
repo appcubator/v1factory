@@ -23,7 +23,7 @@ urlpatterns += patterns('v1factory.views',
     # editor
     url(r'^app/(\d+)/page/([a-zA-Z_]+)/$', 'app_template'),
     # urls
-    url(r'^app/(\d+)/urls/([a-zA-Z_]+)/$', 'app_urls'),
+    # url(r'^app/(\d+)/urls/([a-zA-Z_]+)/$', 'app_urls'),
     # the rest
     url(r'^app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^app/(\d+)/design/$', 'app_design'),

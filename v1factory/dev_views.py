@@ -64,7 +64,7 @@ def app_save_page(request, app_id, page_name):
   return HttpResponse("ok")
 
 @login_required
-def app_urls(request, app_id, page_name):
+def app_sync_urls(request, app_id, page_name):
   if request.method == 'GET':
     app = get_object_or_404(App, id=app_id, owner=request.user)
     route = get_object_or_404(app.urls, page__iexact=page_name)

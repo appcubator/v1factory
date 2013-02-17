@@ -43,7 +43,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 """
   for m in classes:
-    for urls_string += 'from twitter.models import {}\n'.format(m.name)
+    urls_string += 'from twitter.models import {}\n'.format(m.name)
 
   # begin urls section
   urls_string += "urlpatterns = patterns('django.views.generic.simple',\n"

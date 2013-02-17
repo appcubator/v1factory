@@ -88,6 +88,19 @@ var UrlsEditorView = Backbone.View.extend({
   saveUrls: function() {
     var serialized = this.serializeUrls(this.collection.models);
     console.log(serialized);
+
+    $.ajax({
+      type: "POST",
+      url: '/app/1/urls/homepage/',
+      data: {
+        content: JSON.stringify(uiElements)
+      },
+      success: function() {
+
+      },
+      dataType: "JSON"
+    });
+
   },
 
   serializeUrls: function(models) {
