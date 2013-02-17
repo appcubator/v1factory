@@ -35,8 +35,7 @@
 
 {% block js %}
   <script type="text/javascript">
-    var initialEntities = {{ schema|safe }}
-    var initialUIElements = {{ uielements|safe }}
+    var appState = {{ app.state|safe }};
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/widget-editor.js"></script>

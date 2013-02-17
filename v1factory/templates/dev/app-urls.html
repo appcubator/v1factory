@@ -37,6 +37,7 @@
 
 {% block js %}
 <script type="text/html" id="template-url">
+
       <div class="pane hi2">
         <div class="span22 url">
         <% var endsWithEnt = 0;
@@ -77,4 +78,7 @@
       </div>
 </script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/urls-editor.js"></script>
+<script type="text/javascript">
+    var appState = {{ app.state|safe }};
+</script>
 {% endblock %}

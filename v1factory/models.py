@@ -3,17 +3,31 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from app_builder.models import Class, Template, Route
 from app_builder.codegen.django import create_django_project
+import simplejson
 
 class App(models.Model):
   name = models.CharField(max_length=100)
   owner = models.ForeignKey(User, related_name='apps')
+  _state_json = models.TextField(blank=True, default='{}')
 
-  classes = models.ManyToManyField(Class, related_name="+")
-  templates = models.ManyToManyField(Template, related_name="+")
-  urls = models.ManyToManyField(Route, related_name="+")
+  @property
+  def state(self):
+    return simplejson.loads(self._state_json)
+
+  @property
+  def entities(self):
+    return self.state['entities']
+
+  @property
+  def pages(self):
+    return self.state['pages']
+
+  @property
+  def urls(self):
+    return self.state['urls']
 
   def get_absolute_url(self):
-    return reverse('v1factory.views.app_page', args=[str(self.id)])
+      return reverse('v1factory.views.app_page', args=[str(self.id)])
 
   def deploy(self):
     import sys, os
