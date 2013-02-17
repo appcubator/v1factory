@@ -99,8 +99,7 @@ class Query(models.Model):
   q = models.TextField() #encoded mongo-like query
   templates = models.ForeignKey(Template, related_name="queries")
 
-# url may be a pattern, and the "view" is rendered w/ context from pattern
+# for now, saves a page name and json of the url parts
 class Route(models.Model):
-  name = models.CharField(max_length=100, blank=True)
-  url = models.CharField(max_length=100)
-  view = models.ForeignKey(Template)
+  page = models.CharField(max_length=100)
+  url_parts = models.TextField()

@@ -46,7 +46,7 @@ def app_template(request, app_id, page_name):
     return app_save_page(request, app_id, page_name)
   else:
     return HttpResponse("", status=405)
-    
+
 @require_POST
 @login_required
 def app_save_page(request, app_id, page_name):
@@ -63,6 +63,38 @@ def app_save_page(request, app_id, page_name):
   app.templates.add(page) # associate with this app
   return HttpResponse("ok")
 
+@login_required
+def app_urls(request, app_id, page_name):
+  if request.method == 'GET':
+    app = get_object_or_404(App, id=app_id, owner=request.user)
+    route = get_object_or_404(app.urls, page__iexact=page_name)
+    return HttpResponse(route.url_parts)
+  elif request.method == 'POST':
+    return app_save_route(request, app_id, page)
+  else:
+    return HttpResponse("", status=405)
+
+@require_POST
+@login_required
+def app_save_route(request, app_id, page_name):
+  if 'url_parts' not in request.POST:
+    return HttpResponse("you must supply \"url_parts\" as a field", status=400)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  route = app.urls.get_or_create(page__iexact=page_name, defaults={ 'page': page_name })
+  route.url_parts = request.POST['url_parts']
+  try:
+    route.full_clean()
+  except Exception:
+    return HttpResponse("error validating the route object", status=400)
+  route.save()
+  app.urls.add(route) # associate with this app
+  return HttpResponse("ok")
+
+def app_design(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  page_context = { 'app': app, 'title' : 'Design' }
+  return render(request, 'dev/app-design.html', page_context)
 def app_design(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
