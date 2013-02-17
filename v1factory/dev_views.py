@@ -69,15 +69,19 @@ def app_design(request, app_id):
   page_context = { 'app': app, 'title' : 'Design' }
   return render(request, 'dev/app-design.html', page_context)
 
-def app_editor(request, app_id):
+def app_editor(request, app_id, page_name):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Editor' }
+  page_context = { 'app': app, 'title' : 'Editor', 'page_name' : page_name }
   # get schema of app
   schema = [ c.to_dict() for c in app.classes.all() ]
-  page = get_object_or_404(app.templates, name__iexact='homepage')
   page_context['schema'] = simplejson.dumps(schema)
+
+  page = get_object_or_404(app.templates, name__iexact=page_name)
   page_context['uielements'] = page.html
+
+  list_of_pages =  [c.name for c in app.templates.all() ]
+  page_context['pages'] = list_of_pages
   return render(request, 'dev/editor.html', page_context)
 
 def app_analytics(request, app_id):

@@ -102,7 +102,7 @@ var WidgetView = Backbone.View.extend({
   el: null,
   className: 'pseudo-outline',
   tagName : 'span',
-  widget :null,
+  widgetsContainer :null,
   selected : false,
 
   events: {
@@ -171,7 +171,7 @@ var WidgetView = Backbone.View.extend({
     element.appendChild(elementBottom);
 
     element.appendChild(meta);
-    this.widget = element;
+    this.widgetsContainer = element;
     this.el.appendChild(element);
     this.model.select();
   },
@@ -187,34 +187,34 @@ var WidgetView = Backbone.View.extend({
 
   outlineSelected: function() {
     if(this.model.attributes.selected && this.selected === false) {
-      $(this.widget).addClass('selected');
+      $(this.widgetsContainer).addClass('selected');
       this.selected = true;
     }
     else {
-      $(this.widget).removeClass('selected');
+      $(this.widgetsContainer).removeClass('selected');
       this.selected = false;
     }
   },
 
   changedWidth: function(a) {
-    this.widget.className = 'selected widget span' + this.model.attributes.width;
+    this.widgetsContainer.className = 'selected widget span' + this.model.attributes.width;
   },
 
   changedHeight: function(a) {
-    this.widget.style.height = (this.model.attributes.height * GRID_HEIGHT) + 'px';
+    this.widgetsContainer.style.height = (this.model.attributes.height * GRID_HEIGHT) + 'px';
   },
 
   changedTop: function(a) {
-    this.widget.style.top = (GRID_HEIGHT * (this.model.get('top')-1)) + 'px';
+    this.widgetsContainer.style.top = (GRID_HEIGHT * (this.model.get('top')-1)) + 'px';
   },
 
   changedLeft: function(a) {
-    this.widget.style.left = (GRID_HEIGHT * (this.model.get('left')-1)) + 'px';
+    this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('left')-1)) + 'px';
   }
 });
 
 
-var EntityUIContainer = Backbone.View.extend({
+var EntityUIContainer = WidgetView.extend({
   el: null,
   className: 'container-create',
   tagName : 'div',
@@ -234,10 +234,12 @@ var EntityUIContainer = Backbone.View.extend({
                     'select');
     
     this.model = item;
-    // this.model.bind("change:selected", this.outlineSelected, this);
-    // this.model.bind("change:width", this.changedWidth, this);
-    // this.model.bind("change:height", this.changedHeight, this);
-    // this.model.bind("change:coordinates", this.changedCoordinates, this);
+
+    this.model.bind("change:selected", this.outlineSelected, this);
+    this.model.bind("change:width", this.changedWidth, this);
+    this.model.bind("change:height", this.changedHeight, this);
+    this.model.bind("change:top", this.changedTop, this);
+    this.model.bind("change:left", this.changedLeft, this);
 
     this.entity = item.attributes.entity;
     var collection = new WidgetCollection();
@@ -338,11 +340,7 @@ var EntityUIContainer = Backbone.View.extend({
 
   placeUpdateWidgets: function() {
 
-  },
-
-  select: function() {
-    //this.model.select();
-  },
+  }
 });
 
 
@@ -409,18 +407,18 @@ var WidgetInfoView = Backbone.View.extend({
   showAttribute: function(val, key, prop) {
     var self = this;
 
-    if(val.__proto__.toString() === '[object Object]') {
-      var li = document.createElement('li');
-      li.innerHTML = key + ' : ';
-      _(val).each(function(valinner,keyinner) {
-        this.props = String(prop + '-' + keyinner);
-        li.innerHTML += '<br>' + self.showAttribute(valinner,keyinner, this.props).innerHTML;
-      });
-    }
-    else {
+    // if(val.__proto__.toString() === '[object Object]') {
+    //   var li = document.createElement('li');
+    //   li.innerHTML = key + ' : ';
+    //   _(val).each(function(valinner,keyinner) {
+    //     this.props = String(prop + '-' + keyinner);
+    //     li.innerHTML += '<br>' + self.showAttribute(valinner,keyinner, this.props).innerHTML;
+    //   });
+    // }
+    // else {
       var li = document.createElement('li');
       li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
-    }
+    // }
     li.id = 'prop-'+ key;
     return li;
   },
@@ -648,19 +646,23 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   keydown: function(e) {
-    e.preventDefault();
+    
     switch(e.keyCode) {
       case 37:
         widgetCollection.selected.moveLeft();
+        e.preventDefault();
         break;
       case 38:
         widgetCollection.selected.moveUp();
+        e.preventDefault();
         break;
       case 39:
         widgetCollection.selected.moveRight();
+        e.preventDefault();
         break;
       case 40:
         widgetCollection.selected.moveDown();
+        e.preventDefault();
         break;
     }
   }

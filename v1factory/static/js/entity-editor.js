@@ -77,7 +77,7 @@ var EntityView = Backbone.View.extend({
     var name = $('.property-name-input', this.el).val();
     console.log($('.property-name-input', this.el));
 
-    this.model.set(name, "Text");
+    this.model.set(name, "text");
     var template = _.template( $("#template-property").html(), { name: name,
                                                                  key : name,
                                                                  other_models: this.parentCollection.models});
