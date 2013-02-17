@@ -4,7 +4,7 @@
 <link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/editor.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
-
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 {% endblock %}
 
 {% block navbar %}
@@ -38,7 +38,10 @@
     var initialEntities = {{ schema|safe }}
     var initialUIElements = {{ uielements|safe }}
   </script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/widget-editor.js"></script>
+  <script>
+  </script>
 {% endblock %}
 

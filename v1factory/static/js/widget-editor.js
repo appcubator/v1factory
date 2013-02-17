@@ -119,7 +119,8 @@ var WidgetView = Backbone.View.extend({
                     'changedWidth',
                     'changedHeight',
                     'changedTop',
-                    'changedLeft');
+                    'changedLeft',
+                    'resized');
 
     this.model = item;
     this.model.bind("change:selected", this.outlineSelected, this);
@@ -141,8 +142,8 @@ var WidgetView = Backbone.View.extend({
     var height = widget.get('height');
     
     element.setAttribute("style","position:relative;");
-    element.style.top = (GRID_HEIGHT * (widget.get('top')-1)) + 'px';
-    element.style.left = (GRID_HEIGHT * (widget.get('left')-1)) + 'px';
+    element.style.top = (GRID_HEIGHT * (widget.get('top'))) + 'px';
+    element.style.left = (GRID_HEIGHT * (widget.get('left'))) + 'px';
     element.className = 'widget span'+width;
     element.style.height = (height * GRID_HEIGHT) + 'px';
     element.id = 'widget-' + this.collection.length;
@@ -151,29 +152,21 @@ var WidgetView = Backbone.View.extend({
 
     meta = document.createElement('div');
     meta.className = 'meta';
-    deleteBtn = document.createElement('div');
+    deleteBtn = document.createElement('img');
     deleteBtn.className = 'delete';
-    deleteBtn.appendChild(document.createTextNode('delete'));
+    deleteBtn.src = '/static/img/delete-icon.png';
     meta.appendChild(deleteBtn);
-
-    var elementTop = document.createElement('div');
-    elementTop.className = 'top-extend';
-    var elementLeft = document.createElement('div');
-    elementLeft.className = 'left-extend';
-    var elementRight = document.createElement('div');
-    elementRight.className = 'right-extend';
-    var elementBottom = document.createElement('div');
-    elementBottom.className = 'bottom-extend';
-
-    element.appendChild(elementTop);
-    element.appendChild(elementLeft);
-    element.appendChild(elementRight);
-    element.appendChild(elementBottom);
 
     element.appendChild(meta);
     this.widgetsContainer = element;
     this.el.appendChild(element);
     this.model.select();
+
+    var self = this;
+    $(this.widgetsContainer).resizable({
+      grid: 30,
+      resize: self.resized
+    });
   },
 
   remove: function() {
@@ -205,11 +198,18 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedTop: function(a) {
-    this.widgetsContainer.style.top = (GRID_HEIGHT * (this.model.get('top')-1)) + 'px';
+    this.widgetsContainer.style.top = (GRID_HEIGHT * (this.model.get('top'))) + 'px';
   },
 
   changedLeft: function(a) {
-    this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('left')-1)) + 'px';
+    this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('left'))) + 'px';
+  },
+
+  resized: function(e, ui) {
+    var deltaHeight = (ui.size.height + 2) / GRID_HEIGHT;
+    var deltaWidth = (ui.size.width + 2) / GRID_WIDTH;
+    this.model.set('width', deltaWidth);
+    this.model.set('height', deltaHeight);  
   }
 });
 
@@ -286,7 +286,6 @@ var EntityUIContainer = WidgetView.extend({
     element.appendChild(meta);
     this.widgetsContainer = element;
     this.el.appendChild(element);
-    //this.model.select();
   },
 
   placeWidget: function(model, a) {
@@ -306,8 +305,8 @@ var EntityUIContainer = WidgetView.extend({
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
         type : type,
-        width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
-        height: coordinates.bottomRight.y - coordinates.topLeft.y + 1,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y,
         text : '{{' + self.entity.attributes.name + '_' + key + '}}'
       };
       var widget = new Widget(widgetProps);
@@ -328,8 +327,8 @@ var EntityUIContainer = WidgetView.extend({
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
         type : type,
-        width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
-        height: coordinates.bottomRight.y - coordinates.topLeft.y + 1,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y,
         text : '{{' + self.entity.attributes.name + '_' + key + '}}'
       };
       var widget = new Widget(widgetProps);
@@ -379,13 +378,17 @@ var WidgetMenuView = Backbone.View.extend({
 
 var WidgetInfoView = Backbone.View.extend({
   el : document.getElementById('item-info-list'),
-
+  model: null,
   events : {
     'change input' : 'inputChanged'
   },
 
   initialize: function(){
-    _.bindAll(this, 'render', 'show', 'showAttribute', 'inputChanged');
+    _.bindAll(this, 'render', 
+                    'show', 
+                    'showAttribute', 
+                    'inputChanged',
+                    'changedProp');
     this.render();
   },
 
@@ -397,6 +400,7 @@ var WidgetInfoView = Backbone.View.extend({
     this.el.innerHTML = '';
     var self = this;
     this.model = model;
+    this.model.bind("change", this.changedProp, this);
 
     _(model.attributes).each(function(val, key){
       if(key == 'id' || key == 'type' || key == 'selected') return;
@@ -406,29 +410,24 @@ var WidgetInfoView = Backbone.View.extend({
 
   showAttribute: function(val, key, prop) {
     var self = this;
-
-    // if(val.__proto__.toString() === '[object Object]') {
-    //   var li = document.createElement('li');
-    //   li.innerHTML = key + ' : ';
-    //   _(val).each(function(valinner,keyinner) {
-    //     this.props = String(prop + '-' + keyinner);
-    //     li.innerHTML += '<br>' + self.showAttribute(valinner,keyinner, this.props).innerHTML;
-    //   });
-    // }
-    // else {
-      var li = document.createElement('li');
-      li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
-    // }
+    var li = document.createElement('li');
+    li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
     li.id = 'prop-'+ key;
     return li;
   },
 
-
   inputChanged: function(e) {
     var prop = e.target.parentNode.id.replace('prop-', '') + e.target.id;
     this.model.set(prop, e.target.value);
-  }
+  },
 
+  changedProp: function(a, b) {
+    _(a.changed).each(function(val, key) {
+      if(document.getElementById('prop-' + key)) {
+        $('input', document.getElementById('prop-' + key)).val(val);
+      }
+    });
+  }
 });
 
 
@@ -456,8 +455,8 @@ var WidgetEntityView = Backbone.View.extend({
       top : coordinates.topLeft.y,
       left : coordinates.topLeft.x,
       type : 'container',
-      width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
-      height: coordinates.bottomRight.y - coordinates.topLeft.y + 1,
+      width : coordinates.bottomRight.x - coordinates.topLeft.x,
+      height: coordinates.bottomRight.y - coordinates.topLeft.y,
       entity : this.model
     };
     this.widget = widget;
@@ -555,22 +554,20 @@ var WidgetEditorView = Backbone.View.extend({
       top : coordinates.topLeft.y,
       left : coordinates.topLeft.x,
       type : type,
-      width : coordinates.bottomRight.x - coordinates.topLeft.x + 1,
-      height: coordinates.bottomRight.y - coordinates.topLeft.y + 1
+      width : coordinates.bottomRight.x - coordinates.topLeft.x,
+      height: coordinates.bottomRight.y - coordinates.topLeft.y
     };
 
     this.collection.push(widget);
   },
 
   unite: function(cor1, cor2) {
-    var topLeft = {};
-    var bottomRight = {};
+    var topLeft = {}, bottomRight = {};
 
     if(cor1.x < cor2.x) {
       topLeft.x =  cor1.x;
       bottomRight.x = cor2.x;
-    }
-    else {
+    } else {
       topLeft.x =  cor2.x;
       bottomRight.x = cor1.x;
     }
@@ -578,11 +575,12 @@ var WidgetEditorView = Backbone.View.extend({
     if(cor1.y < cor2.y) {
       topLeft.y =  cor1.y;
       bottomRight.y = cor2.y;
-    }
-    else {
+    } else {
       topLeft.y =  cor2.y;
       bottomRight.y = cor1.y;
     }
+
+    topLeft.x--; topLeft.y--;
 
     return {
       topLeft : topLeft,

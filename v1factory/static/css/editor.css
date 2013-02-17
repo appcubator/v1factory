@@ -300,7 +300,14 @@
 .widget .meta .delete, .widgets-container .meta .delete {
   position: absolute;
   display: inline-block;
+  margin-top: 6px;
+  width: 20px;
   z-index: 1002;
+}
+
+.ui-resizable-handle {
+  display: none;
+  opacity: 0;
 }
 
 .widget:hover {
@@ -309,6 +316,10 @@
 
 .widget:hover .meta, .widgets-container:hover .meta {
   height: 30px;
+}
+
+.widget:hover .ui-resizable-handle {
+  opacity: 1;
 }
 
 
