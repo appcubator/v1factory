@@ -34,6 +34,14 @@ select.page {
   margin: 0;
 }
 
+select.url-part {
+  width: 80px;
+}
+
+input.url-part {
+  width: 120px;
+}
+
 div.pages {
   margin: 0;
   margin-top: 14px;
