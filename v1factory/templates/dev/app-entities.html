@@ -32,7 +32,7 @@
       <h2 class="offset1">Entities</h2>
       <div id="entities-container">
       <ul id="entities" class="entity-list"></ul><div id="add-entity-button" class="span7 offset1 add-entity"><span class="pane hi5 hoff1"><p class="hoff2"> + Add Entity</p></span></div>
-      <form id="add-entity-form" class="offset1 span7 entity" style="display:none;">
+      <form id="add-entity-form" class="offset1 span7 entity hoff1" style="display:none;">
         <div class="pane">
         <span class="sub-title">
           <input type="text" id="entity-name-input" placeholder="Entity Name"></span>
@@ -49,8 +49,7 @@
 
 <div id="entities-init">
 <script>
-  var appState = {{ app.state|safe }};
-  var initialEntities = {{ schema|safe }};
+  var appState = {{ app.state_json|safe }};
   var entitiesLibrary = [
                   {
                     name : "Post",

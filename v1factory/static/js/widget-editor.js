@@ -94,7 +94,6 @@ var WidgetCollection = Backbone.Collection.extend({
   selectWidgetById: function(id) {
     this.collection.get(id).select();
     this.selectedElement = this.collection.get(id);
-    console.log(this.selectedElement);
   }
 });
 
@@ -298,7 +297,7 @@ var EntityUIContainer = WidgetView.extend({
     var self = this;
     var widgets = [];
     _(self.entity.attributes.attributes).each(function(val, key, item, ind) {
-      var coordinates = widgetEditor.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
+      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
       var type = 'widget-5';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
@@ -320,7 +319,7 @@ var EntityUIContainer = WidgetView.extend({
     var self = this;
     var widgets = [];
     _(self.entity.attributes.attributes).each(function(val, key, item, ind) {
-      var coordinates = widgetEditor.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
+      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
       var type = 'widget-3';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
@@ -346,8 +345,9 @@ var EntityUIContainer = WidgetView.extend({
 var WidgetMenuView = Backbone.View.extend({
   el : document.getElementById('widget-list'),
 
-  initialize: function(item){
+  initialize: function(widgetCollection){
     _.bindAll(this, 'render', 'addMenuItem', 'removeListItem', 'change');
+    this.render();
     this.collection = widgetCollection;
     this.collection.bind('remove', this.removeListItem);
     this.collection.bind('add', this.addMenuItem);
@@ -355,7 +355,7 @@ var WidgetMenuView = Backbone.View.extend({
   },
 
   render: function() {
-
+    this.el.innerHTML = '';
   },
   addMenuItem: function(elem) {
     var item = document.createElement('li');
@@ -442,14 +442,14 @@ var WidgetEntityView = Backbone.View.extend({
     'click .update' : 'clickedUpdate'
   },
 
-  initialize: function(item){
+  initialize: function(item, widgetCollection){
     var self = this;
     _.bindAll(this, 'render', 'clickedCreate',
                               'clickedUpdate',
                               'clickedShow');
     this.model = item;
 
-    var coordinates = widgetEditor.unite({x: 6, y:2}, {x: 16, y: 10});
+    var coordinates = pagesView.unite({x: 6, y:2}, {x: 16, y: 10});
     var widget = {
       id : widgetCollection + 1,
       top : coordinates.topLeft.y,
@@ -495,21 +495,24 @@ var WidgetEntitiesListView = Backbone.View.extend({
   
   },
 
-  initialize: function(){
+  initialize: function(widgetCollection){
     var self = this;
     _.bindAll(this, 'render');
+    var initialEntities = appState.entities;
     _(initialEntities).each(function(entity) {
       entity.id = self.counter;
       self.counter++;
     });
     this.collection = new EntityCollection(initialEntities);
+    this.widgetCollection = widgetCollection;
     this.render();
   },
 
   render: function() {
     var self = this;
+    this.el.innerHTML = '';
     _(this.collection.models).each(function(item) {
-      var view = new WidgetEntityView(item);
+      var view = new WidgetEntityView(item, this.widgetCollection);
       self.el.appendChild(view.el);
     });
   }
@@ -525,29 +528,33 @@ var WidgetEditorView = Backbone.View.extend({
   events : {
   },
 
-  initialize: function(){
+  initialize: function(page) {
     _.bindAll(this, 'render',
                     'addWidget',
-                    'unite',
                     'placeWidget',
                     'serializeWidgets',
                     'serializeCollection',
                     'keydown');
 
-    this.collection = widgetCollection;
+    this.render();
+    this.collection = new WidgetCollection();
+    this.widgetMenu = new WidgetMenuView(this.collection);
+    this.widgetEntitiesView = new WidgetEntitiesListView(this.collection);
     this.collection.bind('add', this.placeWidget);
+
+    this.collection.add(page.uielements);
+
     //this.render();
 
-    $('#save').on('click', this.serializeWidgets);
     window.addEventListener('keydown', this.keydown);
   },
 
   render: function() {
-
+    this.widgetsContainer.innerHTML = '';
   },
 
   addWidget: function(id, cor1, cor2) {
-    var coordinates = this.unite(cor1, cor2);
+    var coordinates = pagesView.unite(cor1, cor2);
     var type = id;
     var widget = {
       id : this.collection.length + 1,
@@ -559,33 +566,6 @@ var WidgetEditorView = Backbone.View.extend({
     };
 
     this.collection.push(widget);
-  },
-
-  unite: function(cor1, cor2) {
-    var topLeft = {}, bottomRight = {};
-
-    if(cor1.x < cor2.x) {
-      topLeft.x =  cor1.x;
-      bottomRight.x = cor2.x;
-    } else {
-      topLeft.x =  cor2.x;
-      bottomRight.x = cor1.x;
-    }
-
-    if(cor1.y < cor2.y) {
-      topLeft.y =  cor1.y;
-      bottomRight.y = cor2.y;
-    } else {
-      topLeft.y =  cor2.y;
-      bottomRight.y = cor1.y;
-    }
-
-    topLeft.x--; topLeft.y--;
-
-    return {
-      topLeft : topLeft,
-      bottomRight: bottomRight
-    };
   },
 
   placeWidget: function(widget) {
@@ -601,41 +581,25 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   serializeWidgets: function(e) {
-    console.log(widgetCollection.models);
-    uiElements = this.serializeCollection(widgetCollection.models);
-    console.log(JSON.stringify(uiElements));
-
-    $.ajax({
-      type: "POST",
-      url: '/app/1/page/homepage/',
-      data: {
-        content: JSON.stringify(uiElements)
-      },
-      success: function() {
-
-      },
-      dataType: "JSON"
-    });
-
-    return false;
+    uiElements = this.serializeCollection(this.collection.models);    
+    return uiElements;
   },
 
   serializeCollection: function(coll) {
-    console.log(coll);
     var uiElements = [];
     var self = this;
     _(coll).each(function(item, key) {
       if(item.attributes.type == 'container') {
-        console.log(item);
         var elems = { };
         var key = String(item.get('type') + '-' + item.get('action'));
-        elems[key] = {}
+        elems[key] = {};
         elems[key]['entity'] = item.get('entity').get('name');
         elems[key]['elements'] = self.serializeCollection(item.get('childCollection').models);
         uiElements.push(elems);
       }
       else {
         var elem = item.attributes;
+        delete elem.selected;
         uiElements.push(elem);
       }
     });
@@ -666,9 +630,116 @@ var WidgetEditorView = Backbone.View.extend({
   }
 });
 
+var PagesView = Backbone.View.extend({
+  el: document.body,
+  listEl: document.getElementById('pages-list'),
+  events: {
+    'click .new-page' : 'clickedNewPage',
+    'submit .new-page-form' : 'submittedNewPage',
+    'click .exist-page' : 'clickedOpen',
+    'click #save' : 'savePages'
+  },
 
-var widgetCollection = new WidgetCollection();
-var menuView = new WidgetMenuView();
-var widgetEditor = new WidgetEditorView();
+  initialize: function() {
+    _.bindAll(this, 'render', 'clickedNewPage', 'submittedNewPage', 'savePages', 'savePage', 'unite', 'clickedOpen');
+    this.pages = appState.pages || [];
+    this.render();
+  },
+
+  render: function() {
+    var self = this;
+    _(this.pages).each(function(page, ind) {
+      self.listEl.innerHTML +=  '<li class="exist-page" id="page-'+ ind + '">' + page.name + '</li>';
+    });
+    self.listEl.innerHTML += '<li class="new-page"> + Create Page</li>' +
+    '<form class="new-page-form" hi2 style="display:none;"><input class="new-page-name" type="text"></form>';
+
+    // if(this.pages.length) {
+    //   this.curPage = 0;
+    //   this.openPage(0);
+    // }
+  },
+
+  clickedNewPage: function() {
+    $('.new-page').hide();
+    $('.new-page-form').fadeIn();
+    $('.new-page-name').focus();
+  },
+
+  submittedNewPage: function(e) {
+    e.preventDefault();
+    var pageName = $('.new-page-name').val();
+    var page = {'name': pageName, 'uielements' : []};
+
+    this.pages.push(page);
+    this.curPage = this.pages.length - 1;
+    this.openPage(this.curPage);
+
+    $('<li class="page" id="'+ pageName + '">' + pageName + '</li>').insertBefore('.new-page');
+    $('.new-page-form').hide();
+    $('.new-page-name').val('');
+    $('.new-page').fadeIn();
+  },
+
+  openPage: function(pageInd) {
+    if(this.widgetEditor) {
+      this.savePage();
+    }
+    this.curPage = pageInd;
+    this.widgetEditor = new WidgetEditorView(this.pages[pageInd]);
+  },
+
+  savePage: function() {
+    this.pages[this.curPage]['uielements'] = (this.widgetEditor.serializeWidgets() || []);
+  },
+
+  savePages: function() {
+    this.savePage();
+    appState.pages = this.pages;
+    $.ajax({
+      type: "POST",
+      url: '/app/1/state/',
+      data: JSON.stringify(appState),
+      success: function() {
+
+      },
+      dataType: "JSON"
+    });
+  },
+
+  unite: function(cor1, cor2) {
+    var topLeft = {}, bottomRight = {};
+
+    if(cor1.x < cor2.x) {
+      topLeft.x =  cor1.x;
+      bottomRight.x = cor2.x;
+    } else {
+      topLeft.x =  cor2.x;
+      bottomRight.x = cor1.x;
+    }
+
+    if(cor1.y < cor2.y) {
+      topLeft.y =  cor1.y;
+      bottomRight.y = cor2.y;
+    } else {
+      topLeft.y =  cor2.y;
+      bottomRight.y = cor1.y;
+    }
+
+    topLeft.x--; topLeft.y--;
+
+    return {
+      topLeft : topLeft,
+      bottomRight: bottomRight
+    };
+  },
+
+  clickedOpen: function(e) {
+    var ind = String(e.target.id).replace('page-','');
+    this.openPage(ind);
+    e.preventDefault();
+  }
+});
+
+var pagesView = new PagesView();
 var widgetInfoView = new WidgetInfoView();
-var widgetEntitiesView = new WidgetEntitiesListView();

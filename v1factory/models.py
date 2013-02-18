@@ -15,6 +15,10 @@ class App(models.Model):
     return simplejson.loads(self._state_json)
 
   @property
+  def state_json(self):
+    return self._state_json
+
+  @property
   def entities(self):
     return self.state['entities']
 

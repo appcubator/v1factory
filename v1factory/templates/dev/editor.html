@@ -35,7 +35,7 @@
 
 {% block js %}
   <script type="text/javascript">
-    var appState = {{ app.state|safe }};
+    var appState = {{ app.state_json|safe }};
   </script>
   <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>

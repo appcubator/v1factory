@@ -1,18 +1,21 @@
 var EntityModel = Backbone.Model.extend({
-  initialize: function(key, value) {
-    this.name = key;
-  }
 });
 
 var EntityCollection = Backbone.Collection.extend({
-  model: EntityModel,
-  initialize: function(items) {
-    _(items).each(function(item){
-      item['attributes'] = item.fields;
-      item.fields = null;
-    });
-    this.add(items);
-  }
+  model: EntityModel
+  // initialize: function(items) {
+  //   var models = []
+  //   _(items).each(function(item){
+  //     var model = {}
+  //     model.name = item.name;
+  //     _(item.fields).each(function(val, key){
+  //       model[key] = val;
+  //     });
+  //     console.log(model);
+  //     models.push(model);
+  //   });
+  //   this.add(models);
+  // }
 });
 
 var EntityView = Backbone.View.extend({
@@ -59,7 +62,7 @@ var EntityView = Backbone.View.extend({
     var self = this;
     //console.log(this.model);
     var template = _.template( $("#template-entity").html(), { name: this.name,
-                                                               attribs: this.model.get('attributes'),
+                                                               attribs: this.model.get('fields'),
                                                                other_models: this.parentCollection.models } );
     $(this.el).append(template);
   },
@@ -77,7 +80,10 @@ var EntityView = Backbone.View.extend({
     var name = $('.property-name-input', this.el).val();
     console.log($('.property-name-input', this.el));
 
-    this.model.set(name, "text");
+    var curFields = this.model.get('fields');
+    curFields[name] = 'text';
+    this.model.set('fields', curFields);
+
     var template = _.template( $("#template-property").html(), { name: name,
                                                                  key : name,
                                                                  other_models: this.parentCollection.models});
@@ -125,10 +131,12 @@ var EntityListView = Backbone.View.extend({
   initialize: function(){
     self = this;
     _.bindAll(this, 'render', 'appendItem', 'addEntity');
+    var initialEntities = appState.entities || [];
     _(initialEntities).each(function(entity) {
       entity.id = self.counter;
       self.counter++;
     });
+    console.log(initialEntities);
     this.collection = new EntityCollection(initialEntities);
     this.render();
   },
@@ -196,12 +204,13 @@ var EntitiesEditorView = Backbone.View.extend({
   serializeEntities : function(e) {
     console.log("serialized");
     var serialized = [ ];
+    console.log(entityList.collection);
     _(entityList.collection.models).each(function(entity){
 
       var ent = {};
       ent.name = entity.get('name');
       ent.fields = { };
-      _(entity.attributes).each(function(val, key){
+      _(entity.get('fields')).each(function(val, key){
         if (key == "id") return;
         if (key == "name") return;
         if (key == "attributes") return;
@@ -212,14 +221,13 @@ var EntitiesEditorView = Backbone.View.extend({
       serialized.push(ent);
     });
 
-    console.log(JSON.stringify(serialized));
+    console.log(serialized);
+    appState.entities = serialized;
     $.ajax({
       type: "POST",
-      url: '/app/1/syncschema/',
-      data: JSON.stringify(serialized),
-      success: function() {
-
-      },
+      url: '/app/1/state/',
+      data: JSON.stringify(appState),
+      success: function() { },
       dataType: "JSON"
     });
   }

@@ -1,10 +1,3 @@
-var initialUrls = [
-  {
-    urlParts : ['home', '{{User}}'],
-    page: 'home'
-  }
-];
-
 var entities = ['Post', 'Tweet'];
 
 var UrlModel = Backbone.Model.extend({
@@ -33,7 +26,7 @@ var UrlView = Backbone.View.extend({
 
   render: function() {
     var temp = document.getElementById('template-url').innerHTML;
-    var html = _.template(temp, { 'urls': this.urlParts });
+    var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
     this.el.innerHTML = html;
   },
 
@@ -64,8 +57,9 @@ var UrlsEditorView = Backbone.View.extend({
     this.collection = new UrlsCollection();
     this.collection.bind('add', this.placeUrls);
     this.render();
-
-    this.collection.add(initialUrls);
+    
+    var initUrls = appState.urls || [];
+    this.collection.add(initUrls);
 
     $('#create-url').on('click', this.newWUrl);
     $('#save-urls').on('click', this.saveUrls)
@@ -88,13 +82,11 @@ var UrlsEditorView = Backbone.View.extend({
   saveUrls: function() {
     var serialized = this.serializeUrls(this.collection.models);
     console.log(serialized);
-
+    appState.urls = serialized
     $.ajax({
       type: "POST",
-      url: '/app/1/urls/homepage/',
-      data: {
-        content: JSON.stringify(uiElements)
-      },
+      url: '/app/1/state/',
+      data: JSON.stringify(appState),
       success: function() {
 
       },

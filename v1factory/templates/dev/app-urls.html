@@ -43,23 +43,25 @@
         <% var endsWithEnt = 0;
            _.each(urls, function(url, i) { %>
           <span class="slash">/</span>
-          {% for entity in schema %}
-          <% if( url == '\{\{'+ '{{ entity.name }}' + '\}\}') { %>
-            <select class="id url-part" id="inp-<%= i %>">
-              <option selected> <%= url.replace('{{','').replace('\}\}','_id') %></option>
-            </select>
-          <% endsWithEnt = 1; return false; } %>
-          {% endfor %}
+          
+          <% if (/\{\{([^\}]+)}}/g.exec(url)) { endsWithEnt = 1 %>
+          <select class="id url-part" id="inp-<%= i %>">
+          <% _.each(entities, function(entity, i) { %>
+            <option> <%= entity %> </option>
+          <% }); %>
+          </select>
+          <% } else { endsWithEnt = 0; %>
           <input type="text" class="url-part" placeholder="url_string" id="inp-<%= i %>" value='<%= url %>'>
+          <% } %>
         <% }); %>
 
         <% if(!endsWithEnt) {%>
           <span class="slash">/</span>
           <select class="id url-part" id="inp-new" %>>
             <option>Add ID</option>
-          {% for entity in schema %}
-            <option>{{ entity.name }}_id</option>
-          {% endfor %}
+            <% _.each(entities, function(entity, i) { %>
+              <option> <%= entity %> </option>
+            <% }); %>
           </select>
         <% } else {%>
           <span class="slash">/</span>
@@ -69,16 +71,16 @@
         <div class="pages span1 arrow">»</div>
         <div class="pages right span6 offset1">
           <select class="page">
-            {% for page in pages %}
-            <option>{{ page }}</option>
-            {% endfor %}
+            <% _.each(pages, function(page){ %>
+            <option><%= page.name %></option>
+            <% }); %>
             <option>+ Create a new page</option>
           </select>
         </div>
       </div>
 </script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/urls-editor.js"></script>
 <script type="text/javascript">
-    var appState = {{ app.state|safe }};
+  var appState = {{ app.state_json|safe }};
 </script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/urls-editor.js"></script>
 {% endblock %}

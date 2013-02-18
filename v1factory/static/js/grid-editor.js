@@ -112,7 +112,7 @@ var GridEditorView = Backbone.View.extend({
 
   addWidget: function(e) {
     var id = e.target.id || e.target.parentNode.id;
-    widgetEditor.addWidget(id, this.initCor, this.lastCor);
+    pagesView.widgetEditor.addWidget(id, this.initCor, this.lastCor);
     e.preventDefault();
     $(this.itemGallery).hide();
     $('.cselected').removeClass('cselected');
