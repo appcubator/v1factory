@@ -52,8 +52,8 @@ var Widget = Backbone.Model.extend({
   },
 
   select: function() {
-    this.collection.unselectAll();
-    this.collection.selected = this;
+    pagesView.widgetEditor.collection.unselectAll();
+    pagesView.widgetEditor.selected = this;
     this.set('selected', true);
     widgetInfoView.show(this);
   },
@@ -169,7 +169,7 @@ var WidgetView = Backbone.View.extend({
   },
 
   remove: function() {
-    widgetCollection.remove(this);
+    pagesView.widgetEditor.collection.remove(this);
     $(this.el).remove();
   },
 

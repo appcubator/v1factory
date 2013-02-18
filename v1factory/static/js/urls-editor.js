@@ -13,12 +13,17 @@ var UrlView = Backbone.View.extend({
   tagName: 'div',
   className: 'row span30 offset1 hoff1',
   events: {
-    'change .url-part' : 'urlPartChanged'
+    'change .url-part' : 'urlPartChanged',
+    'change .page' : 'pageChanged',
+    'click .cross' : 'urlRemoved'
   },
 
   initialize: function(item){
     var self = this;
-    _.bindAll(this, 'render', 'urlPartChanged');
+    _.bindAll(this, 'render', 
+                    'urlPartChanged', 
+                    'pageChanged', 
+                    'urlRemoved');
     this.model = item;
     this.urlParts = this.model.get('urlParts');
     this.render();
@@ -40,6 +45,24 @@ var UrlView = Backbone.View.extend({
       var ind = String(e.target.id).replace('inp-','');
       this.model.get('urlParts')[ind] = e.target.value;
     }
+  },
+
+  pageChanged: function(e) {
+    if(e.target.value == "<<new_page>>") {
+      console.log("yolo");
+      return;
+    }
+
+    this.model.set('page_name', e.target.value);
+  },
+
+  urlRemoved: function() {
+    this.model.destroy();
+    this.remove();
+  },
+
+  remove: function() {
+    $(this.el).remove();
   }
 });
 
@@ -48,10 +71,10 @@ var UrlsEditorView = Backbone.View.extend({
 
   initialize: function(){
     var self = this;
-    _.bindAll(this, 'render', 
-                    'placeUrls', 
-                    'newWUrl', 
-                    'saveUrls', 
+    _.bindAll(this, 'render',
+                    'placeUrls',
+                    'newWUrl',
+                    'saveUrls',
                     'serializeUrls');
 
     this.collection = new UrlsCollection();

@@ -80,7 +80,7 @@ var EntityView = Backbone.View.extend({
     var name = $('.property-name-input', this.el).val();
     console.log($('.property-name-input', this.el));
 
-    var curFields = this.model.get('fields');
+    var curFields = this.model.get('fields') || {};
     curFields[name] = 'text';
     this.model.set('fields', curFields);
 

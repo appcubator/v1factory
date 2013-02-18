@@ -74,8 +74,9 @@
             <% _.each(pages, function(page){ %>
             <option><%= page.name %></option>
             <% }); %>
-            <option>+ Create a new page</option>
+            <option value="<<new_page>>">+ Create a new page</option>
           </select>
+          <div class="cross right">×</div>
         </div>
       </div>
 </script>

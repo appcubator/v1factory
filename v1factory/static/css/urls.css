@@ -4,6 +4,8 @@
   color: #2b3545;
   font-size: 18px;
   text-align: center;
+  padding-top: 14px;
+  cursor: pointer;
 }
 
 .url {
@@ -43,4 +45,12 @@ div.pages.arrow {
   font-weight: bold;
   height: 32px;
   margin-top: 18px;
+}
+
+.cross {
+  font-weight: bold;
+  font-size: 24px;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 12px;
 }
