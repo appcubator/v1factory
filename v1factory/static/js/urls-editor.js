@@ -33,7 +33,6 @@ var UrlView = Backbone.View.extend({
                     'lastTextChanged');
     this.model = item;
     if(!this.model.get('urlparts')) {
-      console.log("YOLO");
       this.model.set('urlparts', []);
     }
     this.urlParts = this.model.get('urlparts');
@@ -42,19 +41,15 @@ var UrlView = Backbone.View.extend({
 
   render: function() {
     var temp = document.getElementById('template-url').innerHTML;
-    console.log(this.urlParts);
     var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
     this.el.innerHTML = html;
   },
 
   urlPartChanged: function(e) {
-    console.log("CHANGEd");
-    console.log(e.target.tagName);
     if(e.target.id == 'inp-new') {
       e.target.id = 'inp-' + this.model.get('urlparts').length;
       var value = e.target.value;
       if(e.target.tagName == 'SELECT') {
-        console.log("YOLOOO");
         value = '{{' + value + '}}';
       }
       this.model.get('urlparts').push(value);
@@ -140,7 +135,6 @@ var UrlsEditorView = Backbone.View.extend({
   },
 
   placeUrls: function(url) {
-    console.log(url);
     var elem = new UrlView(url);
     this.el.appendChild(elem.el);
   },
@@ -152,7 +146,6 @@ var UrlsEditorView = Backbone.View.extend({
 
   saveUrls: function() {
     var serialized = this.serializeUrls(this.collection.models);
-    console.log(serialized);
     appState.urls = serialized;
     $.ajax({
       type: "POST",
@@ -187,6 +180,5 @@ var UrlsEditorView = Backbone.View.extend({
     return urls;
   }
 });
-
 
 var urlsEditor = new UrlsEditorView();

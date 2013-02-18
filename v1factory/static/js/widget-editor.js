@@ -52,8 +52,10 @@ var Widget = Backbone.Model.extend({
   },
 
   select: function() {
-    pagesView.widgetEditor.collection.unselectAll();
-    pagesView.widgetEditor.selected = this;
+    if(pagesView.widgetEditor) {
+      pagesView.widgetEditor.collection.unselectAll();
+      pagesView.widgetEditor.collection.selectedElement = this;
+    }
     this.set('selected', true);
     widgetInfoView.show(this);
   },
@@ -93,7 +95,7 @@ var WidgetCollection = Backbone.Collection.extend({
 
   selectWidgetById: function(id) {
     this.collection.get(id).select();
-    this.selectedElement = this.collection.get(id);
+    this.selectedElement = this.get(id);
   }
 });
 
@@ -464,7 +466,7 @@ var WidgetEntityView = Backbone.View.extend({
   },
 
   render: function() {
-    this.el.innerHTML = this.model.get('name') + '<div class="buttons">'+
+    this.el.innerHTML = '<div class="entity-name">' + this.model.get('name') + '</div><div class="buttons">'+
                                                     '<span class="create">Create</span>'+
                                                     '<span class="show">Show</span>'+
                                                     '<span class="update">Update</span>';
@@ -545,7 +547,6 @@ var WidgetEditorView = Backbone.View.extend({
     this.collection.add(page.uielements);
 
     //this.render();
-
     window.addEventListener('keydown', this.keydown);
   },
 
@@ -608,22 +609,21 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   keydown: function(e) {
-    
     switch(e.keyCode) {
       case 37:
-        widgetCollection.selected.moveLeft();
+        this.collection.selectedElement.moveLeft();
         e.preventDefault();
         break;
       case 38:
-        widgetCollection.selected.moveUp();
+        this.collection.selectedElement.moveUp();
         e.preventDefault();
         break;
       case 39:
-        widgetCollection.selected.moveRight();
+        this.collection.selectedElement.moveRight();
         e.preventDefault();
         break;
       case 40:
-        widgetCollection.selected.moveDown();
+        this.collection.selectedElement.moveDown();
         e.preventDefault();
         break;
     }
@@ -653,11 +653,6 @@ var PagesView = Backbone.View.extend({
     });
     self.listEl.innerHTML += '<li class="new-page"> + Create Page</li>' +
     '<form class="new-page-form" hi2 style="display:none;"><input class="new-page-name" type="text"></form>';
-
-    // if(this.pages.length) {
-    //   this.curPage = 0;
-    //   this.openPage(0);
-    // }
   },
 
   clickedNewPage: function() {
@@ -687,6 +682,7 @@ var PagesView = Backbone.View.extend({
     }
     this.curPage = pageInd;
     this.widgetEditor = new WidgetEditorView(this.pages[pageInd]);
+    document.getElementById('page-' + pageInd).className += ' selected';
   },
 
   savePage: function() {
@@ -736,10 +732,12 @@ var PagesView = Backbone.View.extend({
 
   clickedOpen: function(e) {
     var ind = String(e.target.id).replace('page-','');
+    $('.selected.exist-page').removeClass('selected');
     this.openPage(ind);
     e.preventDefault();
   }
 });
 
-var pagesView = new PagesView();
 var widgetInfoView = new WidgetInfoView();
+var pagesView = new PagesView();
+pagesView.openPage(0);
