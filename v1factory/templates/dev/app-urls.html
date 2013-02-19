@@ -40,7 +40,7 @@
 
       <div class="pane hi2">
         <div class="span22 url">
-        <% var endsWithEnt = 0;
+        <% var endsWithEnt = 1;
            _.each(urls, function(url, i) { %>
           <span class="slash">/</span>
           
@@ -57,7 +57,7 @@
 
         <% if(!endsWithEnt) {%>
           <span class="slash">/</span>
-          <select class="id url-part" id="inp-new" %>>
+          <select class="id url-part last" id="inp-new" %>>
             <option>Add ID</option>
             <% _.each(entities, function(entity, i) { %>
               <option> <%= entity %> </option>
@@ -65,7 +65,7 @@
           </select>
         <% } else {%>
           <span class="slash">/</span>
-          <input type="text" class="url-part" id="inp-new" placeholder="url_string" value=''>
+          <input type="text" class="url-part last" id="inp-new" placeholder="url_string" value=''>
         <% } %>
         </div>
         <div class="pages span1 arrow">»</div>
@@ -74,10 +74,27 @@
             <% _.each(pages, function(page){ %>
             <option><%= page.name %></option>
             <% }); %>
-            <option>+ Create a new page</option>
+            <option value="<<new_page>>">+ Create a new page</option>
           </select>
+          <form class="add-page-form" style="display:none;">
+            <input class="page-name-input">
+          </form>
+          <div class="cross right">×</div>
         </div>
       </div>
+</script>
+<script type="text/html" id="template-entity">
+<span class="slash">/</span>
+<select class="id url-part last" id="inp-new" %>>
+  <option>Add ID</option>
+  <% _.each(entities, function(entity, i) { %>
+  <option> <%= entity %> </option>
+  <% }); %>
+</select>
+</script>
+<script type="text/html" id="template-text">
+<span class="slash">/</span>
+<input type="text" class="url-part last" id="inp-new" placeholder="url_string" value=''>
 </script>
 <script type="text/javascript">
   var appState = {{ app.state_json|safe }};

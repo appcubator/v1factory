@@ -52,8 +52,10 @@ var Widget = Backbone.Model.extend({
   },
 
   select: function() {
-    this.collection.unselectAll();
-    this.collection.selected = this;
+    if(pagesView.widgetEditor) {
+      pagesView.widgetEditor.collection.unselectAll();
+      pagesView.widgetEditor.collection.selectedElement = this;
+    }
     this.set('selected', true);
     widgetInfoView.show(this);
   },
@@ -93,7 +95,7 @@ var WidgetCollection = Backbone.Collection.extend({
 
   selectWidgetById: function(id) {
     this.collection.get(id).select();
-    this.selectedElement = this.collection.get(id);
+    this.selectedElement = this.get(id);
   }
 });
 
@@ -133,32 +135,43 @@ var WidgetView = Backbone.View.extend({
 
   render: function(widget) {
     this.el.innerHTML = '';
+    if(typeof widget.get('type') == "undefined") {
+      alert('wat');
+      return;
+    }
 
-    /* TODO: Make a better way to fetch these once we have
-       the gallery set up */
-    var element = document.getElementById(widget.get('type')).firstChild.cloneNode(true);
+    var temp = document.getElementById('temp-' + widget.get('type')).innerHTML;
+
+    if(!temp) {
+      alert('elem type could not be found');
+      return;
+    }
+
     var width = widget.get('width');
     var height = widget.get('height');
     
-    element.setAttribute("style","position:relative;");
-    element.style.top = (GRID_HEIGHT * (widget.get('top'))) + 'px';
-    element.style.left = (GRID_HEIGHT * (widget.get('left'))) + 'px';
-    element.className = 'widget span'+width;
-    element.style.height = (height * GRID_HEIGHT) + 'px';
-    element.id = 'widget-' + this.collection.length;
-    if(widget.get('type') != 'widget-5')
-      element.innerHTML = widget.get('text') || "BLANK TEXT";
+    var elem_style = [];
+    elem_style.push("position:relative;");
+    elem_style.push("top:" + (GRID_HEIGHT * (widget.get('top'))) + "px;");
+    elem_style.push("left:" + (GRID_HEIGHT * (widget.get('left'))) + "px;");
+    elem_style.push("height:" + (height * GRID_HEIGHT) + "px;");
+    elem_classname = "widget span" + width;
+    elem_id = "widget-" + this.collection.length;
+    elem_text = widget.get('text') || "BLANK TEXT";
 
-    meta = document.createElement('div');
-    meta.className = 'meta';
-    deleteBtn = document.createElement('img');
-    deleteBtn.className = 'delete';
-    deleteBtn.src = '/static/img/delete-icon.png';
-    meta.appendChild(deleteBtn);
+    var element = _.template(temp, { 'text' : elem_text,
+                                     'style': elem_style,
+                                     'class_name': elem_classname,
+                                     'id'   : elem_id });
 
-    element.appendChild(meta);
+    // meta = document.createElement('div');
+    // meta.className = 'meta';
+    // deleteBtn = document.createElement('img');
+    // deleteBtn.className = 'delete';
+    // deleteBtn.src = '/static/img/delete-icon.png';
+    // meta.appendChild(deleteBtn);
     this.widgetsContainer = element;
-    this.el.appendChild(element);
+    this.el.innerHTML = element;
     this.model.select();
 
     var self = this;
@@ -169,7 +182,7 @@ var WidgetView = Backbone.View.extend({
   },
 
   remove: function() {
-    widgetCollection.remove(this);
+    pagesView.widgetEditor.collection.remove(this);
     $(this.el).remove();
   },
 
@@ -228,7 +241,7 @@ var EntityUIContainer = WidgetView.extend({
     _.bindAll(this, 'render',
                     'placeWidget',
                     'placeCreateWidgets',
-                    'placeShowWidgets',
+                    'placeQueryWidgets',
                     'placeUpdateWidgets',
                     'select');
     
@@ -240,19 +253,19 @@ var EntityUIContainer = WidgetView.extend({
     this.model.bind("change:top", this.changedTop, this);
     this.model.bind("change:left", this.changedLeft, this);
 
-    this.entity = item.attributes.entity;
+    this.entity = item.get('entity');
     var collection = new WidgetCollection();
     this.model.set('childCollection', collection);
     collection.bind("add", this.placeWidget);
 
     this.render(item);
 
-    switch (item.attributes.action) {
+    switch (item.get('action')) {
     case "create":
       this.placeCreateWidgets();
       break;
-    case "show":
-      this.placeShowWidgets();
+    case "query":
+      this.placeQueryWidgets();
       break;
     case "update":
       this.placeUpdateWidgets();
@@ -314,13 +327,14 @@ var EntityUIContainer = WidgetView.extend({
     });
   },
 
-  placeShowWidgets: function() {
+  placeQueryWidgets: function() {
     var nmrAttributes = 0;
     var self = this;
     var widgets = [];
-    _(self.entity.attributes.attributes).each(function(val, key, item, ind) {
+
+    _(self.entity.get('attributes')).each(function(val, key, item, ind) {
       var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
-      var type = 'widget-3';
+      var type = 'widget-2';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
@@ -338,6 +352,10 @@ var EntityUIContainer = WidgetView.extend({
 
   placeUpdateWidgets: function() {
 
+  },
+  remove: function() {
+    pagesView.widgetEditor.collection.remove(this.model);
+    $(this.el).remove();
   }
 });
 
@@ -438,7 +456,7 @@ var WidgetEntityView = Backbone.View.extend({
 
   events: {
     'click .create' : 'clickedCreate',
-    'click .show' : 'clickedShow',
+    'click .query' : 'clickedQuery',
     'click .update' : 'clickedUpdate'
   },
 
@@ -446,12 +464,12 @@ var WidgetEntityView = Backbone.View.extend({
     var self = this;
     _.bindAll(this, 'render', 'clickedCreate',
                               'clickedUpdate',
-                              'clickedShow');
+                              'clickedQuery');
     this.model = item;
+    this.parentCollection = widgetCollection;
 
     var coordinates = pagesView.unite({x: 6, y:2}, {x: 16, y: 10});
     var widget = {
-      id : widgetCollection + 1,
       top : coordinates.topLeft.y,
       left : coordinates.topLeft.x,
       type : 'container',
@@ -464,28 +482,31 @@ var WidgetEntityView = Backbone.View.extend({
   },
 
   render: function() {
-    this.el.innerHTML = this.model.get('name') + '<div class="buttons">'+
+    this.el.innerHTML = '<div class="entity-name">' + this.model.get('name') + '</div><div class="buttons">'+
                                                     '<span class="create">Create</span>'+
-                                                    '<span class="show">Show</span>'+
+                                                    '<span class="query">Query</span>'+
                                                     '<span class="update">Update</span>';
   },
 
   clickedCreate: function() {
     this.widget.action = 'create';
+    this.widget.id = pagesView.widgetEditor.collection.length + 1;
     var newModel = new Widget(this.widget);
-    widgetCollection.add(newModel);
+    this.parentCollection.add(newModel);
   },
 
   clickedUpdate: function() {
     this.widget.action = 'update';
+    this.widget.id = pagesView.widgetEditor.collection.length + 1;
     var newModel = new Widget(this.widget);
-    widgetCollection.add(newModel);
+    this.parentCollection.add(newModel);
   },
 
-  clickedShow: function() {
-    this.widget.action = 'show';
+  clickedQuery: function() {
+    this.widget.action = 'query';
+    this.widget.id = pagesView.widgetEditor.collection.length + 1;
     var newModel = new Widget(this.widget);
-    widgetCollection.add(newModel);
+    this.parentCollection.add(newModel);
   }
 });
 
@@ -512,7 +533,7 @@ var WidgetEntitiesListView = Backbone.View.extend({
     var self = this;
     this.el.innerHTML = '';
     _(this.collection.models).each(function(item) {
-      var view = new WidgetEntityView(item, this.widgetCollection);
+      var view = new WidgetEntityView(item, self.widgetCollection);
       self.el.appendChild(view.el);
     });
   }
@@ -542,10 +563,9 @@ var WidgetEditorView = Backbone.View.extend({
     this.widgetEntitiesView = new WidgetEntitiesListView(this.collection);
     this.collection.bind('add', this.placeWidget);
 
-    this.collection.add(page.uielements);
-
-    //this.render();
-
+    if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
+    
+    this.render();
     window.addEventListener('keydown', this.keydown);
   },
 
@@ -570,8 +590,15 @@ var WidgetEditorView = Backbone.View.extend({
 
   placeWidget: function(widget) {
     var curWidget;
-    if(widget.attributes.entity) {
-      curWidget= new EntityUIContainer(widget);
+    if(widget.get('entity')) {
+      var entityObj = this.widgetEntitiesView.collection.where({ name :widget.get('entity')})[0];
+      if(!entityObj) {
+        alert('Entity could not be found!');
+      }
+      else {
+        widget.set('entity', entityObj);
+        curWidget= new EntityUIContainer(widget);
+      }
     }
     else {
       curWidget = new WidgetView(widget);
@@ -581,24 +608,24 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   serializeWidgets: function(e) {
-    uiElements = this.serializeCollection(this.collection.models);    
+    uiElements = this.serializeCollection(this.collection.models);
     return uiElements;
   },
 
   serializeCollection: function(coll) {
     var uiElements = [];
     var self = this;
+    var elem = { };
     _(coll).each(function(item, key) {
-      if(item.attributes.type == 'container') {
-        var elems = { };
-        var key = String(item.get('type') + '-' + item.get('action'));
-        elems[key] = {};
-        elems[key]['entity'] = item.get('entity').get('name');
-        elems[key]['elements'] = self.serializeCollection(item.get('childCollection').models);
-        uiElements.push(elems);
+      if(item.get('type') == 'container') {
+        elem.type = 'container';
+        elem.action = item.get('action');
+        elem.entity = item.get('entity').get('name');
+        elem.elements = self.serializeCollection(item.get('childCollection').models);
+        uiElements.push(elem);
       }
       else {
-        var elem = item.attributes;
+        elem = item.attributes;
         delete elem.selected;
         uiElements.push(elem);
       }
@@ -608,22 +635,21 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   keydown: function(e) {
-    
     switch(e.keyCode) {
       case 37:
-        widgetCollection.selected.moveLeft();
+        this.collection.selectedElement.moveLeft();
         e.preventDefault();
         break;
       case 38:
-        widgetCollection.selected.moveUp();
+        this.collection.selectedElement.moveUp();
         e.preventDefault();
         break;
       case 39:
-        widgetCollection.selected.moveRight();
+        this.collection.selectedElement.moveRight();
         e.preventDefault();
         break;
       case 40:
-        widgetCollection.selected.moveDown();
+        this.collection.selectedElement.moveDown();
         e.preventDefault();
         break;
     }
@@ -653,11 +679,6 @@ var PagesView = Backbone.View.extend({
     });
     self.listEl.innerHTML += '<li class="new-page"> + Create Page</li>' +
     '<form class="new-page-form" hi2 style="display:none;"><input class="new-page-name" type="text"></form>';
-
-    // if(this.pages.length) {
-    //   this.curPage = 0;
-    //   this.openPage(0);
-    // }
   },
 
   clickedNewPage: function() {
@@ -687,6 +708,7 @@ var PagesView = Backbone.View.extend({
     }
     this.curPage = pageInd;
     this.widgetEditor = new WidgetEditorView(this.pages[pageInd]);
+    document.getElementById('page-' + pageInd).className += ' selected';
   },
 
   savePage: function() {
@@ -736,10 +758,12 @@ var PagesView = Backbone.View.extend({
 
   clickedOpen: function(e) {
     var ind = String(e.target.id).replace('page-','');
+    $('.selected.exist-page').removeClass('selected');
     this.openPage(ind);
     e.preventDefault();
   }
 });
 
-var pagesView = new PagesView();
 var widgetInfoView = new WidgetInfoView();
+var pagesView = new PagesView();
+pagesView.openPage(0);

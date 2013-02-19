@@ -13,14 +13,29 @@ var UrlView = Backbone.View.extend({
   tagName: 'div',
   className: 'row span30 offset1 hoff1',
   events: {
-    'change .url-part' : 'urlPartChanged'
+    'change .url-part' : 'urlPartChanged',
+    'change .page' : 'pageChanged',
+    'click .cross' : 'urlRemoved',
+    'submit .add-page-form' : 'newPageSubmitted',
+    'change .last' : 'lastEntityChanged',
+    'keypress .last': 'lastTextChanged'
   },
 
   initialize: function(item){
     var self = this;
-    _.bindAll(this, 'render', 'urlPartChanged');
+    _.bindAll(this, 'render',
+                    'remove',
+                    'urlPartChanged',
+                    'pageChanged',
+                    'urlRemoved',
+                    'newPageSubmitted',
+                    'lastEntityChanged',
+                    'lastTextChanged');
     this.model = item;
-    this.urlParts = this.model.get('urlParts');
+    if(!this.model.get('urlparts')) {
+      this.model.set('urlparts', []);
+    }
+    this.urlParts = this.model.get('urlparts');
     this.render();
   },
 
@@ -31,15 +46,64 @@ var UrlView = Backbone.View.extend({
   },
 
   urlPartChanged: function(e) {
-    console.log("CHANGEd");
     if(e.target.id == 'inp-new') {
-      e.target.id = 'inp-' + this.model.get('urlParts').length;
-      this.model.get('urlParts').push(e.target.value);
+      e.target.id = 'inp-' + this.model.get('urlparts').length;
+      var value = e.target.value;
+      if(e.target.tagName == 'SELECT') {
+        value = '{{' + value + '}}';
+      }
+      this.model.get('urlparts').push(value);
     }
     else {
       var ind = String(e.target.id).replace('inp-','');
       this.model.get('urlParts')[ind] = e.target.value;
     }
+  },
+
+  pageChanged: function(e) {
+    if(e.target.value == "<<new_page>>") {
+      $(e.target).hide();
+      $('.add-page-form').fadeIn();
+      $('.page-name-input').focus();
+      return;
+    }
+
+    this.model.set('page_name', e.target.value);
+  },
+
+  urlRemoved: function() {
+    this.model.destroy();
+    this.remove();
+  },
+
+  newPageSubmitted: function(e) {
+    var name = $('.page-name-input').val();
+    $('.page-name-input').val('');
+    $('.add-page-form').hide();
+    $('select.page', this.el).fadeIn();
+    $('select').append('<option>' + name + '</option>');
+
+    urlsEditor.createPage(name);
+
+    e.preventDefault();
+  },
+
+  remove: function() {
+    $(this.el).remove();
+  },
+
+  lastEntityChanged: function(e) {
+    $(e.target).removeClass('last');
+    var temp = document.getElementById('template-text').innerHTML;
+    var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
+    $('.url', this.el).append(html);
+  },
+
+  lastTextChanged: function(e) {
+    $(e.target).removeClass('last');
+    var temp = document.getElementById('template-entity').innerHTML;
+    var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
+    $('.url', this.el).append(html);
   }
 });
 
@@ -48,11 +112,12 @@ var UrlsEditorView = Backbone.View.extend({
 
   initialize: function(){
     var self = this;
-    _.bindAll(this, 'render', 
-                    'placeUrls', 
-                    'newWUrl', 
-                    'saveUrls', 
-                    'serializeUrls');
+    _.bindAll(this, 'render',
+                    'placeUrls',
+                    'newWUrl',
+                    'saveUrls',
+                    'serializeUrls',
+                    'createPage');
 
     this.collection = new UrlsCollection();
     this.collection.bind('add', this.placeUrls);
@@ -62,7 +127,7 @@ var UrlsEditorView = Backbone.View.extend({
     this.collection.add(initUrls);
 
     $('#create-url').on('click', this.newWUrl);
-    $('#save-urls').on('click', this.saveUrls)
+    $('#save-urls').on('click', this.saveUrls);
   },
 
   render: function() {
@@ -75,14 +140,13 @@ var UrlsEditorView = Backbone.View.extend({
   },
 
   newWUrl: function(){
-    var newModel = new UrlModel({ urlParts: ['']});
+    var newModel = new UrlModel({ urlParts: []});
     this.collection.push(newModel);
   },
 
   saveUrls: function() {
     var serialized = this.serializeUrls(this.collection.models);
-    console.log(serialized);
-    appState.urls = serialized
+    appState.urls = serialized;
     $.ajax({
       type: "POST",
       url: '/app/1/state/',
@@ -95,18 +159,26 @@ var UrlsEditorView = Backbone.View.extend({
 
   },
 
+  createPage: function (name) {
+    var pages = appState.pages;
+    pages.push({
+      name: name,
+      uielements: []
+    });
+    appState.pages = pages;
+  },
+
   serializeUrls: function(models) {
     var urls = [];
     _(models).each(function(model) {
       var url = {};
-      url.name = model.get('name');
-      url.parts = model.get('urlParts');
+      url.page_name = model.get('page_name');
+      url.urlparts = model.get('urlparts');
       urls.push(url);
     });
 
     return urls;
   }
 });
-
 
 var urlsEditor = new UrlsEditorView();
