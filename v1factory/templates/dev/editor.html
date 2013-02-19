@@ -34,13 +34,50 @@
 {% endblock %}
 
 {% block js %}
-  <script type="text/javascript">
-    var appState = {{ app.state_json|safe }};
-  </script>
-  <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/widget-editor.js"></script>
-  <script>
-  </script>
+<script type="text/javascript">
+  var appState = {{ app.state_json|safe }};
+</script>
+<script type="text/html" id="temp-widget-1">
+<span style="
+<% _(style).each(function(s) { %>
+<%= s %>
+<% }) %>">
+<%= BLANK TEXT %></span>
+</script>
+<script type="text/html" id="temp-widget-2">
+<h1 style="
+<% _(style).each(function(s) { %>
+<%= s %>
+<% }) %>" class="<%= class_name %>">Heading 1</h1>
+</script>
+<script type="text/html" id="temp-widget-3">
+<h2>Heading 2</h2>
+</script>
+<script type="text/html" id="temp-widget-4">
+<h3>Heading 3</h3>
+</script>
+<script type="text/html" id="temp-widget-5">
+<form><input type="text" placeholder="Type something…"></form>
+</script>
+<script type="text/html" id="temp-widget-6">
+<button class="btn">Button</button>
+</script>
+<script type="text/html" id="temp-widget-7">
+<button class="btn btn-large">Button Large</button>
+</script>
+<script type="text/html" id="temp-widget-8">
+<select>
+  <option>1</option>
+  <option>2</option>
+  <option>3</option>
+</select>
+</script>
+<script type="text/html" class="temp-widget-9">
+<img src="{{ STATIC_URL }}img/image-sample.png" class="img-rounded">
+</script>
+
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/widget-editor.js"></script>
 {% endblock %}
 
