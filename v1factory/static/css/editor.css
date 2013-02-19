@@ -258,6 +258,11 @@
   height: 720px;
 }
 
+.container-create {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 .container.editing .row {
   display: inline-block;
@@ -289,13 +294,19 @@
 }
 
 .widget {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.widget-wrapper {
   z-index: 1001;
+  position: absolute;
   cursor: pointer;
   border-radius: 3px;
   overflow: hidden;
 }
 
-.widget .meta, .widgets-container .meta {
+.widget-wrapper .meta, .widgets-container .meta {
   position: absolute;
   bottom: 0;
   height: 0;
@@ -307,11 +318,11 @@
   color: #fff;
 }
 
-.widget.selected, .widgets-container.selected {
+.widget-wrapper.selected, .widgets-container.selected {
   border: 1px solid #ccc;
 }
 
-.widget .meta .delete, .widgets-container .meta .delete {
+.widget-wrapper .meta .delete, .widgets-container .meta .delete {
   position: absolute;
   display: inline-block;
   margin-top: 6px;
@@ -324,15 +335,19 @@
   opacity: 0;
 }
 
-.widget:hover {
+.widget-wrapper {
+  display: inline-block;
+}
+
+.widget-wrapper:hover {
   border:1px solid red;
 }
 
-.widget:hover .meta, .widgets-container:hover .meta {
+.widget-wrapper:hover .meta, .widgets-container:hover .meta {
   height: 30px;
 }
 
-.widget:hover .ui-resizable-handle {
+.widget-wrapper:hover .ui-resizable-handle {
   opacity: 1;
 }
 

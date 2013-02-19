@@ -42,13 +42,14 @@
 <% _(style).each(function(s) { %>
 <%= s %>
 <% }) %>">
-<%= BLANK TEXT %></span>
+<%= BLANK TEXT %>
+<div class="meta">
+<img class="delete" src="/static/img/delete-icon.png">
+</div>
+</span>
 </script>
 <script type="text/html" id="temp-widget-2">
-<h1 style="
-<% _(style).each(function(s) { %>
-<%= s %>
-<% }) %>" class="<%= class_name %>">Heading 1</h1>
+<h1>Heading 1</h1>
 </script>
 <script type="text/html" id="temp-widget-3">
 <h2>Heading 2</h2>
@@ -75,7 +76,11 @@
 <script type="text/html" class="temp-widget-9">
 <img src="{{ STATIC_URL }}img/image-sample.png" class="img-rounded">
 </script>
-
+<script type="text/html" id="temp-meta">
+<div class="meta">
+<img class="delete" src="/static/img/delete-icon.png">
+</div>
+</script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/grid-editor.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/widget-editor.js"></script>

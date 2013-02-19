@@ -12,13 +12,13 @@ var GridEditorView = Backbone.View.extend({
     "click     .item-gallery .header": "hideItemGallery"
   },
   initialize: function(item){
-    _.bindAll(this, 'render', 
-                    'mousedown', 
-                    'mouseup', 
-                    'mouseover', 
-                    'coordselector', 
-                    'popItemGallery', 
-                    'hideItemGallery', 
+    _.bindAll(this, 'render',
+                    'mousedown',
+                    'mouseup',
+                    'mouseover',
+                    'coordselector',
+                    'popItemGallery',
+                    'hideItemGallery',
                     'addWidget');
     this.render();
   },

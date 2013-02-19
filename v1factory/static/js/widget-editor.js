@@ -36,8 +36,8 @@ var EntityCollection = Backbone.Collection.extend({
 
   initialize: function(items) {
     _(items).each(function(item){
-      item['attributes'] = item.fields;
-      item.fields = null;
+      //item['attributes'] = item.fields;
+      //item.fields = null;
     });
     this.add(items);
   }
@@ -52,9 +52,12 @@ var Widget = Backbone.Model.extend({
   },
 
   select: function() {
+    this.collection.unselectAll();
+    this.collection.selectedElement = this;
     if(pagesView.widgetEditor) {
-      pagesView.widgetEditor.collection.unselectAll();
-      pagesView.widgetEditor.collection.selectedElement = this;
+      console.log(this);
+      console.log('hey');
+      pagesView.widgetEditor.selectedElement = this;
     }
     this.set('selected', true);
     widgetInfoView.show(this);
@@ -99,6 +102,7 @@ var WidgetCollection = Backbone.Collection.extend({
   }
 });
 
+
 var WidgetView = Backbone.View.extend({
   el: null,
   className: 'pseudo-outline',
@@ -107,7 +111,7 @@ var WidgetView = Backbone.View.extend({
   selected : false,
 
   events: {
-    'click .widget' : 'select',
+    'click .widget-wrapper' : 'select',
     'click .delete' : 'remove'
   },
 
@@ -150,28 +154,25 @@ var WidgetView = Backbone.View.extend({
     var width = widget.get('width');
     var height = widget.get('height');
     
-    var elem_style = [];
-    elem_style.push("position:relative;");
-    elem_style.push("top:" + (GRID_HEIGHT * (widget.get('top'))) + "px;");
-    elem_style.push("left:" + (GRID_HEIGHT * (widget.get('left'))) + "px;");
-    elem_style.push("height:" + (height * GRID_HEIGHT) + "px;");
-    elem_classname = "widget span" + width;
-    elem_id = "widget-" + this.collection.length;
+    var wrapperElem = document.createElement('div');
+    wrapperElem.className ='widget-wrapper';
+
+    wrapperElem.style.top = (GRID_HEIGHT * (widget.get('top'))) + "px";
+    wrapperElem.style.left = (GRID_HEIGHT * (widget.get('left'))) + "px";
+    wrapperElem.style.height = (height * GRID_HEIGHT) + "px";
+    wrapperElem.className += " span" + width;
+    wrapperElem.id = "widget-" + this.collection.length;
+
     elem_text = widget.get('text') || "BLANK TEXT";
+    var element = _.template(temp, { 'text' : elem_text });
 
-    var element = _.template(temp, { 'text' : elem_text,
-                                     'style': elem_style,
-                                     'class_name': elem_classname,
-                                     'id'   : elem_id });
+    var tempMeta = document.getElementById('temp-meta').innerHTML;
+    var meta = _.template(tempMeta, {});
 
-    // meta = document.createElement('div');
-    // meta.className = 'meta';
-    // deleteBtn = document.createElement('img');
-    // deleteBtn.className = 'delete';
-    // deleteBtn.src = '/static/img/delete-icon.png';
-    // meta.appendChild(deleteBtn);
-    this.widgetsContainer = element;
-    this.el.innerHTML = element;
+    wrapperElem.innerHTML = element + meta;
+
+    this.widgetsContainer = wrapperElem;
+    this.el.appendChild(wrapperElem);
     this.model.select();
 
     var self = this;
@@ -186,8 +187,11 @@ var WidgetView = Backbone.View.extend({
     $(this.el).remove();
   },
 
-  select: function() {
+  select: function(e) {
+    console.log(e);
     this.model.select();
+    e.preventDefault();
+    return false;
   },
 
   outlineSelected: function() {
@@ -214,6 +218,7 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedLeft: function(a) {
+    console.log(this.widgetsContainer);
     this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('left'))) + 'px';
   },
 
@@ -221,7 +226,7 @@ var WidgetView = Backbone.View.extend({
     var deltaHeight = (ui.size.height + 2) / GRID_HEIGHT;
     var deltaWidth = (ui.size.width + 2) / GRID_WIDTH;
     this.model.set('width', deltaWidth);
-    this.model.set('height', deltaHeight);  
+    this.model.set('height', deltaHeight);
   }
 });
 
@@ -244,9 +249,8 @@ var EntityUIContainer = WidgetView.extend({
                     'placeQueryWidgets',
                     'placeUpdateWidgets',
                     'select');
-    
-    this.model = item;
 
+    this.model = item;
     this.model.bind("change:selected", this.outlineSelected, this);
     this.model.bind("change:width", this.changedWidth, this);
     this.model.bind("change:height", this.changedHeight, this);
@@ -259,6 +263,11 @@ var EntityUIContainer = WidgetView.extend({
     collection.bind("add", this.placeWidget);
 
     this.render(item);
+
+    if(item.get('elements')) {
+      this.model.get('childCollection').add(item.get('elements'));
+      return;
+    }
 
     switch (item.get('action')) {
     case "create":
@@ -276,7 +285,7 @@ var EntityUIContainer = WidgetView.extend({
   render: function(widget) {
     this.el.innerHTML = '';
 
-    // var element = document.getElementById(widget.get('type')).firstChild.cloneNode(true);
+    console.log(widget);
     var element = document.createElement('div');
     var width = widget.get('width');
     var height = widget.get('height');
@@ -317,8 +326,8 @@ var EntityUIContainer = WidgetView.extend({
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
         type : type,
-        width : coordinates.bottomRight.x - coordinates.topLeft.x,
-        height: coordinates.bottomRight.y - coordinates.topLeft.y,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : '{{' + self.entity.attributes.name + '_' + key + '}}'
       };
       var widget = new Widget(widgetProps);
@@ -332,6 +341,7 @@ var EntityUIContainer = WidgetView.extend({
     var self = this;
     var widgets = [];
 
+    console.log(self.entity);
     _(self.entity.get('attributes')).each(function(val, key, item, ind) {
       var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
       var type = 'widget-2';
@@ -340,8 +350,8 @@ var EntityUIContainer = WidgetView.extend({
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
         type : type,
-        width : coordinates.bottomRight.x - coordinates.topLeft.x,
-        height: coordinates.bottomRight.y - coordinates.topLeft.y,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : '{{' + self.entity.attributes.name + '_' + key + '}}'
       };
       var widget = new Widget(widgetProps);
@@ -402,9 +412,9 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   initialize: function(){
-    _.bindAll(this, 'render', 
-                    'show', 
-                    'showAttribute', 
+    _.bindAll(this, 'render',
+                    'show',
+                    'showAttribute',
                     'inputChanged',
                     'changedProp');
     this.render();
@@ -460,13 +470,13 @@ var WidgetEntityView = Backbone.View.extend({
     'click .update' : 'clickedUpdate'
   },
 
-  initialize: function(item, widgetCollection){
+  initialize: function(item){
     var self = this;
     _.bindAll(this, 'render', 'clickedCreate',
                               'clickedUpdate',
                               'clickedQuery');
     this.model = item;
-    this.parentCollection = widgetCollection;
+    this.parentCollection = item.collection;
 
     var coordinates = pagesView.unite({x: 6, y:2}, {x: 16, y: 10});
     var widget = {
@@ -520,11 +530,12 @@ var WidgetEntitiesListView = Backbone.View.extend({
     var self = this;
     _.bindAll(this, 'render');
     var initialEntities = appState.entities;
+    var entities = [];
     _(initialEntities).each(function(entity) {
-      entity.id = self.counter;
-      self.counter++;
+      entities.push(entity);
     });
-    this.collection = new EntityCollection(initialEntities);
+    console.log(entities);
+    this.collection = new EntityCollection(entities);
     this.widgetCollection = widgetCollection;
     this.render();
   },
@@ -533,7 +544,7 @@ var WidgetEntitiesListView = Backbone.View.extend({
     var self = this;
     this.el.innerHTML = '';
     _(this.collection.models).each(function(item) {
-      var view = new WidgetEntityView(item, self.widgetCollection);
+      var view = new WidgetEntityView(item);
       self.el.appendChild(view.el);
     });
   }
@@ -565,7 +576,7 @@ var WidgetEditorView = Backbone.View.extend({
 
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
     
-    this.render();
+    
     window.addEventListener('keydown', this.keydown);
   },
 
@@ -590,7 +601,8 @@ var WidgetEditorView = Backbone.View.extend({
 
   placeWidget: function(widget) {
     var curWidget;
-    if(widget.get('entity')) {
+    if(typeof widget.get('entity') == "string") {
+      console.log(widget.get('entity'));
       var entityObj = this.widgetEntitiesView.collection.where({ name :widget.get('entity')})[0];
       if(!entityObj) {
         alert('Entity could not be found!');
@@ -600,10 +612,14 @@ var WidgetEditorView = Backbone.View.extend({
         curWidget= new EntityUIContainer(widget);
       }
     }
+    else if (widget.get('entity')) {
+      curWidget= new EntityUIContainer(widget);
+    }
     else {
       curWidget = new WidgetView(widget);
     }
-     
+    
+
     this.widgetsContainer.appendChild(curWidget.el);
   },
 
@@ -621,6 +637,11 @@ var WidgetEditorView = Backbone.View.extend({
         elem.type = 'container';
         elem.action = item.get('action');
         elem.entity = item.get('entity').get('name');
+        elem.width = item.get('width');
+        elem.height = item.get('height');
+        elem.top = item.get('top');
+        elem.left = item.get('left');
+
         elem.elements = self.serializeCollection(item.get('childCollection').models);
         uiElements.push(elem);
       }
@@ -637,19 +658,19 @@ var WidgetEditorView = Backbone.View.extend({
   keydown: function(e) {
     switch(e.keyCode) {
       case 37:
-        this.collection.selectedElement.moveLeft();
+        this.selectedElement.moveLeft();
         e.preventDefault();
         break;
       case 38:
-        this.collection.selectedElement.moveUp();
+        this.selectedElement.moveUp();
         e.preventDefault();
         break;
       case 39:
-        this.collection.selectedElement.moveRight();
+        this.selectedElement.moveRight();
         e.preventDefault();
         break;
       case 40:
-        this.collection.selectedElement.moveDown();
+        this.selectedElement.moveDown();
         e.preventDefault();
         break;
     }
@@ -690,7 +711,7 @@ var PagesView = Backbone.View.extend({
   submittedNewPage: function(e) {
     e.preventDefault();
     var pageName = $('.new-page-name').val();
-    var page = {'name': pageName, 'uielements' : []};
+    var page = {'page_name': pageName, 'uielements' : []};
 
     this.pages.push(page);
     this.curPage = this.pages.length - 1;
@@ -718,6 +739,8 @@ var PagesView = Backbone.View.extend({
   savePages: function() {
     this.savePage();
     appState.pages = this.pages;
+    console.log(appState);
+    console.log(JSON.stringify(appState));
     $.ajax({
       type: "POST",
       url: '/app/1/state/',
@@ -733,19 +756,15 @@ var PagesView = Backbone.View.extend({
     var topLeft = {}, bottomRight = {};
 
     if(cor1.x < cor2.x) {
-      topLeft.x =  cor1.x;
-      bottomRight.x = cor2.x;
+      topLeft.x =  cor1.x; bottomRight.x = cor2.x;
     } else {
-      topLeft.x =  cor2.x;
-      bottomRight.x = cor1.x;
+      topLeft.x =  cor2.x; bottomRight.x = cor1.x;
     }
 
     if(cor1.y < cor2.y) {
-      topLeft.y =  cor1.y;
-      bottomRight.y = cor2.y;
+      topLeft.y =  cor1.y; bottomRight.y = cor2.y;
     } else {
-      topLeft.y =  cor2.y;
-      bottomRight.y = cor1.y;
+      topLeft.y =  cor2.y; bottomRight.y = cor1.y;
     }
 
     topLeft.x--; topLeft.y--;
