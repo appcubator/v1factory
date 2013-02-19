@@ -1,3 +1,10 @@
+import sys
+import tempfile
+from shutil import copytree
+from os.path import join
+import os.path
+import os
+
 class DjangoWriter:
 
   def __init__(self, analyzed_app):

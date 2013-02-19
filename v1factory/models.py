@@ -38,6 +38,8 @@ class App(models.Model):
     import subprocess
     tmp_project_dir = create_django_project(self.classes.all(), self.templates.all())
     print tmp_project_dir
+    return "done"
+    #
     commands = []
     commands.append('git init')
     commands.append('git add .')
