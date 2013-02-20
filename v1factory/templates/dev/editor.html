@@ -5,21 +5,28 @@
 <link href="{{ STATIC_URL }}css/editor.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
+<style type="text/css">
+{% for element in elements %}
+.{{element.class_name }} {
+{{ element.css|safe }}
+}
+{% endfor %}
+</style>
 {% endblock %}
 
 {% block navbar %}
-        <div class="navbar navbar-inverse navbar-fixed-top editing">
-          <div class="navbar-inner">
-            <div class="container">
-              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </a>
-              <a class="brand" href="#">Project name</a>
-            </div>
-          </div>
-        </div>
+<div class="navbar navbar-inverse navbar-fixed-top editing">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">Project name</a>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block page %}
@@ -37,45 +44,13 @@
 <script type="text/javascript">
   var appState = {{ app.state_json|safe }};
 </script>
-<script type="text/html" id="temp-widget-1">
-<span style="
-<% _(style).each(function(s) { %>
-<%= s %>
-<% }) %>">
-<%= BLANK TEXT %>
-<div class="meta">
-<img class="delete" src="/static/img/delete-icon.png">
-</div>
-</span>
+
+{% for element in elements %}
+<script type="text/html" id="temp-widget-{{ element.id }}">
+{{ element.html|safe }}
 </script>
-<script type="text/html" id="temp-widget-2">
-<h1>Heading 1</h1>
-</script>
-<script type="text/html" id="temp-widget-3">
-<h2>Heading 2</h2>
-</script>
-<script type="text/html" id="temp-widget-4">
-<h3>Heading 3</h3>
-</script>
-<script type="text/html" id="temp-widget-5">
-<form><input type="text" placeholder="Type something…"></form>
-</script>
-<script type="text/html" id="temp-widget-6">
-<button class="btn">Button</button>
-</script>
-<script type="text/html" id="temp-widget-7">
-<button class="btn btn-large">Button Large</button>
-</script>
-<script type="text/html" id="temp-widget-8">
-<select>
-  <option>1</option>
-  <option>2</option>
-  <option>3</option>
-</select>
-</script>
-<script type="text/html" class="temp-widget-9">
-<img src="{{ STATIC_URL }}img/image-sample.png" class="img-rounded">
-</script>
+{% endfor %}
+
 <script type="text/html" id="temp-meta">
 <div class="meta">
 <img class="delete" src="/static/img/delete-icon.png">

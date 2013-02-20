@@ -118,7 +118,8 @@ def entities(request, app_id):
 def app_editor(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Editor' }
+  els = UIElement.get_library()
+  page_context = { 'app': app, 'title' : 'Editor', 'elements' : els }
   return render(request, 'dev/editor.html', page_context)
 
 # IN THE WORKS

@@ -20,22 +20,23 @@
   <div class="row top-buttons offset1 span30 tb-border">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
   </div>
-  <div class="row offset1 span30 hoff1">
+  <div class="row span30">
     {% for element in elements %}
-    <div class="span9">
+    <div class="span9 offset1 hoff1">
       <div class="pane border minhi">
       {{ element.html|safe }}
       </div>
     </div>
     {% endfor %}
-    <div class="span9 offset1">
+    <div class="span9 offset1 hoff1">
       <div class="pane border minhi" id="create-element-button">
         <span class="create-text">+ Create an element</span>
-        <form class="element-create-form" style="display:none;">
+        <form class="element-create-form" id="element-create-form" style="display:none;">
           <input type="text" name="name" placeholder="Name">
+          <input type="text" name="class_name" placeholder="Classname">
           <textarea type="text" name="html" placeholder="HTML"></textarea>
           <textarea type="text" name="css" placeholder="CSS"></textarea>
-          <select>
+          <select name="type">
             <option>Select Type</option>
             <option>Header 1</option>
             <option>Header 2</option>
@@ -60,6 +61,19 @@
 $('#create-element-button').on('click', function() {
   $('.create-text').hide();
   $('.element-create-form').fadeIn();
+})
+
+$('#element-create-form').on('submit', function(e) {
+  $.ajax({
+    type: "POST",
+    url: '/uielement/new/',
+    data: $('#element-create-form').serialize(),
+    success: function() {
+
+    },
+    dataType: "JSON"
+  });
+  e.preventDefault();
 })
 </script>
 {% endblock %}
