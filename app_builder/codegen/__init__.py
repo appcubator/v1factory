@@ -35,6 +35,20 @@ class Page:
     self.queries = Page.get_required_queries(_page_json)
     self.uielements = _page_json['uielements']
 
+  def to_html(self):
+    """This is a function that just produces some crude html based on the UI elements for demo purposes only."""
+    html = ''
+    for el in self.uielements:
+      try:
+        from v1factory.models import UIElement
+        lib_el = UIElement.get_library().get(id=el['lib_id'])
+      except Exception, e:
+        print e
+        html += "<p>Some error for this element, see logs"
+      else:
+        html += lib_el.html
+    return html
+
 class AnalyzedApp:
 
   def __init__(self, app_state, app_name):
