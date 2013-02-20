@@ -111,3 +111,14 @@ def entities(request, app_id):
   schema = [ c.to_dict() for c in app.classes.all() ]
   page_context['schema'] = simplejson.dumps(schema)
   return render(request, 'app-entities.html', page_context)
+
+
+
+from django.forms import ModelForm
+class UIElementForm(ModelForm):
+  class Meta:
+    model = UIElement
+
+def render_form(request):
+  new_form = UIElementForm
+  return render(request, "uielement/new_element.html", {'form': new_form} )

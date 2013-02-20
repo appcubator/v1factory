@@ -1,12 +1,9 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
-from django.core import serializers
 from v1factory.models import App, UIElement
-from app_builder.models import Class
-import requests
 
 @login_required
 def app_list(request):
@@ -152,3 +149,26 @@ def generate_create_container(container_content):
     form_html += '<input name="yolo" type="text">'
   form_html += '</form>'
   return form_html
+
+### UIElement creation form
+from django.forms import ModelForm
+class UIElementForm(ModelForm):
+  class Meta:
+    model = UIElement
+
+def new_uielement(request):
+  if request.method == 'GET':
+    new_form = UIElementForm()
+    return render(request, "uielement/new_element.html", {'form': new_form} )
+
+  elif request.method == 'POST':
+    new_form = UIElementForm(request.POST)
+
+    if new_form.is_valid():
+      obj = new_form.save()
+      return HttpResponse("Success")
+    else:
+      return render(request, "uielement/new_element.html", {'form': new_form} )
+
+  else:
+    return HttpResponse("Only GET and POST allowed", status=405)
