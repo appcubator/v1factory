@@ -8,15 +8,13 @@
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel span22 hi2">
-  <h1 class="name"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <div class="offset2 toppanel span21 hi3">
+  <h1 class="name hoff1"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
-  <div class="span8 right buttons">
+  <div class="span8 right hoff1 offsetr1">
     <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-urls">Save</a>
   </div>
 </div>
-
-
 {% endblock %}
 
 {% block page %}
@@ -60,7 +58,7 @@
           <select class="id url-part last" id="inp-new" %>>
             <option>Add ID</option>
             <% _.each(entities, function(entity, i) { %>
-              <option> <%= entity %> </option>
+              <option> <%= entity.name %> ID </option>
             <% }); %>
           </select>
         <% } else {%>

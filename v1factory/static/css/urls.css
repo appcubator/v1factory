@@ -18,7 +18,11 @@ select.id {
   margin: 0;
 }
 
-select.page {
+.add-page-form {
+  display: inline-block;
+  margin:0;
+}
+select.page, input.page-name-input {
   width: 140px;
   height: 32px;
   margin: 0;
