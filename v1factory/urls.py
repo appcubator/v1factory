@@ -33,4 +33,5 @@ urlpatterns += patterns('v1factory.dev_views',
     url(r'^dev/app/(\d+)/account/$', 'account'),
 
     url(r'^dev/app/(\d+)/tempshow/([a-zA-Z_]+)/$', 'generate_html'),
+    url(r'^uielement/new/$', 'new_uielement'),
 )

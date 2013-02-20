@@ -55,7 +55,7 @@ class App(models.Model):
     return tmp_project_dir
 
 class UIElement(models.Model):
-  app = models.ForeignKey(App, null=True, default=None)
+  app = models.ForeignKey(App, blank=True, null=True, default=None)
   name = models.CharField(max_length=100)
   class_name = models.CharField(max_length=100)
   html = models.TextField()
@@ -64,7 +64,7 @@ class UIElement(models.Model):
 
   @classmethod
   def reseed(cls):
-    heading = cls(name="Heading", class_name="yolo-ology", html="<h1>Heading</h1>" type="generic" css="* {background-color:red}" )
+    heading = cls(name="Heading", class_name="yolo-ology", html="<h1>Heading</h1>", type="generic", css="* {background-color:red}" )
     heading.full_clean()
     heading.save()
     # put more seed elements here
