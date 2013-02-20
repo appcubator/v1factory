@@ -54,17 +54,23 @@ class App(models.Model):
       subprocess.call(c.split(' '), cwd=tmp_project_dir, env=os.environ.copy(), stdout=sys.stdout, stderr=sys.stderr)
     return tmp_project_dir
 
-class AbstractUIElement(models.Model):
+class UIElement(models.Model):
+  app = models.ForeignKey(App, null=True, default=None)
   name = models.CharField(max_length=100)
+  class_name = models.CharField(max_length=100)
   html = models.TextField()
-  css = models.TextField(blank=True)
+  css = models.TextField()
+  type = models.CharField(max_length=100) # later on, introduce choices here
 
-  class Meta:
-    abstract=True
+  @classmethod
+  def reseed(cls):
+    heading = cls(name="Heading", class_name="yolo-ology", html="<h1>Heading</h1>" css="* {background-color:red}" )
+    heading.full_clean()
+    heading.save()
+    # put more seed elements here
 
-class LibUIElement(AbstractUIElement):
-  pass
-
-class UIElement(AbstractUIElement):
-  src_lib_element = models.ForeignKey(LibUIElement)
-  user = models.ForeignKey(User)
+  @classmethod
+  def get_library(cls):
+    if cls.objects.all().count() == 0:
+      cls.reseed()
+    return cls.objects.filter(app=None)

@@ -4,7 +4,7 @@ from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from django.core import serializers
-from v1factory.models import App
+from v1factory.models import App, UIElement
 from app_builder.models import Class
 import requests
 
@@ -46,7 +46,7 @@ def app_template(request, app_id, page_name):
     return app_save_page(request, app_id, page_name)
   else:
     return HttpResponse("", status=405)
-    
+
 @require_POST
 @login_required
 def app_save_page(request, app_id, page_name):
@@ -111,17 +111,3 @@ def entities(request, app_id):
   schema = [ c.to_dict() for c in app.classes.all() ]
   page_context['schema'] = simplejson.dumps(schema)
   return render(request, 'app-entities.html', page_context)
-
-@require_POST
-@login_required
-def sync_schema(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
-  classes = simplejson.loads(request.raw_post_data)
-
-  # function to execute for each new class
-  def add_app_class_relation(cls):
-    app.classes.add(cls)
-
-  Class.sync_classes(classes, add_app_class_relation)
-  return HttpResponse("ok")
