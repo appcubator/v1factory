@@ -54,6 +54,59 @@ class DjangoWriter:
       imports.append('from {}.models import {}'.format(APP_NAME, m['name']))
     return '\n'.join(imports) + '\n'
 
+# MODEL FORMS (form details, used as a base for form submission)
+
+  @staticmethod
+  def generate_model_form_code(form):
+    form_string = ''
+    form_string += 'class {}Form{}(ModelForm):\n'.format(form.entity, form.form_id)
+    form_string += '  class Meta:\n'
+    form_string += '    model = {}\n'.format(form.entity)
+    fields_params = ' '.join([ "'{}',".format(f) for f in form.included_fields])
+    form_string += '    fields = ({})\n'.format(fields_params)
+    return form_string
+
+  def model_forms_py_as_string(self):
+    """Given knowledge of all the forms, return the models.py file as a string."""
+    filestring = ''
+    filestring += 'from django.forms import ModelForm\n'
+    for f in self.app.forms:
+      filestring += '\n' + DjangoWriter.generate_form_code(f)
+    return filestring
+
+  def model_form_imports(self):
+    imports = []
+    for f in self.app.forms:
+      imports.append('from {}.model_forms import {}Form{}'.format(APP_NAME, f.entity, f.form_id))
+    return '\n'.join(imports)
+
+# FORM RECEIVERS (to capture the POSTS and save the object, or return validation errors)
+
+  @staticmethod
+  def generate_form_receiver(form):
+    filestring = ''
+    filestring += '@require_POST\n'
+    filestring += 'def save_{}Form{}(request):\n'.format(form.entity, form.form_id)
+    filestring += '  new_form = {}Form{}(request.POST)\n'.format(form.entity, form.form_id)
+    filestring += '  if new_form.is_valid():\n'
+    filestring += '    obj = new_form.save()\n'
+    filestring += '    return HttpResponse("OK")\n'
+    filestring += '  else:\n'
+    filestring += '    return HttpResponse(simplejson.dumps({ "errors" : [(k, v[0].__unicode__()) for k, v in new_form.errors.items()] }), status=400)\n'
+    return filestring
+
+  def form_receivers_py_as_string(self):
+    filestring = "from django.http import HttpResponse\n"
+    filestring+= "from django.contrib.auth.decorators import login_required\n"
+    filestring+= "from django.views.decorators.http import require_GET, require_POST\n"
+    filestring+= "from django.utils import simplejson\n"
+    filestring+= "from django.shortcuts import redirect, render, get_object_or_404\n\n"
+    filestring+= self.model_form_imports() + '\n\n' 
+
+    for f in self.app.forms:
+      filestring += '\n'+ DjangoWriter.generate_form_receiver(f)
+    return filestring
+
 # CONTROLLERS (functions are namespaced by "view_" to avoid name collisions with models or anything else)
 
   @staticmethod
@@ -62,7 +115,8 @@ class DjangoWriter:
          Should include the declaration, queries, and render the write template."""
     # function declaration
     url_data_params = [ u.lower() + '_id' for u in page.url_data ] # User => user_id
-    function = "def view_{}(request{}):\n".format(page.name, ''.join([ ', ' + u for u in url_data_params ]))
+    function = "@require_GET"
+    function += "def view_{}(request{}):\n".format(page.name, ''.join([ ', ' + u for u in url_data_params ]))
 
     # setup the context, start with the url data, if it was passed
     function += "  page_context = {}\n"
@@ -104,6 +158,9 @@ class DjangoWriter:
     entry = "url(r'{}', '{}.views.view_{}'),".format(url_parts_to_regex(page.url_parts), APP_NAME, page.name)
     return entry
 
+  def generate_form_url_entry(form):
+    entry = "url(r'^formsubmit/{}/{}/$, '{}.form_receivers.save_{}Form{}'),".format(form.entity, form.form_id, APP_NAME, form.entity, form.form_id)
+
   def urls_py_as_string(self):
     urls_string = 'from django.conf.urls import patterns, include, url\n'
     urls_string += "urlpatterns = patterns('',\n"
@@ -112,6 +169,9 @@ class DjangoWriter:
     urls_string += "  url(r'^logout/$', 'django.contrib.auth.views.logout'),\n"
     for p in self.app.pages:
       urls_string += '  {}\n'.format(DjangoWriter.generate_url_entry(p))
+    urls_string += '\n'
+    for f in self.app.forms:
+      urls_string += '  {}\n'.format(DjangoWriter.generate_form_url_entry(f))
     urls_string += ')'
     return urls_string
 

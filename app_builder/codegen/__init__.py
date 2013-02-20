@@ -49,6 +49,19 @@ class Page:
         html += lib_el.html
     return html
 
+class Form:
+  """a Form in an app indicates that a user will modify/create data,
+       and html forms will be used to make those changes."""
+
+  def __init__(self, form_container):
+    """Grab the entity and included fields"""
+    self.entity = form_container['entity']
+
+    self.included_fields = []
+    for uie in form_container['uielements']:
+      if 'field-name' in uie:
+        self.included_fields.append(uie['field-name'])
+
 class AnalyzedApp:
 
   def __init__(self, app_state, app_name):
@@ -56,5 +69,10 @@ class AnalyzedApp:
     self.classes = app_state['entities']
     self.templates = app_state['pages']
     self.urls = app_state['urls']
+    self.forms = []
 
     self.pages = [ Page(d, self) for d in self.urls ]
+    for p in self.pages:
+      if p._page_json['type'] == 'container' and p._page_json['action'] == 'create':
+        self.forms.append(Form(p._page_json))
+
