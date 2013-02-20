@@ -28,6 +28,7 @@ urlpatterns += patterns('v1factory.dev_views',
     # the rest
     url(r'^dev/app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^dev/app/(\d+)/design/$', 'app_design'),
+    url(r'^dev/app/(\d+)/gallery/$', 'app_gallery'),
     url(r'^dev/app/(\d+)/data/$', 'app_data'),
     url(r'^dev/app/(\d+)/finances/$', 'app_finances'),
     url(r'^dev/app/(\d+)/account/$', 'account'),

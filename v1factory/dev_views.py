@@ -73,6 +73,14 @@ def app_design(request, app_id):
   page_context = { 'app': app, 'title' : 'Design' }
   return render(request, 'dev/app-design.html', page_context)
 
+def app_gallery(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  els = UIElement.get_library()
+
+  page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els }
+  return render(request, 'dev/app-gallery.html', page_context)
+
 def app_analytics(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
