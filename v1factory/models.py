@@ -55,7 +55,7 @@ class App(models.Model):
     return tmp_project_dir
 
 class UIElement(models.Model):
-  app = models.ForeignKey(App, null=True, default=None)
+  app = models.ForeignKey(App, null=True, blank=True, default=None)
   name = models.CharField(max_length=100)
   class_name = models.CharField(max_length=100)
   html = models.TextField()

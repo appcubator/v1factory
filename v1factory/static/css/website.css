@@ -16,6 +16,10 @@ h2 {
   font-weight: bold;
 }
 
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
 a.pane:hover {
   color: #fff;
   text-transform: none;
@@ -46,6 +50,20 @@ h1.name {
   border: 1px solid #bbb;
   color: #000;
   background-color: transparent;
+}
+
+.minhi {
+  min-height: 90px;
+}
+
+.pane.border {
+  background-color: transparent;
+  border: 5px solid #2b3545;
+  color: #2b3545;
+  font-size: 18px;
+  text-align: center;
+  padding-top: 14px;
+  cursor: pointer;
 }
 
 .pane img {
