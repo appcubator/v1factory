@@ -1,0 +1,79 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/gallery.css">
+
+{% endblock %}
+
+{% block topbar %}
+<div class="row">
+  <div class="offset2 toppanel hi3">
+  <h1 class="name hoff1"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  </div>
+</div>
+{% endblock %}
+
+{% block page %}
+<div class="container">
+  <div class="row top-buttons offset1 span30 tb-border">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </div>
+  <div class="row span30">
+    {% for element in elements %}
+    <div class="span9 offset1 hoff1">
+      <div class="pane border minhi">
+      {{ element.html|safe }}
+      </div>
+    </div>
+    {% endfor %}
+    <div class="span9 offset1 hoff1">
+      <div class="pane border minhi" id="create-element-button">
+        <span class="create-text">+ Create an element</span>
+        <form class="element-create-form" id="element-create-form" style="display:none;">
+          <input type="text" name="name" placeholder="Name">
+          <input type="text" name="class_name" placeholder="Classname">
+          <textarea type="text" name="html" placeholder="HTML"></textarea>
+          <textarea type="text" name="css" placeholder="CSS"></textarea>
+          <select name="type">
+            <option>Select Type</option>
+            <option>Header 1</option>
+            <option>Header 2</option>
+            <option>Header 3</option>
+            <option>Text</option>
+            <option>Button</option>
+            <option>Text Input</option>
+            <option>Dropdown</option>
+            <option>Textarea</option>
+            <option>Image</option>
+          </select>
+          <input type="submit" value="Add" class="btn">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$('#create-element-button').on('click', function() {
+  $('.create-text').hide();
+  $('.element-create-form').fadeIn();
+})
+
+$('#element-create-form').on('submit', function(e) {
+  $.ajax({
+    type: "POST",
+    url: '/uielement/new/',
+    data: $('#element-create-form').serialize(),
+    success: function() {
+
+    },
+    dataType: "JSON"
+  });
+  e.preventDefault();
+})
+</script>
+{% endblock %}
