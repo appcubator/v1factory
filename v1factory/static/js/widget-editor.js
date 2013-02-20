@@ -35,10 +35,6 @@ var EntityCollection = Backbone.Collection.extend({
   model: EntityModel,
 
   initialize: function(items) {
-    _(items).each(function(item){
-      //item['attributes'] = item.fields;
-      //item.fields = null;
-    });
     this.add(items);
   }
 });
@@ -55,8 +51,6 @@ var Widget = Backbone.Model.extend({
     this.collection.unselectAll();
     this.collection.selectedElement = this;
     if(pagesView.widgetEditor) {
-      console.log(this);
-      console.log('hey');
       pagesView.widgetEditor.selectedElement = this;
     }
     this.set('selected', true);

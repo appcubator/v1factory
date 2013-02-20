@@ -26,9 +26,8 @@ h1.name {
   display: block;
   font-size: 24px;
   font-weight: bold;
-  line-height: 40px;
+  line-height: 30px;
   margin-bottom: 10px;
-  margin-top: 10px;
 }
 
 .pane {
@@ -51,13 +50,15 @@ h1.name {
 
 .pane img {
   position: absolute;
-  right: -30px;
-  bottom: -50px;
+  right: -10px;
+  bottom: -34px;
   opacity: 0.4;
   transition: opacity 0.6s;
   -moz-transition: opacity 0.6s; /* Firefox 4 */
   -webkit-transition: opacity 0.6s; /* Safari and Chrome */
   -o-transition: opacity 0.6s; /* Opera */
+  width: 140px;
+  height: 140px;
 }
 
 .pane:hover img {
