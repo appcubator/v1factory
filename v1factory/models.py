@@ -64,7 +64,7 @@ class UIElement(models.Model):
 
   @classmethod
   def reseed(cls):
-    heading = cls(name="Heading", class_name="yolo-ology", html="<h1>Heading</h1>" css="* {background-color:red}" )
+    heading = cls(name="Heading", class_name="yolo-ology", html="<h1>Heading</h1>" type="generic" css="* {background-color:red}" )
     heading.full_clean()
     heading.save()
     # put more seed elements here
