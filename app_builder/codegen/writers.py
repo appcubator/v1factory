@@ -120,7 +120,8 @@ class DjangoWriter:
   @staticmethod
   def generate_template_code(page):
     """Given a page, return the template code"""
-    return "<html><body>YOLO this page name is {}. Please implement this function.</body></html>".format(page.name)
+# in the future, add template variable names
+    return page.to_html()
 
   def templates_as_strings(self):
     """Return a list of tuples: (filename, template content)"""
