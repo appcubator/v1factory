@@ -7,37 +7,16 @@
  *  panels on the editor page.
  *
  *  Includes:
- *  - EntityModel
- *  - EntityCollection
  *  - Widget
  *  - WidgetCollection
  *  - WidgetView
  *  - EntityUIContainer
  *  - WidgetMenuView
- *  - WidgetInfoView
- *  - WidgetEntityView
- *  - WidgetEntitiesListView
  *  - WidgetEditorView
  */
 
 var GRID_WIDTH = 30;
 var GRID_HEIGHT = 30;
-
-
-var EntityModel = Backbone.Model.extend({
-  initialize: function(key, value) {
-    this.name = key;
-  }
-});
-
-
-var EntityCollection = Backbone.Collection.extend({
-  model: EntityModel,
-
-  initialize: function(items) {
-    this.add(items);
-  }
-});
 
 
 var Widget = Backbone.Model.extend({
@@ -119,6 +98,7 @@ var WidgetView = Backbone.View.extend({
                     'changedHeight',
                     'changedTop',
                     'changedLeft',
+                    'changedText',
                     'resized');
 
     this.model = item;
@@ -127,6 +107,7 @@ var WidgetView = Backbone.View.extend({
     this.model.bind("change:height", this.changedHeight, this);
     this.model.bind("change:top", this.changedTop, this);
     this.model.bind("change:left", this.changedLeft, this);
+    this.model.bind("change:text", this.changedText, this);
 
     this.render(item);
   },
@@ -200,7 +181,8 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedWidth: function(a) {
-    this.widgetsContainer.className = 'selected widget span' + this.model.attributes.width;
+    console.log("width");
+    this.widgetsContainer.className = 'selected widget-wrapper span' + this.model.get('width');
   },
 
   changedHeight: function(a) {
@@ -217,8 +199,11 @@ var WidgetView = Backbone.View.extend({
   },
 
   resized: function(e, ui) {
-    var deltaHeight = (ui.size.height + 2) / GRID_HEIGHT;
-    var deltaWidth = (ui.size.width + 2) / GRID_WIDTH;
+    console.log("YE");
+    var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
+    var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
+    console.log(deltaHeight);
+    console.log(deltaWidth);
     this.model.set('width', deltaWidth);
     this.model.set('height', deltaHeight);
   }
@@ -396,154 +381,6 @@ var WidgetMenuView = Backbone.View.extend({
 
   }
 });
-
-
-var WidgetInfoView = Backbone.View.extend({
-  el : document.getElementById('item-info-list'),
-  model: null,
-  events : {
-    'change input' : 'inputChanged'
-  },
-
-  initialize: function(){
-    _.bindAll(this, 'render',
-                    'show',
-                    'showAttribute',
-                    'inputChanged',
-                    'changedProp');
-    this.render();
-  },
-
-  render: function() {
-
-  },
-
-  show: function(model) {
-    this.el.innerHTML = '';
-    var self = this;
-    this.model = model;
-    this.model.bind("change", this.changedProp, this);
-
-    _(model.attributes).each(function(val, key){
-      if(key == 'id' || key == 'type' || key == 'selected') return;
-      self.el.appendChild(self.showAttribute(val, key, String('')));
-    });
-  },
-
-  showAttribute: function(val, key, prop) {
-    var self = this;
-    var li = document.createElement('li');
-    li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
-    li.id = 'prop-'+ key;
-    return li;
-  },
-
-  inputChanged: function(e) {
-    var prop = e.target.parentNode.id.replace('prop-', '') + e.target.id;
-    this.model.set(prop, e.target.value);
-  },
-
-  changedProp: function(a, b) {
-    _(a.changed).each(function(val, key) {
-      if(document.getElementById('prop-' + key)) {
-        $('input', document.getElementById('prop-' + key)).val(val);
-      }
-    });
-  }
-});
-
-
-var WidgetEntityView = Backbone.View.extend({
-  el : null,
-  tagName : 'li',
-  className : 'entity-view-li',
-
-  events: {
-    'click .create' : 'clickedCreate',
-    'click .query' : 'clickedQuery',
-    'click .update' : 'clickedUpdate'
-  },
-
-  initialize: function(item){
-    var self = this;
-    _.bindAll(this, 'render', 'clickedCreate',
-                              'clickedUpdate',
-                              'clickedQuery');
-    this.model = item;
-    this.parentCollection = item.collection;
-
-    var coordinates = pagesView.unite({x: 6, y:2}, {x: 16, y: 10});
-    var widget = {
-      top : coordinates.topLeft.y,
-      left : coordinates.topLeft.x,
-      type : 'container',
-      width : coordinates.bottomRight.x - coordinates.topLeft.x,
-      height: coordinates.bottomRight.y - coordinates.topLeft.y,
-      entity : this.model
-    };
-    this.widget = widget;
-    this.render();
-  },
-
-  render: function() {
-    this.el.innerHTML = '<div class="entity-name">' + this.model.get('name') + '</div><div class="buttons">'+
-                                                    '<span class="create">Create</span>'+
-                                                    '<span class="query">Query</span>'+
-                                                    '<span class="update">Update</span>';
-  },
-
-  clickedCreate: function() {
-    this.widget.action = 'create';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
-    var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
-  },
-
-  clickedUpdate: function() {
-    this.widget.action = 'update';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
-    var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
-  },
-
-  clickedQuery: function() {
-    this.widget.action = 'query';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
-    var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
-  }
-});
-
-var WidgetEntitiesListView = Backbone.View.extend({
-  el : document.getElementById('entities-list'),
-  events : {
-  
-  },
-
-  initialize: function(widgetCollection){
-    var self = this;
-    _.bindAll(this, 'render');
-    var initialEntities = appState.entities;
-    var entities = [];
-    _(initialEntities).each(function(entity) {
-      entities.push(entity);
-    });
-    console.log(entities);
-    this.collection = new EntityCollection(entities);
-    this.widgetCollection = widgetCollection;
-    this.render();
-  },
-
-  render: function() {
-    var self = this;
-    this.el.innerHTML = '';
-    _(this.collection.models).each(function(item) {
-      var view = new WidgetEntityView(item);
-      self.el.appendChild(view.el);
-    });
-  }
-});
-
 
 var WidgetEditorView = Backbone.View.extend({
   el : $('.page'),
@@ -776,7 +613,3 @@ var PagesView = Backbone.View.extend({
     e.preventDefault();
   }
 });
-
-var widgetInfoView = new WidgetInfoView();
-var pagesView = new PagesView();
-pagesView.openPage(0);
