@@ -12,9 +12,9 @@
 {% block topbar %}
 <div class="row">
   <div class="offset2 toppanel span22 hi3">
-  <h1 class="name"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <h1 class="name hoff1"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
-  <div class="span8 right buttons">
+  <div class="span8 hoff1 right">
     <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-entities">Save</a>
   </div>
 </div>
@@ -23,7 +23,50 @@
 {% block page %}
 <div class="container" id="entities-page">
   <div class="row top-buttons offset1 span30 tb-border">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </div>
+  <div class="row offset1">
+    <div class="span30 hoff1">
+      <div class="pane hi8">
+        <h2 class="offset1 hoff1">User</h2>
+        <div class="offset1 span6">
+          <ul class="property-list">
+            <li>
+              <span class="hi1" id="">Name</span>
+              <select class="attribs" id="Name" disabled>
+                <option value="text" selected="">Text</option>
+              </select>
+            </li>
+            <li>
+              <span class="hi1" id="">Last Name</span>
+              <select class="attribs" id="Addres" disabled>
+                <option value="text" selected="">Text</option>
+              </select>
+            </li>
+            <li>
+              <span class="hi1" id="">Email</span>
+              <select class="attribs" id="Students" disabled>
+                <option value="text" selected="">Text</option>      
+              </select>
+            </li>
+          </ul>
+        </div>
+        <div class="offset2 span6">
+          <ul class="property-list">
+            <a class="add-property-button span7 hoff1"><span class="plus">+</span> Add Property</a>
+          <form class="add-property-form span5 hoff1" style="display:none"><input type="text" class="property-name-input"></form></li>
+          </ul>
+        </div>
+        <div class="span6 offset1">
+          <label class="hi1"><input type="checkbox" value="local">Local Login</label>
+          <label class="hi1"><input type="checkbox" value="facebook">Facebook Login</label>
+          <label class="hi1"><input type="checkbox" value="linkedin">LinkedIn Login</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row top-buttons offset1 hoff1 span30 tb-border">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </div>
   <div class="row">
     <div class="span24 offset1 hoff1">
@@ -45,7 +88,6 @@
   </div>
 </div>
 
-<div id="entities-init">
 <script>
   var appState = {{ app.state_json|safe }};
   var entitiesLibrary = [
@@ -86,8 +128,8 @@
 <% }); %>
 </ul>
 <a class="add-property-button span7 hoff1"><span class="plus">+</span> Add Property</a>
-<form class="add-property-form span5 hoff1" style="display:none"><input type="text" class="property-name-input"></form></li></script>
-
+<form class="add-property-form span5 hoff1" style="display:none"><input type="text" class="property-name-input"></form></li>
+</script>
 <script type="text/html" id="template-property">
 <li><div class="hi1 span5"><%- name %></div><span class="right cross small" id="prop-cross">×</span>
   <select class="attribs" id="<%- key %>">
