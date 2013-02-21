@@ -41,7 +41,7 @@ var UrlView = Backbone.View.extend({
 
   render: function() {
     var temp = document.getElementById('template-url').innerHTML;
-    var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
+    var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
     this.el.innerHTML = html;
   },
 
@@ -63,8 +63,8 @@ var UrlView = Backbone.View.extend({
   pageChanged: function(e) {
     if(e.target.value == "<<new_page>>") {
       $(e.target).hide();
-      $('.add-page-form').fadeIn();
-      $('.page-name-input').focus();
+      $('.add-page-form', this.el).fadeIn();
+      $('.page-name-input', this.el).focus();
       return;
     }
 

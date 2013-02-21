@@ -10,6 +10,7 @@
 
 .property-list {
   list-style: circle;
+  list-style: none;
 }
 
 .add-entity {
@@ -44,8 +45,11 @@ ul.entity-list {
 }
 
 select {
-  width: 100px;
-  display: block;
+  width: 80px;
+  display: inline-block;
+  margin: 0;
+  padding: 4px 2px;
+  text-align: left;
 }
 
 .cross {

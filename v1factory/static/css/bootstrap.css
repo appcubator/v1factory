@@ -282,6 +282,7 @@ a:hover {
   float: left;
   min-height: 1px;
   margin-left: 0px;
+  display: inline-block;
 /*  padding-left: 20px;*/
 }
 
