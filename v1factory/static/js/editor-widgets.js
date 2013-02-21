@@ -163,7 +163,6 @@ var WidgetView = Backbone.View.extend({
   },
 
   select: function(e) {
-    console.log(e);
     this.model.select();
     e.preventDefault();
     return false;
@@ -181,7 +180,6 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedWidth: function(a) {
-    console.log("width");
     this.widgetsContainer.className = 'selected widget-wrapper span' + this.model.get('width');
   },
 
@@ -198,12 +196,13 @@ var WidgetView = Backbone.View.extend({
     this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('left'))) + 'px';
   },
 
+  changedText: function(a) {
+
+  },
+
   resized: function(e, ui) {
-    console.log("YE");
     var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
-    console.log(deltaHeight);
-    console.log(deltaWidth);
     this.model.set('width', deltaWidth);
     this.model.set('height', deltaHeight);
   }
@@ -264,7 +263,6 @@ var EntityUIContainer = WidgetView.extend({
   render: function(widget) {
     this.el.innerHTML = '';
 
-    console.log(widget);
     var element = document.createElement('div');
     var width = widget.get('width');
     var height = widget.get('height');
@@ -505,111 +503,5 @@ var WidgetEditorView = Backbone.View.extend({
         e.preventDefault();
         break;
     }
-  }
-});
-
-var PagesView = Backbone.View.extend({
-  el: document.body,
-  listEl: document.getElementById('pages-list'),
-  events: {
-    'click .new-page' : 'clickedNewPage',
-    'submit .new-page-form' : 'submittedNewPage',
-    'click .exist-page' : 'clickedOpen',
-    'click #save' : 'savePages'
-  },
-
-  initialize: function() {
-    _.bindAll(this, 'render', 'clickedNewPage', 'submittedNewPage', 'savePages', 'savePage', 'unite', 'clickedOpen');
-    this.pages = appState.pages || [];
-    this.render();
-  },
-
-  render: function() {
-    var self = this;
-    _(this.pages).each(function(page, ind) {
-      self.listEl.innerHTML +=  '<li class="exist-page" id="page-'+ ind + '">' + page.name + '</li>';
-    });
-    self.listEl.innerHTML += '<li class="new-page"> + Create Page</li>' +
-    '<form class="new-page-form" hi2 style="display:none;"><input class="new-page-name" type="text"></form>';
-  },
-
-  clickedNewPage: function() {
-    $('.new-page').hide();
-    $('.new-page-form').fadeIn();
-    $('.new-page-name').focus();
-  },
-
-  submittedNewPage: function(e) {
-    e.preventDefault();
-    var pageName = $('.new-page-name').val();
-    var page = {'page_name': pageName, 'uielements' : []};
-
-    this.pages.push(page);
-    this.curPage = this.pages.length - 1;
-    this.openPage(this.curPage);
-
-    $('<li class="page" id="'+ pageName + '">' + pageName + '</li>').insertBefore('.new-page');
-    $('.new-page-form').hide();
-    $('.new-page-name').val('');
-    $('.new-page').fadeIn();
-  },
-
-  openPage: function(pageInd) {
-    if(this.widgetEditor) {
-      this.savePage();
-    }
-    this.curPage = pageInd;
-    this.widgetEditor = new WidgetEditorView(this.pages[pageInd]);
-    document.getElementById('page-' + pageInd).className += ' selected';
-  },
-
-  savePage: function() {
-    this.pages[this.curPage]['uielements'] = (this.widgetEditor.serializeWidgets() || []);
-  },
-
-  savePages: function() {
-    this.savePage();
-    appState.pages = this.pages;
-    console.log(appState);
-    console.log(JSON.stringify(appState));
-    $.ajax({
-      type: "POST",
-      url: '/app/1/state/',
-      data: JSON.stringify(appState),
-      success: function() {
-
-      },
-      dataType: "JSON"
-    });
-  },
-
-  unite: function(cor1, cor2) {
-    var topLeft = {}, bottomRight = {};
-
-    if(cor1.x < cor2.x) {
-      topLeft.x =  cor1.x; bottomRight.x = cor2.x;
-    } else {
-      topLeft.x =  cor2.x; bottomRight.x = cor1.x;
-    }
-
-    if(cor1.y < cor2.y) {
-      topLeft.y =  cor1.y; bottomRight.y = cor2.y;
-    } else {
-      topLeft.y =  cor2.y; bottomRight.y = cor1.y;
-    }
-
-    topLeft.x--; topLeft.y--;
-
-    return {
-      topLeft : topLeft,
-      bottomRight: bottomRight
-    };
-  },
-
-  clickedOpen: function(e) {
-    var ind = String(e.target.id).replace('page-','');
-    $('.selected.exist-page').removeClass('selected');
-    this.openPage(ind);
-    e.preventDefault();
   }
 });

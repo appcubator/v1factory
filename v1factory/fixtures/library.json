@@ -4,7 +4,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "alpha",
-      "html": "<a href=\"#\">a link</a>",
+      "html": "<a href=\"#\"><%= text %></a>",
       "type": "link",
       "css": "",
       "name": "a"
@@ -15,7 +15,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "beta",
-      "html": "<p>text</p>",
+      "html": "<p><%= text %></p>",
       "type": "paragraph",
       "css": "",
       "name": "p"
@@ -37,7 +37,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "hello",
-      "html": "<h1>Title</h1>",
+      "html": "<h1><%= text %></h1>",
       "type": "heading",
       "css": "",
       "name": "h1"
@@ -48,7 +48,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "whatsup",
-      "html": "<h2>Heading</h2>",
+      "html": "<h2><%= text %></h2>",
       "type": "heading",
       "css": "",
       "name": "h2"
@@ -59,7 +59,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "yolo",
-      "html": "<h3>Subheading</h3>",
+      "html": "<h3><%= text %></h3>",
       "type": "heading",
       "css": "",
       "name": "h3"
@@ -70,7 +70,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "ilter",
-      "html": "<div>Container</div>",
+      "html": "<div><%= text %></div>",
       "type": "container",
       "css": "",
       "name": "container (div)"
@@ -81,7 +81,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "karan",
-      "html": "<input type=\"text\" />",
+      "html": "<input type=\"text\" placeholder='<%= text %>'/>",
       "type": "input",
       "css": "",
       "name": "text input field"
@@ -92,7 +92,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "zoo",
-      "html": "<textarea rows=4 cols=50></textarea>",
+      "html": "<textarea rows=4 cols=50><%= text %></textarea>",
       "type": "input",
       "css": "",
       "name": "textarea"
@@ -103,7 +103,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "zebra",
-      "html": "<input type=\"submit\" value=\"Submit\" />",
+      "html": "<input type=\"submit\" value=\"<%= text %>\" />",
       "type": "input",
       "css": "",
       "name": "submit button"

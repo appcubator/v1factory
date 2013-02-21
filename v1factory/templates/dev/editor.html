@@ -42,28 +42,27 @@
 
 {% block js %}
 <script type="text/javascript">
-  var appState = {{ app.state_json|safe }};
+var appState = {{ app.state_json|safe }};
 </script>
-
-{% for element in elements %}
-<script type="text/html" id="temp-widget-{{ element.id }}">
-{{ element.html|safe }}
-</script>
-{% endfor %}
-
 <script type="text/html" id="temp-meta">
 <div class="meta">
 <img class="delete" src="/static/img/delete-icon.png">
 </div>
 </script>
+{% for element in elements %}
+<script type="text/html" id="temp-widget-{{ element.id }}">
+{{ element.html|safe }}
+</script>
+{% endfor %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-grid.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-widgets.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-entities.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-info.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/editor-pages.js"></script>
 <script type="text/javascript">
-var widgetInfoView = new WidgetInfoView();
 var pagesView = new PagesView();
+var widgetInfoView = new WidgetInfoView();
 pagesView.openPage(0);
 </script>
 {% endblock %}
