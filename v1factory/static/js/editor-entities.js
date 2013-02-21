@@ -25,15 +25,18 @@ var WidgetEntityView = Backbone.View.extend({
     'click .update' : 'clickedUpdate'
   },
 
-  initialize: function(item){
+  initialize: function(item, widgetCollection){
     var self = this;
     _.bindAll(this, 'render', 'clickedCreate',
                               'clickedUpdate',
                               'clickedQuery');
+
+    console.log(item);
     this.model = item;
     this.parentCollection = item.collection;
+    this.widgetCollection = widgetCollection;
 
-    var coordinates = pagesView.unite({x: 6, y:2}, {x: 16, y: 10});
+    var coordinates = pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
     var widget = {
       top : coordinates.topLeft.y,
       left : coordinates.topLeft.x,
@@ -55,23 +58,20 @@ var WidgetEntityView = Backbone.View.extend({
 
   clickedCreate: function() {
     this.widget.action = 'create';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
     var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
+    this.widgetCollection.add(newModel);
   },
 
   clickedUpdate: function() {
     this.widget.action = 'update';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
     var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
+    this.widgetCollection.add(newModel);
   },
 
   clickedQuery: function() {
     this.widget.action = 'query';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
     var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
+    this.widgetCollection.add(newModel);
   }
 });
 
@@ -99,7 +99,7 @@ var WidgetEntitiesListView = Backbone.View.extend({
     var self = this;
     this.el.innerHTML = '';
     _(this.collection.models).each(function(item) {
-      var view = new WidgetEntityView(item);
+      var view = new WidgetEntityView(item, self.widgetCollection);
       self.el.appendChild(view.el);
     });
   }

@@ -25,7 +25,7 @@ var WidgetInfoView = Backbone.View.extend({
     this.model.bind("change", this.changedProp, this);
 
     _(model.attributes).each(function(val, key){
-      if(key == 'id' || key == 'type' || key == 'selected') return;
+      if(key == 'id' || key == 'selected') return;
       self.el.appendChild(self.showAttribute(val, key, String('')));
     });
   },

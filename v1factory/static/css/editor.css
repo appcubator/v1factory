@@ -306,6 +306,10 @@
   overflow: hidden;
 }
 
+.pseudo-outline {
+  position: absolute;
+}
+
 .widget-wrapper .meta, .widgets-container .meta {
   position: absolute;
   bottom: 0;
