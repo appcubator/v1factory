@@ -45,7 +45,7 @@ ul.entity-list {
 }
 
 select {
-  width: 80px;
+  width: 76px;
   display: inline-block;
   margin: 0;
   padding: 4px 2px;
@@ -91,11 +91,15 @@ select {
   background-color: #fff;
 }
 
-ul.property-list li {
+ul.property-list li, ul.property-l li {
   margin-top: 10px;
   padding-top: 10px;
   list-style-position: inside;
   border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+ul.property-list li:hover .cross.small, ul.property-l li:hover .cross.small {
+  opacity: 1;
 }
 
 .cross.small {
@@ -106,4 +110,10 @@ ul.property-list li {
   border-radius: 8px;
   font-size: 16px;
   padding-bottom: 4px;
+  margin-right: -14px;
+  opacity: 0;
+}
+
+input[type="checkbox"] {
+  margin-right: 6px;
 }

@@ -27,10 +27,10 @@ var EntityView = Backbone.View.extend({
 
   events : {
     'click .add-property-button' : 'clickedAdd',
-    'submit .add-property-form' : 'formSubmitted',
-    'change .attribs' : 'changedAttribs',
-    'click #cross' : 'clickedDelete',
-    'click #prop-cross' : 'clickedPropDelete'
+    'submit .add-property-form'  : 'formSubmitted',
+    'change .attribs'            : 'changedAttribs',
+    'click #cross'               : 'clickedDelete',
+    'click #prop-cross'          : 'clickedPropDelete'
   },
 
 
@@ -123,6 +123,63 @@ var EntityView = Backbone.View.extend({
   }
 });
 
+
+var UserEntityView = EntityView.extend({
+  el : document.getElementById('user-entity'),
+  
+  events: {
+    'change .cb-login' : 'checkedBox'
+  },
+
+  initialize: function(item) {
+    _.bindAll(this, 'render',
+                    'clickedAdd',
+                    'checkedBox',
+                    'formSubmitted',
+                    'changedAttribs',
+                    'addedEntity',
+                    'clickedDelete',
+                    'modelRemoved',
+                    'clickedPropDelete');
+
+    this.model = item;
+    this.model.bind('change:owns', this.ownsChangedOutside);
+    this.model.bind('change:belongsTo', this.belongsToChangedOutside);
+
+    this.parentCollection = item.collection;
+    this.parentCollection.bind('add', this.addedEntity);
+    this.parentCollection.bind('remove', this.modelRemoved);
+
+    this.name = item.get('name');
+    this.parentName = name;
+    this.render();
+  },
+
+  render: function() {
+    var self = this;
+    _(this.model.get('fields')).each(function(val, key){
+      console.log(val + key);
+      var template = _.template( $("#template-property").html(),
+                                  { name: key,
+                                    key : val,
+                                    other_models: self.parentCollection.models});
+
+      $('.property-list', this.el).append(template);
+    });
+  },
+
+  checkedBox: function(e) {
+    console.log(this.model);
+    if(!this.model.get('loginTypes')) {
+      this.model.set('loginTypes', { 'facebook' : false,
+                                      'linkedin' : false,
+                                      'local'    : false  });
+    }
+    this.model.get('loginTypes')[e.target.value] = e.target.checked;
+  }
+});
+
+
 var EntityListView = Backbone.View.extend({
   el: $('#entities'),
   collection: null,
@@ -149,8 +206,15 @@ var EntityListView = Backbone.View.extend({
   },
 
   appendItem: function(item) {
-    var entityView = new EntityView(item, 'entity-list-');
-    $(this.el).append(entityView.el);
+    var entityView;
+    console.log(item);
+    if(item.get('name') == "User") {
+      entityView = new UserEntityView(item);
+    }
+    else {
+      entityView = new EntityView(item, 'entity-list-');
+      $(this.el).append(entityView.el);
+    }
     $('.add-property-button', entityView.el).on('click', entityView.clickedAdd);
     entityView.delegateEvents();
   },
@@ -164,6 +228,7 @@ var EntityListView = Backbone.View.extend({
     this.appendItem(newModel);
   }
 });
+
 
 var EntitiesEditorView = Backbone.View.extend({
   el : $('#entities-page'),
@@ -217,6 +282,10 @@ var EntitiesEditorView = Backbone.View.extend({
         if (key == "fields") return;
         ent.fields[key] = val;
       });
+
+      if(ent.name == "User") {
+        ent.loginTypes = entity.get('loginTypes');
+      }
     
       serialized.push(ent);
     });
@@ -270,7 +339,6 @@ var EntitiesLibraryView = Backbone.View.extend({
     this.appendItem(new EntityModel(item));
   }
 });
-
 
 var rightEditor = new EntitiesEditorView();
 var entityList = new EntityListView();
