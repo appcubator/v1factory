@@ -220,6 +220,16 @@ class DjangoWriter:
     models_file.write(self.models_py_as_string())
     models_file.close()
 
+    # write model forms file
+    views_file = open(join(inner_app_dir, "model_forms.py"), "w")
+    views_file.write(self.model_forms_py_as_string())
+    views_file.close()
+
+    # write form receivers file
+    views_file = open(join(inner_app_dir, "form_receivers.py"), "w")
+    views_file.write(self.form_receivers_py_as_string())
+    views_file.close()
+
     # write views file
     views_file = open(join(inner_app_dir, "views.py"), "w")
     views_file.write(self.views_py_as_string())

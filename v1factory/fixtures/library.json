@@ -1,0 +1,112 @@
+[
+  {
+    "pk": "1",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "alpha",
+      "html": "<a href=\"#\">a link</a>",
+      "type": "link",
+      "css": "",
+      "name": "a"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "beta",
+      "html": "<p>text</p>",
+      "type": "paragraph",
+      "css": "",
+      "name": "p"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "gamma",
+      "html": "<img src=\"http://www.mediatehawaii.org/wp-content/uploads/placeholder.jpg\" />",
+      "type": "image",
+      "css": "",
+      "name": "img"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "hello",
+      "html": "<h1>Title</h1>",
+      "type": "heading",
+      "css": "",
+      "name": "h1"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "whatsup",
+      "html": "<h2>Heading</h2>",
+      "type": "heading",
+      "css": "",
+      "name": "h2"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "yolo",
+      "html": "<h3>Subheading</h3>",
+      "type": "heading",
+      "css": "",
+      "name": "h3"
+    }
+  },
+  {
+    "pk": "7",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "ilter",
+      "html": "<div>Container</div>",
+      "type": "container",
+      "css": "",
+      "name": "container (div)"
+    }
+  },
+  {
+    "pk": "8",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "karan",
+      "html": "<input type=\"text\" />",
+      "type": "input",
+      "css": "",
+      "name": "text input field"
+    }
+  },
+  {
+    "pk": "9",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "zoo",
+      "html": "<textarea rows=4 cols=50></textarea>",
+      "type": "input",
+      "css": "",
+      "name": "textarea"
+    }
+  },
+  {
+    "pk": "10",
+    "model": "v1factory.UIElement",
+    "fields": {
+      "class_name": "zebra",
+      "html": "<input type=\"submit\" value=\"Submit\" />",
+      "type": "input",
+      "css": "",
+      "name": "submit button"
+    }
+  }
+]
