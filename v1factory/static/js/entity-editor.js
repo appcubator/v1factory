@@ -1,29 +1,32 @@
-var EntityModel = Backbone.Model.extend({
-});
+/*
+ *  Widget Editor
+ *  Written by icanberk
+ *
+ *  Abstract:
+ *  This module controls the entities page.
+ *
+ *  Includes:
+ *  - EntityModel
+ *  - EntityCollection
+ *  - EntityView
+ *  - EntityListView
+ *  - EntitiesEditorView
+ *  - EntitiesLibraryView
+ */
+
+
+var EntityModel = Backbone.Model.extend();
 
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel
-  // initialize: function(items) {
-  //   var models = []
-  //   _(items).each(function(item){
-  //     var model = {}
-  //     model.name = item.name;
-  //     _(item.fields).each(function(val, key){
-  //       model[key] = val;
-  //     });
-  //     console.log(model);
-  //     models.push(model);
-  //   });
-  //   this.add(models);
-  // }
 });
 
 var EntityView = Backbone.View.extend({
-  el : null,
-  tagName: 'li',
-  collection: null,
-  parentName: "",
-  className: 'offset1 span7 entity',
+  el         : null,
+  tagName    : 'li',
+  collection : null,
+  parentName : "",
+  className  : 'offset1 span7 entity',
 
   events : {
     'click .add-property-button' : 'clickedAdd',
@@ -158,11 +161,13 @@ var UserEntityView = EntityView.extend({
   render: function() {
     var self = this;
     _(this.model.get('fields')).each(function(val, key){
-      console.log(val + key);
-      var template = _.template( $("#template-property").html(),
-                                  { name: key,
-                                    key : val,
-                                    other_models: self.parentCollection.models});
+
+      var page_context = {};
+      page_context.name = key;
+      page_context.key = val;
+      page_context.other_models = self.parentCollection.models;
+
+      var template = _.template( $("#template-property").html(), page_context);
 
       $('.property-list', this.el).append(template);
     });
@@ -172,8 +177,8 @@ var UserEntityView = EntityView.extend({
     console.log(this.model);
     if(!this.model.get('loginTypes')) {
       this.model.set('loginTypes', { 'facebook' : false,
-                                      'linkedin' : false,
-                                      'local'    : false  });
+                                     'linkedin' : false,
+                                     'local'    : false  });
     }
     this.model.get('loginTypes')[e.target.value] = e.target.checked;
   }
@@ -181,19 +186,22 @@ var UserEntityView = EntityView.extend({
 
 
 var EntityListView = Backbone.View.extend({
-  el: $('#entities'),
-  collection: null,
-  entities: [ ],
-  counter: 0,
+  el         : $('#entities'),
+  collection : null,
+  entities   : [ ],
+  counter    : 0,
+
   initialize: function(){
-    self = this;
     _.bindAll(this, 'render', 'appendItem', 'addEntity');
+
+    var self = this;
     var initialEntities = appState.entities || [];
+
     _(initialEntities).each(function(entity) {
       entity.id = self.counter;
       self.counter++;
     });
-    console.log(initialEntities);
+
     this.collection = new EntityCollection(initialEntities);
     this.render();
   },
@@ -207,7 +215,7 @@ var EntityListView = Backbone.View.extend({
 
   appendItem: function(item) {
     var entityView;
-    console.log(item);
+
     if(item.get('name') == "User") {
       entityView = new UserEntityView(item);
     }
@@ -220,9 +228,9 @@ var EntityListView = Backbone.View.extend({
   },
 
   addEntity: function(item) {
-    console.log(item);
     item.id = this.counter;
     this.counter++;
+
     var newModel = new EntityModel(item);
     this.collection.add(newModel);
     this.appendItem(newModel);
@@ -231,21 +239,29 @@ var EntityListView = Backbone.View.extend({
 
 
 var EntitiesEditorView = Backbone.View.extend({
-  el : $('#entities-page'),
-  addButton: $('#add-entity-button'),
-  addForm: $('#add-entity-form'),
+  el        : $('#entities-page'),
+  addButton : $('#add-entity-button'),
+  addForm   : $('#add-entity-form'),
+
   events : {
-    'click #save-entities' : 'serializeEntities',
+    'click #save-entities'     : 'serializeEntities',
     'click #add-entity-button' : 'clickedAdd',
-    'submit #add-entity-form' : 'formSubmitted'
+    'submit #add-entity-form'  : 'formSubmitted'
   },
+
   initialize: function() {
-    _.bindAll(this, 'render', 'clickedAdd', 'formSubmitted', 'serializeEntities');
+    _.bindAll(this, 'render',
+                    'clickedAdd',
+                    'formSubmitted',
+                    'serializeEntities');
+
     $('#save-entities').on('click', this.serializeEntities);
   },
+
   render : function() {
 
   },
+
   clickedAdd: function(e) {
     var newForm = this.addForm.clone();
     $(newForm).appendTo('#entities');
@@ -253,17 +269,18 @@ var EntitiesEditorView = Backbone.View.extend({
     $(this.addButton).hide();
     $('#entity-name-input').focus();
   },
+
   formSubmitted: function(e) {
     e.preventDefault();
-    var elem = {
-      name : $('#entity-name-input').val(),
-      fields : {}
-    };
+
+    var elem = {};
+    elem.name = $('#entity-name-input').val();
+    elem.fields = {};
+
     entityList.addEntity(elem);
     $('#entity-name-input').val('');
     $(this.addButton).fadeIn();
     $(e.target).remove();
-    return false;
   },
 
   serializeEntities : function(e) {
@@ -339,8 +356,3 @@ var EntitiesLibraryView = Backbone.View.extend({
     this.appendItem(new EntityModel(item));
   }
 });
-
-var rightEditor = new EntitiesEditorView();
-var entityList = new EntityListView();
-var entityLibrary = new EntitiesLibraryView();
-

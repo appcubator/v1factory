@@ -1,16 +1,32 @@
+/*
+ *  Editor - Grid
+ *  Written by icanberk
+ *
+ *  Abstract:
+ *  This module the grid and arranges the interaction
+ *  between the user and the page. Once an element is
+ *  created, it passes the information to WidgetEditor.
+ *  It is not supposed to store or change any widget.
+ *
+ *  Includes:
+ *  - GridEditorView
+ *
+ */
+
 var GridEditorView = Backbone.View.extend({
-  el : document.getElementById('body-container'),
-  initCor: {},
-  lastCor: {},
-  selectorActive: false,
-  itemGallery: document.getElementById('item-gallery'),
+  el             : document.getElementById('body-container'),
+  initCor        : {},
+  lastCor        : {},
+  selectorActive : false,
+  itemGallery    : document.getElementById('item-gallery'),
   events : {
-    "mousedown .span1" : "mousedown",
-    "mouseup   div.editing" : "mouseup",
-    "mouseover .span1" : "mouseover",
-    "click     .widget-prev" : "addWidget",
-    "click     .item-gallery .header": "hideItemGallery"
+    "mousedown .span1"           : "mousedown",
+    "mouseup div.editing"        : "mouseup",
+    "mouseover .span1"           : "mouseover",
+    "click .widget-prev"         : "addWidget",
+    "click .item-gallery .header": "hideItemGallery"
   },
+
   initialize: function(item){
     _.bindAll(this, 'render',
                     'mousedown',
@@ -71,32 +87,31 @@ var GridEditorView = Backbone.View.extend({
   },
 
   coordselector: function(x1, x2, y1, y2) {
-    var xg, xs, yg, ys;
+    var x, y, xg, xs, yg, ys;
 
     if(x1 < x2) {
-      for(var x=x1; x <= x2; x++) {
+      for(x = x1; x <= x2; x++) {
         ycombinator(x);
       }
     }
     else {
-      for(var x=x1; x >= x2; x--) {
+      for(x = x1; x >= x2; x--) {
         ycombinator(x);
       }
     }
 
     function ycombinator(x) {
       if(y1 < y2) {
-        for(var y=y1; y <= y2; y++) {
+        for(y=y1; y <= y2; y++) {
             $('#'+x+'_'+y).addClass('cselected');
         }
       }
       else {
-        for(var y=y1; y >= y2; y--) {
+        for(y=y1; y >= y2; y--) {
           $('#'+x+'_'+y).addClass('cselected');
         }
       }
     }
-    
   },
 
   popItemGallery: function(x, y) {
@@ -111,14 +126,12 @@ var GridEditorView = Backbone.View.extend({
   },
 
   addWidget: function(e) {
+    e.preventDefault();
+
     var id = e.target.id || e.target.parentNode.id;
     pagesView.widgetEditor.addWidget(id, this.initCor, this.lastCor);
-    e.preventDefault();
     $(this.itemGallery).hide();
     $('.cselected').removeClass('cselected');
     this.selectorActive = false;
-    return false;
   }
 });
-
-var gridEditor = new GridEditorView();

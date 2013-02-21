@@ -463,3 +463,17 @@
   background-color: #dddddf;
   cursor: help;
 }
+
+.accordion {
+  max-height: 40px;
+  overflow: hidden;
+  transition: max-height 1s;
+  -moz-transition: max-height 1s; /* Firefox 4 */
+  -webkit-transition: max-height 1s; /* Safari and Chrome */
+  -o-transition: max-height 1s; /* Opera */
+
+}
+
+.accordion:hover {
+  max-height: 1000px;
+}

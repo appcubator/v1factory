@@ -3,15 +3,18 @@
  *  Written by icanberk
  *
  *  Abstract:
- *  This module controls the widgets and interactions with the side
- *  panels on the editor page.
+ *  This module controls and stores all the widgets
+ *  on the editor page.
+ *
+ *  WidgetContainerView is a model of the WidgetEditorView
+ *  collection. However, sub-elements of the WidgetContainerView
+ *  is only stored in childCollection attribute.
  *
  *  Includes:
  *  - Widget
  *  - WidgetCollection
  *  - WidgetView
- *  - EntityUIContainer
- *  - WidgetMenuView
+ *  - WidgetContainerView
  *  - WidgetEditorView
  */
 
@@ -200,7 +203,6 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedLeft: function(a) {
-    console.log(this.widgetsContainer);
     this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('left'))) + 'px';
   },
 
@@ -237,7 +239,7 @@ var WidgetView = Backbone.View.extend({
 });
 
 
-var EntityUIContainer = WidgetView.extend({
+var WidgetContainerView = WidgetView.extend({
   el: null,
   className: 'container-create',
   tagName : 'div',
@@ -275,7 +277,7 @@ var EntityUIContainer = WidgetView.extend({
       return;
     }
 
-    console.log("HEy");
+    item.get('action');
 
     switch (item.get('action')) {
     case "create":
@@ -323,9 +325,6 @@ var EntityUIContainer = WidgetView.extend({
 
   placeCreateWidgets: function() {
 
-    console.log("YOLO");
-
-    console.log(this);
     var nmrAttributes = 0;
     var self = this;
     var widgets = [];
@@ -352,7 +351,6 @@ var EntityUIContainer = WidgetView.extend({
     var self = this;
     var widgets = [];
 
-    console.log(self.entity);
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
       var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
       var type = 'widget-2';
@@ -376,9 +374,7 @@ var EntityUIContainer = WidgetView.extend({
     var self = this;
     var widgets = [];
 
-    console.log(self.entity);
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      console.log(item);
       var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: 7, y: 1 + ((nmrAttributes+1) * 2)});
       var type = 'widget-8';
       var widgetProps = {
@@ -423,7 +419,7 @@ var WidgetEditorView = Backbone.View.extend({
     this.render();
     this.collection = new WidgetCollection();
     this.widgetMenu = new WidgetMenuView(this.collection);
-    this.widgetEntitiesView = new WidgetEntitiesListView(this.collection);
+    this.widgetEntitiesView = new EntitiesListView(this.collection);
     this.collection.bind('add', this.placeWidget);
 
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
@@ -455,18 +451,17 @@ var WidgetEditorView = Backbone.View.extend({
   placeWidget: function(widget) {
     var curWidget;
     if(typeof widget.get('entity') == "string") {
-      console.log(widget.get('entity'));
       var entityObj = this.widgetEntitiesView.collection.where({ name :widget.get('entity')})[0];
       if(!entityObj) {
         alert('Entity could not be found!');
       }
       else {
         widget.set('entity', entityObj);
-        curWidget= new EntityUIContainer(widget);
+        curWidget= new WidgetContainerView(widget);
       }
     }
     else if (widget.get('entity')) {
-      curWidget= new EntityUIContainer(widget);
+      curWidget= new WidgetContainerView(widget);
     }
     else {
       curWidget = new WidgetView(widget);
@@ -484,8 +479,8 @@ var WidgetEditorView = Backbone.View.extend({
   serializeCollection: function(coll) {
     var uiElements = [];
     var self = this;
-    var elem = { };
     _(coll).each(function(item, key) {
+      var elem = { };
       if(item.get('type') == 'container') {
         elem.type = 'container';
         elem.action = item.get('action');
