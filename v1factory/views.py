@@ -1,12 +1,9 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
-from django.core import serializers
 from v1factory.models import App, UIElement
-from app_builder.models import Class
-import requests
 
 @login_required
 def app_list(request):
@@ -16,13 +13,13 @@ def app_list(request):
     return redirect(app_page, request.user.apps.all()[0].id)
   else:
     page_context = { 'apps': request.user.apps.all() }
-    return render(request, 'apps-show.html', page_context)
+    return render(request, 'dev/apps-show.html', page_context)
 
 
 @login_required
 def app_new(request):
   if request.method == 'GET':
-    return render(request, 'apps-new.html')
+    return render(request, 'dev/apps-new.html')
   elif request.method == 'POST':
     a = App(name="YOLO app", owner=request.user)
     a.save()
@@ -34,73 +31,79 @@ def app_new(request):
 @login_required
 def app_page(request, app_id):
   app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
-  return render(request, 'app-show.html', {'app' : app, 'title' : 'The Office' })
+  return render(request, 'dev/app-show.html', {'app' : app, 'title' : 'The Garage' })
 
 @login_required
-def app_template(request, app_id, page_name):
+def app_state(request, app_id):
+  app = get_object_or_404(App, id=app_id)
   if request.method == 'GET':
-    app = get_object_or_404(App, id=app_id, owner=request.user)
-    page = get_object_or_404(app.templates, name__iexact=page_name)
-    return HttpResponse(page.html)
+    state = app_get_state(request, app)
+    return state
   elif request.method == 'POST':
-    return app_save_page(request, app_id, page_name)
+    status, message = app_save_state(request, app)
+    return HttpResponse(message, status=status)
   else:
-    return HttpResponse("", status=405)
+    return HttpResponse("GET or POST only", status=405)
+
+@require_GET
+@login_required
+def app_get_state(request, app):
+  return app.state
 
 @require_POST
 @login_required
-def app_save_page(request, app_id, page_name):
-  if 'content' not in request.POST:
-    return HttpResponse("you must supply \"content\" as a field", status=400)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page = app.templates.get_or_create(name__iexact=page_name, defaults={ 'name': page_name })[0]
-  page.html = request.POST['content']
+def app_save_state(request, app):
+  app._state_json = request.body
   try:
-    page.full_clean()
-  except Exception:
-    return HttpResponse("error validating the template object", status=400)
-  page.save()
-  app.templates.add(page) # associate with this app
-  return HttpResponse("ok")
+    app.full_clean()
+  except Exception, e:
+    return (400, str(e))
+  app.save()
+  return (200, 'ok')
+
+def app_urls(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  page_context = { 'app': app, 'title' : 'URLs'}
+  return render(request, 'dev/app-urls.html', page_context)
 
 def app_design(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Design' }
-  return render(request, 'app-design.html', page_context)
+  return render(request, 'dev/app-design.html', page_context)
 
-def app_editor(request, app_id):
+def app_gallery(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Editor' }
-  # get schema of app
-  schema = [ c.to_dict() for c in app.classes.all() ]
-  page_context['schema'] = simplejson.dumps(schema)
-  return render(request, 'editor.html', page_context)
+  els = UIElement.get_library()
+
+  page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els }
+  return render(request, 'dev/app-gallery.html', page_context)
 
 def app_analytics(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app , 'title' : 'Analytics' }
-  return render(request, 'app-analytics.html', page_context)
+  return render(request, 'dev/app-analytics.html', page_context)
 
 def app_data(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app , 'title' : 'Data' }
-  return render(request, 'app-data.html', page_context)
+  return render(request, 'dev/app-data.html', page_context)
 
 def app_finances(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app , 'title' : 'Finances' }
-  return render(request, 'app-finances.html', page_context)
+  return render(request, 'dev/app-finances.html', page_context)
 
 def account(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Account Info' }
-  return render(request, 'app-account.html', page_context)
+  return render(request, 'dev/app-account.html', page_context)
 
 @require_GET
 @login_required
@@ -108,17 +111,65 @@ def entities(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Entities' }
-  schema = [ c.to_dict() for c in app.classes.all() ]
-  page_context['schema'] = simplejson.dumps(schema)
-  return render(request, 'app-entities.html', page_context)
+  return render(request, 'dev/app-entities.html', page_context)
 
+@require_GET
+@login_required
+def app_editor(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  els = UIElement.get_library()
+  page_context = { 'app': app, 'title' : 'Editor', 'elements' : els }
+  return render(request, 'dev/editor.html', page_context)
 
+# IN THE WORKS
+def generate_html(request, app_id, page_name):
+  app = get_object_or_404(App, id=app_id)
+  page = get_object_or_404(app.templates, name__iexact='homepage')
+  uielements = simplejson.loads(page.html)[0]
 
+  print uielements
+  generated_html = '<html>'
+  for key, val in uielements.iteritems():
+    print key
+    if key == 'container-create':
+      print 'containiiii'
+      generated_html += generate_create_container(val)
+    else:
+      if val.type is 'widget-5':
+        generated_html += '<input name="yolo" type="text">'
+      else:
+        generated_html += '<span>YOLOOOO</span>'
+
+  return HttpResponse(generated_html)
+
+def generate_create_container(container_content):
+  print container_content
+  form_html = '<form action="/app/create/' + container_content['entity'] + '">'
+  for element in container_content['elements']:
+    form_html += '<input name="yolo" type="text">'
+  form_html += '</form>'
+  return form_html
+
+### UIElement creation form
 from django.forms import ModelForm
 class UIElementForm(ModelForm):
   class Meta:
     model = UIElement
 
-def render_form(request):
-  new_form = UIElementForm
-  return render(request, "uielement/new_element.html", {'form': new_form} )
+def new_uielement(request):
+  if request.method == 'GET':
+    new_form = UIElementForm()
+    return render(request, "uielement/new_element.html", {'form': new_form} )
+
+  elif request.method == 'POST':
+    new_form = UIElementForm(request.POST)
+
+    if new_form.is_valid():
+      obj = new_form.save()
+      return HttpResponse("Success")
+    else:
+      return render(request, "uielement/new_element.html", {'form': new_form} )
+
+  else:
+    return HttpResponse("Only GET and POST allowed", status=405)

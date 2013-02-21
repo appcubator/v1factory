@@ -12,7 +12,7 @@
 {% block topbar %}
 <div class="row">
   <div class="offset2 toppanel hi3">
-  <h1 class="name hoff1"><a href="{% url v1factory.dev_views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
 </div>
 {% endblock %}
@@ -21,25 +21,25 @@
   <div class="container">
   <div class="row">
     <div class="offset2 span19">
-      <a class="pane hi4 entities" href="{% url v1factory.dev_views.entities app.id %}">
+      <a class="pane hi4 entities" href="{% url v1factory.views.entities app.id %}">
         <img src="{{ STATIC_URL }}img/entities.png">
         <div class="hoff1 offset1">
         <h2>Models</h2>
         </div>
       </a>
-      <a class="pane hi4 hoff1" href="{% url v1factory.dev_views.app_urls app.id %}">
+      <a class="pane hi4 hoff1" href="{% url v1factory.views.app_urls app.id %}">
         <img src="{{ STATIC_URL }}img/urls.png">
         <div class="hoff1 offset1">
         <h2>URLs</h2>
         </div>
       </a> 
-      <a class="pane hi4 hoff1" href="{% url v1factory.dev_views.app_design app.id %}">
+      <a class="pane hi4 hoff1" href="{% url v1factory.views.app_design app.id %}">
         <img src="{{ STATIC_URL }}img/design.png">
         <div class="hoff1 offset1">
         <h2>Design</h2>
         </div>
       </a> 
-      <a class="pane hi4 hoff1" href="{% url v1factory.dev_views.app_editor app.id %}">
+      <a class="pane hi4 hoff1" href="{% url v1factory.views.app_editor app.id %}">
         <img src="{{ STATIC_URL }}img/editor.png">
         <div class="hoff1 offset1">
         <h2>Templates</h2>
@@ -47,19 +47,19 @@
       </a>
     </div>
     <div class="offset1 span8">
-      <a class="pane hi9" href="{% url v1factory.dev_views.app_editor app.id %}">
+      <a class="pane hi9" href="{% url v1factory.views.app_editor app.id %}">
         <img src="{{ STATIC_URL }}img/editor.png">
         <div class="hoff1 offset1">
         <h2>App Info</h2>
         </div>
       </a>
-      <a class="pane hi4 hoff1" href="{% url v1factory.dev_views.app_gallery app.id %}">
+      <a class="pane hi4 hoff1" href="{% url v1factory.views.app_gallery app.id %}">
         <img src="{{ STATIC_URL }}img/design.png">
         <div class="hoff1 offset1">
         <h2>Gallery</h2>
         </div>
       </a>
-      <a class="pane hi4 hoff1" href="{% url v1factory.dev_views.app_editor app.id %}">
+      <a class="pane hi4 hoff1" href="{% url v1factory.views.app_editor app.id %}">
         <img src="{{ STATIC_URL }}img/editor.png">
         <div class="hoff1 offset1">
         <h2>Account Info</h2>
