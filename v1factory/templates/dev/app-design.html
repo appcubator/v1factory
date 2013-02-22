@@ -4,12 +4,19 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/design.css">
+<script type="text/javascript" src="{{ STATIC_URL }}js/jscolor/jscolor.js"></script>
+<style type="text/css" id="custom-style">
+
+</style>
 {% endblock %}
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel hi3">
+  <div class="offset2 toppanel span22 hi3">
   <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  </div>
+  <div class="span8 hoff1 right">
+    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-design">Save</a>
   </div>
 </div>
 {% endblock %}
@@ -21,102 +28,15 @@
   </div>
   <div class="row hoff1 offset1 span30">
     <div class="span22">
-      <div class="pane">
-        <div class="hi3 hoff1 offset1">
-          <h3>Background Color</h3>
-          <div class="color options">
-            <div class="opt" style="background-color:#fff;"></div>
-            <div class="opt" style="background-color:#fff;"></div>
-            <div class="opt" style="background-color:#fff;"></div>
-            <div class="opt" style="background-color:#fff;"></div>
-            <div class="opt" style="background-color:#fff;"></div>
-            <div class="opt" style="background-color:#fff;"></div>
-          </div>
-        </div>
-        <div class="hi3 hoff1 offset1">
-          <h3>Background Image</h3>
-          <div class="background options">
-            <div class="opt" style="background-image:url('{{ STATIC_URL}}img/sample_bg.png');"></div>
-            <div class="opt" style="background-image:url('{{ STATIC_URL}}img/sample_bg.png');"></div>
-            <div class="opt" style="background-image:url('{{ STATIC_URL}}img/sample_bg.png');"></div>
-            <div class="opt" style="background-image:url('{{ STATIC_URL}}img/sample_bg.png');"></div>
-            <div class="opt" style="background-image:url('{{ STATIC_URL}}img/sample_bg.png');"></div>
-            <div class="opt" style="background-image:url('{{ STATIC_URL}}img/sample_bg.png');"></div>
-          </div>
-        </div>
-        <div class="hi3 hoff1 offset1">
-          <h3>Text Color</h3>
-          <div class="color options">
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-          </div>
-        </div>
-        <div class="row offset1">
-          <div class="hi3 hoff1 span9">
-            <h3>Text Size</h3>
-            <div class="size options">
-              <select>
-                <option>10px</option>
-                <option selected>12px</option>
-                <option>13px</option>
-                <option>14px</option>
-              </select>
-            </div>
-          </div>
-          <div class="hi3 hoff1 offset1 span9">
-            <h3>Text Family</h3>
-            <div class="size options">
-              <select>
-                <option>Yolo New Roman</option>
-                <option selected>YOLO pro</option>
-                <option>YUBUNTU</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="hi3 hoff1 offset1">
-          <h3>Header Color</h3>
-          <div class="color options">
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-            <div class="opt" style="background-color:#111;"></div>
-          </div>
-        </div>
-        <div class="row offset1">
-          <div class="hi3 hoff1 span9">
-            <h3>Header Size</h3>
-            <div class="size options">
-              <select>
-                <option>10px</option>
-                <option selected>12px</option>
-                <option>13px</option>
-                <option>14px</option>
-              </select>
-            </div>
-          </div>
-          <div class="hi3 hoff1 offset1 span9">
-            <h3>Header Family</h3>
-            <div class="size options">
-              <select>
-                <option>Yolo New Roman</option>
-                <option selected>YOLO pro</option>
-                <option>YUBUNTU</option>
-              </select>
-            </div>
-          </div>
-        </div>
+      <div class="pane" id="props-pane">
       </div>
     </div>
-    <div class="offset1 span7">
-      <div class="pane border">
-        This is a sample text.
+    <div class="offset1 span7 sample">
+      <div class="pane border hi9">
+        <h2 class="sample">Sample Header</h2>
+        <span class="sample">
+          This is a sample text. Lorem impsum is a sample text. Lorem ipsum dolores.
+        </div>
       </div>
     </div>
 
@@ -125,4 +45,8 @@
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript">
+var appState = {{ app.state_json|safe }};
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/design-editor.js"></script>
 {% endblock %}

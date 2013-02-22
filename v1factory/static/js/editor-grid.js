@@ -3,7 +3,7 @@
  *  Written by icanberk
  *
  *  Abstract:
- *  This module the grid and arranges the interaction
+ *  This module creates the grid and arranges the interaction
  *  between the user and the page. Once an element is
  *  created, it passes the information to WidgetEditor.
  *  It is not supposed to store or change any widget.

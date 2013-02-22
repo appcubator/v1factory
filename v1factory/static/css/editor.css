@@ -154,7 +154,6 @@
 
 /* --- */
 
-
 .editor .title {
   display: block;
   text-align: center;
@@ -175,10 +174,8 @@
 }
 
 .container.editing:hover .row.editing {
-  border-top: 1px dashed rgba(210, 210, 210, 0.6);
+  border-top: 1px dashed rgba(210, 210, 210, 0.2);
 }
-
-
 
 .property-list li {
   padding: 4px;
@@ -272,7 +269,7 @@
 }
 
 #LOL {
-  background-color: red;
+  background-color: #2b3545;
 }
 
 .elements-inside-container {
@@ -323,7 +320,7 @@
 }
 
 .widget-wrapper.selected, .widgets-container.selected {
-  border: 1px solid #ccc;
+  border: 1px dashed #ccc;
 }
 
 .widget-wrapper .meta .delete, .widgets-container .meta .delete {
@@ -344,7 +341,7 @@
 }
 
 .widget-wrapper:hover {
-  border:1px solid red;
+  border:1px dashed #2b3545;
 }
 
 .widget-wrapper:hover .meta, .widgets-container:hover .meta {
@@ -363,7 +360,7 @@
 }
 
 .widgets-container:hover {
-  border:1px solid blue;
+  border:1px dashed #2b3545;
 }
 
 .top-extend {
