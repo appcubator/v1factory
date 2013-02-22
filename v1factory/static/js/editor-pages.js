@@ -16,6 +16,7 @@
  *  - PagesView
  *
  */
+
 var PagesView = Backbone.View.extend({
   el     : document.body,
   listEl : document.getElementById('pages-list'),
@@ -32,20 +33,38 @@ var PagesView = Backbone.View.extend({
                     'submittedNewPage',
                     'savePages',
                     'savePage',
+                    'style',
                     'unite',
                     'clickedOpen');
 
     this.pages = appState.pages || [];
     this.render();
+    this.style();
   },
 
   render: function() {
     var self = this;
     _(this.pages).each(function(page, ind) {
-      self.listEl.innerHTML +=  '<li class="exist-page" id="page-'+ ind + '">' + page.name + '</li>';
+      self.listEl.innerHTML +=  '<li class="exist-page" id="page-'+ ind + '">' + page.page_name + '</li>';
     });
     self.listEl.innerHTML += '<li class="new-page"> + Create Page</li>' +
     '<form class="new-page-form" hi2 style="display:none;"><input class="new-page-name" type="text"></form>';
+  },
+
+  style: function() {
+    _(appState.pageProps).each(function(val, key, ind) {
+      var styleTag = document.createElement('style');
+      styleTag.id = val.id;
+
+      var styleContent = (val.tag || 'body') + ' {';
+      styleContent += (val.css).replace(/<%=content%>/g, val.currentValue);
+      styleContent += '}';
+
+      styleTag.innerHTML = styleContent;
+      this.styleTag = styleTag;
+
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
+    });
   },
 
   clickedNewPage: function() {
@@ -55,18 +74,20 @@ var PagesView = Backbone.View.extend({
   },
 
   submittedNewPage: function(e) {
+    console.log('submit');
     e.preventDefault();
     var pageName = $('.new-page-name').val();
     var page = {'page_name': pageName, 'uielements' : []};
 
     this.pages.push(page);
     this.curPage = this.pages.length - 1;
-    this.openPage(this.curPage);
 
     $('<li class="page" id="'+ pageName + '">' + pageName + '</li>').insertBefore('.new-page');
     $('.new-page-form').hide();
     $('.new-page-name').val('');
     $('.new-page').fadeIn();
+
+    this.openPage(this.curPage);
   },
 
   openPage: function(pageInd) {
