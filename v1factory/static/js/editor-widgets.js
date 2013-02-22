@@ -27,6 +27,8 @@ var Widget = Backbone.Model.extend({
 
   initialize: function() {
     _.bindAll(this, 'select');
+
+    console.log(this);
   },
 
   select: function() {
@@ -238,6 +240,65 @@ var WidgetView = Backbone.View.extend({
   }
 });
 
+var WidgetImgView = WidgetView.extend({
+  initialize: function(item){
+    this.constructor.__super__.initialize.apply(this, [item]);
+    _.bindAll(this, 'changedSource');
+    this.model.bind("change:source", this.changedSource, this);
+  },
+
+  changedSource: function(a) {
+    this.el.innerHTML = '';
+    this.el.appendChild(this.renderContent());
+    this.model.select();
+
+    var self = this;
+    $(this.widgetsContainer).resizable({
+      grid: 30,
+      resize: self.resized
+    });
+  },
+
+  renderContent: function() {
+    this.el.innerHTML = '';
+    if(typeof this.model.get('type') == "undefined") {
+      alert('wat');
+      return;
+    }
+
+    var temp = document.getElementById('temp-' + this.model.get('type')).innerHTML;
+
+    if(!temp) {
+      alert('elem type could not be found');
+      return;
+    }
+
+    var width = this.model.get('width');
+    var height = this.model.get('height');
+    
+    var wrapperElem = document.createElement('div');
+    wrapperElem.className ='widget-wrapper';
+
+    wrapperElem.style.top = (GRID_HEIGHT * (this.model.get('top'))) + "px";
+    wrapperElem.style.left = (GRID_HEIGHT * (this.model.get('left'))) + "px";
+    wrapperElem.style.height = (height * GRID_HEIGHT) + "px";
+    wrapperElem.className += " span" + width;
+    wrapperElem.id = "widget-" + this.collection.length;
+
+    elem_text = this.model.get('text') || "BLANK TEXT";
+    var element = _.template(temp, { 'text' : elem_text, 'source' : this.model.get('source') });
+
+    var tempMeta = document.getElementById('temp-meta').innerHTML;
+    var meta = _.template(tempMeta, {});
+
+    wrapperElem.innerHTML = element + meta;
+
+    this.widgetsContainer = wrapperElem;
+
+    return wrapperElem;
+  }
+});
+
 
 var WidgetContainerView = WidgetView.extend({
   el: null,
@@ -319,7 +380,19 @@ var WidgetContainerView = WidgetView.extend({
   },
 
   placeWidget: function(model, a) {
-    var widgetView = new WidgetView(model);
+    var widgetView;
+    console.log(model.get('type'));
+    switch (model.get('type'))
+    {
+      case "widget-3":
+        console.log('hey');
+        model.set('source', 'sdf');
+        widgetView = new WidgetImgView(model);
+        break;
+      default:
+        widgetView = new WidgetView(model);
+    }
+     
     this.widgetsContainer.appendChild(widgetView.el);
   },
 
@@ -464,7 +537,16 @@ var WidgetEditorView = Backbone.View.extend({
       curWidget= new WidgetContainerView(widget);
     }
     else {
-      curWidget = new WidgetView(widget);
+      switch (widget.get('type'))
+      {
+        case "widget-3":
+          console.log('hey');
+          widget.set('source', 'sdf');
+          curWidget = new WidgetImgView(widget);
+          break;
+        default:
+          curWidget = new WidgetView(widget);
+      }
     }
     
 
