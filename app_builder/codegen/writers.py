@@ -40,6 +40,8 @@ class DjangoWriter:
 
     # for each entity, declare a class and write the fields.
     for m in self.app.classes:
+      # skip users because we just import that.
+      if 'hidden' in m: continue
       file_string += 'class {}(models.Model):\n'.format(m['name'])
       for f in m['fields']:
         # go in an indent level
@@ -51,6 +53,7 @@ class DjangoWriter:
     imports = []
     imports.append("from django.contrib.auth.models import User")
     for m in self.app.classes:
+      if 'hidden' in m: continue
       imports.append('from {}.models import {}'.format(APP_NAME, m['name']))
     return '\n'.join(imports) + '\n'
 
@@ -67,7 +70,7 @@ class DjangoWriter:
     form_string += '    fields = ({})\n\n'.format(fields_params)
 
     # what fields are required but not here?
-    # required fields - included fields
+    # required fields - included fields:
     real_entity = [ m for m in self.app.classes if m['name'] == form.entity ][0]
     missing_fields_names = set([f['name'] for f in get_required_fields_from_model(real_entity)]).difference(set(form.included_fields))
     missing_fields = [f for f in real_entity['fields'] if f['name'] in missing_fields_names]
@@ -239,6 +242,8 @@ class DjangoWriter:
         html += template_text
         html += """{% endfor %}"""
       elif el['container-info'] is not None and el['container-info']['action'] == 'create':
+        if el['container-info']['entity'] == "User": continue
+        if el['container-info']['entity'] == "Session": continue
         form_obj = el['container-info']['form']
         html += """<form method="POST" action="{% url """+ "{}.form_receivers.save_{}Form{}".format(APP_NAME, form_obj.entity, form_obj.form_id) +""" %}">"""
         html += """{% csrf_token %}"""

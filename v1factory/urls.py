@@ -25,6 +25,8 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/urls/$', 'app_urls'),
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
+    # deploy this ship!
+    url(r'^app/(\d+)/deploy/$', 'app_deploy'),
     # the rest
     url(r'^app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^app/(\d+)/design/$', 'app_design'),

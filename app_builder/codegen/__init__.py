@@ -60,6 +60,19 @@ class AnalyzedApp:
   def __init__(self, app_state, app_name):
     self.name = app_name
     self.classes = app_state['entities']
+    self.classes.append({"name":"User","fields":[{
+        "name":"first_name",
+        "type":"text",
+        "required":True
+      },{
+        "name":"email",
+        "type":"text",
+        "required":True
+      },{
+        "name":"password",
+        "type":"text",
+        "required":True
+      }]})
     self.templates = app_state['pages']
     self.urls = app_state['urls']
     self.forms = []
@@ -68,6 +81,8 @@ class AnalyzedApp:
     for p in self.pages:
       for i, uie in enumerate(p.uielements):
         if uie['container-info'] is not None and uie['container-info']['action'] == 'create':
+          if uie['container-info']['entity'] == "User": continue
+          if uie['container-info']['entity'] == "Session": continue
           form_obj = Form(uie, i, p)
           uie['container-info']['form'] = form_obj
           self.forms.append(form_obj)
