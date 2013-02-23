@@ -67,11 +67,11 @@ var EntityView = Backbone.View.extend({
   },
 
   render: function() {
-    this.el.innerHTML = '<div class="entity-name">' + this.model.get('name') + 
-                        '</div><div class="buttons">'+
-                        '<span class="create">Create</span>'+
-                        '<span class="query">Query</span>'+
-                        '<span class="update">Update</span>';
+    var name = this.model.get('name');
+    this.el.innerHTML = '<div class="buttons">'+
+                        '<span class="create">Create '+name+'</span>'+
+                        '<span class="query">Query '+name+'</span>'+
+                        '<span class="update">Update '+name+'</span></div>';
   },
 
   clickedCreate: function() {

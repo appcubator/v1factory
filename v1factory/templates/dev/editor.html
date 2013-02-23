@@ -38,6 +38,13 @@
   </div>
   {% include "dev/left-editor.html" %}
   {% include "dev/right-editor.html" %}
+
+  <div class="loading-gif" id="loading-gif">
+    <div class="logo offsetr2 hoff1">
+      <span class="engine1"></span>
+      <span class="engine2"></span>
+    </div>
+  </div>
 {% endblock %}
 
 {% block js %}
@@ -66,6 +73,35 @@ var gridEditor     = new GridEditorView();
 var pagesView      = new PagesView();
 var widgetInfoView = new WidgetInfoView();
 pagesView.openPage(0);
+
+$(function() {
+  $( "#item-info-section" ).draggable();
+});
+</script>
+<script type="text/javascript">
+var mY = 0;
+$('body').mousemove(function(e) {
+    var top = e.pageY - $(window).scrollTop();
+    console.log(top);
+    // moving upward
+    if (e.pageY > mY && top > 450) {
+      $('.entities').css('margin-bottom', 0)
+      $('.menu').css('margin-bottom', 0)
+    }
+
+    if (e.pageY < mY && top < 450) {
+      $('.entities').css('margin-bottom', -140)
+      $('.menu').css('margin-bottom', -140)
+    }
+
+    // set new mY after doing test above
+    mY = e.pageY;
+});
+
+$('.entities').css('margin-bottom', -140);
+$('.menu').css('margin-bottom', -140);
+
+
 </script>
 {% endblock %}
 
