@@ -1,0 +1,11 @@
+<html>
+  <body>
+    <li><a href="{% url socialauth_begin 'linkedin' %}">Login with Linkedin</a></li>
+    {% for tweet in tweet_list %}
+      <div>
+        <h1>{{ tweet.author.first_name }}</h1>
+        <p>{{ tweet.content }}</p>
+        <p>{{ tweet.created_on }}</p>
+    {% endfor %}
+  </body>
+</html>

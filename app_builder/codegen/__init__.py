@@ -23,42 +23,35 @@ class Page:
   def get_required_queries(template):
     qs = []
     for uie in template['uielements']:
-      if uie['type'].find('container-show') != -1:
-        qs.append('{}.objects.all()'.format(uie['entity']))
+      if uie['container-info'] is not None and uie['container-info']['action'] == 'show':
+        qs.append('{}.objects.all()'.format(uie['container-info']['entity']))
     return qs
 
   def __init__(self, urls_d, analyzed_app):
     self.name = urls_d['page_name']
     self.url_parts = urls_d['urlparts']
     self.url_data = filter(lambda x: x is not None, map(extract_from_brace, self.url_parts)) # the free variables
-    _page_json = [ a for a in analyzed_app.templates if a['name'] == self.name ][0]
-    self.queries = Page.get_required_queries(_page_json)
-    self.uielements = _page_json['uielements']
+    self._page_json = [ a for a in analyzed_app.templates if a['name'] == self.name ][0]
+    self.queries = Page.get_required_queries(self._page_json)
+    self.uielements = self._page_json['uielements']
+    self.access_level = self._page_json['access-level']
 
-  def to_html(self):
-    """This is a function that just produces some crude html based on the UI elements for demo purposes only."""
-    html = ''
-    for el in self.uielements:
-      try:
-        from v1factory.models import UIElement
-        lib_el = UIElement.get_library().get(id=el['lib_id'])
-      except Exception, e:
-        print e
-        html += "<p>Some error for this element, see logs"
-      else:
-        html += lib_el.html
-    return html
+def get_required_fields_from_model(entity):
+  """Convenience function that does what it says"""
+  return [ f for f in entity['fields'] if f['required']]
 
 class Form:
   """a Form in an app indicates that a user will modify/create data,
        and html forms will be used to make those changes."""
 
-  def __init__(self, form_container):
+  def __init__(self, form_container, form_id, parent_page):
     """Grab the entity and included fields"""
-    self.entity = form_container['entity']
+    self.form_id = form_id
+    self.entity = form_container['container-info']['entity']
+    self.parent_page = parent_page
 
     self.included_fields = []
-    for uie in form_container['uielements']:
+    for uie in form_container['container-info']['elements']:
       if 'field-name' in uie:
         self.included_fields.append(uie['field-name'])
 
@@ -73,6 +66,9 @@ class AnalyzedApp:
 
     self.pages = [ Page(d, self) for d in self.urls ]
     for p in self.pages:
-      if p._page_json['type'] == 'container' and p._page_json['action'] == 'create':
-        self.forms.append(Form(p._page_json))
+      for i, uie in enumerate(p.uielements):
+        if uie['container-info'] is not None and uie['container-info']['action'] == 'create':
+          form_obj = Form(uie, i, p)
+          uie['container-info']['form'] = form_obj
+          self.forms.append(form_obj)
 

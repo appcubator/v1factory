@@ -81,7 +81,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "karan",
-      "html": "<input type=\"text\" placeholder='<%= text %>'/>",
+      "html": "<input name=\"<%= field_name %>\" type=\"text\" placeholder='<%= text %>'/>",
       "type": "input",
       "css": "",
       "name": "text input field"

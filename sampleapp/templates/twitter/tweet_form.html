@@ -1,0 +1,9 @@
+<html>
+  <body>
+    <form method="POST" action="/tweets/new/">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Tweet" />
+    </form>
+  </body>
+</html>

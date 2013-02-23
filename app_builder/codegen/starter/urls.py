@@ -4,7 +4,6 @@ from django.views.generic import RedirectView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
-import social_auth
 
 # ENTITY IMPORTS
 from twitter.models import Tweet
@@ -15,7 +14,6 @@ from twitter.views import UserListView, UserCreateView
 from twitter.views import HomepageRedirectView
 
 urlpatterns = patterns('',
-  url(r'', include('social_auth.urls')),
 # user entity
   url(r'^login/$', 'django.contrib.auth.views.login' ),
   url(r'^logout/$', 'django.contrib.auth.views.logout'),
