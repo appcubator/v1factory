@@ -122,6 +122,15 @@ def app_editor(request, app_id):
   page_context = { 'app': app, 'title' : 'Editor', 'elements' : els }
   return render(request, 'dev/editor.html', page_context)
 
+@require_GET
+@login_required
+def app_info(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  els = UIElement.get_library()
+  page_context = { 'app': app, 'title' : 'Info', 'elements' : els }
+  return render(request, 'dev/app-info.html', page_context)
+
 # IN THE WORKS
 def generate_html(request, app_id, page_name):
   app = get_object_or_404(App, id=app_id)

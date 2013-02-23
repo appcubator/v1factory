@@ -156,7 +156,7 @@ a:visited {
 }
 
 .btn {
-  margin-left: 4px;
+
 }
 
 input[type="text"] {
@@ -165,4 +165,13 @@ input[type="text"] {
 }
 
 .accordion {
+}
+
+.ltxt {
+  font-size: 32px;
+  line-height: 40px;
+}
+
+.mtxt { 
+  font-size: 24px;
 }

@@ -97,6 +97,7 @@ var PagesView = Backbone.View.extend({
     this.curPage = pageInd;
     this.widgetEditor = new WidgetEditorView(this.pages[pageInd]);
     document.getElementById('page-' + pageInd).className += ' selected';
+    $('#loading-gif').fadeOut().remove();
   },
 
   savePage: function() {
