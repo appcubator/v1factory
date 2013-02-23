@@ -26,7 +26,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "gamma",
-      "html": "<img src=\"http://www.mediatehawaii.org/wp-content/uploads/placeholder.jpg\" />",
+      "html": "<img src=\"<%=source%>\" />",
       "type": "image",
       "css": "",
       "name": "img"

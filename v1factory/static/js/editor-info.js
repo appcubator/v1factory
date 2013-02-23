@@ -1,6 +1,20 @@
+/*
+ *  Editor - Widget Info
+ *  Written by icanberk
+ *
+ *  Abstract:
+ *  This module creates the info view on the right of
+ *  the page. On any change, it changes the related 
+ *  attribute of the currently selected widget.
+ *
+ *  Includes:
+ *  - WidgetInfoView
+ *
+ */
+
 var WidgetInfoView = Backbone.View.extend({
-  el : document.getElementById('item-info-list'),
-  model: null,
+  el     : document.getElementById('item-info-list'),
+  model  : null,
   events : {
     'change input' : 'inputChanged'
   },
@@ -19,13 +33,14 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   show: function(model) {
-    this.el.innerHTML = '';
     var self = this;
+
+    this.el.innerHTML = '';
     this.model = model;
     this.model.bind("change", this.changedProp, this);
 
     _(model.attributes).each(function(val, key){
-      if(key == 'id' || key == 'type' || key == 'selected') return;
+      if(key == 'id' || key == 'selected') return;
       self.el.appendChild(self.showAttribute(val, key, String('')));
     });
   },
@@ -35,6 +50,7 @@ var WidgetInfoView = Backbone.View.extend({
     var li = document.createElement('li');
     li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
     li.id = 'prop-'+ key;
+
     return li;
   },
 

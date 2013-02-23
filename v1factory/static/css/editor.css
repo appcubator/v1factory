@@ -12,7 +12,7 @@
   width: 220px;
   height: 100%;
   top: 40px;
-  background-color: #fff;
+  background-color: transparent;
   z-index: 1031;
 /*  opacity: 0.5;*/
   margin-top: 41px;
@@ -154,7 +154,6 @@
 
 /* --- */
 
-
 .editor .title {
   display: block;
   text-align: center;
@@ -175,10 +174,8 @@
 }
 
 .container.editing:hover .row.editing {
-  border-top: 1px dashed rgba(210, 210, 210, 0.6);
+  border-top: 1px dashed rgba(210, 210, 210, 0.2);
 }
-
-
 
 .property-list li {
   padding: 4px;
@@ -272,7 +269,7 @@
 }
 
 #LOL {
-  background-color: red;
+  background-color: #2b3545;
 }
 
 .elements-inside-container {
@@ -306,6 +303,10 @@
   overflow: hidden;
 }
 
+.pseudo-outline {
+  position: absolute;
+}
+
 .widget-wrapper .meta, .widgets-container .meta {
   position: absolute;
   bottom: 0;
@@ -319,7 +320,7 @@
 }
 
 .widget-wrapper.selected, .widgets-container.selected {
-  border: 1px solid #ccc;
+  border: 1px dashed #ccc;
 }
 
 .widget-wrapper .meta .delete, .widgets-container .meta .delete {
@@ -340,7 +341,7 @@
 }
 
 .widget-wrapper:hover {
-  border:1px solid red;
+  border:1px dashed #2b3545;
 }
 
 .widget-wrapper:hover .meta, .widgets-container:hover .meta {
@@ -359,7 +360,7 @@
 }
 
 .widgets-container:hover {
-  border:1px solid blue;
+  border:1px dashed #2b3545;
 }
 
 .top-extend {
@@ -458,4 +459,18 @@
 .help-text {
   background-color: #dddddf;
   cursor: help;
+}
+
+.accordion {
+  max-height: 40px;
+  overflow: hidden;
+  transition: max-height 1s;
+  -moz-transition: max-height 1s; /* Firefox 4 */
+  -webkit-transition: max-height 1s; /* Safari and Chrome */
+  -o-transition: max-height 1s; /* Opera */
+
+}
+
+.accordion:hover {
+  max-height: 1000px;
 }

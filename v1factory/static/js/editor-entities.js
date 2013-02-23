@@ -1,3 +1,19 @@
+/*
+ *  Editor - Entities
+ *  Written by icanberk
+ *
+ *  Abstract:
+ *  This module creates and controls the entities section
+ *  on the right of the editor page.
+ *
+ *  Includes:
+ *  - EntityModel
+ *  - EntityCollection
+ *  - EntityView
+ *  - EntitiesListView
+ * 
+ */
+
 var EntityModel = Backbone.Model.extend({
   initialize: function(key, value) {
     this.name = key;
@@ -14,82 +30,79 @@ var EntityCollection = Backbone.Collection.extend({
 });
 
 
-var WidgetEntityView = Backbone.View.extend({
+var EntityView = Backbone.View.extend({
   el : null,
   tagName : 'li',
   className : 'entity-view-li',
 
   events: {
     'click .create' : 'clickedCreate',
-    'click .query' : 'clickedQuery',
+    'click .query'  : 'clickedQuery',
     'click .update' : 'clickedUpdate'
   },
 
-  initialize: function(item){
+  initialize: function(item, widgetCollection){
     var self = this;
-    _.bindAll(this, 'render', 'clickedCreate',
-                              'clickedUpdate',
-                              'clickedQuery');
+    _.bindAll(this, 'render', 
+                    'clickedCreate',
+                    'clickedUpdate',
+                    'clickedQuery');
+
     this.model = item;
     this.parentCollection = item.collection;
+    this.widgetCollection = widgetCollection;
 
-    var coordinates = pagesView.unite({x: 6, y:2}, {x: 16, y: 10});
+    var coordinates = pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
     var widget = {
-      top : coordinates.topLeft.y,
-      left : coordinates.topLeft.x,
-      type : 'container',
-      width : coordinates.bottomRight.x - coordinates.topLeft.x,
-      height: coordinates.bottomRight.y - coordinates.topLeft.y,
+      top    : coordinates.topLeft.y,
+      left   : coordinates.topLeft.x,
+      type   : 'container',
+      width  : coordinates.bottomRight.x - coordinates.topLeft.x,
+      height : coordinates.bottomRight.y - coordinates.topLeft.y,
       entity : this.model
     };
+
     this.widget = widget;
     this.render();
   },
 
   render: function() {
-    this.el.innerHTML = '<div class="entity-name">' + this.model.get('name') + '</div><div class="buttons">'+
-                                                    '<span class="create">Create</span>'+
-                                                    '<span class="query">Query</span>'+
-                                                    '<span class="update">Update</span>';
+    this.el.innerHTML = '<div class="entity-name">' + this.model.get('name') + 
+                        '</div><div class="buttons">'+
+                        '<span class="create">Create</span>'+
+                        '<span class="query">Query</span>'+
+                        '<span class="update">Update</span>';
   },
 
   clickedCreate: function() {
     this.widget.action = 'create';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
-    var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
+    this.widgetCollection.add(new Widget(this.widget));
   },
 
   clickedUpdate: function() {
     this.widget.action = 'update';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
-    var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
+    this.widgetCollection.add(new Widget(this.widget));
   },
 
   clickedQuery: function() {
     this.widget.action = 'query';
-    this.widget.id = pagesView.widgetEditor.collection.length + 1;
-    var newModel = new Widget(this.widget);
-    this.parentCollection.add(newModel);
+    this.widgetCollection.add(new Widget(this.widget));
   }
 });
 
-var WidgetEntitiesListView = Backbone.View.extend({
+var EntitiesListView = Backbone.View.extend({
   el : document.getElementById('entities-list'),
-  events : {
-  
-  },
 
-  initialize: function(widgetCollection){
-    var self = this;
+  initialize: function(widgetCollection) {
     _.bindAll(this, 'render');
+
+    var self = this;
     var initialEntities = appState.entities;
     var entities = [];
     _(initialEntities).each(function(entity) {
       entities.push(entity);
     });
-    console.log(entities);
+
     this.collection = new EntityCollection(entities);
     this.widgetCollection = widgetCollection;
     this.render();
@@ -99,7 +112,7 @@ var WidgetEntitiesListView = Backbone.View.extend({
     var self = this;
     this.el.innerHTML = '';
     _(this.collection.models).each(function(item) {
-      var view = new WidgetEntityView(item);
+      var view = new EntityView(item, self.widgetCollection);
       self.el.appendChild(view.el);
     });
   }

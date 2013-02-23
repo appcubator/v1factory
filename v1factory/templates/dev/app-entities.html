@@ -149,18 +149,21 @@
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/entity-editor.js"></script>
 <script type="text/javascript">
-
+var rightEditor   = new EntitiesEditorView();
+var entityList    = new EntityListView();
+var entityLibrary = new EntitiesLibraryView();
+</script>
+<script type="text/javascript">
 $(function() {
-    $("#entities").sortable({
-      update: function( event, ui ) {
-        entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')])
-      }
-    });
-    $("#entities-library").sortable({
-      connectWith: "#entities",
-    });
+  $("#entities").sortable({
+    update: function( event, ui ) {
+      entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')])
+    }
+  });
+  $("#entities-library").sortable({
+    connectWith: "#entities",
+  });
 });
-
 </script>
 
 {% endblock %}
