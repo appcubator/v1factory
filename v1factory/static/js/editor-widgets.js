@@ -97,6 +97,8 @@ var WidgetView = Backbone.View.extend({
     var self = this;
     _.bindAll(this, 'render',
                     'renderContent',
+                    'renderElement',
+                    'renderMeta',
                     'remove',
                     'select',
                     'outlineSelected',
@@ -157,17 +159,24 @@ var WidgetView = Backbone.View.extend({
     wrapperElem.className += " span" + width;
     wrapperElem.id = "widget-" + this.collection.length;
 
-    elem_text = this.model.get('text') || "BLANK TEXT";
-    var element = _.template(temp, { 'text' : elem_text });
-
-    var tempMeta = document.getElementById('temp-meta').innerHTML;
-    var meta = _.template(tempMeta, {});
-
-    wrapperElem.innerHTML = element + meta;
+    wrapperElem.innerHTML = this.renderElement() + this.renderMeta(); //element + meta;
 
     this.widgetsContainer = wrapperElem;
 
     return wrapperElem;
+  },
+
+  renderElement: function() {
+    var temp = document.getElementById('temp-' + this.model.get('type')).innerHTML;
+    elem_text = this.model.get('text') || "BLANK TEXT";
+    var element = _.template(temp, { 'text' : elem_text });
+    return element;
+  },
+
+  renderMeta: function() {
+    var tempMeta = document.getElementById('temp-meta').innerHTML;
+    var meta = _.template(tempMeta, {});
+    return meta;
   },
 
   remove: function() {
@@ -259,43 +268,11 @@ var WidgetImgView = WidgetView.extend({
     });
   },
 
-  renderContent: function() {
-    this.el.innerHTML = '';
-    if(typeof this.model.get('type') == "undefined") {
-      alert('wat');
-      return;
-    }
-
+  renderElement: function() {
     var temp = document.getElementById('temp-' + this.model.get('type')).innerHTML;
-
-    if(!temp) {
-      alert('elem type could not be found');
-      return;
-    }
-
-    var width = this.model.get('width');
-    var height = this.model.get('height');
-    
-    var wrapperElem = document.createElement('div');
-    wrapperElem.className ='widget-wrapper';
-
-    wrapperElem.style.top = (GRID_HEIGHT * (this.model.get('top'))) + "px";
-    wrapperElem.style.left = (GRID_HEIGHT * (this.model.get('left'))) + "px";
-    wrapperElem.style.height = (height * GRID_HEIGHT) + "px";
-    wrapperElem.className += " span" + width;
-    wrapperElem.id = "widget-" + this.collection.length;
-
     elem_text = this.model.get('text') || "BLANK TEXT";
     var element = _.template(temp, { 'text' : elem_text, 'source' : this.model.get('source') });
-
-    var tempMeta = document.getElementById('temp-meta').innerHTML;
-    var meta = _.template(tempMeta, {});
-
-    wrapperElem.innerHTML = element + meta;
-
-    this.widgetsContainer = wrapperElem;
-
-    return wrapperElem;
+    return element;
   }
 });
 
@@ -381,7 +358,6 @@ var WidgetContainerView = WidgetView.extend({
 
   placeWidget: function(model, a) {
     var widgetView;
-    console.log(model.get('type'));
     switch (model.get('type'))
     {
       case "widget-3":
