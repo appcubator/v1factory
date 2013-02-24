@@ -93,18 +93,43 @@
   var entitiesLibrary = [
                   {
                     name : "Post",
-                    fields : {
-                      "Text":"text", 
-                      "Date":"date",
-                      "Title":"text"
-                    }
+                    fields : [
+                      {
+                        name    : "Content",
+                        type    : "text",
+                        required: true
+                      },
+                      {
+                        name    : "Date",
+                        type    : "text",
+                        required: true
+                      },
+                      {
+                        name    : "Title",
+                        type    : "text",
+                        required: true
+                      }
+                    ]
                   },
                   {
                     name : "Glasses",
-                    fields : {
-                      "Price":"number", 
-                      "Brand": "number"
-                    }
+                    fields : [
+                      {
+                        name    : "Content",
+                        type    : "text",
+                        required: true
+                      },
+                      {
+                        name    : "Date",
+                        type    : "text",
+                        required: true
+                      },
+                      {
+                        name    : "Title",
+                        type    : "text",
+                        required: true
+                      }
+                    ]
                   }
                ];
 
@@ -113,15 +138,15 @@
 <span class="pane hoff1">
 <span class="sub-title span5"><%- name %></span><span class="cross" id="cross">×</span>
 <ul class="property-list">
-  <% _( attribs).each(function(val, key){ %><li>
-    <span class="hi1 span3" id=""><%- key %></span><span class="right cross small" id="prop-cross">×</span>
-    <select class="attribs" id="<%- key %>">
-      <option value="text" <% if(val=="text") %> selected <% %>>Text</option>
-      <option value="number" <% if(val=="number") %> selected <% %>>Number</option>
-      <option value="email" <% if(val=="email") %> selected <% %>>Email</option>
+  <% _(attribs).each(function(attrib, ind){ %><li>
+    <span class="hi1 span3" id=""><%- attrib.name %></span><span class="right cross small" id="prop-cross">×</span>
+    <select class="attribs" id="prop-<%- ind %>">
+      <option value="text" <% if(attrib.type=="text") %> selected <% %>>Text</option>
+      <option value="number" <% if(attrib.type=="number") %> selected <% %>>Number</option>
+      <option value="email" <% if(attrib.type=="email") %> selected <% %>>Email</option>
       <% _.each( other_models, function( model ){ %>
         <% if(model.get('name')!= name) %>
-        <option value="<%- model.get('name') %>">List of <%- model.get('name') %></option>
+        <option value="{<%- model.get('name') %>}">List of <%- model.get('name') %>s</option>
         <% %>
       <% }); %>
     </select></li>
@@ -132,13 +157,13 @@
 </script>
 <script type="text/html" id="template-property">
 <li><span class="hi1 span3"><%- name %></span><span class="right cross small" id="prop-cross">×</span>
-  <select class="attribs" id="<%- key %>">
+  <select class="attribs" id="<%- ind %>">
     <option value="text" selected>Text</option>
     <option value="number">Number</option>
     <option value="email">Email</option>
     <% _.each( other_models, function( model ){ %>
       <% if(model.get('name')!= name) %>
-      <option value="<%- model.get('name') %>">List of <%- model.get('name') %></option>
+      <option value="{<%- model.get('name') %>}">List of <%- model.get('name') %>s</option>
       <% %>
     <% }); %>
 </select></li>

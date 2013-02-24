@@ -63,7 +63,6 @@ var EntityView = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    //console.log(this.model);
     var template = _.template( $("#template-entity").html(), { name: this.name,
                                                                attribs: this.model.get('fields'),
                                                                other_models: this.parentCollection.models } );
@@ -83,12 +82,19 @@ var EntityView = Backbone.View.extend({
     var name = $('.property-name-input', this.el).val();
     console.log($('.property-name-input', this.el));
 
-    var curFields = this.model.get('fields') || {};
-    curFields[name] = 'text';
-    this.model.set('fields', curFields);
+    console.log(this.model);
+    var curFields = this.model.get('fields') || [];
+    var ind = curFields.length;
 
+    curFields.push({
+      name: name,
+      type: 'text',
+      required: true
+    });
+
+    this.model.set('fields', curFields);
     var template = _.template( $("#template-property").html(), { name: name,
-                                                                 key : name,
+                                                                 ind : ind,
                                                                  other_models: this.parentCollection.models});
 
     $('.property-list',this.el).append(template);
@@ -99,13 +105,14 @@ var EntityView = Backbone.View.extend({
   },
 
   changedAttribs: function(e) {
-    console.log(e.target.id);
-    this.model.set(e.target.id, e.target.options[e.target.selectedIndex].value);
+    //console.log(e.target.options[e.target.selectedIndex].value);
+    var ind = String(e.target.id).replace('prop-', '');
+    this.model.attributes.fields[ind].type = e.target.options[e.target.selectedIndex].value;
+    //this.model.set(e.target.id, e.target.options[e.target.selectedIndex].value);
   },
 
   addedEntity: function(item) {
-    $('.belongs-to', this.el).append('<option>'+ item.get('name') + '</option>');
-    $('.owns', this.el).append('<option>'+ item.get('name') + '</option>');
+    $('.attribs', this.el).append('<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>');
   },
 
   clickedDelete: function(e) {
@@ -197,11 +204,6 @@ var EntityListView = Backbone.View.extend({
     var self = this;
     var initialEntities = appState.entities || [];
 
-    _(initialEntities).each(function(entity) {
-      entity.id = self.counter;
-      self.counter++;
-    });
-
     this.collection = new EntityCollection(initialEntities);
     this.render();
   },
@@ -229,7 +231,6 @@ var EntityListView = Backbone.View.extend({
 
   addEntity: function(item) {
     item.id = this.counter;
-    this.counter++;
 
     var newModel = new EntityModel(item);
     this.collection.add(newModel);
@@ -275,7 +276,7 @@ var EntitiesEditorView = Backbone.View.extend({
 
     var elem = {};
     elem.name = $('#entity-name-input').val();
-    elem.fields = {};
+    elem.fields = [];
 
     entityList.addEntity(elem);
     $('#entity-name-input').val('');
@@ -291,13 +292,17 @@ var EntitiesEditorView = Backbone.View.extend({
 
       var ent = {};
       ent.name = entity.get('name');
-      ent.fields = { };
+      ent.fields = [ ];
       _(entity.get('fields')).each(function(val, key){
+        var field = {};
         if (key == "id") return;
         if (key == "name") return;
         if (key == "attributes") return;
         if (key == "fields") return;
-        ent.fields[key] = val;
+        field.name = val.name;
+        field.type = val.type;
+        field.required = true;
+        ent.fields.push(field);
       });
 
       if(ent.name == "User") {

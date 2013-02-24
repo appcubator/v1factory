@@ -155,23 +155,40 @@ a:visited {
   padding-top: 14px;
 }
 
-.btn {
-
-}
 
 input[type="text"] {
   height: 32px;
   margin: 0;
 }
 
+input[type="submit"] {
+  display: inline-block;
+}
+
 .accordion {
 }
 
 .ltxt {
-  font-size: 32px;
+  font-size: 28px;
   line-height: 40px;
 }
 
 .mtxt { 
   font-size: 24px;
+}
+
+.pad1 {
+  padding: 5px;
+}
+
+.pad2 {
+  padding: 10px;
+}
+
+.small {
+  font-size: 10px;
+}
+
+.bold {
+  font-weight: bold;
 }
