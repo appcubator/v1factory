@@ -13,16 +13,28 @@ h2 {
   line-height: 50px;
 }
 
-.login.pane .line {
+.login {
+  display: inline-block;
+}
+.login .line {
+  display: inline-block;
   height: 42px;
 }
 
 
-.login.pane form input[type="password"], input[type="text"] {
+.login form input[type="password"], input[type="text"] {
   width: 120px;
   float: right;
 }
 
 input[type="password"], input[type="text"] {
   height: 32px;
+}
+
+body {
+  background-color: #fff;
+}
+
+form {
+  margin: 0;
 }

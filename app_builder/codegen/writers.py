@@ -265,6 +265,7 @@ class DjangoWriter:
 # WRITE THE WHOLE THING
 
   def write(self, STARTER_CODE_PATH="/Users/kssworld93/Projects/v1factory/app_builder/codegen/starter", dest=None):
+    STARTER_CODE_PATH = "/Users/iltercanberk/v1factory/app_builder/codegen/starter"
     if dest is None:
       # create a temporary working directory
       dest = join(tempfile.mkdtemp(), "djanggggg")

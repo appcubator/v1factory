@@ -15,9 +15,19 @@
 
 {% block page %}
 <div class="container" id="entities-page">
-  <div class="offset10 btn span12 hi2 ltxt">Deploy</div>
+  <div class="offset10 btn span12 hi2 ltxt" id="deploy">Deploy</div>
 </div>
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript">
+$('#deploy').on('click', function() {
+    $.ajax({
+      type: "POST",
+      url: '/app/1/deploy/',
+      success: function() { alert("Deployed!")},
+      dataType: "JSON"
+    });
+});
+</script>
 {% endblock %}

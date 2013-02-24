@@ -2,18 +2,14 @@
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
-<form class="span7 offset1 hoff1" method="post" action="{% url django.contrib.auth.views.login %}">
+<form class="" method="post" action="{% url django.contrib.auth.views.login %}">
   {% csrf_token%}
-  <div class="cred">
     <div class="line block hi1">
-     <span>Username</span> {{ form.username }}
+     {{ form.username }}
     </div>
     <div class="line block hi1">
-     <span>Password</span> {{ form.password }}
+     {{ form.password }}
     </div>
-  </div>
-  <div class="buttons">
     <input class="btn right" type="submit" value="Login" />
     <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
-  </div>
 </form>

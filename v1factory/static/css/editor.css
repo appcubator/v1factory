@@ -112,7 +112,7 @@
 .span1.editing {
   height: 100%;
   display: inline-block;
-  cursor: default;
+  cursor: crosshair;
   margin-left: 4px;
 }
 
