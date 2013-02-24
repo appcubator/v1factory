@@ -182,7 +182,7 @@ var entityLibrary = new EntitiesLibraryView();
 $(function() {
   $("#entities").sortable({
     update: function( event, ui ) {
-      entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')])
+      entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')], {silent: true})
     }
   });
   $("#entities-library").sortable({

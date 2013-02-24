@@ -227,6 +227,7 @@ var EntityListView = Backbone.View.extend({
   },
 
   appendItem: function(model) {
+    console.log('append');
     var entityView = new EntityView(model, 'entity-list-');
     $(this.el).append(entityView.el);
     $('.add-property-button', entityView.el).on('click', entityView.clickedAdd);
@@ -239,11 +240,10 @@ var EntityListView = Backbone.View.extend({
   },
 
   addEntity: function(item) {
+    console.log("add entity");
     item.id = this.counter;
-
     var newModel = new EntityModel(item);
     this.collection.add(newModel);
-    this.appendItem(newModel);
   }
 });
 
@@ -287,8 +287,8 @@ var EntitiesEditorView = Backbone.View.extend({
     var elem = {};
     elem.name = $('#entity-name-input').val();
     elem.fields = [];
+    entityList.collection.add(elem);
 
-    entityList.addEntity(elem);
     $('#entity-name-input').val('');
     $(this.addButton).fadeIn();
     $(e.target).remove();
@@ -344,6 +344,5 @@ var EntitiesLibraryView = Backbone.View.extend({
 
   addEntity: function(item) {
     this.collection.add(item);
-    this.appendItem(new EntityModel(item));
   }
 });
