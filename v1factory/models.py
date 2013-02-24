@@ -6,10 +6,112 @@ from app_builder.codegen import AnalyzedApp
 from app_builder.codegen.writers import DjangoWriter
 import simplejson
 
+starter_app = """{
+    "name":"name me pls",
+    "users": {
+        "facebook":false,
+        "linkedin":false,
+        "twitter":false,
+        "local":true,
+        "fields":[]
+    },
+    "entities":[],
+    "pages":[{
+                "name":"login",
+                "uielements":[{
+                                    "lib-id":4,
+                                    "context":{"text":"Login"},
+                                    "container-info":null
+                            },{
+                                    "lib-id":7,
+                                    "context":{"text":""},
+                                    "container-info":{
+                                        "entity":"Session",
+                                        "action":"create",
+                                        "elements":[{
+                                                        "lib-id":8,
+                                                        "field-name":"username",
+                                                        "context":{"text":"",
+                                                                    "field_name":"username"},
+                                                        "container-info":null
+                                                    },{
+                                                        "lib-id":8,
+                                                        "field-name":"password",
+                                                        "context":{"text":"",
+                                                                    "field_name":"password"},
+                                                        "container-info":null
+                                                    },{
+                                                        "lib-id":10,
+                                                        "context":{"text":"submit"},
+                                                        "container-info":null
+                                                    }]
+                                    }
+                }],
+                "access-level":"all"
+            },{
+                "name":"registration",
+                "uielements":[{
+                                    "lib-id":4,
+                                    "context":{"text":"Sign Up"},
+                                    "container-info":null
+                            },{
+                                    "lib-id":7,
+                                    "context":{"text":""},
+                                    "container-info":{
+                                        "entity":"User",
+                                        "action":"create",
+                                        "elements":[{
+                                                        "lib-id":8,
+                                                        "field-name":"username",
+                                                        "context":{"text":"Username",
+                                                                    "field_name":"username"},
+                                                        "container-info":null
+                                                    },{
+                                                        "lib-id":8,
+                                                        "field-name":"password",
+                                                        "context":{"text":"Password",
+                                                                    "field_name":"password"},
+                                                        "container-info":null
+                                                    },{
+                                                        "lib-id":8,
+                                                        "field-name":"email",
+                                                        "context":{"text":"Email Address",
+                                                                    "field_name":"email"},
+                                                        "container-info":null
+                                                    },{
+                                                        "lib-id":10,
+                                                        "context":{"text":"Register"},
+                                                        "container-info":null
+                                                    }]
+                                    }
+                                }
+                }],
+                "access-level":"all"
+            },{
+                "name":"homepage",
+                "uielements": [{
+                                    "lib-id":4,
+                                    "context":{"text":"Homepage"},
+                                    "container-info":null
+                                }],
+                "access-level": "all"
+            }],
+        "urls":[{
+                    "page_name":"homepage",
+                    "urlparts":[]
+                },{
+                    "page_name":"login",
+                    "urlparts":["login"]
+                },{
+                    "page_name":"registration",
+                    "urlparts":["register"]
+                }]
+}"""
+
 class App(models.Model):
   name = models.CharField(max_length=100)
   owner = models.ForeignKey(User, related_name='apps')
-  _state_json = models.TextField(blank=True, default='{}')
+  _state_json = models.TextField(blank=True, default=starter_app)
 
   @property
   def state(self):
