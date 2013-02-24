@@ -84,7 +84,6 @@ starter_app = """{
                                                         "container-info":null
                                                     }]
                                     }
-                                }
                 }],
                 "access-level":"all"
             },{
