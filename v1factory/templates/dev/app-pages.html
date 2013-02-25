@@ -34,10 +34,10 @@
   var appState = {{ app.state_json|safe }};
 </script>
 <script type="text/html" id="temp-page">
-  <div class="hi8" id="user-entity">
-    <h3 class="offset1 hi1 span4" style="margin-top:15px;"><%= page_name %></h3>
+  <div class="hi2" id="user-entity">
+    <h3 class="offset1 hi1 span5" style="margin-top:15px;"><%= page_name %></h3>
     <div class="offset1 span6 hi1" style="margin-top:15px;">
-      <div class="btn">Start Editing</div>
+      <a class="btn edit" href="editor/<%= ind %>">Start Editing</a>
     </div>
     <div class="right span2">
       <img src="{{ STATIC_URL}}img/down-arrow.png" width="60px">

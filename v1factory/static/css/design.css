@@ -24,3 +24,30 @@ input.color {
   font-weight: bold;
   font-size: 10px;
 }
+
+.page-view {
+  height: 60px;
+  transition: height 0.4s;
+-moz-transition: height 0.4s; /* Firefox 4 */
+-webkit-transition: height 0.4s; /* Safari and Chrome */
+-o-transition: height 0.4s; /* Opera */
+}
+
+.page-view.expanded {
+  height: 450px;
+}
+
+.font {
+  width: 160px;
+}
+
+.props-pane {
+  display: inline-block;
+  margin-left:30px;
+  margin-right: 30px;
+  border-top: 1px solid #fff;
+}
+
+a:visited {
+  color: #333;
+}

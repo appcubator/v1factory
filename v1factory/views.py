@@ -130,11 +130,14 @@ def entities(request, app_id):
 
 @require_GET
 @login_required
-def app_editor(request, app_id):
+def app_editor(request, app_id, page_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   els = UIElement.get_library()
-  page_context = { 'app': app, 'title' : 'Editor', 'elements' : els }
+  page_context = { 'app': app, 
+                   'title' : 'Editor', 
+                   'elements' : els,
+                   'page_id': page_id }
   return render(request, 'dev/editor.html', page_context)
 
 @require_GET
