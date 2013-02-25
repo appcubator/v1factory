@@ -1,33 +1,33 @@
-var designOptions = [
-  {
+var designOptions = {
+  'background-color' : {
     id: "backgroundColor",
     name: "Background Color",
     type: "color-picker",
     options: ['#333', '#444', '#555', '#666', '#777', '#888'],
     css: 'background-color:<%=content%>;'
   },
-  {
+  'background-image' : {
     id: "backgroundImage",
     name: "Background Image",
     type: "image-picker",
     options: ['/static/img/sample_bg.png', '/static/img/sample_bg.png', '/static/img/sample_bg.png'],
     css: 'background-image:url(<%=content%>);'
   },
-  {
+  'text-color' : {
     id: "textColor",
     name: "Text Color",
     type: "color-picker",
     options: ['#333', '#444', '#555', '#666', '#777', '#fff'],
     css: 'color:<%=content%>;'
   },
-  {
+  'text-size' : {
     id: "fontSize",
     name: "Text Size",
     type: "size-picker",
     options: ['10px', '11px', '12px', '13px', '14px'],
     css: 'font-size:<%=content%>; line-height:<%=content%>;'
   },
-  {
+  'text-family' : {
     id: "fontFamily",
     name: "Text Family",
     type: "font-picker",
@@ -44,7 +44,7 @@ var designOptions = [
                 'Helvetica Neue", Helvetica, "Lucida Grande"'],
     css: 'font-family:<%=content%>;'
   },
-  {
+  'header-color' : {
     id: "headerColor",
     name: "Header Color",
     type: "color-picker",
@@ -52,15 +52,15 @@ var designOptions = [
     css: 'color:<%=content%>;',
     tag: 'h2'
   },
-  {
+  'header-size' : {
     id: "headerSize",
     name: "Header Size",
     type: "size-picker",
     options: ['10px', '11px', '12px', '13px', '14px', '16px'],
     css: 'font-size:<%=content%>; line-height:<%=content%>;',
-    tag: 'h2' 
+    tag: 'h2'
   },
-  {
+  'header-family' : {
     id: "headerFamily",
     name: "Header Family",
     type: "font-picker",
@@ -78,7 +78,7 @@ var designOptions = [
     css: 'font-family:<%=content%>;',
     tag: 'h2'
   }
-];
+};
 
 
 var DesignProperty = Backbone.Model.extend({});
@@ -95,19 +95,9 @@ var DesignPropertyView = Backbone.View.extend({
     _.bindAll(this, 'render', 'renderTitle', 'style', 'select', 'amendAppState');
     this.model = model;
     this.model.bind('change', this.amendAppState);
-
-    console.log(this.model);
-
-    if(!appState.pageProps[this.model.id]) {
-      appState.pageProps[this.model.id] = _.omit(this.model.attributes, 'options');
-    }
-
-    if(!appState.pageProps[this.model.id].currentValue) {
-      appState.pageProps[this.model.id].currentValue = this.model.get('options')[0];
-    }
-
-    this.model.set('currentValue', appState.pageProps[this.model.id].currentValue);
-
+    this.options = designOptions[this.model.get('type')];
+    console.log(this.options);
+    this.options['currentValue'] = this.model.get('value');
 
     this.render();
     this.style();
@@ -118,7 +108,7 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   renderTitle: function() {
-    this.el.innerHTML =  '<h3>' + this.model.get('name') + '</h3>';
+    this.el.innerHTML =  '<h3>' + this.options.name + '</h3>';
   },
 
   style: function() {
@@ -128,10 +118,10 @@ var DesignPropertyView = Backbone.View.extend({
     }
 
     var styleTag = document.createElement('style');
-    styleTag.id = this.model.get('id');
+    styleTag.id = this.options.id;
 
-    var styleContent = '.sample ' + (this.model.get('tag')||'') + ' {';
-    styleContent += this.model.get('css').replace(/<%=content%>/g, this.model.get('currentValue'));
+    var styleContent = '.sample ' + (this.options.tag||'') + ' {';
+    styleContent += this.options.css.replace(/<%=content%>/g, this.options.currentValue);
     styleContent += '}';
 
     styleTag.innerHTML = styleContent;
@@ -141,8 +131,8 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   amendAppState: function(item) {
-    appState.pageProps[this.model.id] = _.omit(this.model.attributes, 'options');
-    this.style();
+    // appState.pageProps[this.model.id] = _.omit(this.model.attributes, 'options');
+    // this.style();
   }
 });
 
@@ -156,8 +146,8 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
     this.renderTitle();
 
     var newElem = '<div class="options">';
-    _(this.model.get('options')).each(function(option, ind){
-      var bool = (self.model.get('currentValue') == option)?'selected':'';
+    _(this.options.options).each(function(option, ind){
+      var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<div class="opt '+ bool +'" id="color-'+ ind +'" style="background-color:'+ option +';"></div>';
     });
     newElem += '<div class="opt"><input class="color"></div>';
@@ -169,7 +159,7 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
     $('.opt', this.el).removeClass('selected');
     $(e.target).addClass('selected');
     var val = String(e.target.id).replace('color-','');
-    this.model.set('currentValue', this.model.get('options')[val]);
+    this.model.set('value', this.options.options[val]);
   }
 });
 
@@ -183,8 +173,8 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
     this.renderTitle();
 
     var newElem = '<div class="background options">';
-    _(this.model.get('options')).each(function(option){
-      var bool = (self.model.get('currentValue') == option)?'selected':'';
+    _(this.options.options).each(function(option){
+      var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<div class="opt '+ bool +'" style="background-image:url(\''+ option +'\');"></div>';
     });
     newElem += '</div>';
@@ -206,8 +196,8 @@ var DesignSizePickerPropertyView = DesignPropertyView.extend({
     var self = this;
     this.renderTitle();
     var newElem = '<div class="size options"><select>';
-    _(this.model.get('options')).each(function(option){
-      var bool = (self.model.get('currentValue') == option)?'selected':'';
+    _(this.options.options).each(function(option){
+      var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<option '+ bool +'>'+ option +'</option>';
     });
     newElem += '</select></div>';
@@ -217,7 +207,7 @@ var DesignSizePickerPropertyView = DesignPropertyView.extend({
   select: function(e) {
     var val = e.target.value;
     console.log(val);
-    this.model.set('currentValue', val);    
+    this.model.set('value', val);    
   }
 });
 
@@ -231,8 +221,8 @@ var DesignFontPickerPropertyView = DesignPropertyView.extend({
     var self = this;
     this.renderTitle();
     var newElem = '<div class="size options"><select>';
-    _(this.model.get('options')).each(function(option, ind){
-      var bool = (self.model.get('currentValue') == option)?'selected':'';
+    _(this.options.options).each(function(option, ind){
+      var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<option'+ bool +' value ="'+ ind +'">'+ option +'</option>';
     });
     newElem += '</select></div>';
@@ -247,20 +237,22 @@ var DesignFontPickerPropertyView = DesignPropertyView.extend({
 });
 
 var DesignEditorView = Backbone.View.extend({
-  el   : document.body,
-  pane : document.getElementById('props-pane'), 
+  el : null,
+  tagName    : 'div',
+  className : 'props-pane',
   events: {
 
   },
-
-  initialize: function() {
-
+  initialize: function(item) {
     _.bindAll(this, 'render', 'newProperty', 'saveDesign');
-    appState.pageProps = appState.pageProps || {};
+
+    this.model = item;
     this.collection = new DesignPropertiesCollection();
-    this.collection.bind('add', this.newProperty);
-    this.collection.add(designOptions);
-    $('#save-design').on('click', this.saveDesign);
+    this.collection.bind('add', this.newProperty, this);
+
+
+    this.render();
+    this.collection.add(item.get('design-props'));
 
   },
 
@@ -269,23 +261,29 @@ var DesignEditorView = Backbone.View.extend({
   },
 
   newProperty: function(item) {
+    console.log(item);
     var type = item.get('type');
     var newView;
     switch(type){
-      case "color-picker":
+      case "background-color":
+      case "text-color":
+      case "header-color":
         newView = new DesignColorPickerPropertyView(item);
         break;
-      case "image-picker":
+      case "background-image":
         newView = new DesignImagePickerPropertyView(item);
         break;
-      case "size-picker" :
+      case "header-size":
+      case "text-size":
         newView = new DesignSizePickerPropertyView(item);
         break;
-      case "font-picker" :
+      case "header-family":
+      case "text-family":
         newView = new DesignFontPickerPropertyView(item);
         break;
     }
-    this.pane.appendChild(newView.el);
+    console.log(newView);
+    this.el.appendChild(newView.el);
   },
 
   saveDesign: function() {
@@ -300,5 +298,3 @@ var DesignEditorView = Backbone.View.extend({
     });
   }
 });
-
-var designEditor = new DesignEditorView();

@@ -1,0 +1,55 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+    <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/design.css">
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css">
+{% endblock %}
+
+{% block topbar %}
+<div class="row">
+  <div class="offset2 toppanel span22 hi3">
+  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  </div>
+  <div class="span8 hoff1 right">
+    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-entities">Save</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block page %}
+<div class="container" id="entities-page">
+  <div class="row top-buttons offset1 span30 tb-border">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </div>
+  <div class="row offset1" id="list-pages">
+    
+  </div>
+</div>
+<script>
+  var appState = {{ app.state_json|safe }};
+</script>
+<script type="text/html" id="temp-page">
+  <div class="hi8" id="user-entity">
+    <h3 class="offset1 hi1 span4" style="margin-top:15px;"><%= page_name %></h3>
+    <div class="offset1 span6 hi1" style="margin-top:15px;">
+      <div class="btn">Start Editing</div>
+    </div>
+    <div class="right span2">
+      <img src="{{ STATIC_URL}}img/down-arrow.png" width="60px">
+    </div>
+  </div>
+</script>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/design-editor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/pages-editor.js"></script>
+<script type="text/javascript"></script>
+<script type="text/javascript"></script>
+
+{% endblock %}
