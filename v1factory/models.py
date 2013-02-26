@@ -5,6 +5,7 @@ from app_builder.models import Class, Template, Route
 from app_builder.codegen import AnalyzedApp
 from app_builder.codegen.writers import DjangoWriter
 import simplejson
+import re
 
 starter_app = """{
     "name":"name me pls",
@@ -175,3 +176,15 @@ class UIElement(models.Model):
     if cls.objects.all().count() == 0:
       cls.reseed()
     return cls.objects.filter(app=None)
+
+  context_regex = re.compile(r'<%= (.+) %>')
+
+  def get_required_context(self):
+    context_names = re.findall(context_regex, self.lib_el.html)
+    return context_names
+
+class StaticFile(models.Model):
+  name = models.CharField(max_length=255)
+  url = models.TextField()
+  type = models.CharField(max_length=100)
+  app = models.ForeignKey(App)

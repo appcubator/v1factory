@@ -54,7 +54,7 @@ class DjangoWriter:
     imports.append("from django.contrib.auth.models import User")
     for m in self.app.classes:
       if 'hidden' in m: continue
-      imports.append('from {}.models import {}'.format(APP_NAME, m['name']))
+      imports.append('from webapp.models import {}'.format(m['name']))
     return '\n'.join(imports) + '\n'
 
 # MODEL FORMS (form details, used as a base for form submission)
@@ -98,7 +98,7 @@ class DjangoWriter:
   def model_form_imports(self):
     imports = []
     for f in self.app.forms:
-      imports.append('from {}.model_forms import {}Form{}'.format(APP_NAME, f.entity, f.form_id))
+      imports.append('from webapp.model_forms import {}Form{}'.format(f.entity, f.form_id))
     return '\n'.join(imports)
 
 # FORM RECEIVERS (to capture the POSTS and save the object, or return validation errors)
@@ -153,7 +153,7 @@ class DjangoWriter:
       function += "  page_context['q{}'] = {}\n".format(i, q)
 
     # and render the right template
-    function += "  return render(request, '{}/{}.html', page_context)\n".format(APP_NAME, page.name)
+    function += "  return render(request, 'webapp/{}.html', page_context)\n".format(page.name)
 
     return function
 
@@ -172,7 +172,7 @@ class DjangoWriter:
     """Imports required for the views."""
     s = ''
     for p in self.app.pages:
-      s += 'from {}.views import view_{}\n'.format(APP_NAME, p.name)
+      s += 'from webapp.views import view_{}\n'.format(p.name)
 
     return s
 
@@ -180,18 +180,18 @@ class DjangoWriter:
 
   @staticmethod
   def generate_url_entry(page):
-    entry = "url(r'{}', '{}.views.view_{}'),".format(url_parts_to_regex(page.url_parts), APP_NAME, page.name)
+    entry = "url(r'{}', 'webapp.views.view_{}'),".format(url_parts_to_regex(page.url_parts), page.name)
     return entry
 
   @staticmethod
   def generate_form_url_entry(form):
-    entry = "url(r'^formsubmit/{}/{}/$', '{}.form_receivers.save_{}Form{}'),".format(form.entity, form.form_id, APP_NAME, form.entity, form.form_id)
+    entry = "url(r'^formsubmit/{}/{}/$', 'webapp.form_receivers.save_{}Form{}'),".format(form.entity, form.form_id, form.entity, form.form_id)
     return entry
 
   def urls_py_as_string(self):
     urls_string = 'from django.conf.urls import patterns, include, url\n'
+    urls_string += 'from django.contrib.staticfiles.urls import staticfiles_urlpatterns\n\n'
     urls_string += "urlpatterns = patterns('',\n"
-    urls_string += "  url(r'', include('social_auth.urls')),\n"
     urls_string += "  url(r'^login/$', 'django.contrib.auth.views.login' ),\n"
     urls_string += "  url(r'^logout/$', 'django.contrib.auth.views.logout'),\n"
     for p in self.app.pages:
@@ -199,16 +199,27 @@ class DjangoWriter:
     urls_string += '\n'
     for f in self.app.forms:
       urls_string += '  {}\n'.format(DjangoWriter.generate_form_url_entry(f))
-    urls_string += ')'
+    urls_string += ')\n\n'
+
+    urls_string += "urlpatterns += staticfiles_urlpatterns()"
     return urls_string
 
 # TEMPLATES
+  @staticmethod
+  def get_random_classname():
+    """Get a random 8-letter string"""
+    import string
+    import random
+    chrs = []
+    for i in range(0,8):
+      chrs.append(random.choice(string.ascii_letters))
+    return ''.join(chrs)
 
   @staticmethod
   def render_uielement(el):
     from v1factory.models import UIElement
     try:
-      lib_el = UIElement.get_library().get(id=el['id'])
+      lib_el = UIElement.get_library().get(id=el['lib-id'])
     except Exception, e:
       print e
       return "<p>Element could not be found. See logs.</p>"
@@ -217,6 +228,10 @@ class DjangoWriter:
       # replace the handlebars with context
       for k, v in el['context'].items():
         handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
+
+      # fill in the class name
+      handlebars_html = re.sub('<% class_attr %>', "class=\"{}\"".format(lib_el.class_name), handlebars_html)
+
       # if it's a container, do this for each of the elements.
       if el['container-info'] is not None:
         for inner_el in el['container-info']['elements']:
@@ -230,11 +245,15 @@ class DjangoWriter:
        For each UIElement, render the proper django template, which
        will be set up to receive the context from the view"""
     html = ''
+    html += '{% extends "base.html" %}\n\n'
+    html += '{% block title %}'+page.name+'{% endblock %}\n\n'
+    html += '{% block content %}\n'
     query_counter = 0
     for el in page.uielements:
       raw_template = DjangoWriter.render_uielement(el)
+
+      # replace the input_Data variable names with the right thing
       template_text = re.sub(r'{{ *[A-Z][a-z0-9_]*[\._]([a-zA-Z0-9_]+) *}}', r'{{ this_thing.\1 }}', raw_template)
-      # TODO
 
       # if this is a show container, just wrap it in a for loop
       if el['container-info'] is not None and el['container-info']['action'] == 'show':
@@ -245,12 +264,14 @@ class DjangoWriter:
         if el['container-info']['entity'] == "User": continue
         if el['container-info']['entity'] == "Session": continue
         form_obj = el['container-info']['form']
-        html += """<form method="POST" action="{% url """+ "{}.form_receivers.save_{}Form{}".format(APP_NAME, form_obj.entity, form_obj.form_id) +""" %}">"""
+        html += """<form method="POST" action="{% url """+ "webapp.form_receivers.save_{}Form{}".format(form_obj.entity, form_obj.form_id) +""" %}">"""
         html += """{% csrf_token %}"""
         html += template_text
         html += """</form>"""
       else:
         html += template_text
+
+    html += '\n{% endblock %}'
 
     return html
 
@@ -262,10 +283,30 @@ class DjangoWriter:
       kilter.append(twoplee)
     return kilter
 
+  def get_all_lib_ids(self):
+    bag_of_lib_ids = set()
+    for p in self.app.pages:
+      print p
+      print type(p)
+      for t in p.uielements:
+        bag_of_lib_ids.add(t['lib-id'])
+
+    return bag_of_lib_ids
+
+  def generate_css_as_string(self):
+    from v1factory.models import UIElement
+    css_el_strings = []
+    for lib_id in self.get_all_lib_ids():
+      el = UIElement.objects.get(pk=lib_id)
+      css_string = "." + el.class_name + " { " + el.css + " }"
+      css_el_strings.append(css_string)
+    return '\n\n'.join(css_el_strings)
+
+
 # WRITE THE WHOLE THING
 
   def write(self, STARTER_CODE_PATH="/Users/kssworld93/Projects/v1factory/app_builder/codegen/starter", dest=None):
-    STARTER_CODE_PATH = "/Users/iltercanberk/v1factory/app_builder/codegen/starter"
+    # STARTER_CODE_PATH = "/Users/iltercanberk/v1factory/app_builder/codegen/starter"
     if dest is None:
       # create a temporary working directory
       dest = join(tempfile.mkdtemp(), "djanggggg")
@@ -274,9 +315,22 @@ class DjangoWriter:
     copytree(STARTER_CODE_PATH, dest)
 
     # create inner app directory to hold models and views
-    inner_app_dir = join(dest, APP_NAME)
+    inner_app_dir = join(dest, "webapp")
     if not os.path.exists(inner_app_dir):
       os.makedirs(inner_app_dir)
+
+    statics_dir = join(dest, "static")
+    if not os.path.exists(statics_dir):
+      os.makedirs(statics_dir)
+
+    css_dir = join(statics_dir, "stylesheets")
+    if not os.path.exists(css_dir):
+      os.makedirs(css_dir)
+
+    css_file = open(join(css_dir, "style.css"), "w")
+    css_file.write(self.generate_css_as_string())
+    css_file.close()
+
     init_py = open(join(inner_app_dir, "__init__.py"), "w")
     init_py.write("# ;)")
     init_py.close()
@@ -310,8 +364,13 @@ class DjangoWriter:
     templates_dir = join(dest, os.path.normpath("templates"))
     if not os.path.exists(templates_dir):
       os.makedirs(templates_dir)
+
+    webapp_templates_dir = join(templates_dir, os.path.normpath("webapp"))
+    if not os.path.exists(webapp_templates_dir):
+      os.makedirs(webapp_templates_dir)
+
     for fname, content in self.templates_as_strings():
-      template_file = open(join(templates_dir, APP_NAME, fname), "w")
+      template_file = open(join(templates_dir, "webapp", fname), "w")
       template_file.write(content)
       template_file.close()
 

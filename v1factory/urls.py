@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 import django.contrib.auth.views
 import app_builder.urls
 import v1factory.base_views, v1factory.views
+import django.views.generic.base
 
 # from django.contrib import admin
 # admin.autodiscover()
@@ -14,6 +15,8 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('v1factory.views',
+    url(r'filepick', django.views.generic.base.TemplateView.as_view(template_name="dev/filepicker-test.html")),
+
     url(r'^app/$', 'app_list'),
     url(r'^app/new/$', 'app_new'),
     url(r'^app/(\d+)/$', 'app_page'),
@@ -23,6 +26,8 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/editor/$', 'app_editor'),
     # urls
     url(r'^app/(\d+)/urls/$', 'app_urls'),
+    # statix
+    url(r'^app/(\d+)/static/$', 'staticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
     # deploy this ship!

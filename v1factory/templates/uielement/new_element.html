@@ -1,6 +1,6 @@
 <html>
   <body>
-    <form method="post" action="{% url v1factory.dev_views.new_uielement %}">
+    <form method="post" action="{% url v1factory.views.new_uielement %}">
       {% csrf_token %}
       {{ form.as_p }}
       <input type="submit" value="Add"/>
