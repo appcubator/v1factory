@@ -97,8 +97,6 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
 
     var newElem = '<div class="background options">';
     _(this.options.options).each(function(option){
-      console.log(self.model.get('value'));
-      console.log(option);
       var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<div class="opt '+ bool +'" style="background-image:'+ option +'"></div>';
     });

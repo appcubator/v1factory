@@ -1,6 +1,9 @@
-var entities = ['Post', 'Tweet'];
-
-var UrlModel = Backbone.Model.extend({ });
+var UrlModel = Backbone.Model.extend({
+  defaults : {
+    urlparts : [],
+    page_name : "defaults"
+  }
+});
 
 var UrlsCollection = Backbone.Collection.extend({
   model: UrlModel
@@ -56,7 +59,7 @@ var UrlView = Backbone.View.extend({
     }
     else {
       var ind = String(e.target.id).replace('inp-','');
-      this.model.get('urlParts')[ind] = e.target.value;
+      this.model.get('urlparts')[ind] = e.target.value;
     }
   },
 
@@ -95,14 +98,14 @@ var UrlView = Backbone.View.extend({
   lastEntityChanged: function(e) {
     $(e.target).removeClass('last');
     var temp = document.getElementById('template-text').innerHTML;
-    var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
+    var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
     $('.url', this.el).append(html);
   },
 
   lastTextChanged: function(e) {
     $(e.target).removeClass('last');
     var temp = document.getElementById('template-entity').innerHTML;
-    var html = _.template(temp, { 'urls': this.urlParts, 'entities': entities, 'pages': appState.pages });
+    var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
     $('.url', this.el).append(html);
   }
 });
@@ -139,7 +142,7 @@ var UrlsEditorView = Backbone.View.extend({
   },
 
   newWUrl: function(){
-    var newModel = new UrlModel({ urlParts: []});
+    var newModel = new UrlModel();
     this.collection.push(newModel);
   },
 
@@ -158,9 +161,7 @@ var UrlsEditorView = Backbone.View.extend({
     console.log(name);
     var pages = appState.pages;
     pages.push({
-      name: name,
-      uielements: [],
-      'access-level' : "all"
+      name: name
     });
     appState.pages = pages;
   }
