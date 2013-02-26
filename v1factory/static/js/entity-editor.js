@@ -16,6 +16,19 @@
 
 
 var EntityModel = Backbone.Model.extend();
+var UserEntityModel = EntityModel.extend({
+  defaults : {
+    facebook : false,
+    linkedin : false,
+    local : true,
+    fields : [{
+      "name":"description",
+      "required":false,
+      "type": "text"
+    }]
+  }
+});
+
 
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel
@@ -138,7 +151,9 @@ var UserEntityView = EntityView.extend({
   el : document.getElementById('user-entity'),
   
   events: {
-    'change .cb-login' : 'checkedBox'
+    'change .cb-login' : 'checkedBox',
+    'click .add-property-button' : 'clickedAdd',
+    'submit .add-property-form'  : 'formSubmitted'
   },
 
   initialize: function(item) {
@@ -153,41 +168,39 @@ var UserEntityView = EntityView.extend({
                     'clickedPropDelete');
 
     this.model = item;
-    this.model.bind('change:owns', this.ownsChangedOutside);
-    this.model.bind('change:belongsTo', this.belongsToChangedOutside);
-
-    this.parentCollection = item.collection;
-    this.parentCollection.bind('add', this.addedEntity);
-    this.parentCollection.bind('remove', this.modelRemoved);
 
     this.name = item.get('name');
     this.parentName = name;
     this.render();
+
+    this.parentCollection = item.owner.collection;
+    this.parentCollection.bind('add', this.addedEntity);
+    this.parentCollection.bind('remove', this.modelRemoved);
   },
 
   render: function() {
     var self = this;
-    _(this.model.get('fields')).each(function(val, key){
+    console.log(self);
+    _(this.model.get('fields')).each(function(field, ind){
 
       var page_context = {};
-      page_context.name = key;
-      page_context.key = val;
-      page_context.other_models = self.parentCollection.models;
+      page_context.name = field.name;
+      page_context.ind = ind;
+      page_context.other_models = self.model.owner.collection.models;
 
       var template = _.template( $("#template-property").html(), page_context);
 
       $('.property-list', this.el).append(template);
     });
+
+    document.getElementById('facebook').checked = this.model.get('facebook');
+    document.getElementById('linkedin').checked = this.model.get('linkedin');
+    document.getElementById('local').checked = this.model.get('local');
+
   },
 
   checkedBox: function(e) {
-    console.log(this.model);
-    if(!this.model.get('loginTypes')) {
-      this.model.set('loginTypes', { 'facebook' : false,
-                                     'linkedin' : false,
-                                     'local'    : false  });
-    }
-    this.model.get('loginTypes')[e.target.value] = e.target.checked;
+    this.model.set(e.target.value, e.target.checked);
   }
 });
 
@@ -199,42 +212,44 @@ var EntityListView = Backbone.View.extend({
   counter    : 0,
 
   initialize: function(){
-    _.bindAll(this, 'render', 'appendItem', 'addEntity');
+    _.bindAll(this, 'render', 'appendItem', 'appendUser', 'addEntity');
 
     var self = this;
     var initialEntities = appState.entities || [];
 
-    this.collection = new EntityCollection(initialEntities);
+    this.collection = new EntityCollection();
+    this.collection.bind("add", this.appendItem);
     this.render();
+    this.collection.add(initialEntities);
+
+    var userModel = new UserEntityModel(appState.users);
+    userModel.owner = this;
+    this.userModel = userModel;
+    this.appendUser(userModel);
   },
 
   render: function(){
-    var self = this;
-    _(this.collection.models).each(function(item) {
-      self.appendItem(item);
-    });
+
   },
 
-  appendItem: function(item) {
-    var entityView;
-
-    if(item.get('name') == "User") {
-      entityView = new UserEntityView(item);
-    }
-    else {
-      entityView = new EntityView(item, 'entity-list-');
-      $(this.el).append(entityView.el);
-    }
+  appendItem: function(model) {
+    console.log('append');
+    var entityView = new EntityView(model, 'entity-list-');
+    $(this.el).append(entityView.el);
     $('.add-property-button', entityView.el).on('click', entityView.clickedAdd);
     entityView.delegateEvents();
   },
 
-  addEntity: function(item) {
-    item.id = this.counter;
+  appendUser: function(model) {
+    entityView = new UserEntityView(model);
+    // No need to append
+  },
 
+  addEntity: function(item) {
+    console.log("add entity");
+    item.id = this.counter;
     var newModel = new EntityModel(item);
     this.collection.add(newModel);
-    this.appendItem(newModel);
   }
 });
 
@@ -255,6 +270,7 @@ var EntitiesEditorView = Backbone.View.extend({
                     'clickedAdd',
                     'formSubmitted',
                     'serializeEntities');
+
 
     $('#save-entities').on('click', this.serializeEntities);
   },
@@ -277,43 +293,19 @@ var EntitiesEditorView = Backbone.View.extend({
     var elem = {};
     elem.name = $('#entity-name-input').val();
     elem.fields = [];
+    entityList.collection.add(elem);
 
-    entityList.addEntity(elem);
     $('#entity-name-input').val('');
     $(this.addButton).fadeIn();
     $(e.target).remove();
   },
 
   serializeEntities : function(e) {
-    console.log("serialized");
-    var serialized = [ ];
-    console.log(entityList.collection);
-    _(entityList.collection.models).each(function(entity){
 
-      var ent = {};
-      ent.name = entity.get('name');
-      ent.fields = [ ];
-      _(entity.get('fields')).each(function(val, key){
-        var field = {};
-        if (key == "id") return;
-        if (key == "name") return;
-        if (key == "attributes") return;
-        if (key == "fields") return;
-        field.name = val.name;
-        field.type = val.type;
-        field.required = true;
-        ent.fields.push(field);
-      });
+    appState.entities = entityList.collection.toJSON();
+    appState.users = entityList.userModel.toJSON();
 
-      if(ent.name == "User") {
-        ent.loginTypes = entity.get('loginTypes');
-      }
-    
-      serialized.push(ent);
-    });
-
-    console.log(serialized);
-    appState.entities = serialized;
+    console.log(appState);
     $.ajax({
       type: "POST",
       url: '/app/1/state/',
@@ -358,6 +350,5 @@ var EntitiesLibraryView = Backbone.View.extend({
 
   addEntity: function(item) {
     this.collection.add(item);
-    this.appendItem(new EntityModel(item));
   }
 });

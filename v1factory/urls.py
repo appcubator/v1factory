@@ -23,7 +23,6 @@ urlpatterns += patterns('v1factory.views',
     # entities
     url(r'^app/(\d+)/entities/$', 'entities'),
     # editor
-    url(r'^app/(\d+)/editor/$', 'app_editor'),
     # urls
     url(r'^app/(\d+)/urls/$', 'app_urls'),
     # statix
@@ -39,6 +38,9 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/data/$', 'app_data'),
     url(r'^app/(\d+)/finances/$', 'app_finances'),
     url(r'^app/(\d+)/info/$', 'app_info'),
+    url(r'^app/(\d+)/pages/$', 'app_pages'),
+    url(r'^app/(\d+)/pages/editor/(\d+)$', 'app_editor'),
+
     url(r'^app/(\d+)/account/$', 'account'),
 
     url(r'^app/(\d+)/tempshow/([a-zA-Z_]+)/$', 'generate_html'),

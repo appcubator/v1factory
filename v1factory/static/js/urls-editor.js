@@ -1,8 +1,6 @@
 var entities = ['Post', 'Tweet'];
 
-var UrlModel = Backbone.Model.extend({
-
-});
+var UrlModel = Backbone.Model.extend({ });
 
 var UrlsCollection = Backbone.Collection.extend({
   model: UrlModel
@@ -13,12 +11,12 @@ var UrlView = Backbone.View.extend({
   tagName: 'div',
   className: 'row span30 offset1 hoff1',
   events: {
-    'change .url-part' : 'urlPartChanged',
-    'change .page' : 'pageChanged',
-    'click .cross' : 'urlRemoved',
+    'change .url-part'      : 'urlPartChanged',
+    'change .page'          : 'pageChanged',
+    'click .cross'          : 'urlRemoved',
     'submit .add-page-form' : 'newPageSubmitted',
-    'change .last' : 'lastEntityChanged',
-    'keypress .last': 'lastTextChanged'
+    'change .last'          : 'lastEntityChanged',
+    'keypress .last'        : 'lastTextChanged'
   },
 
   initialize: function(item){
@@ -35,13 +33,15 @@ var UrlView = Backbone.View.extend({
     if(!this.model.get('urlparts')) {
       this.model.set('urlparts', []);
     }
-    this.urlParts = this.model.get('urlparts');
     this.render();
   },
 
   render: function() {
     var temp = document.getElementById('template-url').innerHTML;
-    var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
+    var html = _.template(temp, { 'urls': this.model.get('urlparts'),
+                                  'entities': appState.entities,
+                                  'pages': appState.pages,
+                                  'page_name': this.model.get('page_name') });
     this.el.innerHTML = html;
   },
 
@@ -77,15 +77,15 @@ var UrlView = Backbone.View.extend({
   },
 
   newPageSubmitted: function(e) {
-    var name = $('.page-name-input').val();
+    var name = $('.page-name-input', this.el).val();
+    console.log(name);
+    urlsEditor.createPage(name);
+    e.preventDefault();
     $('.page-name-input').val('');
     $('.add-page-form').hide();
     $('select.page', this.el).fadeIn();
     $('select').append('<option>' + name + '</option>');
-
-    urlsEditor.createPage(name);
-
-    e.preventDefault();
+    $('select option:last', this.el).attr('selected','selected');
   },
 
   remove: function() {
@@ -116,7 +116,6 @@ var UrlsEditorView = Backbone.View.extend({
                     'placeUrls',
                     'newWUrl',
                     'saveUrls',
-                    'serializeUrls',
                     'createPage');
 
     this.collection = new UrlsCollection();
@@ -145,39 +144,25 @@ var UrlsEditorView = Backbone.View.extend({
   },
 
   saveUrls: function() {
-    var serialized = this.serializeUrls(this.collection.models);
-    appState.urls = serialized;
+    appState.urls = this.collection.toJSON();
     $.ajax({
       type: "POST",
       url: '/app/1/state/',
       data: JSON.stringify(appState),
-      success: function() {
-
-      },
+      success: function() {},
       dataType: "JSON"
     });
-
   },
 
   createPage: function (name) {
+    console.log(name);
     var pages = appState.pages;
     pages.push({
       name: name,
-      uielements: []
+      uielements: [],
+      'access-level' : "all"
     });
     appState.pages = pages;
-  },
-
-  serializeUrls: function(models) {
-    var urls = [];
-    _(models).each(function(model) {
-      var url = {};
-      url.page_name = model.get('page_name');
-      url.urlparts = model.get('urlparts');
-      urls.push(url);
-    });
-
-    return urls;
   }
 });
 

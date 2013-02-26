@@ -41,12 +41,12 @@
         <% var endsWithEnt = 1;
            _.each(urls, function(url, i) { %>
           <span class="slash">/</span>
-          
-          <% if (/\{\{([^\}]+)}}/g.exec(url)) { endsWithEnt = 1 %>
+          <% if (/\{\{([^\}]+)}}/g.exec(url)) { var urlEnt = /\{\{([^\}]+)}}/g.exec(url); endsWithEnt = 1 %>
           <select class="id url-part" id="inp-<%= i %>">
           <% _.each(entities, function(entity, i) { %>
-            <option> <%= entity %> </option>
+            <option <% console.log(urlEnt); if(entity.name == urlEnt[1]) { %> selected <% } %> > <%= entity.name %> ID</option>
           <% }); %>
+            <option>Add ID</option>
           </select>
           <% } else { endsWithEnt = 0; %>
           <input type="text" class="url-part" placeholder="url_string" id="inp-<%= i %>" value='<%= url %>'>
@@ -70,7 +70,7 @@
         <div class="pages right span6 offset1">
           <select class="page">
             <% _.each(pages, function(page){ %>
-            <option><%= page.name %></option>
+            <option <% if(page.name == page_name){ %> selected <%}%>><%= page.name %></option>
             <% }); %>
             <option value="<<new_page>>">+ Create a new page</option>
           </select>

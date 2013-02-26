@@ -11,7 +11,7 @@
  *  - EntityCollection
  *  - EntityView
  *  - EntitiesListView
- * 
+ *
  */
 
 var EntityModel = Backbone.Model.extend({
@@ -52,13 +52,8 @@ var EntityView = Backbone.View.extend({
     this.parentCollection = item.collection;
     this.widgetCollection = widgetCollection;
 
-    var coordinates = pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
     var widget = {
-      top    : coordinates.topLeft.y,
-      left   : coordinates.topLeft.x,
       type   : 'container',
-      width  : coordinates.bottomRight.x - coordinates.topLeft.x,
-      height : coordinates.bottomRight.y - coordinates.topLeft.y,
       entity : this.model
     };
 
@@ -74,19 +69,35 @@ var EntityView = Backbone.View.extend({
                         '<span class="update">Update '+name+'</span></div>';
   },
 
-  clickedCreate: function() {
+  clickedCreate: function(e) {
     this.widget.action = 'create';
-    this.widgetCollection.add(new Widget(this.widget));
+    var newWidget = new Widget(this.widget);
+    newWidget.assignCoord();
+    this.widgetCollection.add(newWidget);
+
+    e.preventDefault();
+    return false;
   },
 
-  clickedUpdate: function() {
+  clickedUpdate: function(e) {
     this.widget.action = 'update';
     this.widgetCollection.add(new Widget(this.widget));
+    e.preventDefault();
+    return false;
   },
 
-  clickedQuery: function() {
+  clickedQuery: function(e) {
     this.widget.action = 'query';
     this.widgetCollection.add(new Widget(this.widget));
+    e.preventDefault();
+    return false;
+  },
+
+  assignCoord: function() {
+    var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
+                                    pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
+
+    console.log(coordinates);
   }
 });
 

@@ -88,6 +88,14 @@ def app_gallery(request, app_id):
   page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els }
   return render(request, 'dev/app-gallery.html', page_context)
 
+def app_pages(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id)
+  els = UIElement.get_library()
+
+  page_context = { 'app': app, 'title' : 'Pages', 'elements' : els }
+  return render(request, 'dev/app-pages.html', page_context)
+
 def app_analytics(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
@@ -158,12 +166,15 @@ def staticfiles(request, app_id):
 
 @require_GET
 @login_required
-def app_editor(request, app_id):
+def app_editor(request, app_id, page_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   els = UIElement.get_library()
-  page_context = { 'app': app, 'title' : 'Editor', 'elements' : els }
-  return render(request, 'dev/editor.html', page_context)
+  page_context = { 'app': app, 
+                   'title' : 'Editor', 
+                   'elements' : els,
+                   'page_id': page_id }
+  return render(request, 'dev/editor-main.html', page_context)
 
 @require_GET
 @login_required

@@ -12,6 +12,7 @@
  *  - GridEditorView
  *
  */
+var currentCoord;
 
 var GridEditorView = Backbone.View.extend({
   el             : document.getElementById('body-container'),
@@ -23,8 +24,8 @@ var GridEditorView = Backbone.View.extend({
     "mousedown .span1"           : "mousedown",
     "mouseup div.editing"        : "mouseup",
     "mouseover .span1"           : "mouseover",
-    "click .widget-prev"         : "addWidget",
-    "click .item-gallery .header": "hideItemGallery"
+    "click .widget-prev"         : "addWidget"
+    //"click .item-gallery .header": "hideItemGallery"
   },
 
   initialize: function(item){
@@ -33,9 +34,15 @@ var GridEditorView = Backbone.View.extend({
                     'mouseup',
                     'mouseover',
                     'coordselector',
+                    'clearSelections',
+                    'expandInterfaceEl',
                     'popItemGallery',
                     'hideItemGallery',
                     'addWidget');
+
+    $('.interface-elements').on('click', this.expandInterfaceEl);
+    $('.data-elements').on('click', this.expandInterfaceEl);
+
     this.render();
   },
 
@@ -60,6 +67,11 @@ var GridEditorView = Backbone.View.extend({
     }
   },
 
+  clearSelections: function() {
+    $('.cselected').removeClass('cselected');
+    this.selectorActive = false;
+  },
+
   mousedown: function(e) {
     $('.cselected').removeClass('cselected');
     this.initCor.x = $(e.target).data('xcor');
@@ -72,6 +84,7 @@ var GridEditorView = Backbone.View.extend({
     this.selectorActive = false;
     this.lastCor.x = $(e.target).data('xcor');
     this.lastCor.y = $(e.target).data('ycor');
+    currentCoord = {initCor: this.initCor , lastCor: this.lastCor};
     this.popItemGallery(e.pageX, e.pageY);
   },
 
@@ -115,23 +128,35 @@ var GridEditorView = Backbone.View.extend({
   },
 
   popItemGallery: function(x, y) {
-    $(this.itemGallery).css({
-      'left': x,
-      'top': y-10});
-    $(this.itemGallery).fadeIn();
+    $(this.itemGallery).animate({
+       'right': 20
+    });
   },
 
   hideItemGallery: function() {
-    $(this.itemGallery).hide();
+    $(this.itemGallery).animate({
+       'right': -320
+    });
   },
 
   addWidget: function(e) {
     e.preventDefault();
 
+    console.log(e.target);
+
     var id = e.target.id || e.target.parentNode.id;
     pagesView.widgetEditor.addWidget(id, this.initCor, this.lastCor);
-    $(this.itemGallery).hide();
-    $('.cselected').removeClass('cselected');
-    this.selectorActive = false;
+    this.hideItemGallery();
+    this.clearSelections();
+  },
+
+  expandInterfaceEl: function(e) {
+    if($(e.target).hasClass('widget-prev')) {
+      return true;
+    }
+
+    $('.expanded').removeClass('expanded');
+    $(e.target.parentNode).addClass('expanded');
+    return false;
   }
 });

@@ -58,9 +58,9 @@
           <form class="add-property-form span5 hoff1" style="display:none"><input type="text" class="property-name-input"></form>
         </div>
         <div class="span6 offset1">
-          <label class="hi1"><input class="cb-login" type="checkbox" value="local">Local Login</label>
-          <label class="hi1"><input class="cb-login" type="checkbox" value="facebook">Facebook Login</label>
-          <label class="hi1"><input class="cb-login" type="checkbox" value="linkedin">LinkedIn Login</label>
+          <label class="hi1"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
+          <label class="hi1"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
+          <label class="hi1"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
         </div>
       </div>
     </div>
@@ -182,7 +182,7 @@ var entityLibrary = new EntitiesLibraryView();
 $(function() {
   $("#entities").sortable({
     update: function( event, ui ) {
-      entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')])
+      entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')], {silent: true})
     }
   });
   $("#entities-library").sortable({

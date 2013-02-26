@@ -48,8 +48,12 @@ var WidgetInfoView = Backbone.View.extend({
   showAttribute: function(val, key, prop) {
     var self = this;
     var li = document.createElement('li');
-    li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
-    li.id = 'prop-'+ key;
+    
+
+    if(val!=null) {
+      li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
+      li.id = 'prop-'+ key;
+    }
 
     return li;
   },
