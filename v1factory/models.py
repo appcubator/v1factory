@@ -136,6 +136,13 @@ class App(models.Model):
   def get_absolute_url(self):
     return reverse('v1factory.views.app_page', args=[str(self.id)])
 
+  def clean(self):
+    try:
+      simplejson.loads(self._state_json)
+    except simplejson.JSONDecodeError, e:
+      raise ValidationError(e.msg)
+
+
   def deploy(self):
     import sys, os
     import subprocess
@@ -151,6 +158,7 @@ class App(models.Model):
     commands.append('heroku keys:add')
     commands.append('git remote add heroku git@heroku.com:warm-reaches-8765.git')
     commands.append('git push -f heroku master')
+    commands.append('heroku run python manage.py syncdb')
     for c in commands:
       print "Running `{}`".format(c)
       subprocess.call(c.split(' '), cwd=tmp_project_dir, env=os.environ.copy(), stdout=sys.stdout, stderr=sys.stderr)
@@ -165,16 +173,7 @@ class UIElement(models.Model):
   type = models.CharField(max_length=100) # later on, introduce choices here
 
   @classmethod
-  def reseed(cls):
-    heading = cls(name="Heading", class_name="yolo-ology", html="<h1>Heading</h1>", type="generic", css="* {background-color:red}" )
-    heading.full_clean()
-    heading.save()
-    # put more seed elements here
-
-  @classmethod
   def get_library(cls):
-    if cls.objects.all().count() == 0:
-      cls.reseed()
     return cls.objects.filter(app=None)
 
   context_regex = re.compile(r'<%= (.+) %>')

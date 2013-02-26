@@ -192,8 +192,7 @@ class DjangoWriter:
     urls_string = 'from django.conf.urls import patterns, include, url\n'
     urls_string += 'from django.contrib.staticfiles.urls import staticfiles_urlpatterns\n\n'
     urls_string += "urlpatterns = patterns('',\n"
-    urls_string += "  url(r'^login/$', 'django.contrib.auth.views.login' ),\n"
-    urls_string += "  url(r'^logout/$', 'django.contrib.auth.views.logout'),\n"
+    urls_string += "  url(r'^accounts/', include('allauth.urls')),"
     for p in self.app.pages:
       urls_string += '  {}\n'.format(DjangoWriter.generate_url_entry(p))
     urls_string += '\n'

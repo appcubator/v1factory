@@ -6,7 +6,7 @@ from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile
 
 def add_statics_to_context(context, app):
-  context['statics'] = StaticFile.objects.filter(app=app).values()
+  context['statics'] = simplejson.dumps(list(StaticFile.objects.filter(app=app).values()))
   return context
 
 @login_required
