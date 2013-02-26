@@ -59,6 +59,9 @@
 {% endblock %}
 
 {% block js %}
+<script type="text/html">
+  var statics = {{ statics|safe }};
+</script>
 <script type="text/html" id="temp-element">
 <div class="span9 offset1 hoff1">
   <div class="pane border minhi">

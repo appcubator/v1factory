@@ -5,6 +5,10 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile
 
+def add_statics_to_context(context, app):
+  context['statics'] = StaticFile.objects.filter(app=app).values()
+  return context
+
 @login_required
 def app_list(request):
   if request.user.apps.count() == 0:
@@ -86,6 +90,7 @@ def app_gallery(request, app_id):
   els = UIElement.get_library()
 
   page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els }
+  add_statics_to_context(page_context, app)
   return render(request, 'dev/app-gallery.html', page_context)
 
 def app_pages(request, app_id):
@@ -174,6 +179,7 @@ def app_editor(request, app_id, page_id):
                    'title' : 'Editor', 
                    'elements' : els,
                    'page_id': page_id }
+  add_statics_to_context(page_context, app)
   return render(request, 'dev/editor-main.html', page_context)
 
 @require_GET

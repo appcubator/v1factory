@@ -50,7 +50,8 @@
 {% block js %}
 <script type="text/javascript">
 var appState = {{ app.state_json|safe }};
-var pageId = {{ page_id|safe }};
+var statics = {{ statics|safe }};
+var pageId = {{ page_id }};
 </script>
 <script type="text/html" id="temp-meta">
 <div class="meta">
