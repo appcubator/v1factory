@@ -34,10 +34,10 @@
     <div class="elements-inside-container" id="widgets-container"></div>
   </div>
   <div class="container editing" id="body-container">
-    {% include "dev/widget-gallery.html" %}
+    {% include "dev/editor-gallery.html" %}
   </div>
-  {% include "dev/left-editor.html" %}
-  {% include "dev/right-editor.html" %}
+  {% include "dev/editor-left.html" %}
+  {% include "dev/editor-right.html" %}
 
   <div class="loading-gif" id="loading-gif">
     <div class="logo offsetr2 hoff1">
@@ -63,6 +63,7 @@ var pageId = {{ page_id|safe }};
 </script>
 {% endfor %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-grid.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-widgets.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-entities.js"></script>
@@ -83,7 +84,6 @@ $(function() {
 var mY = 0;
 $('body').mousemove(function(e) {
     var top = e.pageY - $(window).scrollTop();
-    console.log(top);
     // moving upward
     if (e.pageY > mY && top > 450) {
       $('.entities').css('margin-bottom', 0)

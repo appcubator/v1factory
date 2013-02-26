@@ -1,0 +1,21 @@
+<div class="item-gallery section" id="item-gallery">
+  <div class="accord">
+    <div id="interface-elements" class="interface-elements">
+      <div class="header">Interface Elements</div>
+      <ul>
+        <li class="help-text"><span>Click on an element below to place on the page. Scroll down to see more.</span></li>
+        {% for element in elements %}
+        <li class="widget-prev {{ element.class_name }}" id="widget-{{ element.id }}">
+        {{ element.html|safe }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div id="data-elements" class="data-elements expanded">
+      <div class="header">Data Elements</div>
+      <ul id='entities-list' class='entities-list'>
+        
+      </ul>   
+    </div>
+  </div>
+</div>

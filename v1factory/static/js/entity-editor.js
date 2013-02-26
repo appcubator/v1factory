@@ -151,7 +151,9 @@ var UserEntityView = EntityView.extend({
   el : document.getElementById('user-entity'),
   
   events: {
-    'change .cb-login' : 'checkedBox'
+    'change .cb-login' : 'checkedBox',
+    'click .add-property-button' : 'clickedAdd',
+    'submit .add-property-form'  : 'formSubmitted'
   },
 
   initialize: function(item) {
@@ -170,6 +172,10 @@ var UserEntityView = EntityView.extend({
     this.name = item.get('name');
     this.parentName = name;
     this.render();
+
+    this.parentCollection = item.owner.collection;
+    this.parentCollection.bind('add', this.addedEntity);
+    this.parentCollection.bind('remove', this.modelRemoved);
   },
 
   render: function() {

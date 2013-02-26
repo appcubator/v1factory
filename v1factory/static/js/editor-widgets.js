@@ -25,6 +25,16 @@ var GRID_HEIGHT = 30;
 var Widget = Backbone.Model.extend({
   selected: false,
 
+  defaults: {
+    'container-info' : null,
+    'context'        : null,
+    'lib-id'         : 1,
+    'top'            : 0,
+    'left'           : 0,
+    'height'         : 2,
+    'width'          : 2
+  },
+
   initialize: function() {
     _.bindAll(this, 'select');
 
@@ -135,12 +145,13 @@ var WidgetView = Backbone.View.extend({
 
   renderContent: function() {
     this.el.innerHTML = '';
-    if(typeof this.model.get('type') == "undefined") {
+    console.log(this.model);
+    if(typeof this.model.get('lib-id') == "undefined") {
       alert('wat');
       return;
     }
 
-    var temp = document.getElementById('temp-' + this.model.get('type')).innerHTML;
+    var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
 
     if(!temp) {
       alert('elem type could not be found');
@@ -167,7 +178,7 @@ var WidgetView = Backbone.View.extend({
   },
 
   renderElement: function() {
-    var temp = document.getElementById('temp-' + this.model.get('type')).innerHTML;
+    var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
     elem_text = this.model.get('text') || "BLANK TEXT";
     var element = _.template(temp, { 'text' : elem_text });
     return element;
@@ -463,14 +474,18 @@ var WidgetEditorView = Backbone.View.extend({
                     'placeWidget',
                     'serializeWidgets',
                     'serializeCollection',
+                    'style',
                     'keydown');
+
+    console.log("hey");
 
     this.render();
     this.collection = new WidgetCollection();
     this.widgetMenu = new WidgetMenuView(this.collection);
     this.widgetEntitiesView = new EntitiesListView(this.collection);
     this.collection.bind('add', this.placeWidget);
-
+    console.log(page);
+    this.style(page['design-props']);
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
     
     
@@ -532,6 +547,30 @@ var WidgetEditorView = Backbone.View.extend({
   serializeWidgets: function(e) {
     uiElements = this.serializeCollection(this.collection.models);
     return uiElements;
+  },
+
+  style: function (props) {
+    console.log(props);
+
+    _(props).each(function(prop) {
+          console.log("HEY");
+
+      if(document.getElementById('style-' + prop.type)) {
+        $(document.getElementById('style-' + prop.type)).remove();
+      }
+
+      var styleTag = document.createElement('style');
+      styleTag.id = 'style-' + prop.type;
+
+      var styleContent = '' + (designOptions[prop.type].tag||'body') + ' {';
+      styleContent += designOptions[prop.type].css.replace(/<%=content%>/g, prop.value);
+      styleContent += '}';
+
+      styleTag.innerHTML = styleContent;
+      this.styleTag = styleTag;
+
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
+    });
   },
 
   serializeCollection: function(coll) {

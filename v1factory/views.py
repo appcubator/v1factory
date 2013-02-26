@@ -138,7 +138,7 @@ def app_editor(request, app_id, page_id):
                    'title' : 'Editor', 
                    'elements' : els,
                    'page_id': page_id }
-  return render(request, 'dev/editor.html', page_context)
+  return render(request, 'dev/editor-main.html', page_context)
 
 @require_GET
 @login_required

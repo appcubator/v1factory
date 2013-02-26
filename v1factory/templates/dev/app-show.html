@@ -7,6 +7,9 @@
     </script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <style type="text/css" id="custom-style">
+
+    </style>
 {% endblock %}
 
 {% block topbar %}
@@ -59,7 +62,7 @@
         <h2>Gallery</h2>
         </div>
       </a>
-      <a class="pane hi4 hoff1" href="{% url v1factory.views.app_editor app.id %}">
+      <a class="pane hi4 hoff1" href="">
         <img src="{{ STATIC_URL }}img/editor.png">
         <div class="hoff1 offset1">
         <h2>Account Info</h2>

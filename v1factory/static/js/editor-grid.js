@@ -23,8 +23,8 @@ var GridEditorView = Backbone.View.extend({
     "mousedown .span1"           : "mousedown",
     "mouseup div.editing"        : "mouseup",
     "mouseover .span1"           : "mouseover",
-    "click .widget-prev"         : "addWidget",
-    "click .item-gallery .header": "hideItemGallery"
+    "click .widget-prev"         : "addWidget"
+    //"click .item-gallery .header": "hideItemGallery"
   },
 
   initialize: function(item){
@@ -33,9 +33,14 @@ var GridEditorView = Backbone.View.extend({
                     'mouseup',
                     'mouseover',
                     'coordselector',
+                    'expandInterfaceEl',
                     'popItemGallery',
                     'hideItemGallery',
                     'addWidget');
+
+    $('.interface-elements').on('click', this.expandInterfaceEl);
+    $('.data-elements').on('click', this.expandInterfaceEl);
+
     this.render();
   },
 
@@ -115,14 +120,15 @@ var GridEditorView = Backbone.View.extend({
   },
 
   popItemGallery: function(x, y) {
-    $(this.itemGallery).css({
-      'left': x,
-      'top': y-10});
-    $(this.itemGallery).fadeIn();
+    $(this.itemGallery).animate({
+       'right': 20
+    });
   },
 
   hideItemGallery: function() {
-    $(this.itemGallery).hide();
+    $(this.itemGallery).animate({
+       'right': -320
+    });
   },
 
   addWidget: function(e) {
@@ -133,5 +139,11 @@ var GridEditorView = Backbone.View.extend({
     $(this.itemGallery).hide();
     $('.cselected').removeClass('cselected');
     this.selectorActive = false;
+  },
+
+  expandInterfaceEl: function(e) {
+    $('.expanded').removeClass('expanded');
+    $(e.target.parentNode).addClass('expanded');
+    return false;
   }
 });
