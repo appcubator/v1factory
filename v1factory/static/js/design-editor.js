@@ -111,7 +111,7 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
     $('.opt', this.el).removeClass('selected');
     $(e.target).addClass('selected');
     var val = e.target.style.backgroundImage;
-    console.log(val);
+    console.log(val)
     this.model.set('value', val);
     return false;
   }
@@ -177,7 +177,8 @@ var DesignEditorView = Backbone.View.extend({
 
   },
   initialize: function(item) {
-    _.bindAll(this, 'render', 'newProperty');
+    _.bindAll(this, 'render', 
+                    'newProperty');
 
     this.model = item;
     this.collection = new DesignPropertiesCollection();

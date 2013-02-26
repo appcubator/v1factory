@@ -36,9 +36,7 @@ var Widget = Backbone.Model.extend({
   },
 
   initialize: function() {
-    _.bindAll(this, 'select');
-
-    console.log(this);
+    _.bindAll(this, 'select', 'assignCoord');
   },
 
   select: function() {
@@ -65,6 +63,19 @@ var Widget = Backbone.Model.extend({
 
   moveDown: function() {
     this.set('top', this.get('top') + 1);
+  },
+
+
+  assignCoord: function() {
+    var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
+                                    pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
+
+    this.set('top', coordinates.topLeft.y + 1);
+    this.set('left', coordinates.topLeft.x + 1);
+    this.set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
+    this.set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
+
+    console.log(this);
   }
 });
 
@@ -118,6 +129,7 @@ var WidgetView = Backbone.View.extend({
                     'changedLeft',
                     'changedText',
                     'changedType',
+                    'removeView',
                     'resized');
 
     this.model = item;
@@ -128,6 +140,7 @@ var WidgetView = Backbone.View.extend({
     this.model.bind("change:left", this.changedLeft, this);
     this.model.bind("change:text", this.changedText, this);
     this.model.bind("change:type", this.changedType, this);
+    this.model.bind("remove", this.removeView, this);
 
     this.render(item);
   },
@@ -145,7 +158,7 @@ var WidgetView = Backbone.View.extend({
 
   renderContent: function() {
     this.el.innerHTML = '';
-    console.log(this.model);
+
     if(typeof this.model.get('lib-id') == "undefined") {
       alert('wat');
       return;
@@ -179,8 +192,10 @@ var WidgetView = Backbone.View.extend({
 
   renderElement: function() {
     var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
-    elem_text = this.model.get('text') || "BLANK TEXT";
-    var element = _.template(temp, { 'text' : elem_text });
+    var page_context = {};
+    page_context.text = this.model.get('text') || "BLANK TEXT";
+    page_context.field_name = this.model.get('field_name');
+    var element = _.template(temp, page_context);
     return element;
   },
 
@@ -192,6 +207,10 @@ var WidgetView = Backbone.View.extend({
 
   remove: function() {
     pagesView.widgetEditor.collection.remove(this);
+    $(this.el).remove();
+  },
+
+  removeView: function() {
     $(this.el).remove();
   },
 
@@ -305,6 +324,7 @@ var WidgetContainerView = WidgetView.extend({
                     'placeCreateWidgets',
                     'placeQueryWidgets',
                     'placeUpdateWidgets',
+                    'removeView',
                     'select');
 
     this.model = item;
@@ -313,6 +333,7 @@ var WidgetContainerView = WidgetView.extend({
     this.model.bind("change:height", this.changedHeight, this);
     this.model.bind("change:top", this.changedTop, this);
     this.model.bind("change:left", this.changedLeft, this);
+    this.model.bind("remove", this.removeView, this);
 
     this.entity = item.get('entity');
     var collection = new WidgetCollection();
@@ -372,7 +393,6 @@ var WidgetContainerView = WidgetView.extend({
     switch (model.get('type'))
     {
       case "widget-3":
-        console.log('hey');
         model.set('source', 'sdf');
         widgetView = new WidgetImgView(model);
         break;
@@ -389,16 +409,17 @@ var WidgetContainerView = WidgetView.extend({
     var self = this;
     var widgets = [];
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
-      var type = 'widget-8';
+      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
+      var type = '8';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        type : type,
+        'lib-id' : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-        height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
-        text : key
+        height: 2,
+        field_name : val.name,
+        text : val.name
       };
       var widget = new Widget(widgetProps);
       self.model.get('childCollection').push(widget);
@@ -412,7 +433,7 @@ var WidgetContainerView = WidgetView.extend({
     var widgets = [];
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 3)}, {x: 7, y: 1 + ((nmrAttributes+1) * 3)});
+      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
       var type = 'widget-2';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
@@ -435,7 +456,7 @@ var WidgetContainerView = WidgetView.extend({
     var widgets = [];
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: 7, y: 1 + ((nmrAttributes+1) * 2)});
+      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
       var type = 'widget-8';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
@@ -455,6 +476,10 @@ var WidgetContainerView = WidgetView.extend({
   remove: function(e) {
     e.preventDefault();
     pagesView.widgetEditor.collection.remove(this.model);
+    $(this.el).remove();
+  },
+
+  removeView: function() {
     $(this.el).remove();
   }
 });
@@ -477,14 +502,12 @@ var WidgetEditorView = Backbone.View.extend({
                     'style',
                     'keydown');
 
-    console.log("hey");
-
     this.render();
     this.collection = new WidgetCollection();
     this.widgetMenu = new WidgetMenuView(this.collection);
     this.widgetEntitiesView = new EntitiesListView(this.collection);
     this.collection.bind('add', this.placeWidget);
-    console.log(page);
+
     this.style(page['design-props']);
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
     
@@ -498,12 +521,12 @@ var WidgetEditorView = Backbone.View.extend({
 
   addWidget: function(id, cor1, cor2) {
     var coordinates = pagesView.unite(cor1, cor2);
-    var type = id;
+    var libId = id.replace('widget-','');
     var widget = {
       id : this.collection.length + 1,
       top : coordinates.topLeft.y,
       left : coordinates.topLeft.x,
-      type : type,
+      'lib-id' : libId,
       width : coordinates.bottomRight.x - coordinates.topLeft.x,
       height: coordinates.bottomRight.y - coordinates.topLeft.y,
       text: "New Text"
@@ -550,10 +573,8 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   style: function (props) {
-    console.log(props);
 
     _(props).each(function(prop) {
-          console.log("HEY");
 
       if(document.getElementById('style-' + prop.type)) {
         $(document.getElementById('style-' + prop.type)).remove();
@@ -601,6 +622,7 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   keydown: function(e) {
+
     switch(e.keyCode) {
       case 37:
         this.selectedElement.moveLeft();
@@ -618,6 +640,10 @@ var WidgetEditorView = Backbone.View.extend({
         this.selectedElement.moveDown();
         e.preventDefault();
         break;
+      case 8:
+        e.preventDefault();
+        this.selectedElement.collection.remove(this.selectedElement);
+        return false;
     }
   }
 });

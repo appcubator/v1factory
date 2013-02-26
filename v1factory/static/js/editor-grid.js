@@ -12,6 +12,7 @@
  *  - GridEditorView
  *
  */
+var currentCoord;
 
 var GridEditorView = Backbone.View.extend({
   el             : document.getElementById('body-container'),
@@ -33,6 +34,7 @@ var GridEditorView = Backbone.View.extend({
                     'mouseup',
                     'mouseover',
                     'coordselector',
+                    'clearSelections',
                     'expandInterfaceEl',
                     'popItemGallery',
                     'hideItemGallery',
@@ -65,6 +67,11 @@ var GridEditorView = Backbone.View.extend({
     }
   },
 
+  clearSelections: function() {
+    $('.cselected').removeClass('cselected');
+    this.selectorActive = false;
+  },
+
   mousedown: function(e) {
     $('.cselected').removeClass('cselected');
     this.initCor.x = $(e.target).data('xcor');
@@ -77,6 +84,7 @@ var GridEditorView = Backbone.View.extend({
     this.selectorActive = false;
     this.lastCor.x = $(e.target).data('xcor');
     this.lastCor.y = $(e.target).data('ycor');
+    currentCoord = {initCor: this.initCor , lastCor: this.lastCor};
     this.popItemGallery(e.pageX, e.pageY);
   },
 
@@ -134,14 +142,19 @@ var GridEditorView = Backbone.View.extend({
   addWidget: function(e) {
     e.preventDefault();
 
+    console.log(e.target);
+
     var id = e.target.id || e.target.parentNode.id;
     pagesView.widgetEditor.addWidget(id, this.initCor, this.lastCor);
-    $(this.itemGallery).hide();
-    $('.cselected').removeClass('cselected');
-    this.selectorActive = false;
+    this.hideItemGallery();
+    this.clearSelections();
   },
 
   expandInterfaceEl: function(e) {
+    if($(e.target).hasClass('widget-prev')) {
+      return true;
+    }
+
     $('.expanded').removeClass('expanded');
     $(e.target.parentNode).addClass('expanded');
     return false;

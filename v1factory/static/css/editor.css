@@ -361,7 +361,7 @@
   background-color: #2b3545;
 
   border-bottom: 1px solid #1b2535;
-  border-top: 1px solid #1b2535;
+  border-top: 1px solid #3b4555;
 }
 
 .item-gallery .header:after {
@@ -437,7 +437,7 @@
 
 .data-elements.expanded {
   height: 100%;
-  top: 40px;
+  top: 42px;
   margin-top: 0;
   margin-bottom: 180%;
 }
@@ -681,4 +681,26 @@
 .widget-prev {
   text-align: center;
   padding-top: 20px !important;
+}
+
+.create {
+  background-image: url('../img/plus.png');
+  background-position: 10px center;
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+}
+
+.query {
+  background-image: url('../img/list.png');
+  background-position: 10px center;
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+}
+
+
+.update {
+  background-image: url('../img/update.png');
+  background-position: 10px center;
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
 }

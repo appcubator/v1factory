@@ -70,15 +70,17 @@ var pageId = {{ page_id|safe }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-info.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-list.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-pages.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/pages-models.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/design-editor.js"></script>
 <script type="text/javascript">
 var gridEditor     = new GridEditorView();
 var pagesView      = new PagesView();
 var widgetInfoView = new WidgetInfoView();
 pagesView.openPage(pageId);
+var designEditor = new DesignEditorView(new PageModel(appState.pages[pageId]));
 
-$(function() {
-  $( "#item-info-section" ).draggable();
-});
+$(function() {$( "#item-info-section" ).draggable();});
 </script>
 <script type="text/javascript">
 var mY = 0;
