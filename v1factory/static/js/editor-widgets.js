@@ -493,7 +493,7 @@ var WidgetEditorView = Backbone.View.extend({
   events : {
   },
 
-  initialize: function(page) {
+  initialize: function(contextEntities, page) {
     _.bindAll(this, 'render',
                     'addWidget',
                     'placeWidget',
@@ -505,12 +505,11 @@ var WidgetEditorView = Backbone.View.extend({
     this.render();
     this.collection = new WidgetCollection();
     this.widgetMenu = new WidgetMenuView(this.collection);
-    this.widgetEntitiesView = new EntitiesListView(this.collection);
+    this.widgetEntitiesView = new EntitiesListView(contextEntities, this.collection);
     this.collection.bind('add', this.placeWidget);
 
     this.style(page['design-props']);
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
-    
     
     window.addEventListener('keydown', this.keydown);
   },

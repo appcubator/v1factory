@@ -30,6 +30,7 @@ var PagesView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render',
                     'clickedNewPage',
+                    'getContextEntities',
                     'submittedNewPage',
                     'savePages',
                     'savePage',
@@ -95,9 +96,17 @@ var PagesView = Backbone.View.extend({
       this.savePage();
     }
     this.curPage = pageInd;
-    this.widgetEditor = new WidgetEditorView(this.pages[pageInd]);
+    this.widgetEditor = new WidgetEditorView(this.getContextEntities(pageInd),this.pages[pageInd]);
     document.getElementById('page-' + pageInd).className += ' selected';
     $('#loading-gif').fadeOut().remove();
+  },
+
+  getContextEntities: function(ind) {
+    var name = this.pages[ind].name;
+    var page = _.where(appState.urls, {page_name: name})[0];
+    var contextEntites = _.filter(page.urlparts, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
+    contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
+    return contextEntites;
   },
 
   savePage: function() {

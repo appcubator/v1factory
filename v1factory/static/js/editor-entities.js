@@ -15,6 +15,12 @@
  */
 
 var EntityModel = Backbone.Model.extend({
+  
+  defaults: {
+    name: "default name",
+    fields: []
+  },
+
   initialize: function(key, value) {
     this.name = key;
   }
@@ -23,9 +29,19 @@ var EntityModel = Backbone.Model.extend({
 
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel,
+  add: function(inpObjs) {
+    console.log('hey');
+    _.each(inpObjs, function(inpObj,ind) {
+      console.log(inpObj);
+      if(!inpObj.fields) {
+        console.log("yolot");
+        inpObj = _.where(appState.entities, {name: inpObj})[0];
+        inpObjs[ind] = inpObj;
+      }
+    });
 
-  initialize: function(items) {
-    this.add(items);
+    Backbone.Collection.prototype.add.call(this, inpObjs);
+    //console.log(inpObjs);
   }
 });
 
@@ -43,7 +59,7 @@ var EntityView = Backbone.View.extend({
 
   initialize: function(item, widgetCollection){
     var self = this;
-    _.bindAll(this, 'render', 
+    _.bindAll(this, 'render',
                     'clickedCreate',
                     'clickedUpdate',
                     'clickedQuery');
@@ -104,27 +120,32 @@ var EntityView = Backbone.View.extend({
 var EntitiesListView = Backbone.View.extend({
   el : document.getElementById('entities-list'),
 
-  initialize: function(widgetCollection) {
+  initialize: function(contextEntities, widgetCollection) {
     _.bindAll(this, 'render');
 
-    var self = this;
-    var initialEntities = appState.entities;
-    var entities = [];
-    _(initialEntities).each(function(entity) {
-      entities.push(entity);
-    });
-
-    this.collection = new EntityCollection(entities);
-    this.widgetCollection = widgetCollection;
     this.render();
+
+    this.collection = new EntityCollection();
+    this.collection.bind('add', this.appendEntity, this);
+    this.contextCollection = new EntityCollection();
+    this.contextCollection.bind('add', this.appendContextEntity, this);
+
+    this.widgetCollection = widgetCollection;
+
+    this.contextCollection.add(contextEntities);
+    this.collection.add(appState.entities);
   },
 
   render: function() {
-    var self = this;
-    this.el.innerHTML = '';
-    _(this.collection.models).each(function(item) {
-      var view = new EntityView(item, self.widgetCollection);
-      self.el.appendChild(view.el);
-    });
+  },
+
+  appendEntity: function(entityModel) {
+    console.log(entityModel);
+    var view = new EntityView(entityModel, self.widgetCollection);
+    this.el.appendChild(view.el);
+  },
+
+  appendContextEntity: function(entityModel) {
+    console.log(entityModel);
   }
 });
