@@ -14,6 +14,8 @@
  *  - Widget
  *  - WidgetCollection
  *  - WidgetView
+ *  - WidgetImgView
+ *  - WidgetLinkView
  *  - WidgetContainerView
  *  - WidgetEditorView
  */
@@ -112,7 +114,7 @@ var WidgetView = Backbone.View.extend({
     'click .delete' : 'remove'
   },
 
-  initialize: function(item){
+  initialize: function(widgetModel){
     var self = this;
     _.bindAll(this, 'render',
                     'renderContent',
@@ -130,7 +132,9 @@ var WidgetView = Backbone.View.extend({
                     'removeView',
                     'resized');
 
-    this.model = item;
+    console.log(widgetModel);
+
+    this.model = widgetModel;
     this.model.bind("change:selected", this.outlineSelected, this);
     this.model.bind("change:width", this.changedWidth, this);
     this.model.bind("change:height", this.changedHeight, this);
@@ -140,7 +144,7 @@ var WidgetView = Backbone.View.extend({
     this.model.bind("change:type", this.changedType, this);
     this.model.bind("remove", this.removeView, this);
 
-    this.render(item);
+    this.render(widgetModel);
   },
 
   render: function() {
@@ -280,6 +284,7 @@ var WidgetView = Backbone.View.extend({
 var WidgetImgView = WidgetView.extend({
   initialize: function(item){
     this.constructor.__super__.initialize.apply(this, [item]);
+    this.model.set('source', '/static/img/placholder.png');
     _.bindAll(this, 'changedSource');
     this.model.bind("change:source", this.changedSource, this);
   },
@@ -297,13 +302,19 @@ var WidgetImgView = WidgetView.extend({
   },
 
   renderElement: function() {
-    var temp = document.getElementById('temp-' + this.model.get('type')).innerHTML;
+    var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
     elem_text = this.model.get('text') || "BLANK TEXT";
     var element = _.template(temp, { 'text' : elem_text, 'source' : this.model.get('source') });
     return element;
   }
 });
 
+var WidgetLinkView = WidgetView.extend({
+  initialize: function(item){
+    this.constructor.__super__.initialize.apply(this, [item]);
+    this.model.set('href', '{{ Homepage }}');
+  }
+});
 
 var WidgetContainerView = WidgetView.extend({
   el: null,
@@ -392,9 +403,11 @@ var WidgetContainerView = WidgetView.extend({
 
   placeWidget: function(model, a) {
     var widgetView;
-    switch (model.get('type'))
+    console.log(model.get('lib-id'));
+
+    switch (model.get('lib-id'))
     {
-      case "widget-3":
+      case "3":
         model.set('source', 'sdf');
         widgetView = new WidgetImgView(model);
         break;
@@ -570,11 +583,12 @@ var WidgetEditorView = Backbone.View.extend({
       curWidget= new WidgetContainerView(widget);
     }
     else {
-      switch (widget.get('type'))
+      switch (widget.get('lib-id'))
       {
-        case "widget-3":
-          console.log('hey');
-          widget.set('source', 'sdf');
+        case "1":
+          curWidget = new WidgetLinkView(widget);
+          break;
+        case "3":
           curWidget = new WidgetImgView(widget);
           break;
         default:

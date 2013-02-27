@@ -32,14 +32,11 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   style: function() {
-    console.log(this.pageModel);
     if(!this.pageModel.get('shouldStyle')) return;
 
     if(document.getElementById(this.options.id)) {
       $(document.getElementById(this.options.id)).remove();
     }
-
-    console.log(this);
 
     var styleTag = document.createElement('style');
     styleTag.id = this.options.id;
@@ -52,7 +49,6 @@ var DesignPropertyView = Backbone.View.extend({
     this.styleTag = styleTag;
 
     document.getElementsByTagName('head')[0].appendChild(styleTag);
-    console.log(styleTag);
   },
 
   amendAppState: function(item) {

@@ -25,13 +25,15 @@ var PagesView = Backbone.View.extend({
     'submit .new-page-form' : 'submittedNewPage',
     'click .exist-page'     : 'clickedOpen',
     'click #save'           : 'savePages',
-    'click #settings'       : 'showSettings'
+    'click #settings'       : 'showSettings',
+    'click .cross'          : 'hideSettings'
   },
 
   initialize: function() {
     _.bindAll(this, 'render',
                     'clickedNewPage',
                     'getContextEntities',
+                    'hideSettings',
                     'submittedNewPage',
                     'savePages',
                     'savePage',
@@ -59,7 +61,6 @@ var PagesView = Backbone.View.extend({
       var styleTag = document.createElement('style');
       styleTag.id = val.id;
 
-      console.log(val.currentValue);
       var styleContent = (val.tag || 'body') + ' {';
       styleContent += (val.css).replace(/<%=content%>/g, val.currentValue);
       styleContent += '}';
@@ -78,7 +79,7 @@ var PagesView = Backbone.View.extend({
   },
 
   submittedNewPage: function(e) {
-    console.log('submit');
+
     e.preventDefault();
     var pageName = $('.new-page-name').val();
     var page = {'page_name': pageName, 'uielements' : []};
@@ -117,12 +118,13 @@ var PagesView = Backbone.View.extend({
 
   savePage: function() {
     this.pages[this.curPage]['uielements'] = (this.widgetEditor.serializeWidgets() || []);
+    this.pages[this.curPage]['design-props'] = (this.designEditor.model.toJSON()['design-props']);
   },
 
   savePages: function() {
     this.savePage();
     appState.pages = this.pages;
-    console.log(appState);
+
     $.ajax({
       type: "POST",
       url: '/app/1/state/',
@@ -162,12 +164,21 @@ var PagesView = Backbone.View.extend({
     e.preventDefault();
   },
 
-  showSettings: function() {
+  showSettings: function(e) {
     var pageModel = new PageModel(appState.pages[self.curPage]);
     var view = new DesignEditorView(pageModel, true);
+    this.designEditor = view;
+
     $('#page-settings').append(view.el);
     $('#page-settings').animate({
-      marginTop : 0
+      marginBottom : -10
+    });
+    return false;
+  },
+
+  hideSettings: function(e) {
+    $('#page-settings').animate({
+      marginBottom : '-100%'
     });
     return false;
   }

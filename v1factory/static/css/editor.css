@@ -707,12 +707,12 @@
 
 .settings {
   position: fixed;
-  top: 100px;
+  bottom: -10px;
   height: 560px;
   left: 50%;
   width: 930px;
   margin-left: -465px;
-  margin-top: -100%;
+  margin-bottom: -100%;
 }
 .settings .span5 {
   width: 170px;
@@ -727,4 +727,12 @@
 }
 select.font {
   width: 180px;
+}
+
+.cross {
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-right: 20px;
 }

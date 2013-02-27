@@ -32,14 +32,14 @@ var WidgetInfoView = Backbone.View.extend({
 
   },
 
-  show: function(model) {
+  show: function(widgetModel) {
     var self = this;
 
     this.el.innerHTML = '';
-    this.model = model;
+    this.model = widgetModel;
     this.model.bind("change", this.changedProp, this);
 
-    _(model.attributes).each(function(val, key){
+    _(widgetModel.attributes).each(function(val, key){
       if(key == 'id' || key == 'selected') return;
       self.el.appendChild(self.showAttribute(val, key, String('')));
     });
@@ -51,8 +51,13 @@ var WidgetInfoView = Backbone.View.extend({
     
 
     if(val!=null) {
-      li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
-      li.id = 'prop-'+ key;
+      if(key == 'href') {
+        
+      }
+      else {
+        li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
+        li.id = 'prop-'+ key;
+      }
     }
 
     return li;

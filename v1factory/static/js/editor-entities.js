@@ -26,7 +26,6 @@ var EntityCollection = Backbone.Collection.extend({
   model: EntityModel,
   add: function(inpObjs) {
     _.each(inpObjs, function(inpObj,ind) {
-      console.log(inpObj);
       if(!inpObj.fields) {
         inpObj = _.where(appState.entities, {name: inpObj})[0];
         inpObjs[ind] = inpObj;

@@ -142,8 +142,6 @@ var GridEditorView = Backbone.View.extend({
   addWidget: function(e) {
     e.preventDefault();
 
-    console.log(e.target);
-
     var id = e.target.id || e.target.parentNode.id;
     pagesView.widgetEditor.addWidget(id, this.initCor, this.lastCor);
     this.hideItemGallery();
