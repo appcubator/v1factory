@@ -74,8 +74,6 @@ var Widget = Backbone.Model.extend({
     this.set('left', coordinates.topLeft.x + 1);
     this.set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
     this.set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
-
-    console.log(this);
   }
 });
 
@@ -324,6 +322,7 @@ var WidgetContainerView = WidgetView.extend({
                     'placeCreateWidgets',
                     'placeQueryWidgets',
                     'placeUpdateWidgets',
+                    'plageEntitySingleWidget',
                     'removeView',
                     'select');
 
@@ -358,6 +357,9 @@ var WidgetContainerView = WidgetView.extend({
       break;
     case "update":
       this.placeUpdateWidgets();
+      break;
+    case "display":
+      this.plageEntitySingleWidget();
       break;
     }
   },
@@ -434,12 +436,12 @@ var WidgetContainerView = WidgetView.extend({
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
       var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
-      var type = 'widget-2';
+      var type = '2';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        type : type,
+        'lib-id' : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
         height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : '{{' + self.entity.attributes.name + '_' + key + '}}'
@@ -457,12 +459,12 @@ var WidgetContainerView = WidgetView.extend({
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
       var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
-      var type = 'widget-8';
+      var type = '8';
       var widgetProps = {
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        type : type,
+        'lib-id' : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
         height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : key
@@ -471,6 +473,24 @@ var WidgetContainerView = WidgetView.extend({
       self.model.get('childCollection').push(widget);
       nmrAttributes++;
     });
+  },
+
+  plageEntitySingleWidget: function() {
+    console.log(this);
+    if (this.model.get('displayType') == "text") {
+      var coordinates = pagesView.unite({x: 1, y: 1 }, {x: this.model.get('width') + 1, y: 3});
+      var type = '2';
+      var widgetProps = {
+        top : coordinates.topLeft.y,
+        left : coordinates.topLeft.x,
+        'lib-id' : type,
+        width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+        height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
+        text : '{{' + this.entity.get('name') + ' ' + this.model.get('field') + '}}'
+      };
+      var widget = new Widget(widgetProps);
+      this.model.get('childCollection').push(widget);
+    }
   },
 
   remove: function(e) {

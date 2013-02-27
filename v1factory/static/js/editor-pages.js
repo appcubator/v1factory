@@ -24,7 +24,8 @@ var PagesView = Backbone.View.extend({
     'click .new-page'       : 'clickedNewPage',
     'submit .new-page-form' : 'submittedNewPage',
     'click .exist-page'     : 'clickedOpen',
-    'click #save'           : 'savePages'
+    'click #save'           : 'savePages',
+    'click #settings'       : 'showSettings'
   },
 
   initialize: function() {
@@ -34,6 +35,7 @@ var PagesView = Backbone.View.extend({
                     'submittedNewPage',
                     'savePages',
                     'savePage',
+                    'showSettings',
                     'style',
                     'unite',
                     'clickedOpen');
@@ -57,6 +59,7 @@ var PagesView = Backbone.View.extend({
       var styleTag = document.createElement('style');
       styleTag.id = val.id;
 
+      console.log(val.currentValue);
       var styleContent = (val.tag || 'body') + ' {';
       styleContent += (val.css).replace(/<%=content%>/g, val.currentValue);
       styleContent += '}';
@@ -104,6 +107,9 @@ var PagesView = Backbone.View.extend({
   getContextEntities: function(ind) {
     var name = this.pages[ind].name;
     var page = _.where(appState.urls, {page_name: name})[0];
+    if(!page) {
+      return [];
+    }
     var contextEntites = _.filter(page.urlparts, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
     contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
     return contextEntites;
@@ -154,5 +160,15 @@ var PagesView = Backbone.View.extend({
     $('.selected.exist-page').removeClass('selected');
     this.openPage(ind);
     e.preventDefault();
+  },
+
+  showSettings: function() {
+    var pageModel = new PageModel(appState.pages[self.curPage]);
+    var view = new DesignEditorView(pageModel, true);
+    $('#page-settings').append(view.el);
+    $('#page-settings').animate({
+      marginTop : 0
+    });
+    return false;
   }
 });

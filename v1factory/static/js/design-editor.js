@@ -8,7 +8,7 @@ var DesignPropertyView = Backbone.View.extend({
   tagName : 'div',
   className: 'property hi3 hoff1 span14',
   
-  initialize: function(model, pageModel, ind) {
+  initialize: function(model, pageModel, ind, shouldStyle) {
 
     _.bindAll(this, 'render', 'renderTitle', 'style', 'select', 'amendAppState');
     this.model = model;
@@ -18,7 +18,7 @@ var DesignPropertyView = Backbone.View.extend({
 
     this.pageModel = pageModel;
     this.ind = ind;
-
+    this.shouldStyle = shouldStyle || true;
     this.render();
     this.style();
   },
@@ -32,28 +32,34 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   style: function() {
-    if(this.styleTag) {
-      $(this.styleTag).remove();
+    console.log(this.pageModel);
+    if(!this.pageModel.get('shouldStyle')) return;
+
+    if(document.getElementById(this.options.id)) {
+      $(document.getElementById(this.options.id)).remove();
     }
+
+    console.log(this);
 
     var styleTag = document.createElement('style');
     styleTag.id = this.options.id;
 
-    var styleContent = '.sample ' + (this.options.tag||'') + ' {';
-    styleContent += this.options.css.replace(/<%=content%>/g, this.options.currentValue);
+    var styleContent = 'body ' + (this.options.tag||'') + ' {';
+    styleContent += this.options.css.replace(/<%=content%>/g, this.model.get('value'));
     styleContent += '}';
 
     styleTag.innerHTML = styleContent;
     this.styleTag = styleTag;
 
     document.getElementsByTagName('head')[0].appendChild(styleTag);
+    console.log(styleTag);
   },
 
   amendAppState: function(item) {
     var currentProps = this.pageModel.get('design-props');
     currentProps[this.ind] = this.model.toJSON();
     this.pageModel.set('design-props', currentProps);
-    //this.style();
+    this.style();
   }
 });
 
@@ -108,8 +114,8 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
     e.preventDefault();
     $('.opt', this.el).removeClass('selected');
     $(e.target).addClass('selected');
+    console.log(e.target.style.backgroundImage);
     var val = e.target.style.backgroundImage;
-    console.log(val)
     this.model.set('value', val);
     return false;
   }
@@ -174,16 +180,16 @@ var DesignEditorView = Backbone.View.extend({
   events: {
 
   },
-  initialize: function(item) {
-    _.bindAll(this, 'render', 
+  initialize: function(pageModel, shouldStyle) {
+    _.bindAll(this, 'render',
                     'newProperty');
 
-    this.model = item;
+    this.model = pageModel;
     this.collection = new DesignPropertiesCollection();
     this.collection.bind('add', this.newProperty, this);
-
+    this.model.set('shouldStyle', shouldStyle);
     this.render();
-    this.collection.add(item.get('design-props'));
+    this.collection.add(pageModel.get('design-props'));
   },
 
   render: function() {

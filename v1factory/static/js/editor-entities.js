@@ -15,14 +15,9 @@
  */
 
 var EntityModel = Backbone.Model.extend({
-  
   defaults: {
     name: "default name",
     fields: []
-  },
-
-  initialize: function(key, value) {
-    this.name = key;
   }
 });
 
@@ -30,18 +25,15 @@ var EntityModel = Backbone.Model.extend({
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel,
   add: function(inpObjs) {
-    console.log('hey');
     _.each(inpObjs, function(inpObj,ind) {
       console.log(inpObj);
       if(!inpObj.fields) {
-        console.log("yolot");
         inpObj = _.where(appState.entities, {name: inpObj})[0];
         inpObjs[ind] = inpObj;
       }
     });
 
     Backbone.Collection.prototype.add.call(this, inpObjs);
-    //console.log(inpObjs);
   }
 });
 
@@ -91,21 +83,24 @@ var EntityView = Backbone.View.extend({
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);
 
-    e.preventDefault();
     return false;
   },
 
   clickedUpdate: function(e) {
     this.widget.action = 'update';
-    this.widgetCollection.add(new Widget(this.widget));
-    e.preventDefault();
+    var newWidget = new Widget(this.widget);
+    newWidget.assignCoord();
+    this.widgetCollection.add(newWidget);
+
     return false;
   },
 
   clickedQuery: function(e) {
     this.widget.action = 'query';
-    this.widgetCollection.add(new Widget(this.widget));
-    e.preventDefault();
+    var newWidget = new Widget(this.widget);
+    newWidget.assignCoord();
+    this.widgetCollection.add(newWidget);
+
     return false;
   },
 
@@ -114,6 +109,42 @@ var EntityView = Backbone.View.extend({
                                     pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
 
     console.log(coordinates);
+  }
+});
+
+var EntityContextView = EntityView.extend({
+  events: {
+    'click .entity-sing-text' : 'clickedEntitySingText'
+  },
+
+  initialize: function(item, widgetCollection) {
+    this.constructor.__super__.initialize.apply(this, [item, widgetCollection]);
+    _.bindAll(this, 'clickedEntitySingText');
+  },
+
+  render: function() {
+    var self = this;
+    var name = this.model.get('name');
+    this.el.innerHTML = '<div class="buttons">';
+    _(this.model.get('fields')).each(function(field) {
+      self.el.innerHTML += '<span id="'+ field.name +'" class="entity-sing-text">Display ' + name +' '+field.name+'</span>';
+    });
+    this.el.innerHTML += '</div>';
+  },
+
+  clickedEntitySingText: function(e) {
+
+    this.widget.action = 'display';
+    this.widget.displayType = 'text';
+    this.widget.type = 'container',
+    this.widget.entity = this.model;
+    this.widget.field =  e.target.id;
+
+    var newView = new Widget(this.widget);
+    newView.assignCoord();
+    this.widgetCollection.add(newView);
+
+    return false;
   }
 });
 
@@ -140,12 +171,12 @@ var EntitiesListView = Backbone.View.extend({
   },
 
   appendEntity: function(entityModel) {
-    console.log(entityModel);
-    var view = new EntityView(entityModel, self.widgetCollection);
+    var view = new EntityView(entityModel, this.widgetCollection);
     this.el.appendChild(view.el);
   },
 
   appendContextEntity: function(entityModel) {
-    console.log(entityModel);
+    var view = new EntityContextView(entityModel, this.widgetCollection);
+    this.el.appendChild(view.el);
   }
 });

@@ -13,7 +13,7 @@ var PageView = Backbone.View.extend({
     this.ind = ind;
 
     this.render(pageModel);
-    var designEditor = new DesignEditorView(this.model);
+    var designEditor = new DesignEditorView(this.model, false);
     this.el.appendChild(designEditor.el);
   },
 

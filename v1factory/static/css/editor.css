@@ -704,3 +704,27 @@
   background-size: 40px 40px;
   background-repeat: no-repeat;
 }
+
+.settings {
+  position: fixed;
+  top: 100px;
+  height: 560px;
+  left: 50%;
+  width: 930px;
+  margin-left: -465px;
+  margin-top: -100%;
+}
+.settings .span5 {
+  width: 170px;
+}
+
+.settings .property {
+  height: 120px !important;
+}
+
+.size select {
+  width: 60px;
+}
+select.font {
+  width: 180px;
+}
