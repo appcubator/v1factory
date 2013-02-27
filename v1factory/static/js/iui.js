@@ -22,6 +22,7 @@ var iui = {
               } else {
                 // the server saved the static file entry successfully.
                 // now you can change the state of the page
+                //console.log(f.url);
               }
             })
         }

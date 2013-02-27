@@ -283,11 +283,12 @@ var WidgetImgView = WidgetView.extend({
   initialize: function(widgetModel){
     widgetModel.set('source', '/static/img/placholder.png');
     this.constructor.__super__.initialize.apply(this, [widgetModel]);
-    // _.bindAll(this, 'changedSource');
-    // this.model.bind("change:source", this.changedSource, this);
+    _.bindAll(this, 'changedSource');
+    this.model.bind("change:source", this.changedSource, this);
   },
 
   changedSource: function(a) {
+    // TODO: can be more efficient
     this.el.innerHTML = '';
     this.el.appendChild(this.renderContent());
     this.model.select();
@@ -652,7 +653,6 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   keydown: function(e) {
-
     switch(e.keyCode) {
       case 37:
         this.selectedElement.moveLeft();
@@ -669,9 +669,13 @@ var WidgetEditorView = Backbone.View.extend({
         this.selectedElement.moveDown();
         e.preventDefault();
         break;
-      case 8:
+      case 8: //backspace
         e.preventDefault();
         this.selectedElement.collection.remove(this.selectedElement);
+        break;
+      case 27: //escape
+        gridEditor.clearSelections();
+        if(this.selectedElement) this.selectedElement.collection.unselectAll();
         return false;
     }
   }
