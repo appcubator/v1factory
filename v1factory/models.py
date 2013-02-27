@@ -21,78 +21,110 @@ starter_app = """{
                 "name":"login",
                 "uielements":[{
                                     "lib-id":4,
-                                    "context":{"text":"Login"},
-                                    "container-info":null
+                                    "text":"Login",
+                                    "container-info":null,
+                                    "width":4,
+                                    "height":4,
+                                    "top":1,
+                                    "left":1
                             },{
                                     "lib-id":7,
-                                    "context":{"text":""},
                                     "container-info":{
                                         "entity":"Session",
                                         "action":"create",
-                                        "elements":[{
+                                        "uielements":[{
                                                         "lib-id":8,
                                                         "field-name":"username",
-                                                        "context":{"text":"",
-                                                                    "field_name":"username"},
+                                                        "text":"",
+                                                        "field_name":"username",
                                                         "container-info":null
                                                     },{
                                                         "lib-id":8,
                                                         "field-name":"password",
-                                                        "context":{"text":"",
-                                                                    "field_name":"password"},
+                                                        "text":"",
+                                                        "field_name":"password",
                                                         "container-info":null
                                                     },{
                                                         "lib-id":10,
-                                                        "context":{"text":"submit"},
+                                                        "text":"submit",
                                                         "container-info":null
                                                     }]
-                                    }
+                                    },
+                                    "width":4,
+                                    "height":4,
+                                    "top":1,
+                                    "left":1
                 }],
                 "access-level":"all"
             },{
                 "name":"registration",
                 "uielements":[{
-                                    "lib-id":4,
-                                    "context":{"text":"Sign Up"},
-                                    "container-info":null
+                                "lib-id":4,
+                                "text":"Sign Up",
+                                "container-info":null,
+                                "width":4,
+                                "height":4,
+                                "top":1,
+                                "left":1
                             },{
-                                    "lib-id":7,
-                                    "context":{"text":""},
-                                    "container-info":{
+                                "lib-id":7,
+                                "text":"",
+                                "container-info":{
                                         "entity":"User",
                                         "action":"create",
-                                        "elements":[{
+                                        "uielements":[{
                                                         "lib-id":8,
                                                         "field-name":"username",
-                                                        "context":{"text":"Username",
-                                                                    "field_name":"username"},
-                                                        "container-info":null
+                                                        "text":"Username",
+                                                        "field_name":"username",
+                                                        "container-info":null,
+                                                        "width":4,
+                                                        "height":4,
+                                                        "top":1,
+                                                        "left":1
                                                     },{
                                                         "lib-id":8,
                                                         "field-name":"password",
-                                                        "context":{"text":"Password",
-                                                                    "field_name":"password"},
-                                                        "container-info":null
+                                                        "text":"Password",
+                                                        "field_name":"password",
+                                                        "container-info":null,
+                                                        "height":4,
+                                                        "top":1,
+                                                        "left":1
                                                     },{
                                                         "lib-id":8,
                                                         "field-name":"email",
-                                                        "context":{"text":"Email Address",
-                                                                    "field_name":"email"},
-                                                        "container-info":null
+                                                        "text":"Email Address",
+                                                        "field_name":"email",
+                                                        "container-info":null,
+                                                        "height":4,
+                                                        "top":1,
+                                                        "left":1
                                                     },{
                                                         "lib-id":10,
-                                                        "context":{"text":"Register"},
-                                                        "container-info":null
+                                                        "text":"Register",
+                                                        "container-info":null,
+                                                        "height":4,
+                                                        "top":1,
+                                                        "left":1
                                                     }]
-                                    }
+                                    },
+                                "width":4,
+                                "height":4,
+                                "top":1,
+                                "left":1
                 }],
                 "access-level":"all"
             },{
                 "name":"homepage",
                 "uielements": [{
                                     "lib-id":4,
-                                    "context":{"text":"Homepage"},
-                                    "container-info":null
+                                    "text":"Homepage",
+                                    "container-info":null,
+                                    "width":4,
+                                    "height":4,
+                                    "top":1,
+                                    "left":1
                                 }],
                 "access-level": "all"
             }],
@@ -171,6 +203,32 @@ class UIElement(models.Model):
   html = models.TextField()
   css = models.TextField()
   type = models.CharField(max_length=100) # later on, introduce choices here
+
+  _login_form_templ = """<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  <h2>Login</h2>
+  {}{}{}
+  <p><input type="text" name="username" placeholder="Username" /></p>
+  <p><input type="password" name="password" placeholder="Password" /></p>
+  <button class="primaryAction" type="submit">Sign In</button>
+</form>"""
+
+  @staticmethod
+  def get_login_form(twitter="", linkedin="", facebook=""):
+    """Create login, the strings passed in represent the auth url"""
+
+    def buttonify(provider_name):
+      social_login_btn = "<a href=\"{}\"><img src=\"{}\" /></a>"
+      if len(provider_name) > 0:
+        return social_login_btn.format(provider_name, "{{ STATIC_URL }}images/icon_%s.png" % provider_name)
+      else:
+        return ""
+
+    twitter = buttonify(twitter)
+    linkedin = buttonify(linkedin)
+    facebook = buttonify(facebook)
+
+    return _login_form_templ.format(facebook, twitter, linkedin)
 
   @classmethod
   def get_library(cls):

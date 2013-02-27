@@ -34,7 +34,8 @@ var PageModel = Backbone.Model.extend({
         type  : "header-family",
         value : '"Palatino Linotype", "Book Antiqua", Palatino, serif'
       }
-    ]
+    ],
+    "access-level" : "all"
   }
 });
 

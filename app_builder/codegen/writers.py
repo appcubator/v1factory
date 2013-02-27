@@ -191,8 +191,13 @@ class DjangoWriter:
   def urls_py_as_string(self):
     urls_string = 'from django.conf.urls import patterns, include, url\n'
     urls_string += 'from django.contrib.staticfiles.urls import staticfiles_urlpatterns\n\n'
+
+    urls_string += 'from django.contrib import admin\n'
+    urls_string += 'admin.autodiscover()\n\n'
+
     urls_string += "urlpatterns = patterns('',\n"
     urls_string += "  url(r'^accounts/', include('allauth.urls')),"
+    urls_string += "  url(r'^admin/', include(admin.site.urls)),"
     for p in self.app.pages:
       urls_string += '  {}\n'.format(DjangoWriter.generate_url_entry(p))
     urls_string += '\n'
@@ -225,23 +230,29 @@ class DjangoWriter:
     else:
       handlebars_html = lib_el.html
       # replace the handlebars with context
-      for k, v in el['context'].items():
-        handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
+      #for k, v in el['context'].items():
+      if 'text' in el:
+       handlebars_html = re.sub('<%= {} %>'.format("text"), el['text'], handlebars_html)
 
-      print el
+      if 'width' not in el:
+        el['width'] = 5
+        el['height'] = 5
+
       # fill in the class name
-      class_name = lib_el.class_name +' span' + el.width + ' hi' + el.height
+      class_name = lib_el.class_name +' span' + str(el['width']) + ' hi' + str(el['height'])
       handlebars_html = re.sub('<% class_attr %>', "class=\"{}\"".format(class_name), handlebars_html)
 
       # if it's a container, do this for each of the elements.
       if el['container-info'] is not None:
-        for inner_el in el['container-info']['elements']:
+        for inner_el in el['container-info']['uielements']:
           handlebars_html += DjangoWriter.render_uielement(inner_el)
 
       return handlebars_html
 
   @staticmethod
   def generate_template_code(page):
+
+    print page.name
     """Given a page, return the template code.
        For each UIElement, render the proper django template, which
        will be set up to receive the context from the view"""
@@ -306,8 +317,9 @@ class DjangoWriter:
 
 # WRITE THE WHOLE THING
 
-  def write(self, STARTER_CODE_PATH="/Users/kssworld93/Projects/v1factory/app_builder/codegen/starter", dest=None):
-    # STARTER_CODE_PATH = "/Users/iltercanberk/v1factory/app_builder/codegen/starter"
+  def write(self, dest=None):
+    STARTER_CODE_PATH = os.path.abspath(join(os.path.dirname(__file__), 'starter'))
+
     if dest is None:
       # create a temporary working directory
       dest = join(tempfile.mkdtemp(), "djanggggg")

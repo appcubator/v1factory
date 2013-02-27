@@ -158,11 +158,9 @@ var UrlsEditorView = Backbone.View.extend({
   },
 
   createPage: function (name) {
-    console.log(name);
+    var newPage = new PageModel({ name: name});
     var pages = appState.pages;
-    pages.push({
-      name: name
-    });
+    pages.push(newPage.toJSON());
     appState.pages = pages;
   }
 });
