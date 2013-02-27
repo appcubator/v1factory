@@ -29,7 +29,6 @@ var PageView = Backbone.View.extend({
   },
 
   toggleExpand: function() {
-    console.log("yolo");
     this.expanded?$(this.el).removeClass('expanded'):this.el.className+=' expanded';
     this.expanded = this.expanded? false:true;
   }
