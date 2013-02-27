@@ -142,7 +142,7 @@ var WidgetView = Backbone.View.extend({
     this.model.bind("change:type", this.changedType, this);
     this.model.bind("remove", this.removeView, this);
 
-    this.render(widgetModel);
+    this.render();
   },
 
   render: function() {
@@ -280,11 +280,11 @@ var WidgetView = Backbone.View.extend({
 });
 
 var WidgetImgView = WidgetView.extend({
-  initialize: function(item){
-    this.constructor.__super__.initialize.apply(this, [item]);
-    this.model.set('source', '/static/img/placholder.png');
-    _.bindAll(this, 'changedSource');
-    this.model.bind("change:source", this.changedSource, this);
+  initialize: function(widgetModel){
+    widgetModel.set('source', '/static/img/placholder.png');
+    this.constructor.__super__.initialize.apply(this, [widgetModel]);
+    // _.bindAll(this, 'changedSource');
+    // this.model.bind("change:source", this.changedSource, this);
   },
 
   changedSource: function(a) {
@@ -406,7 +406,6 @@ var WidgetContainerView = WidgetView.extend({
     switch (model.get('lib-id'))
     {
       case "3":
-        model.set('source', 'sdf');
         widgetView = new WidgetImgView(model);
         break;
       default:
@@ -657,7 +656,6 @@ var WidgetEditorView = Backbone.View.extend({
     switch(e.keyCode) {
       case 37:
         this.selectedElement.moveLeft();
-        e.preventDefault();
         break;
       case 38:
         this.selectedElement.moveUp();

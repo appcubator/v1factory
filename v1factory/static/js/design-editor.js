@@ -64,16 +64,21 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
     'click .opt' : 'select'
   },
 
+  initialize: function(model, pageModel, ind, shouldStyle) {
+    this.constructor.__super__.initialize.apply(this, [model, pageModel, ind, shouldStyle]);
+    _.bindAll(this, 'selectColor');
+  },
+
   render: function() {
     var self = this;
     this.renderTitle();
-
+    
     var newElem = '<div class="options">';
     _(this.options.options).each(function(option, ind){
       var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<div class="opt '+ bool +'" id="color-'+ ind +'" style="background-color:'+ option +';"></div>';
     });
-    newElem += '<div class="opt"><input class="color"></div>';
+    newElem += '<div class="opt"><input class="color" onchange="'+self.selectColor(this.color)+'"></div>';
     newElem += '</div>';
     this.el.innerHTML += newElem;
   },
@@ -83,8 +88,13 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
     $('.opt', this.el).removeClass('selected');
     $(e.target).addClass('selected');
     var val = String(e.target.id).replace('color-','');
-    this.model.set('value', this.options.options[val]);
+    this.selectColor(this.options.options[val]);
     return false;
+  },
+
+  selectColor: function(color) {
+    console.log(color);
+    this.model.set('value', color);
   }
 });
 

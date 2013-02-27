@@ -63,6 +63,13 @@ var pageId = {{ page_id }};
 <script type="text/html" id="temp-widget-{{ element.id }}">
 {{ element.html|safe }}
 </script>
+<script type="text/html" id="temp-href-select">
+<select>
+  <% _(appState.pages).each(function(page){ var b = ''; if(('\{\{'+page.name+'\}\}') == val){ b = 'selected';}%>
+  <option value="<%= page.name %>" <%= b %>><%= page.name %></option>
+  <%  }) %>
+</select>
+</script>
 {% endfor %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>

@@ -52,14 +52,9 @@ var WidgetInfoView = Backbone.View.extend({
 
     if(val!==null) {
       if(key == 'href') {
-        var select = '<select>';
-        _(appState.pages).each(function(page) {
-          var selected ='';
-          if('{{'+page.name+'}}' === val) selected = 'selected';
-          select += '<option value="{{'+ page.name+'}}" '+ selected +'>' + page.name + '</option>';
-        });
-        select += '</select>';
-        li.innerHTML = key + ' : '+ select;
+        var temp = document.getElementById('temp-href-select').innerHTML;
+        var html = _.template(temp, {val : val});
+        li.innerHTML = key + ' : '+ html;
       }
       else {
         li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
