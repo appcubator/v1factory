@@ -4,7 +4,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "alpha",
-      "html": "<a <% class_attr %> href=\"#\"><%= text %></a>",
+      "html": "<a class=\"alpha\" href=\"#\"><%= text %></a>",
       "type": "link",
       "css": "",
       "name": "a"
@@ -15,7 +15,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "beta",
-      "html": "<p <% class_attr %> ><%= text %></p>",
+      "html": "<p class=\"beta\" ><%= text %></p>",
       "type": "paragraph",
       "css": "",
       "name": "p"
@@ -26,7 +26,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "gamma",
-      "html": "<img <% class_attr %> src=\"<%=source%>\" />",
+      "html": "<img class=\"gamma\" src=\"<%=source%>\" />",
       "type": "image",
       "css": "",
       "name": "img"
@@ -37,7 +37,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "hello",
-      "html": "<h1 <% class_attr %> ><%= text %></h1>",
+      "html": "<h1 class=\"hello\" ><%= text %></h1>",
       "type": "heading",
       "css": "",
       "name": "h1"
@@ -48,7 +48,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "whatsup",
-      "html": "<h2 <% class_attr %> ><%= text %></h2>",
+      "html": "<h2 class=\"whatsup\" ><%= text %></h2>",
       "type": "heading",
       "css": "",
       "name": "h2"
@@ -59,7 +59,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "yolo",
-      "html": "<h3 <% class_attr %> ><%= text %></h3>",
+      "html": "<h3 class=\"yolo\" ><%= text %></h3>",
       "type": "heading",
       "css": "",
       "name": "h3"
@@ -70,7 +70,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "ilter",
-      "html": "<div <% class_attr %> ><%= text %></div>",
+      "html": "<div class=\"ilter\" ><%= text %></div>",
       "type": "container",
       "css": "",
       "name": "container (div)"
@@ -81,7 +81,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "karan",
-      "html": "<input <% class_attr %> name=\"<%= field_name %>\" type=\"text\" placeholder='<%= text %>'/>",
+      "html": "<input class=\"karan\" name=\"<%= field_name %>\" type=\"text\" placeholder='<%= text %>'/>",
       "type": "input",
       "css": "",
       "name": "text input field"
@@ -92,7 +92,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "zoo",
-      "html": "<textarea <% class_attr %> rows=4 cols=50><%= text %></textarea>",
+      "html": "<textarea class=\"zoo\" rows=4 cols=50><%= text %></textarea>",
       "type": "input",
       "css": "",
       "name": "textarea"
@@ -103,7 +103,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "zebra",
-      "html": "<input <% class_attr %> type=\"submit\" value=\"<%= text %>\" />",
+      "html": "<input class=\"zebra\" type=\"submit\" value=\"<%= text %>\" />",
       "type": "input",
       "css": "",
       "name": "submit button"
@@ -114,7 +114,7 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "kangaroo",
-      "html": "<form <% class_attr %> method=\"POST\" action=\"{% url 'account_login' %}\">{% csrf_token %}{{ form.as_p }}{% if redirect_field_value %}<input type=\"hidden\" name=\"{{ redirect_field_name }}\" value=\"{{ redirect_field_value }}\" />{% endif %}<a class=\"button secondaryAction\" href=\"{% url 'account_reset_password' %}\">{% trans \"Forgot Password?\" %}</a><button class=\"primaryAction\" type=\"submit\">{% trans \"Sign In\" %}</button></form>",
+      "html": "<form class=\"kangaroo\" method=\"POST\" action=\"{% url 'account_login' %}\">{% csrf_token %}{{ form.as_p }}{% if redirect_field_value %}<input type=\"hidden\" name=\"{{ redirect_field_name }}\" value=\"{{ redirect_field_value }}\" />{% endif %}<a class=\"button secondaryAction\" href=\"{% url 'account_reset_password' %}\">{% trans \"Forgot Password?\" %}</a><button class=\"primaryAction\" type=\"submit\">{% trans \"Sign In\" %}</button></form>",
       "css": "",
       "name": "Login form"
     }

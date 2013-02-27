@@ -42,7 +42,7 @@ def app_state(request, app_id):
   app = get_object_or_404(App, id=app_id)
   if request.method == 'GET':
     state = app_get_state(request, app)
-    return state
+    return JSONResponse(state)
   elif request.method == 'POST':
     status, message = app_save_state(request, app)
     return HttpResponse(message, status=status)
@@ -149,7 +149,7 @@ class StaticFileForm(ModelForm):
 
 
 def JSONResponse(serializable_obj):
-  return HttpResponse(simplejson.dumps(serializable_obj))
+  return HttpResponse(simplejson.dumps(serializable_obj), mimetype="application/json")
 
 @login_required
 def staticfiles(request, app_id):

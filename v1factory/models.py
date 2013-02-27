@@ -172,6 +172,32 @@ class UIElement(models.Model):
   css = models.TextField()
   type = models.CharField(max_length=100) # later on, introduce choices here
 
+  _login_form_templ = """<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  <h2>Login</h2>
+  {}{}{}
+  <p><input type="text" name="username" placeholder="Username" /></p>
+  <p><input type="password" name="password" placeholder="Password" /></p>
+  <button class="primaryAction" type="submit">Sign In</button>
+</form>"""
+
+  @staticmethod
+  def get_login_form(twitter="", linkedin="", facebook=""):
+    """Create login, the strings passed in represent the auth url"""
+
+    def buttonify(provider_name):
+      social_login_btn = "<a href=\"{}\"><img src=\"{}\" /></a>"
+      if len(provider_name) > 0:
+        return social_login_btn.format(provider_name, "{{ STATIC_URL }}images/icon_%s.png" % provider_name)
+      else:
+        return ""
+
+    twitter = buttonify(twitter)
+    linkedin = buttonify(linkedin)
+    facebook = buttonify(facebook)
+
+    return _login_form_templ.format(facebook, twitter, linkedin)
+
   @classmethod
   def get_library(cls):
     return cls.objects.filter(app=None)
