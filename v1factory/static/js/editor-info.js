@@ -50,14 +50,22 @@ var WidgetInfoView = Backbone.View.extend({
     var li = document.createElement('li');
     
 
-    if(val!=null) {
+    if(val!==null) {
       if(key == 'href') {
-        
+        var select = '<select>';
+        _(appState.pages).each(function(page) {
+          var selected ='';
+          if('{{'+page.name+'}}' === val) selected = 'selected';
+          select += '<option value="{{'+ page.name+'}}" '+ selected +'>' + page.name + '</option>';
+        });
+        select += '</select>';
+        li.innerHTML = key + ' : '+ select;
       }
       else {
         li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
-        li.id = 'prop-'+ key;
       }
+
+      li.id = 'prop-'+ key;
     }
 
     return li;

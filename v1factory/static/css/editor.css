@@ -567,6 +567,14 @@
   margin-bottom: 4px;
 }
 
+.item-info li:empty {
+  display: none;
+}
+
+.item-info li select {
+  width: 160px;
+}
+
 .widgets {
   display: none;
 }

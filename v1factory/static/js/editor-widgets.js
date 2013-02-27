@@ -132,8 +132,6 @@ var WidgetView = Backbone.View.extend({
                     'removeView',
                     'resized');
 
-    console.log(widgetModel);
-
     this.model = widgetModel;
     this.model.bind("change:selected", this.outlineSelected, this);
     this.model.bind("change:width", this.changedWidth, this);
@@ -312,7 +310,7 @@ var WidgetImgView = WidgetView.extend({
 var WidgetLinkView = WidgetView.extend({
   initialize: function(item){
     this.constructor.__super__.initialize.apply(this, [item]);
-    this.model.set('href', '{{ Homepage }}');
+    this.model.set('href', '{{homepage}}');
   }
 });
 
