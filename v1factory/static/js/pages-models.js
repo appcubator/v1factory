@@ -2,11 +2,11 @@ var PageModel = Backbone.Model.extend({
   defaults : {
     "name"             : "default-page",
     "design-props"     : [
-      { 
+      {
         type  : "background-image",
         value : "/static/img/sample_bg.png"
       },
-      { 
+      {
         type  : "background-color",
         value : "#eee"
       },
@@ -35,7 +35,8 @@ var PageModel = Backbone.Model.extend({
         value : '"Palatino Linotype", "Book Antiqua", Palatino, serif'
       }
     ],
-    "access-level" : "all"
+    "access-level" : "all",
+    "uielements" : []
   }
 });
 

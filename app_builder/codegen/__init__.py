@@ -24,6 +24,10 @@ class Page:
   @staticmethod
   def get_required_queries(template):
     qs = []
+
+    if 'uielements' not in template:
+      template['uielements'] = []
+
     for uie in template['uielements']:
       if uie['container-info'] is not None and uie['container-info']['action'] == 'show':
         qs.append('{}.objects.all()'.format(uie['container-info']['entity']))
@@ -33,9 +37,18 @@ class Page:
     self.name = urls_d['page_name']
     self.url_parts = urls_d['urlparts']
     self.url_data = filter(lambda x: x is not None, map(extract_from_brace, self.url_parts)) # the free variables
+    print self.name
     self._page_json = [ a for a in analyzed_app.templates if a['name'] == self.name ][0]
     self.queries = Page.get_required_queries(self._page_json)
+
+    if 'uielements' not in self._page_json:
+      self._page_json['uielements'] = []
+
     self.uielements = self._page_json['uielements']
+
+    if 'access-level' not in self._page_json:
+      self._page_json['access-level'] = "all"
+
     self.access_level = self._page_json['access-level']
 
 def get_required_fields_from_model(entity):

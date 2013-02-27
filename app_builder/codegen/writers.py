@@ -240,6 +240,7 @@ class DjangoWriter:
 
       # fill in the class name
       class_name = lib_el.class_name +' span' + str(el['width']) + ' hi' + str(el['height'])
+      print class_name
       handlebars_html = re.sub('<% class_attr %>', "class=\"{}\"".format(class_name), handlebars_html)
 
       # if it's a container, do this for each of the elements.

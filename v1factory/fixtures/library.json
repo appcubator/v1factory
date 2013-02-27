@@ -4,7 +4,8 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "alpha",
-      "html": "<a class=\"alpha\" href=\"#\"><%= text %></a>",
+      "html": "<%= text %>",
+      "tag_name" : "a",
       "type": "link",
       "css": "",
       "name": "a"

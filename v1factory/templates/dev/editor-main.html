@@ -54,24 +54,9 @@ var appState = {{ app.state_json|safe }};
 var statics = {{ statics|safe }};
 var pageId = {{ page_id }};
 </script>
-<script type="text/html" id="temp-meta">
-<div class="meta">
-<img class="delete" src="/static/img/delete-icon.png">
-</div>
-</script>
-{% for element in elements %}
-<script type="text/html" id="temp-widget-{{ element.id }}">
-{{ element.html|safe }}
-</script>
-<script type="text/html" id="temp-href-select">
-<select>
-  <% _(appState.pages).each(function(page){ var b = ''; if(('\{\{'+page.name+'\}\}') == val){ b = 'selected';}%>
-  <option value="<%= page.name %>" <%= b %>><%= page.name %></option>
-  <%  }) %>
-</select>
-</script>
-{% endfor %}
+{% include "editor-main.html" %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/iui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-grid.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-widgets.js"></script>

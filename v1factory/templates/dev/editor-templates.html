@@ -1,0 +1,25 @@
+<script type="text/html" id="temp-meta">
+<div class="meta">
+<img class="delete" src="/static/img/delete-icon.png">
+</div>
+</script>
+{% for element in elements %}
+<script type="text/html" id="temp-widget-{{ element.id }}">
+{{ element.html|safe }}
+</script>
+{% endfor %}
+<script type="text/html" id="temp-href-select">
+<select id="<%= prop %>">
+  <% _(appState.pages).each(function(page){ var b = ''; if(('\{\{'+page.name+'\}\}') == val){ b = 'selected';}%>
+  <option value="<%= page.name %>" <%= b %>><%= page.name %></option>
+  <%  }) %>
+</select>
+</script>
+<script type="text/html" id="temp-source-select">
+<select id="<%= prop %>" class="statics">
+  <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';}%>
+  <option value="<%= asset%>" <%= b %>><%= asset%></option>
+  <%  }) %>
+  <option class="upload-image">+ Upload an image</option>
+</select>
+</script>

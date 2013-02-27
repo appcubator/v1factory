@@ -16,7 +16,8 @@ var WidgetInfoView = Backbone.View.extend({
   el     : document.getElementById('item-info-list'),
   model  : null,
   events : {
-    'change input' : 'inputChanged'
+    'change input' : 'inputChanged',
+    'change select.statics' : 'staticsChanged'
   },
 
   initialize: function(){
@@ -53,7 +54,12 @@ var WidgetInfoView = Backbone.View.extend({
     if(val!==null) {
       if(key == 'href') {
         var temp = document.getElementById('temp-href-select').innerHTML;
-        var html = _.template(temp, {val : val});
+        var html = _.template(temp, {val : val, prop: prop});
+        li.innerHTML = key + ' : '+ html;
+      }
+      else if(key == 'source') {
+        var temp = document.getElementById('temp-source-select').innerHTML;
+        var html = _.template(temp, {val : val, prop: prop});
         li.innerHTML = key + ' : '+ html;
       }
       else {
@@ -69,6 +75,10 @@ var WidgetInfoView = Backbone.View.extend({
   inputChanged: function(e) {
     var prop = e.target.parentNode.id.replace('prop-', '') + e.target.id;
     this.model.set(prop, e.target.value);
+  },
+
+  staticsChanged: function(e) {
+
   },
 
   changedProp: function(a, b) {
