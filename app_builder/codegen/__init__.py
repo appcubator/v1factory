@@ -66,7 +66,7 @@ class Form:
     self.parent_page = parent_page
 
     self.included_fields = []
-    for uie in form_container['container-info']['elements']:
+    for uie in form_container['container-info']['uielements']:
       if 'field-name' in uie:
         self.included_fields.append(uie['field-name'])
 
