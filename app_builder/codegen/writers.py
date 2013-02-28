@@ -229,19 +229,25 @@ class DjangoWriter:
       return "<p>Element could not be found. See logs.</p>"
     else:
       handlebars_html = lib_el.html
-      # replace the handlebars with context
-      #for k, v in el['context'].items():
-      if 'text' in el:
-       handlebars_html = re.sub('<%= {} %>'.format("text"), el['text'], handlebars_html)
+      # replace the handlebars with context - <p><%= text %></p>  =>  <p>Hello</p>
+      for k, v in el['context'].items():
+        handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
 
+      # TODO move this to validation
       if 'width' not in el:
         el['width'] = 5
         el['height'] = 5
 
-      # fill in the class name
-      class_name = lib_el.class_name +' span' + str(el['width']) + ' hi' + str(el['height'])
-      print class_name
-      handlebars_html = re.sub('<% class_attr %>', "class=\"{}\"".format(class_name), handlebars_html)
+      def widthclass(width):
+        return "span{}".format(width)
+      def heightclass(height):
+        return "hi{}".format(height)
+
+      # parse the html using lxml, then add class attributes:
+      print handlebars_html
+      new_classes = " ".join([lib_el.class_name, widthclass(el['width']), heightclass(el['height'])])
+      handlebars_html = re.sub(r'^(<\w+ [^>]*class="[^"]*)("[^>]*>)', r"\1 %s\2" % new_classes, handlebars_html)
+      print handlebars_html, "\n\n"
 
       # if it's a container, do this for each of the elements.
       if el['container-info'] is not None:
@@ -268,19 +274,23 @@ class DjangoWriter:
       # replace the input_Data variable names with the right thing
       template_text = re.sub(r'{{ *[A-Z][a-z0-9_]*[\._]([a-zA-Z0-9_]+) *}}', r'{{ this_thing.\1 }}', raw_template)
 
-      # if this is a show container, just wrap it in a for loop
-      if el['container-info'] is not None and el['container-info']['action'] == 'show':
-        html += """{% for this_thing in q"""+ str(query_counter) +""" %}"""
-        html += template_text
-        html += """{% endfor %}"""
-      elif el['container-info'] is not None and el['container-info']['action'] == 'create':
-        if el['container-info']['entity'] == "User": continue
-        if el['container-info']['entity'] == "Session": continue
-        form_obj = el['container-info']['form']
-        html += """<form method="POST" action="{% url """+ "webapp.form_receivers.save_{}Form{}".format(form_obj.entity, form_obj.form_id) +""" %}">"""
-        html += """{% csrf_token %}"""
-        html += template_text
-        html += """</form>"""
+      # if this is a container, do things like forms and for loops for the queries.
+      if el['container-info'] is not None:
+        if el['container-info']['action'] == 'show':
+          html += """{% for this_thing in q"""+ str(query_counter) +""" %}"""
+          html += template_text
+          html += """{% endfor %}"""
+        elif el['container-info']['action'] == 'create':
+          if el['container-info']['entity'] == "User": continue # TODO make login stuff work...
+          if el['container-info']['entity'] == "Session": continue
+          form_obj = el['container-info']['form']
+          html += """<form method="POST" action="{% url """+ "webapp.form_receivers.save_{}Form{}".format(form_obj.entity, form_obj.form_id) +""" %}">"""
+          html += """{% csrf_token %}"""
+          html += template_text
+          html += """</form>"""
+        else:
+          raise Exception("Not yet implemented.")
+      # so this is not a container, it must be a normal uielement.
       else:
         html += template_text
 
