@@ -14,14 +14,6 @@
  *
  */
 
-var EntityModel = Backbone.Model.extend({
-  defaults: {
-    name: "default name",
-    fields: []
-  }
-});
-
-
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel,
   add: function(inpObjs) {

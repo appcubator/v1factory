@@ -23,63 +23,6 @@
 var GRID_WIDTH = 30;
 var GRID_HEIGHT = 30;
 
-
-var Widget = Backbone.Model.extend({
-  selected: false,
-
-  defaults: {
-    'container-info' : null,
-    'context'        : null,
-    'lib-id'         : 1,
-    'top'            : 0,
-    'left'           : 0,
-    'height'         : 2,
-    'width'          : 2
-  },
-
-  initialize: function() {
-    _.bindAll(this, 'select', 'assignCoord');
-  },
-
-  select: function() {
-    if(this.collection){ this.collection.unselectAll()};
-    this.collection.selectedElement = this;
-    if(pagesView.widgetEditor) {
-      pagesView.widgetEditor.selectedElement = this;
-    }
-    this.set('selected', true);
-    widgetInfoView.show(this);
-  },
-
-  moveLeft: function() {
-    this.set('left', this.get('left') - 1);
-  },
-
-  moveRight: function() {
-    this.set('left', this.get('left') + 1);
-  },
-
-  moveUp: function() {
-    this.set('top', this.get('top') - 1);
-  },
-
-  moveDown: function() {
-    this.set('top', this.get('top') + 1);
-  },
-
-
-  assignCoord: function() {
-    var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
-                                    pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
-
-    this.set('top', coordinates.topLeft.y + 1);
-    this.set('left', coordinates.topLeft.x + 1);
-    this.set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
-    this.set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
-  }
-});
-
-
 var WidgetCollection = Backbone.Collection.extend({
   model : Widget,
   selectedElement: null,

@@ -14,22 +14,6 @@
  *  - EntitiesLibraryView
  */
 
-
-var EntityModel = Backbone.Model.extend();
-var UserEntityModel = EntityModel.extend({
-  defaults : {
-    facebook : false,
-    linkedin : false,
-    local : true,
-    fields : [{
-      "name":"description",
-      "required":false,
-      "type": "text"
-    }]
-  }
-});
-
-
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel
 });

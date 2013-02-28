@@ -230,8 +230,11 @@ class DjangoWriter:
     else:
       handlebars_html = lib_el.html
       # replace the handlebars with context - <p><%= text %></p>  =>  <p>Hello</p>
-      for k, v in el['context'].items():
-        handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
+      #for k, v in el['context'].items():
+      #  handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
+
+      if 'text' in el:
+        handlebars_html = re.sub('<%= {} %>'.format('text'), el['text'], handlebars_html)
 
       # TODO move this to validation
       if 'width' not in el:

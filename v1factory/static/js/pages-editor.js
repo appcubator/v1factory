@@ -1,3 +1,7 @@
+var PagesCollection = Backbone.Collection.extend({
+  model : PageModel
+});
+
 var PageView = Backbone.View.extend({
   el: null,
   tagName : 'div',
@@ -75,5 +79,3 @@ var PagesView = Backbone.View.extend({
     });
   }
 });
-
-var pagesView = new PagesView();
