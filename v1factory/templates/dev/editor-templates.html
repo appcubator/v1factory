@@ -9,17 +9,18 @@
 </script>
 {% endfor %}
 <script type="text/html" id="temp-href-select">
-<select id="<%= prop %>">
+<select>
   <% _(appState.pages).each(function(page){ var b = ''; if(('\{\{'+page.name+'\}\}') == val){ b = 'selected';}%>
   <option value="<%= page.name %>" <%= b %>><%= page.name %></option>
   <%  }) %>
 </select>
 </script>
 <script type="text/html" id="temp-source-select">
-<select id="<%= prop %>" class="statics">
-  <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';}%>
-  <option value="<%= asset%>" <%= b %>><%= asset%></option>
+<select class="statics">
+  <option class="upload-image">Placeholder</option>
+  <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';} console.log(asset)%>
+  <option value="<%= asset.url %>" <%= b %>><%= asset.name %></option>
   <%  }) %>
-  <option class="upload-image">+ Upload an image</option>
+  <option class="upload-image" value="upload-image">+ Upload an image</option>
 </select>
 </script>

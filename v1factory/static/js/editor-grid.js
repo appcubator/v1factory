@@ -70,6 +70,7 @@ var GridEditorView = Backbone.View.extend({
   clearSelections: function() {
     $('.cselected').removeClass('cselected');
     this.selectorActive = false;
+    this.hideItemGallery();
   },
 
   mousedown: function(e) {

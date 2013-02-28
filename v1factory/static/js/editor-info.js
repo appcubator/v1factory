@@ -25,6 +25,7 @@ var WidgetInfoView = Backbone.View.extend({
                     'show',
                     'showAttribute',
                     'inputChanged',
+                    'staticsChanged',
                     'changedProp');
     this.render();
   },
@@ -63,7 +64,7 @@ var WidgetInfoView = Backbone.View.extend({
         li.innerHTML = key + ' : '+ html;
       }
       else {
-        li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"value=' + val + '>';
+        li.innerHTML = key + ' : '+ '<input type="text" id="' + prop + '"  value=' + val + '>';
       }
 
       li.id = 'prop-'+ key;
@@ -78,7 +79,15 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   staticsChanged: function(e) {
-
+    console.log(e.target);
+    console.log(e.target.parentNode);
+    var prop = e.target.parentNode.id.replace('prop-', '') + e.target.id;
+    if(e.target.value == "upload-image") {
+      var a = iui.openFilePick();
+    }
+    else {
+      this.model.set(prop, e.target.value);
+    }
   },
 
   changedProp: function(a, b) {
