@@ -1,5 +1,5 @@
 var iui = {
-  openFilePick: function() {
+  openFilePick: function(callback, success) {
     filepicker.setKey("AAO81GwtTTec7D8nH9SaTz");
     filepicker.pickMultiple({
         mimetypes: ['image/*'],
@@ -7,25 +7,20 @@ var iui = {
         services:['COMPUTER', 'GMAIL', 'DROPBOX', 'INSTAGRAM', 'IMAGE_SEARCH', 'URL']
       },
       function(FPFiles){
-        console.log(JSON.stringify(FPFiles));
         for (var i = 0; i < FPFiles.length; i++) {
           var f = FPFiles[i];
           /* f has the following properties:
                      url, filename, mimetype, size, isWriteable */
           $.post('/app/1/static/',{
-              name: f.filename,
-              url:  f.url,
-              type: f.mimetype
-            }, function(d){
-              if (d.error) {
-                alert("Something went wrong with the file upload! Data: "+f);
-              } else {
-                // the server saved the static file entry successfully.
-                // now you can change the state of the page
-                //console.log(f.url);
-              }
-            })
+            name: f.filename,
+            url:  f.url,
+            type: f.mimetype,
+            error: function(d) {
+              alert("Something went wrong with the file upload! Data: "+f);
+            }
+          });
         }
+        callback(FPFiles, success);
       },
       function(FPError){
         console.log(FPError.toString());

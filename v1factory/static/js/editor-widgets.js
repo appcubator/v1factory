@@ -42,7 +42,7 @@ var Widget = Backbone.Model.extend({
   },
 
   select: function() {
-    this.collection.unselectAll();
+    if(this.collection){ this.collection.unselectAll()};
     this.collection.selectedElement = this;
     if(pagesView.widgetEditor) {
       pagesView.widgetEditor.selectedElement = this;
@@ -281,7 +281,11 @@ var WidgetView = Backbone.View.extend({
 
 var WidgetImgView = WidgetView.extend({
   initialize: function(widgetModel){
-    widgetModel.set('source', '/static/img/placholder.png');
+
+    if(!widgetModel.get('source')) {
+      widgetModel.set('source', '/static/img/placholder.png');
+    }
+
     this.constructor.__super__.initialize.apply(this, [widgetModel]);
     _.bindAll(this, 'changedSource');
     this.model.bind("change:source", this.changedSource, this);
