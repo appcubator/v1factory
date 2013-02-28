@@ -260,12 +260,13 @@ class App(models.Model):
     return tmp_project_dir
 
 class UIElement(models.Model):
+  """Describes the UIElement. If app is none, this belongs to the Library."""
   app = models.ForeignKey(App, blank=True, null=True, default=None)
   name = models.CharField(max_length=100)
   class_name = models.CharField(max_length=100)
   html = models.TextField()
   css = models.TextField()
-  type = models.CharField(max_length=100) # later on, introduce choices here
+  tagname = models.CharField(max_length=100)
 
   _login_form_templ = """<form class="login" method="POST" action="{% url 'account_login' %}">
   {% csrf_token %}

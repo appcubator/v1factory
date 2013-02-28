@@ -5,9 +5,9 @@
     "fields": {
       "class_name": "alpha",
       "html": "<%= text %>",
-      "type": "link",
+      "tagname" : "a",
       "css": "",
-      "name": "a"
+      "name": "Link"
     }
   },
   {
@@ -15,10 +15,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "beta",
-      "html": "<p class=\"beta\" ><%= text %></p>",
-      "type": "paragraph",
+      "html": "<%= text %>",
+      "tagname": "p",
       "css": "",
-      "name": "p"
+      "name": "Block Text"
     }
   },
   {
@@ -26,10 +26,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "gamma",
-      "html": "<img class=\"gamma\" src=\"<%=source%>\" />",
-      "type": "image",
+      "html": "",
       "css": "",
-      "name": "img"
+      "tagname": "img",
+      "name": "Image"
     }
   },
   {
@@ -37,10 +37,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "hello",
-      "html": "<h1 class=\"hello\" ><%= text %></h1>",
-      "type": "heading",
+      "html": "<%= text %>",
       "css": "",
-      "name": "h1"
+      "name": "Title",
+      "tagname": "h1"
     }
   },
   {
@@ -48,10 +48,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "whatsup",
-      "html": "<h2 class=\"whatsup\" ><%= text %></h2>",
-      "type": "heading",
+      "html": "<%= text %>",
       "css": "",
-      "name": "h2"
+      "tagname": "h2",
+      "name": "Heading"
     }
   },
   {
@@ -59,10 +59,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "yolo",
-      "html": "<h3 class=\"yolo\" ><%= text %></h3>",
-      "type": "heading",
+      "html": "<%= text %>",
       "css": "",
-      "name": "h3"
+      "name": "Subheading",
+      "tagname": "h3"
     }
   },
   {
@@ -70,10 +70,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "ilter",
-      "html": "<div class=\"ilter\" ><%= text %></div>",
-      "type": "container",
+      "html": "<%= text %>",
       "css": "",
-      "name": "container (div)"
+      "tagname": "div",
+      "name": "Container"
     }
   },
   {
@@ -81,10 +81,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "karan",
-      "html": "<input class=\"karan\" name=\"<%= field_name %>\" type=\"text\" placeholder='<%= text %>'/>",
-      "type": "input",
+      "html": "",
+      "tagname": "input",
       "css": "",
-      "name": "text input field"
+      "name": "One-line textfield"
     }
   },
   {
@@ -92,10 +92,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "zoo",
-      "html": "<textarea class=\"zoo\" rows=4 cols=50><%= text %></textarea>",
-      "type": "input",
+      "html": "",
       "css": "",
-      "name": "textarea"
+      "tagname": "textarea",
+      "name": "Paragraph textfield"
     }
   },
   {
@@ -103,20 +103,10 @@
     "model": "v1factory.UIElement",
     "fields": {
       "class_name": "zebra",
-      "html": "<input class=\"zebra\" type=\"submit\" value=\"<%= text %>\" />",
-      "type": "input",
+      "html": "",
+      "tagname": "button",
       "css": "",
-      "name": "submit button"
-    }
-  },
-  {
-    "pk":"11",
-    "model": "v1factory.UIElement",
-    "fields": {
-      "class_name": "kangaroo",
-      "html": "<form class=\"kangaroo\" method=\"POST\" action=\"{% url 'account_login' %}\">{% csrf_token %}{{ form.as_p }}{% if redirect_field_value %}<input type=\"hidden\" name=\"{{ redirect_field_name }}\" value=\"{{ redirect_field_value }}\" />{% endif %}<a class=\"button secondaryAction\" href=\"{% url 'account_reset_password' %}\">{% trans \"Forgot Password?\" %}</a><button class=\"primaryAction\" type=\"submit\">{% trans \"Sign In\" %}</button></form>",
-      "css": "",
-      "name": "Login form"
+      "name": "Button"
     }
   }
 ]
