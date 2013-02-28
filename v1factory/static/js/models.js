@@ -12,6 +12,7 @@
  *  - EntityModel
  *  - UserEntityModel
  *  - PageModel
+ *
  */
 
 var DesignProperty = Backbone.Model.extend({});
@@ -29,9 +30,9 @@ var Widget = Backbone.Model.extend({
   selected: false,
 
   defaults: {
-    'container-info' : null,
-    'context'        : null,
-    'lib-id'         : 1,
+    'container_info' : null,
+    'context'        : {},
+    'lib_id'         : 1,
     'top'            : 0,
     'left'           : 0,
     'height'         : 2,
@@ -90,9 +91,9 @@ var UserEntityModel = EntityModel.extend({
     linkedin : false,
     local : true,
     fields : [{
-      "name":"description",
-      "required":false,
-      "type": "text"
+      "name"     :"description",
+      "required" :false,
+      "type"     : "text"
     }]
   }
 });

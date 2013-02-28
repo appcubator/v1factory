@@ -102,12 +102,12 @@ var WidgetView = Backbone.View.extend({
   renderContent: function() {
     this.el.innerHTML = '';
 
-    if(typeof this.model.get('lib-id') == "undefined") {
+    if(typeof this.model.get('lib_id') == "undefined") {
       alert('wat');
       return;
     }
 
-    var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
+    var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
 
     if(!temp) {
       alert('elem type could not be found');
@@ -134,7 +134,7 @@ var WidgetView = Backbone.View.extend({
   },
 
   renderElement: function() {
-    var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
+    var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
     var page_context = {};
     page_context.text = this.model.get('text') || "BLANK TEXT";
     page_context.field_name = this.model.get('field_name');
@@ -248,7 +248,7 @@ var WidgetImgView = WidgetView.extend({
   },
 
   renderElement: function() {
-    var temp = document.getElementById('temp-widget-' + this.model.get('lib-id')).innerHTML;
+    var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
     elem_text = this.model.get('text') || "BLANK TEXT";
     var element = _.template(temp, { 'text' : elem_text, 'source' : this.model.get('source') });
     return element;
@@ -349,9 +349,8 @@ var WidgetContainerView = WidgetView.extend({
 
   placeWidget: function(model, a) {
     var widgetView;
-    console.log(model.get('lib-id'));
 
-    switch (model.get('lib-id'))
+    switch (model.get('lib_id'))
     {
       case "3":
         widgetView = new WidgetImgView(model);
@@ -375,7 +374,7 @@ var WidgetContainerView = WidgetView.extend({
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        'lib-id' : type,
+        lib_id : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
         height: 2,
         field_name : val.name,
@@ -399,7 +398,7 @@ var WidgetContainerView = WidgetView.extend({
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        'lib-id' : type,
+        lib_id : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
         height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : '{{' + self.entity.attributes.name + '_' + key + '}}'
@@ -422,7 +421,7 @@ var WidgetContainerView = WidgetView.extend({
         id : self.model.get('childCollection').length + 1,
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        'lib-id' : type,
+        lib_id : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
         height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : key
@@ -441,7 +440,7 @@ var WidgetContainerView = WidgetView.extend({
       var widgetProps = {
         top : coordinates.topLeft.y,
         left : coordinates.topLeft.x,
-        'lib-id' : type,
+        lib_id : type,
         width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
         height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
         text : '{{' + this.entity.get('name') + ' ' + this.model.get('field') + '}}'
@@ -503,7 +502,7 @@ var WidgetEditorView = Backbone.View.extend({
       id : this.collection.length + 1,
       top : coordinates.topLeft.y,
       left : coordinates.topLeft.x,
-      'lib-id' : libId,
+      lib_id : libId,
       width : coordinates.bottomRight.x - coordinates.topLeft.x,
       height: coordinates.bottomRight.y - coordinates.topLeft.y,
       text: "New Text"
@@ -528,7 +527,7 @@ var WidgetEditorView = Backbone.View.extend({
       curWidget= new WidgetContainerView(widget);
     }
     else {
-      switch (widget.get('lib-id'))
+      switch (widget.get('lib_id'))
       {
         case "1":
           curWidget = new WidgetLinkView(widget);
