@@ -20,113 +20,134 @@ starter_app = """{
     "pages":[{
                 "name":"login",
                 "uielements":[{
-                                    "lib-id":4,
-                                    "text":"Login",
-                                    "container-info":null,
-                                    "width":4,
-                                    "height":4,
-                                    "top":1,
-                                    "left":1
+                               "lib_id":4,
+                               "text":"Login",
+                               "container_info":null,
+                               "layout": {
+                                          "width":4,
+                                          "height":4,
+                                          "top":1,
+                                          "left":1
+                                         }
                             },{
-                                    "lib-id":7,
-                                    "container-info":{
-                                        "entity":"Session",
-                                        "action":"create",
-                                        "uielements":[{
-                                                        "lib-id":8,
-                                                        "field-name":"username",
-                                                        "text":"",
-                                                        "field_name":"username",
-                                                        "container-info":null
-                                                    },{
-                                                        "lib-id":8,
-                                                        "field-name":"password",
-                                                        "text":"",
-                                                        "field_name":"password",
-                                                        "container-info":null
-                                                    },{
-                                                        "lib-id":10,
-                                                        "text":"submit",
-                                                        "container-info":null
-                                                    }]
-                                    },
-                                    "width":4,
-                                    "height":4,
-                                    "top":1,
-                                    "left":1
-                }],
-                "access-level":"all"
+                               "lib_id":7,
+                               "container_info":{
+                                   "entity":"Session",
+                                   "action":"create",
+                                   "uielements":[{
+                                                   "lib_id":8,
+                                                   "field-name":"username",
+                                                   "text":"",
+                                                   "field_name":"username",
+                                                   "container_info":null
+                                               },{
+                                                   "lib_id":8,
+                                                   "field-name":"password",
+                                                   "text":"",
+                                                   "field_name":"password",
+                                                   "container_info":null
+                                               },{
+                                                   "lib_id":10,
+                                                   "text":"submit",
+                                                   "container_info":null
+                                               }]
+                               },
+                               "layout": {
+                                          "width":4,
+                                          "height":4,
+                                          "top":1,
+                                          "left":1
+                                         }
+                            }],
+                "access_level":"all"
             },{
                 "name":"registration",
                 "uielements":[{
-                                "lib-id":4,
+                                "lib_id":4,
                                 "text":"Sign Up",
-                                "container-info":null,
-                                "width":4,
-                                "height":4,
-                                "top":1,
-                                "left":1
+                                "container_info":null,
+                                "layout": {
+                                           "width":4,
+                                           "height":4,
+                                           "top":1,
+                                           "left":1
+                                          }
                             },{
-                                "lib-id":7,
+                                "lib_id":7,
                                 "text":"",
-                                "container-info":{
+                                "container_info":{
                                         "entity":"User",
                                         "action":"create",
                                         "uielements":[{
-                                                        "lib-id":8,
+                                                        "lib_id":8,
                                                         "field-name":"username",
                                                         "text":"Username",
                                                         "field_name":"username",
-                                                        "container-info":null,
-                                                        "width":4,
-                                                        "height":4,
-                                                        "top":1,
-                                                        "left":1
+                                                        "container_info":null,
+                                                        "layout": {
+                                                                   "width":4,
+                                                                   "height":4,
+                                                                   "top":1,
+                                                                   "left":1
+                                                                  }
                                                     },{
-                                                        "lib-id":8,
+                                                        "lib_id":8,
                                                         "field-name":"password",
                                                         "text":"Password",
                                                         "field_name":"password",
-                                                        "container-info":null,
-                                                        "height":4,
-                                                        "top":1,
-                                                        "left":1
+                                                        "container_info":null,
+                                                        "layout": {
+                                                                   "width":4,
+                                                                   "height":4,
+                                                                   "top":1,
+                                                                   "left":1
+                                                                  }
                                                     },{
-                                                        "lib-id":8,
+                                                        "lib_id":8,
                                                         "field-name":"email",
                                                         "text":"Email Address",
                                                         "field_name":"email",
-                                                        "container-info":null,
-                                                        "height":4,
-                                                        "top":1,
-                                                        "left":1
+                                                        "container_info":null,
+                                                        "layout": {
+                                                                   "width":4,
+                                                                   "height":4,
+                                                                   "top":1,
+                                                                   "left":1
+                                                                  }
                                                     },{
-                                                        "lib-id":10,
+                                                        "lib_id":10,
                                                         "text":"Register",
-                                                        "container-info":null,
-                                                        "height":4,
-                                                        "top":1,
-                                                        "left":1
+                                                        "container_info":null,
+                                                        "layout": {
+                                                                   "width":4,
+                                                                   "height":4,
+                                                                   "top":1,
+                                                                   "left":1
+                                                                  }
                                                     }]
                                     },
-                                "width":4,
-                                "height":4,
-                                "top":1,
-                                "left":1
+                                    "layout": {
+                                               "width":4,
+                                               "height":4,
+                                               "top":1,
+                                               "left":1
+                                              }
                 }],
-                "access-level":"all"
+                "access_level":"all"
             },{
                 "name":"homepage",
                 "uielements": [{
-                                    "lib-id":4,
+                                    "lib_id":4,
                                     "text":"Homepage",
-                                    "container-info":null,
-                                    "width":4,
-                                    "height":4,
-                                    "top":1,
-                                    "left":1
+                                    "container_info":null,
+                                    "layout": {
+                                               "width":4,
+                                               "height":4,
+                                               "top":1,
+                                               "left":1
+                                              }
                                 }],
-                "access-level": "all"
+                "access_level": "all"
             }],
         "urls":[{
                     "page_name":"homepage",
@@ -197,12 +218,13 @@ class App(models.Model):
     return tmp_project_dir
 
 class UIElement(models.Model):
+  """Describes the UIElement. If app is none, this belongs to the Library."""
   app = models.ForeignKey(App, blank=True, null=True, default=None)
   name = models.CharField(max_length=100)
   class_name = models.CharField(max_length=100)
   html = models.TextField()
   css = models.TextField()
-  type = models.CharField(max_length=100) # later on, introduce choices here
+  tagname = models.CharField(max_length=100)
 
   _login_form_templ = """<form class="login" method="POST" action="{% url 'account_login' %}">
   {% csrf_token %}
