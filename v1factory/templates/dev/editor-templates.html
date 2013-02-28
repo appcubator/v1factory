@@ -18,7 +18,7 @@
 <script type="text/html" id="temp-source-select">
 <select class="statics">
   <option class="upload-image">Placeholder</option>
-  <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';} console.log(asset)%>
+  <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';} %>
   <option value="<%= asset.url %>" <%= b %>><%= asset.name %></option>
   <%  }) %>
   <option class="upload-image" value="upload-image">+ Upload an image</option>

@@ -118,7 +118,9 @@ var PagesView = Backbone.View.extend({
 
   savePage: function() {
     this.pages[this.curPage]['uielements'] = (this.widgetEditor.serializeWidgets() || []);
-    this.pages[this.curPage]['design-props'] = (this.designEditor.model.toJSON()['design-props']);
+    if(this.designEditor){
+      this.pages[this.curPage]['design-props'] = (this.designEditor.model.toJSON()['design-props']||[]);
+    }
   },
 
   savePages: function() {

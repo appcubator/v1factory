@@ -21,7 +21,7 @@
 {% block js %}
 <script>
   filepicker.setKey("AAO81GwtTTec7D8nH9SaTz");
-  function openFilePick(){
+  function openFilePick(callback){
     filepicker.pickMultiple({
         mimetypes: ['image/*'],
         container: 'modal',
@@ -41,11 +41,11 @@
               if (d.error) {
                 alert("Something went wrong with the file upload! Data: "+f);
               } else {
-                // the server saved the static file entry successfully.
-                // now you can change the state of the page
               }
             })
         }
+
+        callback(FPFiles);
       },
       function(FPError){
         console.log(FPError.toString());
