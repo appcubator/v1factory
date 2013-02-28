@@ -14,14 +14,6 @@
  *
  */
 
-var EntityModel = Backbone.Model.extend({
-  defaults: {
-    name: "default name",
-    fields: []
-  }
-});
-
-
 var EntityCollection = Backbone.Collection.extend({
   model: EntityModel,
   add: function(inpObjs) {
@@ -60,8 +52,11 @@ var EntityView = Backbone.View.extend({
     this.widgetCollection = widgetCollection;
 
     var widget = {
-      type   : 'container',
-      entity : this.model
+      container_info : {
+        entity : this.model,
+        uielements : [],
+        action : null
+      }
     };
 
     this.widget = widget;
@@ -77,7 +72,7 @@ var EntityView = Backbone.View.extend({
   },
 
   clickedCreate: function(e) {
-    this.widget.action = 'create';
+    this.widget.container_info.action = 'create';
     var newWidget = new Widget(this.widget);
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);
@@ -86,7 +81,7 @@ var EntityView = Backbone.View.extend({
   },
 
   clickedUpdate: function(e) {
-    this.widget.action = 'update';
+    this.widget.container_info.action = 'update';
     var newWidget = new Widget(this.widget);
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);
@@ -95,7 +90,7 @@ var EntityView = Backbone.View.extend({
   },
 
   clickedQuery: function(e) {
-    this.widget.action = 'query';
+    this.widget.container_info.action = 'query';
     var newWidget = new Widget(this.widget);
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);

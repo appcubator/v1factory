@@ -1,4 +1,3 @@
-var DesignProperty = Backbone.Model.extend({});
 var DesignPropertiesCollection = Backbone.Collection.extend({
   model : DesignProperty
 });
