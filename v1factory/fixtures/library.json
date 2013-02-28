@@ -5,7 +5,6 @@
     "fields": {
       "class_name": "alpha",
       "html": "<%= text %>",
-      "tag_name" : "a",
       "type": "link",
       "css": "",
       "name": "a"

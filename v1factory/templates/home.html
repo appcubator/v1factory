@@ -13,10 +13,10 @@
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel hi3 span6">
-  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> {{ title }}</h1>
+  <div class="offset1 toppanel hi3 span6">
+  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> {{ title }}</h1>
   </div>
-  <div class="offset4 toppanel hi3 span19">
+  <div class="offset6 toppanel hi3 span19">
     <div class="login pane inset hi2 hoff1 pad1" style="height:45px; margin-top: 22px;">
       <span class="span6 pad1"><strong>User Login</strong><i class="small"> (forgot password?)</span>
       <span class="login span11 offset1">
@@ -32,57 +32,74 @@
 {% block page %}
 <div class="container">
   <div class="row">
-    <div class="span29 offset2 parent-span">
-      <div class="pane hi11"  style="background-color:#4575c4;">
+    <div class="span32 parent-span">
+      <div class="pane hi12">
         <div class="logo offsetr2 hoff1">
           <span class="engine1"></span>
           <span class="engine2"></span>
         </div>
         <h2 class="offset1 hoff1">Bring your ideas<br>into reality.</h2>
-        <p class="offset1 span16">Start your online business quickly, without hiring a developer or coding. Connect with us to find out more. </p>
+        <p class="offset1  span16">Start your online business quickly, without hiring a developer or coding. Connect with us to find out more. </p>
       </div>
     </div>
   </div>
   <div class="row meta hi6 hoff1">
-    <div class="span9 offset2 parent-span">
-      <div class="pane hi6" style="background-color:#4575c4;">
+    <div class="span7 parent-span" style="margin-right: 10px;">
+      <div class="pane hi6">
        <p class="offset1 hoff1">
-        <span class="mtxt bold">Free</span>
+        <span class="mtxt bold">Develop Your App.</span>
        </p>
       </div>
     </div>
-    <div class="span9 offset1 parent-span">
-      <div class="pane hi6" style="background-color:#244fa1;">
+    <div class="span7 offset1 parent-span" style="margin-right: 10px;">
+      <div class="pane hi6">
       <p class="offset1 hoff1">
-        <span class="mtxt bold">Developer</span>
+        <span class="mtxt bold">Publish It.</span>
        </p>
       </div>
     </div>
-    <div class="span9 offset1 parent-span">
-      <div class="pane hi6" style="background-color:#1e3d72;">
+    <div class="span7 offset1 parent-span" style="margin-right: 10px;">
+      <div class="pane hi6">
         <p class="offset1 hoff1">
-          <span class="mtxt bold">Business</span>
+          <span class="mtxt bold">Start Getting Users.</span>
+        </p>
+      </div>
+    </div>
+    <div class="span7 offset1 parent-span">
+      <div class="pane hi6">
+        <p class="offset1 hoff1">
+          <span class="mtxt bold">Watch the Metrics.</span>
         </p>
       </div>
     </div>
   </div>
 
-  <div class="row meta hi6 hoff1">
-    <div class="span18 offset2">
-      <div class="login pane inset hi6">
+  <div class="row meta hi8 hoff1">
+    <div class="span32">
+      <div class="login pane inset hi8">
       <h3 class="offset1 span17 hoff1">Connect</h3>
-      <p class="offset1 hoff">Sign in with LinkedIn and we'll be right with you.</p>
-      <script type="IN/Login">
-      </script>
       </div>
     </div>
-    <div class="span9 offset1 parent-span">
-      <div class="login pane inset hi6">
-      {% if user.is_authenticated %}
-        <a href="{% url v1factory.views.app_list %}">Logged In</a>
-      {% else %}
-        {% include "registration/login.html" %}
-      {% endif %}</div>
+  </div>
+  <div class="row meta hi8 hoff1">
+    <div class="span32">
+      <div class="login pane inset hi8">
+      <h3 class="offset1 span17 hoff1">Connect</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row meta hi8 hoff1">
+    <div class="span32">
+      <div class="login pane inset hi8">
+      <h3 class="offset1 span17 hoff1">Connect</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row meta hi8 hoff1">
+    <div class="span32">
+      <div class="login pane inset hi8">
+      <h3 class="offset1 span17 hoff1">Connect</h3>
+      </div>
     </div>
   </div>
 </div>

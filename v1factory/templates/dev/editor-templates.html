@@ -16,7 +16,7 @@
 </select>
 </script>
 <script type="text/html" id="temp-source-select">
-<select class="statics">
+<select class="statics"  id="prop-<%= prop %>">
   <option class="upload-image">Placeholder</option>
   <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';} %>
   <option value="<%= asset.url %>" <%= b %>><%= asset.name %></option>
