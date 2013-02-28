@@ -129,11 +129,11 @@
 }
 
 .span1.editing:hover{
-  background-color: #ccc;
+  background-color: rgba(43, 53, 69, 0.5);
 }
 
 .span1.cselected {
-  background-color: #ddd;
+  background-color: rgba(43, 53, 69, 0.5);
 }
 
 
@@ -149,7 +149,6 @@
   top: 60px;
   left: 50%;
   margin-left: -470px;
-  height: 720px;
 }
 
 #elements-container {
@@ -157,7 +156,6 @@
   top: 60px;
   left: 50%;
   margin-left: -470px;
-  height: 720px;
 }
 
 /* Right Panel */
@@ -224,7 +222,7 @@
 .widget-wrapper {
   z-index: 1001;
   position: absolute;
-  cursor: pointer;
+  cursor: move;
   border-radius: 3px;
   overflow: visible;
 }
@@ -235,9 +233,10 @@
 
 .widget-wrapper .meta, .widgets-container .meta {
   position: absolute;
-  bottom: 0;
+  left: 100%;
+  top: 0;
   height: 0;
-  width: 100%;
+  width: 30px;
   background-color: rgba(30, 30, 30, 0.6);
   overflow: hidden;
   font-size: 12px;
@@ -271,7 +270,7 @@
 }
 
 .widget-wrapper:hover .meta, .widgets-container:hover .meta {
-  height: 30px;
+  height: 60px;
 }
 
 .widget-wrapper:hover .ui-resizable-handle {
@@ -828,4 +827,10 @@ select.font {
   margin-top: 2px;
   display: block !important;
   width: 160px;
+}
+
+/* Settings Menu */
+.menu ul li {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

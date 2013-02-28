@@ -39,6 +39,7 @@ var WidgetCollection = Backbone.Collection.extend({
   },
 
   selectWidgetById: function(id) {
+    console.log("heyyyy");
     this.collection.get(id).select();
     this.selectedElement = this.get(id);
   }
@@ -53,7 +54,7 @@ var WidgetView = Backbone.View.extend({
   selected : false,
 
   events: {
-    'click .widget-wrapper' : 'select',
+    'mousedown .widget-wrapper' : 'select',
     'click .delete' : 'remove'
   },
 
@@ -72,6 +73,7 @@ var WidgetView = Backbone.View.extend({
                     'changedLeft',
                     'changedText',
                     'changedType',
+                    'moved',
                     'removeView',
                     'resized');
 
@@ -85,7 +87,7 @@ var WidgetView = Backbone.View.extend({
     this.render();
 
     this.model.get('context').bind("change:text", this.changedText, this);
-    
+
     this.model.bind("change:selected", this.outlineSelected, this);
     this.model.bind("change:type", this.changedType, this);
     this.model.bind("remove", this.removeView, this);
@@ -101,6 +103,11 @@ var WidgetView = Backbone.View.extend({
       handles: "n, e, s, w, se",
       grid: 30,
       resize: self.resized
+    });
+    $(this.widgetsContainer).draggable({
+      grid: [ 30,30 ],
+      containment : $('#elements-container'),
+      drag: self.moved
     });
   },
 
@@ -189,6 +196,7 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedTop: function(a) {
+    console.log("HEEEEY");
     this.widgetsContainer.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + 'px';
   },
 
@@ -228,6 +236,13 @@ var WidgetView = Backbone.View.extend({
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
     this.model.get('layout').set('width', deltaWidth);
     this.model.get('layout').set('height', deltaHeight);
+  },
+
+  moved: function(e, ui) {
+    var top = Math.round((ui.position.top / GRID_HEIGHT));
+    var left = Math.round((ui.position.left / GRID_HEIGHT));
+    this.model.get('layout').set('top', top);
+    this.model.get('layout').set('left', left);
   }
 });
 

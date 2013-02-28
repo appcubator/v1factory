@@ -148,16 +148,17 @@ var WidgetInfoView = Backbone.View.extend({
 
   changedContext: function(changedContextModel) {
     _(changedContextModel.changed).each(function(val, key) {
-      if(document.getElementById('prop-' + key)) {
-        $(document.getElementById('prop-' + key)).val(val);
+      if(document.getElementById('prop-context-' + key)) {
+        $(document.getElementById('prop-context-' + key)).val(val);
       }
     });
   },
 
   changedLayout: function(changedLayoutModel) {
-    _(changedLayoutModel.changed).each(function(val, key) {
-      if(document.getElementById('prop-' + key)) {
-        $(document.getElementById('prop-' + key)).val(val);
+    _(changedLayoutModel.attributes).each(function(val, key) {
+      console.log(key + ' : ' + val);
+      if(document.getElementById('prop-layout-' + key)) {
+        $(document.getElementById('prop-layout-' + key)).val(val);
       }
     });
   }
