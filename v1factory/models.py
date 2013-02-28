@@ -8,157 +8,199 @@ import simplejson
 import re
 
 starter_app = """{
-    "name":"name me pls",
+    "name":"EasyApp",
     "users": {
-        "facebook":false,
-        "linkedin":false,
-        "twitter":false,
-        "local":true,
-        "fields":[]
+      "facebook":false,
+      "linkedin":false,
+      "twitter":false,
+      "local":true,
+      "fields":[]
     },
     "entities":[],
-    "pages":[{
-                "name":"login",
-                "uielements":[{
-                               "lib_id":4,
-                               "text":"Login",
-                               "container_info":null,
-                               "layout": {
-                                          "width":4,
-                                          "height":4,
-                                          "top":1,
-                                          "left":1
-                                         }
-                            },{
-                               "lib_id":7,
-                               "container_info":{
-                                   "entity":"Session",
-                                   "action":"create",
-                                   "uielements":[{
-                                                   "lib_id":8,
-                                                   "field-name":"username",
-                                                   "text":"",
-                                                   "field_name":"username",
-                                                   "container_info":null
-                                               },{
-                                                   "lib_id":8,
-                                                   "field-name":"password",
-                                                   "text":"",
-                                                   "field_name":"password",
-                                                   "container_info":null
-                                               },{
-                                                   "lib_id":10,
-                                                   "text":"submit",
-                                                   "container_info":null
-                                               }]
-                               },
-                               "layout": {
-                                          "width":4,
-                                          "height":4,
-                                          "top":1,
-                                          "left":1
-                                         }
-                            }],
-                "access_level":"all"
-            },{
-                "name":"registration",
-                "uielements":[{
-                                "lib_id":4,
-                                "text":"Sign Up",
-                                "container_info":null,
-                                "layout": {
-                                           "width":4,
-                                           "height":4,
-                                           "top":1,
-                                           "left":1
-                                          }
-                            },{
-                                "lib_id":7,
-                                "text":"",
-                                "container_info":{
-                                        "entity":"User",
-                                        "action":"create",
-                                        "uielements":[{
-                                                        "lib_id":8,
-                                                        "field-name":"username",
-                                                        "text":"Username",
-                                                        "field_name":"username",
-                                                        "container_info":null,
-                                                        "layout": {
-                                                                   "width":4,
-                                                                   "height":4,
-                                                                   "top":1,
-                                                                   "left":1
-                                                                  }
-                                                    },{
-                                                        "lib_id":8,
-                                                        "field-name":"password",
-                                                        "text":"Password",
-                                                        "field_name":"password",
-                                                        "container_info":null,
-                                                        "layout": {
-                                                                   "width":4,
-                                                                   "height":4,
-                                                                   "top":1,
-                                                                   "left":1
-                                                                  }
-                                                    },{
-                                                        "lib_id":8,
-                                                        "field-name":"email",
-                                                        "text":"Email Address",
-                                                        "field_name":"email",
-                                                        "container_info":null,
-                                                        "layout": {
-                                                                   "width":4,
-                                                                   "height":4,
-                                                                   "top":1,
-                                                                   "left":1
-                                                                  }
-                                                    },{
-                                                        "lib_id":10,
-                                                        "text":"Register",
-                                                        "container_info":null,
-                                                        "layout": {
-                                                                   "width":4,
-                                                                   "height":4,
-                                                                   "top":1,
-                                                                   "left":1
-                                                                  }
-                                                    }]
-                                    },
-                                    "layout": {
-                                               "width":4,
-                                               "height":4,
-                                               "top":1,
-                                               "left":1
-                                              }
-                }],
-                "access_level":"all"
-            },{
-                "name":"homepage",
-                "uielements": [{
-                                    "lib_id":4,
-                                    "text":"Homepage",
-                                    "container_info":null,
-                                    "layout": {
-                                               "width":4,
-                                               "height":4,
-                                               "top":1,
-                                               "left":1
-                                              }
-                                }],
-                "access_level": "all"
-            }],
-        "urls":[{
-                    "page_name":"homepage",
-                    "urlparts":[]
-                },{
-                    "page_name":"login",
-                    "urlparts":["login"]
-                },{
-                    "page_name":"registration",
-                    "urlparts":["register"]
-                }]
+    "pages":[
+      {
+        "name":"login",
+        "design_props" : null,
+        "uielements":[
+          {
+            "lib_id":4,
+            "context": {
+              "text":"Login"
+            },
+            "container_info":null,
+            "layout": {
+              "width"  :4,
+              "height" :4,
+              "top"    :1,
+              "left"   :1
+            }
+          },
+          {
+            "lib_id":7,
+            "container_info":{
+            "entity":"Session",
+            "action":"create",
+            "layout" : {
+              "width"  :4,
+              "height" :4,
+              "top"    :1,
+              "left"   :1
+            },
+            "uielements":[
+              {
+                "lib_id":8,
+                "field_name":"username",
+                "context" : {
+                  "text":""
+                },
+                "layout" : {
+                  "width"  :4,
+                  "height" :4,
+                  "top"    :1,
+                  "left"   :1
+                },
+                "field_name":"username",
+                "container_info":null
+              },
+              {
+                "lib_id":8,
+                "field_name":"password",
+                "context" : {
+                  "text":""
+                },
+                "container_info":null
+              },
+              {
+                "lib_id":10,
+                "context" : {
+                  "text":"submit"
+                },
+                "container_info":null
+              }
+            ]
+          }
+          }
+        ],
+        "access_level" : "all"
+      },
+      {
+        "name":"registration",
+        "design_props" : null,
+        "uielements": [
+          {
+            "lib_id":4,
+            "context" : {
+              "text":"Sign Up"
+            },
+            "container_info":null,
+            "layout" : {
+              "width"  :4,
+              "height" :4,
+              "top"    :1,
+              "left"   :1
+            }
+          },
+          {
+            "lib_id":7,
+            "layout" : {
+              "width"  :4,
+              "height" :4,
+              "top"    :1,
+              "left"   :1
+            },
+            "container_info": {
+              "entity":"User",
+              "action":"create",
+              "uielements":[
+                {
+                  "lib_id":8,
+                  "field_name":"username",
+                  "text":"Username",
+                  "field_name":"username",
+                  "container_info":null,
+                  "layout" : {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  }
+                },
+                {
+                  "lib_id":8,
+                  "field_name":"password",
+                  "text":"Password",
+                  "field_name":"password",
+                  "container_info":null,
+                  "layout" : {
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1,
+                    "width"  :4
+                  }
+                },
+                {
+                  "lib_id":8,
+                  "field_name":"email",
+                  "text":"Email Address",
+                  "field_name":"email",
+                  "container_info":null,
+                  "layout": {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  }
+                },
+                {
+                  "lib_id":10,
+                  "text":"Register",
+                  "container_info":null,
+                  "layout" : {
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1,
+                    "width"  :4
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "access_level":"all"
+      },
+      {
+        "name":"homepage",
+        "design_props" : [],
+        "uielements": [
+          {
+            "lib_id":4,
+            "text":"Homepage",
+            "container_info":null,
+            "layout" : {
+              "width"  :4,
+              "height" :4,
+              "top"    :1,
+              "left"   :1
+            }
+          }
+        ],
+        "access_level": "all"
+      }
+    ],
+    "urls": [
+      {
+        "page_name":"homepage",
+        "urlparts":[]
+      },
+      {
+        "page_name":"login",
+        "urlparts":["login"]
+      },
+      {
+        "page_name":"registration",
+        "urlparts":["register"]
+      }
+    ]
 }"""
 
 class App(models.Model):

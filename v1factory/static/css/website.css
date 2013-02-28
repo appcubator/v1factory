@@ -7,7 +7,7 @@
 body {
   font: normal 14px/20px "proxima-nova", Arial, sans-serif;
   font-weight: lighter;
-  background-color: #efefef;
+  background-color: #fff;
   padding-bottom: 60px;
 }
 
@@ -28,7 +28,7 @@ a.pane:hover {
 
 h1.name {
   display: block;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
   line-height: 30px;
   margin-bottom: 10px;
@@ -37,7 +37,7 @@ h1.name {
 .pane {
   position: relative;
   display: inline-block;
-  background-color: #2b3545 ;
+  background-color: #233b62 ;
   border-radius: 6px;
   color: #fff;
   box-shadow: 0 1px 3px #b9bbbe;
@@ -174,7 +174,7 @@ input[type="submit"] {
 }
 
 .mtxt { 
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .pad1 {

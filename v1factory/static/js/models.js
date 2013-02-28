@@ -25,22 +25,30 @@ var EntityModel = Backbone.Model.extend({
   }
 });
 
+var LayoutModel = Backbone.Model.extend({
+  defaults: {
+    'top'    : 0,
+    'left'   : 0,
+    'height' : 2,
+    'width'  : 2
+  }
+});
 
-var Widget = Backbone.Model.extend({
+var ContextModel = Backbone.Model.extend({
+})
+
+var WidgetModel = Backbone.Model.extend({
   selected: false,
 
   defaults: {
     'container_info' : null,
-    'context'        : {},
-    'lib_id'         : 1,
-    'top'            : 0,
-    'left'           : 0,
-    'height'         : 2,
-    'width'          : 2
+    'lib_id'         : 1
   },
 
-  initialize: function() {
+  initialize: function(bone) {
     _.bindAll(this, 'select', 'assignCoord');
+    this.set('context', new ContextModel(this.get('context')));
+    this.set('layout', new LayoutModel(this.get('layout')));
   },
 
   select: function() {
@@ -54,19 +62,22 @@ var Widget = Backbone.Model.extend({
   },
 
   moveLeft: function() {
-    this.set('left', this.get('left') - 1);
+    if(this.get('layout').get('left') < 1) return;
+    this.get('layout').set('left', this.get('layout').get('left') - 1);
   },
 
   moveRight: function() {
-    this.set('left', this.get('left') + 1);
+    if(this.get('layout').get('left') + this.get('layout').get('width') > 31) return;
+    this.get('layout').set('left', this.get('layout').get('left') + 1);
   },
 
   moveUp: function() {
-    this.set('top', this.get('top') - 1);
+    if(this.get('layout').get('top') < 1) return;
+    this.get('layout').set('top', this.get('layout').get('top') - 1);
   },
 
   moveDown: function() {
-    this.set('top', this.get('top') + 1);
+    this.get('layout').set('top', this.get('layout').get('top') + 1);
   },
 
 
@@ -74,10 +85,10 @@ var Widget = Backbone.Model.extend({
     var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
                                     pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
 
-    this.set('top', coordinates.topLeft.y + 1);
-    this.set('left', coordinates.topLeft.x + 1);
-    this.set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
-    this.set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
+    this.get('layout').set('top', coordinates.topLeft.y + 1);
+    this.get('layout').set('left', coordinates.topLeft.x + 1);
+    this.get('layout').set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
+    this.get('layout').set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
   }
 });
 
@@ -102,7 +113,7 @@ var UserEntityModel = EntityModel.extend({
 var PageModel = Backbone.Model.extend({
   defaults : {
     "name"             : "default-page",
-    "design-props"     : [
+    "design_props"     : [
       {
         type  : "background-image",
         value : "/static/img/sample_bg.png"
@@ -136,7 +147,7 @@ var PageModel = Backbone.Model.extend({
         value : '"Palatino Linotype", "Book Antiqua", Palatino, serif'
       }
     ],
-    "access-level" : "all",
+    "access_level" : "all",
     "uielements" : []
   }
 });

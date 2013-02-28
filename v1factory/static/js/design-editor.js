@@ -46,14 +46,14 @@ var DesignPropertyView = Backbone.View.extend({
 
     styleTag.innerHTML = styleContent;
     this.styleTag = styleTag;
-
+    
     document.getElementsByTagName('head')[0].appendChild(styleTag);
   },
 
   amendAppState: function(item) {
-    var currentProps = this.pageModel.get('design-props');
+    var currentProps = this.pageModel.get('design_props');
     currentProps[this.ind] = this.model.toJSON();
-    this.pageModel.set('design-props', currentProps);
+    this.pageModel.set('design_props', currentProps);
     this.style();
   }
 });
@@ -92,7 +92,6 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
   },
 
   selectColor: function(color) {
-    console.log(color);
     this.model.set('value', color);
   }
 });
@@ -194,7 +193,7 @@ var DesignEditorView = Backbone.View.extend({
     this.collection.bind('add', this.newProperty, this);
     this.model.set('shouldStyle', shouldStyle);
     this.render();
-    this.collection.add(pageModel.get('design-props'));
+    this.collection.add(pageModel.get('design_props'));
   },
 
   render: function() {
