@@ -278,6 +278,7 @@ class App(models.Model):
 
   def deploy(self):
     import sys, os
+    import traceback
     import subprocess
 
     analyzed_app = AnalyzedApp(self.state, self.name)
@@ -298,26 +299,26 @@ class App(models.Model):
     return tmp_project_dir
 
   def deploy_test(self):
-    """
     analyzed_app = AnalyzedApp(self.state, self.name)
     django_writer = DjangoWriter(analyzed_app)
 
     def print_test(heading, test_output_fun):
-      print 
+      import sys, traceback
+      print "\n\n\n", 17*"#", 7*" ", heading, 7*" ", 17*"#"
       try:
-        test_output = test_output_fun())
-      except Exception, e:
-        # print traceback
+        test_output = test_output_fun()
+      except Exception:
+        traceback.print_exc(file=sys.stdout)
       else:
-        print test_output
-      print "\n\n#############     END     #############"
-    django_writer.urls_py_as_string()
-    django_writer.models_py_as_string()
-    django_writer.model_forms_py_as_string()
-    django_writer.views_py_as_string()
-    django_writer.form_receivers_py_as_string()
-    django_writer.templates_as_strings()
-    """
+        print "\n".join([ "> " + line for line in test_output.split('\n') ])
+      print 17*"#", 7*" ", "END", 7*" ", 17*"#"
+
+    print_test("urls.py", django_writer.urls_py_as_string)
+    print_test("models.py", django_writer.models_py_as_string)
+    print_test("model_forms.py", django_writer.model_forms_py_as_string)
+    print_test("views.py", django_writer.views_py_as_string)
+    print_test("form_receivers.py", django_writer.form_receivers_py_as_string)
+    print_test("templates", lambda: "\n\nNEXT:\n".join(django_writer.templates_as_strings()))
 
 class UIElement(models.Model):
   """Describes the UIElement. If app is none, this belongs to the Library."""
