@@ -275,6 +275,23 @@ class App(models.Model):
     except simplejson.JSONDecodeError, e:
       raise ValidationError(e.msg)
 
+  def summary_user_settings(self):
+    """Human-readable summary of the user settings"""
+    summary = ""
+    summary += "Enabled auth modes:\t{};".format(", ".join([a for a,v in self.state['users'].items() if v]))
+    return summary
+
+  def summary_entities(self):
+    """Human-readable summary of the entities"""
+    summary = ""
+    summary += "Entities:\t\t{};".format(", ".join([e['name'] for e in self.state['entities']]))
+    return summary
+
+  def summary_pages(self):
+    """Human-readable summary of the pages"""
+    summary = ""
+    summary += "Pages:\t\t\t{};".format(", ".join(['("{}", {})'.format(u['page_name'], u['urlparts']) for u in self.state['urls']]))
+    return summary
 
   def deploy(self):
     import sys, os
@@ -302,6 +319,15 @@ class App(models.Model):
     analyzed_app = AnalyzedApp(self.state, self.name)
     django_writer = DjangoWriter(analyzed_app)
 
+    ### Also want to print:
+    #     user settings
+    #     entities
+    #     urls/pages
+    print "\n".join([ self.summary_user_settings(),
+                      self.summary_entities(),
+                      self.summary_pages() ])
+    ###
+
     def print_test(heading, test_output_fun):
       import sys, traceback
       print "\n\n\n", 17*"#", 7*" ", heading, 7*" ", 17*"#"
@@ -318,7 +344,7 @@ class App(models.Model):
     print_test("model_forms.py", django_writer.model_forms_py_as_string)
     print_test("views.py", django_writer.views_py_as_string)
     print_test("form_receivers.py", django_writer.form_receivers_py_as_string)
-    print_test("templates", lambda: "\n\nNEXT:\n".join(django_writer.templates_as_strings()))
+    print_test("templates", lambda: "\n\nNEXT:\n".join([t[1] for t in django_writer.templates_as_strings()]))
 
 class UIElement(models.Model):
   """Describes the UIElement. If app is none, this belongs to the Library."""
