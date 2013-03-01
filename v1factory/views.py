@@ -178,8 +178,8 @@ def app_editor(request, app_id, page_id):
   my_els = els.filter(app=app)
   page_context = { 'app': app,
                    'title' : 'Editor',
-                   'elements' : simplejson.dumps(els),
-                   'myuielements' : simplejson.dumps(my_els),
+                   'elements' : simplejson.dumps(list(els)),
+                   'myuielements' : simplejson.dumps(list(my_els)),
                    'page_id': page_id }
   add_statics_to_context(page_context, app)
   return render(request, 'dev/editor-main.html', page_context)
