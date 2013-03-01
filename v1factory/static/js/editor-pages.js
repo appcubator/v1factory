@@ -39,7 +39,6 @@ var PagesView = Backbone.View.extend({
                     'savePage',
                     'showSettings',
                     'style',
-                    'unite',
                     'clickedOpen');
 
     this.pages = appState.pages || [];
@@ -60,10 +59,6 @@ var PagesView = Backbone.View.extend({
     _(appState.pageProps).each(function(val, key, ind) {
       var styleTag = document.createElement('style');
       styleTag.id = val.id;
-
-      console.log("EEEE");
-      console.log(val);
-
       
       var styleContent = (val.tag || '.sample') + ' {';
       styleContent += (val.css).replace(/<%=content%>/g, val.currentValue);
@@ -123,7 +118,7 @@ var PagesView = Backbone.View.extend({
   savePage: function() {
     this.pages[this.curPage]['uielements'] = (this.widgetEditor.serializeWidgets() || []);
     if(this.designEditor){
-      this.pages[this.curPage]['design-props'] = (this.designEditor.model.toJSON()['design-props']||[]);
+      this.pages[this.curPage]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
     }
   },
 
@@ -138,29 +133,6 @@ var PagesView = Backbone.View.extend({
       success: function() {},
       dataType: "JSON"
     });
-  },
-
-  unite: function(cor1, cor2) {
-    var topLeft = {}, bottomRight = {};
-
-    if(cor1.x < cor2.x) {
-      topLeft.x =  cor1.x; bottomRight.x = cor2.x;
-    } else {
-      topLeft.x =  cor2.x; bottomRight.x = cor1.x;
-    }
-
-    if(cor1.y < cor2.y) {
-      topLeft.y =  cor1.y; bottomRight.y = cor2.y;
-    } else {
-      topLeft.y =  cor2.y; bottomRight.y = cor1.y;
-    }
-
-    topLeft.x--; topLeft.y--;
-
-    return {
-      topLeft : topLeft,
-      bottomRight: bottomRight
-    };
   },
 
   clickedOpen: function(e) {

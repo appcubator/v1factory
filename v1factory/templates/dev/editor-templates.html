@@ -4,13 +4,23 @@
 <li><img class="delete" src="/static/img/delete-icon.png"></li>
 </ul>
 </script>
-{% for element in elements %}
-<script type="text/html" id="temp-widget-{{ element.id }}">
-<{{ element.tagname|safe}} src="">
-{{ element.html|safe }}
-</{{ element.tagname|safe}}>
+
+
+<script type="text/html" id="temp-node">
+<<%= element.tagname%> 
+class = "<%= element.class_name %>"
+<% _(node.attribs).each(function(val, key) { %>
+<%= key %> = <%= val %>
+<% }); %>>
+<% _(node.content).each(function(val, key) { %>
+<%= val %>
+<% }); %>
+<% if(!node.isSingle) {%>
+</<%= element.tagname%>>
+<% } %>
 </script>
-{% endfor %}
+
+
 <script type="text/html" id="temp-href-select">
 <select>
   <% _(appState.pages).each(function(page){ var b = ''; if(('\{\{'+page.name+'\}\}') == val){ b = 'selected';}%>
@@ -18,6 +28,7 @@
   <%  }) %>
 </select>
 </script>
+
 <script type="text/html" id="temp-source-select">
 <select class="statics"  id="prop-<%= prop %>">
   <option class="upload-image">Placeholder</option>

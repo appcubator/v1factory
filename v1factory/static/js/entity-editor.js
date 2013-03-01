@@ -23,7 +23,7 @@ var EntityView = Backbone.View.extend({
   tagName    : 'li',
   collection : null,
   parentName : "",
-  className  : 'offset1 span7 entity',
+  className  : 'offset1 span14 entity',
 
   events : {
     'click .add-property-button' : 'clickedAdd',
@@ -77,9 +77,7 @@ var EntityView = Backbone.View.extend({
   formSubmitted: function(e) {
     e.preventDefault();
     var name = $('.property-name-input', this.el).val();
-    console.log($('.property-name-input', this.el));
 
-    console.log(this.model);
     var curFields = this.model.get('fields') || [];
     var ind = curFields.length;
 
@@ -102,7 +100,6 @@ var EntityView = Backbone.View.extend({
   },
 
   changedAttribs: function(e) {
-    //console.log(e.target.options[e.target.selectedIndex].value);
     var ind = String(e.target.id).replace('prop-', '');
     this.model.attributes.fields[ind].type = e.target.options[e.target.selectedIndex].value;
     //this.model.set(e.target.id, e.target.options[e.target.selectedIndex].value);
@@ -113,7 +110,6 @@ var EntityView = Backbone.View.extend({
   },
 
   clickedDelete: function(e) {
-    console.log('deleting');
     this.parentCollection.remove(this.model);
   },
 
@@ -164,7 +160,6 @@ var UserEntityView = EntityView.extend({
 
   render: function() {
     var self = this;
-    console.log(self);
     _(this.model.get('fields')).each(function(field, ind){
 
       var page_context = {};
@@ -217,7 +212,6 @@ var EntityListView = Backbone.View.extend({
   },
 
   appendItem: function(model) {
-    console.log('append');
     var entityView = new EntityView(model, 'entity-list-');
     $(this.el).append(entityView.el);
     $('.add-property-button', entityView.el).on('click', entityView.clickedAdd);
@@ -230,7 +224,6 @@ var EntityListView = Backbone.View.extend({
   },
 
   addEntity: function(item) {
-    console.log("add entity");
     item.id = this.counter;
     var newModel = new EntityModel(item);
     this.collection.add(newModel);
@@ -285,11 +278,9 @@ var EntitiesEditorView = Backbone.View.extend({
   },
 
   serializeEntities : function(e) {
-
     appState.entities = entityList.collection.toJSON();
     appState.users = entityList.userModel.toJSON();
 
-    console.log(appState);
     $.ajax({
       type: "POST",
       url: '/app/1/state/',

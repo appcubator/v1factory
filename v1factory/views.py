@@ -178,6 +178,7 @@ def app_editor(request, app_id, page_id):
   my_els = els.filter(app=app)
   page_context = { 'app': app,
                    'title' : 'Editor',
+                   'gallery_elements' : els,
                    'elements' : simplejson.dumps(list(els)),
                    'myuielements' : simplejson.dumps(list(my_els)),
                    'page_id': page_id }

@@ -5,7 +5,7 @@ var DesignPropertiesCollection = Backbone.Collection.extend({
 var DesignPropertyView = Backbone.View.extend({
   el  : null,
   tagName : 'div',
-  className: 'property hi3 hoff1 span14',
+  className: 'property hi6 hoff1 span28',
   
   initialize: function(model, pageModel, ind, shouldStyle) {
 
@@ -125,7 +125,6 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
     e.preventDefault();
     $('.opt', this.el).removeClass('selected');
     $(e.target).addClass('selected');
-    console.log(e.target.style.backgroundImage);
     var val = e.target.style.backgroundImage;
     this.model.set('value', val);
     return false;
@@ -134,7 +133,7 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignSizePickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi3 hoff1 span5',
+  className: 'property hi6 hoff1 span10',
   events: {
     'change .size' : 'select'
   },
@@ -160,7 +159,7 @@ var DesignSizePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignFontPickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi3 hoff1 span9',
+  className: 'property hi6 hoff1 span18',
   events: {
     'change .size' : 'select'
   },

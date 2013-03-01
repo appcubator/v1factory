@@ -20,12 +20,9 @@
  *  - WidgetEditorView
  */
 
-var GRID_WIDTH = 30;
-var GRID_HEIGHT = 30;
-
 var WidgetCollection = Backbone.Collection.extend({
   model : WidgetModel,
-  selectedElement: null,
+  selectedEl: null,
 
   initialize: function() {
     _.bindAll(this, 'selectWidgetById',
@@ -39,9 +36,8 @@ var WidgetCollection = Backbone.Collection.extend({
   },
 
   selectWidgetById: function(id) {
-    console.log("heyyyy");
     this.collection.get(id).select();
-    this.selectedElement = this.get(id);
+    this.selectedEl = this.get(id);
   }
 });
 
@@ -73,25 +69,26 @@ var WidgetView = Backbone.View.extend({
                     'changedLeft',
                     'changedText',
                     'changedType',
+                    'changedSource',
                     'moved',
                     'removeView',
                     'resized');
 
     this.model = widgetModel;
 
-    this.model.get('layout').bind("change:width", this.changedWidth, this);
-    this.model.get('layout').bind("change:height", this.changedHeight, this);
-    this.model.get('layout').bind("change:top", this.changedTop, this);
-    this.model.get('layout').bind("change:left", this.changedLeft, this);
-
     this.render();
-
-    this.model.get('context').bind("change:text", this.changedText, this);
 
     this.model.bind("change:selected", this.outlineSelected, this);
     this.model.bind("change:type", this.changedType, this);
     this.model.bind("remove", this.removeView, this);
 
+    this.model.get('layout').bind("change:width", this.changedWidth, this);
+    this.model.get('layout').bind("change:height", this.changedHeight, this);
+    this.model.get('layout').bind("change:top", this.changedTop, this);
+    this.model.get('layout').bind("change:left", this.changedLeft, this);
+
+    this.model.get('content').bind("change:text", this.changedText, this);
+    this.model.get('attribs').bind("change:src", this.changedSource, this);
   },
 
   render: function() {
@@ -101,11 +98,11 @@ var WidgetView = Backbone.View.extend({
     var self = this;
     $(this.widgetsContainer).resizable({
       handles: "n, e, s, w, se",
-      grid: 30,
+      grid: GRID_WIDTH,
       resize: self.resized
     });
     $(this.widgetsContainer).draggable({
-      grid: [ 30,30 ],
+      grid: [ GRID_WIDTH, GRID_HEIGHT ],
       containment : $('#elements-container'),
       drag: self.moved
     });
@@ -114,17 +111,7 @@ var WidgetView = Backbone.View.extend({
   renderContent: function() {
     this.el.innerHTML = '';
 
-    if(typeof this.model.get('lib_id') == "undefined") {
-      alert('wat');
-      return;
-    }
-
-    var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
-
-    if(!temp) {
-      alert('elem type could not be found');
-      return;
-    }
+    iui.assert(this.model.get('lib_id'));
 
     var width = this.model.get('layout').get('width');
     var height = this.model.get('layout').get('height');
@@ -146,15 +133,27 @@ var WidgetView = Backbone.View.extend({
   },
 
   renderElement: function() {
-    console.log(document.getElementById('temp-widget-' + this.model.get('lib_id')));
-    var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
-    console.log(temp);
-    var page_context = {};
-    this.model.get('context').set('text', this.model.get('context').get('text') || "BLANK TEXT");
-    page_context.text = this.model.get('context').get('text');
-    page_context.field_name = this.model.get('field_name');
-    var element = _.template(temp, page_context);
-    return element;
+    var self = this;
+    var temp = document.getElementById('temp-node').innerHTML;
+    var element = _.findWhere(library, { 'id' : this.model.get('lib_id')});
+
+    iui.assert(element);
+
+    var node = tagDict[element.tagname];
+    console.log(node);
+    _(node.attribs).each(function(val, key) {
+      node.attribs[key] = self.model.get('attribs').get(key) || val;
+      self.model.get('attribs').set(key, node.attribs[key]);
+    });
+
+    _(node.content).each(function(val, key) {
+      node.content[key] = self.model.get('content').get(key) || val;
+      self.model.get('content').set(key, node.content[key]);
+    });
+
+    var el = _.template(temp, { node: node, element: element});
+
+    return el;
   },
 
   renderMeta: function() {
@@ -198,7 +197,6 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedTop: function(a) {
-    console.log("HEEEEY");
     this.widgetsContainer.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + 'px';
   },
 
@@ -207,7 +205,6 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedText: function(a) {
-    console.log("Hey");
     this.el.innerHTML = '';
     this.el.appendChild(this.renderContent());
     this.model.select();
@@ -233,6 +230,26 @@ var WidgetView = Backbone.View.extend({
     });
   },
 
+  changedSource: function(a) {
+    // TODO: can be more efficient
+    this.el.innerHTML = '';
+    this.el.appendChild(this.renderContent());
+    this.model.select();
+
+    var self = this;
+    $(this.widgetsContainer).resizable({
+      handles: "n, e, s, w, se",
+      grid: 30,
+      resize: self.resized
+    });
+
+    $(this.widgetsContainer).draggable({
+      grid: [ 30,30 ],
+      containment : $('#elements-container'),
+      drag: self.moved
+    });
+  },
+
   resized: function(e, ui) {
     var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
@@ -248,47 +265,6 @@ var WidgetView = Backbone.View.extend({
   }
 });
 
-var WidgetImgView = WidgetView.extend({
-  initialize: function(widgetModel){
-
-    if(!widgetModel.get('context').get('source')) {
-      widgetModel.get('context').set('source', '/static/img/placholder.png');
-    }
-
-    this.constructor.__super__.initialize.apply(this, [widgetModel]);
-    _.bindAll(this, 'changedSource');
-
-    this.model.get('context').bind("change:source", this.changedSource, this);
-  },
-
-  changedSource: function(a) {
-    // TODO: can be more efficient
-    this.el.innerHTML = '';
-    this.el.appendChild(this.renderContent());
-    this.model.select();
-
-    var self = this;
-    $(this.widgetsContainer).resizable({
-      handles: "n, e, s, w, se",
-      grid: 30,
-      resize: self.resized
-    });
-  },
-
-  renderElement: function() {
-    var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
-    var element = _.template(temp, { 'source' : this.model.get('context').get('source'),
-                                     'prop' : 'source' });
-    return element;
-  }
-});
-
-var WidgetLinkView = WidgetView.extend({
-  initialize: function(item){
-    this.constructor.__super__.initialize.apply(this, [item]);
-    this.model.get('context').set('href', '{{homepage}}');
-  }
-});
 
 var WidgetContainerView = WidgetView.extend({
   el: null,
@@ -376,102 +352,88 @@ var WidgetContainerView = WidgetView.extend({
   },
 
   placeWidget: function(model, a) {
-    var widgetView;
-
-    switch (model.get('lib_id'))
-    {
-      case "3":
-        widgetView = new WidgetImgView(model);
-        break;
-      default:
-        widgetView = new WidgetView(model);
-    }
-     
+    var widgetView = new WidgetView(model);
     this.widgetsContainer.appendChild(widgetView.el);
   },
 
   placeCreateWidgets: function() {
-
-    var nmrAttributes = 0;
     var self = this;
-    var widgets = [];
+
+    console.log("CREATING");
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
+      var coordinates = iui.unite({x: 1, y: 1 + (ind * 2)}, {x: self.model.get('width') + 1, y: 1 + ((ind+1) * 2)});
       var type = '8';
       var widgetProps = {
-        id : self.model.get('childCollection').length + 1,
-        top : coordinates.topLeft.y,
-        left : coordinates.topLeft.x,
-        lib_id : type,
-        width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-        height: 2,
-        field_name : val.name,
-        text : val.name
+        lib_id : 8,
+        layout : {
+          top : coordinates.topLeft.y,
+          left : coordinates.topLeft.x,
+          width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+          height: 2
+        },
+        attribs : {
+          field_name : val.name
+        },
+        content : {
+          text : val.name
+        }
       };
       var widget = new WidgetModel(widgetProps);
       self.model.get('childCollection').push(widget);
-      nmrAttributes++;
     });
   },
 
   placeQueryWidgets: function() {
-    var nmrAttributes = 0;
     var self = this;
-    var widgets = [];
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
-      var type = '2';
+      var coordinates = iui.unite({x: 1, y: 1 + (ind * 2)}, {x: self.model.get('width') + 1, y: 1 + ((ind+1) * 2)});
       var widgetProps = {
-        id : self.model.get('childCollection').length + 1,
-        lib_id : type,
+        lib_id : 2,
         layout: {
           top : coordinates.topLeft.y,
           left : coordinates.topLeft.x,
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: coordinates.bottomRight.y - coordinates.topLeft.y -1
         },
-        context: {
+        content: {
           text : '{{' + self.entity.attributes.name + '_' + key + '}}'
         }
       };
       var widget = new WidgetModel(widgetProps);
       self.model.get('childCollection').push(widget);
-      nmrAttributes++;
     });
   },
 
   placeUpdateWidgets: function() {
-    var nmrAttributes = 0;
     var self = this;
-    var widgets = [];
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = pagesView.unite({x: 1, y: 1 + (nmrAttributes * 2)}, {x: self.model.get('width') + 1, y: 1 + ((nmrAttributes+1) * 2)});
-      var type = '8';
+      var coordinates = iui.unite({ x: 1,
+                                    y: 1 + (ind * 2)},
+                                  { x: self.model.get('width') + 1,
+                                    y: 1 + ((ind+1) * 2)});
       var widgetProps = {
-        id : self.model.get('childCollection').length + 1,
-        lib_id : type,
+        lib_id : 8,
         layout: {
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
           top : coordinates.topLeft.y,
           left : coordinates.topLeft.x
         },
-        context: {
+        content: {
           text : key
         }
       };
       var widget = new WidgetModel(widgetProps);
       self.model.get('childCollection').push(widget);
-      nmrAttributes++;
     });
   },
 
   plageEntitySingleWidget: function() {
 
     if (this.model.get('displayType') == "text") {
-      var coordinates = pagesView.unite({x: 1, y: 1 }, {x: this.model.get('layout').get('width') + 1, y: 3});
+      var coordinates = iui.unite({x: 1, y: 1 }, {x: this.model.get('layout').get('width') + 1, y: 3});
       var type = '2';
       var widgetProps = {
         lib_id : type,
@@ -481,7 +443,7 @@ var WidgetContainerView = WidgetView.extend({
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: coordinates.bottomRight.y - coordinates.topLeft.y -1
         },
-        context : {
+        content : {
           text : '{{' + this.entity.get('name') + ' ' + this.model.get('field') + '}}'
         }
       };
@@ -505,7 +467,7 @@ var WidgetEditorView = Backbone.View.extend({
   el : $('.page'),
   widgetsContainer : document.getElementById('widgets-container'),
   widgets : [],
-  selectedElement: null,
+  selectedEl: null,
 
   events : {
   },
@@ -536,10 +498,10 @@ var WidgetEditorView = Backbone.View.extend({
   },
 
   addWidget: function(id, cor1, cor2) {
-    var coordinates = pagesView.unite(cor1, cor2);
-    var libId = id.replace('widget-','');
+    var coordinates = iui.unite(cor1, cor2);
+    var libId = parseInt(id.replace('widget-',''));
+
     var widget = {
-      id : this.collection.length + 1,
       lib_id : libId,
       layout: {
         top : coordinates.topLeft.y,
@@ -552,33 +514,32 @@ var WidgetEditorView = Backbone.View.extend({
     this.collection.push(widget);
   },
 
-  placeWidget: function(widget) {
-    var curWidget;
-    if(typeof widget.get('entity') == "string") {
-      var entityObj = this.widgetEntitiesView.collection.where({ name :widget.get('entity')})[0];
-      if(!entityObj) {
-        alert('Entity could not be found!');
+  placeWidget: function(widgetModel) {
+    var curWidget, entityObj;
+
+    if(widgetModel.get('container_info') &&
+       typeof (widgetModel.get('container_info').entity) == "string") {
+      var nameString = widgetModel.get('container_info').entity;
+      
+      if(nameString === "Session") {
+
       }
       else {
-        widget.set('entity', entityObj);
-        curWidget= new WidgetContainerView(widget);
+        entityObj = this.widgetEntitiesView.collection.find(function(model) {
+          return model.get('name') == widgetModel.get('container_info').entity;
+        });
+        iui.assert(entityObj);
+        var container_info = widgetModel.get('container_info');
+        container_info.entity = entityObj;
+        widgetModel.set('container_info', container_info);
       }
     }
-    else if (widget.get('entity')) {
-      curWidget= new WidgetContainerView(widget);
+    
+    if (widgetModel.get('container_info')) {
+      curWidget= new WidgetContainerView(widgetModel);
     }
     else {
-      switch (widget.get('lib_id'))
-      {
-        case "1":
-          curWidget = new WidgetLinkView(widget);
-          break;
-        case "3":
-          curWidget = new WidgetImgView(widget);
-          break;
-        default:
-          curWidget = new WidgetView(widget);
-      }
+      curWidget = new WidgetView(widgetModel);
     }
     
 
@@ -642,27 +603,28 @@ var WidgetEditorView = Backbone.View.extend({
   keydown: function(e) {
     switch(e.keyCode) {
       case 37:
-        this.selectedElement.moveLeft();
+        this.selectedEl.moveLeft();
         break;
       case 38:
-        this.selectedElement.moveUp();
+        this.selectedEl.moveUp();
         e.preventDefault();
         break;
       case 39:
-        this.selectedElement.moveRight();
+        this.selectedEl.moveRight();
         e.preventDefault();
         break;
       case 40:
-        this.selectedElement.moveDown();
+        this.selectedEl.moveDown();
         e.preventDefault();
         break;
       case 8: //backspace
         e.preventDefault();
-        this.selectedElement.collection.remove(this.selectedElement);
+        this.selectedEl.collection.remove(this.selectedEl);
         break;
       case 27: //escape
         gridEditor.clearSelections();
-        if(this.selectedElement) this.selectedElement.collection.unselectAll();
+        if(this.selectedEl) 
+          this.selectedEl.collection.unselectAll();
         return false;
     }
   }

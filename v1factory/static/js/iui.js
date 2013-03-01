@@ -26,5 +26,33 @@ var iui = {
         console.log(FPError.toString());
       }
     );
+  },
+  assert : function(inp) {
+    if(!inp) {
+      console.trace();
+      alert('Important Error!');
+    }
+  },
+  unite: function(cor1, cor2) {
+    var topLeft = {}, bottomRight = {};
+
+    if(cor1.x < cor2.x) {
+      topLeft.x =  cor1.x; bottomRight.x = cor2.x;
+    } else {
+      topLeft.x =  cor2.x; bottomRight.x = cor1.x;
+    }
+
+    if(cor1.y < cor2.y) {
+      topLeft.y =  cor1.y; bottomRight.y = cor2.y;
+    } else {
+      topLeft.y =  cor2.y; bottomRight.y = cor1.y;
+    }
+
+    topLeft.x--; topLeft.y--;
+
+    return {
+      topLeft : topLeft,
+      bottomRight: bottomRight
+    };
   }
 };

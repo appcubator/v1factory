@@ -73,7 +73,7 @@ var EntityView = Backbone.View.extend({
 
   clickedCreate: function(e) {
     this.widget.container_info.action = 'create';
-    var newWidget = new Widget(this.widget);
+    var newWidget = new WidgetModel(this.widget);
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);
 
@@ -82,7 +82,7 @@ var EntityView = Backbone.View.extend({
 
   clickedUpdate: function(e) {
     this.widget.container_info.action = 'update';
-    var newWidget = new Widget(this.widget);
+    var newWidget = new WidgetModel(this.widget);
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);
 
@@ -91,7 +91,7 @@ var EntityView = Backbone.View.extend({
 
   clickedQuery: function(e) {
     this.widget.container_info.action = 'query';
-    var newWidget = new Widget(this.widget);
+    var newWidget = new WidgetModel(this.widget);
     newWidget.assignCoord();
     this.widgetCollection.add(newWidget);
 
@@ -99,10 +99,9 @@ var EntityView = Backbone.View.extend({
   },
 
   assignCoord: function() {
-    var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
-                                    pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
+    var coordinates = currentCoord? iui.unite(currentCoord.initCor, currentCoord.lastCor):
+                                    iui.unite({x: 0, y:2}, {x: 16, y: 10});
 
-    console.log(coordinates);
   }
 });
 

@@ -11,10 +11,10 @@
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel span22 hi3">
-  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <div class="offset2 toppanel span44 hi6">
+  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
-  <div class="span8 hoff1 right">
+  <div class="span16 hoff2 right">
     <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-entities">Save</a>
   </div>
 </div>
@@ -22,65 +22,65 @@
 
 {% block page %}
 <div class="container" id="entities-page">
-  <div class="row top-buttons offset1 span30 tb-border">
+  <div class="row top-buttons offset1 span60 tb-border">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </div>
   <div class="row offset1">
-    <div class="span30 hoff1">
-      <div class="pane hi8" id="user-entity">
-        <h2 class="offset1 hoff1">User</h2>
-        <div class="offset1 span6">
+    <div class="span60 hoff1">
+      <div class="pane hi16" id="user-entity">
+        <h2 class="offset1 hoff2">User</h2>
+        <div class="offset1 span12">
           <ul class="property-l">
             <li>
-              <span class="hi1 span3" id="">Name</span>
+              <span class="hi2 span6" id="">Name</span>
               <select class="attribs" id="Name" disabled>
                 <option value="text" selected="">Text</option>
               </select>
             </li>
             <li>
-              <span class="hi1 span3" id="">Last Name</span>
+              <span class="hi2 span6" id="">Last Name</span>
               <select class="attribs" id="Addres" disabled>
                 <option value="text" selected="">Text</option>
               </select>
             </li>
             <li>
-              <span class="hi1 span3" id="">Email</span>
+              <span class="hi2 span6" id="">Email</span>
               <select class="attribs" id="Students" disabled>
                 <option value="text" selected="">Text</option>      
               </select>
             </li>
           </ul>
         </div>
-        <div class="offset2 span6">
+        <div class="offset2 span12">
           <ul class="property-list">
           </ul>
-          <a class="add-property-button span7 hoff1"><span class="plus">+</span> Add Property</a>
-          <form class="add-property-form span5 hoff1" style="display:none"><input type="text" class="property-name-input"></form>
+          <a class="add-property-button span14 hoff1"><span class="plus">+</span> Add Property</a>
+          <form class="add-property-form span10 hoff1" style="display:none"><input type="text" class="property-name-input"></form>
         </div>
-        <div class="span6 offset1">
-          <label class="hi1"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
-          <label class="hi1"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
-          <label class="hi1"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
+        <div class="span12 offset1">
+          <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
+          <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
+          <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
         </div>
       </div>
     </div>
   </div>
-  <div class="row top-buttons offset1 hoff1 span30 tb-border">
+  <div class="row top-buttons offset1 hoff1 span60 tb-border">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </div>
   <div class="row">
-    <div class="span24 offset1 hoff1">
+    <div class="span48 offset1 hoff1">
       <h2 class="offset1">Entities</h2>
       <div id="entities-container">
-      <ul id="entities" class="entity-list"></ul><div id="add-entity-button" class="span7 offset1 add-entity"><span class="pane hi5 hoff1"><p class="hoff2"> + Add Entity</p></span></div>
-      <form id="add-entity-form" class="offset1 span7 entity hoff1" style="display:none;">
+      <ul id="entities" class="entity-list"></ul><div id="add-entity-button" class="span14 offset1 add-entity"><span class="pane hi10 hoff1"><p class="hoff4"> + Add Entity</p></span></div>
+      <form id="add-entity-form" class="offset1 span14 entity hoff1" style="display:none;">
         <div class="pane">
         <span class="sub-title">
           <input type="text" id="entity-name-input" placeholder="Entity Name"></span>
         </div>
       </form>
       </div>
-    </div><div class="span5 hoff1" id="entities-library-view">
+    </div><div class="span10 hoff1" id="entities-library-view">
       <h2 class="offset1">Library</h2>
       <ul id="entities-library" class="entity-list">
       </ul>
@@ -136,10 +136,10 @@
 </script>
 <script type="text/html" id="template-entity">
 <span class="pane hoff1">
-<span class="sub-title span5"><%- name %></span><span class="cross" id="cross">×</span>
+<span class="sub-title span10"><%- name %></span><span class="cross" id="cross">×</span>
 <ul class="property-list">
   <% _(attribs).each(function(attrib, ind){ %><li>
-    <span class="hi1 span3" id=""><%- attrib.name %></span><span class="right cross small" id="prop-cross">×</span>
+    <span class="hi1 span12" id=""><%- attrib.name %></span><span class="right cross small" id="prop-cross">×</span>
     <select class="attribs" id="prop-<%- ind %>">
       <option value="text" <% if(attrib.type=="text") %> selected <% %>>Text</option>
       <option value="number" <% if(attrib.type=="number") %> selected <% %>>Number</option>
@@ -152,11 +152,11 @@
     </select></li>
 <% }); %>
 </ul>
-<a class="add-property-button span7 hoff1"><span class="plus">+</span> Add Property</a>
-<form class="add-property-form span5 hoff1" style="display:none"><input type="text" class="property-name-input"></form></li>
+<a class="add-property-button span28 hoff1"><span class="plus">+</span> Add Property</a>
+<form class="add-property-form span20 hoff1" style="display:none"><input type="text" class="property-name-input"></form></li>
 </script>
 <script type="text/html" id="template-property">
-<li><span class="hi1 span3"><%- name %></span><span class="right cross small" id="prop-cross">×</span>
+<li><span class="hi2 span3"><%- name %></span><span class="right cross small" id="prop-cross">×</span>
   <select class="attribs" id="<%- ind %>">
     <option value="text" selected>Text</option>
     <option value="number">Number</option>
