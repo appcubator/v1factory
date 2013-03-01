@@ -54,7 +54,11 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                           "left": { "_type": 0 }
                                                                          }
                                                             },
-                                                  "attrib": {
+                                                  "attribs": {
+                                                              "_type": {},
+                                                              "_mapping":{}
+                                                             },
+                                                  "content": {
                                                               "_type": {},
                                                               "_mapping":{}
                                                              },
@@ -77,7 +81,11 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                                                                                    "left": { "_type": 0 }
                                                                                                                                   }
                                                                                                                      },
-                                                                                                           "attrib": {
+                                                                                                           "attribs": {
+                                                                                                                      "_type": {},
+                                                                                                                      "_mapping":{}
+                                                                                                                     },
+                                                                                                           "content": {
                                                                                                                       "_type": {},
                                                                                                                       "_mapping":{}
                                                                                                                      },

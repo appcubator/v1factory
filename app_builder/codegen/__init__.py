@@ -67,8 +67,9 @@ class Form:
 
     self.included_fields = []
     for uie in form_container['container_info']['uielements']:
-      if 'field-name' in uie:
-        self.included_fields.append(uie['field-name'])
+      # grab the "name" attribute, it is indicative of the model fields
+      if uie['tagname'] in ['input', 'textarea']:
+        self.included_fields.append(uie['attrib']['name'])
 
 class AnalyzedApp:
 

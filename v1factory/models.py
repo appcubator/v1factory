@@ -24,8 +24,8 @@ starter_app = """{
         "uielements":[
           {
             "lib_id":4,
-            "text":"Login",
-            "attrib":{},
+            "attribs":{},
+            "content": { "text":"Login" },
             "container_info":null,
             "layout": {
               "width"  :4,
@@ -36,7 +36,8 @@ starter_app = """{
           },
           {
             "lib_id":7,
-            "attrib":{},
+            "attribs":{},
+            "content":{},
             "layout" : {
               "width"  :4,
               "height" :4,
@@ -49,11 +50,12 @@ starter_app = """{
             "uielements":[
               {
                 "lib_id":8,
-                "attrib" : {
+                "attribs" : {
                   "placeholder":"Username",
                   "name":"username",
                   "type":"text"
                 },
+                "content":{},
                 "layout" : {
                   "width"  :4,
                   "height" :4,
@@ -65,11 +67,12 @@ starter_app = """{
               },
               {
                 "lib_id":8,
-                "attrib" : {
+                "attribs" : {
                   "placeholder":"Password",
                   "name":"password",
                   "type":"password"
                 },
+                "content":{},
                 "layout" : {
                   "width"  :4,
                   "height" :4,
@@ -80,10 +83,10 @@ starter_app = """{
               },
               {
                 "lib_id":10,
-                "text": "Login",
-                "attrib" : {
+                "attribs" : {
                   "type":"submit"
                 },
+                "content":{ "text":"Login" },
                 "layout" : {
                   "width"  :4,
                   "height" :4,
@@ -110,8 +113,8 @@ starter_app = """{
         "uielements": [
           {
             "lib_id":4,
-            "text": "Sign Up",
-            "attrib": {},
+            "attribs": {},
+            "content":{ "text": "Sign Up" },
             "container_info":null,
             "layout" : {
               "width"  :4,
@@ -122,7 +125,8 @@ starter_app = """{
           },
           {
             "lib_id":7,
-            "attrib": {},
+            "attribs": {},
+            "content":{},
             "layout" : {
               "width"  :4,
               "height" :4,
@@ -135,11 +139,12 @@ starter_app = """{
               "uielements":[
                 {
                   "lib_id":8,
-                  "attrib": {
+                  "attribs": {
                     "name":"username",
                     "placeholder":"Username",
                     "type":"text"
                   },
+            "content":{},
                   "container_info":null,
                   "layout" : {
                     "width"  :4,
@@ -150,11 +155,12 @@ starter_app = """{
                 },
                 {
                   "lib_id":8,
-                  "attrib" : {
+                  "attribs" : {
                     "placeholder":"Password",
                     "name":"password",
                     "type":"password"
                   },
+            "content":{},
                   "container_info":null,
                   "layout" : {
                     "height" :4,
@@ -165,11 +171,12 @@ starter_app = """{
                 },
                 {
                   "lib_id":8,
-                  "attrib" : {
+                  "attribs" : {
                     "placeholder":"Email",
                     "name":"email",
                     "type":"text"
                   },
+            "content":{},
                   "container_info":null,
                   "layout": {
                     "width"  :4,
@@ -180,10 +187,10 @@ starter_app = """{
                 },
                 {
                   "lib_id":10,
-                  "text":"Continue",
-                  "attrib" : {
+                  "attribs" : {
                     "type":"submit"
                   },
+                  "content":{ "text":"Continue" },
                   "container_info":null,
                   "layout" : {
                     "height" :4,
@@ -204,9 +211,9 @@ starter_app = """{
         "uielements": [
           {
             "lib_id":4,
-            "text":"Homepage",
             "container_info":null,
-            "attrib":{},
+            "attribs":{},
+            "content":{ "text":"Homepage" },
             "layout" : {
               "width"  :4,
               "height" :4,
@@ -289,6 +296,28 @@ class App(models.Model):
       print "Running `{}`".format(c)
       subprocess.call(c.split(' '), cwd=tmp_project_dir, env=os.environ.copy(), stdout=sys.stdout, stderr=sys.stderr)
     return tmp_project_dir
+
+  def deploy_test(self):
+    """
+    analyzed_app = AnalyzedApp(self.state, self.name)
+    django_writer = DjangoWriter(analyzed_app)
+
+    def print_test(heading, test_output_fun):
+      print 
+      try:
+        test_output = test_output_fun())
+      except Exception, e:
+        # print traceback
+      else:
+        print test_output
+      print "\n\n#############     END     #############"
+    django_writer.urls_py_as_string()
+    django_writer.models_py_as_string()
+    django_writer.model_forms_py_as_string()
+    django_writer.views_py_as_string()
+    django_writer.form_receivers_py_as_string()
+    django_writer.templates_as_strings()
+    """
 
 class UIElement(models.Model):
   """Describes the UIElement. If app is none, this belongs to the Library."""
