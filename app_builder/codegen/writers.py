@@ -221,43 +221,53 @@ class DjangoWriter:
 
   @staticmethod
   def render_uielement(el):
-    from v1factory.models import UIElement
-    try:
-      lib_el = UIElement.get_library().get(id=el['lib-id'])
-    except Exception, e:
-      print e
-      return "<p>Element could not be found. See logs.</p>"
-    else:
-      handlebars_html = lib_el.html
-      # replace the handlebars with context - <p><%= text %></p>  =>  <p>Hello</p>
-      #for k, v in el['context'].items():
-      #  handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
 
-      if 'text' in el:
-        handlebars_html = re.sub('<%= {} %>'.format('text'), el['text'], handlebars_html)
-
-      # TODO move this to validation
-      if 'width' not in el:
-        el['width'] = 5
-        el['height'] = 5
-
+    def get_classes(el, lib_el):
+      """list of classes for this el"""
       def widthclass(width):
         return "span{}".format(width)
       def heightclass(height):
         return "hi{}".format(height)
+      classes = [lib_el.class_name, widthclass(el['layout']['width']), heightclass(el['layout']['height'])]
 
-      # parse the html using lxml, then add class attributes:
-      print handlebars_html
-      new_classes = " ".join([lib_el.class_name, widthclass(el['width']), heightclass(el['height'])])
-      handlebars_html = re.sub(r'^(<\w+ [^>]*class="[^"]*)("[^>]*>)', r"\1 %s\2" % new_classes, handlebars_html)
-      print handlebars_html, "\n\n"
+      return classes
 
-      # if it's a container, do this for each of the elements.
-      if el['container-info'] is not None:
-        for inner_el in el['container-info']['uielements']:
-          handlebars_html += DjangoWriter.render_uielement(inner_el)
+    def get_attributes(el):
+      """list of attr/value pairs for this el"""
+      return el['attrib'].items()
 
-      return handlebars_html
+    from v1factory.models import UIElement
+    try:
+      lib_el = UIElement.get_library().get(id=el['lib_id'])
+    except Exception, e:
+      print e
+      return "<p>Element could not be found. See logs.</p>"
+    else:
+      classes = get_classes(el, lib_el)
+      attributes = get_attributes(el)
+
+      if el['container_info'] is not None:
+        container_els = [ DjangoWriter.render_uielement(inner_el) for inner_el in el['container_info']['uielements'] ]
+        html = "\n".join(container_els)
+        return html
+
+      elif lib_el.tagname in ['img', 'input']:
+         html = "<{} class=\"{}\" {} />".format(lib_el.tagname, classes, attributes)
+         return html
+
+      else:
+        filler = lib_el.html
+            # LATER maybe use this context system if we need more than just text:
+            # replace the handlebars with context - <p><%= text %></p>  =>  <p>Hello</p>
+            #for k, v in el['context'].items():
+            #  handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
+
+        handlebars_html = "<{} class=\"{}\" {}>{}</{}>".format(lib_el.tagname, classes, attributes, filler, lib_el.tagname)
+
+        if 'text' in el:
+          html = re.sub('<%= text %>', el['text'], handlebars_html)
+
+        return html
 
   @staticmethod
   def generate_template_code(page):
@@ -278,15 +288,15 @@ class DjangoWriter:
       template_text = re.sub(r'{{ *[A-Z][a-z0-9_]*[\._]([a-zA-Z0-9_]+) *}}', r'{{ this_thing.\1 }}', raw_template)
 
       # if this is a container, do things like forms and for loops for the queries.
-      if el['container-info'] is not None:
-        if el['container-info']['action'] == 'show':
+      if el['container_info'] is not None:
+        if el['container_info']['action'] == 'show':
           html += """{% for this_thing in q"""+ str(query_counter) +""" %}"""
           html += template_text
           html += """{% endfor %}"""
-        elif el['container-info']['action'] == 'create':
-          if el['container-info']['entity'] == "User": continue # TODO make login stuff work...
-          if el['container-info']['entity'] == "Session": continue
-          form_obj = el['container-info']['form']
+        elif el['container_info']['action'] == 'create':
+          if el['container_info']['entity'] == "User": continue # TODO make login stuff work...
+          if el['container_info']['entity'] == "Session": continue
+          form_obj = el['container_info']['form']
           html += """<form method="POST" action="{% url """+ "webapp.form_receivers.save_{}Form{}".format(form_obj.entity, form_obj.form_id) +""" %}">"""
           html += """{% csrf_token %}"""
           html += template_text
@@ -315,7 +325,7 @@ class DjangoWriter:
       print p
       print type(p)
       for t in p.uielements:
-        bag_of_lib_ids.add(t['lib-id'])
+        bag_of_lib_ids.add(t['lib_id'])
 
     return bag_of_lib_ids
 

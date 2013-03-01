@@ -54,7 +54,7 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                           "left": { "_type": 0 }
                                                                          }
                                                             },
-                                                  "context": {
+                                                  "attrib": {
                                                               "_type": {},
                                                               "_mapping":{}
                                                              },
@@ -77,17 +77,17 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                                                                                    "left": { "_type": 0 }
                                                                                                                                   }
                                                                                                                      },
-                                                                                                           "context": {
-                                                                                                                       "_type": {},
-                                                                                                                       "_mapping":{}
-                                                                                                                      },
+                                                                                                           "attrib": {
+                                                                                                                      "_type": {},
+                                                                                                                      "_mapping":{}
+                                                                                                                     },
                                                                                                            }}
                                                                                                  },
                                                                                  }
                                                                     },
-                                                  "access_level": { "_type" : u"" }
                                                  }},
                                        },
+                         "access_level": { "_type" : u"" }
                         }
            }},
   "urls": {
@@ -163,7 +163,7 @@ def validate(thing, schema):
       try: assert(thing >= schema["_min"])
       except Exception: errors.append('int was less than min: \"{}\", min={}'.format(thing, schema['_min']))
     if "_max" in schema:
-      try: assert(thing >= schema["_max"])
+      try: assert(thing <= schema["_max"])
       except Exception: errors.append('int was greater than max: \"{}\", max={}'.format(thing, schema['_max']))
 
   elif type(thing) == type(True):

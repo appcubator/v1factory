@@ -29,8 +29,8 @@ class Page:
       template['uielements'] = []
 
     for uie in template['uielements']:
-      if uie['container-info'] is not None and uie['container-info']['action'] == 'show':
-        qs.append('{}.objects.all()'.format(uie['container-info']['entity']))
+      if uie['container_info'] is not None and uie['container_info']['action'] == 'show':
+        qs.append('{}.objects.all()'.format(uie['container_info']['entity']))
     return qs
 
   def __init__(self, urls_d, analyzed_app):
@@ -46,10 +46,10 @@ class Page:
 
     self.uielements = self._page_json['uielements']
 
-    if 'access-level' not in self._page_json:
-      self._page_json['access-level'] = "all"
+    if 'access_level' not in self._page_json:
+      self._page_json['access_level'] = "all"
 
-    self.access_level = self._page_json['access-level']
+    self.access_level = self._page_json['access_level']
 
 def get_required_fields_from_model(entity):
   """Convenience function that does what it says"""
@@ -62,11 +62,11 @@ class Form:
   def __init__(self, form_container, form_id, parent_page):
     """Grab the entity and included fields"""
     self.form_id = form_id
-    self.entity = form_container['container-info']['entity']
+    self.entity = form_container['container_info']['entity']
     self.parent_page = parent_page
 
     self.included_fields = []
-    for uie in form_container['container-info']['uielements']:
+    for uie in form_container['container_info']['uielements']:
       if 'field-name' in uie:
         self.included_fields.append(uie['field-name'])
 
@@ -95,10 +95,10 @@ class AnalyzedApp:
     self.pages = [ Page(d, self) for d in self.urls ]
     for p in self.pages:
       for i, uie in enumerate(p.uielements):
-        if uie['container-info'] is not None and uie['container-info']['action'] == 'create':
-          if uie['container-info']['entity'] == "User": continue
-          if uie['container-info']['entity'] == "Session": continue
+        if uie['container_info'] is not None and uie['container_info']['action'] == 'create':
+          if uie['container_info']['entity'] == "User": continue
+          if uie['container_info']['entity'] == "Session": continue
           form_obj = Form(uie, i, p)
-          uie['container-info']['form'] = form_obj
+          uie['container_info']['form'] = form_obj
           self.forms.append(form_obj)
 
