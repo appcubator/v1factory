@@ -61,7 +61,11 @@ var PagesView = Backbone.View.extend({
       var styleTag = document.createElement('style');
       styleTag.id = val.id;
 
-      var styleContent = (val.tag || 'body') + ' {';
+      console.log("EEEE");
+      console.log(val);
+
+      
+      var styleContent = (val.tag || '.sample') + ' {';
       styleContent += (val.css).replace(/<%=content%>/g, val.currentValue);
       styleContent += '}';
 

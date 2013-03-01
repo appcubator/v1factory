@@ -40,7 +40,7 @@ var DesignPropertyView = Backbone.View.extend({
     var styleTag = document.createElement('style');
     styleTag.id = this.options.id;
 
-    var styleContent = 'body ' + (this.options.tag||'') + ' {';
+    var styleContent = '.sample ' + (this.options.tag||'') + ' {';
     styleContent += this.options.css.replace(/<%=content%>/g, this.model.get('value'));
     styleContent += '}';
 
@@ -60,12 +60,14 @@ var DesignPropertyView = Backbone.View.extend({
 
 var DesignColorPickerPropertyView = DesignPropertyView.extend({
   events: {
-    'click .opt' : 'select'
+    'click .color' : 'colorClicked',
+    'click .opt' : 'select',
+    'change .color' : 'selectColor'
   },
 
   initialize: function(model, pageModel, ind, shouldStyle) {
     this.constructor.__super__.initialize.apply(this, [model, pageModel, ind, shouldStyle]);
-    _.bindAll(this, 'selectColor');
+    _.bindAll(this, 'selectColor', 'colorClicked');
   },
 
   render: function() {
@@ -77,7 +79,7 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
       var bool = (self.model.get('value') == option)?'selected':'';
       newElem += '<div class="opt '+ bool +'" id="color-'+ ind +'" style="background-color:'+ option +';"></div>';
     });
-    newElem += '<div class="opt"><input class="color" onchange="'+self.selectColor(this.color)+'"></div>';
+    newElem += '<div class="opt"><input class="color"></div>';
     newElem += '</div>';
     this.el.innerHTML += newElem;
   },
@@ -91,8 +93,13 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
     return false;
   },
 
-  selectColor: function(color) {
-    this.model.set('value', color);
+  selectColor: function(e, color) {
+    this.model.set('value', '#'+e.target.value);
+  },
+
+  colorClicked: function(e) {
+    e.preventDefault();
+    return false;
   }
 });
 

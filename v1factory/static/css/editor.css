@@ -65,7 +65,7 @@
 }
 
 .section ul li:hover {
-  background-color: #3b4555;
+  background-color: rgba(59, 69, 85, 0.6);
 }
 
 .section ul li:active {
@@ -130,6 +130,7 @@
 
 .span1.editing:hover{
   background-color: rgba(43, 53, 69, 0.5);
+  border-radius: 4px;
 }
 
 .span1.cselected {
@@ -393,7 +394,7 @@
 }
 
 .item-gallery ul li:hover {
-  background-color: #dddddf;
+  background-color: rgba(59, 69, 85, 0.6);
 }
 
 .accord {
@@ -446,6 +447,7 @@
   color: #000;
   cursor: help;
   padding-top: 20px;
+  font: normal 16px/20px "proxima-nova", Arial, sans-serif; 
 }
 
 .accordion {
@@ -718,6 +720,7 @@
   width: 930px;
   margin-left: -465px;
   margin-bottom: -100%;
+  z-index: 1006;
 }
 .settings .span5 {
   width: 170px;
@@ -829,6 +832,19 @@ select.font {
   width: 160px;
 }
 
+li.model {
+  padding: 0!important;
+}
+
+li.model span.title {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+  height: 26px;
+  padding: 3px;
+  padding-left: 12px;
+  background-image: -webkit-linear-gradient(#2b3545, #263040);
+}
 /* Settings Menu */
 .menu ul li {
   padding-top: 10px;

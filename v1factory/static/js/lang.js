@@ -5,5 +5,7 @@ var lang = {
   height : "Height",
   source : "Source",
   href   : "Target",
-  text   : "Text"
+  text   : "Text",
+  layout : "Layout Info",
+  context: "Content"
 };

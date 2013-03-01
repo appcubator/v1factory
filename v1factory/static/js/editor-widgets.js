@@ -146,7 +146,9 @@ var WidgetView = Backbone.View.extend({
   },
 
   renderElement: function() {
+    console.log(document.getElementById('temp-widget-' + this.model.get('lib_id')));
     var temp = document.getElementById('temp-widget-' + this.model.get('lib_id')).innerHTML;
+    console.log(temp);
     var page_context = {};
     this.model.get('context').set('text', this.model.get('context').get('text') || "BLANK TEXT");
     page_context.text = this.model.get('context').get('text');
@@ -599,7 +601,7 @@ var WidgetEditorView = Backbone.View.extend({
       var styleTag = document.createElement('style');
       styleTag.id = 'style-' + prop.type;
 
-      var styleContent = '' + (designOptions[prop.type].tag||'body') + ' {';
+      var styleContent = '' + (designOptions[prop.type].tag||'.sample') + ' {';
       styleContent += designOptions[prop.type].css.replace(/<%=content%>/g, prop.value);
       styleContent += '}';
 

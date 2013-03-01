@@ -10,7 +10,7 @@ var designOptions = {
     id: "backgroundImage",
     name: "Background Image",
     type: "image-picker",
-    options: ['url(/static/img/sample_bg.png)', 'url(/static/img/escheresque_ste.png)', 'url(/static/img/kindajean.png)'],
+    options: ['none', 'url(/static/img/sample_bg.png)', 'url(/static/img/escheresque_ste.png)', 'url(/static/img/kindajean.png)'],
     css: 'background-image:<%=content%>;'
   },
   'text-color' : {

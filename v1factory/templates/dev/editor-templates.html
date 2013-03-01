@@ -6,7 +6,9 @@
 </script>
 {% for element in elements %}
 <script type="text/html" id="temp-widget-{{ element.id }}">
+<{{ element.tagname|safe}} src="">
 {{ element.html|safe }}
+</{{ element.tagname|safe}}>
 </script>
 {% endfor %}
 <script type="text/html" id="temp-href-select">

@@ -67,15 +67,24 @@ var WidgetInfoView = Backbone.View.extend({
   showModel: function(model, modelName) {
     var self = this;
     var li = document.createElement('li');
+    li.className = 'model';
+    
+
+    var span = document.createElement('span');
+    span.innerText = lang[modelName];
+    span.className = "title";
 
     var ul = document.createElement('ul');
-    ul.className = 'prop' + modelName;
+    ul.className = 'prop-' + modelName;
 
     _(model.attributes).each(function(val, key) {
       ul.appendChild(self.showAttribute(val, key, key, modelName));
     });
 
-    return li.appendChild(ul);
+    li.appendChild(span);
+    li.appendChild(ul);
+    console.log(li);
+    return li;
   },
 
   showAttribute: function(val, key, prop, modelName) {
@@ -156,7 +165,6 @@ var WidgetInfoView = Backbone.View.extend({
 
   changedLayout: function(changedLayoutModel) {
     _(changedLayoutModel.attributes).each(function(val, key) {
-      console.log(key + ' : ' + val);
       if(document.getElementById('prop-layout-' + key)) {
         $(document.getElementById('prop-layout-' + key)).val(val);
       }
