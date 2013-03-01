@@ -175,9 +175,11 @@ def app_editor(request, app_id, page_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   els = UIElement.get_library()
-  page_context = { 'app': app, 
-                   'title' : 'Editor', 
+  my_els = els.filter(app=app)
+  page_context = { 'app': app,
+                   'title' : 'Editor',
                    'elements' : els,
+                   'myuielements' : my_els,
                    'page_id': page_id }
   add_statics_to_context(page_context, app)
   return render(request, 'dev/editor-main.html', page_context)
