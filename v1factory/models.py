@@ -19,89 +19,6 @@ starter_app = """{
     "entities":[],
     "pages":[
       {
-        "name":"login",
-        "design_props" : null,
-        "uielements":[
-          {
-            "lib_id":4,
-            "attribs":{},
-            "content": { "text":"Login" },
-            "container_info":null,
-            "layout": {
-              "width"  :4,
-              "height" :4,
-              "top"    :1,
-              "left"   :1
-            }
-          },
-          {
-            "lib_id":7,
-            "attribs":{},
-            "content":{},
-            "layout" : {
-              "width"  :4,
-              "height" :4,
-              "top"    :1,
-              "left"   :1
-            },
-            "container_info":{
-            "entity":"Session",
-            "action":"create",
-            "uielements":[
-              {
-                "lib_id":8,
-                "attribs" : {
-                  "placeholder":"Username",
-                  "name":"username",
-                  "type":"text"
-                },
-                "content":{},
-                "layout" : {
-                  "width"  :4,
-                  "height" :4,
-                  "top"    :1,
-                  "left"   :1
-                },
-                "field_name":"username",
-                "container_info":null
-              },
-              {
-                "lib_id":8,
-                "attribs" : {
-                  "placeholder":"Password",
-                  "name":"password",
-                  "type":"password"
-                },
-                "content":{},
-                "layout" : {
-                  "width"  :4,
-                  "height" :4,
-                  "top"    :1,
-                  "left"   :1
-                },
-                "container_info":null
-              },
-              {
-                "lib_id":10,
-                "attribs" : {
-                  "type":"submit"
-                },
-                "content":{ "text":"Login" },
-                "layout" : {
-                  "width"  :4,
-                  "height" :4,
-                  "top"    :1,
-                  "left"   :1
-                },
-                "container_info":null
-              }
-            ]
-          }
-          }
-        ],
-        "access_level" : "all"
-      },
-      {
         "name":"registration",
         "design_props" : null,
         "layout" : {
@@ -135,7 +52,7 @@ starter_app = """{
             },
             "container_info": {
               "entity":"User",
-              "action":"create",
+              "action":"signup",
               "uielements":[
                 {
                   "lib_id":8,
@@ -144,7 +61,7 @@ starter_app = """{
                     "placeholder":"Username",
                     "type":"text"
                   },
-            "content":{},
+                  "content":{},
                   "container_info":null,
                   "layout" : {
                     "width"  :4,
@@ -160,7 +77,7 @@ starter_app = """{
                     "name":"password",
                     "type":"password"
                   },
-            "content":{},
+                  "content":{},
                   "container_info":null,
                   "layout" : {
                     "height" :4,
@@ -176,7 +93,7 @@ starter_app = """{
                     "name":"email",
                     "type":"text"
                   },
-            "content":{},
+                  "content":{},
                   "container_info":null,
                   "layout": {
                     "width"  :4,
@@ -220,6 +137,70 @@ starter_app = """{
               "top"    :1,
               "left"   :1
             }
+          },
+          {
+            "lib_id":7,
+            "attribs":{},
+            "content":{},
+            "layout" : {
+              "width"  :4,
+              "height" :4,
+              "top"    :1,
+              "left"   :1
+            },
+            "container_info":{
+              "entity":"User",
+              "action":"login",
+              "uielements":[
+                {
+                  "lib_id":8,
+                  "attribs" : {
+                    "placeholder":"Username",
+                    "name":"username",
+                    "type":"text"
+                  },
+                  "content":{},
+                  "layout" : {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  },
+                  "field_name":"username",
+                  "container_info":null
+                },
+                {
+                  "lib_id":8,
+                  "attribs" : {
+                    "placeholder":"Password",
+                    "name":"password",
+                    "type":"password"
+                  },
+                  "content":{},
+                  "layout" : {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  },
+                  "container_info":null
+                },
+                {
+                  "lib_id":10,
+                  "attribs" : {
+                    "type":"submit"
+                  },
+                  "content":{ "text":"Login" },
+                  "layout" : {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  },
+                  "container_info":null
+                }
+              ]
+            }
           }
         ],
         "access_level": "all"
@@ -229,10 +210,6 @@ starter_app = """{
       {
         "page_name":"homepage",
         "urlparts":[]
-      },
-      {
-        "page_name":"login",
-        "urlparts":["login"]
       },
       {
         "page_name":"registration",

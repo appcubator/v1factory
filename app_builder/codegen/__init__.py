@@ -15,7 +15,7 @@ def url_parts_to_regex(url_parts):
       return id_regex
     else:
       return s
-  return '^' + '/'.join(map(repl_model_with_id_regex, url_parts)) + '/$'
+  return '^' + '/'.join(map(repl_model_with_id_regex, url_parts)) + '$'
 
 APP_NAME = "twitter"
 
@@ -76,21 +76,9 @@ class AnalyzedApp:
   def __init__(self, app_state, app_name):
     self.name = app_name
     self.classes = app_state['entities']
-    self.classes.append({"name":"User","fields":[{
-        "name":"first_name",
-        "type":"text",
-        "required":True
-      },{
-        "name":"email",
-        "type":"text",
-        "required":True
-      },{
-        "name":"password",
-        "type":"text",
-        "required":True
-      }]})
     self.templates = app_state['pages']
     self.urls = app_state['urls']
+    self.user_settings = app_state['users']
     self.forms = []
 
     self.pages = [ Page(d, self) for d in self.urls ]
