@@ -81,7 +81,6 @@ var UrlView = Backbone.View.extend({
 
   newPageSubmitted: function(e) {
     var name = $('.page-name-input', this.el).val();
-    console.log(name);
     urlsEditor.createPage(name);
     e.preventDefault();
     $('.page-name-input').val('');

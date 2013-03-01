@@ -125,7 +125,6 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
     e.preventDefault();
     $('.opt', this.el).removeClass('selected');
     $(e.target).addClass('selected');
-    console.log(e.target.style.backgroundImage);
     var val = e.target.style.backgroundImage;
     this.model.set('value', val);
     return false;

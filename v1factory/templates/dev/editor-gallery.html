@@ -4,11 +4,14 @@
       <div class="header">Interface Elements</div>
       <ul class="sample">
         <li class="help-text"><span>Click on an element below to place on the page. Scroll down to see more.</span></li>
-        {% for element in elements %}
-        <li class="widget-prev {{ element.class_name }}" id="widget-{{ element.id }}">
-        <{{ element.tagname|safe}}>
-        {{ element.html|safe }}
-        </{{ element.tagname|safe}}>
+        {% for element in gallery_elements %}
+        <li class="widget-prev {{ element.class_name }}" id="widget-{{element.id}}">
+          <{{ element.tagname}} {% for attrib in element.attribs %} {{ attrib }}=default {% endfor %}>
+            text
+            {% for key, value in element.content %}
+              {{ key }}
+            {% endfor %}
+          </{{ element.tagname}}>
         </li>
         {% endfor %}
       </ul>

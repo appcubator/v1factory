@@ -99,10 +99,9 @@ var EntityView = Backbone.View.extend({
   },
 
   assignCoord: function() {
-    var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
-                                    pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
+    var coordinates = currentCoord? iui.unite(currentCoord.initCor, currentCoord.lastCor):
+                                    iui.unite({x: 0, y:2}, {x: 16, y: 10});
 
-    console.log(coordinates);
   }
 });
 

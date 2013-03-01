@@ -16,7 +16,8 @@ var WidgetInfoView = Backbone.View.extend({
   el     : document.getElementById('item-info-list'),
   model  : null,
   events : {
-    'change input' : 'inputChanged',
+    'change input'          : 'inputChanged',
+    'keydown input'         : 'keydownInput',
     'change select.statics' : 'staticsChanged'
   },
 
@@ -26,10 +27,11 @@ var WidgetInfoView = Backbone.View.extend({
                     'showAttribute',
                     'staticsAdded',
                     'inputChanged',
+                    'keydownInput',
                     'staticsChanged',
                     'showModel',
                     'changedProp',
-                    'changedContext',
+                    'changedContent',
                     'changedLayout');
     this.render();
   },
@@ -42,18 +44,15 @@ var WidgetInfoView = Backbone.View.extend({
     $(this.el).fadeIn();
     var self = this;
 
-    console.log(this);
-
-
     this.el.innerHTML = '';
     this.model = widgetModel;
     this.model.bind("change", this.changedProp, this);
     this.model.bind("remove", this.hide, this);
     this.model.get('layout').bind("change", this.changedLayout, this);
-    this.model.get('context').bind("change", this.changedContext, this);
+    this.model.get('content').bind("change", this.changedContent, this);
 
     _(widgetModel.attributes).each(function(val, key){
-      if(key == 'id' || key == 'selected' || key == 'lib_id') return;
+      if(key == 'id' || key == 'selected' || key == 'lib_id' || key == 'container_info') return;
 
       if(val && val.attributes) {
         self.el.appendChild(self.showModel(val, key));
@@ -83,7 +82,6 @@ var WidgetInfoView = Backbone.View.extend({
 
     li.appendChild(span);
     li.appendChild(ul);
-    console.log(li);
     return li;
   },
 
@@ -98,7 +96,7 @@ var WidgetInfoView = Backbone.View.extend({
         html         = _.template(temp, {val : val, prop: prop});
         li.innerHTML = '<span class="key">'+lang[key]+'</span>' + html;
       }
-      else if(key == 'source') {
+      else if(key == 'src') {
         temp         = document.getElementById('temp-source-select').innerHTML;
         html         = _.template(temp, {val : val, prop: prop});
         li.innerHTML = '<span class="key">'+lang[key]+'</span>'+ html;
@@ -119,7 +117,6 @@ var WidgetInfoView = Backbone.View.extend({
     var props = prop.split('-');
 
     if(props.length > 1) {
-      console.log(props);
       this.model.get(props[0]).set(props[1], e.target.value);
     }
     else {
@@ -134,7 +131,7 @@ var WidgetInfoView = Backbone.View.extend({
       iui.openFilePick(function(files, f) {f(files);}, this.staticsAdded);
     }
     else {
-      this.model.get('context').set(prop, e.target.value);
+      this.model.get('attribs').set(prop, e.target.value);
     }
   },
 
@@ -143,7 +140,7 @@ var WidgetInfoView = Backbone.View.extend({
       file.name = file.filename;
       statics.push(file);
     });
-    this.model.get('context').set('source', _.last(files).url);
+    this.model.get('attribs').set('src', _.last(files).url);
     this.show(this.model);
   },
 
@@ -155,19 +152,20 @@ var WidgetInfoView = Backbone.View.extend({
     });
   },
 
-  changedContext: function(changedContextModel) {
+  changedContent: function(changedContextModel) {
     _(changedContextModel.changed).each(function(val, key) {
-      if(document.getElementById('prop-context-' + key)) {
-        $(document.getElementById('prop-context-' + key)).val(val);
-      }
+      $(document.getElementById('prop-context-' + key)).val(val);
     });
   },
 
   changedLayout: function(changedLayoutModel) {
     _(changedLayoutModel.attributes).each(function(val, key) {
-      if(document.getElementById('prop-layout-' + key)) {
-        $(document.getElementById('prop-layout-' + key)).val(val);
-      }
+      $(document.getElementById('prop-layout-' + key)).val(val);
     });
+  },
+
+  keydownInput: function(e) {
+    if(e.keyCode == 13) { e.target.blur(); }
+    e.stopPropagation();
   }
 });

@@ -34,8 +34,11 @@ var LayoutModel = Backbone.Model.extend({
   }
 });
 
-var ContextModel = Backbone.Model.extend({
-})
+var ContentModel = Backbone.Model.extend({
+});
+
+var AttribsModel = Backbone.Model.extend({
+});
 
 var WidgetModel = Backbone.Model.extend({
   selected: false,
@@ -46,16 +49,18 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   initialize: function(bone) {
-    _.bindAll(this, 'select', 'assignCoord');
-    this.set('context', new ContextModel(this.get('context')));
+    this.set('content', new ContentModel(this.get('content')));
     this.set('layout', new LayoutModel(this.get('layout')));
+    this.set('attribs', new AttribsModel(this.get('attribs')));
+
+    _.bindAll(this, 'select', 'assignCoord');
   },
 
   select: function() {
-    if(this.collection){ this.collection.unselectAll()};
-    this.collection.selectedElement = this;
+    if(this.collection){ this.collection.unselectAll();}
+    this.collection.selectedEl = this;
     if(pagesView.widgetEditor) {
-      pagesView.widgetEditor.selectedElement = this;
+      pagesView.widgetEditor.selectedEl = this;
     }
     this.set('selected', true);
     widgetInfoView.show(this);

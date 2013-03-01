@@ -4,8 +4,11 @@ var lang = {
   width  : "Width",
   height : "Height",
   source : "Source",
+  src    : "Source",
   href   : "Target",
   text   : "Text",
   layout : "Layout Info",
-  context: "Content"
+  content: "Content",
+  attribs: "Attributes",
+  style  : "Style"
 };
