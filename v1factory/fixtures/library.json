@@ -105,7 +105,7 @@
       "class_name": "zebra",
       "html": "",
       "tagname": "button",
-      "css": "",
+      "css": "background-image:  -webkit-linear-gradient(top, #1d87c8, #12458c); color:white; border-radius: 4px; padding:4px",
       "name": "Button"
     }
   }

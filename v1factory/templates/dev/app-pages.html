@@ -13,10 +13,10 @@
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel span22 hi3">
-  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <div class="offset2 toppanel span44 hi6">
+  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
-  <div class="span8 hoff1 right">
+  <div class="span16 hoff2 right">
     <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-entities">Save</a>
   </div>
 </div>
@@ -24,7 +24,7 @@
 
 {% block page %}
 <div class="container" id="entities-page">
-  <div class="row top-buttons offset1 span30 tb-border">
+  <div class="row top-buttons offset1 span60 tb-border">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </div>
   <div class="row offset1" id="list-pages">
@@ -35,9 +35,9 @@
   var appState = {{ app.state_json|safe }};
 </script>
 <script type="text/html" id="temp-page">
-  <div class="hi2" id="user-entity">
-    <h3 class="offset1 hi1 span5" style="margin-top:15px;"><%= page_name %></h3>
-    <div class="offset1 span6 hi1" style="margin-top:15px;">
+  <div class="hi4" id="user-entity">
+    <h3 class="offset1 hi2 span10" style="margin-top:15px;"><%= page_name %></h3>
+    <div class="offset1 span12 hi2" style="margin-top:15px;">
       <a class="btn edit" href="editor/<%= ind %>">Start Editing</a>
     </div>
     <div class="right span2">

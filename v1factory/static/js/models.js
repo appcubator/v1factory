@@ -72,7 +72,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   moveRight: function() {
-    if(this.get('layout').get('left') + this.get('layout').get('width') > 31) return;
+    if(this.get('layout').get('left') + this.get('layout').get('width') > 63) return;
     this.get('layout').set('left', this.get('layout').get('left') + 1);
   },
 
@@ -87,8 +87,8 @@ var WidgetModel = Backbone.Model.extend({
 
 
   assignCoord: function() {
-    var coordinates = currentCoord? pagesView.unite(currentCoord.initCor, currentCoord.lastCor):
-                                    pagesView.unite({x: 0, y:2}, {x: 16, y: 10});
+    var coordinates = currentCoord? iui.unite(currentCoord.initCor, currentCoord.lastCor):
+                                    iui.unite({x: 0, y:2}, {x: 16, y: 10});
 
     this.get('layout').set('top', coordinates.topLeft.y + 1);
     this.get('layout').set('left', coordinates.topLeft.x + 1);
@@ -96,10 +96,6 @@ var WidgetModel = Backbone.Model.extend({
     this.get('layout').set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
   }
 });
-
-
-var EntityModel = Backbone.Model.extend();
-
 
 var UserEntityModel = EntityModel.extend({
   defaults : {

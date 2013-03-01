@@ -20,9 +20,6 @@
  *  - WidgetEditorView
  */
 
-var GRID_WIDTH = 30;
-var GRID_HEIGHT = 30;
-
 var WidgetCollection = Backbone.Collection.extend({
   model : WidgetModel,
   selectedEl: null,
@@ -101,11 +98,11 @@ var WidgetView = Backbone.View.extend({
     var self = this;
     $(this.widgetsContainer).resizable({
       handles: "n, e, s, w, se",
-      grid: 30,
+      grid: GRID_WIDTH,
       resize: self.resized
     });
     $(this.widgetsContainer).draggable({
-      grid: [ 30,30 ],
+      grid: [ GRID_WIDTH, GRID_HEIGHT ],
       containment : $('#elements-container'),
       drag: self.moved
     });
@@ -362,6 +359,7 @@ var WidgetContainerView = WidgetView.extend({
   placeCreateWidgets: function() {
     var self = this;
 
+    console.log("CREATING");
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
       var coordinates = iui.unite({x: 1, y: 1 + (ind * 2)}, {x: self.model.get('width') + 1, y: 1 + ((ind+1) * 2)});
       var type = '8';
@@ -516,23 +514,32 @@ var WidgetEditorView = Backbone.View.extend({
     this.collection.push(widget);
   },
 
-  placeWidget: function(widget) {
-    var curWidget;
-    if(typeof widget.get('entity') == "string") {
-      var entityObj = this.widgetEntitiesView.collection.where({ name :widget.get('entity')})[0];
-      if(!entityObj) {
-        alert('Entity could not be found!');
+  placeWidget: function(widgetModel) {
+    var curWidget, entityObj;
+
+    if(widgetModel.get('container_info') &&
+       typeof (widgetModel.get('container_info').entity) == "string") {
+      var nameString = widgetModel.get('container_info').entity;
+      
+      if(nameString === "Session") {
+
       }
       else {
-        widget.set('entity', entityObj);
-        curWidget= new WidgetContainerView(widget);
+        entityObj = this.widgetEntitiesView.collection.find(function(model) {
+          return model.get('name') == widgetModel.get('container_info').entity;
+        });
+        iui.assert(entityObj);
+        var container_info = widgetModel.get('container_info');
+        container_info.entity = entityObj;
+        widgetModel.set('container_info', container_info);
       }
     }
-    else if (widget.get('entity')) {
-      curWidget= new WidgetContainerView(widget);
+    
+    if (widgetModel.get('container_info')) {
+      curWidget= new WidgetContainerView(widgetModel);
     }
     else {
-      curWidget = new WidgetView(widget);
+      curWidget = new WidgetView(widgetModel);
     }
     
 

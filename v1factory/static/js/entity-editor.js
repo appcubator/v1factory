@@ -23,7 +23,7 @@ var EntityView = Backbone.View.extend({
   tagName    : 'li',
   collection : null,
   parentName : "",
-  className  : 'offset1 span7 entity',
+  className  : 'offset1 span14 entity',
 
   events : {
     'click .add-property-button' : 'clickedAdd',

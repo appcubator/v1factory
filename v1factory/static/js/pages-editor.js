@@ -5,7 +5,7 @@ var PagesCollection = Backbone.Collection.extend({
 var PageView = Backbone.View.extend({
   el: null,
   tagName : 'div',
-  className: 'page-view span30 hoff1 pane',
+  className: 'page-view span60 hoff2 pane',
   expanded: false,
   events: {
     'click' : 'toggleExpand'

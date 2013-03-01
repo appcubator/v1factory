@@ -98,21 +98,22 @@
 .row.editing {
   display: inline-block;
   height: 30px;
-  border-top: 1px dashed transparent;
+  border-top: none;
 
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
 }
 
-.container.editing:hover .row.editing {
+.container.editing:hover .row.editing:nth-child(4n) {
   border-top: 1px dashed rgba(210, 210, 210, 0.5);
 }
 
 .container.editing:hover .row.editing .span1:first-child {
   border-left: 1px dashed rgba(210, 210, 210, 0.5);
 }
-.container.editing:hover .row.editing .span1.editing {
+
+.container.editing:hover .row.editing .span1.editing:nth-child(4n) {
   border-right: 1px dashed rgba(210, 210, 210, 0.5);
 }
 
@@ -134,13 +135,14 @@
 }
 
 .span1.cselected {
+  border: none;
   background-color: rgba(43, 53, 69, 0.5);
 }
 
 
 .container.editing .row {
   display: inline-block;
-  height: 30px;
+  height: 15px;
   margin: 0;
   padding: 0;
 }

@@ -8,9 +8,9 @@
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="{{ STATIC_URL }}js/jscolor/jscolor.js"></script>
 <style type="text/css">
-{% for element in elements %}
+{% for element in gallery_elements %}
 .{{element.class_name }} {
-{{ element.css|safe }}
+{{ element.css }}
 }
 {% endfor %}
 </style>
@@ -74,6 +74,9 @@ var pageId = {{ page_id }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-editor.js"></script>
 <script type="text/javascript">
+var GRID_WIDTH = 15;
+var GRID_HEIGHT = 15;
+
 var gridEditor     = new GridEditorView();
 var pagesView      = new PagesView();
 var widgetInfoView = new WidgetInfoView();

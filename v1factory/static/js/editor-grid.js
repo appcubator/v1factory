@@ -48,12 +48,12 @@ var GridEditorView = Backbone.View.extend({
 
   render: function() {
 
-    for(var y=1; y < 37; y++) {
+    for(var y=1; y < 73; y++) {
       var row = document.createElement('div');
       $(row).addClass('row editing');
       row.id = 'row_' + y;
       $(row).data('row', y);
-      for(var x=1; x < 33; x++) {
+      for(var x=1; x < 65; x++) {
         var square = document.createElement('div');
         $(square).addClass('span1 editing');
         $(square).data({
