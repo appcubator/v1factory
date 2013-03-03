@@ -115,7 +115,7 @@ var WidgetView = Backbone.View.extend({
 
     var width = this.model.get('layout').get('width');
     var height = this.model.get('layout').get('height');
-    
+
     var wrapperElem = document.createElement('div');
     wrapperElem.className ='widget-wrapper';
 
@@ -140,7 +140,6 @@ var WidgetView = Backbone.View.extend({
     iui.assert(element);
 
     var node = tagDict[element.tagname];
-    console.log(node);
     _(node.attribs).each(function(val, key) {
       node.attribs[key] = self.model.get('attribs').get(key) || val;
       self.model.get('attribs').set(key, node.attribs[key]);
@@ -189,7 +188,8 @@ var WidgetView = Backbone.View.extend({
   },
 
   changedWidth: function(a) {
-    this.widgetsContainer.className = 'selected widget-wrapper span' + this.model.get('layout').get('width');
+    this.widgetsContainer.className = 'selected widget-wrapper';
+    this.widgetsContainer.className += 'span' + this.model.get('layout').get('width');
   },
 
   changedHeight: function(a) {
@@ -237,17 +237,8 @@ var WidgetView = Backbone.View.extend({
     this.model.select();
 
     var self = this;
-    $(this.widgetsContainer).resizable({
-      handles: "n, e, s, w, se",
-      grid: 30,
-      resize: self.resized
-    });
+    iui.resizableAndDraggable(this.widgetsContainer);
 
-    $(this.widgetsContainer).draggable({
-      grid: [ 30,30 ],
-      containment : $('#elements-container'),
-      drag: self.moved
-    });
   },
 
   resized: function(e, ui) {
@@ -361,13 +352,16 @@ var WidgetContainerView = WidgetView.extend({
 
     console.log("CREATING");
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = iui.unite({x: 1, y: 1 + (ind * 2)}, {x: self.model.get('width') + 1, y: 1 + ((ind+1) * 2)});
+      var coordinates = iui.unite({x: 1,
+                                   y: 1 + (ind * 2)},
+                                  {x: self.model.get('width') + 1,
+                                   y: 1 + ((ind+1) * 2)});
       var type = '8';
       var widgetProps = {
         lib_id : 8,
         layout : {
-          top : coordinates.topLeft.y,
-          left : coordinates.topLeft.x,
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: 2
         },
@@ -387,12 +381,15 @@ var WidgetContainerView = WidgetView.extend({
     var self = this;
 
     _(self.entity.get('fields')).each(function(val, key, item, ind) {
-      var coordinates = iui.unite({x: 1, y: 1 + (ind * 2)}, {x: self.model.get('width') + 1, y: 1 + ((ind+1) * 2)});
+      var coordinates = iui.unite({ x: 1,
+                                    y: 1 + (ind * 2)},
+                                  { x: self.model.get('width') + 1,
+                                    y: 1 + ((ind+1) * 2)});
       var widgetProps = {
         lib_id : 2,
         layout: {
-          top : coordinates.topLeft.y,
-          left : coordinates.topLeft.x,
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: coordinates.bottomRight.y - coordinates.topLeft.y -1
         },
@@ -418,8 +415,8 @@ var WidgetContainerView = WidgetView.extend({
         layout: {
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: coordinates.bottomRight.y - coordinates.topLeft.y -1,
-          top : coordinates.topLeft.y,
-          left : coordinates.topLeft.x
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x
         },
         content: {
           text : key
@@ -433,7 +430,10 @@ var WidgetContainerView = WidgetView.extend({
   plageEntitySingleWidget: function() {
 
     if (this.model.get('displayType') == "text") {
-      var coordinates = iui.unite({x: 1, y: 1 }, {x: this.model.get('layout').get('width') + 1, y: 3});
+      var coordinates = iui.unite({x: 1,
+                                   y: 1 },
+                                  {x: this.model.get('layout').get('width') + 1,
+                                   y: 3});
       var type = '2';
       var widgetProps = {
         lib_id : type,
@@ -484,12 +484,11 @@ var WidgetEditorView = Backbone.View.extend({
     this.render();
     this.collection = new WidgetCollection();
     this.widgetMenu = new WidgetMenuView(this.collection);
-    this.widgetEntitiesView = new EntitiesListView(contextEntities, this.collection);
     this.collection.bind('add', this.placeWidget);
 
     this.style(page['design_props']);
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
-    
+
     window.addEventListener('keydown', this.keydown);
   },
 
@@ -504,8 +503,8 @@ var WidgetEditorView = Backbone.View.extend({
     var widget = {
       lib_id : libId,
       layout: {
-        top : coordinates.topLeft.y,
-        left : coordinates.topLeft.x,
+        top   : coordinates.topLeft.y,
+        left  : coordinates.topLeft.x,
         width : coordinates.bottomRight.x - coordinates.topLeft.x,
         height: coordinates.bottomRight.y - coordinates.topLeft.y
       }
@@ -618,12 +617,13 @@ var WidgetEditorView = Backbone.View.extend({
         e.preventDefault();
         break;
       case 8: //backspace
-        e.preventDefault();
-        this.selectedEl.collection.remove(this.selectedEl);
+        if(this.selectedEl) {
+          this.selectedEl.collection.remove(this.selectedEl);
+        }
         break;
       case 27: //escape
         gridEditor.clearSelections();
-        if(this.selectedEl) 
+        if(this.selectedEl)
           this.selectedEl.collection.unselectAll();
         return false;
     }

@@ -1,26 +1,40 @@
-<div class="item-gallery section" id="item-gallery">
-  <div class="accord">
-    <div id="interface-elements" class="interface-elements">
-      <div class="header">Interface Elements</div>
-      <ul class="sample">
-        <li class="help-text"><span>Click on an element below to place on the page. Scroll down to see more.</span></li>
+<div id="top-panel-bb">
+  <div class="section-select">
+    <div class="menu-button home">
+    </div><div class="menu-button setting" id="settings">
+    </div><div class="menu-button save">
+      <span>Save</span>
+    </div><div class="header selected" id="cont-all">All Elements
+    </div><div class="header" id="cont-interface">Interface Elements
+    </div><div class="header" id="cont-entities">Data Elements
+    </div><div class="search">
+      <input type="text" class="search" placeholder="Search for element...">
+    </div><div class="menu-button help"></div>
+  </div>
+  <div class="item-gallery section" id="item-gallery">
+    <div class="elements-list" id="elements-list">
+      <div id="all-elements" class="interface-elements">
+        <ul id='all-list' class="list">
+        </ul>
+      </div>
+      <div id="interface-elements" class="interface-elements hide">
+        <ul id='interface-list'>
+        </ul>
+      </div>
+      <div id="entities-elements" class="data-elements hide">
+        <ul id='entities-list' class='data-list'>
+        </ul>   
+      </div>
+    </div>
+  </div>
+</div>
         {% for element in gallery_elements %}
-        <li class="widget-prev {{ element.class_name }}" id="widget-{{element.id}}">
+<!--         <li class="widget-prev {{ element.class_name }}" id="widget-{{element.id}}">
           <{{ element.tagname}} {% for attrib in element.attribs %} {{ attrib }}=default {% endfor %}>
             text
             {% for key, value in element.content %}
               {{ key }}
             {% endfor %}
           </{{ element.tagname}}>
-        </li>
+        </li> -->
         {% endfor %}
-      </ul>
-    </div>
-    <div id="data-elements" class="data-elements expanded">
-      <div class="header">Data Elements</div>
-      <ul id='entities-list' class='entities-list'>
-        
-      </ul>   
-    </div>
-  </div>
-</div>

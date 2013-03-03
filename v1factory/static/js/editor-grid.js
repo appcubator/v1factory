@@ -21,9 +21,6 @@ var GridEditorView = Backbone.View.extend({
   selectorActive : false,
   itemGallery    : document.getElementById('item-gallery'),
   events : {
-    "mousedown .span1"           : "mousedown",
-    "mouseup div.editing"        : "mouseup",
-    "mouseover .span1"           : "mouseover",
     "click .widget-prev"         : "addWidget"
     //"click .item-gallery .header": "hideItemGallery"
   },
@@ -48,14 +45,14 @@ var GridEditorView = Backbone.View.extend({
 
   render: function() {
 
-    for(var y=1; y < 73; y++) {
+    for(var y=1; y < 19; y++) {
       var row = document.createElement('div');
-      $(row).addClass('row editing');
+      $(row).addClass('row editing hi4');
       row.id = 'row_' + y;
       $(row).data('row', y);
-      for(var x=1; x < 65; x++) {
+      for(var x=1; x < 17; x++) {
         var square = document.createElement('div');
-        $(square).addClass('span1 editing');
+        $(square).addClass('span4 hi4 editing');
         $(square).data({
           xcor : x,
           ycor : y

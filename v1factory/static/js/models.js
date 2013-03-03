@@ -5,10 +5,16 @@
  *  Abstract:
  *  Contains all the front-end modules
  *
+ *  Notes:
+ *  Widgets are elements that are placed on the editor - they
+ *  posses some context/information
+ *  UIElementModel are purely type/style of interface elements.
+ *
  *  Includes:
  *  - DesignProperty
  *  - EntityModel
- *  - Widget
+ *  - WidgetModel
+ *  - UIElementModel
  *  - EntityModel
  *  - UserEntityModel
  *  - PageModel
@@ -22,6 +28,19 @@ var EntityModel = Backbone.Model.extend({
   defaults: {
     name: "default name",
     fields: []
+  }
+});
+
+var UserEntityModel = EntityModel.extend({
+  defaults : {
+    facebook : false,
+    linkedin : false,
+    local : true,
+    fields : [{
+      "name"     :"description",
+      "required" :false,
+      "type"     : "text"
+    }]
   }
 });
 
@@ -57,13 +76,10 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   select: function() {
-    if(this.collection){ this.collection.unselectAll();}
+    this.collection.unselectAll();
     this.collection.selectedEl = this;
-    if(pagesView.widgetEditor) {
-      pagesView.widgetEditor.selectedEl = this;
-    }
     this.set('selected', true);
-    widgetInfoView.show(this);
+    //widgetInfoView.show(this);
   },
 
   moveLeft: function() {
@@ -97,19 +113,9 @@ var WidgetModel = Backbone.Model.extend({
   }
 });
 
-var UserEntityModel = EntityModel.extend({
-  defaults : {
-    facebook : false,
-    linkedin : false,
-    local : true,
-    fields : [{
-      "name"     :"description",
-      "required" :false,
-      "type"     : "text"
-    }]
-  }
+var UIElementModel = Backbone.Model.extend({
+  
 });
-
 
 var PageModel = Backbone.Model.extend({
   defaults : {

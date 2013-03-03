@@ -17,7 +17,7 @@
  *
  */
 
-var PagesView = Backbone.View.extend({
+var PageSettingsView = Backbone.View.extend({
   el     : document.body,
   listEl : document.getElementById('pages-list'),
   events : {
@@ -99,9 +99,7 @@ var PagesView = Backbone.View.extend({
       this.savePage();
     }
     this.curPage = pageInd;
-    this.widgetEditor = new WidgetEditorView(this.getContextEntities(pageInd),this.pages[pageInd]);
     document.getElementById('page-' + pageInd).className += ' selected';
-    $('#loading-gif').fadeOut().remove();
   },
 
   getContextEntities: function(ind) {
@@ -143,15 +141,7 @@ var PagesView = Backbone.View.extend({
   },
 
   showSettings: function(e) {
-    var pageModel = new PageModel(appState.pages[self.curPage]);
-    var view = new DesignEditorView(pageModel, true);
-    this.designEditor = view;
 
-    $('#page-settings').append(view.el);
-    $('#page-settings').animate({
-      marginBottom : -10
-    });
-    return false;
   },
 
   hideSettings: function(e) {
