@@ -47,6 +47,13 @@ class DjangoWriter:
         # go in an indent level
         file_string += '  ' + self.code_for_field(f)
 
+    # if local user that has extra fields, make a userprofile module.
+    if self.app.user_settings['local'] and 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0:
+      file_string += "class Userprofile(models.Model):"
+      file_string += "  user = models.OneToOneField(User, blank=True, editable=False)"
+      for f in self.app.user_settings['fields']:
+        file_string += '  ' + self.code_for_field(f)
+
     return file_string
 
   def model_imports(self):
@@ -55,9 +62,54 @@ class DjangoWriter:
     for m in self.app.classes:
       if 'hidden' in m: continue
       imports.append('from webapp.models import {}'.format(m['name']))
+    if 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0:
+      imports.append('from webapp.models import Userprofile')
     return '\n'.join(imports) + '\n'
 
-# MODEL FORMS (form details, used as a base for form submission)
+# FORMS (form details, used as a base for form submission)
+
+  def generate_signup_forms(self):
+    signup_forms =  """
+class UserField(forms.CharField):
+  def clean(self, value):
+    super(UserField, self).clean(value)
+    try:
+      User.objects.get(username=value)
+      raise forms.ValidationError("Someone is already using this username. Please pick an other.")
+    except User.DoesNotExist:
+      return value
+
+class UserForm(forms.Form):
+  first_name = forms.CharField(max_length=30)
+  last_name = forms.CharField(max_length=30)
+  username = UserField(max_length=30)
+  password = forms.CharField(widget=forms.PasswordInput())
+  password2 = forms.CharField(widget=forms.PasswordInput(), label="Repeat your password")
+  email = forms.EmailField()
+
+  def clean_password(self):
+    if self.data['password'] != self.data['password2']:
+      raise forms.ValidationError('Passwords are not the same')
+    return self.data['password']
+
+  def clean(self,*args, **kwargs):
+    self.clean_email()
+    self.clean_password()
+    return super(UserForm, self).clean(*args, **kwargs)
+
+  def save(self, *args, **kwargs):
+    user = User.objects.create(self.username, self.email, self.password)
+    return super(UserForm, self).save(*args, **kwargs)
+"""
+    userprofile_present = 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0
+    if userprofile_present:
+      signup_forms += """
+
+class UserprofileForm(forms.Form):
+  class Meta:
+    model=Userprofile
+"""
+    return signup_forms
 
   def generate_model_form_code(self, form):
     """ If there is a required field not in "included_fields", we have to get
@@ -93,15 +145,65 @@ class DjangoWriter:
     filestring += self.model_imports()
     for f in self.app.forms:
       filestring += '\n' + self.generate_model_form_code(f)
+
+    if self.app.user_settings['local']:
+      filestring += self.generate_signup_forms()
     return filestring
 
   def model_form_imports(self):
     imports = []
+    imports.append('from webapp.model_forms import UserForm')
     for f in self.app.forms:
       imports.append('from webapp.model_forms import {}Form{}'.format(f.entity, f.form_id))
+    if 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0:
+      imports.append('from webapp.model_forms import UserprofileForm')
+
     return '\n'.join(imports)
 
 # FORM RECEIVERS (to capture the POSTS and save the object, or return validation errors)
+
+  def generate_login_form_receiver(self):
+    """The view that handles a login form post.
+         for now leaving this blank because we will use django's built in view in the urls."""
+    pass
+
+  def generate_signup_form_receiver(self):
+    """The view that handles a user signup.
+         Takes the data, validates user AND userprofile."""
+    filestring = ''
+    filestring += '@require_POST\n'
+    filestring += 'def save_signup(request):\n'
+    userprofile_present = 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0
+    if userprofile_present:
+      filestring += '  userform = UserForm(request.POST)\n'
+      filestring += '  profileform = UserprofileForm(request.POST)\n'
+      filestring += '  # force evaluation of both to get their errors\n'
+      filestring += '  uvalid, pvalid = (userform.is_valid(), profileform.is_valid())\n'
+      filestring += '  if uvalid and pvalid:\n'
+      filestring += '    user = userform.save()\n'
+      filestring += '    profile = profileform.save(commit=False)\n'
+      filestring += '    profile.user = user\n'
+      filestring += '    profile.save()\n'
+      filestring += '    user = authenticate(username=request.POST["username"],\n'
+      filestring += '                        password=request.POST["password"])\n'
+      filestring += '    login(request, user)\n'
+      filestring += '    return redirect("/")\n'
+      filestring += '  else:\n'
+      filestring += '    usererrs = { "errors" : [(k, v[0].__unicode__()) for k, v in userform.errors.items()] }\n'
+      filestring += '    proferrs = { "errors" : [(k, v[0].__unicode__()) for k, v in profileform.errors.items()] }\n'
+      filestring += '    return HttpResponse(simplejson.dumps(dict(usererrs.items() + proferrs.items())), status=400)\n'
+    else:
+      filestring += '  userform = UserForm(request.POST)\n'
+      filestring += '  if userform.is_valid():\n'
+      filestring += '    user = userform.save()\n'
+      filestring += '    user = authenticate(username=request.POST["username"],\n'
+      filestring += '                        password=request.POST["password"])\n'
+      filestring += '    login(request, user)\n'
+      filestring += '    return redirect("/")\n'
+      filestring += '  else:\n'
+      filestring += '    usererrs = { "errors" : [(k, v[0].__unicode__()) for k, v in userform.errors.items()] }\n'
+      filestring += '    return HttpResponse(simplejson.dumps(usererrs), status=400)\n'
+    return filestring
 
   @staticmethod
   def generate_form_receiver(form):
@@ -128,6 +230,9 @@ class DjangoWriter:
 
     for f in self.app.forms:
       filestring += '\n'+ DjangoWriter.generate_form_receiver(f)
+
+    if self.app.user_settings['local']:
+      filestring += '\n' + self.generate_signup_form_receiver()
     return filestring
 
 # CONTROLLERS (functions are namespaced by "view_" to avoid name collisions with models or anything else)
@@ -173,10 +278,20 @@ class DjangoWriter:
     s = ''
     for p in self.app.pages:
       s += 'from webapp.views import view_{}\n'.format(p.name)
+    if 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0:
+      imports.append('from webapp.models import Userprofile')
 
     return s
 
 # ROUTES/URLS
+
+  def generate_login_urls(self):
+    urls = ""
+    if self.app.user_settings['local']:
+      urls += '  urls(r"^/login_receiver/", "django.contrib.auth.views.login"),\n'
+      urls += '  urls(r"^/signup_receiver/", "webapp.form_receivers.save_signup"),\n'
+    # TODO add facebook, twitter, linkedin oauth things here.
+    return urls
 
   @staticmethod
   def generate_url_entry(page):
@@ -196,13 +311,15 @@ class DjangoWriter:
     urls_string += 'admin.autodiscover()\n\n'
 
     urls_string += "urlpatterns = patterns('',\n"
-    urls_string += "  url(r'^accounts/', include('allauth.urls')),"
-    urls_string += "  url(r'^admin/', include(admin.site.urls)),"
+                  #"  url(r'^accounts/', include('allauth.urls')),\n"
+    urls_string += self.generate_login_urls()
+    urls_string += "  url(r'^admin/', include(admin.site.urls)),\n\n"
     for p in self.app.pages:
       urls_string += '  {}\n'.format(DjangoWriter.generate_url_entry(p))
     urls_string += '\n'
     for f in self.app.forms:
       urls_string += '  {}\n'.format(DjangoWriter.generate_form_url_entry(f))
+
     urls_string += ')\n\n'
 
     urls_string += "urlpatterns += staticfiles_urlpatterns()"
@@ -234,7 +351,7 @@ class DjangoWriter:
 
     def get_attributes(el):
       """list of attr/value pairs for this el"""
-      return el['attrib'].items()
+      return el['attribs'].items()
 
     from v1factory.models import UIElement
     try:
@@ -245,6 +362,8 @@ class DjangoWriter:
     else:
       classes = get_classes(el, lib_el)
       attributes = get_attributes(el)
+      class_string = " ".join(classes)
+      attr_string = " ".join([ '{}="{}"'.format(a[0], a[1]) for a in attributes ])
 
       if el['container_info'] is not None:
         container_els = [ DjangoWriter.render_uielement(inner_el) for inner_el in el['container_info']['uielements'] ]
@@ -252,7 +371,7 @@ class DjangoWriter:
         return html
 
       elif lib_el.tagname in ['img', 'input']:
-         html = "<{} class=\"{}\" {} />".format(lib_el.tagname, classes, attributes)
+         html = "<{} class=\"{}\" {} />".format(lib_el.tagname, class_string, attr_string)
          return html
 
       else:
@@ -262,10 +381,12 @@ class DjangoWriter:
             #for k, v in el['context'].items():
             #  handlebars_html = re.sub('<%= {} %>'.format(k), v, handlebars_html)
 
-        handlebars_html = "<{} class=\"{}\" {}>{}</{}>".format(lib_el.tagname, classes, attributes, filler, lib_el.tagname)
+        handlebars_html = "<{} class=\"{}\" {}>{}</{}>".format(lib_el.tagname, class_string, attr_string, filler, lib_el.tagname)
 
         if 'text' in el:
           html = re.sub('<%= text %>', el['text'], handlebars_html)
+        else:
+          html = handlebars_html
 
         return html
 
@@ -294,10 +415,18 @@ class DjangoWriter:
           html += template_text
           html += """{% endfor %}"""
         elif el['container_info']['action'] == 'create':
-          if el['container_info']['entity'] == "User": continue # TODO make login stuff work...
-          if el['container_info']['entity'] == "Session": continue
           form_obj = el['container_info']['form']
           html += """<form method="POST" action="{% url """+ "webapp.form_receivers.save_{}Form{}".format(form_obj.entity, form_obj.form_id) +""" %}">"""
+          html += """{% csrf_token %}"""
+          html += template_text
+          html += """</form>"""
+        elif el['container_info']['action'] == 'login':
+          html += """<form method="POST" action="{% url django.contrib.auth.views.login %}">"""
+          html += """{% csrf_token %}"""
+          html += template_text
+          html += """</form>"""
+        elif el['container_info']['action'] == 'signup':
+          html += """<form method="POST" action="{% url webapp.form_receivers.save_signup %}">"""
           html += """{% csrf_token %}"""
           html += template_text
           html += """</form>"""
