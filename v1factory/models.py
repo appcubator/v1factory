@@ -57,6 +57,36 @@ starter_app = """{
                 {
                   "lib_id":8,
                   "attribs": {
+                    "name":"first_name",
+                    "placeholder":"First Name",
+                    "type":"text"
+                  },
+                  "content":{},
+                  "container_info":null,
+                  "layout" : {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  }
+                },{
+                  "lib_id":8,
+                  "attribs": {
+                    "name":"last_name",
+                    "placeholder":"Last Name",
+                    "type":"text"
+                  },
+                  "content":{},
+                  "container_info":null,
+                  "layout" : {
+                    "width"  :4,
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1
+                  }
+                },{
+                  "lib_id":8,
+                  "attribs": {
                     "name":"username",
                     "placeholder":"Username",
                     "type":"text"
@@ -69,8 +99,7 @@ starter_app = """{
                     "top"    :1,
                     "left"   :1
                   }
-                },
-                {
+                },{
                   "lib_id":8,
                   "attribs" : {
                     "placeholder":"Password",
@@ -85,8 +114,22 @@ starter_app = """{
                     "left"   :1,
                     "width"  :4
                   }
-                },
-                {
+                },{
+                  "lib_id":8,
+                  "attribs" : {
+                    "placeholder":"Confirm password",
+                    "name":"password2",
+                    "type":"password"
+                  },
+                  "content":{},
+                  "container_info":null,
+                  "layout" : {
+                    "height" :4,
+                    "top"    :1,
+                    "left"   :1,
+                    "width"  :4
+                  }
+                },{
                   "lib_id":8,
                   "attribs" : {
                     "placeholder":"Email",

@@ -93,13 +93,8 @@ class UserForm(forms.Form):
     return self.data['password']
 
   def clean(self,*args, **kwargs):
-    self.clean_email()
     self.clean_password()
     return super(UserForm, self).clean(*args, **kwargs)
-
-  def save(self, *args, **kwargs):
-    user = User.objects.create(self.username, self.email, self.password)
-    return super(UserForm, self).save(*args, **kwargs)
 """
     userprofile_present = 'fields' in self.app.user_settings and len(self.app.user_settings['fields']) > 0
     if userprofile_present:
@@ -142,6 +137,7 @@ class UserprofileForm(forms.Form):
     """Given knowledge of all the forms, return the models.py file as a string."""
     filestring = ''
     filestring += 'from django.forms import ModelForm\n'
+    filestring += 'from django import forms\n'
     filestring += self.model_imports()
     for f in self.app.forms:
       filestring += '\n' + self.generate_model_form_code(f)
@@ -189,19 +185,19 @@ class UserprofileForm(forms.Form):
       filestring += '    login(request, user)\n'
       filestring += '    return redirect("/")\n'
       filestring += '  else:\n'
-      filestring += '    usererrs = { "errors" : [(k, v[0].__unicode__()) for k, v in userform.errors.items()] }\n'
-      filestring += '    proferrs = { "errors" : [(k, v[0].__unicode__()) for k, v in profileform.errors.items()] }\n'
+      filestring += '    usererrs = { "errors" : [(k, v[0]) for k, v in userform.errors.items()] }\n'
+      filestring += '    proferrs = { "errors" : [(k, v[0]) for k, v in profileform.errors.items()] }\n'
       filestring += '    return HttpResponse(simplejson.dumps(dict(usererrs.items() + proferrs.items())), status=400)\n'
     else:
       filestring += '  userform = UserForm(request.POST)\n'
       filestring += '  if userform.is_valid():\n'
-      filestring += '    user = userform.save()\n'
+      filestring += "    user = User.objects.create(request.POST['username'], request.POST['email'], request.POST['password'])"
       filestring += '    user = authenticate(username=request.POST["username"],\n'
       filestring += '                        password=request.POST["password"])\n'
       filestring += '    login(request, user)\n'
       filestring += '    return redirect("/")\n'
       filestring += '  else:\n'
-      filestring += '    usererrs = { "errors" : [(k, v[0].__unicode__()) for k, v in userform.errors.items()] }\n'
+      filestring += '    usererrs = { "errors" : [(k, v[0]) for k, v in userform.errors.items()] }\n'
       filestring += '    return HttpResponse(simplejson.dumps(usererrs), status=400)\n'
     return filestring
 
@@ -288,8 +284,8 @@ class UserprofileForm(forms.Form):
   def generate_login_urls(self):
     urls = ""
     if self.app.user_settings['local']:
-      urls += '  urls(r"^/login_receiver/", "django.contrib.auth.views.login"),\n'
-      urls += '  urls(r"^/signup_receiver/", "webapp.form_receivers.save_signup"),\n'
+      urls += '  url(r"^login_receiver/", "django.contrib.auth.views.login"),\n'
+      urls += '  url(r"^signup_receiver/", "webapp.form_receivers.save_signup"),\n'
     # TODO add facebook, twitter, linkedin oauth things here.
     return urls
 
