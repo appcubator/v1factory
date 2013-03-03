@@ -13,7 +13,7 @@
  */
 
 var WidgetInfoView = Backbone.View.extend({
-  el     : document.getElementById('item-info-list'),
+  el     : document.getElementById('item-info-section'),
   model  : null,
   events : {
     'change input'          : 'inputChanged',
@@ -37,14 +37,19 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   render: function() {
-
+    var span = document.createElement('span');
+    span.className = "title";
+    span.innerText = "Item Info";
+    this.list = document.createElement('ul');
+    this.el.appendChild(span);
+    this.el.appendChild(this.list);
   },
 
   show: function(widgetModel) {
-    $(this.el).fadeIn();
+    $(this.list).fadeIn();
     var self = this;
 
-    this.el.innerHTML = '';
+    this.list.innerHTML = '';
     this.model = widgetModel;
     this.model.bind("change", this.changedProp, this);
     this.model.bind("remove", this.hide, this);
@@ -55,10 +60,10 @@ var WidgetInfoView = Backbone.View.extend({
       if(key == 'id' || key == 'selected' || key == 'lib_id' || key == 'container_info') return;
 
       if(val && val.attributes) {
-        self.el.appendChild(self.showModel(val, key));
+        self.list.appendChild(self.showModel(val, key));
       }
       else {
-        self.el.appendChild(self.showAttribute(val, key, String('')));
+        self.list.appendChild(self.showAttribute(val, key, String('')));
       }
     });
   },

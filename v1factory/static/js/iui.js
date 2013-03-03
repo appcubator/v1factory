@@ -54,5 +54,25 @@ var iui = {
       topLeft : topLeft,
       bottomRight: bottomRight
     };
+  },
+
+  resizableAndDraggable: function(el) {
+
+    $(el).resizable({
+      handles: "n, e, s, w, se",
+      grid: 30,
+      resize: self.resized
+    });
+
+    $(el).draggable({
+      grid: [ 30,30 ],
+      containment : $('#elements-container'),
+      drag: self.moved
+    });
+    return el;
+  },
+
+  get: function(id) {
+    return document.getElementById(id);
   }
 };

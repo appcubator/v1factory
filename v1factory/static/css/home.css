@@ -38,3 +38,8 @@ body {
 form {
   margin: 0;
 }
+
+.pane {
+  border: 2px solid #132b52;
+  border-top: 2px solid #334b72;
+}

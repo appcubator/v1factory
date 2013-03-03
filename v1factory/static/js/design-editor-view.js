@@ -5,10 +5,9 @@ var DesignPropertiesCollection = Backbone.Collection.extend({
 var DesignPropertyView = Backbone.View.extend({
   el  : null,
   tagName : 'div',
-  className: 'property hi6 hoff1 span28',
-  
-  initialize: function(model, pageModel, ind, shouldStyle) {
+  className: 'property hi6 hoff1 span28 offset1',
 
+  initialize: function(model, pageModel, ind, shouldStyle) {
     _.bindAll(this, 'render', 'renderTitle', 'style', 'select', 'amendAppState');
     this.model = model;
     this.model.bind('change', this.amendAppState);
@@ -23,7 +22,7 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   render: function() {
-    
+
   },
 
   renderTitle: function() {
@@ -46,7 +45,7 @@ var DesignPropertyView = Backbone.View.extend({
 
     styleTag.innerHTML = styleContent;
     this.styleTag = styleTag;
-    
+
     document.getElementsByTagName('head')[0].appendChild(styleTag);
   },
 
@@ -73,7 +72,7 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
   render: function() {
     var self = this;
     this.renderTitle();
-    
+
     var newElem = '<div class="options">';
     _(this.options.options).each(function(option, ind){
       var bool = (self.model.get('value') == option)?'selected':'';
@@ -94,6 +93,8 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
   },
 
   selectColor: function(e, color) {
+    if(!e.target) return false;
+    console.log(e.target);
     this.model.set('value', '#'+e.target.value);
   },
 
@@ -133,7 +134,7 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignSizePickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi6 hoff1 span10',
+  className: 'property hi6 hoff1 span10 offset1',
   events: {
     'change .size' : 'select'
   },
@@ -159,7 +160,7 @@ var DesignSizePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignFontPickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi6 hoff1 span18',
+  className: 'property hi6 hoff1 span17 offset1',
   events: {
     'change .size' : 'select'
   },
@@ -184,7 +185,7 @@ var DesignFontPickerPropertyView = DesignPropertyView.extend({
 });
 
 var DesignEditorView = Backbone.View.extend({
-  el : null,
+  el  : iui.get('page-settings'),
   tagName    : 'div',
   className : 'props-pane',
   events: {
