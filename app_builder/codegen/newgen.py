@@ -91,6 +91,49 @@ class AnalyzedApp:
           uie['container_info']['form'] = form_obj
           self.forms.append(form_obj)
 
+# END OLD CODE
+# ANALYZED APP CREATOR
+
+class AnalyzedAppDos:
+  """
+  Coordinate the creation of the AppComponents from an AppJSON.
+  """
+  def __init__(self, app_state):
+    # should probably do some validity checks on the app_state here
+
+    self.name = app_state['name']
+    self.models = Model.objects
+    self.views = View.objects
+    self.form_receivers = FormReceiver.objects
+    self.templates = Template.objects
+
+    if app_state['users']['local']:
+      Model("User") # tell the model manager that it has a user
+      FormReceiver("login") # Tell the form receiver manager about the user login and sign up
+      FormReceiver("signup")
+      # maybe instantiate some permissions manager
+      # will add more user stuff later.
+    for m in app_state['entities']:
+      Model(m)
+
+    for p in app_state['pages']:
+      self.create_page(p)
+
+    self.pages = [ Page(d, self) for d in self.urls ]
+    for p in self.pages:
+      for i, uie in enumerate(p.uielements):
+        if uie['container_info'] is not None and uie['container_info']['action'] == 'create':
+          if uie['container_info']['entity'] == "User": continue
+          if uie['container_info']['entity'] == "Session": continue
+          form_obj = Form(uie, i, p)
+          uie['container_info']['form'] = form_obj
+          self.forms.append(form_obj)
+
+  def create_page(self, page):
+    Page(page['name'] 
+
+def createAnalyzedApp:
+# turns appjson into these objects, and wrap the objects in an object.
 
 class Manager:
   """
