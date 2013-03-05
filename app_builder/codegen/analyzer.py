@@ -31,6 +31,11 @@ class Page:
     self.name = page['name']
     self.access_level = page['access_level']
     self.uielements = []
+    self.design_props = []
+    if 'design_props' in page:
+      self.design_props = page['design_props']
+      if self.design_props is None:
+        self.design_props = []
     for uie in page['uielements']:
       self.uielements.append(UIElement.create(uie, self))
 

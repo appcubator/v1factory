@@ -1,7 +1,7 @@
 # Django settings for sample project.
 import os
 
-DEBUG = "HEROKU" in os.environ and os.environ["HEROKU"] == "1"
+DEBUG = not ("HEROKU" in os.environ and os.environ["HEROKU"] == "1")
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -10,17 +10,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    }
+}
 if DEBUG:
   DATABASES = {
       'default': {
           'ENGINE': 'django.db.backends.sqlite3',
           'NAME': 'db',
-      }
-  }
-else:
-  DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
       }
   }
 

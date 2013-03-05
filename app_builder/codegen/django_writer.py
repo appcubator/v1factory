@@ -2,6 +2,11 @@
 
 import re
 from manager import Manager
+import os
+import os.path
+import shutil
+import tempfile
+from os.path import join
 
 
 def analyzed_app_to_app_components(analyzed_app):
@@ -17,10 +22,11 @@ def analyzed_app_to_app_components(analyzed_app):
 # url has to know about the view
 # view has to know about the templates location
 # template has to know about the view's context
-    v = DjangoView(p, analyzed_app)
+    t = DjangoTemplate(p, analyzed_app)
+    templates.add(t)
+    v = DjangoView(p, analyzed_app, t)
     views.add(v)
     urls.add( DjangoUrl(p, v, analyzed_app) )
-    templates.add( DjangoTemplate(p, analyzed_app) )
 
   dw = DjangoApp(models, views, urls, templates)
   return dw
@@ -116,10 +122,11 @@ class Query:
 
 class DjangoView:
 
-  def __init__(self, page, analyzed_app):
+  def __init__(self, page, analyzed_app, template):
     self.name = page.name
     self.page = page
     self.app = analyzed_app
+    self.template = template
 
   def identifier(self):
     return "view_"+self.name
@@ -135,7 +142,7 @@ class DjangoView:
     return []
 
   def template_repr(self):
-    return repr("here/lies/template.html")
+    return repr("webapp/"+self.template.filename)
 
 class DjangoUrl:
 
@@ -171,16 +178,17 @@ class HTMLRenderer:
 
 class DjangoTemplate:
   from jinja2 import Environment, PackageLoader
-  env = Environment(loader=PackageLoader('app_builder.codegen.dev', 'code_templates/template_templates'))
+  env = Environment(loader=PackageLoader('app_builder.codegen', 'code_templates/template_templates'))
 
   def __init__(self, page, analyzed_app):
     self.name = page.name
+    self.filename = page.name + ".html"
     self.page = page
     self.app = analyzed_app
 
   def render(self):
     template = DjangoTemplate.env.get_template('template.html')
-    return template.render(uielements=self.page.uielements)
+    return template.render(uielements=self.page.uielements, css_props=self.page.design_props)
 
 class DjangoApp:
   """Wrap all the app components. Nuff said"""
@@ -195,10 +203,7 @@ class DjangoApp:
 class DjangoAppWriter:
   """Write django apps. Nuff said"""
   from jinja2 import Environment, PackageLoader
-  import os
-  import os.path
-  import shutil
-  env = Environment(loader=PackageLoader('app_builder.codegen.dev', 'code_templates'))
+  env = Environment(loader=PackageLoader('app_builder.codegen', 'code_templates'))
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 
@@ -222,7 +227,7 @@ class DjangoAppWriter:
   def render_templates(self):
     templates = []
     for t in self.django_app.templates.each():
-      templates.append( (t.name, t.render(),) )
+      templates.append( (t.filename, t.render(),) )
 
     return templates
 
@@ -263,9 +268,11 @@ class DjangoAppWriter:
         bootstrap.min.js
   """
 
-  def write_to_fs(self, dest=""):
-    import os.path.join as join
-    bp_src = DjangoAppWriter.bp_src
+  def write_to_fs(self, dest=None):
+    if dest is None:
+      dest = tempfile.mkdtemp()
+
+    bpsrc = DjangoAppWriter.bpsrc
 
     # if dir is not empty, throw an exception
     dest = os.path.normpath(dest)
@@ -279,17 +286,16 @@ class DjangoAppWriter:
     templates_dir = join(dest, "templates")
     templates_webapp_dir = join(templates_dir, "webapp")
     static_dir = join(dest, "static")
-    static_jslibs_dir = join(static, "jslibs")
+    static_jslibs_dir = join(static_dir, "jslibs")
     os.mkdir(webapp_dir)
     os.mkdir(templates_dir)
     os.mkdir(templates_webapp_dir)
     os.mkdir(static_dir)
-    os.mkdir(static_jslibs_dir)
 
     def f_transporter(src_str, dest_str, f, *args, **kwargs):
       src_tokens = src_str.split('/')
       dest_tokens = dest_str.split('/')
-      return f(join(bp_src, *src_tokens), join(dest, *dest_tokens), *args, **kwargs)
+      return f(join(bpsrc, *src_tokens), join(dest, *dest_tokens), *args, **kwargs)
 
     def write_string(content, dest_str):
       dest_tokens = dest_str.split('/')
@@ -303,6 +309,7 @@ class DjangoAppWriter:
     # copy boilerplate
     copy_file('heroku/Procfile', 'Procfile')
     copy_file('heroku/runtime.txt', 'runtime.txt')
+    copy_file('requirements.txt', 'requirements.txt')
     copy_file('__init__.py', '__init__.py')
     copy_file('manage.py', 'manage.py')
     copy_file('settings.py', 'settings.py')
@@ -310,14 +317,14 @@ class DjangoAppWriter:
 
     # main webapp files
     copy_file('__init__.py', 'webapp/__init__.py')
-    write_string(self.django_app.render_models_py(), 'webapp/models.py')
-    write_string(self.django_app.render_views_py(), 'webapp/views.py')
-    write_string(self.django_app.render_urls_py(), 'urls.py')
+    write_string(self.render_models_py(), 'webapp/models.py')
+    write_string(self.render_views_py(), 'webapp/views.py')
+    write_string(self.render_urls_py(), 'urls.py')
 
     # templates
     copy_file('base.html', 'templates/base.html')
-    for name, template in self.django_app.render_templates()
-      write_string(template, 'templates/webapp/{}.html' + name)
+    for fname, template in self.render_templates():
+      write_string(template, 'templates/webapp/{}'.format(fname))
 
     # static
     f_transporter('jslibs', 'static/jslibs', shutil.copytree)

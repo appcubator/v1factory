@@ -1,9 +1,6 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from app_builder.models import Class, Template, Route
-from app_builder.codegen import AnalyzedApp
-from app_builder.codegen.writers import DjangoWriter
 import simplejson
 import re
 
@@ -314,6 +311,7 @@ class App(models.Model):
     return summary
 
   def deploy(self):
+    return "do the funky chicken"
     import sys, os
     import traceback
     import subprocess
@@ -336,6 +334,7 @@ class App(models.Model):
     return tmp_project_dir
 
   def deploy_test(self):
+    return "do the funky chicken"
     analyzed_app = AnalyzedApp(self.state, self.name)
     django_writer = DjangoWriter(analyzed_app)
 

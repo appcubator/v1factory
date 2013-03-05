@@ -1,4 +1,5 @@
 {{ "{%" }} extends "base.html" {{ "%}" }}
+{{ "{% block content %}" }}
 {% for uie in uielements %}
   {% if uie.__class__.__name__ == "LoginForm" %}
 {% include "container_form.html" %}
@@ -14,3 +15,11 @@
 {% include "node.html" %}
   {% endif %}
 {% endfor %}
+{{ "{% endblock %}" }}
+{{ "{% block css %}" }}
+body {
+{% for s in css_props %}
+  {{ s.type }}: {{ s.value }};
+{% endfor %}
+}
+{{ "{% endblock %}" }}
