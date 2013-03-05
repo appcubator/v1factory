@@ -72,6 +72,36 @@ var iui = {
     return el;
   },
 
+  draggable: function(el) {
+    $(el).draggable({
+      grid: [ 30,30 ],
+      drag: self.moved
+    });
+  },
+
+  setCursor: function(node,pos){
+    console.log(node);
+    var node = (typeof node == "string" ||
+    node instanceof String) ? document.getElementById(node) : node;
+        if(!node){
+            return false;
+        }else if(node.createTextRange){
+            var textRange = node.createTextRange();
+            textRange.collapse(true);
+            textRange.moveEnd(pos);
+            textRange.moveStart(pos);
+            textRange.select();
+            console.log('he');
+            return true;
+        }else if(node.setSelectionRange){
+            node.setSelectionRange(pos,pos);
+            console.log('yo');
+            return true;
+        }
+                  console.log('yo');
+        return false;
+  },
+
   get: function(id) {
     return document.getElementById(id);
   }

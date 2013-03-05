@@ -304,6 +304,9 @@
 /* Element Selector */
 
 .elements-list {
+  width: 100%;
+  display: block;
+  overflow:hidden;
   height: 100px;
 }
 
@@ -426,6 +429,7 @@
   padding: 0;
   margin: 0;
   overflow: visible;
+  overflow-x: scroll;
   z-index: 999;
   border-radius: 0;
   border: none;
@@ -461,24 +465,25 @@
   background-color: rgba(59, 69, 85, 0.6);
 }
 
-.accord {
-  display: block;
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-
 .interface-elements {
   position: absolute;
-  width: 100%;
+  width: 200%;
   top: 0;
+  overflow-x:scroll;
   overflow-y:visible;
+  overflow: visible;
   height: 100px;
 }
 
 .interface-elements ul {
+  display: block;
+  overflow: scroll;
+  float: left;
   height: 100px;
-  overflow: visible;
+}
+
+.interface-elements ul li {
+  float: left;
 }
 
 .elements-list ul li {
@@ -506,7 +511,24 @@
   background-size: auto 20px;
 }
 
+.elements-list ul li.large {
+  width: 120px;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: 8px center;
+  background-size: auto 20px;
+}
+
 .elements-list ul li.entity span {
+  display: inline-block;
+  vertical-align: middle;
+  height: 80px;
+  margin-left: 40px;
+  width: 70px;
+  padding-top: 20px;
+}
+
+.elements-list ul li.large span {
   display: inline-block;
   vertical-align: middle;
   height: 80px;
@@ -976,7 +998,7 @@ li.model span.title {
 .text-input {
   background-image: url('../img/text_input.png');
 }
-.textarea {
+.text-area {
   background-image: url('../img/text_area.png');
 }
 .line {
@@ -1005,6 +1027,16 @@ li.model span.title {
 
 .addbutton {
   background-image: url('../img/add_button_icon_b.png');
+}
+
+.facebook {
+  background-size: auto 30px !important;
+  background-image: url('../img/facebook_icon.png');
+}
+
+.linkedin {
+  background-size: auto 30px !important;
+  background-image: url('../img/linkedin_icon.png');
 }
 
 .entity-list {

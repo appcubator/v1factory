@@ -21,7 +21,7 @@ var WidgetInfoView = Backbone.View.extend({
     'change select.statics' : 'staticsChanged'
   },
 
-  initialize: function(){
+  initialize: function(widgetsCollection){
     _.bindAll(this, 'render',
                     'show',
                     'showAttribute',
@@ -30,34 +30,59 @@ var WidgetInfoView = Backbone.View.extend({
                     'keydownInput',
                     'staticsChanged',
                     'showModel',
+                    'selectChanged',
                     'changedProp',
                     'changedContent',
                     'changedLayout');
-    this.render();
+
+    this.widgetsCollection = widgetsCollection;
+    this.model = widgetsCollection.selectedEl;
+    this.widgetsCollection.bind('change', this.selectChanged, this);
+    if(this.widgetsCollection.selectedEl) {
+      this.render();
+    }
+  },
+
+  selectChanged : function(chg, ch2) {
+    console.log(this.widgetsCollection.selectedEl );
+    if(this.widgetsCollection.selectedEl === null) {
+      this.model = null;
+      this.el.innerHTML = '';
+    }
+    else if(this.widgetsCollection.selectedEl != this.model) {
+      console.log("YOLO");
+      this.el.innerHTML = '';
+      this.model = this.widgetsCollection.selectedEl;
+      this.render();
+      //this.show();
+    }
   },
 
   render: function() {
     var span = document.createElement('span');
     span.className = "title";
-    span.innerText = "Item Info";
+    span.innerText = this.model.get('type')+" Info";
     this.list = document.createElement('ul');
     this.el.appendChild(span);
     this.el.appendChild(this.list);
+    iui.draggable(this.el);
+    this.show();
   },
 
-  show: function(widgetModel) {
-    $(this.list).fadeIn();
+  show: function() {
     var self = this;
 
-    this.list.innerHTML = '';
-    this.model = widgetModel;
     this.model.bind("change", this.changedProp, this);
     this.model.bind("remove", this.hide, this);
     this.model.get('layout').bind("change", this.changedLayout, this);
     this.model.get('content').bind("change", this.changedContent, this);
 
-    _(widgetModel.attributes).each(function(val, key){
-      if(key == 'id' || key == 'selected' || key == 'lib_id' || key == 'container_info') return;
+    _(this.model.attributes).each(function(val, key){
+      if(key == 'id' || key == 'selected'
+                     || key == 'lib_id'
+                     || key == 'container_info'
+                     || key == 'isSingle'
+                     || key == 'tagName') return;
 
       if(val && val.attributes) {
         self.list.appendChild(self.showModel(val, key));
@@ -72,10 +97,10 @@ var WidgetInfoView = Backbone.View.extend({
     var self = this;
     var li = document.createElement('li');
     li.className = 'model';
-    
+
 
     var span = document.createElement('span');
-    span.innerText = lang[modelName];
+    span.innerText = lang[modelName]||modelName;
     span.className = "title";
 
     var ul = document.createElement('ul');
@@ -94,23 +119,23 @@ var WidgetInfoView = Backbone.View.extend({
     var temp, html;
     var self = this;
     var li = document.createElement('li');
-    
+
     if(val!==null) {
       if(key == 'href') {
         temp         = document.getElementById('temp-href-select').innerHTML;
         html         = _.template(temp, {val : val, prop: prop});
-        li.innerHTML = '<span class="key">'+lang[key]+'</span>' + html;
+        li.innerHTML = '<span class="key">'+(lang[key]||key)+'</span>' + html;
       }
       else if(key == 'src') {
         temp         = document.getElementById('temp-source-select').innerHTML;
         html         = _.template(temp, {val : val, prop: prop});
-        li.innerHTML = '<span class="key">'+lang[key]+'</span>'+ html;
+        li.innerHTML = '<span class="key">'+(lang[key]||key)+'</span>'+ html;
       }
       else {
         var hash     = modelName + '-' + key;
-        li.innerHTML =  '<span class="key">'+lang[key]+'</span>' +
+        li.innerHTML =  '<span class="key">'+(lang[key]||key)+'</span>' +
                         '<input type="text" class="'+ hash +
-                        '" id="prop-'+ hash + '"  value=' + val + '>';
+                        '" id="prop-'+ hash + '"  value="' + val + '">';
       }
     }
 
@@ -131,7 +156,7 @@ var WidgetInfoView = Backbone.View.extend({
 
   staticsChanged: function(e) {
     var prop = e.target.id.replace('prop-', '');
-    
+
     if(e.target.value == "upload-image") {
       iui.openFilePick(function(files, f) {f(files);}, this.staticsAdded);
     }
