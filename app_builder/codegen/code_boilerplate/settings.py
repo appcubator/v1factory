@@ -1,8 +1,7 @@
 # Django settings for sample project.
 import os
 
-DEBUG = True
-#DEBUG = False
+DEBUG = "HEROKU" in os.environ and os.environ["HEROKU"] == "1"
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -11,21 +10,23 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
+if DEBUG:
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.sqlite3',
+          'NAME': 'db',
+      }
+  }
+else:
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+      }
+  }
 
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+if not DEBUG:
+  import dj_database_url
+  DATABASES['default'] =  dj_database_url.config()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

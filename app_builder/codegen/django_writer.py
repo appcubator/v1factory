@@ -183,11 +183,7 @@ class DjangoTemplate:
     return template.render(uielements=self.page.uielements)
 
 class DjangoApp:
-  """Write the different appcomponents to code."""
-  from jinja2 import Environment, PackageLoader
-  env = Environment(loader=PackageLoader('app_builder.codegen.dev', 'code_templates'))
-
-  _single = None
+  """Wrap all the app components. Nuff said"""
 
   def __init__(self, d_models, d_views, d_urls, d_templates):
     self.models = d_models
@@ -195,26 +191,138 @@ class DjangoApp:
     self.urls = d_urls
     self.templates = d_templates
 
-    if DjangoApp._single is None:
-      DjangoApp._single = self
-    else:
-      raise Exception("you can only create one at a time.")
 
-  def write_models_py(self):
-    template = DjangoApp.env.get_template('models.py')
-    return template.render(classes=list(self.models.each()))
+class DjangoAppWriter:
+  """Write django apps. Nuff said"""
+  from jinja2 import Environment, PackageLoader
+  import os
+  import os.path
+  import shutil
+  env = Environment(loader=PackageLoader('app_builder.codegen.dev', 'code_templates'))
 
-  def write_urls_py(self):
-    template = DjangoApp.env.get_template('urls.py')
-    return template.render(urls=list(self.urls.each()), form_receivers=[])
+  bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 
-  def write_views_py(self):
-    template = DjangoApp.env.get_template('views.py')
-    return template.render(views=self.views.each(), models=self.models.each(), form_receivers=[])
+  def __init__(self, django_app):
+    self.django_app = django_app
 
-  def write_templates(self):
+  """ Main app content """
+
+  def render_models_py(self):
+    template = DjangoAppWriter.env.get_template('models.py')
+    return template.render(classes=list(self.django_app.models.each()))
+
+  def render_urls_py(self):
+    template = DjangoAppWriter.env.get_template('urls.py')
+    return template.render(urls=list(self.django_app.urls.each()), form_receivers=[])
+
+  def render_views_py(self):
+    template = DjangoAppWriter.env.get_template('views.py')
+    return template.render(views=self.django_app.views.each(), models=self.django_app.models.each(), form_receivers=[])
+
+  def render_templates(self):
     templates = []
-    for t in self.templates.each():
-      templates.append(t.render())
+    for t in self.django_app.templates.each():
+      templates.append( (t.name, t.render(),) )
 
     return templates
+
+  def render_css(self):
+    return ""
+
+  """ Directory Structure """
+
+  """
+  ./
+    Procfile
+    requirements.txt
+
+    __init__.py
+    manage.py
+    settings.py
+    wsgi.py
+    urls.py
+
+    webapp/
+      __init__.py
+      models.py
+      views.py
+
+    templates/
+      base.html
+      webapp/
+        <template files>
+
+    static/
+      reset.css
+      bootstrap.css
+      style.css
+      script.js
+      jslibs/
+        backbone.js
+        underscore.js
+        bootstrap.min.js
+  """
+
+  def write_to_fs(self, dest=""):
+    import os.path.join as join
+    bp_src = DjangoAppWriter.bp_src
+
+    # if dir is not empty, throw an exception
+    dest = os.path.normpath(dest)
+    if os.listdir(dest):
+      raise Exception("I'm not going to write into a nonempty directory, that's dangerous")
+
+    # create directories
+    if not os.path.exists(dest):
+      os.makedirs(dest)
+    webapp_dir = join(dest, "webapp")
+    templates_dir = join(dest, "templates")
+    templates_webapp_dir = join(templates_dir, "webapp")
+    static_dir = join(dest, "static")
+    static_jslibs_dir = join(static, "jslibs")
+    os.mkdir(webapp_dir)
+    os.mkdir(templates_dir)
+    os.mkdir(templates_webapp_dir)
+    os.mkdir(static_dir)
+    os.mkdir(static_jslibs_dir)
+
+    def f_transporter(src_str, dest_str, f, *args, **kwargs):
+      src_tokens = src_str.split('/')
+      dest_tokens = dest_str.split('/')
+      return f(join(bp_src, *src_tokens), join(dest, *dest_tokens), *args, **kwargs)
+
+    def write_string(content, dest_str):
+      dest_tokens = dest_str.split('/')
+      f = open(join(dest, *dest_tokens), "w")
+      f.write(content)
+      f.close()
+
+    def copy_file(src_str, dest_str):
+      return f_transporter(src_str, dest_str, shutil.copyfile)
+
+    # copy boilerplate
+    copy_file('heroku/Procfile', 'Procfile')
+    copy_file('heroku/runtime.txt', 'runtime.txt')
+    copy_file('__init__.py', '__init__.py')
+    copy_file('manage.py', 'manage.py')
+    copy_file('settings.py', 'settings.py')
+    copy_file('wsgi.py', 'wsgi.py')
+
+    # main webapp files
+    copy_file('__init__.py', 'webapp/__init__.py')
+    write_string(self.django_app.render_models_py(), 'webapp/models.py')
+    write_string(self.django_app.render_views_py(), 'webapp/views.py')
+    write_string(self.django_app.render_urls_py(), 'urls.py')
+
+    # templates
+    copy_file('base.html', 'templates/base.html')
+    for name, template in self.django_app.render_templates()
+      write_string(template, 'templates/webapp/{}.html' + name)
+
+    # static
+    f_transporter('jslibs', 'static/jslibs', shutil.copytree)
+    copy_file('script.js', 'static/script.js')
+    write_string(self.render_css(), 'static/style.css')
+    # TODO copy the other css files here too later.
+
+    return dest
