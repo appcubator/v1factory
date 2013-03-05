@@ -1,0 +1,7 @@
+{% if h.is_stub_tag() %}
+<{{ h.tagname }} id="{{ h.html_id }}" class="{% for c in h.classes %}{{ c }} {% endfor %}" {% for k,v in h.attribs.items() %}{{ k }}="{{ v }}"{% endfor %}>
+  {{ h.content() }}
+</{{ h.tagname }}>
+{% else %}
+<{{ h.tagname }} id="{{ h.html_id }}" class="{% for c in h.classes %}{{ c }} {% endfor %}" {% for k,v in h.attribs.items() %}{{ k }}="{{ v }}"{% endfor %} />
+{% endif %}
