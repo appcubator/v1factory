@@ -7,17 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
-    # login views
-    {% for v in login_views %}
-    url({{ v.url }}, {{ v.view_path }}),
-    {% endfor %}
-
-    {% for v in views %}
-    url({{ v.url }}, {{ v.view_path }}),
-    {% endfor %}
-
-    {% for v in form_receivers %}
-    url({{ v.url }}, {{ v.view_path }}),
+    {% for v in urls %}
+    url({{ v.url_repr() }}, {{ v.view_path_repr() }}),
     {% endfor %}
 )
 

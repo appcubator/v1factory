@@ -1,7 +1,7 @@
-{% if h.is_stub_tag() %}
-<{{ h.tagname }} id="{{ h.html_id }}" class="{% for c in h.classes %}{{ c }} {% endfor %}" {% for k,v in h.attribs.items() %}{{ k }}="{{ v }}"{% endfor %}>
-  {{ h.content() }}
-</{{ h.tagname }}>
+{% if uie.is_normal_tag() %}
+<{{ uie.tagname }} id="{{ uie.html_id }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
+  {{ uie.content() }}
+</{{ uie.tagname }}>
 {% else %}
-<{{ h.tagname }} id="{{ h.html_id }}" class="{% for c in h.classes %}{{ c }} {% endfor %}" {% for k,v in h.attribs.items() %}{{ k }}="{{ v }}"{% endfor %} />
+<{{ uie.tagname }} id="{{ uie.html_id }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
 {% endif %}
