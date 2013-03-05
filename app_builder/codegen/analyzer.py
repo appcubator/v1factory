@@ -36,6 +36,9 @@ class Page:
       self.design_props = page['design_props']
       if self.design_props is None:
         self.design_props = []
+      for d in self.design_props:
+        if d['type'] == 'background-image':
+          d['value'] = 'url({})'.format(d['value'])
     for uie in page['uielements']:
       self.uielements.append(UIElement.create(uie, self))
 
@@ -45,6 +48,13 @@ class Route:
   def __init__(self, url):
     self.name = url['page_name']
     self.urlparts = url['urlparts']
+
+  def static_url(self):
+    # if the url is static, just display it. else, return "DYNAMIC URL"
+    for u in self.urlparts:
+      if not(isinstance(u, str) or isinstance(u, unicode)):
+        return "/DYNAMIC_URL"
+    return "/" + "/".join(self.urlparts)
 
 
 
@@ -89,6 +99,7 @@ class Node(UIElement):
     self.attribs = uie['attribs']
     self.content_dict = uie['content']
 
+
   @property
   def classes(self):
       classes = ["span{}".format(self.width), "hi{}".format(self.height)]
@@ -103,6 +114,16 @@ class Node(UIElement):
 
   def is_normal_tag(self):
     return self.tagname not in ['img', 'input']
+
+  def resolve_links(self, pages):
+    if 'href' in self.attribs:
+      m = re.match(r"\{\{(.+)\}\}$", self.attribs['href'])
+      if m:
+        link_ref = m.group(1)
+        p = pages.get_by_name(link_ref)
+        if p is None:
+          raise Exception("Bad link reference: {}".format(p))
+        self.attribs['href'] = p
 
 # abstract
 class Container(UIElement):
@@ -119,6 +140,11 @@ class Container(UIElement):
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
 
     return u
+  
+  def resolve_links(self, pages, *args, **kwargs):
+    for n in self.nodes:
+      n.resolve_links(pages, *args, **kwargs)
+
 
 # abstract
 class Form(Container):
@@ -143,7 +169,7 @@ class LoginForm(Form):
   def __init__(self, uie, page):
     # put the info here
     self.uie = uie
-    self.nodes = uie['container_info']['uielements']
+    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
 
 class SignupForm(Form):
@@ -151,7 +177,7 @@ class SignupForm(Form):
   def __init__(self, uie, page):
     # put the info here
     self.uie = uie
-    self.nodes = uie['container_info']['uielements']
+    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
 
 class EditForm(Form):
@@ -159,7 +185,7 @@ class EditForm(Form):
   def __init__(self, uie, page):
     # put the info here
     self.uie = uie
-    self.nodes = uie['container_info']['uielements']
+    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
 
 class CreateForm(Form):
@@ -167,13 +193,13 @@ class CreateForm(Form):
   def __init__(self, uie, page):
     # put the info here
     self.uie = uie
-    self.nodes = uie['container_info']['uielements']
+    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
 
 class QuerysetWrapper:
   def __init__(self, uie, page):
     self.uie = uie
-    self.nodes = uie['container_info']['uielements']
+    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
 
 
@@ -215,6 +241,7 @@ class AnalyzedApp:
 
     self.link_models_to_routes()
     self.link_routes_and_pages()
+    self.fill_in_hrefs()
     # will eventually do forms.
 
 
@@ -242,6 +269,12 @@ class AnalyzedApp:
     for r in self.routes.each():
       r.page = self.pages.get_by_name(r.name)
       r.page.route = r
+
+  def fill_in_hrefs(self):
+    for p in self.pages.each():
+      for uie in p.uielements:
+        uie.resolve_links(self.pages)
+
 
 
 def test():

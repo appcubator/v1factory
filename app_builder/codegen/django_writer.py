@@ -119,7 +119,6 @@ class Query:
   """Remembers the variable name and the executing line of the query"""
   pass
 
-
 class DjangoView:
 
   def __init__(self, page, analyzed_app, template):
@@ -181,10 +180,24 @@ class DjangoTemplate:
   env = Environment(loader=PackageLoader('app_builder.codegen', 'code_templates/template_templates'))
 
   def __init__(self, page, analyzed_app):
+    from analyzer import Container, Page
     self.name = page.name
     self.filename = page.name + ".html"
     self.page = page
     self.app = analyzed_app
+
+    for uie in self.page.uielements:
+      # container case
+      if isinstance(uie, Container):
+        for n in uie.nodes:
+          if 'href' in n.attribs:
+            if isinstance(n.attribs['href'], Page):
+              n.attribs['href'] = n.attribs['href'].route.static_url()
+      # node case
+      else:
+        if 'href' in uie.attribs:
+          if isinstance(uie.attribs['href'], Page):
+            uie.attribs['href'] = uie.attribs['href'].route.static_url()
 
   def render(self):
     template = DjangoTemplate.env.get_template('template.html')
