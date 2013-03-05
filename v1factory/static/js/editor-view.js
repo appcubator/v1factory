@@ -91,6 +91,7 @@ var EditorView = Backbone.View.extend({
     var contextEntites = _.filter(page.urlparts, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
     contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
+    console.log(self.entityCollection);
     _(contextEntites).each(function(entityName) {
       console.log(self.entityCollection);
       self.contextCollection.add(self.entityCollection.findWhere({ name : entityName}));

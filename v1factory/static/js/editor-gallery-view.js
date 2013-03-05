@@ -139,7 +139,7 @@ var GalleryView = Backbone.View.extend({
     // Attr of X - UIElement
 
     var self = this;
-    var tempLi   = '<li id="entity-<%= cid %>" class="entity-list entity">'+
+    var tempLi   = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
                    '<span class="name">Show <%= name %> <%= attr %></span></li>';
 
     console.log(entityModel);
@@ -148,7 +148,8 @@ var GalleryView = Backbone.View.extend({
       var context = {
         name : entityModel.get('name'),
         cid  : entityModel.cid,
-        attr : val.name
+        attr : val.name,
+        type : val.type
       };
 
       $(self.dataList).append(_.template(tempLi, context));
@@ -157,7 +158,7 @@ var GalleryView = Backbone.View.extend({
 
 
 
-    $('.entity').draggable({
+    $('.single-data').draggable({
       cursor: "move",
       cursorAt: { top: 0, left: 0 },
       helper: "clone",
@@ -243,7 +244,6 @@ var GalleryView = Backbone.View.extend({
     var widget = {};
     console.log(className);
     if(/(entity)/.exec(className)) {
-
       var cid = String(id).replace('entity-','');
       var entity = this.entitiesCollection.get(cid);
       var action = className.split(' ')[0];
@@ -251,6 +251,19 @@ var GalleryView = Backbone.View.extend({
       widget.container_info = {
          entity : entity,
          action : action
+      };
+    }
+    else if (/(single-data)/.exec(className)) {
+      console.log(id);
+      var id = String(id).replace('entity-','');
+      console.log(id.split('-')[0]);
+
+      var entity = this.entitiesCollection.get(id.split('-')[0]);
+      var field = id.split('-')[1];
+
+      widget = uiLibrary['text'][0];
+      widget.content = {
+        text : '{{'+entity.get('name')+'_'+field+'}}'
       };
     }
     else {

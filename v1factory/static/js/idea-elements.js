@@ -69,7 +69,20 @@ uiLibrary = {
         name  : 'wrong-name',
         placeholder: 'Default placeholder...'
       },
-      content : null,
+      content : {},
+      isSingle: true
+    }
+  ],
+
+  "password" : [
+    {
+      tagName : 'input',
+      attribs : {
+        type  : 'password',
+        name  : 'wrong-name',
+        placeholder: 'Default placeholder...'
+      },
+      content : {},
       isSingle: true
     }
   ],

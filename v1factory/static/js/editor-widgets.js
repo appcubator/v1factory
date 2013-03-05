@@ -26,6 +26,7 @@ var WidgetView = Backbone.View.extend({
   tagName : 'span',
   widgetsContainer :null,
   selected : false,
+  editable : false,
 
   events: {
     'mousedown .widget-wrapper' : 'select',
@@ -143,9 +144,12 @@ var WidgetView = Backbone.View.extend({
   },
 
   select: function(e) {
-    this.model.select();
-    e.preventDefault();
-    return false;
+    if(!this.editable) {
+      console.log('hey');
+      this.model.select();
+      e.preventDefault();
+      return false;
+    }
   },
 
   outlineSelected: function() {
@@ -227,6 +231,20 @@ var WidgetView = Backbone.View.extend({
     var left = Math.round((ui.position.left / GRID_HEIGHT));
     this.model.get('layout').set('top', top);
     this.model.get('layout').set('left', left);
+  },
+
+  switchOnEditMode: function(e) {
+    $(this.widgetsContainer).draggable('destroy');
+    this.editable = true;
+    var elem = this.widgetsContainer.firstChild;
+    elem.setAttribute('contenteditable', true);
+    $(elem).focus();
+    return false;
+    //iui.setCursor(this.widgetsContainer.firstChild, 1);
+  },
+
+  switchOffEditMode: function() {
+
   }
 });
 
@@ -264,8 +282,8 @@ var WidgetContainerView = WidgetView.extend({
 
     this.render(widgetModel);
 
-    if(widgetModel.get('uielements')) {
-      this.model.get('childCollection').add(widgetModel.get('uielements'));
+    if(widgetModel.get('container_info').uielements) {
+      this.model.get('childCollection').add(widgetModel.get('container_info').uielements);
       return;
     }
   },
@@ -329,14 +347,6 @@ var WidgetContainerView = WidgetView.extend({
 
   removeView: function() {
     $(this.el).remove();
-  },
-
-  switchOnEditMode: function() {
-
-  },
-
-  switchOffEditMode: function() {
-
   }
 
 });

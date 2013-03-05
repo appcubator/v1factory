@@ -9,8 +9,7 @@ _.templateSettings.escape = false;
 </script>
 
 
-<script type="text/template" id="temp-node">
-<<%= element.tagName%> 
+<script type="text/template" id="temp-node"><<%= element.tagName%> 
 class = "<%= element.class_name %>"
 <% _(element.attribs).each(function(val, key) { %>
 <%=key%>="<%=val%>"<% }); %>>
@@ -19,8 +18,7 @@ class = "<%= element.class_name %>"
 <% }); %>
 <% if(!element.isSingle) {%>
 </<%= element.tagName%>>
-<% } %>
-</script>
+<% } %></script>
 
 
 <script type="text/html" id="temp-href-select">

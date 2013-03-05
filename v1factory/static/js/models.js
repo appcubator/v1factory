@@ -76,7 +76,7 @@ var WidgetModel = Backbone.Model.extend({
 
     _.bindAll(this, 'select', 'assignCoord');
 
-    if(this.get('container_info')) {
+    if(this.get('container_info')&&this.get('container_info').uielements == undefined) {
       // this['handle' + this.get('container_info').action]
       console.log(this);
       this.containerHandler[this.get('container_info').action].call(this);
@@ -134,9 +134,8 @@ var WidgetModel = Backbone.Model.extend({
 
   containerHandler: {
     'entity-list' : function() {
-
       var self = this;
-      self.set('uielements',[]);
+      self.get('container_info').uielements = [];
 
       _(this.get('container_info').entity.get('fields')).each(function(v, ind, li){
 
@@ -157,12 +156,14 @@ var WidgetModel = Backbone.Model.extend({
             text : '{{'+self.get('container_info').entity.get('name')+'_'+v.name+'}}'
         };
         var widget = new WidgetModel(widgetProps);
-        self.get('uielements').push(widget);
+        self.get('container_info').uielements.push(widget);
       });
     },
     'form' : function() {
       var self = this;
-      self.set('uielements',[]);
+      var container_info = self.get('container_info');
+      container_info.uielements = [];
+      self.set('container_info', container_info);
 
       _(this.get('container_info').entity.get('fields')).each(function(v, k, ind){
 
@@ -181,7 +182,7 @@ var WidgetModel = Backbone.Model.extend({
         };
         widgetProps.attribs.placeholder = '{{'+self.get('container_info').entity.get('name')+'_'+v.name+'}}';
         var widget = new WidgetModel(widgetProps);
-        self.get('uielements').push(widget);
+        self.get('container_info').uielements.push(widget);
       });
 
       var ind = this.get('container_info').entity.get('fields').length;
@@ -200,11 +201,13 @@ var WidgetModel = Backbone.Model.extend({
       };
       widgetProps.attribs.value = 'Create';
       var widget = new WidgetModel(widgetProps);
-      self.get('uielements').push(widget);
+      self.get('container_info').uielements.push(widget);
     },
     'addbutton' : function() {
       var self = this;
-      self.set('uielements',[]);
+      var container_info = self.get('container_info');
+      container_info.uielements = [];
+      self.set('container_info', container_info);
 
       var coordinates = iui.unite({x: 1,
                                    y: 1 },
@@ -213,6 +216,46 @@ var WidgetModel = Backbone.Model.extend({
       var type = "button";
       var widgetProps = uiLibrary[type][0];
       widgetProps.type = type;
+      widgetProps.layout = {
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
+          width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+          height: 4
+      };
+      console.log(self);
+      widgetProps.attribs.value = 'Add ' + this.get('container_info').entity.get('name');
+      var widget = new WidgetModel(widgetProps);
+      self.get('container_info').uielements.push(widget);
+    },
+    'login' : function() {
+      var self = this;
+          console.log(self);
+      var coordinates = iui.unite({x: 1,
+                                   y: 1 },
+                                  {x: self.get('layout').get('width') + 1,
+                                   y: 1 });
+      var type = "text-input";
+      var widgetProps = uiLibrary[type][0];
+      widgetProps.type = type;
+      widgetProps.attribs.placeholder = "Username...";
+      widgetProps.layout = {
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
+          width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+          height: 4
+      };
+
+      var widget = new WidgetModel(widgetProps);
+      self.get('uielements').push(widget);
+
+      var coordinates = iui.unite({x: 1,
+                                   y: 5 },
+                                  {x: self.get('layout').get('width') + 1,
+                                   y: 5 });
+      var type = "password";
+      var widgetProps = uiLibrary['password'][0];
+      widgetProps.type = type;
+      widgetProps.attribs.placeholder = "Password...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
           left  : coordinates.topLeft.x,

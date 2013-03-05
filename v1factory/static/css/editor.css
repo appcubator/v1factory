@@ -511,7 +511,24 @@
   background-size: auto 20px;
 }
 
+.elements-list ul li.large {
+  width: 120px;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: 8px center;
+  background-size: auto 20px;
+}
+
 .elements-list ul li.entity span {
+  display: inline-block;
+  vertical-align: middle;
+  height: 80px;
+  margin-left: 40px;
+  width: 70px;
+  padding-top: 20px;
+}
+
+.elements-list ul li.large span {
   display: inline-block;
   vertical-align: middle;
   height: 80px;
