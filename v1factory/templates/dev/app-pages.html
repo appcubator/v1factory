@@ -48,9 +48,11 @@
 {% endblock %}
 
 {% block js %}
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/iui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/models.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/design-editor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/design-editor-view.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/pages-editor.js"></script>
 <script type="text/javascript">
 var pagesView = new PagesView();

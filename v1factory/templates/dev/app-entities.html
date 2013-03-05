@@ -69,7 +69,7 @@
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </div>
   <div class="row">
-    <div class="span48 offset1 hoff1">
+    <div class="span48 hoff1">
       <h2 class="offset1">Entities</h2>
       <div id="entities-container">
       <ul id="entities" class="entity-list"></ul><div id="add-entity-button" class="span14 offset1 add-entity"><span class="pane hi10 hoff1"><p class="hoff4"> + Add Entity</p></span></div>
@@ -139,7 +139,7 @@
 <span class="sub-title span10"><%- name %></span><span class="cross" id="cross">×</span>
 <ul class="property-list">
   <% _(attribs).each(function(attrib, ind){ %><li>
-    <span class="hi1 span12" id=""><%- attrib.name %></span><span class="right cross small" id="prop-cross">×</span>
+    <span class="hi2 span12" id=""><%- attrib.name %></span><span class="right cross small" id="prop-cross">×</span>
     <select class="attribs" id="prop-<%- ind %>">
       <option value="text" <% if(attrib.type=="text") %> selected <% %>>Text</option>
       <option value="number" <% if(attrib.type=="number") %> selected <% %>>Number</option>
@@ -156,7 +156,7 @@
 <form class="add-property-form span20 hoff1" style="display:none"><input type="text" class="property-name-input"></form></li>
 </script>
 <script type="text/html" id="template-property">
-<li><span class="hi2 span3"><%- name %></span><span class="right cross small" id="prop-cross">×</span>
+<li><span class="hi2 span6"><%- name %></span><span class="right cross small" id="prop-cross">×</span>
   <select class="attribs" id="<%- ind %>">
     <option value="text" selected>Text</option>
     <option value="number">Number</option>

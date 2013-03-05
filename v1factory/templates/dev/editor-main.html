@@ -63,118 +63,24 @@ var pageId = {{ page_id }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/default-uielements.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/tag-dict.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/list.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/idea-elements.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/models.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/collections.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-options.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-grid.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-widgets.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/editor-entities.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/editor-gallery-view.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/editor-info.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/editor-list.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/editor-pages.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/design-editor-view.js"></script>
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/list.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/editor-view.js"></script>
+
 
 <script type="text/javascript">
 var GRID_WIDTH = 15;
 var GRID_HEIGHT = 15;
-
-// var entitiesColl   = new EntityCollection();
-// var widgetInfoView = new WidgetInfoView();
-
-// var 
-
-// contextColl.add(contextEntities);
-// entitiesColl.add(appState.entities);
-
-// $(function() {$( "#item-info-section" ).draggable();});
-
-var EditorView = Backbone.View.extend({
-  el        : document.body,
-  className : 'sample',
-
-  events    : {
-    'click #save'          : 'save',
-    'click #settings'      : 'showSettings',
-    'click #settings-cross': 'hideSettings'
-
-  },
-  
-  initialize: function() {
-    _.bindAll(this, 'save',
-                    'hideSettings',
-                    'showSettings',
-                    'getContextEntities');
-    
-    var page = appState.pages[pageId];
-    var contextEntites = this.getContextEntities();
-
-    this.model            = new PageModel(page);
-    this.entityCollection = new EntityCollection();
-    this.contextCollection= new EntityCollection();
-
-    console.log(this.model);
-
-    this.galleryEditor = new GalleryView(this.contextCollection, this.entityCollection);
-    this.widgetEditor  = new WidgetEditorView(contextEntites, page);
-    this.gridEditor    = new GridEditorView();
-    this.designEditor  = new DesignEditorView(this.model, true);
-
-    this.entityCollection.add(appState.entities);
-    this.contextCollection.add(contextEntites);
-
-    this.render();
-    $('#loading-gif').fadeOut().remove();
-  },
-
-  render: function() {
-    this.el.appendChild(this.galleryEditor.el);
-    this.el.appendChild(this.widgetEditor.el);
-    this.el.appendChild(this.gridEditor.el);
-    this.el.appendChild(this.designEditor.el);
-  },
-
-  save : function() {
-    appState.pages[pageInd]['uielements'] = (this.widgetEditor.serializeWidgets() || []);
-    appState.pages[pageInd]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
-    
-    $.ajax({
-      type: "POST",
-      url: '/app/1/state/',
-      data: JSON.stringify(appState),
-      success: function() {},
-      dataType: "JSON"
-    });
-  },
-
-  showSettings: function() {
-    $('#page-settings').animate({
-      marginBottom : -10
-    });
-    return false;
-  },
-
-  hideSettings: function() {
-    $('#page-settings').animate({
-      marginBottom : '-100%'
-    });
-    return false;   
-  },
-
-  getContextEntities: function() {
-    var name = appState.pages[pageId].name;
-    var page = _.where(appState.urls, {page_name: name})[0];
-    if(!page) {
-      return [];
-    }
-    var contextEntites = _.filter(page.urlparts, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
-    contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
-    return contextEntites;
-  }
-
-});
 
 var editorView = new EditorView();
 </script>

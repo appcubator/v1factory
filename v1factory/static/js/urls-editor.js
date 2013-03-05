@@ -12,7 +12,7 @@ var UrlsCollection = Backbone.Collection.extend({
 var UrlView = Backbone.View.extend({
   el: null,
   tagName: 'div',
-  className: 'row span30 offset1 hoff1',
+  className: 'row span60 offset1 hoff1',
   events: {
     'change .url-part'      : 'urlPartChanged',
     'change .page'          : 'pageChanged',

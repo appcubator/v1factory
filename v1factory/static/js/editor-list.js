@@ -9,7 +9,6 @@
  *  of the related widget.
  *
  *  Includes:
- *  - WidgetInfoView
  *
  */
 
@@ -17,9 +16,9 @@ var WidgetMenuView = Backbone.View.extend({
   el : document.getElementById('widget-list'),
 
   initialize: function(widgetCollection){
-    _.bindAll(this, 'render', 
-                    'addMenuItem', 
-                    'removeListItem', 
+    _.bindAll(this, 'render',
+                    'addMenuItem',
+                    'removeListItem',
                     'change');
 
     this.render();

@@ -1,3 +1,6 @@
+<script type="text/javascript">
+_.templateSettings.escape = false;
+</script>
 <script type="text/html" id="temp-meta">
 <ul class="meta" style="display:none;">
 <li><img class="delete" src="/static/img/delete-icon.png"></li>
@@ -6,17 +9,16 @@
 </script>
 
 
-<script type="text/html" id="temp-node">
-<<%= element.tagname%> 
+<script type="text/template" id="temp-node">
+<<%= element.tagName%> 
 class = "<%= element.class_name %>"
-<% _(node.attribs).each(function(val, key) { %>
-<%= key %> = <%= val %>
-<% }); %>>
-<% _(node.content).each(function(val, key) { %>
+<% _(element.attribs).each(function(val, key) { %>
+<%=key%>="<%=val%>"<% }); %>>
+<% _(element.content).each(function(val, key) { %>
 <%= val %>
 <% }); %>
-<% if(!node.isSingle) {%>
-</<%= element.tagname%>>
+<% if(!element.isSingle) {%>
+</<%= element.tagName%>>
 <% } %>
 </script>
 

@@ -8,10 +8,10 @@
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel span21 hi3">
-  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <div class="offset2 toppanel span21 hi6">
+  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
-  <div class="span8 right hoff1 offsetr1">
+  <div class="span16 right hoff2 offsetr1">
     <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-urls">Save</a>
   </div>
 </div>
@@ -19,14 +19,14 @@
 
 {% block page %}
 <div class="container" id="urls-page">
-  <div class="row top-buttons offset1 span30 tb-border">
+  <div class="row top-buttons offset1 span60 tb-border">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
   </div>
   <div id="urls-editor">
     
   </div>
-  <div class="row span30 offset1 hoff1">
-    <div class="pane border add-url hi2" id="create-url">
+  <div class="row span60 offset1 hoff1">
+    <div class="pane border add-url hi4" id="create-url">
       + Create a new URL
     </div>
   </div>
@@ -36,8 +36,8 @@
 {% block js %}
 <script type="text/html" id="template-url">
 
-      <div class="pane hi2">
-        <div class="span22 url">
+      <div class="pane hi4">
+        <div class="span44 url">
         <% var endsWithEnt = 1;
            _.each(urls, function(url, i) { %>
           <span class="slash">/</span>
@@ -67,7 +67,7 @@
         <% } %>
         </div>
         <div class="pages span1 arrow">»</div>
-        <div class="pages right span6 offset1">
+        <div class="pages right span12 offset1">
           <select class="page">
             <% _.each(pages, function(page){ %>
             <option <% if(page.name == page_name){ %> selected <%}%>><%= page.name %></option>

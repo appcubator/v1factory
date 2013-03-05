@@ -72,6 +72,13 @@ var iui = {
     return el;
   },
 
+  draggable: function(el) {
+    $(el).draggable({
+      grid: [ 30,30 ],
+      drag: self.moved
+    });
+  },
+
   get: function(id) {
     return document.getElementById(id);
   }

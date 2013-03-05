@@ -59,7 +59,7 @@ var PageSettingsView = Backbone.View.extend({
     _(appState.pageProps).each(function(val, key, ind) {
       var styleTag = document.createElement('style');
       styleTag.id = val.id;
-      
+
       var styleContent = (val.tag || '.sample') + ' {';
       styleContent += (val.css).replace(/<%=content%>/g, val.currentValue);
       styleContent += '}';
