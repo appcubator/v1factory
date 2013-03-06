@@ -140,7 +140,7 @@ class Container(UIElement):
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
 
     return u
-  
+
   def resolve_links(self, pages, *args, **kwargs):
     for n in self.nodes:
       n.resolve_links(pages, *args, **kwargs)
@@ -157,7 +157,7 @@ class Form(Container):
       u = LoginForm(uie, page)
     elif uie['container_info']['action'] == 'signup':
       u = SignupForm(uie, page)
-    elif uie['aciton'] == 'edit':
+    elif uie['container_info']['action'] == 'edit':
       u = EditForm(uie, page)
     elif uie['container_info']['action'] == 'create':
       u = CreateForm(uie, page)
@@ -168,6 +168,7 @@ class LoginForm(Form):
   """A standard login form."""
   def __init__(self, uie, page):
     # put the info here
+    self.name = "Form{}".format(id(uie))
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
@@ -176,6 +177,7 @@ class SignupForm(Form):
   """A standard signup form."""
   def __init__(self, uie, page):
     # put the info here
+    self.name = "Form{}".format(id(uie))
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
@@ -183,6 +185,7 @@ class SignupForm(Form):
 class EditForm(Form):
   """Edit a model instance form."""
   def __init__(self, uie, page):
+    self.name = "Form{}".format(id(uie))
     # put the info here
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
@@ -191,13 +194,25 @@ class EditForm(Form):
 class CreateForm(Form):
   """Create a model instance form."""
   def __init__(self, uie, page):
+    self.name = "Form{}".format(id(uie))
     # put the info here
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
+    self.included_field_names = [ n.attribs['name'] for n in self.nodes if 'name' in n.attribs ]
+    self.entity_name = uie['container_info']['entity']
 
-class QuerysetWrapper:
+  def resolve_entity(self, analyzed_app):
+    self.entity = analyzed_app.models.get_by_name(self.entity_name)
+    self.included_fields = []
+    for f in self.entity.fields:
+      if f.name in self.included_field_names:
+        self.included_fields.append(f)
+
+
+class QuerysetWrapper(Container):
   def __init__(self, uie, page):
+    self.name = "QW{}".format(id(uie))
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
@@ -243,6 +258,7 @@ class AnalyzedApp:
     self.link_routes_and_pages()
     self.fill_in_hrefs()
     # will eventually do forms.
+    self.init_forms()
 
 
   # link routes and models
@@ -275,7 +291,14 @@ class AnalyzedApp:
       for uie in p.uielements:
         uie.resolve_links(self.pages)
 
-
+  def init_forms(self):
+    self.forms = Manager(Form)
+    for p in self.pages.each():
+      for uie in p.uielements:
+        if isinstance(uie, Form):
+          if isinstance(uie, CreateForm):
+            self.forms.add(uie)
+            uie.resolve_entity(self)
 
 def test():
   from v1factory.models import App

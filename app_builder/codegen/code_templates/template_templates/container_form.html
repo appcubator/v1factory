@@ -1,3 +1,5 @@
-<form>
-  I am a form...
+<form method="POST" action="{{ '{%' }} url {{ uie.form_receiver.view_path() }} {{ '%}' }}">
+  {% for uie in uie.nodes %}
+  {% include "node.html" %}
+  {% endfor %}
 </form>
