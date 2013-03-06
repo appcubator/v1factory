@@ -119,5 +119,16 @@ uiLibrary = {
       attribs : null,
       isSingle: true
     }
+  ],
+
+  "box" : [
+    {
+      tagName : 'div',
+      content: null,
+      attribs : {
+        style : 'background-color:#ccc;'
+      },
+      isSingle: false
+    }
   ]
 };

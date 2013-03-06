@@ -51,5 +51,11 @@ var defaultElements = [
     text: "Dropdown",
     className : "dropdown",
     el : "<select><option>Option 1</option></select>"
+  },
+
+  {
+    text: "Box",
+    className : "box",
+    el : "<div style='background-color:#ccc;height:120px' class='span20'></div>"
   }
 ];

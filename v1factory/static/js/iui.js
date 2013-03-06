@@ -56,17 +56,15 @@ var iui = {
     };
   },
 
-  resizableAndDraggable: function(el) {
-
+  resizableAndDraggable: function(el, self) {
     $(el).resizable({
       handles: "n, e, s, w, se",
-      grid: 30,
+      grid: 15,
       resize: self.resized
     });
 
     $(el).draggable({
-      grid: [ 30,30 ],
-      containment : $('#elements-container'),
+      grid: [ 15,15 ],
       drag: self.moved
     });
     return el;

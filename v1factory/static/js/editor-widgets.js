@@ -29,9 +29,8 @@ var WidgetView = Backbone.View.extend({
   editable : false,
 
   events: {
-    'mousedown .widget-wrapper' : 'select',
-    'click .delete' : 'remove',
-    'dblclick' : 'switchOnEditMode'
+    'mousedown' : 'select',
+    'click .delete' : 'remove'
   },
 
   initialize: function(widgetModel){
@@ -75,19 +74,18 @@ var WidgetView = Backbone.View.extend({
 
   render: function() {
     this.el.appendChild(this.renderContent());
+
+    if(this.model.get('type') == 'box') {
+      console.log("YOLOOOO");
+      this.el.style.zIndex = 0;
+    }
+
     this.model.select();
 
     var self = this;
-    $(this.widgetsContainer).resizable({
-      handles: "n, e, s, w, se",
-      grid: GRID_WIDTH,
-      resize: self.resized
-    });
-    $(this.widgetsContainer).draggable({
-      grid: [ GRID_WIDTH, GRID_HEIGHT ],
-      containment : $('#elements-container'),
-      drag: self.moved
-    });
+    iui.resizableAndDraggable(self.widgetsContainer, self);
+
+    return this;
   },
 
   renderContent: function() {
@@ -122,9 +120,9 @@ var WidgetView = Backbone.View.extend({
     var node_context = _.clone(this.model.attributes);
     node_context.attribs = this.model.get('attribs').attributes;
     node_context.content = this.model.get('content').attributes;
+    node_context.attribs.style += 'width:100%; height:100%;';
 
     var el = _.template(temp, { element: node_context});
-
     return el;
   },
 
@@ -144,12 +142,13 @@ var WidgetView = Backbone.View.extend({
   },
 
   select: function(e) {
-    if(!this.editable) {
-      console.log('hey');
+    console.log(this);
+    // if(!this.editable) {
+    //   console.log('hey');
       this.model.select();
       e.preventDefault();
       return false;
-    }
+    // }
   },
 
   outlineSelected: function() {
@@ -213,12 +212,12 @@ var WidgetView = Backbone.View.extend({
     this.model.select();
 
     var self = this;
-    iui.resizableAndDraggable(this.widgetsContainer);
+    iui.resizableAndDraggable(this.widgetsContainer, self);
 
   },
 
   resized: function(e, ui) {
-    console.log("YOLO");
+    console.log(this);
     var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
     console.log(deltaHeight + ' ,' + deltaWidth);
@@ -256,7 +255,7 @@ var WidgetContainerView = WidgetView.extend({
   entity: null,
   type: null,
   events: {
-    'click .widgets-container' : 'select',
+    'click' : 'select',
     'click .delete'            : 'remove'
   },
 
@@ -269,13 +268,15 @@ var WidgetContainerView = WidgetView.extend({
 
     this.model = widgetModel;
     this.model.bind("change:selected", this.outlineSelected, this);
-    this.model.bind("change:width", this.changedWidth, this);
-    this.model.bind("change:height", this.changedHeight, this);
-    this.model.bind("change:top", this.changedTop, this);
-    this.model.bind("change:left", this.changedLeft, this);
+
+    this.model.get('layout').bind("change:width", this.changedWidth, this);
+    this.model.get('layout').bind("change:height", this.changedHeight, this);
+    this.model.get('layout').bind("change:top", this.changedTop, this);
+    this.model.get('layout').bind("change:left", this.changedLeft, this);
+
     this.model.bind("remove", this.removeView, this);
 
-    this.entity = widgetModel.get('entity');
+    this.entity = widgetModel.get('container_info').entity;
     var collection = new WidgetCollection();
     this.model.set('childCollection', collection);
     collection.bind("add", this.placeWidget);
@@ -289,6 +290,7 @@ var WidgetContainerView = WidgetView.extend({
   },
 
   render: function(widget) {
+    var self = this;
     this.el.innerHTML = '';
 
     var element = document.createElement('div');
@@ -306,7 +308,9 @@ var WidgetContainerView = WidgetView.extend({
     this.widgetsContainer = element;
     this.el.appendChild(element);
 
-    iui.resizableAndDraggable(this.el);
+    iui.resizableAndDraggable(this.widgetsContainer, self);
+
+    return this;
   },
 
   placeWidget: function(model, a) {

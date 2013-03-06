@@ -18,15 +18,18 @@ var WidgetInfoView = Backbone.View.extend({
   events : {
     'change input'          : 'inputChanged',
     'keydown input'         : 'keydownInput',
-    'change select.statics' : 'staticsChanged'
+    'change select.statics' : 'staticsChanged',
+    'change select'         : 'inputChanged'
   },
 
   initialize: function(widgetsCollection){
     _.bindAll(this, 'render',
+                    'clear',
                     'show',
                     'showAttribute',
                     'staticsAdded',
                     'inputChanged',
+                    'selectChanged',
                     'keydownInput',
                     'staticsChanged',
                     'showModel',
@@ -44,18 +47,18 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   selectChanged : function(chg, ch2) {
-    console.log(this.widgetsCollection.selectedEl );
+    console.log(this.widgetsCollection.selectedEl);
     if(this.widgetsCollection.selectedEl === null) {
       this.model = null;
       this.el.innerHTML = '';
     }
     else if(this.widgetsCollection.selectedEl != this.model) {
-      console.log("YOLO");
       this.el.innerHTML = '';
       this.model = this.widgetsCollection.selectedEl;
       this.render();
-      this.show();
+      //this.show();
     }
+    console.log(this.el);
   },
 
   render: function() {
@@ -70,15 +73,17 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   show: function() {
+    console.log("SAHOWING!");
     var self = this;
     self.list.innerHTML =  '';
 
     this.model.bind("change", this.changedProp, this);
-    this.model.bind("remove", this.hide, this);
+    this.model.bind("remove", this.clear, this);
     this.model.get('layout').bind("change", this.changedLayout, this);
     this.model.get('content').bind("change", this.changedContent, this);
 
     _(this.model.attributes).each(function(val, key){
+      console.log(key);
       if(key == 'id' || key == 'selected'
                      || key == 'lib_id'
                      || key == 'container_info'
@@ -198,5 +203,10 @@ var WidgetInfoView = Backbone.View.extend({
   keydownInput: function(e) {
     if(e.keyCode == 13) { e.target.blur(); }
     e.stopPropagation();
+  },
+
+  clear: function() {
+    this.el.innerHTML = '';
+    this.model = null;
   }
 });

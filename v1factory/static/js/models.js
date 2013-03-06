@@ -95,7 +95,9 @@ var WidgetModel = Backbone.Model.extend({
 
   toJSON : function() {
     var json = _.clone(this.attributes);
+    console.log(json);
     json.attribs = this.get('attribs').toJSON();
+    console.log(json);
     json.content = this.get('content').toJSON();
     json.layout  = this.get('layout').toJSON();
 
@@ -133,7 +135,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   containerHandler: {
-    'entity-list' : function() {
+    'query' : function() {
       var self = this;
       self.get('container_info').uielements = [];
 
@@ -182,6 +184,8 @@ var WidgetModel = Backbone.Model.extend({
             height: 4
         };
         widgetProps.attribs.placeholder = '{{'+self.get('container_info').entity.get('name')+'_'+v.name+'}}';
+        widgetProps.attribs.name = v.name;
+
         var widget = new WidgetModel(widgetProps);
         self.get('container_info').uielements.push(widget);
       });

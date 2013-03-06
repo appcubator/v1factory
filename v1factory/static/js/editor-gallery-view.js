@@ -55,8 +55,8 @@ var GalleryView = Backbone.View.extend({
   },
 
   render: function() {
-    $('#item-gallery').css('top', -180);
-    this.mY = 0;
+    // $('#item-gallery').css('top', -180);
+    // this.mY = 0;
     $('body').mousemove(this.mousemoveHandler);
   },
 
@@ -102,7 +102,7 @@ var GalleryView = Backbone.View.extend({
       cid : entityModel.cid
     };
 
-    var tempLi   = '<li id="entity-<%= cid %>" class="entity-list entity">'+
+    var tempLi   = '<li id="entity-<%= cid %>" class="query entity">'+
                    '<span class="name">List of <%= name %></span></li>';
     var tempForm = '<li id="entity-<%= cid %>" class="form entity">'+
                    '<span class="name">Add <%= name %> Form</span></li>';
@@ -178,6 +178,9 @@ var GalleryView = Backbone.View.extend({
     $(this.elementsList).append(html);
     $(this.allList).append(html);
 
+    console.log("APPEENDDD!!!");
+    console.log(elementModel.get('className'));
+
     $('.' + elementModel.get('className')).draggable({
       cursor: "move",
       cursorAt: { top: 0, left: 0 },
@@ -211,16 +214,16 @@ var GalleryView = Backbone.View.extend({
   },
 
   mousemoveHandler: function(e) {
-    var top = e.pageY - $(window).scrollTop();
+    // var top = e.pageY - $(window).scrollTop();
 
-    if (e.pageY < this.mY && top < 300) {
-      $('#item-gallery').css('top', 0);
-    }
-    if (e.pageY > this.mY && top > 300 && !this.dragActive) {
-      $('#item-gallery').css('top', -180);
-    }
+    // if (e.pageY < this.mY && top < 300) {
+    //   $('#item-gallery').css('top', 0);
+    // }
+    // if (e.pageY > this.mY && top > 300 && !this.dragActive) {
+    //   $('#item-gallery').css('top', -180);
+    // }
 
-    this.mY = e.pageY;
+    // this.mY = e.pageY;
   },
 
   dropped : function(e, ui) {
@@ -247,6 +250,7 @@ var GalleryView = Backbone.View.extend({
       var cid = String(id).replace('entity-','');
       var entity = this.entitiesCollection.get(cid);
       var action = className.split(' ')[0];
+      console.log(action);
 
       widget.container_info = {
          entity : entity,
