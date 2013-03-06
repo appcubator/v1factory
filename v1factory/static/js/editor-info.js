@@ -54,7 +54,7 @@ var WidgetInfoView = Backbone.View.extend({
       this.el.innerHTML = '';
       this.model = this.widgetsCollection.selectedEl;
       this.render();
-      //this.show();
+      this.show();
     }
   },
 
@@ -71,6 +71,7 @@ var WidgetInfoView = Backbone.View.extend({
 
   show: function() {
     var self = this;
+    self.list.innerHTML =  '';
 
     this.model.bind("change", this.changedProp, this);
     this.model.bind("remove", this.hide, this);
