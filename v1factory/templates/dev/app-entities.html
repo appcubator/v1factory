@@ -90,6 +90,8 @@
 
 <script>
   var appState = {{ app.state_json|safe }};
+  var appId = {{ app_id|safe }};
+
   var entitiesLibrary = [
                   {
                     name : "Post",

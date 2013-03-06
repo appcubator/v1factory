@@ -123,7 +123,7 @@ var UrlsEditorView = Backbone.View.extend({
     this.collection = new UrlsCollection();
     this.collection.bind('add', this.placeUrls);
     this.render();
-    
+
     var initUrls = appState.urls || [];
     this.collection.add(initUrls);
 
@@ -149,7 +149,7 @@ var UrlsEditorView = Backbone.View.extend({
     appState.urls = this.collection.toJSON();
     $.ajax({
       type: "POST",
-      url: '/app/1/state/',
+      url: '/app/'+appId+'/state/',
       data: JSON.stringify(appState),
       success: function() {},
       dataType: "JSON"

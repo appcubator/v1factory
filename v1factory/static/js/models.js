@@ -69,6 +69,7 @@ var WidgetModel = Backbone.Model.extend({
 
   initialize: function(bone) {
     console.log(bone);
+    var self = this;
 
     this.set('content', new ContentModel(this.get('content')));
     this.set('layout', new LayoutModel(this.get('layout')));
@@ -76,10 +77,20 @@ var WidgetModel = Backbone.Model.extend({
 
     _.bindAll(this, 'select', 'assignCoord');
 
-    if(this.get('container_info')&&this.get('container_info').uielements == undefined) {
-      // this['handle' + this.get('container_info').action]
-      console.log(this);
-      this.containerHandler[this.get('container_info').action].call(this);
+    if(this.get('container_info')&&this.get('container_info').uielements === undefined) {
+
+      if(constantContainers[this.get('container_info').action]) {
+        this.get('container_info').uielements = [];
+        _(constantContainers[this.get('container_info').action]).each(function(element){
+          var permAttribs = element.permAttribs;
+          element = uiLibrary[element.type][0];
+          element.attribs = _.extend(element.attribs, permAttribs);
+          self.get('container_info').uielements.push(element);
+        });
+      }
+      else {
+        this.containerHandler[this.get('container_info').action].call(this);
+      }
     }
     else {
 
@@ -90,7 +101,6 @@ var WidgetModel = Backbone.Model.extend({
     this.collection.unselectAll();
     this.collection.selectedEl = this;
     this.set('selected', true);
-    //widgetInfoView.show(this);
   },
 
   toJSON : function() {
@@ -133,7 +143,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   containerHandler: {
-    'entity-list' : function() {
+    'query' : function() {
       var self = this;
       self.get('container_info').uielements = [];
 
@@ -182,6 +192,8 @@ var WidgetModel = Backbone.Model.extend({
             height: 4
         };
         widgetProps.attribs.placeholder = '{{'+self.get('container_info').entity.get('name')+'_'+v.name+'}}';
+        widgetProps.attribs.name = v.name;
+
         var widget = new WidgetModel(widgetProps);
         self.get('container_info').uielements.push(widget);
       });

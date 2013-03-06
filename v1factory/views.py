@@ -75,7 +75,7 @@ def app_deploy(request, app_id):
 def app_urls(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'URLs'}
+  page_context = { 'app': app, 'title' : 'URLs', 'app_id': app_id }
   return render(request, 'dev/app-urls.html', page_context)
 
 def app_design(request, app_id):
@@ -89,7 +89,7 @@ def app_gallery(request, app_id):
   app = get_object_or_404(App, id=app_id)
   els = UIElement.get_library()
 
-  page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els }
+  page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els, 'app_id': app_id  }
   add_statics_to_context(page_context, app)
   return render(request, 'dev/app-gallery.html', page_context)
 
@@ -98,7 +98,7 @@ def app_pages(request, app_id):
   app = get_object_or_404(App, id=app_id)
   els = UIElement.get_library()
 
-  page_context = { 'app': app, 'title' : 'Pages', 'elements' : els }
+  page_context = { 'app': app, 'title' : 'Pages', 'elements' : els, 'app_id': app_id }
   return render(request, 'dev/app-pages.html', page_context)
 
 def app_analytics(request, app_id):
@@ -130,7 +130,7 @@ def account(request, app_id):
 def entities(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
-  page_context = { 'app': app, 'title' : 'Entities' }
+  page_context = { 'app': app, 'title' : 'Entities', 'app_id': app_id  }
   return render(request, 'dev/app-entities.html', page_context)
 
 from django.forms import ModelForm
@@ -181,7 +181,8 @@ def app_editor(request, app_id, page_id):
                    'gallery_elements' : els,
                    'elements' : simplejson.dumps(list(els)),
                    'myuielements' : simplejson.dumps(list(my_els)),
-                   'page_id': page_id }
+                   'page_id': page_id,
+                   'app_id': app_id }
   add_statics_to_context(page_context, app)
   return render(request, 'dev/editor-main.html', page_context)
 
@@ -191,7 +192,7 @@ def app_info(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
   els = UIElement.get_library()
-  page_context = { 'app': app, 'title' : 'Info', 'elements' : els }
+  page_context = { 'app': app, 'title' : 'Info', 'elements' : els, 'app_id': app_id  }
   return render(request, 'dev/app-info.html', page_context)
 
 # IN THE WORKS

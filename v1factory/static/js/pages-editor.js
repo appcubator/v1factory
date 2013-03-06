@@ -72,7 +72,7 @@ var PagesView = Backbone.View.extend({
     appState.pages = pagesView.collection.toJSON();
     $.ajax({
       type: "POST",
-      url: '/app/1/state/',
+      url: '/app/'+appId+'/state/',
       data: JSON.stringify(appState),
       success: function() {},
       dataType: "JSON"
