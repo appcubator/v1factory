@@ -47,7 +47,6 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   selectChanged : function(chg, ch2) {
-    console.log(this.widgetsCollection.selectedEl);
     if(this.widgetsCollection.selectedEl === null) {
       this.model = null;
       this.el.innerHTML = '';
@@ -56,9 +55,7 @@ var WidgetInfoView = Backbone.View.extend({
       this.el.innerHTML = '';
       this.model = this.widgetsCollection.selectedEl;
       this.render();
-      //this.show();
     }
-    console.log(this.el);
   },
 
   render: function() {
@@ -73,7 +70,6 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   show: function() {
-    console.log("SAHOWING!");
     var self = this;
     self.list.innerHTML =  '';
 
@@ -83,7 +79,6 @@ var WidgetInfoView = Backbone.View.extend({
     this.model.get('content').bind("change", this.changedContent, this);
 
     _(this.model.attributes).each(function(val, key){
-      console.log(key);
       if(key == 'id' || key == 'selected'
                      || key == 'lib_id'
                      || key == 'container_info'

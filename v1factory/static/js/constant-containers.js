@@ -22,7 +22,21 @@ var constantContainers = {
         left  : 0,
         width : 16,
         height: 4
-      }    
+      }
+    }
+  ],
+  'facebook' : [
+    {
+      'type' : 'button',
+      'permAttribs' : {
+        value : "Login w/ facebook"
+      },
+      'layout' : {
+        top   : 0,
+        left  : 0,
+        width : 16,
+        height: 4
+      }
     }
   ]
 };

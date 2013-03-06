@@ -106,10 +106,14 @@ var WidgetView = Backbone.View.extend({
     var self = this;
     var temp = document.getElementById('temp-node').innerHTML;
 
+    console.log(this);
+
     var node_context = _.clone(this.model.attributes);
     node_context.attribs = this.model.get('attribs').attributes;
     node_context.content = this.model.get('content').attributes;
     //node_context.attribs.style += 'width:100%; height:100%;';
+
+    console.log(node_context);
 
     var el = _.template(temp, { element: node_context});
     return el;
@@ -166,7 +170,7 @@ var WidgetView = Backbone.View.extend({
 
   changedText: function(a) {
     this.el.innerHTML = '';
-    this.el.appendChild(this.renderContent());
+    this.el.innerHTML = this.renderElement();
     this.model.select();
 
     var self = this;

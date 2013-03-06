@@ -18,23 +18,18 @@ starter_app = """{
       {
         "name":"registration",
         "design_props" : null,
-        "layout" : {
-          "width"  :4,
-          "height" :4,
-          "top"    :1,
-          "left"   :1
-        },
         "uielements": [
           {
             "lib_id":4,
             "attribs": {},
+            "tagName": h1,
             "content":{ "text": "Sign Up" },
             "container_info":null,
             "layout" : {
-              "width"  :4,
-              "height" :4,
-              "top"    :1,
-              "left"   :1
+              "width"  :12,
+              "height" :8,
+              "top"    :12,
+              "left"   :12
             }
           },
           {
@@ -49,114 +44,7 @@ starter_app = """{
             },
             "container_info": {
               "entity":"User",
-              "action":"signup",
-              "uielements":[
-                {
-                  "lib_id":8,
-                  "attribs": {
-                    "name":"first_name",
-                    "placeholder":"First Name",
-                    "type":"text"
-                  },
-                  "content":{},
-                  "container_info":null,
-                  "layout" : {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  }
-                },{
-                  "lib_id":8,
-                  "attribs": {
-                    "name":"last_name",
-                    "placeholder":"Last Name",
-                    "type":"text"
-                  },
-                  "content":{},
-                  "container_info":null,
-                  "layout" : {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  }
-                },{
-                  "lib_id":8,
-                  "attribs": {
-                    "name":"username",
-                    "placeholder":"Username",
-                    "type":"text"
-                  },
-                  "content":{},
-                  "container_info":null,
-                  "layout" : {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  }
-                },{
-                  "lib_id":8,
-                  "attribs" : {
-                    "placeholder":"Password",
-                    "name":"password",
-                    "type":"password"
-                  },
-                  "content":{},
-                  "container_info":null,
-                  "layout" : {
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1,
-                    "width"  :4
-                  }
-                },{
-                  "lib_id":8,
-                  "attribs" : {
-                    "placeholder":"Confirm password",
-                    "name":"password2",
-                    "type":"password"
-                  },
-                  "content":{},
-                  "container_info":null,
-                  "layout" : {
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1,
-                    "width"  :4
-                  }
-                },{
-                  "lib_id":8,
-                  "attribs" : {
-                    "placeholder":"Email",
-                    "name":"email",
-                    "type":"text"
-                  },
-                  "content":{},
-                  "container_info":null,
-                  "layout": {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  }
-                },
-                {
-                  "lib_id":10,
-                  "attribs" : {
-                    "type":"submit"
-                  },
-                  "content":{ "text":"Continue" },
-                  "container_info":null,
-                  "layout" : {
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1,
-                    "width"  :4
-                  }
-                }
-              ]
+              "action":"signup"
             }
           }
         ],
@@ -170,6 +58,7 @@ starter_app = """{
             "lib_id":4,
             "container_info":null,
             "attribs":{},
+            "tagName" : h1,
             "content":{ "text":"Homepage" },
             "layout" : {
               "width"  :4,
@@ -190,56 +79,7 @@ starter_app = """{
             },
             "container_info":{
               "entity":"User",
-              "action":"login",
-              "uielements":[
-                {
-                  "lib_id":8,
-                  "attribs" : {
-                    "placeholder":"Username",
-                    "name":"username",
-                    "type":"text"
-                  },
-                  "content":{},
-                  "layout" : {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  },
-                  "field_name":"username",
-                  "container_info":null
-                },
-                {
-                  "lib_id":8,
-                  "attribs" : {
-                    "placeholder":"Password",
-                    "name":"password",
-                    "type":"password"
-                  },
-                  "content":{},
-                  "layout" : {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  },
-                  "container_info":null
-                },
-                {
-                  "lib_id":10,
-                  "attribs" : {
-                    "type":"submit"
-                  },
-                  "content":{ "text":"Login" },
-                  "layout" : {
-                    "width"  :4,
-                    "height" :4,
-                    "top"    :1,
-                    "left"   :1
-                  },
-                  "container_info":null
-                }
-              ]
+              "action":"login"
             }
           }
         ],
