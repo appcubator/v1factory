@@ -22,8 +22,8 @@
 
 var WidgetView = Backbone.View.extend({
   el: null,
-  className: 'pseudo-outline',
-  tagName : 'span',
+  className: 'pseudo-outline widget-wrapper',
+  tagName : 'div',
   widgetsContainer :null,
   selected : false,
   editable : false,
@@ -36,7 +36,6 @@ var WidgetView = Backbone.View.extend({
   initialize: function(widgetModel){
     var self = this;
     _.bindAll(this, 'render',
-                    'renderContent',
                     'renderElement',
                     'renderMeta',
                     'remove',
@@ -73,22 +72,15 @@ var WidgetView = Backbone.View.extend({
   },
 
   render: function() {
-    this.el.appendChild(this.renderContent());
+
+    var self = this;
 
     if(this.model.get('type') == 'box') {
-      console.log("YOLOOOO");
       this.el.style.zIndex = 0;
     }
 
     this.model.select();
 
-    var self = this;
-    iui.resizableAndDraggable(self.widgetsContainer, self);
-
-    return this;
-  },
-
-  renderContent: function() {
     this.el.innerHTML = '';
 
     iui.assert(this.model.get('lib_id'));
@@ -96,20 +88,17 @@ var WidgetView = Backbone.View.extend({
     var width = this.model.get('layout').get('width');
     var height = this.model.get('layout').get('height');
 
-    var wrapperElem = document.createElement('div');
-    wrapperElem.className ='widget-wrapper';
 
-    wrapperElem.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + "px";
-    wrapperElem.style.left = (GRID_HEIGHT * (this.model.get('layout').get('left'))) + "px";
-    wrapperElem.style.height = (height * GRID_HEIGHT) + "px";
-    wrapperElem.className += " span" + width;
-    wrapperElem.id = "widget-" + this.collection.length;
+    this.el.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + "px";
+    this.el.style.left = (GRID_HEIGHT * (this.model.get('layout').get('left'))) + "px";
+    this.el.style.height = (height * GRID_HEIGHT) + "px";
+    this.el.className += " span" + width;
 
-    wrapperElem.innerHTML = this.renderElement() + this.renderMeta(); //element + meta;
-
-    this.widgetsContainer = wrapperElem;
-
-    return wrapperElem;
+    this.el.innerHTML = this.renderElement();
+    //+ this.renderMeta(); //element + meta;
+    iui.resizableAndDraggable(self.el, self);
+    this.el.style.position = "absolute";
+    return this;
   },
 
   renderElement: function() {
@@ -120,7 +109,7 @@ var WidgetView = Backbone.View.extend({
     var node_context = _.clone(this.model.attributes);
     node_context.attribs = this.model.get('attribs').attributes;
     node_context.content = this.model.get('content').attributes;
-    node_context.attribs.style += 'width:100%; height:100%;';
+    //node_context.attribs.style += 'width:100%; height:100%;';
 
     var el = _.template(temp, { element: node_context});
     return el;
@@ -142,41 +131,37 @@ var WidgetView = Backbone.View.extend({
   },
 
   select: function(e) {
-    console.log(this);
-    // if(!this.editable) {
-    //   console.log('hey');
-      this.model.select();
-      e.preventDefault();
-      return false;
-    // }
+    this.model.select();
+    e.preventDefault();
+    return false;
   },
 
   outlineSelected: function() {
     if(this.model.attributes.selected && this.selected === false) {
-      $(this.widgetsContainer).addClass('selected');
+      $(this.el).addClass('selected');
       this.selected = true;
     }
     else {
-      $(this.widgetsContainer).removeClass('selected');
+      $(this.el).removeClass('selected');
       this.selected = false;
     }
   },
 
   changedWidth: function(a) {
-    this.widgetsContainer.className = 'selected widget-wrapper ui-resizable ui-draggable';
-    this.widgetsContainer.className += 'span' + this.model.get('layout').get('width');
+    this.el.className = 'selected widget-wrapper ui-resizable ui-draggable';
+    this.el.className += 'span' + this.model.get('layout').get('width');
   },
 
   changedHeight: function(a) {
-    this.widgetsContainer.style.height = (this.model.get('layout').get('height') * GRID_HEIGHT) + 'px';
+    this.el.style.height = (this.model.get('layout').get('height') * GRID_HEIGHT) + 'px';
   },
 
   changedTop: function(a) {
-    this.widgetsContainer.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + 'px';
+    this.el.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + 'px';
   },
 
   changedLeft: function(a) {
-    this.widgetsContainer.style.left = (GRID_HEIGHT * (this.model.get('layout').get('left'))) + 'px';
+    this.el.style.left = (GRID_HEIGHT * (this.model.get('layout').get('left'))) + 'px';
   },
 
   changedText: function(a) {
@@ -217,10 +202,8 @@ var WidgetView = Backbone.View.extend({
   },
 
   resized: function(e, ui) {
-    console.log(this);
     var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
-    console.log(deltaHeight + ' ,' + deltaWidth);
     this.model.get('layout').set('width', deltaWidth);
     this.model.get('layout').set('height', deltaHeight);
   },
@@ -255,33 +238,20 @@ var WidgetContainerView = WidgetView.extend({
   entity: null,
   type: null,
   events: {
-    'click' : 'select',
-    'click .delete'            : 'remove'
+    'click '        : 'select',
+    'click .delete' : 'remove'
   },
 
   initialize: function(widgetModel) {
-    _.bindAll(this, 'render',
-                    'placeWidget',
-                    'plageEntitySingleWidget',
-                    'removeView',
-                    'select');
 
-    this.model = widgetModel;
-    this.model.bind("change:selected", this.outlineSelected, this);
-
-    this.model.get('layout').bind("change:width", this.changedWidth, this);
-    this.model.get('layout').bind("change:height", this.changedHeight, this);
-    this.model.get('layout').bind("change:top", this.changedTop, this);
-    this.model.get('layout').bind("change:left", this.changedLeft, this);
-
-    this.model.bind("remove", this.removeView, this);
+    WidgetContainerView.__super__.initialize.call(this, widgetModel);
+    _.bindAll(this, 'placeWidget',
+                    'plageEntitySingleWidget');
 
     this.entity = widgetModel.get('container_info').entity;
     var collection = new WidgetCollection();
     this.model.set('childCollection', collection);
     collection.bind("add", this.placeWidget);
-
-    this.render(widgetModel);
 
     if(widgetModel.get('container_info').uielements) {
       this.model.get('childCollection').add(widgetModel.get('container_info').uielements);
@@ -289,33 +259,26 @@ var WidgetContainerView = WidgetView.extend({
     }
   },
 
-  render: function(widget) {
+  render: function() {
     var self = this;
     this.el.innerHTML = '';
 
-    var element = document.createElement('div');
-    var width = widget.get('layout').get('width');
-    var height = widget.get('layout').get('height');
+    var width = this.model.get('layout').get('width');
+    var height = this.model.get('layout').get('height');
 
-    element.style.top = (GRID_HEIGHT * (widget.get('layout').get('top') -1)) + 'px';
-    element.style.left = (GRID_HEIGHT * (widget.get('layout').get('left') -1)) + 'px';
-    element.className = 'widget-wrapper span'+width;
-    element.style.height = (height * GRID_HEIGHT) + 'px';
-    element.id = 'widget-' + this.collection.length;
+    this.el.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top') -1)) + 'px';
+    this.el.style.left = (GRID_HEIGHT * (this.model.get('layout').get('left') -1)) + 'px';
+    this.el.className += ' widget-wrapper span'+width;
+    this.el.style.height = (height * GRID_HEIGHT) + 'px';
 
-    console.log(element);
-
-    this.widgetsContainer = element;
-    this.el.appendChild(element);
-
-    iui.resizableAndDraggable(this.widgetsContainer, self);
+    iui.resizableAndDraggable(self.el, self);
 
     return this;
   },
 
   placeWidget: function(model, a) {
     var widgetView = new WidgetView(model);
-    this.widgetsContainer.appendChild(widgetView.el);
+    this.el.appendChild(widgetView.el);
   },
 
   plageEntitySingleWidget: function() {
