@@ -14,22 +14,53 @@ def analyzed_app_to_app_components(analyzed_app):
   views = Manager(DjangoView)
   urls = Manager(DjangoUrl)
   templates = Manager(DjangoTemplate)
+  form_receivers = Manager(DjangoFormReceiver)
 
   for m in analyzed_app.models.each():
     models.add( DjangoModel(m, analyzed_app) )
 
   for p in analyzed_app.pages.each():
-# url has to know about the view
-# view has to know about the templates location
-# template has to know about the view's context
+    # url has to know about the view
+    # view has to know about the templates location
+    # template has to know about the view's context
     t = DjangoTemplate(p, analyzed_app)
     templates.add(t)
     v = DjangoView(p, analyzed_app, t)
     views.add(v)
-    urls.add( DjangoUrl(p, v, analyzed_app) )
+    urls.add( DjangoUrl.create_get(p, v, analyzed_app) )
 
-  dw = DjangoApp(models, views, urls, templates)
+  for f in analyzed_app.forms.each():
+    rec = DjangoFormReceiver(f, analyzed_app)
+    rec.find_model(models)
+    form_receivers.add(rec)
+    u = DjangoUrl.create_post(rec, analyzed_app)
+    urls.add(u)
+
+  dw = DjangoApp(models, views, urls, templates, form_receivers)
   return dw
+
+class DjangoFormReceiver:
+  """For now it only handles create forms"""
+  def __init__(self, form, analyzed_app):
+    self.name = form.name
+    self.form = form
+    self.form.form_receiver = self
+    self.page = form.page
+    self.analyzed_app = analyzed_app
+    self.model = analyzed_app.models.get_by_name(form.entity.name)
+    self.included_fields = form.included_fields
+
+  def find_model(self, models):
+    self.model = models.get_by_name(self.model.name)
+    for i, f in enumerate(self.included_fields):
+      self.included_fields[i] = self.model.fields.get_by_name(f.name)
+
+
+  def identifier(self):
+    return "receive_{}".format(self.form.name)
+
+  def view_path(self):
+    return "webapp.form_receivers."+self.identifier()
 
 class DjangoModel:
   """
@@ -132,7 +163,6 @@ class DjangoView:
 
   def view_path(self):
     return "webapp.views."+self.identifier()
-    pass
 
   def queries(self):
     return []
@@ -145,11 +175,19 @@ class DjangoView:
 
 class DjangoUrl:
 
-  def __init__(self, page, view, analyzed_app):
-    self.name = page.name
+  def __init__(self, page=None, view=None, analyzed_app=None):
+    self.name = view.name
     self.page = page
     self.app = analyzed_app
     self.view = view
+
+  @classmethod
+  def create_get(cls, page, view, analyzed_app):
+    return cls(page=page,view=view,analyzed_app=analyzed_app)
+
+  @classmethod
+  def create_post(cls, form_receiver, analyzed_app):
+    return cls(page=form_receiver.page, view=form_receiver, analyzed_app=analyzed_app)
 
   def url_parts_to_regex(self):
     url_parts = self.page.route.urlparts
@@ -165,6 +203,9 @@ class DjangoUrl:
     return '^' + ''.join(map(lambda x : repl_model_with_id_regex(x) + r'/', url_parts)) + '$'
 
   def url_repr(self):
+    from analyzer import Form
+    if isinstance(self.view, DjangoFormReceiver):
+      return repr("^{}/$".format(self.view.identifier()))
     return repr(self.url_parts_to_regex())
 
   def view_path_repr(self):
@@ -206,11 +247,12 @@ class DjangoTemplate:
 class DjangoApp:
   """Wrap all the app components. Nuff said"""
 
-  def __init__(self, d_models, d_views, d_urls, d_templates):
+  def __init__(self, d_models, d_views, d_urls, d_templates, d_form_receivers):
     self.models = d_models
     self.views = d_views
     self.urls = d_urls
     self.templates = d_templates
+    self.form_receivers = d_form_receivers
 
 
 class DjangoAppWriter:
@@ -235,7 +277,11 @@ class DjangoAppWriter:
 
   def render_views_py(self):
     template = DjangoAppWriter.env.get_template('views.py')
-    return template.render(views=self.django_app.views.each(), models=self.django_app.models.each(), form_receivers=[])
+    return template.render(views=self.django_app.views.each(), models=self.django_app.models.each())
+
+  def render_form_receivers_py(self):
+    template = DjangoAppWriter.env.get_template('form_receivers.py')
+    return template.render(form_receivers=self.django_app.form_receivers.each(), models=self.django_app.models.each())
 
   def render_templates(self):
     templates = []
@@ -332,6 +378,7 @@ class DjangoAppWriter:
     copy_file('__init__.py', 'webapp/__init__.py')
     write_string(self.render_models_py(), 'webapp/models.py')
     write_string(self.render_views_py(), 'webapp/views.py')
+    write_string(self.render_form_receivers_py(), 'webapp/form_receivers.py')
     write_string(self.render_urls_py(), 'urls.py')
 
     # templates
