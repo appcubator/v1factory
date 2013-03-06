@@ -21,10 +21,12 @@
 
 {% block js %}
 <script type="text/javascript">
+var appId = {{ app_id|safe }};
+
 $('#deploy').on('click', function() {
     $.ajax({
       type: "POST",
-      url: '/app/1/deploy/',
+      url: '/app/'+appId+'/deploy/',
       success: function() { alert("Deployed!")},
       dataType: "JSON"
     });

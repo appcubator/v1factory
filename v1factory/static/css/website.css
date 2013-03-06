@@ -42,7 +42,10 @@
 }
 
 body {
-  font: normal 14px/20px, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
   font-weight: lighter;
   background-color: #fff;
   padding-bottom: 60px;

@@ -50,11 +50,11 @@
 {% block js %}
 <script type="text/javascript">
 var appState = {{ app.state_json|safe }};
+var appId = {{ app_id|safe }};
 var statics = {{ statics|safe }};
 var myUIElements = {{ myuielements|safe }};
 var library = {{ elements|safe }};
 var pageId = {{ page_id }};
-
 </script>
 {% include "dev/editor-templates.html" %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>

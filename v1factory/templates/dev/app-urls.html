@@ -95,7 +95,8 @@
 <input type="text" class="url-part last" id="inp-new" placeholder="url_string" value=''>
 </script>
 <script type="text/javascript">
-  var appState = {{ app.state_json|safe }};
+var appState = {{ app.state_json|safe }};
+var appId = {{ app_id|safe }};
 </script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/models.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/pages-models.js"></script>

@@ -283,7 +283,7 @@ var EntitiesEditorView = Backbone.View.extend({
 
     $.ajax({
       type: "POST",
-      url: '/app/1/state/',
+      url: '/app/'+appId+'/state/',
       data: JSON.stringify(appState),
       success: function() { },
       dataType: "JSON"
