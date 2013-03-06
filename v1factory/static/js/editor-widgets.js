@@ -37,7 +37,6 @@ var WidgetView = Backbone.View.extend({
     var self = this;
     _.bindAll(this, 'render',
                     'renderElement',
-                    'renderMeta',
                     'remove',
                     'select',
                     'switchOnEditMode',
@@ -73,13 +72,9 @@ var WidgetView = Backbone.View.extend({
 
   render: function() {
 
+    this.model.select();
     var self = this;
 
-    if(this.model.get('type') == 'box') {
-      this.el.style.zIndex = 0;
-    }
-
-    this.model.select();
 
     this.el.innerHTML = '';
 
@@ -88,14 +83,14 @@ var WidgetView = Backbone.View.extend({
     var width = this.model.get('layout').get('width');
     var height = this.model.get('layout').get('height');
 
-
+    if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
     this.el.style.top = (GRID_HEIGHT * (this.model.get('layout').get('top'))) + "px";
     this.el.style.left = (GRID_HEIGHT * (this.model.get('layout').get('left'))) + "px";
     this.el.style.height = (height * GRID_HEIGHT) + "px";
     this.el.className += " span" + width;
 
     this.el.innerHTML = this.renderElement();
-    //+ this.renderMeta(); //element + meta;
+
     iui.resizableAndDraggable(self.el, self);
     this.el.style.position = "absolute";
     return this;
@@ -111,23 +106,11 @@ var WidgetView = Backbone.View.extend({
     var node_context = _.clone(this.model.attributes);
     node_context.attribs = this.model.get('attribs').attributes;
     node_context.content = this.model.get('content').attributes;
-    //node_context.attribs.style += 'width:100%; height:100%;';
 
     console.log(node_context);
 
     var el = _.template(temp, { element: node_context});
     return el;
-  },
-
-  renderMeta: function() {
-    // var tempMeta = document.getElementById('temp-meta').innerHTML;
-    // var meta = _.template(tempMeta, {});
-    return '';
-  },
-
-  remove: function() {
-    //pagesView.widgetEditor.collection.remove(this);
-    $(this.el).remove();
   },
 
   removeView: function() {
@@ -153,7 +136,16 @@ var WidgetView = Backbone.View.extend({
 
   changedWidth: function(a) {
     this.el.className = 'selected widget-wrapper ui-resizable ui-draggable';
-    this.el.className += 'span' + this.model.get('layout').get('width');
+
+    if(this.model.get('layout').get('width') == '100%') {
+      $('#full-container').append(this.el);
+      this.el.style.left = 0;
+      this.el.style.width = '100%';
+    }
+    else {
+      this.el.style.width = '';
+      this.el.className += 'span' + this.model.get('layout').get('width');
+    }
   },
 
   changedHeight: function(a) {
@@ -183,21 +175,18 @@ var WidgetView = Backbone.View.extend({
 
   changedType: function(a) {
     this.el.innerHTML = '';
-    this.el.appendChild(this.renderContent());
+    this.el.innerHTML = this.renderElement();
     this.model.select();
 
     var self = this;
-    $(this.widgetsContainer).resizable({
-      handles: "n, e, s, w, se",
-      grid: 30,
-      resize: self.resized
-    });
+    iui.resizableAndDraggable(this.widgetsContainer, self);
+
   },
 
   changedSource: function(a) {
     // TODO: can be more efficient
     this.el.innerHTML = '';
-    this.el.appendChild(this.renderContent());
+    this.el.innerHTML = this.renderElement();
     this.model.select();
 
     var self = this;
@@ -296,8 +285,8 @@ var WidgetContainerView = WidgetView.extend({
       var widgetProps = {
         lib_id : type,
         layout: {
-          top : coordinates.topLeft.y,
-          left : coordinates.topLeft.x,
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: coordinates.bottomRight.y - coordinates.topLeft.y -1
         },
@@ -339,8 +328,8 @@ var WidgetEditorView = Backbone.View.extend({
     this.render();
     this.collection = widgetsCollection;
     this.collection.bind('add', this.placeWidget);
+    //this.style(page['design_props']);
 
-    this.style(page['design_props']);
     if(page.uielements && page.uielements.length) this.collection.add(page.uielements);
 
   },

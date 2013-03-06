@@ -49,7 +49,6 @@ var EditorView = Backbone.View.extend({
   },
 
   save : function() {
-    console.log(this.widgetsCollection.models[0].toJSON());
     console.log(this.widgetsCollection.toJSON());
     appState.pages[pageId]['uielements'] = (this.widgetsCollection.toJSON() || []);
     appState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);

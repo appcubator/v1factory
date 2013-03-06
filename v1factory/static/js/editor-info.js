@@ -19,7 +19,8 @@ var WidgetInfoView = Backbone.View.extend({
     'change input'          : 'inputChanged',
     'keydown input'         : 'keydownInput',
     'change select.statics' : 'staticsChanged',
-    'change select'         : 'inputChanged'
+    'change select'         : 'inputChanged',
+    'click .width-full'     : 'toggleFullWidth'
   },
 
   initialize: function(widgetsCollection){
@@ -33,7 +34,7 @@ var WidgetInfoView = Backbone.View.extend({
                     'keydownInput',
                     'staticsChanged',
                     'showModel',
-                    'selectChanged',
+                    'optionChanged',
                     'changedProp',
                     'changedContent',
                     'changedLayout');
@@ -47,6 +48,7 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   selectChanged : function(chg, ch2) {
+
     if(this.widgetsCollection.selectedEl === null) {
       this.model = null;
       this.el.innerHTML = '';
@@ -123,14 +125,21 @@ var WidgetInfoView = Backbone.View.extend({
 
     if(val!==null) {
       if(key == 'href') {
+        var hash     = modelName + '-' + key;
         temp         = document.getElementById('temp-href-select').innerHTML;
-        html         = _.template(temp, {val : val, prop: prop});
+        html         = _.template(temp, {val : val, prop: prop, hash: hash});
         li.innerHTML = '<span class="key">'+(lang[key]||key)+'</span>' + html;
       }
       else if(key == 'src') {
         temp         = document.getElementById('temp-source-select').innerHTML;
         html         = _.template(temp, {val : val, prop: prop});
         li.innerHTML = '<span class="key">'+(lang[key]||key)+'</span>'+ html;
+      }
+      else if(key == 'width') {
+        var hash     = modelName + '-' + key;
+        li.innerHTML =  '<span class="key">'+(lang[key]||key)+'</span>' +
+                        '<input type="text" class="'+ hash +
+                        '" id="prop-'+ hash + '"  value="' + val + '"><div class="width-full"></div>';
       }
       else {
         var hash     = modelName + '-' + key;
@@ -143,10 +152,34 @@ var WidgetInfoView = Backbone.View.extend({
     return li;
   },
 
+  toggleFullWidth: function() {
+    if(this.model.get('layout').get('width') != '100%') {
+      this.model.get('layout').set('width', '100%');
+    }
+    else {
+      this.model.get('layout').set('width', '16');
+    }
+  },
+
   inputChanged: function(e) {
     var prop = e.target.id.replace('prop-', '');
     var props = prop.split('-');
 
+    console.log(props);
+
+    if(props.length > 1) {
+      this.model.get(props[0]).set(props[1], e.target.value);
+    }
+    else {
+      this.model.set(prop, e.target.value);
+    }
+  },
+
+  optionChanged: function() {
+    var prop = e.target.id.replace('prop-', '');
+    var props = prop.split('-');
+
+    console.log(props);
     if(props.length > 1) {
       this.model.get(props[0]).set(props[1], e.target.value);
     }
