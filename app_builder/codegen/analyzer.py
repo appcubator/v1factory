@@ -7,13 +7,13 @@ from manager import Manager
 
 """ MODELS """
 
-class Model:
+class Model(object):
   """User, Profile, Student, Book, Rental, anything you name it."""
   def __init__(self, entity):
     self.name = entity['name']
     self.fields = [ Field(f, self) for f in entity['fields'] ]
 
-class Field:
+class Field(object):
   """A Field belongs to a model and has a name and type"""
   def __init__(self, field, model):
     self.name = field['name']
@@ -25,7 +25,7 @@ class Field:
 
 """ PAGES """
 
-class Page:
+class Page(object):
   """A page is a list of UIElements, and has a URL where it can be reached."""
   def __init__(self, page):
     self.name = page['name']
@@ -42,7 +42,7 @@ class Page:
     for uie in page['uielements']:
       self.uielements.append(UIElement.create(uie, self))
 
-class Route:
+class Route(object):
   """A Route is exactly what you think, except it can sometimes have dynamic inputs,
       which link to model fields. Ie /user/:user_id/"""
   def __init__(self, url):
@@ -60,7 +60,7 @@ class Route:
 
 """ UIEls """
 
-class UIElement:
+class UIElement(object):
   """A UIElement is either a Container or Node."""
 
   @classmethod
@@ -70,6 +70,13 @@ class UIElement:
     else:
       u = Container.create(uie, page)
     return u
+
+  def __init__(self, uie=None):
+    self.uie = uie
+    self.width = uie['layout']['width']
+    self.height = uie['layout']['height']
+    self.top = uie['layout']['top']
+    self.left = uie['layout']['left']
 
 class Node(UIElement):
   """A Node can be thought of as a single element on the page.
@@ -91,12 +98,10 @@ class Node(UIElement):
 
     self.html_id = ""
 
-    self.width = uie['layout']['width']
-    self.height = uie['layout']['height']
-    self.top = uie['layout']['top']
-    self.left = uie['layout']['left']
+    super(Node, self).__init__(uie=uie)
 
     self.attribs = uie['attribs']
+    self.attribs['style'] = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
     self.content_dict = uie['content']
 
 
@@ -148,6 +153,8 @@ class Container(UIElement):
     for n in self.nodes:
       n.resolve_links(pages, *args, **kwargs)
 
+  def __init__(self, uie=None):
+    super(Container, self).__init__(uie=uie)
 
 # abstract
 class Form(Container):
@@ -166,6 +173,9 @@ class Form(Container):
       u = CreateForm(uie, page)
 
     return u
+
+  def __init__(self, uie=None):
+    super(Form, self).__init__(uie=uie)
 
 class LoginForm(Form):
   """A standard login form."""
@@ -197,6 +207,7 @@ class EditForm(Form):
 class CreateForm(Form):
   """Create a model instance form."""
   def __init__(self, uie, page):
+    super(CreateForm, self).__init__(uie=uie)
     self.name = "Form{}".format(id(uie))
     # put the info here
     self.uie = uie
@@ -217,6 +228,7 @@ class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.
   For now that query is to get all the elements from some model."""
   def __init__(self, uie, page):
+    super(QuerysetWrapper, self).__init__(uie=uie)
     self.name = "QW{}".format(id(uie))
     self.uie = uie
     self.entity_name = uie['container_info']['entity']
