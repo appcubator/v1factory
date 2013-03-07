@@ -12,6 +12,7 @@ var WidgetCollection = Backbone.Collection.extend({
 
   initialize: function() {
     _.bindAll(this, 'selectWidgetById',
+                    'select',
                     'unselectAll');
 
     this.model.bind('change:selected', this.selectedChanged);
@@ -21,7 +22,6 @@ var WidgetCollection = Backbone.Collection.extend({
     _.each(this.models, function(model) {
       model.set('selected', false);
     });
-    console.log('unss');
     this.selectedEl = null;
   },
 
@@ -32,5 +32,15 @@ var WidgetCollection = Backbone.Collection.extend({
 
   selectedChanged : function(model) {
     console.log(model);
+  },
+
+  select : function(model) {
+    this.unselectAll();
+    this.selectedEl = model;
+  },
+
+  removeSelected  : function() {
+    this.remove(this.selectedEl);
+    this.selectedEl = null;
   }
 });

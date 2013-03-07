@@ -68,7 +68,6 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   initialize: function(bone) {
-    console.log(bone);
     var self = this;
 
     this.set('content', new ContentModel(this.get('content')));
@@ -98,8 +97,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   select: function() {
-    this.collection.unselectAll();
-    this.collection.selectedEl = this;
+    this.collection.select(this);
     this.set('selected', true);
   },
 
@@ -108,6 +106,12 @@ var WidgetModel = Backbone.Model.extend({
     json.attribs = this.get('attribs').toJSON();
     json.content = this.get('content').toJSON();
     json.layout  = this.get('layout').toJSON();
+
+    if(this.get('container_info') && this.get('container_info').entity) {
+      if(typeof this.get('container_info').entity !== "string") {
+        json.container_info.entity = this.get('container_info').entity.get('name');
+      }
+    }
 
     return json;
   },
@@ -235,7 +239,7 @@ var WidgetModel = Backbone.Model.extend({
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: 4
       };
-      console.log(self);
+
       widgetProps.attribs.value = 'Add ' + this.get('container_info').entity.get('name');
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
@@ -276,7 +280,7 @@ var WidgetModel = Backbone.Model.extend({
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: 4
       };
-      console.log(self.get('container_info').entity);
+
       widgetProps.attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
