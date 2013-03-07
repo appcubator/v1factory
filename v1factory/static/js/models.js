@@ -109,6 +109,12 @@ var WidgetModel = Backbone.Model.extend({
     json.content = this.get('content').toJSON();
     json.layout  = this.get('layout').toJSON();
 
+    if(this.get('container_info') && this.get('container_info').entity) {
+      if(typeof this.get('container_info').entity !== "string") {
+        json.container_info.entity = this.get('container_info').entity.get('name');
+      }
+    }
+
     return json;
   },
 
