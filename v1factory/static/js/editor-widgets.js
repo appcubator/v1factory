@@ -30,7 +30,8 @@ var WidgetView = Backbone.UIView.extend({
 
   events: {
     'mousedown' : 'select',
-    'click .delete' : 'remove'
+    'click .delete' : 'remove',
+    'dblclick' : 'switchOnEditMode'
   },
 
   initialize: function(widgetModel){
@@ -104,8 +105,6 @@ var WidgetView = Backbone.UIView.extend({
 
   select: function(e) {
     this.model.select();
-    e.preventDefault();
-    return false;
   },
 
   outlineSelected: function() {
@@ -182,13 +181,24 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   switchOnEditMode: function(e) {
-    $(this.widgetsContainer).draggable('destroy');
-    this.editable = true;
-    var elem = this.widgetsContainer.firstChild;
+
+    elem = this.el.firstChild.cloneNode(true);
     elem.setAttribute('contenteditable', true);
-    $(elem).focus();
-    return false;
-    //iui.setCursor(this.widgetsContainer.firstChild, 1);
+    elem.style.position = 'fixed';
+    elem.style.top = '300px';
+    elem.style.left = '200px';
+
+    console.log(elem);
+
+    document.body.appendChild(elem);
+    elem.focus();
+
+    var range = document.createRange();
+    range.selectNodeContents(elem);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    console.log('tryn');
   },
 
   switchOffEditMode: function() {
