@@ -15,6 +15,7 @@ def analyzed_app_to_app_components(analyzed_app):
   urls = Manager(DjangoUrl)
   templates = Manager(DjangoTemplate)
   form_receivers = Manager(DjangoFormReceiver)
+  queries = []
 
   for m in analyzed_app.models.each():
     models.add( DjangoModel(m, analyzed_app) )
@@ -28,6 +29,16 @@ def analyzed_app_to_app_components(analyzed_app):
     v = DjangoView(p, analyzed_app, t)
     views.add(v)
     urls.add( DjangoUrl.create_get(p, v, analyzed_app) )
+    v.queries = Manager(DjangoQuery)
+    # create the djangoquery and find it's django model.
+    for q in p.queries.each():
+      dq = DjangoQuery(q, analyzed_app)
+      dq.find_model(models)
+      v.queries.add(dq)
+
+  # now that we know all the queries, replace template handlebars.
+  for t in templates.each():
+    t.properly_name_vars_in_q_container(models)
 
   for f in analyzed_app.forms.each():
     rec = DjangoFormReceiver(f, analyzed_app)
@@ -38,6 +49,19 @@ def analyzed_app_to_app_components(analyzed_app):
 
   dw = DjangoApp(models, views, urls, templates, form_receivers)
   return dw
+
+class DjangoQuery:
+  def __init__(self, query, analyzed_app):
+    self.query = query
+    self.name = query.name
+    self.entity = query.entity
+    self.query.django_query = self
+
+  def identifier(self):
+    return self.name
+
+  def find_model(self, models):
+    self.model = models.get_by_name(self.entity.name)
 
 class DjangoFormReceiver:
   """For now it only handles create forms"""
@@ -146,10 +170,6 @@ class DjangoField:
     template = env.get_template('model_fields.py')
     return template.render(f = self)
 
-class Query:
-  """Remembers the variable name and the executing line of the query"""
-  pass
-
 class DjangoView:
 
   def __init__(self, page, analyzed_app, template):
@@ -239,6 +259,28 @@ class DjangoTemplate:
         if 'href' in uie.attribs:
           if isinstance(uie.attribs['href'], Page):
             uie.attribs['href'] = uie.attribs['href'].route.static_url()
+
+  def properly_name_vars_in_q_container(self, models):
+    """Replaces the model handlebars with the template text require to render the for loop properly"""
+    from analyzer import QuerysetWrapper
+    query_containers = filter(lambda x: isinstance(x, QuerysetWrapper), self.page.uielements)
+    for uie in query_containers:
+      for n in uie.nodes:
+        current_content = n.content()
+        handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', current_content)
+        # check validity
+        for mname, fname in handlebars_search:
+          m = models.get_by_name(mname)
+          assert(m is not None) # if err, then mname is not a model
+          f = m.fields.get_by_name(fname)
+          assert(f is not None) # if err, then fname is not a field of the model
+        # function to do the replacing
+        def repl_handlebars(match):
+          m = models.get_by_name(match.group(1))
+          f = m.fields.get_by_name(match.group(2))
+          return "{{ item."+f.identifier()+" }}"
+        # replace the content.
+        n.set_content(re.sub(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', repl_handlebars, current_content))
 
   def render(self):
     template = DjangoTemplate.env.get_template('template.html')

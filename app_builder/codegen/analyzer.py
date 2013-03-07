@@ -112,6 +112,9 @@ class Node(UIElement):
     else:
       return ""
 
+  def set_content(self, text):
+    self.content_dict['text'] = text
+
   def is_normal_tag(self):
     return self.tagname not in ['img', 'input']
 
@@ -211,12 +214,17 @@ class CreateForm(Form):
 
 
 class QuerysetWrapper(Container):
+  """A container that wraps some nodes in a for loop, and fills them with data from a query.
+  For now that query is to get all the elements from some model."""
   def __init__(self, uie, page):
     self.name = "QW{}".format(id(uie))
     self.uie = uie
+    self.entity_name = uie['container_info']['entity']
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
 
+  def resolve_entity(self, analyzed_app):
+    self.entity = analyzed_app.models.get_by_name(self.entity_name)
 
 """ ANALYZED APP """
 
@@ -259,6 +267,7 @@ class AnalyzedApp:
     self.fill_in_hrefs()
     # will eventually do forms.
     self.init_forms()
+    self.init_queries()
 
 
   # link routes and models
@@ -300,10 +309,10 @@ class AnalyzedApp:
             self.forms.add(uie)
             uie.resolve_entity(self)
 
-def test():
-  from v1factory.models import App
-  import validator
-  app = App.objects.get(pk=1)
-  validator.validate_app_state(app)
-  analyzed_app_state = AnalyzedApp(app.state)
-  return analyzed_app_state
+  def init_queries(self):
+    for p in self.pages.each():
+      p.queries = Manager(QuerysetWrapper)
+      for uie in p.uielements:
+        if isinstance(uie, QuerysetWrapper):
+          uie.resolve_entity(self)
+          p.queries.add(uie)
