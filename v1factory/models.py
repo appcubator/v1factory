@@ -22,7 +22,7 @@ starter_app = """{
           {
             "lib_id":4,
             "attribs": {},
-            "tagName": h1,
+            "tagName": "h1",
             "content":{ "text": "Sign Up" },
             "container_info":null,
             "layout" : {
@@ -37,8 +37,8 @@ starter_app = """{
             "attribs": {},
             "content":{},
             "layout" : {
-              "width"  :4,
-              "height" :4,
+              "width"  :16,
+              "height" :16,
               "top"    :1,
               "left"   :1
             },
@@ -58,7 +58,7 @@ starter_app = """{
             "lib_id":4,
             "container_info":null,
             "attribs":{},
-            "tagName" : h1,
+            "tagName" : "h1",
             "content":{ "text":"Homepage" },
             "layout" : {
               "width"  :4,

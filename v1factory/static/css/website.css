@@ -42,7 +42,7 @@
 }
 
 body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 20px;
@@ -79,7 +79,7 @@ h1.name {
 .pane {
   position: relative;
   display: inline-block;
-  background-color: #233b62 ;
+  background-color: #1C3a62 ;
   border-radius: 6px;
   color: #fff;
   box-shadow: 0 1px 3px #b9bbbe;
@@ -123,41 +123,6 @@ h1.name {
 
 .pane:hover img {
   opacity: 0.9;
-}
-
-.logo {
-  display: inline-block;
-  position: relative;
-  float: right;
-  height: 220px;
-  width: 220px;
-  vertical-align: top;
-  top:10px;
-  right: 0px;
-}
-
-.engine1 {
-  position: absolute;
-  right: 60px;
-  top: 0px;
-  width: 140px;
-  height: 140px;
-  background-image: url('../img/engine.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
-}
-
-.engine2 {
-  position: absolute;
-  right: 0px;
-  top: 100px;
-  width: 100px;
-  height: 100px;
-  background-image: url('../img/engine.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
 }
 
 .block {
@@ -232,6 +197,10 @@ input[type="submit"] {
   font-size: 10px;
 }
 
+.micro {
+  font-size: 8px;
+  line-height: 10px;
+}
 .bold {
   font-weight: bold;
 }
