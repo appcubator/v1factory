@@ -93,6 +93,57 @@ var GalleryView = Backbone.View.extend({
       $(this.allList).append(tempLi);
     }
 
+
+    var self = this;
+    var tempLi   = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
+                   '<span class="name">Show <%= name %> <%= attr %></span></li>';
+
+    appState.users.fields.push({
+      name : "Name",
+      required: "",
+      type :"text"
+    });
+
+    appState.users.fields.push({
+      name : "Last Name",
+      required: "",
+      type :"text"
+    });
+
+    appState.users.fields.push({
+      name : "Email",
+      required: "",
+      type :"text"
+    });
+
+    appState.users.name = "User";
+
+    var model = this.entitiesCollection.push(appState.users, {silent : true});
+
+    _(appState.users.fields).each(function(val, key, ind) {
+      var context = {
+        name : "User",
+        cid  : model.cid,
+        attr : val.name,
+        type : val.type
+      };
+
+      $(self.userList).append(_.template(tempLi, context));
+      $(self.allList).append(_.template(tempLi, context));
+    });
+
+    $('.single-data').draggable({
+      cursor: "move",
+      cursorAt: { top: 0, left: 0 },
+      helper: "clone",
+      start : function(e) {
+        self.dragActive = true;
+      },
+      stop: self.dropped
+    });
+
+    this.setupSearch();
+
   },
 
   appendEntity : function(entityModel) {
