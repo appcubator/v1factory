@@ -68,7 +68,6 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   initialize: function(bone) {
-    console.log(bone);
     var self = this;
 
     this.set('content', new ContentModel(this.get('content')));
@@ -241,7 +240,7 @@ var WidgetModel = Backbone.Model.extend({
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: 4
       };
-      console.log(self);
+
       widgetProps.attribs.value = 'Add ' + this.get('container_info').entity.get('name');
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
@@ -282,7 +281,7 @@ var WidgetModel = Backbone.Model.extend({
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: 4
       };
-      console.log(self.get('container_info').entity);
+
       widgetProps.attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);

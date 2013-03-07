@@ -21,7 +21,6 @@ var WidgetCollection = Backbone.Collection.extend({
     _.each(this.models, function(model) {
       model.set('selected', false);
     });
-    console.log('unss');
     this.selectedEl = null;
   },
 
