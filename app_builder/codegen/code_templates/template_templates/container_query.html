@@ -1,1 +1,5 @@
-<p> I AM A QUERY </p>
+{{ '{%' }} for item in {{ uie.django_query.identifier() }} {{ '%}' }}
+  {% for uie in uie.nodes %}
+  {% include "node.html" %}
+  {% endfor %}
+{{ "{% endfor %}" }}

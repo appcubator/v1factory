@@ -12,8 +12,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 @require_GET
 def {{ v.identifier() }}(request, {% for u in v.url_keys() %}{{ u }}, {% endfor %}):
   page_context = {}
-  {% for q in v.queries() %}
-  page_context[{{ q.identifier_repr() }}] = {{ q.execute_line() }}
+  {% for q in v.queries.each() %}
+  page_context['{{ q.identifier() }}'] = {{ q.model.identifier() }}.objects.all()
   {% endfor %}
   return render(request, {{ v.template_repr() }}, page_context)
 
