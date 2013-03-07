@@ -219,6 +219,8 @@ var WidgetContainerView = WidgetView.extend({
 
     var uielements = widgetModel.get('container_info').uielements;
     this.model.get('childCollection').add(uielements);
+
+    console.log(this.model.collection);
   },
 
   render: function() {

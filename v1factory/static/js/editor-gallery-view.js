@@ -178,9 +178,6 @@ var GalleryView = Backbone.View.extend({
     $(this.elementsList).append(html);
     $(this.allList).append(html);
 
-    console.log("APPEENDDD!!!");
-    console.log(elementModel.get('className'));
-
     $('.' + elementModel.get('className')).draggable({
       cursor: "move",
       cursorAt: { top: 0, left: 0 },
@@ -245,7 +242,7 @@ var GalleryView = Backbone.View.extend({
 
   determineType: function(className, id) {
     var widget = {};
-    console.log(className);
+
     if(/(entity)/.exec(className)) {
       var cid = String(id).replace('entity-','');
       var entity = this.entitiesCollection.get(cid);

@@ -97,8 +97,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   select: function() {
-    this.collection.unselectAll();
-    this.collection.selectedEl = this;
+    this.collection.select(this);
     this.set('selected', true);
   },
 

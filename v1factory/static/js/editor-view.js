@@ -118,8 +118,8 @@ var EditorView = Backbone.View.extend({
       case 8: //backspace
         if(this.widgetsCollection.selectedEl) {
           e.preventDefault();
-          this.widgetsCollection.remove(this.widgetsCollection.selectedEl);
-          this.widgetsCollection.selectedEl = null;
+          this.widgetsCollection.removeSelected();
+          return false;
         }
         break;
       case 27: //escape
