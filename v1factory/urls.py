@@ -46,6 +46,5 @@ urlpatterns += patterns('v1factory.views',
 
     url(r'^app/(\d+)/account/$', 'account'),
 
-    url(r'^app/(\d+)/tempshow/([a-zA-Z_]+)/$', 'generate_html'),
     url(r'^uielement/new/$', 'new_uielement'),
 )
