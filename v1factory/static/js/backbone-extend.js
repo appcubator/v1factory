@@ -6,11 +6,13 @@ Backbone.UIView = Backbone.View.extend({
     $(self.el).resizable({
       handles: "n, e, s, w, se",
       grid: 15,
+      containment: $('#elements-container'),
       resize: self.resized
     });
 
     $(self.el).draggable({
       grid: [ 15,15 ],
+      containment: $('#elements-container'),
       drag: self.moved
     });
 
@@ -36,7 +38,6 @@ Backbone.UIView = Backbone.View.extend({
 
   setRight : function(val) {
     this.el.style.right = val + "px";
-
   },
 
   setTop: function(val) {

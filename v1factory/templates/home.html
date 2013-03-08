@@ -9,17 +9,25 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/home.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
+<!--     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+ -->
 {% endblock %}
 
 {% block topbar %}
 <div class="row">
-  <div class="offset1 toppanel hi6 span12">
+  <div class="offset1 toppanel hi6 span12 logo-text">
+    <div class="logo">
+      <span class="engine1"></span>
+      <span class="engine2"></span>
+      <span class="engine3"></span>
+    </div>
     <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> {{ title }}</h1>
   </div>
-  <div class="offset6 toppanel hi6 span38">
+  <div class="offset10 toppanel hi6 span30">
     <div class="login pane inset hi2 hoff1 pad1" style="height:45px; margin-top: 22px;">
-      <span class="span12 pad1"><strong>User Login</strong><i class="small"> (forgot password?)</span>
-      <span class="login span22 offset1">
+      <span class="span6 pad1"><strong style="line-height:14px;">User Login</strong><br><i class="micro"> (forgot password?)</i></span>
+      <span class="login span21 offset1">
       {% if user.is_authenticated %}
         <a href="{% url v1factory.views.app_list %}">Logged In</a>
       {% else %}
@@ -30,78 +38,67 @@
 </div>
 {% endblock %}
 {% block page %}
-<div class="container">
-  <div class="row">
-    <div class="span64 parent-span">
-      <div class="pane hi24">
-        <div class="logo offsetr2 hoff2">
-          <span class="engine1"></span>
-          <span class="engine2"></span>
+<div class="preload">
+<div class="well">
+  <div class="container">
+    <div class="span64">
+      <div class="hi22">
+        <div class="span32 offset1 hoff2">
+          <h2 class="">Bring your ideas<br>into reality.</h2>
+          <p class="">Start your online business quickly, without hiring a developer or coding. Connect with us to find out more. </p>
         </div>
-        <h2 class="offset1 hoff2">Bring your ideas<br>into reality.</h2>
-        <p class="offset1  span32">Start your online business quickly, without hiring a developer or coding. Connect with us to find out more. </p>
+        <div class="span26 offset1">
+          <div class="site-trackstudent"></div>
+          <div class="mobile-trackstudent"></div>
+        </div>
       </div>
     </div>
   </div>
+</div>
+<div class="container">
   <div class="row meta hi12 hoff2">
     <div class="span14 parent-span" style="margin-right: 10px;">
-      <div class="pane hi12">
+      <div class="pane hi12 nocode">
        <p class="offset1 hoff1">
-        <span class="mtxt bold">Develop Your App.</span>
+        <span class="mtxt bold">Develop without Hassle.</span>
+       </p>
+       <p class="offset1">
+        <span class="small">All through a GUI. Easier than Microsoft Excel or Powerpoint.</span>
        </p>
       </div>
     </div>
     <div class="span14 offset1 parent-span" style="margin-right: 10px;">
-      <div class="pane hi12">
-      <p class="offset1 hoff1">
-        <span class="mtxt bold">Publish It.</span>
-       </p>
+      <div class="pane hi12 publish">
+        <p class="offset1 hoff1">
+         <span class="mtxt bold">Publish It.</span>
+        </p>
+        <p class="offset1">
+          <span class="small">Deploy it with one click and let it scale.</span>
+        </p>
       </div>
     </div>
     <div class="span14 offset1 parent-span" style="margin-right: 10px;">
-      <div class="pane hi12">
+      <div class="pane hi12 users">
         <p class="offset1 hoff1">
           <span class="mtxt bold">Start Getting Users.</span>
+        </p>
+        <p class="offset1">
+          <span class="small">Drag'n'Drop social integrations make it easy.</span>
         </p>
       </div>
     </div>
     <div class="span14 offset1 parent-span">
-      <div class="pane hi12">
+      <div class="pane hi12 metrics">
         <p class="offset1 hoff1">
-          <span class="mtxt bold">Watch the Metrics.</span>
+          <span class="mtxt bold">Watch your Metrics.</span>
+        </p>
+        <p class="offset1">
+          <span class="small">All the data aggregated in one interface.</span>
         </p>
       </div>
     </div>
   </div>
-
-  <!-- <div class="row meta hi16 hoff1">
-    <div class="span64">
-      <div class="login pane inset hi8">
-      <h3 class="offset1 span34 hoff1">Connect</h3>
-      </div>
-    </div>
-  </div>
-  <div class="row meta hi16 hoff1">
-    <div class="spaN64">
-      <div class="login pane inset hi8">
-      <h3 class="offset1 span34 hoff1">Connect</h3>
-      </div>
-    </div>
-  </div>
-  <div class="row meta hi16 hoff1">
-    <div class="span64">
-      <div class="login pane inset hi8">
-      <h3 class="offset1 span34 hoff1">Connect</h3>
-      </div>
-    </div>
-  </div>
-  <div class="row meta hi8 hoff1">
-    <div class="span32">
-      <div class="login pane inset hi8">
-      <h3 class="offset1 span17 hoff1">Connect</h3>
-      </div>
-    </div>
-  </div> -->
+</div>
 </div>
 {% endblock %}
 
@@ -126,8 +123,10 @@
     <script type="text/javascript">
     var $elie = $('.engine1');
     var $elie2 = $('.engine2');
-    rotate(0, 1);
-    rotate2(0, -1);
+    var $elie3 = $('.engine3');
+    rotate(0, -1);
+    rotate2(0, 1);
+    rotate3(0, -1);
     function rotate(degree, direction) {
       $elie.css({ WebkitTransform: 'rotate(' + degree + 'deg)'});
       $elie.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
@@ -138,5 +137,13 @@
       $elie2.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
       setTimeout(function(){setTimeout(function() { rotate2(degree + direction, direction); },26)}, 1);
     }
+    function rotate3(degree, direction) {
+      $elie3.css({ WebkitTransform: 'rotate(' + degree + 'deg)'});
+      $elie3.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
+      setTimeout(function(){setTimeout(function() { rotate3(degree + direction, direction); },26)}, 1);
+    }
+    $("window").load(function() {
+      //$(".preload").removeClass("preload");
+    });
     </script>
 {% endblock %}

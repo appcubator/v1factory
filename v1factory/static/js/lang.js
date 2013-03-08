@@ -10,5 +10,7 @@ var lang = {
   layout : "Layout Info",
   content: "Content",
   attribs: "Attributes",
-  style  : "Style"
+  style  : "Style",
+  childCollection : "Sub-Elements"
+
 };

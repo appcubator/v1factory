@@ -48,8 +48,8 @@ var LayoutModel = Backbone.Model.extend({
   defaults: {
     'top'    : 0,
     'left'   : 0,
-    'height' : 2,
-    'width'  : 2
+    'height' : 8,
+    'width'  : 16
   }
 });
 
@@ -88,6 +88,7 @@ var WidgetModel = Backbone.Model.extend({
         });
       }
       else {
+        console.log(this.get('container_info').action);
         this.containerHandler[this.get('container_info').action].call(this);
       }
     }
@@ -107,9 +108,15 @@ var WidgetModel = Backbone.Model.extend({
     json.content = this.get('content').toJSON();
     json.layout  = this.get('layout').toJSON();
 
-    if(this.get('container_info') && this.get('container_info').entity) {
-      if(typeof this.get('container_info').entity !== "string") {
+    if(this.get('container_info')) {
+
+      if(this.get('container_info').entity && typeof this.get('container_info').entity !== "string") {
         json.container_info.entity = this.get('container_info').entity.get('name');
+      }
+
+      if(this.has('childCollection')) {
+        json.container_info.uielements = this.get('childCollection');
+        delete this.childCollection;
       }
     }
 
@@ -147,7 +154,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   containerHandler: {
-    'query' : function() {
+    'show' : function() {
       var self = this;
       self.get('container_info').uielements = [];
 
@@ -173,7 +180,7 @@ var WidgetModel = Backbone.Model.extend({
         self.get('container_info').uielements.push(widget);
       });
     },
-    'form' : function() {
+    'create' : function() {
       var self = this;
       var container_info = self.get('container_info');
       container_info.uielements = [];
@@ -282,6 +289,65 @@ var WidgetModel = Backbone.Model.extend({
       };
 
       widgetProps.attribs.value = 'Add ' + self.get('container_info').entity;
+      var widget = new WidgetModel(widgetProps);
+      self.get('container_info').uielements.push(widget);
+    },
+    'signup' : function() {
+      var self = this;
+      self.get('container_info').uielements = [];
+
+      var coordinates = iui.unite({x: 1,
+                                   y: 1 },
+                                  {x: self.get('layout').get('width') + 1,
+                                   y: 1 });
+      var type = "text-input";
+      var widgetProps = uiLibrary[type][0];
+      widgetProps.type = type;
+      widgetProps.attribs.placeholder = "Username...";
+      widgetProps.layout = {
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
+          width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+          height: 4
+      };
+
+      var widget = new WidgetModel(widgetProps);
+      self.get('container_info').uielements.push(widget);
+
+      var coordinates = iui.unite({x: 1,
+                                   y: 5 },
+                                  {x: self.get('layout').get('width') + 1,
+                                   y: 5 });
+      var type = "password";
+      var widgetProps = uiLibrary['password'][0];
+      widgetProps.type = type;
+      widgetProps.attribs.placeholder = "Password...";
+      widgetProps.layout = {
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
+          width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+          height: 4
+      };
+
+      widgetProps.attribs.value = 'Add ' + self.get('container_info').entity;
+      var widget = new WidgetModel(widgetProps);
+      self.get('container_info').uielements.push(widget);
+
+      var coordinates = iui.unite({x: 1,
+                                   y: 9 },
+                                  {x: self.get('layout').get('width') + 1,
+                                   y: 9 });
+      var type = "button";
+      var widgetProps = uiLibrary[type][0];
+      widgetProps.type = type;
+      widgetProps.attribs.value = "Sign Up";
+      widgetProps.layout = {
+          top   : coordinates.topLeft.y,
+          left  : coordinates.topLeft.x,
+          width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
+          height: 4
+      };
+
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
     }

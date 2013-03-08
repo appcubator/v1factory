@@ -153,9 +153,9 @@ var GalleryView = Backbone.View.extend({
       cid : entityModel.cid
     };
 
-    var tempLi   = '<li id="entity-<%= cid %>" class="query entity">'+
+    var tempLi   = '<li id="entity-<%= cid %>" class="Show entity">'+
                    '<span class="name">List of <%= name %></span></li>';
-    var tempForm = '<li id="entity-<%= cid %>" class="form entity">'+
+    var tempForm = '<li id="entity-<%= cid %>" class="create entity">'+
                    '<span class="name">Add <%= name %> Form</span></li>';
     var tempBtn  = '<li id="entity-<%= cid %>" class="addbutton entity">'+
                    '<span class="name">Add <%= name %> Button</span></li>';
