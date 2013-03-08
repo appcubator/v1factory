@@ -9,7 +9,6 @@
 }
 
 .well p {
-    font-size: 16px;
   vertical-align: bottom;
 }
 
@@ -217,4 +216,27 @@ background-repeat: no-repeat;
   -moz-transition: none !important;
   -ms-transition: none !important;
   -o-transition: none !important;
+}
+
+.motto {
+  font-family: 'verb_lightitalic';
+  font-size: 32px;
+  line-height: 36px;
+}
+
+.light-green {
+background-color: #8fd36f;
+}
+.green-3 {
+background-color: #26656e;
+}
+
+.green-2 {
+  background-color: #137a7e;
+
+}
+
+.green-1 {
+    background-color:#009e8e;
+
 }
