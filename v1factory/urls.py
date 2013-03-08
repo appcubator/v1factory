@@ -29,6 +29,9 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/static/$', 'staticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
+
+    # getting/setting uie state
+    url(r'^app/(\d+)/uiestate/$', 'uie_state'),
     # deploy this ship!
     url(r'^app/(\d+)/deploy/$', 'app_deploy'),
     # the rest

@@ -102,6 +102,7 @@ class App(models.Model):
   name = models.CharField(max_length=100)
   owner = models.ForeignKey(User, related_name='apps')
   _state_json = models.TextField(blank=True, default=starter_app)
+  _uie_state_json = models.TextField(blank=True, default=starter_app)
 
   @property
   def state(self):
@@ -109,6 +110,14 @@ class App(models.Model):
 
   @property
   def state_json(self):
+    return self._state_json
+
+  @property
+  def uie_state(self):
+    return simplejson.loads(self._state_json)
+
+  @property
+  def uie_state_json(self):
     return self._state_json
 
   @property
@@ -129,6 +138,10 @@ class App(models.Model):
   def clean(self):
     try:
       simplejson.loads(self._state_json)
+    except simplejson.JSONDecodeError, e:
+      raise ValidationError(e.msg)
+    try:
+      simplejson.loads(self._uie_state_json)
     except simplejson.JSONDecodeError, e:
       raise ValidationError(e.msg)
 

@@ -66,6 +66,34 @@ def app_save_state(request, app):
   return (200, 'ok')
 
 @login_required
+def uie_state(request, app_id):
+  app = get_object_or_404(App, id=app_id)
+  if request.method == 'GET':
+    state = app_get_uie_state(request, app)
+    return JSONResponse(state)
+  elif request.method == 'POST':
+    status, message = app_save_uie_state(request, app)
+    return HttpResponse(message, status=status)
+  else:
+    return HttpResponse("GET or POST only", status=405)
+
+@require_GET
+@login_required
+def app_get_uie_state(request, app):
+  return app.uie_state
+
+@require_POST
+@login_required
+def app_save_uie_state(request, app):
+  app._uie_state_json = request.body
+  try:
+    app.full_clean()
+  except Exception, e:
+    return (400, str(e))
+  app.save()
+  return (200, 'ok')
+
+@login_required
 @require_POST
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id)
