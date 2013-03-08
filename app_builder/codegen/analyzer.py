@@ -73,10 +73,16 @@ class UIElement(object):
 
   def __init__(self, uie=None):
     self.uie = uie
-    self.width = uie['layout']['width']
-    self.height = uie['layout']['height']
-    self.top = uie['layout']['top']
-    self.left = uie['layout']['left']
+    if 'layout' in uie:
+      self.width = uie['layout']['width']
+      self.height = uie['layout']['height']
+      self.top = uie['layout']['top']
+      self.left = uie['layout']['left']
+    else:
+      self.width = 5
+      self.height = 5
+      self.left = 5
+      self.top = 5
 
 class Node(UIElement):
   """A Node can be thought of as a single element on the page.

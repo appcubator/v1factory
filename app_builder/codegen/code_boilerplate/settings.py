@@ -125,13 +125,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
 
     "django.core.context_processors.request",
-    "allauth.account.context_processors.account",
-    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 INSTALLED_APPS = (
@@ -143,12 +140,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'webapp',
     'django.contrib.admin',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
-    'allauth.socialaccount.providers.linkedin',
+    'facebook',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -185,9 +177,10 @@ LOGGING = {
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_MIN_LENGTH = 2
-ACCOUNT_PASSWORD_MIN_LENGTH = 3
-SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
-ACCOUNT_EMAIL_VERIFICATION = "none"
+FACEBOOK_APP_ID = '145000778994158'
+FACEBOOK_API_SECRET = 'f5f3f2a69011b36da2005fbea8aa3476'
+FACEBOOK_REDIRECT_URI = 'http://localhost:8000/facebooklogin/'
+
+AUTHENTICATION_BACKENDS += (
+    'facebook.backends.FacebookBackend',
+)
