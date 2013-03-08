@@ -77,18 +77,30 @@ var uieState = {{ app.uie_state_json|safe }};
   </div>
 </div>
 </script>
+<script type="text/template" id="temp-element-node">
+<div class="element-node">
+<<%= tagName %> <% _(attribs).each(function(attrib){ %>
+<%= attrib %> = "default" 
+<% }); %><% _(cons_attribs).each(function(val, key){ %>
+<%= key %>=<%= val %> <% }); %>>
+<% if(!isSingle) { %>
+Default <<%=tagName%>>
+<% } %>
+</div>
+</script>
 <script type="text/template" id="temp-element-pane">
 <form class="element-create-form">
-          <select name="tagName">
-            <% _(tags).each(function(val, key){ %>
-            <option value="<%= key %>"><%= key %></option>
-            <% });%>
-          </select>
-          <input type="text" name="class_name" placeholder="Classname">
-          <% _(attribs).each(function(attrib){ %>
-          <input type="text" name="<%= attrib %>" placeholder="<%= attrib %>">
-          <% });%>
-          <input type="submit" value="Add" class="btn">
+  <select name="tagName">
+    <% _(tags).each(function(tag){ %>
+    <option value="<%= tag.get('tagName') %>"><%= tag.get('tagName') %></option>
+    <% });%>
+  </select>
+  <input type="text" name="className" placeholder="Class Name...">
+  <% _(attribs).each(function(attrib){ %>
+  <input type="text" name="attribs-<%= attrib %>" placeholder="<%= attrib %>">
+  <% });%>
+  <textarea name="style" placeholder="Styling here..."></textarea>
+  <input type="submit" value="Done" class="btn">
 </form>
 </script>
 <script type="text/template" id="temp-node"><<%= element.tagName%> 
@@ -101,9 +113,9 @@ class = "<%= element.class_name %>"
 <% if(!element.isSingle) {%>
 </<%= element.tagName%>>
 <% } %></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/iui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/backbone-extend.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/gallery-editor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/gallery-view.js"></script>
 <script type="text/javascript">
 var galleryView = new GalleryView();
 

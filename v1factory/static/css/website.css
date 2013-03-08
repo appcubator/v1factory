@@ -217,3 +217,15 @@ input[type="submit"] {
 .bold {
   font-weight: bold;
 }
+
+.modal {
+  opacity: 1.0;
+  background-color: #fff;
+  padding: 30px;
+}
+
+.element-node {
+  min-height: 200px;
+  padding: 20px;
+  text-align: center;
+}

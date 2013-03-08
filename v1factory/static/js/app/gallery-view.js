@@ -1,5 +1,14 @@
 var TagModel = Backbone.Model.extend({
-  
+  initialize: function(bone) {
+    var key = _.keys(bone)[0];
+    console.log(key);
+    this.set('tagName', key);
+    this.set('attribs', bone[key].attribs);
+    this.set('cons_attribs', bone[key].cons_attribs);
+    this.set('className', 'unnamed');
+    this.set('style', '');
+    this.set('isSingle', bone[key].isSingle);
+  }
 });
 
 var TagCollection = Backbone.Collection.extend({
@@ -8,8 +17,10 @@ var TagCollection = Backbone.Collection.extend({
 
 var UIElementModel = Backbone.Model.extend({
   initialize: function(type) {
+    var tagCollection = new TagCollection(settingsTags[type]);
     this.set('type', type);
-    this.set('tags', new TagCollection(settingsTags[type]));
+    this.set('tags', tagCollection);
+    this.set('tag', tagCollection.first());
   }
 });
 
@@ -21,10 +32,23 @@ var UIElementCollection = Backbone.Collection.extend({
 var UIElementView = Backbone.ModalView.extend({
   tagName : 'div',
   className : 'element-view',
-  initialize: function() {
+
+  initialize: function(uieModel) {
+    this.model = uieModel;
     this.render();
-    this.el.innerHTML = 'HOLLA!!!!';
+  },
+
+  render: function() {
+    var elDiv = _.template(iui.getHTML('temp-element-node'), this.model.get('tag').attributes );
+    this.el.innerHTML = elDiv;
+
+    var form = _.template(iui.getHTML('temp-element-pane'),{ tags : this.model.get('tags').models,
+                                                         attribs: this.model.get('tag').get('attribs')});
+    this.el.innerHTML += form;
+
+    return this;
   }
+
 });
 
 
@@ -55,15 +79,13 @@ var UIElementListView = Backbone.View.extend({
   },
 
   showForm: function(e) {
-    $(e.target).hide();
-    // $('.element-create-form', this.el).fadeIn();
     var newUIElement = new UIElementModel(this.type);
     this.collection.add(newUIElement);
     new UIElementView(newUIElement);
   },
 
   submitForm: function(e) {
-        alert("HEEEEY");
+    alert("HEEEEY");
   }
 
 });
@@ -134,9 +156,10 @@ var settingsTags = {
 
   "button": {
     'input': {
-      attribs: ['submit', 'value'],
+      attribs: ['value'],
       cons_attribs: {
-        class: 'btn'
+        class: 'btn',
+        type: 'submit'
       },
       isSingle: true
     }
@@ -191,7 +214,7 @@ var settingsTags = {
   "password" : {
     'input' : {
       cons_attribs : {
-        type  : 'password',
+        type  : 'password'
       },
       attribs : null,
       isSingle: true
@@ -231,4 +254,4 @@ var settingsTags = {
       isSingle: false
     }
   }
-}
+};
