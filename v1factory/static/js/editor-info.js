@@ -28,6 +28,8 @@ var WidgetInfoView = Backbone.View.extend({
                     'clear',
                     'show',
                     'showAttribute',
+                    'showCollection',
+                    'showUIElem',
                     'staticsAdded',
                     'inputChanged',
                     'selectChanged',
@@ -79,16 +81,27 @@ var WidgetInfoView = Backbone.View.extend({
     this.model.bind("remove", this.clear, this);
     this.model.get('layout').bind("change", this.changedLayout, this);
     this.model.get('content').bind("change", this.changedContent, this);
+    this.showUIElem(this.model);
 
-    _(this.model.attributes).each(function(val, key){
+  },
+
+  showUIElem: function(widgetModel) {
+    var self = this;
+    _(widgetModel.attributes).each(function(val, key){
       if(key == 'id' || key == 'selected'
                      || key == 'lib_id'
                      || key == 'container_info'
                      || key == 'isSingle'
                      || key == 'tagName') return;
 
+        console.log(key);
+      console.log(self);
+
       if(val && val.attributes) {
         self.list.appendChild(self.showModel(val, key));
+      }
+      else if(val && val.models) {
+        self.list.appendChild(self.showCollection(val, key));
       }
       else {
         self.list.appendChild(self.showAttribute(val, key, String('')));
@@ -111,6 +124,30 @@ var WidgetInfoView = Backbone.View.extend({
 
     _(model.attributes).each(function(val, key) {
       ul.appendChild(self.showAttribute(val, key, key, modelName));
+    });
+
+    li.appendChild(span);
+    li.appendChild(ul);
+    return li;
+  },
+
+  showCollection: function(coll, collectionName) {
+    var self = this;
+    var li = document.createElement('li');
+    li.className = 'model';
+
+    console.log("YOLOOOO");
+
+    var span = document.createElement('span');
+    span.innerText = lang[collectionName]||collectionName;
+    span.className = "title";
+
+    var ul = document.createElement('ul');
+    ul.className = 'prop-' + collectionName;
+
+    _(coll.models).each(function(model) {
+      console.log(model);
+      ul.appendChild(self.showUIElem(model));
     });
 
     li.appendChild(span);

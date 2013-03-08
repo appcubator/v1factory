@@ -108,9 +108,15 @@ var WidgetModel = Backbone.Model.extend({
     json.content = this.get('content').toJSON();
     json.layout  = this.get('layout').toJSON();
 
-    if(this.get('container_info') && this.get('container_info').entity) {
-      if(typeof this.get('container_info').entity !== "string") {
+    if(this.get('container_info')) {
+
+      if(this.get('container_info').entity && typeof this.get('container_info').entity !== "string") {
         json.container_info.entity = this.get('container_info').entity.get('name');
+      }
+
+      if(this.has('childCollection')) {
+        json.container_info.uielements = this.get('childCollection');
+        delete this.childCollection;
       }
     }
 
@@ -148,7 +154,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   containerHandler: {
-    'query' : function() {
+    'show' : function() {
       var self = this;
       self.get('container_info').uielements = [];
 
@@ -174,7 +180,7 @@ var WidgetModel = Backbone.Model.extend({
         self.get('container_info').uielements.push(widget);
       });
     },
-    'form' : function() {
+    'create' : function() {
       var self = this;
       var container_info = self.get('container_info');
       container_info.uielements = [];

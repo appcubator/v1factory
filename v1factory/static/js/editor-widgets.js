@@ -167,6 +167,7 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   resized: function(e, ui) {
+    console.log("RESIIIIZED!");
     var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
     this.model.get('layout').set('width', deltaWidth);

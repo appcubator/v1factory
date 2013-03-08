@@ -5,7 +5,8 @@
 <link href="{{ STATIC_URL }}css/editor.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/design.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
+<link href="{{ STATIC_URL }}css/jquery-ui.css" rel="stylesheet">
+
 <script type="text/javascript" src="{{ STATIC_URL }}js/jscolor/jscolor.js"></script>
 <style type="text/css">
 {% for element in gallery_elements %}
@@ -59,7 +60,8 @@ var library = {{ elements|safe }};
 var pageId = {{ page_id }};
 </script>
 {% include "dev/editor-templates.html" %}
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui.js"></script>
+
 <script type="text/javascript" src="{{ STATIC_URL }}js/backbone-extend.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/iui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/lang.js"></script>
