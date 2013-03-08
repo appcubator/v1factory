@@ -119,16 +119,21 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   changedWidth: function(a) {
-    this.el.className = 'selected widget-wrapper ui-resizable ui-draggable';
+    this.el.className = 'selected widget-wrapper ';
 
     if(this.model.get('layout').get('width') == '100%') {
       $('#full-container').append(this.el);
+      this.disableResizeAndDraggable();
       this.setLeft(0);
-      this.setWidth('100%');
+      this.el.style.width = '100%';
     }
     else {
+      $('#widgets-container').append(this.el);
       this.setWidth('');
+      this.el.style.width = '';
       this.el.className += 'span' + this.model.get('layout').get('width');
+      this.setLeft(GRID_HEIGHT * (this.model.get('layout').get('left')));
+      this.resizableAndDraggable();
     }
   },
 

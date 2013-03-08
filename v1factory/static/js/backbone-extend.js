@@ -28,6 +28,11 @@ Backbone.UIView = Backbone.View.extend({
     });
   },
 
+  disableResizeAndDraggable: function() {
+    $(this.el).resizable("disable");
+    $(this.el).draggable("disable");
+  },
+
   clear : function() {
     this.el.innerHTML = '';
   },
@@ -59,5 +64,49 @@ Backbone.UIView = Backbone.View.extend({
   setPosition: function(val) {
     this.el.style.position = val;
   }
+
+});
+
+Backbone.ModalView = Backbone.View.extend({
+
+    _configure: function(options) {
+       Backbone.ModalView.__super__._configure.call(this, options);
+       this.backgroundDiv = this.setupModal();
+       this.modalWindow = this.setupModalWindow();
+       this.backgroundDiv.appendChild(this.modalWindow);
+    },
+
+    _ensureElement: function(options) {
+      Backbone.ModalView.__super__._ensureElement.call(this, options);
+      this.modalWindow.appendChild(this.el);
+    },
+
+    setupModal: function() {
+      var div = document.createElement('div');
+      div.style.position = 'fixed';
+      div.style.width = '100%';
+      div.style.height = '100%';
+      div.style.top = '0';
+      div.style.left = '0';
+      div.style.backgroundColor = '#222';
+      div.style.opacity = '0.6';
+      document.body.appendChild(div);
+      return div;
+    },
+
+    setupModalWindow: function() {
+      var div = document.createElement('div');
+      div.style.position = 'fixed';
+      div.className = 'modal';
+      div.style.width = '500px';
+      div.style.height = '600px';
+      div.style.top = '140px';
+      div.style.left = '50%';
+      div.style.marginLeft= '-250px';
+      div.style.backgroundColor = '#222';
+      div.style.opacity = '0.6';
+      document.body.appendChild(div);
+      return div;
+    }
 
 });

@@ -114,11 +114,11 @@ class App(models.Model):
 
   @property
   def uie_state(self):
-    return simplejson.loads(self._state_json)
+    return simplejson.loads(self._uie_state_json)
 
   @property
   def uie_state_json(self):
-    return self._state_json
+    return self._uie_state_json
 
   @property
   def entities(self):

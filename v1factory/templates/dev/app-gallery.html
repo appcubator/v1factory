@@ -9,104 +9,103 @@
 
 {% block topbar %}
 <div class="row">
-  <div class="offset2 toppanel span22 hi3">
-  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  <div class="offset2 toppanel span44 hi6">
+  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
   </div>
-  <div class="span8 hoff1 right">
-    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-entities">Save</a>
+  <div class="span16 hoff2 right">
+    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save">Save</a>
   </div>
 </div>
 {% endblock %}
 
 {% block page %}
 <div class="container">
-  <div class="row top-buttons offset1 span30 tb-border">
+  <div class="row top-buttons offset1 span60 tb-border">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
   </div>
-  <div class="row span30">
-    <div id="elements-list">
-    {% for element in elements %}
-    <div class="span9 offset1 hoff1">
-      <div class="pane border minhi">
-      {{ element.html|safe }}
-      </div>
-    </div>
-    {% endfor %}
-    </div>  
-    <div class="span9 offset1 hoff1">
-      <div class="pane border minhi" id="create-element-button">
-        <span class="create-text">+ Create an element</span>
-        <form class="element-create-form" id="element-create-form" style="display:none;">
-          <input type="text" name="name" placeholder="Name">
-          <input type="text" name="class_name" placeholder="Classname">
-          <textarea type="text" name="html" placeholder="HTML"></textarea>
-          <textarea type="text" name="css" placeholder="CSS"></textarea>
-          <select name="type">
-            <option>Select TagName</option>
-            <option>h1</option>
-            <option>h2</option>
-            <option>h3</option>
-            <option>span</option>
-            <option>div</option>
-            <option>input type="text"</option>
-            <option>select</option>
-            <option>textarea</option>
-            <option>img</option>
-          </select>
-          <input type="submit" value="Add" class="btn">
-        </form>
-      </div>
-    </div>
+  <div class="row span60 offset1"  >
+    <ul class="hoff2">
+      <li class="hi12" id="button">
+        <h2>Button</h2>
+      </li>
+      <li class="hi12" id="image">
+        <h2>Image</h2>
+      </li>
+      <li class="hi12" id="header-text">
+        <h2>Header</h2>
+      </li>
+      <li class="hi12" id="text">
+        <h2>Text</h2>
+      </li>
+      <li class="hi12" id="link">
+        <h2>Link</h2>
+      </li>
+      <li class="hi12" id="text-input">
+        <h2>Input</h2>
+      </li>
+      <li class="hi12" id="password">
+        <h2>Password Field</h2>
+      </li>
+      <li class="hi12" id="text-area">
+        <h2>Text Area</h2>
+      </li>
+      <li class="hi12" id="line">
+        <h2>Line</h2>
+      </li>
+      <li class="hi12" id="dropdown">
+        <h2>Dropdown</h2>
+      </li>
+      <li class="hi12">
+        <h2>Box</h2><div id="box"></div>
+      </li>
+    </ul>
   </div>
 </div>
 {% endblock %}
 
 {% block js %}
-<script type="text/html">
-  var statics = {{ statics|safe }};
+<script type="text/javascript">
+var appId = {{ app_id|safe }};
+var statics = {{ statics|safe }};
+var uieState = {{ app.uie_state_json|safe }};
 </script>
-<script type="text/html" id="temp-element">
-<div class="span9 offset1 hoff1">
+
+<script type="text/template" id="temp-create">
+<div class="span9 hoff1 create-text">
   <div class="pane border minhi">
-    <<%= tag_name %> class="<%= class_name %>" style="<%= style %>">
-    Sample
-    <% if(tag_name != 'input type="text"' && tag_name != 'img') {%>
-    </<%=tag_name%>>
-    <% } %>
+    <span class="">+ Create an element</span>
   </div>
 </div>
-
 </script>
+<script type="text/template" id="temp-element-pane">
+<form class="element-create-form">
+          <select name="tagName">
+            <% _(tags).each(function(val, key){ %>
+            <option value="<%= key %>"><%= key %></option>
+            <% });%>
+          </select>
+          <input type="text" name="class_name" placeholder="Classname">
+          <% _(attribs).each(function(attrib){ %>
+          <input type="text" name="<%= attrib %>" placeholder="<%= attrib %>">
+          <% });%>
+          <input type="submit" value="Add" class="btn">
+</form>
+</script>
+<script type="text/template" id="temp-node"><<%= element.tagName%> 
+class = "<%= element.class_name %>"
+<% _(element.attribs).each(function(val, key) { %>
+<%=key%>="<%=val%>"<% }); %>>
+<% _(element.content).each(function(val, key) { %>
+<%= val %>
+<% }); %>
+<% if(!element.isSingle) {%>
+</<%= element.tagName%>>
+<% } %></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/iui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/backbone-extend.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/gallery-editor.js"></script>
 <script type="text/javascript">
-$('#create-element-button').on('click', function() {
-  $('.create-text').hide();
-  $('.element-create-form').fadeIn();
-})
+var galleryView = new GalleryView();
 
-$('#element-create-form').on('submit', function(e) {
-  var elem =  $('#element-create-form').serialize();
-  $.ajax({
-    type: "POST",
-    url: '/uielement/new/',
-    data: elem,
-    success: function() {
-
-    },
-    dataType: "JSON"
-  });
-  e.preventDefault();
-
-  var elem = $('#element-create-form').serializeArray();
-  var temp = document.getElementById('temp-element').innerHTML;
-  console.log(elem);
-  html = _.template(temp, { 
-                            style: elem[3].value, 
-                            tag_name: elem[4].value, 
-                            class_name: elem[1].value
-                          });
-  $("#elements-list").append(html);
-  $('.create-text').fadeIn();
-  $('.element-create-form').hide();
-})
 </script>
 {% endblock %}
