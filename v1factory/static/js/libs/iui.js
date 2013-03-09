@@ -102,5 +102,9 @@ var iui = {
 
   get: function(id) {
     return document.getElementById(id);
+  },
+
+  getHTML: function(id) {
+    return document.getElementById(id).innerHTML;
   }
 };

@@ -74,7 +74,7 @@ var WidgetModel = Backbone.Model.extend({
     this.set('layout', new LayoutModel(this.get('layout')));
     this.set('attribs', new AttribsModel(this.get('attribs')));
 
-    _.bindAll(this, 'select', 'assignCoord');
+    _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
 
     if(this.get('container_info')&&this.get('container_info').uielements === undefined) {
 
@@ -123,12 +123,20 @@ var WidgetModel = Backbone.Model.extend({
     return json;
   },
 
+  isFullWidth: function() {
+    return this.get('layout').get('width') == '100%';
+  },
+
   moveLeft: function() {
+    if(this.isFullWidth()) return;
+
     if(this.get('layout').get('left') < 1) return;
     this.get('layout').set('left', this.get('layout').get('left') - 1);
   },
 
   moveRight: function() {
+    if(this.isFullWidth()) return;
+
     if(this.get('layout').get('left') + this.get('layout').get('width') > 63) return;
     this.get('layout').set('left', this.get('layout').get('left') + 1);
   },

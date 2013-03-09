@@ -8,7 +8,7 @@ import django.views.generic.base
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'django.contrib.auth.views.login', { 'template_name' : 'home.html' }),
+    url(r'^$', 'django.contrib.auth.views.login', { 'template_name' : 'website-home.html' }),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout'),
     url(r'^connect_with/$', 'v1factory.base_views.get_linkedin'),
@@ -46,6 +46,5 @@ urlpatterns += patterns('v1factory.views',
 
     url(r'^app/(\d+)/account/$', 'account'),
 
-    url(r'^app/(\d+)/tempshow/([a-zA-Z_]+)/$', 'generate_html'),
     url(r'^uielement/new/$', 'new_uielement'),
 )

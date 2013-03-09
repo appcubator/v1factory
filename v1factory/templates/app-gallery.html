@@ -1,0 +1,123 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/gallery.css">
+
+{% endblock %}
+
+{% block topbar %}
+<div class="row">
+  <div class="offset2 toppanel span44 hi6">
+  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  </div>
+  <div class="span16 hoff2 right">
+    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save">Save</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block page %}
+<div class="container">
+  <div class="row top-buttons offset1 span60 tb-border">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </div>
+  <div class="row span60 offset1"  >
+    <ul class="hoff2">
+      <li class="hi12" id="button">
+        <h2>Button</h2>
+      </li>
+      <li class="hi12" id="image">
+        <h2>Image</h2>
+      </li>
+      <li class="hi12" id="header-text">
+        <h2>Header</h2>
+      </li>
+      <li class="hi12" id="text">
+        <h2>Text</h2>
+      </li>
+      <li class="hi12" id="link">
+        <h2>Link</h2>
+      </li>
+      <li class="hi12" id="text-input">
+        <h2>Input</h2>
+      </li>
+      <li class="hi12" id="password">
+        <h2>Password Field</h2>
+      </li>
+      <li class="hi12" id="text-area">
+        <h2>Text Area</h2>
+      </li>
+      <li class="hi12" id="line">
+        <h2>Line</h2>
+      </li>
+      <li class="hi12" id="dropdown">
+        <h2>Dropdown</h2>
+      </li>
+      <li class="hi12">
+        <h2>Box</h2><div id="box"></div>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+var appId = {{ app_id|safe }};
+var statics = {{ statics|safe }};
+var uieState = {{ app.uie_state_json|safe }};
+</script>
+
+<script type="text/template" id="temp-create">
+<div class="span9 hoff1 create-text">
+  <div class="pane border minhi">
+    <span class="">+ Create an element</span>
+  </div>
+</div>
+</script>
+<script type="text/template" id="temp-element-node">
+<div class="element-node">
+<<%= tagName %> <% _(attribs).each(function(attrib){ %>
+<%= attrib %> = "default" 
+<% }); %><% _(cons_attribs).each(function(val, key){ %>
+<%= key %>=<%= val %> <% }); %>>
+<% if(!isSingle) { %>
+Default <<%=tagName%>>
+<% } %>
+</div>
+</script>
+<script type="text/template" id="temp-element-pane">
+<form class="element-create-form">
+  <select name="tagName">
+    <% _(tags).each(function(tag){ %>
+    <option value="<%= tag.get('tagName') %>"><%= tag.get('tagName') %></option>
+    <% });%>
+  </select>
+  <input type="text" name="className" placeholder="Class Name...">
+  <% _(attribs).each(function(attrib){ %>
+  <input type="text" name="attribs-<%= attrib %>" placeholder="<%= attrib %>">
+  <% });%>
+  <textarea name="style" placeholder="Styling here..."></textarea>
+  <input type="submit" value="Done" class="btn">
+</form>
+</script>
+<script type="text/template" id="temp-node"><<%= element.tagName%> 
+class = "<%= element.class_name %>"
+<% _(element.attribs).each(function(val, key) { %>
+<%=key%>="<%=val%>"<% }); %>>
+<% _(element.content).each(function(val, key) { %>
+<%= val %>
+<% }); %>
+<% if(!element.isSingle) {%>
+</<%= element.tagName%>>
+<% } %></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/gallery-view.js"></script>
+<script type="text/javascript">
+var galleryView = new GalleryView();
+
+</script>
+{% endblock %}

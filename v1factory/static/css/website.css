@@ -34,6 +34,18 @@
 
 }
 
+@font-face {
+    font-family: 'verb_lightitalic';
+    src: url('../font/verb_lightitalic/VerbLight-Italic-webfont.eot');
+    src: url('../font/verb_lightitalic/VerbLight-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/verb_lightitalic/VerbLight-Italic-webfont.woff') format('woff'),
+         url('../font/verb_lightitalic/VerbLight-Italic-webfont.ttf') format('truetype'),
+         url('../font/verb_lightitalic/VerbLight-Italic-webfont.svg#verb_lightitalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 
 * {
   box-sizing:border-box;
@@ -70,10 +82,11 @@ a.pane:hover {
 
 h1.name {
   display: block;
-  font-family: 'verb_regularbold';
-  font-size: 30px;
+  font-family: 'verb_regularregular';
+  font-size: 24px;
   line-height: 30px;
   margin-bottom: 10px;
+  color: #8fd36f;
 }
 
 .pane {
@@ -203,4 +216,16 @@ input[type="submit"] {
 }
 .bold {
   font-weight: bold;
+}
+
+.modal {
+  opacity: 1.0;
+  background-color: #fff;
+  padding: 30px;
+}
+
+.element-node {
+  min-height: 200px;
+  padding: 20px;
+  text-align: center;
 }
