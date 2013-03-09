@@ -41,7 +41,7 @@
         <div class="span32 offset1 hoff6" style="color:#0f2d40;">
           <p class="motto"> Turn your idea into a working application at a, <strong>low cost</strong> and <strong>quick turnaround</strong>.</p>
           <h2 class="hoff2">Realize Your Ideas.</h2>
-          <div class="btn btn-green hoff1">Request a Beta Invite</div>
+          <div class="btn btn-green hoff1"><script type="in/Login"></script>Request a Beta Invite</div>
         </div>
         <div class="span26 hi18 hoff7 offset1 video-pane ">
           <div class="site-trackstudent"></div>
@@ -101,5 +101,22 @@
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript"></script>
+<script type="text/javascript">
+      IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
+      function onLinkedInLogin() {
+        IN.API.Profile("me")
+          .fields(["id", "firstName", "lastName", "publicProfileUrl", "emailAddress", "headline"])
+          .result(login_callback)
+          .error(function(err) {
+            alert(err);
+          });
+      }
+      function login_callback(result) {
+        var realresult = result.values[0];
+        $.post('/connect_with/', realresult, function(data){
+          alert("Thanks for expressing interest, "+realresult.firstName+", we will reach out to you soon.");
+        });
+      }
+
+</script>
 {% endblock %}

@@ -15,10 +15,10 @@ def format_full_details(details):
 
 def send_login_notification_message(message):
   return requests.post(
-      "https://api.mailgun.net/v2/heapengine.mailgun.org/messages",
+      "https://api.mailgun.net/v2/v1factory.mailgun.org/messages",
       auth=("api", "key-8iina6flmh4rtfyeh8kj5ai1maiddha8"),
       data={
-             "from": "Heap Engine Bot <postmaster@heapengine.mailgun.org>",
+             "from": "v1Factory Bot <postmaster@v1factory.mailgun.org>",
              "to": "founders@heapdocs.com",
              "subject": "Someone signed on!",
              "text": message,
