@@ -48,3 +48,7 @@ urlpatterns += patterns('v1factory.views',
 
     url(r'^uielement/new/$', 'new_uielement'),
 )
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+urlpatterns += staticfiles_urlpatterns()
