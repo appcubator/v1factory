@@ -1,7 +1,0 @@
-Django==1.4.3
-psycopg2==2.4.6
-dj-database-url==0.2.1
-python-openid==2.2.5
-oauth2==1.5.211
-requests==1.1.0
-django-allauth==0.9.0

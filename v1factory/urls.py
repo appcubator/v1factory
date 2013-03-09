@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 import django.contrib.auth.views
-import app_builder.urls
 import v1factory.base_views, v1factory.views
 import django.views.generic.base
 

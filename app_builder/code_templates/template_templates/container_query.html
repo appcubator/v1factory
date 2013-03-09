@@ -1,0 +1,9 @@
+<div style="position:absolute; top:{{ uie.top * 15 }}px; left:{{ uie.left * 15 }}px;">
+{{ '{%' }} for item in {{ uie.django_query.identifier() }} {{ '%}' }}
+  <div style="position:relative;" class="span{{uie.width}} hi{{uie.height}}">
+    {% for uie in uie.nodes %}
+    {% include "node.html" %}
+    {% endfor %}
+  </div>
+{{ "{% endfor %}" }}
+</div>

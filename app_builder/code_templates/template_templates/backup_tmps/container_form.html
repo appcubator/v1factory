@@ -1,0 +1,5 @@
+<form method="POST" action="{{ c.receiver.url }}">
+  {% for h in c.nodes %}
+  {% include "node.html" %}
+  {% endfor %}
+</form>

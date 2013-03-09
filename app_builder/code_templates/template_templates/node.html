@@ -1,0 +1,7 @@
+{% if uie.is_normal_tag() %}
+<{{ uie.tagname }} id="{{ uie.html_id }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
+  {{ uie.content() }}
+</{{ uie.tagname }}>
+{% else %}
+<{{ uie.tagname }} id="{{ uie.html_id }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
+{% endif %}

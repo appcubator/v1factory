@@ -1,1 +1,0 @@
-<h1>v1 Twitter</h1>{% for this_thing in q0 %}<div><%= text %></div><h3>{{ this_thing.content }}</h3>{% endfor %}<h3>New tweet</h3><form method="POST" action="{% url twitter.form_receivers.save_TweetForm3 %}">{% csrf_token %}<div></div><input name="content" type="text" placeholder=''/><input type="submit" value="submit" /></form>

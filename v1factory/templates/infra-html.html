@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title> Heap Engine | {{ title }}</title>
+<title> v1 Factory | {{ title }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -25,11 +25,10 @@
     {% block page %}
     {% endblock %}  
   </div>
-  <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/libs/underscore.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
   <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
   {% block js %}
   {% endblock %}

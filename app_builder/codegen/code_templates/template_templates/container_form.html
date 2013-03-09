@@ -1,6 +1,0 @@
-<form method="POST" action="{{ '{%' }} url {{ uie.form_receiver.view_path() }} {{ '%}' }}">
-  {{ "{% csrf_token %}" }}
-  {% for uie in uie.nodes %}
-  {% include "node.html" %}
-  {% endfor %}
-</form>

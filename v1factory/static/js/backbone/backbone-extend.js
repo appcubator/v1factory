@@ -84,8 +84,6 @@ Backbone.ModalView = Backbone.View.extend({
     _ensureElement: function(options) {
       Backbone.ModalView.__super__._ensureElement.call(this, options);
       this.modalWindow.appendChild(this.el);
-
-      console.log(this);
     },
 
     setupModal: function() {
@@ -117,7 +115,7 @@ Backbone.ModalView = Backbone.View.extend({
       div.style.position = 'fixed';
       div.className = 'modal';
       div.style.width = '500px';
-      div.style.height = '600px';
+      div.style.minHeight = '300px';
       div.style.top = '140px';
       div.style.left = '50%';
       div.style.marginLeft= '-250px';
