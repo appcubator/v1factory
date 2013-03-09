@@ -212,7 +212,7 @@ def app_editor(request, app_id, page_id):
                    'page_id': page_id,
                    'app_id': app_id }
   add_statics_to_context(page_context, app)
-  return render(request, 'editor-main.html', page_context)
+  return render(request, 'app-editor-main.html', page_context)
 
 @require_GET
 @login_required

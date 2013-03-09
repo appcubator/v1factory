@@ -135,9 +135,9 @@ background-repeat: no-repeat;
 
 .users {
   background-image: url('../img/home/users.png');
-  background-size: 24% auto;
+  background-size: 18% auto;
   background-repeat: no-repeat;
-  background-position: center 114px;
+  background-position: center 112px;
   animation: fadeIn 2.8s;
   -moz-animation: fadeIn 2.8s;
   -webkit-animation: fadeIn 2.8s;
@@ -233,10 +233,24 @@ background-color: #26656e;
 
 .green-2 {
   background-color: #137a7e;
-
 }
 
 .green-1 {
-    background-color:#009e8e;
+  background-color:#009e8e;
+}
 
+.video-pane { 
+  background-color: #16555e;
+  border-radius: 6px;
+  box-shadow: inset 0px 0px 10px 0px rgba(30,30,30,0.6);
+}
+
+.btn-green {
+  display: inline-block;
+  background-color: #8fd36f;
+  border-radius: 8px;
+  color:#fff;
+  font-size: 18px;
+  padding: 18px 24px;
+  font-family: 'verb_regularregular';
 }
