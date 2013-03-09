@@ -159,19 +159,18 @@ background-repeat: no-repeat;
   display: inline-block;
   position: relative;
   height: 100%;
-  width: 30px;
+  width: 160px;
   vertical-align: top;
-  float: left;
-  margin-left: -40px;
+  margin-left: 0px;
   margin-top: 8px;
 }
 
 .engine1 {
   position: absolute;
-  right: 16px;
+  right: 48px;
   top: 16px;
-  width: 27px;
-  height: 27px;
+  width: 81px;
+  height: 81px;
   background-image: url('../img/home/engine.png');
   background-repeat: no-repeat;
   background-position: center center;
@@ -181,9 +180,9 @@ background-repeat: no-repeat;
 .engine2 {
   position: absolute;
   right: 0px;
-  width: 30px;
-  height: 30px;
-  top:27px;
+  width: 90px;
+  height: 90px;
+  top:48px;
   background-image: url('../img/home/engine.png');
   background-repeat: no-repeat;
   background-position: center center;
@@ -191,10 +190,10 @@ background-repeat: no-repeat;
 }
 .engine3 {
   position: absolute;
-  right: 21px;
-  top: 36px;
-  width: 22px;
-  height: 22px;
+  right: 60px;
+  top: 82px;
+  width: 66px;
+  height: 66px;
   background-image: url('../img/home/engine.png');
   background-repeat: no-repeat;
   background-position: center center;
