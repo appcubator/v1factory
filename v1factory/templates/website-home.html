@@ -41,7 +41,7 @@
         <div class="span32 offset1 hoff8" style="color:#0f2d40;">
           <p class="motto">Start your online business quickly, <strong>without</strong> hiring a developer or coding.</p>
           <h2 class="hoff2">Realize Your Ideas.</h2>
-          <div class="btn-green">Sign Up Now</div>
+          <div class="btn-green"><script type="in/Login"></script></div>
         </div>
         <div class="span26 hi18 hoff7 offset1 video-pane ">
           Video about Twitter in 30 seconds.
@@ -101,5 +101,22 @@
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript"></script>
+<script type="text/javascript">
+      IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
+      function onLinkedInLogin() {
+        IN.API.Profile("me")
+          .fields(["id", "firstName", "lastName", "publicProfileUrl", "emailAddress", "headline"])
+          .result(login_callback)
+          .error(function(err) {
+            alert(err);
+          });
+      }
+      function login_callback(result) {
+        var realresult = result.values[0];
+        $.post('/connect_with/', realresult, function(data){
+          alert("Thanks for expressing interest, "+realresult.firstName+", we will reach out to you soon.");
+        });
+      }
+
+</script>
 {% endblock %}
