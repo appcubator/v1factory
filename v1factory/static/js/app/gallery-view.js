@@ -1,54 +1,28 @@
-var TagModel = Backbone.Model.extend({
-  initialize: function(bone) {
-    var key = _.keys(bone)[0];
-    console.log(key);
-    this.set('tagName', key);
-    this.set('attribs', bone[key].attribs);
-    this.set('cons_attribs', bone[key].cons_attribs);
-    this.set('className', 'unnamed');
-    this.set('style', '');
-    this.set('isSingle', bone[key].isSingle);
-  }
+var UIElementAttributesModel = Backbone.Model.extend({
+
 });
 
-var TagCollection = Backbone.Collection.extend({
-  model : TagModel
-});
 
 var UIElementModel = Backbone.Model.extend({
-  initialize: function(type) {
-    console.log(type);
-    var self = this;
-    var tagCollection = new TagCollection(settingsTags["button"]);
-    //this.set('type', type);
-    this.set('tags', tagCollection);
-    this.set('tag', type);
-    if(this.has('tag')) {
-      this.get('tag').bind('change', function(){self.trigger('change', self);});
-    };
+  initialize: function(bone) {
+    this.set('attribs', new UIElementAttributesModel(bone.attribs));
   },
-
   toJSON: function() {
-    var attribs = this.get('tag').attributes;
-    attribs.class_name = attribs.className;
-    delete attribs.className;
-    console.log(attribs);
-    attribs.attribs = _.extend(attribs.attribs||{}, attribs.cons_attribs);
-    delete attribs.cons_attribs;
-    return attribs;
+    json = this.attributes;
+    json.attribs = this.get('attribs').attributes;
+    return json;
   }
 });
 
 var UIElementCollection = Backbone.Collection.extend({
   model : UIElementModel,
   initialize: function (models, type) {
-    //console.log(models);
     this.type = type;
   }
 });
 
 
-var UIElementView = Backbone.ModalView.extend({
+var UIElementModalView = Backbone.ModalView.extend({
   tagName : 'div',
   className : 'element-view',
   events: {
@@ -59,8 +33,8 @@ var UIElementView = Backbone.ModalView.extend({
     _.bindAll(this, 'inputChanged', 'reRenderElement');
     this.model = uieModel;
 
-    this.model.get('tag').bind('change:style', this.reRenderElement);
-    this.model.get('tag').bind('change:value', this.reRenderElement);
+    this.model.bind('change:style', this.reRenderElement);
+    this.model.bind('change:value', this.reRenderElement);
 
     this.render();
   },
@@ -69,101 +43,126 @@ var UIElementView = Backbone.ModalView.extend({
     var div = document.createElement('div');
     div.className = "node-wrapper";
 
-    var elDiv = _.template(iui.getHTML('temp-element-node'), this.model.get('tag').attributes );
+    var elDiv = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
+                                                              attribs: this.model.get('attribs').attributes});
     div.innerHTML = elDiv;
     this.el.appendChild(div);
 
-    var form = _.template(iui.getHTML('temp-element-pane'),{ tags : this.model.get('tags').models,
-                                                         attribs: this.model.get('tag').get('attribs')});
+    var form = _.template(iui.getHTML('temp-element-pane'),{ tags : [] ,
+                                                         info: this.model.attributes,
+                                                         attribs: this.model.get('attribs').attributes});
+
     this.el.innerHTML += form;
 
     return this;
   },
 
   inputChanged: function(e) {
-    console.log(e.target.className);
     var props = e.target.className.split('-');
-    console.log(props);
 
     if(props.length == 1) {
-      console.log("HEYO");
-      this.model.get('tag').set(props[0], e.target.value);
+      this.model.set(props[0], e.target.value);
     }
 
     if(props.length == 2) {
-      this.model.get('tag').get(props[0]).set(props[1], e.target.value);
+      this.model.get(props[0]).set(props[1], e.target.value);
     }
   },
 
   reRenderElement: function() {
-    this.$el.find('.node-wrapper').html(_.template(iui.getHTML('temp-element-node'), this.model.get('tag').attributes ));
+    this.$el.find('.node-wrapper').html(_.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
+                                                              attribs: this.model.get('attribs').attributes}));
   }
 
 });
 
+var UIElementView = Backbone.View.extend({
+  el: null,
+  className: 'widgetWrapper',
+
+  events : {
+    'click' : 'openModal'
+  },
+
+  initialize: function(model) {
+    _.bindAll(this, 'render',
+                    'openModal');
+
+    this.model = model;
+    this.model.bind('change', this.render);
+    this.render();
+    this.delegateEvents();
+    if(model.isNew()) this.openModal();
+  },
+
+  render: function() {
+    this.el.innerHTML ='';
+    var div = document.createElement('div');
+    div.className = 'pane-inline offsetr1 border minhi hi6 span9 hoff1 elem-' + this.model.cid;
+
+    div.innerHTML = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
+                                                              attribs: this.model.get('attribs').attributes});
+
+    this.el.appendChild(div);
+    this.el.style.display = 'inline-block';
+    return this;
+  },
+
+  openModal: function () {
+    new UIElementModalView(this.model);
+  }
+});
+
 
 var UIElementListView = Backbone.View.extend({
+  className: 'list',
   events : {
     'click div.create-text'       : 'showForm',
     'submit .element-create-form' : 'submitForm'
   },
 
   initialize: function(UIElementColl, type) {
-    _.bindAll(this,'render', 'showForm', 'submitForm', 'appendUIE', 'collectionChanged','reRenderUIE');
+    _.bindAll(this,'render', 'showForm', 'submitForm', 'appendUIE');
 
     this.type = type;
     this.collection = UIElementColl;
     this.collection.bind('add', this.appendUIE);
-    this.collection.bind('change', this.collectionChanged);
     this.render();
   },
 
   render: function() {
     var self = this;
-    var div = document.createElement('div');
+    var div = document.createElement('span');
     div.className = 'elems';
     this.elems = div;
     this.el.appendChild(this.elems);
 
     _(this.collection.models).each(function(uieModel) {
-      console.log(uieModel);
+      uieModel.id = self.collection.length;
       self.appendUIE(uieModel);
     });
 
-    var html = iui.get('temp-create').innerHTML;
-    this.el.innerHTML += _.template(html, {});
+    var createBtn = document.createElement('span');
+    createBtn.innerHTML = _.template(iui.getHTML('temp-create'), {});
 
+    this.el.appendChild(createBtn);
     return this;
   },
 
+
   showForm: function(e) {
-    var newUIElement = new UIElementModel(this.type);
-    this.collection.add(newUIElement);
-    new UIElementView(newUIElement);
+    var newModel = new UIElementModel(baseTags[this.type][0]);
+    this.collection.push(newModel);
   },
 
   submitForm: function(e) {
-    alert("HEEEEY");
+    //alert("HEEEEY");
   },
 
   appendUIE: function(uieModel) {
-    var div = document.createElement('div');
-    div.className = 'pane-inline border minhi hi6 span9 hoff1 elem-' + uieModel.cid;
-    div.innerHTML = _.template(iui.getHTML('temp-element-node'), uieModel.get('tag').attributes);
-    //console.log(this.elems);
-    this.$el.find('.elems').append(div);
-    uieModel.bind('change', this.collectionChanged, this);
-  },
-
-  collectionChanged: function (uieModel) {
-    this.reRenderUIE(uieModel.cid);
-  },
-
-  reRenderUIE: function(cid) {
-    var model = this.collection.get(cid);
-    this.$el.find('.elem-' + cid).html(_.template(iui.getHTML('temp-element-node'), model.get('tag').attributes));
+    var newView = new UIElementView(uieModel);
+    this.elems.appendChild(newView.el);
   }
-
 });
 
 
@@ -175,8 +174,6 @@ var GalleryView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this,'save', 'render');
-
-    console.log(uieState);
 
     this.buttonCollection     = new UIElementCollection(uieState["button"], "button");
     this.imageCollection      = new UIElementCollection(uieState["image"], "image");
@@ -232,9 +229,6 @@ var GalleryView = Backbone.View.extend({
     json["dropdown"]   = this.dropdownCollection.toJSON()||{};
     json["box"]        = this.boxCollection.toJSON()||{};
 
-    console.log(json);
-
-
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/uiestate/',
@@ -245,106 +239,138 @@ var GalleryView = Backbone.View.extend({
   }
 });
 
-var settingsTags = {
+var baseTags = {
 
-  "button": {
-    'input': {
-      attribs: null,
-      cons_attribs: {
+  "button": [
+    {
+      tagName : 'input',
+      class_name : 'btn',
+      attribs: {
+        type : 'submit',
         class: 'btn',
-        type: 'submit'
+        value : "Button1"
       },
+      content : null,
       isSingle: true
     }
-  },
+  ],
 
-  "image" : {
-    'img' : {
-      attribs: ['src'],
-      isSingle: true
-    }
-  },
-
-  "header-text": {
-    'h1' : {
-      attribs : null,
-      isSingle: false
-    },
-    'h2' : {
-      attribs : null,
-      isSingle: false
-    },
-    'h3' : {
-      attribs : null,
-      isSingle: false
-    }
-  },
-
-  "text" : {
-    'span': {
-      attribs : null,
-      isSingle: false
-    }
-  },
-
-  "link" : {
-    'a' : {
-      attribs  : ['href'],
-      isSingle: false
-    }
-  },
-
-  "text-input" : {
-    'input' : {
-      attribs : null,
-      cons_attribs: {
-        'type' : 'text'
+  "image" : [
+    {
+      tagName : 'img',
+      attribs : {
+        'src' : '/static/img/placeholder.png'
       },
-      isSingle: true
+      content : null,
+      isSingle : true
     }
-  },
+  ],
 
-  "password" : {
-    'input' : {
-      cons_attribs : {
-        type  : 'password'
+  "header-text": [
+    {
+      tagName : 'h1',
+      attribs : null,
+      content : {
+        'text' : 'Default header!'
       },
-      attribs : null,
-      isSingle: true
-    }
-  },
-
-  "text-area" : {
-    'textarea' : {
-      attribs : null,
       isSingle: false
     }
-  },
+  ],
 
-  "line" : {
-    'div' : {
-      cons_attribs : {
+  "text" : [
+    {
+      tagName : 'span',
+      attribs : {
+        'style' : ''
+      },
+      content : {
+        'text' : 'Default text!'
+      },
+      isSingle: false
+    }
+  ],
+
+  "link" : [
+    {
+      tagName  : 'a',
+      attribs  : {
+        'href' : '{{homepage}}'
+      },
+      content: {
+        'text' : 'Default Link...'
+      },
+      isSingle: false
+    }
+  ],
+
+  "text-input" : [
+    {
+      tagName : 'input',
+      attribs : {
+        type  : 'text',
+        name  : 'wrong-name',
+        placeholder: 'Default placeholder...'
+      },
+      content : {},
+      isSingle: true
+    }
+  ],
+
+  "password" : [
+    {
+      tagName : 'input',
+      attribs : {
+        type  : 'password',
+        name  : 'wrong-name',
+        placeholder: 'Default placeholder...'
+      },
+      content : {},
+      isSingle: true
+    }
+  ],
+
+  "text-area" : [
+    {
+      tagName : 'textarea',
+      attribs : {
+      },
+      content  : {
+        'text' : 'Default Text Area...'
+      },
+      isSingle: false
+    }
+  ],
+
+  "line" : [
+    {
+      tagName : 'div',
+      attribs : {
         class : 'span12'
       },
-      attribs : null,
+      content : null,
       isSingle: false
     }
-  },
+  ],
 
-  "dropdown" : {
-    'select' : {
+  "dropdown" : [
+    {
+      tagName : 'select',
+      content: {
+        text : '<option>Option 1</option>'
+      },
       attribs : null,
       isSingle: true
     }
-  },
+  ],
 
-  "box" : {
-    'div': {
-      attribs : null,
-      cons_attribs : {
+  "box" : [
+    {
+      tagName : 'div',
+      content: null,
+      attribs : {
         style : 'background-color:#ccc;'
       },
       isSingle: false
     }
-  }
+  ]
 };

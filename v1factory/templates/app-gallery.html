@@ -79,12 +79,11 @@ var uieState = {{ app.uie_state_json|safe }};
 </script>
 <script type="text/template" id="temp-element-node">
 <div class="element-node">
-<<%= tagName %> <% _(attribs).each(function(attrib){ %>
-<%= attrib %> = "default" 
-<% }); %><% _(cons_attribs).each(function(val, key){ %>
-<%= key %>=<%= val %> <% }); %> style="<%= style %>">
-<% if(!isSingle) { %>
-Default <<%=tagName%>>
+<<%= info.tagName %> <% _(attribs).each(function(val, key){ %>
+<%= key %> = <%= val %>
+<% }); %> style="<%= info.style %>">
+<% if(!info.isSingle) { %>
+Default </<%=info.tagName%>>
 <% } %>
 </div>
 </script>

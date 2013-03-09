@@ -116,9 +116,10 @@ Backbone.ModalView = Backbone.View.extend({
       div.className = 'modal';
       div.style.width = '500px';
       div.style.minHeight = '300px';
-      div.style.top = '140px';
+      div.style.top = '50%';
       div.style.left = '50%';
       div.style.marginLeft= '-250px';
+      div.style.marginTop = '-250px';
       document.body.appendChild(div);
       return div;
     },
