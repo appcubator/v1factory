@@ -55,8 +55,8 @@
       <li class="hi12" id="dropdown">
         <h2>Dropdown</h2>
       </li>
-      <li class="hi12">
-        <h2>Box</h2><div id="box"></div>
+      <li class="hi12" id="box">
+        <h2>Box</h2>
       </li>
     </ul>
   </div>
@@ -82,7 +82,7 @@ var uieState = {{ app.uie_state_json|safe }};
 <<%= tagName %> <% _(attribs).each(function(attrib){ %>
 <%= attrib %> = "default" 
 <% }); %><% _(cons_attribs).each(function(val, key){ %>
-<%= key %>=<%= val %> <% }); %>>
+<%= key %>=<%= val %> <% }); %> style="<%= style %>">
 <% if(!isSingle) { %>
 Default <<%=tagName%>>
 <% } %>
@@ -99,7 +99,7 @@ Default <<%=tagName%>>
   <% _(attribs).each(function(attrib){ %>
   <input type="text" name="attribs-<%= attrib %>" placeholder="<%= attrib %>">
   <% });%>
-  <textarea name="style" placeholder="Styling here..."></textarea>
+  <textarea name="style" class="style" placeholder="Styling here..."></textarea>
   <input type="submit" value="Done" class="btn">
 </form>
 </script>

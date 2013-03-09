@@ -84,8 +84,6 @@ Backbone.ModalView = Backbone.View.extend({
     _ensureElement: function(options) {
       Backbone.ModalView.__super__._ensureElement.call(this, options);
       this.modalWindow.appendChild(this.el);
-
-      console.log(this);
     },
 
     setupModal: function() {

@@ -77,10 +77,10 @@ to {margin-top: 20px;}
   overflow: hidden;
 }
 .site-trackstudent {
-  position: absolute;
-  width: 460px;
-  height: 400px;
+  width: 230px;
+  height: 180px;
   margin-top: 20px;
+  margin-left: 80px;
 animation: myfirst 1s;
 -moz-animation: myfirst 1s; /* Firefox */
 -webkit-animation: myfirst 1s; /* Safari and Chrome */
@@ -93,11 +93,10 @@ background-repeat: no-repeat;
 
 .mobile-trackstudent {
   position: absolute;
-  top: 84px;
-  width: 160px;
-  float: right;
-  height: 400px;
-  margin-left: -40px;
+  top: 14px;
+  width: 50px;
+  height: 200px;
+  margin-left: 50px;
   margin-top: 20px;
 animation: myfirst 1s;
 -moz-animation: myfirst 1s; /* Firefox */
@@ -221,7 +220,7 @@ background-repeat: no-repeat;
 .motto {
   font-family: 'verb_lightitalic';
   font-size: 32px;
-  line-height: 36px;
+  line-height: 40px;
 }
 
 .light-green {
@@ -243,14 +242,50 @@ background-color: #26656e;
   background-color: #16555e;
   border-radius: 6px;
   box-shadow: inset 0px 0px 10px 0px rgba(30,30,30,0.6);
+  overflow: hidden;
+  position: relative;
+  text-align: center;
 }
 
 .btn-green {
   display: inline-block;
-  background-color: #8fd36f;
+  background-color: #7fc35f;
   border-radius: 8px;
   color:#fff;
   font-size: 18px;
-  padding: 18px 24px;
+  padding: 16px 24px;
   font-family: 'verb_regularregular';
+  background-image: none !important;
+  border: 1px solid #6fb34f;
+  text-shadow:none;
+}
+
+.btn-green:hover {
+  background-color: #5fb33f;
+  color: #fff;
+}
+
+.btn-blue {
+  display: inline-block;
+  background-color: #0f2d40;
+  border-radius: 8px;
+  color:#fff;
+  font-size: 14px;
+  padding: 14px 20px;
+  font-family: 'verb_regularregular'; 
+  background-image: none !important;
+  text-shadow: none;
+  line-height: 18px;
+}
+
+.btn-blue:hover {
+  background-color: #0f1d30;
+  color: #fff;
+}
+
+.btn img {
+  margin-left: 4px;
+}
+p {
+  margin-bottom: 4px;
 }
