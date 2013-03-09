@@ -166,7 +166,7 @@ class DjangoField:
 
   def render(self):
     from jinja2 import Environment, PackageLoader
-    env = Environment(loader=PackageLoader('app_builder.codegen', 'code_templates'))
+    env = Environment(loader=PackageLoader('app_builder', 'code_templates'))
     template = env.get_template('model_fields.py')
     return template.render(f = self)
 
@@ -238,7 +238,7 @@ class HTMLRenderer:
 
 class DjangoTemplate:
   from jinja2 import Environment, PackageLoader
-  env = Environment(loader=PackageLoader('app_builder.codegen', 'code_templates/template_templates'))
+  env = Environment(loader=PackageLoader('app_builder', 'code_templates/template_templates'))
 
   def __init__(self, page, analyzed_app):
     from analyzer import Container, Page
@@ -300,7 +300,7 @@ class DjangoApp:
 class DjangoAppWriter:
   """Write django apps. Nuff said"""
   from jinja2 import Environment, PackageLoader
-  env = Environment(loader=PackageLoader('app_builder.codegen', 'code_templates'))
+  env = Environment(loader=PackageLoader('app_builder', 'code_templates'))
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 

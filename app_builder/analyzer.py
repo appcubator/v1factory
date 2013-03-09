@@ -265,6 +265,9 @@ class AnalyzedApp:
       m = Model(base_user)
       self.models.add(m)
 
+    if app_state['users']['facebook']:
+      self.facebook_login = True
+
     # create models from app_state entities
     for ent in app_state['entities']:
       m = Model(ent)
