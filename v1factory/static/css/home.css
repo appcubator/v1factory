@@ -218,8 +218,9 @@ background-repeat: no-repeat;
 
 .motto {
   font-family: 'verb_lightitalic';
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 30px;
+  line-height: 42px;
+  width: 105%;
 }
 
 .light-green {
