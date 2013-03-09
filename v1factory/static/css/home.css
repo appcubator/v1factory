@@ -293,3 +293,7 @@ p {
 .IN-widget {
   display: none !important;
 }
+
+.card {
+  padding: 5px 15px;
+}
