@@ -289,3 +289,7 @@ background-color: #26656e;
 p {
   margin-bottom: 4px;
 }
+
+.IN-widget {
+  display: none !important;
+}

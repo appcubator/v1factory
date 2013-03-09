@@ -41,7 +41,8 @@
         <div class="span32 offset1 hoff6" style="color:#0f2d40;">
           <p class="motto"> Turn your idea into a working application at a, <strong>low cost</strong> and <strong>quick turnaround</strong>.</p>
           <h2 class="hoff2">Realize Your Ideas.</h2>
-          <div class="btn btn-green hoff1"><script type="in/Login"></script>Request a Beta Invite</div>
+          <div class="btn btn-green hoff1" id="request">Request a Beta Invite</div>
+          <script type="in/Login"></script>
         </div>
         <div class="span26 hi18 hoff7 offset1 video-pane ">
           <div class="site-trackstudent"></div>
@@ -102,21 +103,39 @@
 
 {% block js %}
 <script type="text/javascript">
-      IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
-      function onLinkedInLogin() {
-        IN.API.Profile("me")
-          .fields(["id", "firstName", "lastName", "publicProfileUrl", "emailAddress", "headline"])
-          .result(login_callback)
-          .error(function(err) {
-            alert(err);
-          });
-      }
-      function login_callback(result) {
-        var realresult = result.values[0];
-        $.post('/connect_with/', realresult, function(data){
-          alert("Thanks for expressing interest, "+realresult.firstName+", we will reach out to you soon.");
-        });
-      }
+var ThanksView = Backbone.ModalView.extend({
+  tagName: 'div',
+  className: 'thanks',
+  initialize: function(text) {
+    this.text = text.text;
+    this.render();
+  },
+  render : function() {
+    this.el.innerHTML = this.text;
+    return this;
+  }
+})
 
+IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
+
+  function onLinkedInLogin() {
+    IN.API.Profile("me")
+      .fields(["id", "firstName", "lastName", "publicProfileUrl", "emailAddress", "headline"])
+      .result(login_callback)
+      .error(function(err) {
+        alert(err);
+      });
+  }
+  function login_callback(result) {
+    var realresult = result.values[0];
+      $.post('/connect_with/', realresult, function(data){
+        new ThanksView({ text: "Thanks for expressing interest, "+realresult.firstName+", we will reach out to you soon."});
+      });
+  }
+
+$('.IN-widget').hide();
+$('#request').on('click', function() {
+  $('.IN-widget').children().first().children().first().trigger('click');
+})
 </script>
 {% endblock %}
