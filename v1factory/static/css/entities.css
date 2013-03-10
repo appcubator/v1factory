@@ -41,7 +41,6 @@ input[type="text"] {
 
 ul.entity-list {
   display: inline-block;
-  min-height: 80px;
 }
 
 select {
