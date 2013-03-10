@@ -255,13 +255,10 @@ class AnalyzedApp:
     self.routes = Manager(Route)
 
     # given user settings, create some models
-    base_user = { "name": "User",
-                  "fields": [{ "name": "email",
-                               "type": "email",
-                               "required": "True" }]}
+    base_user = { "name": "User" }
     if app_state['users']['local']:
       self.local_login = True
-      base_user.update(app_state['users']['fields'])
+      base_user['fields'] = app_state['users']['fields']
       m = Model(base_user)
       self.models.add(m)
 
@@ -326,8 +323,8 @@ class AnalyzedApp:
     for p in self.pages.each():
       for uie in p.uielements:
         if isinstance(uie, Form):
+          self.forms.add(uie)
           if isinstance(uie, CreateForm):
-            self.forms.add(uie)
             uie.resolve_entity(self)
 
   def init_queries(self):
