@@ -41,17 +41,23 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
             "_type": {},
             "_mapping": {
                          "name": { "_type" : "" },
+                         "design_props": {
+                                          "_type": [],
+                                          "_each": { "_type": {}, "_mapping": {
+                                                    "type": { "_type": "" },
+                                                    "value": { "_type": "" }
+                                                   }}
+                                         },
                          "uielements": {
                                         "_type": [],
                                         "_each": { "_type": {}, "_mapping": {
-                                                  "lib_id": { "_type": 0 },
                                                   "layout": {
                                                              "_type": {},
                                                              "_mapping": {
-                                                                          "width": { "_type": 0, "_min": 1, "_max": 32 },
+                                                                          "width": { "_type": 0, "_min": 1, "_max": 64 },
                                                                           "height": { "_type": 0, "_min": 1 },
-                                                                          "top": { "_type": 0 },
-                                                                          "left": { "_type": 0 }
+                                                                          "top": { "_type": 0, "_min": 0 },
+                                                                          "left": { "_type": 0, "_min": 0, "_max": 64 }
                                                                          }
                                                             },
                                                   "attribs": {
@@ -71,14 +77,13 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                                   "uielements": {
                                                                                                  "_type": [],
                                                                                                  "_each": { "_type": {}, "_mapping": {
-                                                                                                           "lib_id": { "_type": 0 },
                                                                                                            "layout": {
                                                                                                                       "_type": {},
                                                                                                                       "_mapping": {
-                                                                                                                                   "width": { "_type": 0, "_min": 1, "_max": 32 },
+                                                                                                                                   "width": { "_type": 0, "_min": 1, "_max": 64 },
                                                                                                                                    "height": { "_type": 0, "_min": 1 },
-                                                                                                                                   "top": { "_type": 0 },
-                                                                                                                                   "left": { "_type": 0 }
+                                                                                                                                   "top": { "_type": 0, "_min": 0 },
+                                                                                                                                   "left": { "_type": 0, "_min": 0, "_max": 64 }
                                                                                                                                   }
                                                                                                                      },
                                                                                                            "attribs": {
@@ -134,6 +139,9 @@ def validate(thing, schema):
   except Exception:
     raise Xception('schema structure doesn\'t begin with _type')
 
+  if type(thing) == type(u""):
+    thing = str(thing)
+
   try:
     assert(type(thing) == type(schema['_type']))
   except Exception:
@@ -154,7 +162,7 @@ def validate(thing, schema):
     for key in schema['_mapping']:
       try: assert(key in thing)
       except Exception:
-        errors.append('found a key in the schema which is not part of thing. "{}"'.format(key))
+        errors.append('found a key in the schema which is not part of thing. "{}", {}'.format(key, thing))
       else:
         errors.extend(validate(thing[key], schema['_mapping'][key]))
 
