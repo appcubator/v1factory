@@ -12,13 +12,14 @@ var PageView = Backbone.View.extend({
   },
 
   initialize: function(pageModel, ind, urlModel) {
-    _.bindAll(this, 'render', 'toggleExpand');
+    _.bindAll(this, 'render', 'renderMenu','renderUrl', 'toggleExpand');
     this.model = pageModel;
     this.ind = ind;
 
     this.url = urlModel;
     this.render();
     this.renderUrl();
+    this.renderMenu();
     //var designEditor = new DesignEditorView(this.model, false);
     //this.el.appendChild(designEditor.el);
   },
@@ -30,15 +31,26 @@ var PageView = Backbone.View.extend({
     page_context.page_name = this.model.get('name');
     page_context.ind = this.ind;
 
-    console.log(temp);
     var page = _.template(temp, page_context);
     this.el.innerHTML += page;
   },
 
   renderUrl: function() {
-    console.log(this);
     var newView =  new UrlView(this.url);
     this.el.appendChild(newView.el);
+  },
+
+  renderMenu: function() {
+    var temp = iui.getHTML('temp-menu');
+
+    var page_context = {};
+    page_context.page_name = this.model.get('name');
+    page_context.ind = this.ind;
+    var page = _.template(temp, page_context);
+    var span = document.createElement('span');
+    span.innerHTML = page;
+
+    this.el.appendChild(span);
   },
 
   toggleExpand: function() {
@@ -49,13 +61,16 @@ var PageView = Backbone.View.extend({
 
 
 var PagesView = Backbone.View.extend({
-  el: document.getElementById('list-pages'),
-  event: {
-
+  el: document.body,
+  events: {
+    'click .create-page' : 'createPage',
+    'submit .create-form' : 'createFormSubmitted'
   },
 
   initialize: function() {
     _.bindAll(this, 'render',
+                    'createPage',
+                    'createFormSubmitted',
                     'appendPage',
                     'savePages');
 
@@ -73,21 +88,38 @@ var PagesView = Backbone.View.extend({
   },
 
   render: function() {
+    this.listView = document.getElementById('list-pages');
+  },
 
+  createPage: function (e) {
+    this.$el.find('.create-page').hide();
+    this.$el.find('.create-form').fadeIn();
+    this.$el.find('.page-name').focus();
+  },
+
+  createFormSubmitted: function(e) {
+    e.preventDefault();
+    var name = this.$el.find('.page-name').val();
+    if(name.length > 0) {
+      this.$el.find('.page-name').val('');
+      this.$el.find('.create-form').hide();
+      this.$el.find('.create-page').fadeIn();
+      this.urlsCollection.add({ urlparts: [], page_name: name});
+      this.collection.add({ name: name});
+    }
   },
 
   appendPage: function(model) {
     var ind = _.indexOf(this.collection.models, model);
-    console.log(model);
-    console.log(model.get('name'));
     var urlModel = this.urlsCollection.findWhere({ page_name : model.get('name')});
-    console.log(urlModel);
     var pageView = new PageView(model, ind, urlModel);
-    this.el.appendChild(pageView.el);
+    this.listView.appendChild(pageView.el);
   },
 
   savePages: function(e) {
-    appState.pages = pagesView.collection.toJSON();
+    appState.pages = this.collection.toJSON();
+    appState.urls  = this.urlsCollection.toJSON();
+
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/state/',

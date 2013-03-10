@@ -380,3 +380,11 @@ input[type="submit"] {
 .uie-gallery li{
   padding-bottom: 20px;
 }
+
+.create-page {
+  cursor: pointer;
+}
+
+hr {
+  margin: 10px 0;
+}
