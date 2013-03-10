@@ -13,55 +13,73 @@
 {% endblock %}
 
 {% block topbar %}
-<div class="row">
-  <div class="offset2 toppanel hi6">
-  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
+  <div class="container">
+    <div class="toppanel span18 logo-text" style="">
+      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+    </div>
+    <div class="offset4 toppanel hi6 span30">
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
+        hey
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
 
 {% block page %}
+<div class="well" style="background-color:#26656e;">
   <div class="container">
-  <div class="row">
-    <div class="offset2 span38">
-      <a class="pane hi8 entities" href="{% url v1factory.views.entities app.id %}">
-        <img src="{{ STATIC_URL }}img/entities.png">
-        <div class="hoff1 offset1">
-        <h2>Models</h2>
+    <div class="span64">
+      <div class="hi8">
+        <div class="span32 hoff6" style="color:#0f2d40;">
+          bla bla
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row hoff1">
+    <div class="span11 offsetr1">
+      <ul class="left-menu">
+        <li class="selected">App 1</li>
+        <li>App 2</li>
+      </ul>
+    </div>
+    <div class="span36">
+      <a class="pane hi8" href="{% url v1factory.views.app_info app.id %}">
+        <img src="{{ STATIC_URL }}img/editor.png">
+        <div class="hoff2 offset1">
+        <h2>App Info</h2>
         </div>
       </a>
-      <a class="pane hi8 hoff2" href="{% url v1factory.views.app_urls app.id %}">
-        <img src="{{ STATIC_URL }}img/urls.png">
-        <div class="hoff1 offset1">
-        <h2>URLs</h2>
+      <a class="pane hi8 entities hoff2" href="{% url v1factory.views.entities app.id %}">
+        <img src="{{ STATIC_URL }}img/entities.png">
+        <div class="hoff2 offset1">
+        <h2>Models</h2>
         </div>
-      </a>  
+      </a> 
+      <a class="pane hi8 hoff2" href="{% url v1factory.views.app_gallery app.id %}">
+        <img src="{{ STATIC_URL }}img/design.png">
+        <div class="hoff2 offset1">
+        <h2>Gallery</h2>
+        </div>
+      </a>
       <a class="pane hi8 hoff2" href="{% url v1factory.views.app_pages app.id %}">
         <img src="{{ STATIC_URL }}img/editor.png">
-        <div class="hoff1 offset1">
+        <div class="hoff2 offset1">
         <h2>Pages</h2>
         </div>
       </a>
     </div>
-    <div class="offset1 span16">
-      <a class="pane hi18" href="{% url v1factory.views.app_info app.id %}">
-        <img src="{{ STATIC_URL }}img/editor.png">
-        <div class="hoff1 offset1">
-        <h2>App Info</h2>
-        </div>
-      </a>
-      <a class="pane hi8 hoff2" href="{% url v1factory.views.app_gallery app.id %}">
-        <img src="{{ STATIC_URL }}img/design.png">
-        <div class="hoff1 offset1">
-        <h2>Gallery</h2>
-        </div>
-      </a>
-      <a class="pane hi8 hoff2" href="">
-        <img src="{{ STATIC_URL }}img/editor.png">
-        <div class="hoff1 offset1">
-        <h2>Account Info</h2>
-        </div>
-      </a>
+    <div class="span11 offset1">
+      <ul class="">
+        <li>Last Deplayed in</li>
+        <li>Number of Users</li>
+        <li>Number of Visitors Today</li>
+      </ul>
     </div>
   </div>
 </div>

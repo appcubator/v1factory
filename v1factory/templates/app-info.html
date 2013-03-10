@@ -6,16 +6,68 @@
 {% endblock %}
 
 {% block topbar %}
-<div class="row">
-  <div class="offset2 toppanel hi3">
-  <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
+  <div class="container">
+    <div class="toppanel span18 logo-text" style="">
+      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+    </div>
+    <div class="offset4 toppanel hi6 span30">
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
+        hey
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
 
 {% block page %}
-<div class="container" id="entities-page">
+<!-- <div class="container" id="entities-page">
   <div class="offset10 btn span12 hi2 ltxt" id="deploy">Deploy</div>
+</div> -->
+<div class="well" style="background-color:#26656e;">
+  <div class="container">
+    <div class="span64">
+      <div class="hi8">
+        <div class="span32 hoff6" style="color:#0f2d40;">
+          bla bla
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row hoff1">
+    <div class="span11 offsetr1">
+    </div>
+    <div class="span36">
+      <div class="hoff1">
+        <h3 class="span10">App Name</h3>
+        <input type="text" class="span26" value="Yolo app">
+      </div>
+      <hr>
+      <div class="hoff2">
+        <h3 class="span10">Description</h3>
+        <textarea class="span26 hi6">
+        YOLO App description
+        </textarea>
+      </div>
+      <hr>
+      <div class="hoff2">
+        <h3 class="span10">Keywords</h3>
+        <textarea class="span26 hi6">
+        YOLO App description
+        </textarea>
+      </div>
+    </div>
+    <div class="span11 offset1">
+      <ul class="">
+        <li>Last Deplayed in</li>
+        <li>Number of Users</li>
+        <li>Number of Visitors Today</li>
+      </ul>
+    </div>
+  </div>
 </div>
 {% endblock %}
 

@@ -10,27 +10,94 @@
 {% endblock %}
 
 {% block topbar %}
-<div class="row">
-  <div class="offset2 toppanel span44 hi6">
-  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
-  </div>
-  <div class="span16 hoff2 right">
-    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save-entities">Save</a>
+<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
+  <div class="container">
+    <div class="toppanel span18 logo-text" style="">
+      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+    </div>
+    <div class="offset4 toppanel hi6 span30">
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
+        hey
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
 
 {% block page %}
-<div class="container" id="entities-page">
-  <div class="row top-buttons offset1 span60 tb-border">
+<div class="well" style="background-color:#26656e;">
+  <div class="container">
+    <div class="span64">
+      <div class="hi9">
+        <div class="hoff5" style="color:#0f2d40;">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="row offset1">
-    <div class="span60 hoff1">
-      <div class="pane hi16" id="user-entity">
-        <h2 class="offset1 hoff2">User</h2>
-        <div class="offset1 span12">
-          <ul class="property-l">
+</div>
+
+<div class="container" id="entities-page">
+  <div class="row hoff1">
+    <ul class="span6 hoff1 sub-menu">
+      <li>Upload Excel</li>
+      <li>Delete</li>
+    </ul>
+    <div class="span58">
+      <div class="pane hi12" id="user-entity">
+        <div class="span10 hoff2 offset1">
+          <h2 class="">User</h2>
+          <div class="hoff1">
+            <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
+            <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
+            <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
+          </div>
+        </div>
+        <span class="tbl hi8 hoff2 offset1">
+          <div class="column span6">
+            <div class="hi3 hdr">Property</div>
+            <div class="hi3">Type</div>
+            <div class="hi3">Is Required?</div>
+          </div>
+          <div class="column span6">
+            <div class="hi3 hdr">Name</div>
+            <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+            </div>
+            <div class="hi3"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
+          </div>
+          <div class="column span6">
+            <div class="hi3 hdr">Last Name</div>
+            <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+            </div>
+            <div class="hi3"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
+          </div>
+          <div class="column span6">
+            <div class="hi3 hdr">Email</div>
+            <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+            </div>
+            <div class="hi3"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
+          </div>
+          <a class="add-property-button column span6">
+            <span class="plus">+</span> Add Property
+          </a>
+        </span>
+
+<!--         <div class="offset2 span12">
+          <ul class="property-list">
+          </ul>
+          <form class="add-property-form span10 hoff1" style="display:none"><input type="text" class="property-name-input"></form>
+        </div>
+        <div class="span12 offset1"> -->
+<!-- <ul class="property-l">
             <li>
               <span class="hi2 span6" id="">Name</span>
               <select class="attribs" id="Name" disabled>
@@ -49,18 +116,9 @@
                 <option value="text" selected="">Text</option>      
               </select>
             </li>
-          </ul>
-        </div>
-        <div class="offset2 span12">
-          <ul class="property-list">
-          </ul>
-          <a class="add-property-button span14 hoff1"><span class="plus">+</span> Add Property</a>
-          <form class="add-property-form span10 hoff1" style="display:none"><input type="text" class="property-name-input"></form>
-        </div>
-        <div class="span12 offset1">
-          <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
-          <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
-          <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
+          </ul> -->
+
+
         </div>
       </div>
     </div>
@@ -174,8 +232,8 @@
 
 {% block js %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/models.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/entity-editor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/entities-view.js"></script>
 <script type="text/javascript">
 var rightEditor   = new EntitiesEditorView();
 var entityList    = new EntityListView();

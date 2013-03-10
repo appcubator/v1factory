@@ -313,14 +313,14 @@ var GalleryView = Backbone.View.extend({
       var entity = this.entitiesCollection.get(id.split('-')[0]);
       var field = id.split('-')[1];
 
-      widget = uiLibrary['text'][0];
+      widget = uieState['text'][0];
       widget.content = {
         text : '{{'+entity.get('name')+'_'+field+'}}'
       };
     }
     else {
       var type = className.replace(' ui-draggable','');
-      widget = uiLibrary[type][0];
+      widget = uieState[type][0];
       widget.type = type;
     }
 

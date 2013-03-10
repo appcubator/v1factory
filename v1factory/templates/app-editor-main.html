@@ -58,6 +58,7 @@ var statics = {{ statics|safe }};
 var myUIElements = {{ myuielements|safe }};
 var library = {{ elements|safe }};
 var pageId = {{ page_id }};
+var uieState = {{ app.uie_state_json|safe }};
 </script>
 {% include "app-editor-templates.html" %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.js"></script>
@@ -69,7 +70,6 @@ var pageId = {{ page_id }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/tag-dict.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/list.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/idea-elements.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/constant-containers.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>

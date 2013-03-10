@@ -220,6 +220,7 @@ var GalleryView = Backbone.View.extend({
     var json = {};
     json["button"]     = this.buttonCollection.toJSON()||{};
     json["image"]      = this.imageCollection.toJSON()||{};
+    json["header-text"]= this.headerTextCollection.toJSON()||{};
     json["text"]       = this.imageCollection.toJSON()||{};
     json["link"]       = this.linkCollection.toJSON()||{};
     json["text-input"] = this.textInputCollection.toJSON()||{};

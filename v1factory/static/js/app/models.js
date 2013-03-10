@@ -82,7 +82,7 @@ var WidgetModel = Backbone.Model.extend({
         this.get('container_info').uielements = [];
         _(constantContainers[this.get('container_info').action]).each(function(element){
           var permAttribs = element.permAttribs;
-          element = uiLibrary[element.type][0];
+          element = uieState[element.type][0];
           element.attribs = _.extend(element.attribs, permAttribs);
           self.get('container_info').uielements.push(element);
         });
@@ -173,7 +173,7 @@ var WidgetModel = Backbone.Model.extend({
                                     {x: self.get('layout').get('width') + 1,
                                      y: 1 + ((ind+1) * 4)});
         var type = "text";
-        var widgetProps = uiLibrary['text'][0];
+        var widgetProps = uieState['text'][0];
         widgetProps.type = 'text';
         widgetProps.layout = {
             top   : coordinates.topLeft.y,
@@ -202,7 +202,7 @@ var WidgetModel = Backbone.Model.extend({
                                     {x: self.get('layout').get('width') + 1,
                                      y: 1 + ((ind+1) * 2)});
         var type = "text-input";
-        var widgetProps = uiLibrary[type][0];
+        var widgetProps = uieState[type][0];
         widgetProps.type = type;
         widgetProps.layout = {
             top   : coordinates.topLeft.y,
@@ -223,7 +223,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 1 + ((ind+1) * 2)});
       var type = "button";
-      var widgetProps = uiLibrary[type][0];
+      var widgetProps = uieState[type][0];
       widgetProps.type = type;
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
@@ -246,7 +246,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 1 });
       var type = "button";
-      var widgetProps = uiLibrary[type][0];
+      var widgetProps = uieState[type][0];
       widgetProps.type = type;
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
@@ -268,7 +268,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 1 });
       var type = "text-input";
-      var widgetProps = uiLibrary[type][0];
+      var widgetProps = uieState[type][0];
       widgetProps.type = type;
       widgetProps.attribs.placeholder = "Username...";
       widgetProps.layout = {
@@ -286,7 +286,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 5 });
       var type = "password";
-      var widgetProps = uiLibrary['password'][0];
+      var widgetProps = uieState['password'][0];
       widgetProps.type = type;
       widgetProps.attribs.placeholder = "Password...";
       widgetProps.layout = {
@@ -309,7 +309,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 1 });
       var type = "text-input";
-      var widgetProps = uiLibrary[type][0];
+      var widgetProps = uieState[type][0];
       widgetProps.type = type;
       widgetProps.attribs.placeholder = "Username...";
       widgetProps.layout = {
@@ -327,7 +327,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 5 });
       var type = "password";
-      var widgetProps = uiLibrary['password'][0];
+      var widgetProps = uieState['password'][0];
       widgetProps.type = type;
       widgetProps.attribs.placeholder = "Password...";
       widgetProps.layout = {
@@ -346,7 +346,7 @@ var WidgetModel = Backbone.Model.extend({
                                   {x: self.get('layout').get('width') + 1,
                                    y: 9 });
       var type = "button";
-      var widgetProps = uiLibrary[type][0];
+      var widgetProps = uieState[type][0];
       widgetProps.type = type;
       widgetProps.attribs.value = "Sign Up";
       widgetProps.layout = {
