@@ -5,15 +5,15 @@ Backbone.UIView = Backbone.View.extend({
 
     $(self.el).resizable({
       handles: "n, e, s, w, se",
-      grid: 15,
       containment: $('#elements-container'),
-      resize: self.resized
+      resize: self.resizing,
+      stop  : self.resized
     });
 
     $(self.el).draggable({
-      grid: [ 15,15 ],
       containment: $('#elements-container'),
-      drag: self.moved
+      drag: self.moving,
+      stop: self.moved
     });
 
     this.setPosition("absolute");
@@ -24,7 +24,8 @@ Backbone.UIView = Backbone.View.extend({
     $(this.el).resizable({
       handles: "n, e, s, w, se",
       grid: 30,
-      resize: self.resized
+      resize: self.resizing,
+      stop: self.resized
     });
   },
 
