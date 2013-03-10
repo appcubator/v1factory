@@ -23,14 +23,14 @@ var EntityView = Backbone.View.extend({
   tagName    : 'li',
   collection : null,
   parentName : "",
-  className  : 'offset1 span14 entity',
+  className  : 'span64 entity',
 
   events : {
     'click .add-property-button' : 'clickedAdd',
     'submit .add-property-form'  : 'formSubmitted',
     'change .attribs'            : 'changedAttribs',
     'click #cross'               : 'clickedDelete',
-    'click #prop-cross'          : 'clickedPropDelete'
+    'click .prop-cross'          : 'clickedPropDelete'
   },
 
 
@@ -129,11 +129,12 @@ var EntityView = Backbone.View.extend({
 
 var UserEntityView = EntityView.extend({
   el : document.getElementById('user-entity'),
-  
+
   events: {
     'change .cb-login' : 'checkedBox',
     'click .add-property-button' : 'clickedAdd',
-    'submit .add-property-form'  : 'formSubmitted'
+    'submit .add-property-form'  : 'formSubmitted',
+    'click .prop-cross'          : 'clickedPropDelete'
   },
 
   initialize: function(item) {
@@ -161,6 +162,8 @@ var UserEntityView = EntityView.extend({
   render: function() {
     var self = this;
     _(this.model.get('fields')).each(function(field, ind){
+
+      if(field.name == 'Name' || field.name == 'Last Name' || field.name =='Email') return;
 
       var page_context = {};
       page_context.name = field.name;
@@ -281,6 +284,7 @@ var EntitiesEditorView = Backbone.View.extend({
     appState.entities = entityList.collection.toJSON();
     appState.users = entityList.userModel.toJSON();
 
+    console.log(appState);
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/state/',

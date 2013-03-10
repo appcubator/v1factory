@@ -8,57 +8,98 @@
 {% endblock %}
 
 {% block topbar %}
-<div class="row">
-  <div class="offset2 toppanel span44 hi6">
-  <h1 class="name hoff2"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
-  </div>
-  <div class="span16 hoff2 right">
-    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save">Save</a>
+<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
+  <div class="container">
+    <div class="toppanel span18 logo-text" style="">
+      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+    </div>
+    <div class="offset4 toppanel hi6 span30">
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
+        hey
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
+    <a class="btn">Go back</a><a class="btn">Cancel</a><a class="btn" id="save">Save</a>
 
 {% block page %}
-<div class="container">
-  <div class="row top-buttons offset1 span60 tb-border">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+<div class="well" style="background-color:#26656e;">
+  <div class="container hoff5">
+    <div class="span58">
+      <div class="hi4">
+        <div class="" style="color:#0f2d40;">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </div>
+      </div>
+    </div>
+    <div class="span6">
+      <a class="btn span6" id="save">Save</a>
+      <a class="btn span6 btn-reset">Reset</a>
+    </div>
   </div>
-  <div class="row span60 offset1"  >
-    <ul class="hoff2">
-      <li class="hi12" id="button">
-        <h2>Button</h2>
-      </li>
-      <li class="hi12" id="image">
-        <h2>Image</h2>
-      </li>
-      <li class="hi12" id="header-text">
-        <h2>Header</h2>
-      </li>
-      <li class="hi12" id="text">
-        <h2>Text</h2>
-      </li>
-      <li class="hi12" id="link">
-        <h2>Link</h2>
-      </li>
-      <li class="hi12" id="text-input">
-        <h2>Input</h2>
-      </li>
-      <li class="hi12" id="password">
-        <h2>Password Field</h2>
-      </li>
-      <li class="hi12" id="text-area">
-        <h2>Text Area</h2>
-      </li>
-      <li class="hi12" id="line">
-        <h2>Line</h2>
-      </li>
-      <li class="hi12" id="dropdown">
-        <h2>Dropdown</h2>
-      </li>
-      <li class="hi12" id="box">
-        <h2>Box</h2>
-      </li>
-    </ul>
+</div>
+
+<div class="container">
+  <div class="row hoff1">
+    <span class="span48">
+      <ul class="hoff2 uie-gallery">
+        <li class="" id="button">
+          <h3>Button</h3>
+        </li>
+        <li class="hi10" id="image">
+          <h3>Image</h3>
+        </li>
+        <li class="hi10" id="header-text">
+          <h3>Header</h3>
+        </li>
+        <li class="hi10" id="text">
+          <h3>Text</h3>
+        </li>
+        <li class="hi10" id="link">
+          <h3>Link</h3>
+        </li>
+        <li class="hi10" id="text-input">
+          <h3>Input</h3>
+        </li>
+        <li class="hi10" id="password">
+          <h3>Password Field</h3>
+        </li>
+        <li class="hi10" id="text-area">
+          <h3>Text Area</h3>
+        </li>
+        <li class="hi10" id="line">
+          <h3>Line</h3>
+        </li>
+        <li class="hi10" id="dropdown">
+          <h3>Dropdown</h3>
+        </li>
+        <li class="hi10" id="box">
+          <h3>Box</h3>
+        </li>
+      </ul>
+    </span>
+    <span class="span16">
+      <ul class="theme-gallery">
+        <h3>Theme Gallery</h3>
+        <li>
+          <img src="{{ STATIC_URL }}img/theme1.png">
+          <span class="theme">Theme 1</span>
+        </li>
+        <li>
+          <img src="{{ STATIC_URL }}img/theme2.png">
+          <span class="theme">Theme 2</span>
+        </li>
+        <li>
+          <img src="{{ STATIC_URL }}img/theme3.png">
+          <span class="theme">Theme 3</span>
+        </li>
+        <li>
+          <img src="{{ STATIC_URL }}img/theme4.png">
+          <span class="theme">Theme 4</span>
+        </li>
+      </ul>
+    </span>
   </div>
 </div>
 {% endblock %}
