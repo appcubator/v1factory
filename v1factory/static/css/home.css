@@ -72,10 +72,15 @@ to {margin-top: 20px;}
 from {margin-top: 160px;}
 to {margin-top: 20px;}
 }
+
 .well {
   position: relative;
   overflow: hidden;
+  border-radius: 0 !important;
+  border:none;
+  box-shadow: inset 0 0 12px 0 rgba(60, 60, 60, 0.6);
 }
+
 .site-trackstudent {
   width: 230px;
   height: 180px;
