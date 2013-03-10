@@ -49,7 +49,9 @@ var WidgetView = Backbone.UIView.extend({
                     'changedText',
                     'changedType',
                     'changedSource',
+                    'moving',
                     'moved',
+                    'resizing',
                     'resized');
 
     this.model = widgetModel;
@@ -171,19 +173,32 @@ var WidgetView = Backbone.UIView.extend({
     this.resizableAndDraggable();
   },
 
-  resized: function(e, ui) {
-    console.log("RESIIIIZED!");
+  resizing: function(e, ui) {
     var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
     var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
     this.model.get('layout').set('width', deltaWidth);
     this.model.get('layout').set('height', deltaHeight);
   },
 
-  moved: function(e, ui) {
+  resized: function (argument) {
+    // this.clear();
+    // this.el.innerHTML = this.renderElement();
+    // this.model.select();
+    // this.resizableAndDraggable();
+  },
+
+  moving: function(e, ui) {
     var top = Math.round((ui.position.top / GRID_HEIGHT));
     var left = Math.round((ui.position.left / GRID_HEIGHT));
     this.model.get('layout').set('top', top);
     this.model.get('layout').set('left', left);
+  },
+
+  moved: function () {
+    //this.clear();
+    //this.el.innerHTML = this.renderElement();
+    //this.model.select();
+    //this.resizableAndDraggable();
   },
 
   switchOnEditMode: function(e) {

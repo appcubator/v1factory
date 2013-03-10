@@ -8,11 +8,11 @@ var PageView = Backbone.View.extend({
   className: 'page-view span64 hoff2 pane',
   expanded: false,
   events: {
-    'click' : 'toggleExpand'
+    'click .delete' : 'deletePage'
   },
 
   initialize: function(pageModel, ind, urlModel) {
-    _.bindAll(this, 'render', 'renderMenu','renderUrl', 'toggleExpand');
+    _.bindAll(this, 'render', 'renderMenu','renderUrl', 'deletePage');
     this.model = pageModel;
     this.ind = ind;
 
@@ -53,9 +53,9 @@ var PageView = Backbone.View.extend({
     this.el.appendChild(span);
   },
 
-  toggleExpand: function() {
-    //this.expanded?$(this.el).removeClass('expanded'):this.el.className+=' expanded';
-    //this.expanded = this.expanded? false:true;
+  deletePage: function() {
+    this.model.collection.remove(this.model);
+    this.remove();
   }
 });
 

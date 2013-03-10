@@ -1,14 +1,18 @@
 var UIElementAttributesModel = Backbone.Model.extend({
-
 });
 
+var UIElementStyleModel = Backbone.Model.extend({
+});
 
 var UIElementModel = Backbone.Model.extend({
   initialize: function(bone) {
     this.set('attribs', new UIElementAttributesModel(bone.attribs));
+    this.set('style', new UIElementStyleModel(bone.style));
   },
   toJSON: function() {
+    console.log(this);
     json = this.attributes;
+    console.log(this.get('attribs'));
     json.attribs = this.get('attribs').attributes;
     return json;
   }
@@ -160,6 +164,7 @@ var UIElementListView = Backbone.View.extend({
   },
 
   appendUIE: function(uieModel) {
+    console.log(uieModel);
     var newView = new UIElementView(uieModel);
     this.elems.appendChild(newView.el);
   }
@@ -221,7 +226,7 @@ var GalleryView = Backbone.View.extend({
     json["button"]     = this.buttonCollection.toJSON()||{};
     json["image"]      = this.imageCollection.toJSON()||{};
     json["header-text"]= this.headerTextCollection.toJSON()||{};
-    json["text"]       = this.imageCollection.toJSON()||{};
+    json["text"]       = this.textCollection.toJSON()||{};
     json["link"]       = this.linkCollection.toJSON()||{};
     json["text-input"] = this.textInputCollection.toJSON()||{};
     json["password"]   = this.passwordCollection.toJSON()||{};
@@ -229,6 +234,8 @@ var GalleryView = Backbone.View.extend({
     json["line"]       = this.lineCollection.toJSON()||{};
     json["dropdown"]   = this.dropdownCollection.toJSON()||{};
     json["box"]        = this.boxCollection.toJSON()||{};
+
+    console.log(json);
 
     $.ajax({
       type: "POST",
@@ -259,10 +266,10 @@ var baseTags = {
   "image" : [
     {
       tagName : 'img',
-      attribs : {
-        'src' : '/static/img/placeholder.png'
-      },
       content : null,
+      attribs : {
+        src : '/static/img/placeholder.png'
+      },
       isSingle : true
     }
   ],
