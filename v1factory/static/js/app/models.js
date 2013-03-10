@@ -407,3 +407,11 @@ var PageModel = Backbone.Model.extend({
     "uielements" : []
   }
 });
+
+var UrlModel = Backbone.Model.extend({
+  defaults : {
+    urlparts : [],
+    page_name : "defaults"
+  }
+});
+

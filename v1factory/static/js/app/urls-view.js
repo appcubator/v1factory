@@ -1,18 +1,7 @@
-var UrlModel = Backbone.Model.extend({
-  defaults : {
-    urlparts : [],
-    page_name : "defaults"
-  }
-});
-
-var UrlsCollection = Backbone.Collection.extend({
-  model: UrlModel
-});
-
 var UrlView = Backbone.View.extend({
   el: null,
   tagName: 'div',
-  className: 'row span60 offset1 hoff1',
+  className: 'row offset1',
   events: {
     'change .url-part'      : 'urlPartChanged',
     'change .page'          : 'pageChanged',
@@ -32,6 +21,9 @@ var UrlView = Backbone.View.extend({
                     'newPageSubmitted',
                     'lastEntityChanged',
                     'lastTextChanged');
+
+    console.log(item);
+
     this.model = item;
     if(!this.model.get('urlparts')) {
       this.model.set('urlparts', []);

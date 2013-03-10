@@ -44,3 +44,8 @@ var WidgetCollection = Backbone.Collection.extend({
     this.selectedEl = null;
   }
 });
+
+var UrlsCollection = Backbone.Collection.extend({
+  model: UrlModel
+});
+
