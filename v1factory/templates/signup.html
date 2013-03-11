@@ -1,11 +1,61 @@
-<body>
-  <form method="POST" action="{% url v1factory.base_views.signup %}">
-    <input name="username" type="text" />
-    <input name="password1" type="password" />
-    <input name="password2" type="password" />
-    <input name="email" type="text" />
-    <input name="first_name" type="text" />
-    <input name="last_name" type="text" />
-  </form>
+{% extends "infra-html.html" %}
 
-</body>
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
+<!--     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+ -->
+{% endblock %}
+{% block topbar %}
+{% endblock %}
+{% block page %}
+<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.6; top:0; left:0; z-index:1; width:100%;">
+  <div class="container">
+    <div class="offset1 toppanel  span12 logo-text" style="">
+      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> {{ title }}</h1>
+    </div>
+    <div class="offset10 toppanel hi6 span30">
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
+        <span class="span6 pad1"><strong style="line-height:14px;">User Login</strong><br><i class="micro"> (forgot password?)</i></span>
+        <span class="login span21 offset1">
+        {% if user.is_authenticated %}
+          <a href="{% url v1factory.views.app_list %}">Logged In</a>
+        {% else %}
+          {% include "registration/login.html" %}
+        {% endif %}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="well" style="background-color:#26656e;">
+  <div class="container">
+    <div class="span64">
+      <div class="hi9 offset1">
+        <h1 class="hoff5">Sign Up Form</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row meta">
+    <form method="POST" class="span16 offset12" action="{% url v1factory.base_views.signup %}">
+      <h4>Username</h4>
+      <input class="span16" name="username" type="text"><br>
+      <h4>First Name</h4>
+      <input class="span16" name="first_name" type="text"><br>
+      <h4>Last Name</h4>
+      <input class="span16" name="last_name" type="text"><br>
+      <h4>Email Address</h4>
+      <input class="span16" name="email" type="text"><br>
+      <h4>Password</h4>
+      <input class="span16" name="password1" type="password"><br>
+      <h4>Confirm Password</h4>
+      <input class="span16" name="password2" type="password"><br>
+      <input class="span16 hoff2 btn btn-blue" type="submit" value="Join the Private Beta">
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

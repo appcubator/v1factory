@@ -252,45 +252,6 @@ background-color: #26656e;
   text-align: center;
 }
 
-.btn-green {
-  display: inline-block;
-  background-color: #7fc35f;
-  border-radius: 8px;
-  color:#fff;
-  font-size: 18px;
-  padding: 16px 24px;
-  font-family: 'verb_regularregular';
-  background-image: none !important;
-  border: 1px solid #6fb34f;
-  text-shadow:none;
-}
-
-.btn-green:hover {
-  background-color: #5fb33f;
-  color: #fff;
-}
-
-.btn-blue {
-  display: inline-block;
-  background-color: #0f2d40;
-  border-radius: 8px;
-  color:#fff;
-  font-size: 14px;
-  padding: 14px 20px;
-  font-family: 'verb_regularregular'; 
-  background-image: none !important;
-  text-shadow: none;
-  line-height: 18px;
-}
-
-.btn-blue:hover {
-  background-color: #0f1d30;
-  color: #fff;
-}
-
-.btn img {
-  margin-left: 4px;
-}
 p {
   margin-bottom: 4px;
 }

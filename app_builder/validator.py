@@ -65,8 +65,7 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                               "_mapping":{}
                                                              },
                                                   "content": {
-                                                              "_type": {},
-                                                              "_mapping":{}
+                                                              "_type": ""
                                                              },
                                                   "container_info": {
                                                                      "_null": True,
@@ -91,8 +90,7 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                                                                       "_mapping":{}
                                                                                                                      },
                                                                                                            "content": {
-                                                                                                                      "_type": {},
-                                                                                                                      "_mapping":{}
+                                                                                                                      "_type": ""
                                                                                                                      },
                                                                                                            }}
                                                                                                  },
