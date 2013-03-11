@@ -169,7 +169,33 @@ class App(models.Model):
     return summary
 
   def deploy(self):
-    return "do the funky chicken"
+    from app_builder.analyzer import AnalyzedApp
+    from v1factory.models import App
+    a = AnalyzedApp(self.state)
+    from app_builder.django.coordinator import analyzed_app_to_app_components
+    dw = analyzed_app_to_app_components(a)
+    from app_builder.django.writer import DjangoAppWriter
+    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+
+    import sys, os
+    import subprocess
+    import shlex
+    if "DJANGO_SETTINGS_MODULE" in os.environ: del os.environ["DJANGO_SETTINGS_MODULE"]
+    commands = []
+    commands.append('python manage.py syncdb --noinput')
+    commands.append(r"""osascript -e 'tell application "Terminal" to do script "cd {}; python manage.py runserver 127.0.0.1:8009"'""".format(tmp_project_dir))
+    commands.append(r"_sleep")
+    commands.append(r"open http://localhost:8009/")
+
+    for c in commands:
+      if c == "_sleep":
+        import time
+        time.sleep(1)
+        continue
+      print "Running `{}`".format(c)
+      subprocess.call(shlex.split(c), cwd=tmp_project_dir, stdout=sys.stdout, stderr=sys.stderr)
+
+    return ""
     import sys, os
     import traceback
     import subprocess
