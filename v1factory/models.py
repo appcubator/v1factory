@@ -17,7 +17,7 @@ starter_app = """{
     "pages":[
       {
         "name":"registration",
-        "design_props" : null,
+        "design_props" : {},
         "uielements": [
           {
             "lib_id":4,
