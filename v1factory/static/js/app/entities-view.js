@@ -110,7 +110,7 @@ var EntityView = Backbone.View.extend({
   },
 
   clickedDelete: function(e) {
-    this.parentCollection.remove(this.model);
+    this.parentCollection.remove(this.model.cid);
   },
 
   modelRemoved: function(model) {

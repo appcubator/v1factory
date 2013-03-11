@@ -76,7 +76,7 @@ var WidgetModel = Backbone.Model.extend({
 
     _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
 
-    if(this.get('container_info')&&this.get('container_info').uielements === undefined) {
+    if(this.get('container_info')&&this.get('container_info').action&&this.get('container_info').uielements === undefined) {
 
       if(constantContainers[this.get('container_info').action]) {
         this.get('container_info').uielements = [];
@@ -104,7 +104,8 @@ var WidgetModel = Backbone.Model.extend({
 
   toJSON : function() {
     var json = _.clone(this.attributes);
-    json.content_attribs = this.get('content_attribs').toJSON();
+    json.content_attribs = this.get('content_attribs').toJSON()|| {};
+    json.content = this.get('content')||'';
     json.layout  = this.get('layout').toJSON();
 
     if(this.get('container_info')) {
@@ -310,7 +311,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "text-input";
       var widgetProps = uieState[type][0];
       widgetProps.type = type;
-      widgetProps.attribs.placeholder = "Username...";
+      widgetProps.content_attribs.placeholder = "Username...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
           left  : coordinates.topLeft.x,
@@ -328,7 +329,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "password";
       var widgetProps = uieState['password'][0];
       widgetProps.type = type;
-      widgetProps.attribs.placeholder = "Password...";
+      widgetProps.content_attribs.placeholder = "Password...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
           left  : coordinates.topLeft.x,
@@ -336,8 +337,9 @@ var WidgetModel = Backbone.Model.extend({
           height: 4
       };
 
-      widgetProps.attribs.value = 'Add ' + self.get('container_info').entity;
+      //widgetProps.content_attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
+      console.log(widget);
       self.get('container_info').uielements.push(widget);
 
       var coordinates = iui.unite({x: 1,
@@ -347,7 +349,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "button";
       var widgetProps = uieState[type][0];
       widgetProps.type = type;
-      widgetProps.attribs.value = "Sign Up";
+      widgetProps.content_attribs.value = "Sign Up";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
           left  : coordinates.topLeft.x,

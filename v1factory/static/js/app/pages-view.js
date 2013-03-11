@@ -8,11 +8,17 @@ var PageView = Backbone.View.extend({
   className: 'page-view span64 hoff2 pane',
   expanded: false,
   events: {
-    'click .delete' : 'deletePage'
+    'click .delete' : 'deletePage',
+    'change #access_level' : 'accessLevelChanged'
   },
 
   initialize: function(pageModel, ind, urlModel) {
-    _.bindAll(this, 'render', 'renderMenu','renderUrl', 'deletePage');
+    _.bindAll(this, 'render',
+                    'renderMenu',
+                    'renderUrl',
+                    'accessLevelChanged',
+                    'deletePage');
+
     this.model = pageModel;
     this.ind = ind;
 
@@ -44,13 +50,19 @@ var PageView = Backbone.View.extend({
     var temp = iui.getHTML('temp-menu');
 
     var page_context = {};
+    page_context = this.model.attributes;
     page_context.page_name = this.model.get('name');
     page_context.ind = this.ind;
+
     var page = _.template(temp, page_context);
     var span = document.createElement('span');
     span.innerHTML = page;
 
     this.el.appendChild(span);
+  },
+
+  accessLevelChanged: function (e) {
+    this.model.set('access_level', e.target.value);
   },
 
   deletePage: function() {

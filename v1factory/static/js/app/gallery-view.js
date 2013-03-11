@@ -11,6 +11,7 @@ var UIElementModel = Backbone.Model.extend({
   },
   toJSON: function() {
     json = this.attributes;
+    if(json.content == null) json.content = '';
     //json.attribs = this.get('attribs').attributes;
     return json;
   }

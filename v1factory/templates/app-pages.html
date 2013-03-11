@@ -110,6 +110,15 @@ var appId = {{ app_id|safe }};
 
 
 <script type="text/html" id="temp-menu">
+
+<hr class="span60 offset1">
+<h3 class="hi3 span12 hoff1 offset1">Access Level</h3>
+<div>
+  <select class="span8 hoff1" id="access_level">
+    <option <% if(access_level == 'all') { %> selected <% } %> value="all">Everyone</option>
+    <option <% if(access_level == 'users') { %> selected <% } %> value="users">Only Users</option>
+  </select>
+</div>
 <hr class="span60 offset1">
 <div class="offset1 span12 hi3">
   <a class="btn edit" href="editor/<%= ind %>">Start Editing</a>
