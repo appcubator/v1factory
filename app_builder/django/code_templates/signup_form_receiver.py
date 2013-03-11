@@ -10,7 +10,7 @@ class MyUserCreationForm(UserCreationForm):
   email = forms.EmailField(required=True)
 
   def save(self, commit=True):
-    user = UserCreationForm.save(commit=False)
+    user = super(MyUserCreationForm, self).save(commit=False)
     name = self.cleaned_data.get('name')
     email = self.cleaned_data.get('email')
 

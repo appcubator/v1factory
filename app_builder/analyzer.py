@@ -199,7 +199,17 @@ class SignupForm(Form):
     self.name = "Form{}".format(id(uie))
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
+    self.verify_required_fields_exist()
     self.page = page
+
+  def verify_required_fields_exist(self):
+    field_names = [ n.attribs['name'] for n in self.nodes if 'name' in n.attribs ]
+    required_signup_fields = ['name', 'email', 'username', 'password1', 'password2']
+    for rf in required_signup_fields:
+      try:
+        assert(rf in field_names)
+      except AssertionError:
+        raise Exception("\"{}\" missing as a field in the signup form.".format(rf))
 
 class EditForm(Form):
   """Edit a model instance form."""
