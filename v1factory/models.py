@@ -144,6 +144,11 @@ class App(models.Model):
       simplejson.loads(self._uie_state_json)
     except simplejson.JSONDecodeError, e:
       raise ValidationError(e.msg)
+    from app_builder.validator import validate_app_state
+    state_errs = validate_app_state(self.state)
+    if len(state_errs) > 0:
+      raise ValidationError("\n\n".join(state_errs))
+
 
   def summary_user_settings(self):
     """Human-readable summary of the user settings"""
