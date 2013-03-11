@@ -42,8 +42,11 @@ class DjangoFormReceiver(object):
     return "webapp.form_receivers."+self.identifier()
 
   def render(self):
+    from jinja2 import Environment, PackageLoader
+    env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
     if self.model is not None:
-      template = DjangoAppWriter.env.get_template('form_receiver.py')
+      template = env.get_template('form_receiver.py')
       return template.render(form_receiver=self, model=self.model)
     else:
-      return "\"\"\"SIGNUP FORM\"\"\""
+      template = env.get_template('signup_form_receiver.py')
+      return template.render(form_receiver=self)
