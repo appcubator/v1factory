@@ -1,3 +1,5 @@
+from form_receiver import DjangoFormReceiver
+
 class DjangoUrl(object):
 
   def __init__(self, page=None, view=None, analyzed_app=None):
@@ -21,14 +23,14 @@ class DjangoUrl(object):
       if isinstance(s, str) or isinstance(s, unicode):
         return s
       else:
-        from analyzer import Model
+        from app_builder.analyzer import Model
         assert(isinstance(s, Model))
         return id_regex
 
     return '^' + ''.join(map(lambda x : repl_model_with_id_regex(x) + r'/', url_parts)) + '$'
 
   def url_repr(self):
-    from analyzer import Form
+    from app_builder.analyzer import Form
     if isinstance(self.view, DjangoFormReceiver):
       return repr("^{}/$".format(self.view.identifier()))
     return repr(self.url_parts_to_regex())

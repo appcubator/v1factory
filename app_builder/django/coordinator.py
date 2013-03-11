@@ -2,11 +2,6 @@
 
 import re
 from app_builder.manager import Manager
-import os
-import os.path
-import shutil
-import tempfile
-from os.path import join
 
 from model import DjangoModel
 from view import DjangoView
@@ -14,6 +9,8 @@ from query import DjangoQuery
 from template import DjangoTemplate
 from url import DjangoUrl
 from form_receiver import DjangoFormReceiver
+
+from app import DjangoApp
 
 def analyzed_app_to_app_components(analyzed_app):
   models = Manager(DjangoModel)
@@ -47,7 +44,10 @@ def analyzed_app_to_app_components(analyzed_app):
   for f in analyzed_app.forms.each():
     from app_builder.analyzer import SignupForm
     if isinstance(f, SignupForm):
-      pass
+      rec = DjangoFormReceiver.create_signup(f, analyzed_app)
+      form_receivers.add(rec)
+      u = DjangoUrl.create_post(rec, analyzed_app)
+      urls.add(u)
     else:
       rec = DjangoFormReceiver.create(f, analyzed_app)
       rec.find_model(models)
@@ -55,6 +55,5 @@ def analyzed_app_to_app_components(analyzed_app):
       u = DjangoUrl.create_post(rec, analyzed_app)
       urls.add(u)
 
-  from app import DjangoApp
   dw = DjangoApp(models, views, urls, templates, form_receivers)
   return dw
