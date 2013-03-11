@@ -18,6 +18,18 @@ class DjangoFormReceiver(object):
 
     return self
 
+  @classmethod
+  def create_signup(cls, form, analyzed_app):
+    name = form.name
+    included_fields = ['username', 'password', 'email']
+    self = cls(name=name, included_fields=included_fields, model=None)
+
+    self.form = form
+    self.form.form_receiver = self
+    self.page = form.page
+
+    return self
+
   def find_model(self, models):
     self.model = models.get_by_name(self.model.name)
     for i, f in enumerate(self.included_fields):
@@ -29,3 +41,9 @@ class DjangoFormReceiver(object):
   def view_path(self):
     return "webapp.form_receivers."+self.identifier()
 
+  def render(self):
+    if self.model is not None:
+      template = DjangoAppWriter.env.get_template('form_receiver.py')
+      return template.render(form_receiver=self, model=self.model)
+    else:
+      return "\"\"\"SIGNUP FORM\"\"\""

@@ -1,3 +1,9 @@
+import os
+import os.path
+import shutil
+import tempfile
+from os.path import join
+
 class DjangoAppWriter:
   """Write django apps. Nuff said"""
   from jinja2 import Environment, PackageLoader

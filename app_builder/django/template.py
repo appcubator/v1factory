@@ -1,6 +1,6 @@
 class DjangoTemplate(object):
   from jinja2 import Environment, PackageLoader
-  env = Environment(loader=PackageLoader('app_builder', 'code_templates/template_templates'))
+  env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates'))
 
   def __init__(self, name=None, filename=None, page=None):
     self.name = name
