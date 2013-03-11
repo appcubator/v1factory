@@ -1,5 +1,41 @@
-<html>
-  <body>
+{% extends "infra-html.html" %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <style type="text/css" id="custom-style">
+
+    </style>
+{% endblock %}
+
+{% block topbar %}
+<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
+  <div class="container">
+    <div class="toppanel span18 logo-text" style="">
+      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+    </div>
+    <div class="offset4 toppanel hi6 span30">
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
+        hey
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page %}
+<div class="well" style="background-color:#26656e;">
+  <div class="container">
+    <div class="span64">
+      <div class="hi8">
+        <div class="span32 hoff6" style="color:#0f2d40;">
+          bla bla
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
     <p>Welcome {{ user }}.</p>
     <p>To get started with you new Heap Engine app, we need to know how far along you already are.</p>
     <p>Do you need a domain name?</p>
@@ -7,11 +43,12 @@
     <p>Cool! Now let's build your idea and make you millions.</p>
     <form method="post" action="{% url v1factory.views.app_new %}">
       {% csrf_token %}
-      <button type='submit'>Make it!</button>
+      <button type='submit' class="btn">Make it!</button>
     </form>
     <br>
     <br>
     <br>
     <a href="{% url v1factory.views.app_list %}">I changed my mind. Back to my apps.</a>
-  </body>
-</html>
+</div>
+{% endblock %}
+

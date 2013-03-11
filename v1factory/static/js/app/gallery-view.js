@@ -14,6 +14,8 @@ var UIElementModel = Backbone.Model.extend({
     json = this.attributes;
     console.log(this.get('attribs'));
     json.attribs = this.get('attribs').attributes;
+    json.style = this.get('style').attributes;
+
     return json;
   }
 });
