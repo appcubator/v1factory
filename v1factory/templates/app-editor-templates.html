@@ -6,16 +6,15 @@
 </script>
 
 
-<script type="text/template" id="temp-node"><<%= element.tagName%> 
+<script type="text/template" id="temp-node">
+<<%= element.tagName %> <% if(element.tagType) { %>type =" <%= element.tagType %> " <% }; %>
 class = "<%= element.class_name %>"
-<% _(element.attribs).each(function(val, key) { %>
-<%=key%>="<%=val%>"<% }); %>>
-<% _(element.content).each(function(val, key) { %>
-<%= val %>
-<% }); %>
-<% if(!element.isSingle) {%>
-</<%= element.tagName%>>
-<% } %></script>
+<% _(element.content_attribs).each(function(val, key) { %>
+<%=key%> = "<%=val%>"<% }); %> style="<%= element.style %>" >
+<% if(!element.isSingle) { %>
+<%= element.content %>
+<<%= element.tagName %>>
+<% }; %></script>
 
 
 <script type="text/html" id="temp-href-select">

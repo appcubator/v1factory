@@ -80,19 +80,34 @@ var WidgetInfoView = Backbone.View.extend({
     this.model.bind("change", this.changedProp, this);
     this.model.bind("remove", this.clear, this);
     this.model.get('layout').bind("change", this.changedLayout, this);
-    this.model.get('content').bind("change", this.changedContent, this);
+    this.model.get('content_attribs').bind("change", this.changedContent, this);
     this.showUIElem(this.model);
 
   },
 
   showUIElem: function(widgetModel) {
     var self = this;
+    var elemPicker = document.createElement('select');
+    elemPicker.id = 'prop-class_name';
+    elemPicker.innerHTML = '';
+    _(uieState[widgetModel.get('type')]).each(function(uie){
+
+      selected = (uie.class_name == widgetModel.get('class_name'))? 'selected' : '';
+
+      elemPicker.innerHTML += '<option '+ selected +'>' + uie.class_name + '</option>';
+    });
+    self.list.appendChild(elemPicker);
+
     _(widgetModel.attributes).each(function(val, key){
       if(key == 'id' || key == 'selected'
                      || key == 'lib_id'
                      || key == 'container_info'
                      || key == 'isSingle'
-                     || key == 'tagName') return;
+                     || key == 'tagName'
+                     || key == 'tagType'
+                     || key == 'type'
+                     || key == 'Style'
+                     || key == 'class_name') return;
 
         console.log(key);
       console.log(self);
@@ -135,8 +150,6 @@ var WidgetInfoView = Backbone.View.extend({
     var self = this;
     var li = document.createElement('li');
     li.className = 'model';
-
-    console.log("YOLOOOO");
 
     var span = document.createElement('span');
     span.innerText = lang[collectionName]||collectionName;

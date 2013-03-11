@@ -6,13 +6,12 @@ var UIElementStyleModel = Backbone.Model.extend({
 
 var UIElementModel = Backbone.Model.extend({
   initialize: function(bone) {
-    this.set('attribs', new UIElementAttributesModel(bone.attribs));
+    this.set('style', bone.style||'');
+    this.set('class_name', bone.class_name||'');
   },
   toJSON: function() {
-    console.log(this);
     json = this.attributes;
-    console.log(this.get('attribs'));
-    json.attribs = this.get('attribs').attributes;
+    //json.attribs = this.get('attribs').attributes;
     return json;
   }
 });
@@ -46,14 +45,11 @@ var UIElementModalView = Backbone.ModalView.extend({
     var div = document.createElement('div');
     div.className = "node-wrapper";
 
-    var elDiv = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
-                                                              attribs: this.model.get('attribs').attributes});
+    var elDiv = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes});
     div.innerHTML = elDiv;
     this.el.appendChild(div);
 
-    var form = _.template(iui.getHTML('temp-element-pane'),{ tags : [] ,
-                                                         info: this.model.attributes,
-                                                         attribs: this.model.get('attribs').attributes});
+    var form = _.template(iui.getHTML('temp-element-pane'),{info: this.model.attributes});
 
     this.el.innerHTML += form;
 
@@ -73,8 +69,7 @@ var UIElementModalView = Backbone.ModalView.extend({
   },
 
   reRenderElement: function() {
-    this.$el.find('.node-wrapper').html(_.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
-                                                              attribs: this.model.get('attribs').attributes}));
+    this.$el.find('.node-wrapper').html(_.template(iui.getHTML('temp-element-node'), {info: this.model.attributes}));
   }
 
 });
@@ -105,8 +100,7 @@ var UIElementView = Backbone.View.extend({
     var div = document.createElement('div');
     div.className = 'pane-inline offsetr1 border minhi hi6 span9 hoff1 elem-' + this.model.cid;
 
-    div.innerHTML = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
-                                                              attribs: this.model.get('attribs').attributes});
+    div.innerHTML = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes});
     div.innerHTML += '<span class="remove">×</span>';
     this.el.appendChild(div);
     this.el.style.display = 'inline-block';
@@ -244,8 +238,6 @@ var GalleryView = Backbone.View.extend({
     json["dropdown"]   = this.dropdownCollection.toJSON()||{};
     json["box"]        = this.boxCollection.toJSON()||{};
 
-    console.log(json);
-
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/uiestate/',
@@ -261,10 +253,8 @@ var baseTags = {
   "button": [
     {
       tagName : 'input',
-      class_name : 'btn',
-      attribs: {
-        type : 'submit',
-        class: 'btn',
+      tagType : 'submit',
+      content_attribs: {
         value : "Button1"
       },
       content : null,
@@ -275,10 +265,11 @@ var baseTags = {
   "image" : [
     {
       tagName : 'img',
-      content : null,
-      attribs : {
+      tagType: null,
+      content_attribs : {
         src : '/static/img/placeholder.png'
       },
+      content: null,
       isSingle : true
     }
   ],
@@ -286,10 +277,9 @@ var baseTags = {
   "header-text": [
     {
       tagName : 'h1',
-      attribs : null,
-      content : {
-        'text' : 'Default header!'
-      },
+      tagType: null,
+      content_attribs: null,
+      content : 'Default header!',
       isSingle: false
     }
   ],
@@ -297,12 +287,9 @@ var baseTags = {
   "text" : [
     {
       tagName : 'span',
-      attribs : {
-        'style' : ''
-      },
-      content : {
-        'text' : 'Default text!'
-      },
+      tagType: null,
+      content_attribs: null,
+      content : 'Default text!',
       isSingle: false
     }
   ],
@@ -310,12 +297,11 @@ var baseTags = {
   "link" : [
     {
       tagName  : 'a',
-      attribs  : {
+      tagType : null,
+      content_attribs  : {
         'href' : '{{homepage}}'
       },
-      content: {
-        'text' : 'Default Link...'
-      },
+      content: 'Default Link...',
       isSingle: false
     }
   ],
@@ -323,12 +309,11 @@ var baseTags = {
   "text-input" : [
     {
       tagName : 'input',
-      attribs : {
-        type  : 'text',
-        name  : 'wrong-name',
+      tagType : 'text',
+      content_attribs : {
         placeholder: 'Default placeholder...'
       },
-      content : {},
+      content : null,
       isSingle: true
     }
   ],
@@ -336,56 +321,54 @@ var baseTags = {
   "password" : [
     {
       tagName : 'input',
-      attribs : {
-        type  : 'password',
-        name  : 'wrong-name',
+      tagType  : 'password',
+      content_attribs : {
         placeholder: 'Default placeholder...'
       },
-      content : {},
+      content : null,
       isSingle: true
     }
   ],
 
   "text-area" : [
     {
-      tagName : 'textarea',
-      attribs : {
-      },
-      content  : {
-        'text' : 'Default Text Area...'
-      },
-      isSingle: false
+      tagName  : 'textarea',
+      tagType : null,
+      content_attribs: null,
+      content  : 'Default Text Area...',
+      isSingle : false
     }
   ],
 
   "line" : [
     {
-      tagName : 'div',
-      attribs : {
+      tagName : 'hr',
+      tagType : null,
+      cons_attribs : {
         class : 'span12'
       },
       content : null,
-      isSingle: false
+      isSingle: true
     }
   ],
 
   "dropdown" : [
     {
       tagName : 'select',
-      content: {
-        text : '<option>Option 1</option>'
-      },
+      tagType : null,
+      content: '<option>Option 1</option>',
       attribs : null,
-      isSingle: true
+      isSingle: false
     }
   ],
 
   "box" : [
     {
       tagName : 'div',
+      tagType : null,
       content: null,
-      attribs : {
-        style : 'background-color:#ccc;'
+      cons_attribs : {
+        style : 'border:1px solud #333;'
       },
       isSingle: false
     }

@@ -70,9 +70,9 @@ var WidgetModel = Backbone.Model.extend({
   initialize: function(bone) {
     var self = this;
 
-    this.set('content', new ContentModel(this.get('content')));
+    this.set('content_attribs', new ContentModel(this.get('content_attribs')));
     this.set('layout', new LayoutModel(this.get('layout')));
-    this.set('attribs', new AttribsModel(this.get('attribs')));
+    //this.set('attribs', new AttribsModel(this.get('attribs')));
 
     _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
 
@@ -104,8 +104,7 @@ var WidgetModel = Backbone.Model.extend({
 
   toJSON : function() {
     var json = _.clone(this.attributes);
-    json.attribs = this.get('attribs').toJSON();
-    json.content = this.get('content').toJSON();
+    json.content_attribs = this.get('content_attribs').toJSON();
     json.layout  = this.get('layout').toJSON();
 
     if(this.get('container_info')) {

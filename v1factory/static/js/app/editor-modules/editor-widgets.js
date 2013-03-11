@@ -59,12 +59,15 @@ var WidgetView = Backbone.UIView.extend({
                     'resized',
                     'keyHandler');
 
+    console.log(widgetModel);
+
     this.model = widgetModel;
 
     this.render();
 
     this.model.bind("change:selected", this.outlineSelected, this);
     this.model.bind("change:type", this.changedType, this);
+    this.model.bind("change:class_name", this.changedType, this);
     this.model.bind("remove", this.remove, this);
 
     this.model.get('layout').bind("change:width", this.changedWidth, this);
@@ -73,8 +76,8 @@ var WidgetView = Backbone.UIView.extend({
     this.model.get('layout').bind("change:left", this.changedLeft, this);
     this.model.get('layout').bind("change:isFull", this.toggleFull, this);
 
-    this.model.get('content').bind("change:text", this.changedText, this);
-    this.model.get('attribs').bind("change:src", this.changedSource, this);
+    this.model.bind("change:content", this.changedText, this);
+    this.model.get('content_attribs').bind("change:src", this.changedSource, this);
 
     window.addEventListener('keydown', this.keyHandler);
   },
@@ -104,11 +107,8 @@ var WidgetView = Backbone.UIView.extend({
 
   renderElement: function() {
     var temp = document.getElementById('temp-node').innerHTML;
-
     var node_context = _.clone(this.model.attributes);
-    node_context.attribs = this.model.get('attribs').attributes;
-    node_context.content = this.model.get('content').attributes;
-
+    node_context.content_attribs = this.model.get('content_attribs').attributes;
     var el = _.template(temp, { element: node_context});
     return el;
   },
@@ -178,10 +178,9 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   changedType: function(a) {
-    this.clear();
-    this.el.innerHTML = this.renderElement();
-    this.model.select();
-    this.resizableAndDraggable();
+    var newBone = _.findWhere(uieState[this.model.get('type')], {class_name : this.model.get('class_name')});
+    this.model.set('style', newBone.style);
+    this.render();
   },
 
   changedSource: function(a) {
