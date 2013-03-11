@@ -27,11 +27,14 @@ var WidgetView = Backbone.UIView.extend({
   widgetsContainer :null,
   selected : false,
   editable : false,
+  editMode : false,
+  shadowElem : null,
 
   events: {
     'mousedown' : 'select',
     'click .delete' : 'remove',
-    'dblclick' : 'switchOnEditMode'
+    'dblclick' : 'switchOnEditMode',
+    'keyDown'  : 'keyHandler'
   },
 
   initialize: function(widgetModel){
@@ -49,10 +52,12 @@ var WidgetView = Backbone.UIView.extend({
                     'changedText',
                     'changedType',
                     'changedSource',
+                    'toggleFull',
                     'moving',
                     'moved',
                     'resizing',
-                    'resized');
+                    'resized',
+                    'keyHandler');
 
     this.model = widgetModel;
 
@@ -66,17 +71,19 @@ var WidgetView = Backbone.UIView.extend({
     this.model.get('layout').bind("change:height", this.changedHeight, this);
     this.model.get('layout').bind("change:top", this.changedTop, this);
     this.model.get('layout').bind("change:left", this.changedLeft, this);
+    this.model.get('layout').bind("change:isFull", this.toggleFull, this);
 
     this.model.get('content').bind("change:text", this.changedText, this);
     this.model.get('attribs').bind("change:src", this.changedSource, this);
+
+    window.addEventListener('keydown', this.keyHandler);
   },
 
   render: function() {
-
-    this.model.select();
     this.clear();
+    this.model.select();
 
-    iui.assert(this.model.get('lib_id'));
+    //iui.assert(this.model.get('lib_id'));
 
     var width = this.model.get('layout').get('width');
     var height = this.model.get('layout').get('height');
@@ -85,9 +92,10 @@ var WidgetView = Backbone.UIView.extend({
     this.setTop(GRID_HEIGHT * (this.model.get('layout').get('top')));
     this.setLeft(GRID_HEIGHT * (this.model.get('layout').get('left')));
     this.setHeight(height * GRID_HEIGHT);
-
     this.el.className += " span" + width;
     this.el.innerHTML = this.renderElement();
+
+    if(this.model.isFullWidth()) this.switchOnFullWidth();
 
     this.resizableAndDraggable();
 
@@ -122,21 +130,32 @@ var WidgetView = Backbone.UIView.extend({
 
   changedWidth: function(a) {
     this.el.className = 'selected widget-wrapper ';
+    this.el.className += 'span' + this.model.get('layout').get('width');
+    this.setLeft(GRID_HEIGHT * (this.model.get('layout').get('left')));
 
-    if(this.model.get('layout').get('width') == '100%') {
-      $('#full-container').append(this.el);
-      this.disableResizeAndDraggable();
-      this.setLeft(0);
-      this.el.style.width = '100%';
+  },
+
+  toggleFull: function (argument) {
+    if(this.model.get('layout').get('isFull') === true) {
+      this.switchOnFullWidth();
     }
     else {
-      $('#widgets-container').append(this.el);
-      this.setWidth('');
-      this.el.style.width = '';
-      this.el.className += 'span' + this.model.get('layout').get('width');
-      this.setLeft(GRID_HEIGHT * (this.model.get('layout').get('left')));
-      this.resizableAndDraggable();
+      this.switchOffFullWidth();
     }
+  },
+
+  switchOnFullWidth: function() {
+    $('#full-container').append(this.el);
+    this.disableResizeAndDraggable();
+    this.el.className = 'selected widget-wrapper spanFull';
+    this.setLeft(0);
+    this.fullWidth = true;
+  },
+
+  switchOffFullWidth: function() {
+    this.fullWidth = false;
+    $('#elements-container').append(this.el);
+    this.render();
   },
 
   changedHeight: function(a) {
@@ -195,21 +214,29 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   moved: function () {
-    //this.clear();
-    //this.el.innerHTML = this.renderElement();
-    //this.model.select();
-    //this.resizableAndDraggable();
+    // console.log(this);
+    // this.render();
+    // this.model.select();
+    // this.resizableAndDraggable();
   },
 
   switchOnEditMode: function(e) {
+    console.log(this);
+    this.editMode = true;
 
-    elem = this.el.firstChild.cloneNode(true);
+    var editedElem = this.el.firstChild;
+    var top = $(editedElem).offset().top;
+    var left = $(editedElem).offset().left;
+    this.editedElem = editedElem;
+
+    elem = editedElem.cloneNode(true);
     elem.setAttribute('contenteditable', true);
-    elem.style.position = 'fixed';
-    elem.style.top = '300px';
-    elem.style.left = '200px';
+    elem.style.position = 'absolute';
+    elem.style.top = top;
+    elem.style.left = left;
+    this.shadowElem = elem;
 
-    console.log(elem);
+    $(editedElem).hide();
 
     document.body.appendChild(elem);
     elem.focus();
@@ -219,11 +246,24 @@ var WidgetView = Backbone.UIView.extend({
     var sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
-    console.log('tryn');
   },
 
   switchOffEditMode: function() {
+    console.log(this);
+    this.model.get('content').set('text', this.shadowElem.innerText);
+    $(this.shadowElem).remove();
+    $(this.editedElem).fadeIn();
+  },
 
+  keyHandler: function (e) {
+    if(this.editMode === false) return;
+
+    switch(e.keyCode) {
+      case 13: //enter
+        this.switchOffEditMode();
+        return false;
+        break;
+    }
   }
 });
 
@@ -280,7 +320,7 @@ var WidgetContainerView = WidgetView.extend({
 
 var WidgetEditorView = Backbone.View.extend({
   el : $('.page'),
-  widgetsContainer : document.getElementById('widgets-container'),
+  widgetsContainer : document.getElementById('elements-container'),
   widgets : [],
   selectedEl: null,
 
@@ -315,7 +355,8 @@ var WidgetEditorView = Backbone.View.extend({
       curWidget = new WidgetView(widgetModel);
     }
 
-    this.widgetsContainer.appendChild(curWidget.el);
+    if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
+    else iui.get('full-container').appendChild(curWidget.el);
   },
 
   style: function (props) {

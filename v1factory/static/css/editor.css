@@ -229,7 +229,7 @@
 }
 
 .widget-wrapper.selected, .widgets-container.selected {
-  border: 1px dashed #ccc;
+  border: 1px solid #71c5ef
 }
 
 .widget-wrapper .meta .delete, .widgets-container .meta .delete {
@@ -247,11 +247,11 @@
 
 .widget-wrapper {
   display: inline-block;
-  border:1px dashed transparent;
+  border:1px solid transparent;
 }
 
 .widget-wrapper:hover {
-  border-color: #2b3545;
+  border-color: #71c5ef;
 }
 
 .widget-wrapper:hover .meta, .widgets-container:hover .meta {

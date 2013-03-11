@@ -124,7 +124,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   isFullWidth: function() {
-    return this.get('layout').get('width') == '100%';
+    return this.get('layout').get('isFull') === true;
   },
 
   moveLeft: function() {

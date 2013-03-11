@@ -3,6 +3,8 @@ Backbone.UIView = Backbone.View.extend({
   resizableAndDraggable: function() {
     var self = this;
 
+    console.log(self.el);
+
     $(self.el).resizable({
       handles: "n, e, s, w, se",
       containment: $('#elements-container'),
@@ -10,6 +12,7 @@ Backbone.UIView = Backbone.View.extend({
       stop  : self.resized
     });
 
+    console.log(self);
     $(self.el).draggable({
       containment: $('#elements-container'),
       drag: self.moving,
@@ -30,11 +33,17 @@ Backbone.UIView = Backbone.View.extend({
   },
 
   disableResizeAndDraggable: function() {
-    $(this.el).resizable("disable");
-    $(this.el).draggable("disable");
+    if(this.$el.hasClass('ui-resizable')) {
+      $(this.el).resizable("disable");
+    }
+    if(this.$el.hasClass('ui-draggable')) {
+      $(this.el).draggable("disable");
+    }
   },
 
   clear : function() {
+    this.disableResizeAndDraggable();
+    this.el.className = this.className;
     this.el.innerHTML = '';
   },
 
