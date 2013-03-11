@@ -1,8 +1,6 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-<script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
-<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
@@ -44,20 +42,50 @@
 </div>
 
 <div class="container" id="pages-view">
-  <div class="row" id="list-pages">
+  <div class="span11 offsetr1">
+      <ul class="left-menu">
+        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">Page1</a></li>
+        <li><a href="{% url v1factory.views.app_new %}">+ Create New</a></li>
+      </ul>
   </div>
-  <div class="hi7 page-view span64 hoff2 pane create-page" style="margin-bottom:60px;">
-    <div class="">
-      <h2 class="offset1 hoff3">+ Create a New Page</h2>
+  <div class="span48">
+    <h3>Navigation Bars</h3>
+    <div class="row" id="list-navbars">
+      <div class="page-view span64 hoff2 pane">
+        <div class="hi5">
+          <h2 class="offset1 span32 hoff2">For Everyone</h2>
+          <div class="span8 hoff1 offsetr1 right">
+            <a class="edit span3 hi3" href="editor/0"></a>
+            <a class="delete span3 hi3 offset1"></a>
+          </div>
+        </div>
+      </div>
+      <div class="page-view span64 hoff2 pane">
+        <div class="hi5">
+          <h2 class="offset1 span32 hoff2">For Users</h2>
+          <div class="span8 hoff1 offsetr1 right">
+            <a class="edit span3 hi3" href="editor/0"></a>
+            <a class="delete span3 hi3 offset1"></a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="row offset1"></div>
+    <h3 class="hoff2">Pages</h3>
+    <div class="row" id="list-pages">
+    </div>
+    <div class="hi7 page-view span64 hoff2 pane create-page" style="margin-bottom:60px;">
+      <div class="">
+        <h2 class="offset1 hoff3">+ Create a New Page</h2>
+      </div>
+      <div class="row offset1"></div>
+    </div>
+    <form class="hi7 page-view span64 hoff2 pane create-form" style="display:none;">
+      <div class="offset1 hoff3">
+        <input type="text" class="page-name" placeholder="Page Name">
+      </div>
+      <div class="row offset1"></div>
+    </form>
   </div>
-  <form class="hi7 page-view span64 hoff2 pane create-form" style="display:none;">
-    <div class="offset1 hoff3">
-      <input type="text" class="page-name" placeholder="Page Name">
-    </div>
-    <div class="row offset1"></div>
-  </form>
 </div>
 <script>
 var appState = {{ app.state_json|safe }};
@@ -66,16 +94,19 @@ var appId = {{ app_id|safe }};
 
 <script type="text/html" id="temp-page">
   <div class="hi4">
-    <h2 class="offset1 span16 hoff2"><%= page_name %></h>
-
+    <h2 class="offset1 span16 hoff2"><%= page_name %></h2>
+    <div class="offset1 span8 hi3 hoff1 offsetr1 right">
+      <a class="edit span3 hi3" href="editor/<%= ind %>"></a>
+      <a class="delete span3 hi3 offset1"></a>
+    </div>
   </div>
 </script>
 
 <script type="text/html" id="template-url">
       <hr class="span60">
       <h3 class="hi3 span8 hoff1">URL</h3>
-      <div class="hi3 span44 hoff1">
-        <div class="span44 url">
+      <div class="hi3 span35 hoff1">
+        <div class="span35 url">
         <% var endsWithEnt = 1;
            _.each(urls, function(url, i) { %>
           <span class="slash">/</span>
@@ -118,13 +149,6 @@ var appId = {{ app_id|safe }};
     <option <% if(access_level == 'all') { %> selected <% } %> value="all">Everyone</option>
     <option <% if(access_level == 'users') { %> selected <% } %> value="users">Only Users</option>
   </select>
-</div>
-<hr class="span60 offset1">
-<div class="offset1 span12 hi3">
-  <a class="btn edit" href="editor/<%= ind %>">Start Editing</a>
-</div>
-<div class="offset1 span12 hi3">
-  <a class="btn delete">Delete Page</a>
 </div>
 </script>
 

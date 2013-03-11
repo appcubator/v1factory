@@ -428,3 +428,17 @@ hr {
 .btn img {
   margin-left: 4px;
 }
+
+.edit {
+  background-image: url(../img/edit.png);
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
+
+.delete {
+  background-image: url(../img/trash.png);
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
