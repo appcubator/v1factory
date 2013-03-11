@@ -190,12 +190,8 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   toggleFullWidth: function() {
-    if(this.model.get('layout').get('width') != '100%') {
-      this.model.get('layout').set('width', '100%');
-    }
-    else {
-      this.model.get('layout').set('width', '16');
-    }
+    var isFull = this.model.get('layout').get('isFull');
+    this.model.get('layout').set('isFull', !isFull);
   },
 
   inputChanged: function(e) {

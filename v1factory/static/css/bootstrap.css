@@ -301,6 +301,7 @@ a:hover {
   overflow: hidden;
 }
 
+.spanFull { width: 100%; }
 .span64 { width: 960px; }
 .span63 { width: 945px; }
 .span62 { width: 930px; }
