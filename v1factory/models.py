@@ -3,106 +3,28 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 import simplejson
 import re
+import os.path
 
-starter_app = """{
-    "name":"EasyApp",
-    "users": {
-      "facebook":false,
-      "linkedin":false,
-      "twitter":false,
-      "local":true,
-      "fields":[]
-    },
-    "entities":[],
-    "pages":[
-      {
-        "name":"registration",
-        "design_props" : {},
-        "uielements": [
-          {
-            "lib_id":4,
-            "attribs": {},
-            "tagName": "h1",
-            "content":{ "text": "Sign Up" },
-            "container_info":null,
-            "layout" : {
-              "width"  :12,
-              "height" :8,
-              "top"    :12,
-              "left"   :12
-            }
-          },
-          {
-            "lib_id":7,
-            "attribs": {},
-            "content":{},
-            "layout" : {
-              "width"  :16,
-              "height" :16,
-              "top"    :1,
-              "left"   :1
-            },
-            "container_info": {
-              "entity":"User",
-              "action":"signup"
-            }
-          }
-        ],
-        "access_level":"all"
-      },
-      {
-        "name":"homepage",
-        "design_props" : [],
-        "uielements": [
-          {
-            "lib_id":4,
-            "container_info":null,
-            "attribs":{},
-            "tagName" : "h1",
-            "content":{ "text":"Homepage" },
-            "layout" : {
-              "width"  :4,
-              "height" :4,
-              "top"    :1,
-              "left"   :1
-            }
-          },
-          {
-            "lib_id":7,
-            "attribs":{},
-            "content":{},
-            "layout" : {
-              "width"  :4,
-              "height" :4,
-              "top"    :1,
-              "left"   :1
-            },
-            "container_info":{
-              "entity":"User",
-              "action":"login"
-            }
-          }
-        ],
-        "access_level": "all"
-      }
-    ],
-    "urls": [
-      {
-        "page_name":"homepage",
-        "urlparts":[]
-      },
-      {
-        "page_name":"registration",
-        "urlparts":["register"]
-      }
-    ]
-}"""
+DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
+
+def get_default_uie_state():
+  f = open(os.path.join(DEFAULT_STATE_DIR, "uie_state.json"))
+  s = f.read()
+  f.close()
+  return s
+
+def get_default_app_state():
+  f = open(os.path.join(DEFAULT_STATE_DIR, "app_state.json"))
+  s = f.read()
+  f.close()
+  return s
+
 
 class App(models.Model):
   name = models.CharField(max_length=100)
   owner = models.ForeignKey(User, related_name='apps')
-  _state_json = models.TextField(blank=True, default=starter_app)
-  _uie_state_json = models.TextField(blank=True, default=starter_app)
+  _state_json = models.TextField(blank=True, default=get_default_app_state)
+  _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
   @property
   def state(self):
