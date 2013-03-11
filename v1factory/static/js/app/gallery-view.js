@@ -7,15 +7,12 @@ var UIElementStyleModel = Backbone.Model.extend({
 var UIElementModel = Backbone.Model.extend({
   initialize: function(bone) {
     this.set('attribs', new UIElementAttributesModel(bone.attribs));
-    this.set('style', new UIElementStyleModel(bone.style));
   },
   toJSON: function() {
     console.log(this);
     json = this.attributes;
     console.log(this.get('attribs'));
     json.attribs = this.get('attribs').attributes;
-    json.style = this.get('style').attributes;
-
     return json;
   }
 });
@@ -87,11 +84,13 @@ var UIElementView = Backbone.View.extend({
   className: 'widgetWrapper',
 
   events : {
-    'click' : 'openModal'
+    'click'         : 'openModal',
+    'click .remove' : 'removeUIE'
   },
 
   initialize: function(model) {
     _.bindAll(this, 'render',
+                    'removeUIE',
                     'openModal');
 
     this.model = model;
@@ -108,10 +107,18 @@ var UIElementView = Backbone.View.extend({
 
     div.innerHTML = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes,
                                                               attribs: this.model.get('attribs').attributes});
-
+    div.innerHTML += '<span class="remove">×</span>';
     this.el.appendChild(div);
     this.el.style.display = 'inline-block';
     return this;
+  },
+
+  removeUIE: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var model = this.model;
+    this.model.collection.remove(model.cid);
+    $(this.el).remove();
   },
 
   openModal: function () {
