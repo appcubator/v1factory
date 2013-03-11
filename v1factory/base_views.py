@@ -44,6 +44,12 @@ class MyUserCreationForm(forms.UserCreationForm):
     self.fields['last_name'].required = True
     self.fields['email'].required = True
 
+@require_GET
+def homepage(request):
+  if request.user.is_authenticated():
+    return redirect('/app')
+  return render(request, 'website-home.html')
+
 @require_http_methods(["GET", "POST"])
 def signup(request):
   if request.method == "GET":
