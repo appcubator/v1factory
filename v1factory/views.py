@@ -65,7 +65,12 @@ def app_save_state(request, app):
   except Exception, e:
     return (400, str(e))
   app.save()
-  return (200, 'ok')
+  m = "ok"
+  from app_builder.validator import validate_app_state
+  state_errs = validate_app_state(app.state)
+  if len(state_errs) > 0:
+    m = "\n\n".join(state_errs)
+  return (200, m)
 
 @login_required
 def uie_state(request, app_id):
