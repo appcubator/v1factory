@@ -91,8 +91,7 @@ var WidgetModel = Backbone.Model.extend({
 
   defaults: {
     'container_info' : null,
-    'lib_id'         : 1,
-    'attribs'        : {},
+    'deletable' : true
   },
 
   initialize: function(bone) {
@@ -128,6 +127,10 @@ var WidgetModel = Backbone.Model.extend({
   select: function() {
     this.collection.select(this);
     this.set('selected', true);
+  },
+
+  remove :function() {
+    if(this.get('deletable') === false) return;
   },
 
   toJSON : function() {
@@ -341,6 +344,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "text-input";
       var widgetProps = uieState[type][0];
       widgetProps.type = type;
+      widgetProps.deletable = false;
       widgetProps.content_attribs.placeholder = "Username...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
@@ -359,6 +363,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "password";
       var widgetProps = uieState['password'][0];
       widgetProps.type = type;
+      widgetProps.deletable = false;
       widgetProps.content_attribs.placeholder = "Password...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
@@ -379,6 +384,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "button";
       var widgetProps = uieState[type][0];
       widgetProps.type = type;
+      widgetProps.deletable = false;
       widgetProps.content_attribs.value = "Sign Up";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,

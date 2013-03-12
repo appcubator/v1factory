@@ -44,7 +44,7 @@ var EntityView = Backbone.View.extend({
                     'clickedDelete',
                     'modelRemoved',
                     'clickedPropDelete');
-    console.log(item);
+
     this.model = item;
     this.model.bind('change:owns', this.ownsChangedOutside);
     this.model.bind('change:belongsTo', this.belongsToChangedOutside);
@@ -55,6 +55,8 @@ var EntityView = Backbone.View.extend({
 
     this.name = item.get('name');
     this.parentName = name;
+
+    this.model.get('fields').bind('add', this.appendField);
     this.render();
   },
 
@@ -82,28 +84,24 @@ var EntityView = Backbone.View.extend({
     var name = $('.property-name-input', this.el).val();
 
     var curFields = this.model.get('fields') || [];
-    var ind = curFields.length;
 
-    curFields.push({
+    curFields.add(new FieldModel({
       name: name,
       type: 'text',
       required: true
-    });
+    }));
 
-    this.model.set('fields', curFields);
-    var template = _.template( $("#template-property").html(), { name: name,
-                                                                 ind : ind,
-                                                                 other_models: this.parentCollection.models});
-
-    $('.property-list',this.el).append(template);
     $('.property-name-input', this.el).val('');
     $('.add-property-form', this.el).hide();
     $('.add-property-button', this.el).fadeIn();
     return false;
   },
 
-  appendField: function () {
-    // body...
+  appendField: function (fieldModel) {
+      var template = _.template( $("#template-property").html(), { name: fieldModel.get('name'),
+                                                                 cid : fieldModel.cid,
+                                                                 other_models: entityEditor.collection.models});
+      this.$el.find('.property-list').append(template);
   },
 
   changedAttribs: function(e) {
