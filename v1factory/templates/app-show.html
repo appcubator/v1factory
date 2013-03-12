@@ -7,6 +7,7 @@
     </script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app-page.css">
     <style type="text/css" id="custom-style">
 
     </style>
@@ -19,8 +20,8 @@
       <h1 class="name hoff1"><a href="/">v1 Factory</a> | {{ title }}</h1>
     </div>
     <div class="offset4 toppanel hi6 span30">
-      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
-        hey
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px; float:right;">
+        {{ user.username }} | <a href="/logout">Logout</a>
       </div>
     </div>
   </div>
