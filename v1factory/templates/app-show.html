@@ -7,6 +7,7 @@
     </script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app-page.css">
     <style type="text/css" id="custom-style">
 
     </style>
@@ -16,11 +17,11 @@
 <div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
   <div class="container">
     <div class="toppanel span18 logo-text" style="">
-      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> | {{ title }}</h1>
+      <h1 class="name hoff1"><a href="/">v1 Factory</a> | {{ title }}</h1>
     </div>
     <div class="offset4 toppanel hi6 span30">
-      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
-        hey
+      <div class="login hi2 pad1" style="height:45px; margin-top: 10px; float:right;">
+        {{ user.username }} | <a href="/logout">Logout</a>
       </div>
     </div>
   </div>
@@ -45,7 +46,7 @@
     <div class="span11 offsetr1">
       <ul class="left-menu">
         {% for a in apps %}
-        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">{{ a.name }}</a></li>
+        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">{{ a.state.name }}</a></li>
         {% endfor %}
         <li><a href="{% url v1factory.views.app_new %}">+ Create New</a></li>
       </ul>

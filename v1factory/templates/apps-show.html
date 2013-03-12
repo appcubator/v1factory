@@ -4,7 +4,7 @@
     <h2>Your apps</h2>
     <ul>
       {% for app in apps %}
-      <li><a href="{{ get_absolute_url }}">{{ name }}</a></li>
+      <li><a href="{{ app.get_absolute_url }}">{{ app.state.name }}</a></li>
       {% endfor %}
     </ul>
     <p>Or, make a new app</p>

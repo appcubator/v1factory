@@ -13,11 +13,8 @@ def add_statics_to_context(context, app):
 def app_list(request):
   if request.user.apps.count() == 0:
     return redirect(app_new)
-  elif request.user.apps.count() == 1:
-    return redirect(app_page, request.user.apps.all()[0].id)
   else:
-    page_context = { 'apps': request.user.apps.all() }
-    return render(request, 'apps-show.html', page_context)
+    return redirect(app_page, request.user.apps.all()[0].id)
 
 
 @login_required

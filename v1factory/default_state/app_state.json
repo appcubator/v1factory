@@ -120,7 +120,7 @@
                                     "width": 16,
                                     "height": 4
                                 },
-                                "container_info": null,
+                                "container_info": null
                             },
                             {
                                 "type"   : "password",
@@ -194,7 +194,7 @@
                                     "width": 16,
                                     "height": 4
                                 },
-                                "container_info": null,
+                                "container_info": null
                             }
                         ]
                     },
@@ -223,7 +223,7 @@
                             "tagType": "password",
                             "content_attribs": {
                                 "name": "password",
-                                "placeholder": "Password...",
+                                "placeholder": "Password..."
                             },
                             "content": "",
                             "isSingle": true,
@@ -251,7 +251,7 @@
                                 "width": 16,
                                 "height": 4
                             },
-                            "container_info": null,
+                            "container_info": null
                         }
                     ]
                 }
@@ -272,7 +272,7 @@
                         "height": 5,
                         "top": 3,
                         "left": 19
-                    },
+                    }
                 },
                 {
                     "type": "link",
@@ -288,7 +288,7 @@
                         "width": 14,
                         "height": 3
                     },
-                    "container_info": null,
+                    "container_info": null
                 }
             ],
             "access_level": "all"

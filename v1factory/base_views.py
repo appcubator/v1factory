@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpRequest
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from django.shortcuts import redirect,render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import forms, authenticate, login
 from django.utils import simplejson
 
 import requests
@@ -31,10 +32,36 @@ def get_linkedin(request):
   r = send_login_notification_message(format_full_details(request.POST))
   return HttpResponse("ok")
 
+class MyUserCreationForm(forms.UserCreationForm):
+  """Creates a user"""
+
+  class Meta(forms.UserCreationForm.Meta):
+    fields = ('username','first_name','last_name','email')
+
+  def __init__(self, *args, **kwargs):
+    super(MyUserCreationForm, self).__init__(*args, **kwargs)
+    self.fields['first_name'].required = True
+    self.fields['last_name'].required = True
+    self.fields['email'].required = True
+
+@require_GET
+def homepage(request):
+  if request.user.is_authenticated():
+    return redirect('/app')
+  return render(request, 'website-home.html')
+
+@require_http_methods(["GET", "POST"])
 def signup(request):
   if request.method == "GET":
     return render(request, "signup.html")
-  elif request.method == "POST":
-    pass
+
   else:
-    return HttpResponse("", status=405)
+    form = MyUserCreationForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      new_user = authenticate(username=request.POST['username'],
+                              password=request.POST['password1'])
+      login(request, new_user)
+      return redirect('/')
+    else:
+      return HttpResponse(simplejson.dumps({ k : v for k,v in form.errors.items() }), mimetype="application/json")
