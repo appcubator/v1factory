@@ -36,6 +36,7 @@ var EntityView = Backbone.View.extend({
 
   initialize: function(item, name){
     _.bindAll(this, 'render',
+                    'appendField',
                     'clickedAdd',
                     'formSubmitted',
                     'changedAttribs',
@@ -43,7 +44,7 @@ var EntityView = Backbone.View.extend({
                     'clickedDelete',
                     'modelRemoved',
                     'clickedPropDelete');
-
+    console.log(item);
     this.model = item;
     this.model.bind('change:owns', this.ownsChangedOutside);
     this.model.bind('change:belongsTo', this.belongsToChangedOutside);
@@ -60,9 +61,11 @@ var EntityView = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    var template = _.template( $("#template-entity").html(), { name: this.name,
-                                                               attribs: this.model.get('fields'),
-                                                               other_models: this.parentCollection.models } );
+    var page_context = { name: self.name,
+                         attribs: self.model.get('fields').models,
+                         other_models: self.parentCollection.models };
+
+    var template = _.template($("#template-entity").html(), page_context);
     $(this.el).append(template);
   },
 
@@ -99,6 +102,10 @@ var EntityView = Backbone.View.extend({
     return false;
   },
 
+  appendField: function () {
+    // body...
+  },
+
   changedAttribs: function(e) {
     var ind = String(e.target.id).replace('prop-', '');
     this.model.attributes.fields[ind].type = e.target.options[e.target.selectedIndex].value;
@@ -120,8 +127,9 @@ var EntityView = Backbone.View.extend({
   },
 
   clickedPropDelete: function(e) {
-    var name = e.target.previousSibling.innerHTML;
-    this.model.unset(name);
+    var cid = String(e.target.id).replace('delete-','');
+    console.log(cid);
+    this.model.get('fields').remove(cid);
     $(e.target.parentNode).remove();
   }
 });
@@ -137,8 +145,9 @@ var UserEntityView = EntityView.extend({
     'click .prop-cross'          : 'clickedPropDelete'
   },
 
-  initialize: function(item) {
+  initialize: function(userEntityModel) {
     _.bindAll(this, 'render',
+                    'appendField',
                     'clickedAdd',
                     'checkedBox',
                     'formSubmitted',
@@ -148,31 +157,31 @@ var UserEntityView = EntityView.extend({
                     'modelRemoved',
                     'clickedPropDelete');
 
-    this.model = item;
+    this.model = userEntityModel;
+    this.name = userEntityModel.get('name');
 
-    this.name = item.get('name');
-    this.parentName = name;
+    this.model.get('fields').bind('add', this.appendField);
     this.render();
 
-    this.parentCollection = item.owner.collection;
-    this.parentCollection.bind('add', this.addedEntity);
-    this.parentCollection.bind('remove', this.modelRemoved);
   },
 
   render: function() {
     var self = this;
-    _(this.model.get('fields')).each(function(field, ind){
 
-      if(field.name == 'Name' || field.name == 'Last Name' || field.name =='Email') return;
+    console.log(this.model);
+
+    _(this.model.get('fields').models).each(function(fieldModel) {
+      if(fieldModel.get('name') == 'First Name' ||
+         fieldModel.get('name') == 'Last Name'  ||
+         fieldModel.get('name') =='Email') return;
 
       var page_context = {};
-      page_context.name = field.name;
-      page_context.ind = ind;
-      page_context.other_models = self.model.owner.collection.models;
+      page_context.name = fieldModel.get('name');
+      page_context.cid = fieldModel.cid;
+      page_context.other_models = appState.entities;
 
-      var template = _.template( $("#template-property").html(), page_context);
-
-      $('.property-list', this.el).append(template);
+      var template = _.template($("#template-property").html(), page_context);
+      self.$el.find('.property-list').append(template);
     });
 
     document.getElementById('facebook').checked = this.model.get('facebook');
@@ -183,51 +192,76 @@ var UserEntityView = EntityView.extend({
 
   checkedBox: function(e) {
     this.model.set(e.target.value, e.target.checked);
+  },
+
+  appendField: function(fieldModel) {
+    alert('append');
+    if(fieldModel.get('name') == 'First Name' ||
+       fieldModel.get('name') == 'Last Name'  ||
+       fieldModel.get('name') =='Email') return;
+
+    var page_context = {};
+    page_context.name = fieldModel.get('name');
+    page_context.ind = fieldModel.cid;
+    page_context.other_models = entityEditor.collection.models;
+
+    var template = _.template( $("#template-property").html(), page_context);
+
+    $('.property-list', this.el).append(template);
+  },
+
+  formSubmitted: function(e) {
+    e.preventDefault();
+    var name = $('.property-name-input', this.el).val();
+
+    console.log(this.model);
+    console.log(this.model.get('fields'));
+
+    this.model.get('fields').add(new FieldModel({
+      name: name,
+      type: 'text',
+      required: true
+    }));
+
+    $('.property-name-input', this.el).val('');
+    $('.add-property-form', this.el).hide();
+    $('.add-property-button', this.el).fadeIn();
+    return false;
   }
 });
 
 
 var EntityListView = Backbone.View.extend({
   el         : $('#entities'),
-  collection : null,
-  entities   : [ ],
-  counter    : 0,
 
-  initialize: function(){
-    _.bindAll(this, 'render', 'appendItem', 'appendUser', 'addEntity');
+  initialize: function(entitiesColl) {
+    _.bindAll(this, 'render', 'appendItem', 'addEntity');
 
     var self = this;
     var initialEntities = appState.entities || [];
 
-    this.collection = new EntityCollection();
-    this.collection.bind("add", this.appendItem);
     this.render();
+
+    this.collection = entitiesColl;
+    this.collection.bind("add", this.appendItem);
     this.collection.add(initialEntities);
 
-    var userModel = new UserEntityModel(appState.users);
-    userModel.owner = this;
-    this.userModel = userModel;
-    this.appendUser(userModel);
+    this.userModel = new UserEntityModel(appState.users);
+    console.log(this.userModel);
+    new UserEntityView(this.userModel);
+
   },
 
   render: function(){
 
   },
 
-  appendItem: function(model) {
-    var entityView = new EntityView(model, 'entity-list-');
-    $(this.el).append(entityView.el);
-    $('.add-property-button', entityView.el).on('click', entityView.clickedAdd);
-    entityView.delegateEvents();
-  },
-
-  appendUser: function(model) {
-    entityView = new UserEntityView(model);
-    // No need to append
+  appendItem: function(entityModel) {
+    var entityView = new EntityView(entityModel, 'entity-list-');
+    this.el.appendChild(entityView.el);
   },
 
   addEntity: function(item) {
-    item.id = this.counter;
     var newModel = new EntityModel(item);
     this.collection.add(newModel);
   }
@@ -235,12 +269,12 @@ var EntityListView = Backbone.View.extend({
 
 
 var EntitiesEditorView = Backbone.View.extend({
-  el        : $('#entities-page'),
+  el        : document.body,
   addButton : $('#add-entity-button'),
   addForm   : $('#add-entity-form'),
 
   events : {
-    'click #save-entities'     : 'serializeEntities',
+    'click #save-entities'     : 'saveEntities',
     'click #add-entity-button' : 'clickedAdd',
     'submit #add-entity-form'  : 'formSubmitted'
   },
@@ -249,10 +283,11 @@ var EntitiesEditorView = Backbone.View.extend({
     _.bindAll(this, 'render',
                     'clickedAdd',
                     'formSubmitted',
-                    'serializeEntities');
+                    'saveEntities');
 
-
-    $('#save-entities').on('click', this.serializeEntities);
+    this.collection = new EntityCollection();
+    this.entityList = new EntityListView(this.collection);
+    //this.entityLibrary = new EntitiesLibraryView();
   },
 
   render : function() {
@@ -273,16 +308,16 @@ var EntitiesEditorView = Backbone.View.extend({
     var elem = {};
     elem.name = $('#entity-name-input').val();
     elem.fields = [];
-    entityList.collection.add(elem);
+    this.collection.add(elem);
 
     $('#entity-name-input').val('');
     $(this.addButton).fadeIn();
     $(e.target).remove();
   },
 
-  serializeEntities : function(e) {
-    appState.entities = entityList.collection.toJSON();
-    appState.users = entityList.userModel.toJSON();
+  saveEntities : function(e) {
+    appState.entities = this.entityList.collection.toJSON();
+    appState.users = this.entityList.userModel.toJSON();
 
     console.log(appState);
     $.ajax({
