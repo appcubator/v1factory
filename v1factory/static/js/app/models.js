@@ -64,7 +64,8 @@ var WidgetModel = Backbone.Model.extend({
 
   defaults: {
     'container_info' : null,
-    'lib_id'         : 1
+    'lib_id'         : 1,
+    'attribs'        : {},
   },
 
   initialize: function(bone) {
@@ -210,8 +211,8 @@ var WidgetModel = Backbone.Model.extend({
             width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
             height: 4
         };
-        widgetProps.attribs.placeholder = '{{'+self.get('container_info').entity.get('name')+'_'+v.name+'}}';
-        widgetProps.attribs.name = v.name;
+        widgetProps.content_attribs.placeholder = '{{'+self.get('container_info').entity.get('name')+'_'+v.name+'}}';
+        widgetProps.content_attribs.name = v.name;
 
         var widget = new WidgetModel(widgetProps);
         self.get('container_info').uielements.push(widget);
@@ -231,7 +232,7 @@ var WidgetModel = Backbone.Model.extend({
           width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
           height: 4
       };
-      widgetProps.attribs.value = 'Create';
+      widgetProps.content_attribs.value = 'Create';
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
     },
@@ -255,7 +256,7 @@ var WidgetModel = Backbone.Model.extend({
           height: 4
       };
 
-      widgetProps.attribs.value = 'Add ' + this.get('container_info').entity.get('name');
+      widgetProps.content_attribs.value = 'Add ' + this.get('container_info').entity.get('name');
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
     },
@@ -270,7 +271,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "text-input";
       var widgetProps = uieState[type][0];
       widgetProps.type = type;
-      widgetProps.attribs.placeholder = "Username...";
+      widgetProps.content_attribs.placeholder = "Username...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
           left  : coordinates.topLeft.x,
@@ -288,7 +289,7 @@ var WidgetModel = Backbone.Model.extend({
       var type = "password";
       var widgetProps = uieState['password'][0];
       widgetProps.type = type;
-      widgetProps.attribs.placeholder = "Password...";
+      widgetProps.content_attribs.placeholder = "Password...";
       widgetProps.layout = {
           top   : coordinates.topLeft.y,
           left  : coordinates.topLeft.x,
@@ -296,7 +297,7 @@ var WidgetModel = Backbone.Model.extend({
           height: 4
       };
 
-      widgetProps.attribs.value = 'Add ' + self.get('container_info').entity;
+      widgetProps.content_attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').uielements.push(widget);
     },

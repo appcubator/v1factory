@@ -173,7 +173,7 @@ var GalleryView = Backbone.View.extend({
     $('.entity').draggable({
       cursor: "move",
       cursorAt: { top: 0, left: 0 },
-      helper: "clone",
+      helper: "<div>abc</div>",
       start : function(e) {
         self.dragActive = true;
       },
