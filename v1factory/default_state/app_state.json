@@ -27,7 +27,7 @@
     "entities": [],
     "pages": [
         {
-            "name": "registration",
+            "name": "Registration Page",
             "design_props": [
                 {
                     "type": "background-image",
@@ -259,8 +259,41 @@
             "access_level": "all"
         },
         {
-            "name": "homepage",
-            "design_props": [],
+            "name": "Homepage",
+            "design_props": [
+                {
+                    "type": "background-image",
+                    "value": "/static/img/sample_bg.png"
+                },
+                {
+                    "type": "background-color",
+                    "value": "#eee"
+                },
+                {
+                    "type": "text-color",
+                    "value": "#000"
+                },
+                {
+                    "type": "text-size",
+                    "value": "12px"
+                },
+                {
+                    "type": "text-family",
+                    "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+                },
+                {
+                    "type": "header-color",
+                    "value": "#666"
+                },
+                {
+                    "type": "header-size",
+                    "value": "16px"
+                },
+                {
+                    "type": "header-family",
+                    "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+                }
+            ],
             "uielements": [
                 {
                     "container_info": null,
@@ -296,11 +329,11 @@
     ],
     "urls": [
         {
-            "page_name": "homepage",
+            "page_name": "Homepage",
             "urlparts": []
         },
         {
-            "page_name": "registration",
+            "page_name": "Registration Page",
             "urlparts": [
                 "register"
             ]

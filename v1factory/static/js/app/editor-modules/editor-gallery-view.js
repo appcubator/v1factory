@@ -70,6 +70,14 @@ var GalleryView = Backbone.View.extend({
     // Update User
     // Attribs
 
+    if(appState.users.local) {
+      var tempLogin = '<li id="entity-<%= cid %>" class="login entity">'+
+                   '<span class="name">User Login Form</span></li>';
+
+      $(this.userList).append(tempLogin);
+      $(this.allList).append(tempLogin);
+    }
+
     if(appState.users.facebook) {
       var tempFb = '<li id="entity-<%= cid %>" class="facebook entity">'+
                    '<span class="name">Facebook Login Button</span></li>';
@@ -98,25 +106,7 @@ var GalleryView = Backbone.View.extend({
     var tempLi   = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
                    '<span class="name">Show <%= name %> <%= attr %></span></li>';
 
-    appState.users.fields.push({
-      name : "Name",
-      required: "",
-      type :"text"
-    });
 
-    appState.users.fields.push({
-      name : "Last Name",
-      required: "",
-      type :"text"
-    });
-
-    appState.users.fields.push({
-      name : "Email",
-      required: "",
-      type :"text"
-    });
-
-    appState.users.name = "User";
 
     var model = this.entitiesCollection.push(appState.users, {silent : true});
 
@@ -195,12 +185,12 @@ var GalleryView = Backbone.View.extend({
 
     console.log(entityModel);
 
-    _(entityModel.get('fields')).each(function(val, key, ind) {
+    _(entityModel.get('fields').models).each(function(model, ind) {
       var context = {
         name : entityModel.get('name'),
         cid  : entityModel.cid,
-        attr : val.name,
-        type : val.type
+        attr : model.get('name'),
+        type : model.get('type')
       };
 
       $(self.dataList).append(_.template(tempLi, context));
@@ -298,7 +288,6 @@ var GalleryView = Backbone.View.extend({
       var cid = String(id).replace('entity-','');
       var entity = this.entitiesCollection.get(cid);
       var action = className.split(' ')[0];
-      console.log(action);
 
       widget.container_info = {
          entity : entity,
@@ -314,9 +303,7 @@ var GalleryView = Backbone.View.extend({
       var field = id.split('-')[1];
 
       widget = uieState['text'][0];
-      widget.content = {
-        text : '{{'+entity.get('name')+'_'+field+'}}'
-      };
+      widget.content =  '{{'+entity.get('name')+'_'+field+'}}';
     }
     else {
       var type = className.replace(' ui-draggable','');

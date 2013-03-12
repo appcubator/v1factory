@@ -1,5 +1,5 @@
 var iui = {
-  openFilePick: function(callback, success) {
+  openFilePick: function(callback, success, appId) {
     filepicker.setKey("AAO81GwtTTec7D8nH9SaTz");
     filepicker.pickMultiple({
         mimetypes: ['image/*'],
@@ -11,12 +11,12 @@ var iui = {
           var f = FPFiles[i];
           /* f has the following properties:
                      url, filename, mimetype, size, isWriteable */
-          $.post('/app/1/static/',{
+          $.post('/app/'+ appId +'/static/',{
             name: f.filename,
             url:  f.url,
             type: f.mimetype,
             error: function(d) {
-              alert("Something went wrong with the file upload! Data: "+f);
+              //alert("Something went wrong with the file upload! Data: "+f);
             }
           });
         }

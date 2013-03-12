@@ -193,7 +193,7 @@ var UserEntityView = EntityView.extend({
   },
 
   appendField: function(fieldModel) {
-    alert('append');
+
     if(fieldModel.get('name') == 'First Name' ||
        fieldModel.get('name') == 'Last Name'  ||
        fieldModel.get('name') =='Email') return;

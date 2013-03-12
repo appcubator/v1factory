@@ -238,10 +238,10 @@ var WidgetInfoView = Backbone.View.extend({
     var prop = e.target.id.replace('prop-', '');
 
     if(e.target.value == "upload-image") {
-      iui.openFilePick(function(files, f) {f(files);}, this.staticsAdded);
+      iui.openFilePick(function(files, f) {f(files);}, this.staticsAdded, appId);
     }
     else {
-      this.model.get('attribs').set(prop, e.target.value);
+      this.model.get('content_attribs').set(prop, e.target.value);
     }
   },
 
@@ -250,7 +250,7 @@ var WidgetInfoView = Backbone.View.extend({
       file.name = file.filename;
       statics.push(file);
     });
-    this.model.get('attribs').set('src', _.last(files).url);
+    this.model.get('content_attribs').set('src', _.last(files).url);
     this.show(this.model);
   },
 

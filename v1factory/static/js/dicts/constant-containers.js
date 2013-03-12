@@ -2,8 +2,11 @@ var constantContainers = {
   'login' : [
     {
       'type' : 'text-input',
-      'permAttribs' : {
+      'content_attribs' : {
         placeholder : 'Username...'
+      },
+      'constant_attribs' : {
+        name : 'username'
       },
       'layout' : {
         top   : 0,
@@ -14,11 +17,30 @@ var constantContainers = {
     },
     {
       'type' : 'password',
-      'permAttribs' : {
+      'content_attribs' : {
         placeholder : 'Password...'
       },
+      'constant_attribs' : {
+        name : 'password',
+        type : 'password'
+      },
       'layout' : {
-        top   : 4,
+        top   : 8,
+        left  : 0,
+        width : 16,
+        height: 4
+      }
+    },
+    {
+      'type' : 'button',
+      'content_attribs' : {
+        value : 'Log In'
+      },
+      'constant_attribs' : {
+        type : 'submit'
+      },
+      'layout' : {
+        top   : 12,
         left  : 0,
         width : 16,
         height: 4

@@ -94,7 +94,7 @@ var appId = {{ app_id|safe }};
 
 <script type="text/html" id="temp-page">
   <div class="hi4">
-    <h2 class="offset1 span16 hoff2"><%= page_name %></h2>
+    <h2 class="offset1 span20 hoff2"><%= page_name %></h2>
     <div class="offset1 span8 hi3 hoff1 offsetr1 right">
       <a class="edit span3 hi3" href="editor/<%= ind %>"></a>
       <a class="delete span3 hi3 offset1"></a>
@@ -162,6 +162,11 @@ var appId = {{ app_id|safe }};
   <option value="<%= entity.name %>"> <%= entity.name %> ID</option>
   <% }); %>
 </select>
+</script>
+
+<script type="text/html" id="template-text">
+<span class="slash">/</span>
+<input type="text" class="url-part last" id="inp-new" placeholder="url_string" value=''>
 </script>
 {% endblock %}
 

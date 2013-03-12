@@ -84,7 +84,7 @@ var WidgetView = Backbone.UIView.extend({
 
   render: function() {
     this.clear();
-    this.model.select();
+    //this.model.select();
 
     //iui.assert(this.model.get('lib_id'));
 
@@ -110,6 +110,7 @@ var WidgetView = Backbone.UIView.extend({
     var node_context = _.clone(this.model.attributes);
     node_context.content_attribs = this.model.get('content_attribs').attributes;
     var el = _.template(temp, { element: node_context});
+    console.log(el);
     return el;
   },
 
@@ -171,10 +172,7 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   changedText: function(a) {
-    this.clear();
-    this.el.innerHTML = this.renderElement();
-    this.model.select();
-    this.resizable();
+    this.el.firstChild.innerHTML = this.model.get('content');
   },
 
   changedType: function(a) {
@@ -184,11 +182,7 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   changedSource: function(a) {
-    // TODO: can be more efficient
-    this.clear();
-    this.el.innerHTML = this.renderElement();
-    this.model.select();
-    this.resizableAndDraggable();
+    this.el.firstChild.src = this.model.get('content_attribs').get('src');
   },
 
   resizing: function(e, ui) {
@@ -223,10 +217,12 @@ var WidgetView = Backbone.UIView.extend({
     console.log(this);
     this.editMode = true;
 
-    var editedElem = this.el.firstChild;
+    var editedElem = this.el;
     var top = $(editedElem).offset().top;
     var left = $(editedElem).offset().left;
     this.editedElem = editedElem;
+
+    console.log(editedElem);
 
     elem = editedElem.cloneNode(true);
     elem.setAttribute('contenteditable', true);
@@ -249,7 +245,8 @@ var WidgetView = Backbone.UIView.extend({
 
   switchOffEditMode: function() {
     console.log(this);
-    this.model.get('content').set('text', this.shadowElem.innerText);
+    this.model.set('content', this.shadowElem.innerText);
+    console.log(this.shadowElem.innerText);
     $(this.shadowElem).remove();
     $(this.editedElem).fadeIn();
   },
@@ -263,6 +260,8 @@ var WidgetView = Backbone.UIView.extend({
         return false;
         break;
     }
+
+    return false;
   }
 });
 

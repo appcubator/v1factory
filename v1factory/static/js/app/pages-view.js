@@ -22,6 +22,8 @@ var PageView = Backbone.View.extend({
     this.model = pageModel;
     this.ind = ind;
 
+    console.log(urlModel);
+
     this.url = urlModel;
     this.render();
     this.renderUrl();
@@ -119,11 +121,12 @@ var PagesView = Backbone.View.extend({
       this.urlsCollection.add({ urlparts: [], page_name: name});
       this.collection.add({ name: name});
     }
+    this.savePages();
   },
 
   appendPage: function(model) {
     var ind = _.indexOf(this.collection.models, model);
-    var urlModel = this.urlsCollection.findWhere({ page_name : model.get('name')});
+    var urlModel = this.urlsCollection.where({ page_name : model.get('name')})[0];
     var pageView = new PageView(model, ind, urlModel);
     this.listView.appendChild(pageView.el);
   },

@@ -5,21 +5,31 @@ Backbone.UIView = Backbone.View.extend({
 
     console.log(self.el);
 
-    $(self.el).resizable({
+    self.$el.resizable({
       handles: "n, e, s, w, se",
       containment: $('#elements-container'),
       resize: self.resizing,
       stop  : self.resized
     });
 
-    console.log(self);
-    $(self.el).draggable({
+    self.$el.draggable({
       containment: $('#elements-container'),
       drag: self.moving,
       stop: self.moved
     });
 
     this.setPosition("absolute");
+  },
+
+  draggable: function() {
+    alert('yolo');
+    var self = this;
+    console.log(self.$el.draggable());
+    self.$el.draggable({
+      containment: $('#elements-container'),
+      drag: self.moving,
+      stop: self.moved
+    });
   },
 
   resizable: function() {

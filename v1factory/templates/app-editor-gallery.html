@@ -1,6 +1,6 @@
 <div id="top-panel-bb">
   <div class="section-select">
-    <a href="{% url v1factory.views.app_list %}" class="menu-button home">
+    <a href="{{ app.get_absolute_url }}" class="menu-button home">
     </a><div class="menu-button setting" id="settings">
     </div><div class="menu-button save" id="save">
       <span>Save</span>
@@ -33,13 +33,3 @@
     </div>
   </div>
 </div>
-        {% for element in gallery_elements %}
-<!--         <li class="widget-prev {{ element.class_name }}" id="widget-{{element.id}}">
-          <{{ element.tagname}} {% for attrib in element.attribs %} {{ attrib }}=default {% endfor %}>
-            text
-            {% for key, value in element.content %}
-              {{ key }}
-            {% endfor %}
-          </{{ element.tagname}}>
-        </li> -->
-        {% endfor %}
