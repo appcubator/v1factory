@@ -132,6 +132,8 @@ var WidgetModel = Backbone.Model.extend({
 
   toJSON : function() {
     var json = _.clone(this.attributes);
+    json = _.omit(json, 'selected');
+
     json.content_attribs = this.get('content_attribs').toJSON()|| {};
     json.content = this.get('content')||'';
     json.layout  = this.get('layout').toJSON();
