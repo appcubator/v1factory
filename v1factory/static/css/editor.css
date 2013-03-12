@@ -209,6 +209,8 @@
   cursor: move;
   border-radius: 3px;
   overflow: visible;
+  background-color: rgba(124, 192, 213, 0.0);
+  -webkit-transition: backgroundColor 50ms linear;
 }
 
 .pseudo-outline {
@@ -229,7 +231,8 @@
 }
 
 .widget-wrapper.selected, .widgets-container.selected {
-  border: 1px solid #71c5ef
+  border: 2px solid #71c5ef;
+  background-color: rgba(124, 192, 213, 0.12);
 }
 
 .widget-wrapper .meta .delete, .widgets-container .meta .delete {
@@ -247,7 +250,9 @@
 
 .widget-wrapper {
   display: inline-block;
-  border:1px solid transparent;
+  border:2px solid transparent;
+  position: absolute;
+  -webkit-transition: border-color 200ms linear;
 }
 
 .widget-wrapper:hover {
@@ -270,7 +275,7 @@
 }
 
 .widgets-container:hover {
-  border:1px dashed #2b3545;
+  border:2px dashed #2b3545;
 }
 
 .top-extend {

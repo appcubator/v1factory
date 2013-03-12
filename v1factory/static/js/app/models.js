@@ -67,6 +67,9 @@ var UserEntityModel = EntityModel.extend({
     var json = {};
     json = _.clone(this.attributes);
     json.fields = this.get('fields').toJSON();
+    console.log( _.uniq(json.fields, function(val) { return val.name; }));
+    json.fields = _.uniq(json.fields, function(val) { return val.name; });
+
     return json;
   }
 });
