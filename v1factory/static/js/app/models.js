@@ -23,11 +23,29 @@
 
 var DesignProperty = Backbone.Model.extend({});
 
+var FieldModel = Backbone.Model.extend({
+  defaults :{
+      "name"     : "description",
+      "required" : false,
+      "type"     : "text"
+  }
+});
 
 var EntityModel = Backbone.Model.extend({
   defaults: {
-    name: "default name",
-    fields: []
+    name: "default name"
+  },
+  initialize: function(bone) {
+    var fieldCollection = new FieldsCollection();
+    if(bone) fieldCollection.add(bone.fields);
+
+    this.set('fields', fieldCollection);
+  },
+  toJSON: function () {
+    var json = {};
+    json = this.attributes;
+    json.fields = this.get('fields').toJSON();
+    return json;
   }
 });
 
@@ -35,12 +53,21 @@ var UserEntityModel = EntityModel.extend({
   defaults : {
     facebook : false,
     linkedin : false,
-    local : true,
-    fields : [{
-      "name"     :"description",
-      "required" :false,
-      "type"     : "text"
-    }]
+    local : true
+  },
+
+  initialize: function(bone) {
+    var fieldCollection = new FieldsCollection();
+    if(bone) fieldCollection.add(bone.fields);
+
+    this.set('fields', fieldCollection);
+  },
+
+  toJSON: function () {
+    var json = {};
+    json = this.attributes;
+    json.fields = this.get('fields').toJSON();
+    return json;
   }
 });
 

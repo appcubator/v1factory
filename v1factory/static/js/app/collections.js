@@ -6,6 +6,10 @@ var ElementCollection = Backbone.Collection.extend({
   model : UIElementModel
 });
 
+var FieldsCollection = Backbone.Collection.extend({
+  model : FieldModel
+});
+
 var WidgetCollection = Backbone.Collection.extend({
   model : WidgetModel,
   selectedEl: null,

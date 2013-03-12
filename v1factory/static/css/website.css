@@ -265,12 +265,12 @@ input[type="submit"] {
 }
 
 .column {
-  border-left: 1px solid #666;
+  border-left: 1px solid #AAA;
   height: 100%;
 }
 
 .column:last-child {
-  border-right: 1px solid #666;
+  border-right: 1px solid #AAA;
 }
 
 .tbl {
@@ -279,18 +279,19 @@ input[type="submit"] {
 
 .tbl .hdr {
   font-weight: bold;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #AAA;
   height: 30px;
   padding: 4px;
 }
 .tbl {
-  border-top: 1px solid #666;
-  border-bottom: 1px solid #666;
+  border-top: 1px solid #AAA;
+  border-bottom: 1px solid #AAA;
+  border-radius: 3px;
 }
 
 .column > div {
   padding: 4px;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #AAA;
 }
 
 .add-property-button {
@@ -427,4 +428,18 @@ hr {
 
 .btn img {
   margin-left: 4px;
+}
+
+.edit {
+  background-image: url(../img/edit.png);
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
+
+.delete {
+  background-image: url(../img/trash.png);
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
 }

@@ -65,7 +65,7 @@
               <div class="hi2">Is Required?</div>
             </div>
             <div class="column span6">
-              <div class="hi3 hdr">Name</div>
+              <div class="hi3 hdr">First Name</div>
               <div class="hi3">
                   <select class="attribs" id="Name" disabled>
                     <option value="text" selected="">Text</option>
@@ -94,8 +94,7 @@
               <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
 <!--               <div class="hi1 remove prop-cross">Remove</div>           
  -->            </div>
-            <ul class="property-list"></ul>
-            <a class="column span8">
+            <ul class="property-list"></ul><a class="column span8 right">
                 <form class="add-property-form" style="display:none">
                   <div class="hi2 hdr">
                     <input type="text" class="property-name-input span7" placeholder="Property Name...">
@@ -113,8 +112,7 @@
 
   <div id="entities-container">
     <ul id="entities" class="entity-list">
-    </ul>
-    <div id="add-entity-button" class="add-entity offset3 span58">
+    </ul><div id="add-entity-button" class="add-entity offset3 span58">
       <span class="pane hi10 hoff1"><p class="hoff4"> + Add Entity</p></span>
     </div>
     <form id="add-entity-form" class="offset3 span58 entity hoff1" style="display:none;">
@@ -193,11 +191,11 @@
       <li>Delete</li>
     </ul>
     <div class="span58">
-      <div class="pane h12">
-        <div class="span10 hi9">
+      <div class="pane hi12" style="padding:0;">
+        <div class="span10 hi9 offset1 hoff2">
           <h2><%- name %></h2>
         </div>
-        <span class="tbl-wrapper hi9 span44">
+        <span class="tbl-wrapper hi9 span44 hoff2">
           <span class="tbl">
             <div class="column span6">
               <div class="hi3 hdr">Property</div>
@@ -205,9 +203,9 @@
               <div class="hi2">Is Required?</div>
             </div>
             <ul class="property-list">
-            <% _(attribs).each(function(attrib, ind){ %>
+            <% _(attribs).each(function(attrib, ind){ console.log(attrib); %>
               <div class="column span6">
-                  <div class="hi3 hdr"><%- attrib.name %></div>
+                  <div class="hi3 hdr"><%- attrib.get('name') %></div>
                   <div class="hi3">
                       <select class="attribs" id="Name" disabled>
                         <option value="text" <% if(attrib.type=="text") %> selected <% %>>Text</option>
@@ -224,8 +222,7 @@
                   <div class="hi1 remove prop-cross">Remove</div>           
               </div>
             <% }); %>
-            </ul>
-            <a class="column span8">
+            </ul><a class="column span8" style="float:none;">
               <form class="add-property-form" style="display:none">
                 <div class="hi2 hdr">
                   <input type="text" class="property-name-input span7" placeholder="Property Name...">
@@ -243,13 +240,13 @@
 <div class="column span6">
   <div class="hi3 hdr"><%- name %></div>
   <div class="hi3">
-    <select class="attribs" id="<%- ind %>">
+    <select class="attribs" id="<%- cid %>">
       <option value="text" selected>Text</option>
       <option value="number">Number</option>
       <option value="email">Email</option>
-      <% _.each( other_models, function( model ){ %>
-        <% if(model.get('name')!= name) %>
-        <option value="{<%- model.get('name') %>}">List of <%- model.get('name') %>s</option>
+      <% _.each(other_models, function(model){ %>
+        <% if(model.name != name) %>
+        <option value="{<%- model.name %>}">List of <%- model.name %>s</option>
         <% %>
       <% }); %>
     </select>
@@ -257,7 +254,7 @@
   <div class="hi2">
     <input class="cb-login" id="linkedin" type="checkbox" value="linkedin">
   </div>
-  <div class="hi1 remove prop-cross">Remove</div>
+  <div class="hi1 remove prop-cross" id="delete-<%- cid %>">Remove</div>
 </div>
 </script>
 {% endblock %}
@@ -265,11 +262,12 @@
 {% block js %}
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/collections.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/entities-view.js"></script>
 <script type="text/javascript">
-var rightEditor   = new EntitiesEditorView();
-var entityList    = new EntityListView();
-var entityLibrary = new EntitiesLibraryView();
+var entityEditor   = new EntitiesEditorView();
+// var entityList    = new EntityListView();
+// var entityLibrary = new EntitiesLibraryView();
 </script>
 <script type="text/javascript">
 // $(function() {
