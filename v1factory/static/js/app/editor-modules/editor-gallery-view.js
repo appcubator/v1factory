@@ -183,8 +183,6 @@ var GalleryView = Backbone.View.extend({
     var tempLi   = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
                    '<span class="name">Show <%= name %> <%= attr %></span></li>';
 
-    console.log(entityModel);
-
     _(entityModel.get('fields').models).each(function(model, ind) {
       var context = {
         name : entityModel.get('name'),
@@ -295,10 +293,7 @@ var GalleryView = Backbone.View.extend({
       };
     }
     else if (/(single-data)/.exec(className)) {
-      console.log(id);
       var id = String(id).replace('entity-','');
-      console.log(id.split('-')[0]);
-
       var entity = this.entitiesCollection.get(id.split('-')[0]);
       var field = id.split('-')[1];
 

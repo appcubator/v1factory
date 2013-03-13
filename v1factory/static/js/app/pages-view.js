@@ -22,8 +22,6 @@ var PageView = Backbone.View.extend({
     this.model = pageModel;
     this.ind = ind;
 
-    console.log(urlModel);
-
     this.url = urlModel;
     this.render();
     this.renderUrl();

@@ -59,8 +59,6 @@ var WidgetView = Backbone.UIView.extend({
                     'resized',
                     'keyHandler');
 
-    console.log(widgetModel);
-
     this.model = widgetModel;
 
     this.render();
@@ -278,18 +276,20 @@ var WidgetContainerView = WidgetView.extend({
   },
 
   initialize: function(widgetModel) {
-
     WidgetContainerView.__super__.initialize.call(this, widgetModel);
     _.bindAll(this, 'placeWidget');
 
     var collection = new WidgetCollection();
-    this.model.set('childCollection', collection);
-    collection.bind("add", this.placeWidget);
+    //this.model.set('uielements', collection);
+    this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
-    var uielements = widgetModel.get('container_info').uielements;
-    this.model.get('childCollection').add(uielements);
+    console.log(this.model.get('container_info'));
+    //this.model.get('container_info').get('uielements').add(widgetModel.)
+    //var uielements = widgetModel.get('container_info').uielements;
+    //this.model.get('uielements').add(uielements);
 
     console.log(this.model.collection);
+    this.render();
   },
 
   render: function() {
@@ -304,6 +304,10 @@ var WidgetContainerView = WidgetView.extend({
     this.setHeight(height * GRID_HEIGHT);
 
     this.el.className += ' widget-wrapper span'+width;
+
+    _(this.model.get('container_info').get('uielements').models).each(function(widgetModel) {
+      self.placeWidget(widgetModel);
+    });
 
     this.resizableAndDraggable();
 

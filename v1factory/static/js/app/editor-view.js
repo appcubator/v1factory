@@ -49,11 +49,8 @@ var EditorView = Backbone.View.extend({
   },
 
   save : function() {
-    console.log(this.widgetsCollection.toJSON());
     appState.pages[pageId]['uielements'] = (this.widgetsCollection.toJSON() || []);
     appState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
-
-    console.log(appState.pages[pageId]['uielements']);
 
     $.ajax({
       type: "POST",
@@ -90,11 +87,8 @@ var EditorView = Backbone.View.extend({
     var contextEntites = _.filter(page.urlparts, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
     contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
-    console.log(self.entityCollection);
     _(contextEntites).each(function(entityName) {
-      console.log(self.entityCollection);
       self.contextCollection.add(self.entityCollection.findWhere({ name : entityName}));
-      console.log(entityModels);
     });
   },
 

@@ -94,7 +94,6 @@ var DesignColorPickerPropertyView = DesignPropertyView.extend({
 
   selectColor: function(e, color) {
     if(!e.target) return false;
-    console.log(e.target);
     this.model.set('value', '#'+e.target.value);
   },
 

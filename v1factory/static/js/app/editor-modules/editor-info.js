@@ -27,9 +27,9 @@ var WidgetInfoView = Backbone.View.extend({
     _.bindAll(this, 'render',
                     'clear',
                     'show',
+                    'doBindings',
                     'showAttribute',
                     'showCollection',
-                    'showUIElem',
                     'staticsAdded',
                     'inputChanged',
                     'selectChanged',
@@ -37,16 +37,22 @@ var WidgetInfoView = Backbone.View.extend({
                     'staticsChanged',
                     'showModel',
                     'optionChanged',
-                    'changedProp',
-                    'changedContent',
-                    'changedLayout');
+                    'changedProp');
 
     this.widgetsCollection = widgetsCollection;
     this.model = widgetsCollection.selectedEl;
     this.widgetsCollection.bind('change', this.selectChanged, this);
     if(this.widgetsCollection.selectedEl) {
+      this.doBindings(this.model);
       this.render();
     }
+
+    this.globalModels = [];
+  },
+
+  doBindings: function(model) {
+    model.bind("change", this.changedProp, this);
+    model.bind("remove", this.clear, this);
   },
 
   selectChanged : function(chg, ch2) {
@@ -63,136 +69,131 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   render: function() {
-    var span = document.createElement('span');
-    span.className = "title";
-    span.innerText = this.model.get('type')+" Info";
+
     this.list = document.createElement('ul');
-    this.el.appendChild(span);
     this.el.appendChild(this.list);
     iui.draggable(this.el);
-    this.show();
+    this.list.appendChild(this.showModel(this.model, this.model.get('type')||"Container"));
   },
 
-  show: function() {
-    var self = this;
-    self.list.innerHTML =  '';
+  show: function(alphaVal, key, cid) {
 
-    this.model.bind("change", this.changedProp, this);
-    this.model.bind("remove", this.clear, this);
-    this.model.get('layout').bind("change", this.changedLayout, this);
-    this.model.get('content_attribs').bind("change", this.changedContent, this);
-    this.showUIElem(this.model);
-
-  },
-
-  showUIElem: function(widgetModel) {
-    var self = this;
-    var elemPicker = document.createElement('select');
-    elemPicker.id = 'prop-class_name';
-    elemPicker.innerHTML = '';
-    _(uieState[widgetModel.get('type')]).each(function(uie){
-
-      selected = (uie.class_name == widgetModel.get('class_name'))? 'selected' : '';
-
-      elemPicker.innerHTML += '<option '+ selected +'>' + uie.class_name + '</option>';
-    });
-    self.list.appendChild(elemPicker);
-
-    _(widgetModel.attributes).each(function(val, key){
-      if(key == 'id' || key == 'selected'
-                     || key == 'lib_id'
-                     || key == 'container_info'
-                     || key == 'isSingle'
-                     || key == 'tagName'
-                     || key == 'tagType'
-                     || key == 'type'
-                     || key == 'Style'
-                     || key == 'class_name') return;
-
-        console.log(key);
-      console.log(self);
-
-      if(val && val.attributes) {
-        self.list.appendChild(self.showModel(val, key));
-      }
-      else if(val && val.models) {
-        self.list.appendChild(self.showCollection(val, key));
-      }
-      else {
-        self.list.appendChild(self.showAttribute(val, key, String('')));
-      }
-    });
-  },
-
-  showModel: function(model, modelName) {
-    var self = this;
     var li = document.createElement('li');
-    li.className = 'model';
 
+    if(alphaVal.models) {
+      return this.showCollection(alphaVal, key);
+    }
+    else if(alphaVal.attributes) {
+      return this.showModel(alphaVal, key);
+    }
+    else {
+      //alert('yolo');
+      return (this.showAttribute(alphaVal, key, cid));
+    }
+
+    return li;
+  },
+
+  showModel: function(widgetModel, key) {
+    this.globalModels.push(widgetModel);
+    this.doBindings(widgetModel);
+
+    var list = document.createElement('ul');
+
+    var self = this;
 
     var span = document.createElement('span');
-    span.innerText = lang[modelName]||modelName;
     span.className = "title";
+    span.innerText = (key) +" Info";
+    list.appendChild(span);
 
-    var ul = document.createElement('ul');
-    ul.className = 'prop-' + modelName;
+    if(widgetModel.get('type')) {
+      var elemPicker = document.createElement('select');
+      elemPicker.id = 'prop-'+ widgetModel.cid +'-class_name';
+      elemPicker.innerHTML = '';
+      _(uieState[widgetModel.get('type')]).each(function(uie){
 
-    _(model.attributes).each(function(val, key) {
-      ul.appendChild(self.showAttribute(val, key, key, modelName));
+        selected = (uie.class_name == widgetModel.get('class_name'))? 'selected' : '';
+
+        elemPicker.innerHTML += '<option '+ selected +'>' + uie.class_name + '</option>';
+      });
+      list.appendChild(elemPicker);
+    }
+
+    _(widgetModel.attributes).each(function(val, key){
+      if( key == 'id' ||
+          key == 'selected' ||
+          key == 'lib_id' ||
+          key == 'isSingle' ||
+          key == 'tagName' ||
+          key == 'tagType' ||
+          key == 'type' ||
+          key == 'Style' ||
+          key == 'class_name' ||
+          key == 'name' ||
+          key == 'deletable') return;
+
+      if(val === null) {
+        return;
+      }
+
+      list.appendChild(self.show(val, key, widgetModel.cid));
     });
 
-    li.appendChild(span);
-    li.appendChild(ul);
-    return li;
+    return list;
+
   },
 
   showCollection: function(coll, collectionName) {
+
     var self = this;
     var li = document.createElement('li');
     li.className = 'model';
 
     var span = document.createElement('span');
-    span.innerText = lang[collectionName]||collectionName;
+    span.innerText = lang[collectionName]||"Sub-Elements";
     span.className = "title";
 
     var ul = document.createElement('ul');
-    ul.className = 'prop-' + collectionName;
-
-    _(coll.models).each(function(model) {
-      console.log(model);
-      ul.appendChild(self.showUIElem(model));
-    });
-
+    ul.className = 'sub-list';
     li.appendChild(span);
     li.appendChild(ul);
+
+    _(coll.models).each(function(model) {
+      var elem = self.show(model, (model.get('type')||"SubElement"));
+      elem.className += 'sub-element';
+      ul.appendChild(elem);
+    });
+
     return li;
   },
 
-  showAttribute: function(val, key, prop, modelName) {
+  showAttribute: function(val, key, cid) {
     var temp, html;
     var self = this;
     var li = document.createElement('li');
 
     if(val!==null) {
       if(key == 'href') {
-        var hash     = modelName + '-' + key;
+        var hash     = cid + '-' + key;
         temp         = document.getElementById('temp-href-select').innerHTML;
-        html         = _.template(temp, {val : val, prop: prop, hash: hash});
+        html         = _.template(temp, {val : val, hash: hash});
         li.innerHTML = '<span class="key">'+(lang[key]||key)+'</span>' + html;
       }
       else if(key == 'src') {
+        var hash     = cid + '-' + key;
         temp         = document.getElementById('temp-source-select').innerHTML;
-        html         = _.template(temp, {val : val, prop: prop});
+        html         = _.template(temp, {val : val, hash: hash});
         li.innerHTML = '<span class="key">'+(lang[key]||key)+'</span>'+ html;
       }
       else if(key == 'width') {
-        var hash     = modelName + '-' + key;
+        var hash     = cid + '-' + key;
         li.innerHTML =  '<span class="key">'+(lang[key]||key)+'</span>' +
                         '<input type="text" class="'+ hash +
                         '" id="prop-'+ hash + '"  value="' + val + '"><div class="width-full"></div>';
       }
       else {
-        var hash     = modelName + '-' + key;
+        var hash     = cid + '-' + key;
         li.innerHTML =  '<span class="key">'+(lang[key]||key)+'</span>' +
                         '<input type="text" class="'+ hash +
                         '" id="prop-'+ hash + '"  value="' + val + '">';
@@ -208,16 +209,16 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   inputChanged: function(e) {
-    var prop = e.target.id.replace('prop-', '');
-    var props = prop.split('-');
 
-    console.log(props);
+    var hash = e.target.id.replace('prop-', '');
+    var info = hash.split('-');
+    var model = _.findWhere(this.globalModels, { cid : info[0] });
 
-    if(props.length > 1) {
-      this.model.get(props[0]).set(props[1], e.target.value);
+    if(model && info[1]) {
+      model.set(info[1], e.target.value);
     }
     else {
-      this.model.set(prop, e.target.value);
+      alert('something went wrong');
     }
   },
 
@@ -225,7 +226,6 @@ var WidgetInfoView = Backbone.View.extend({
     var prop = e.target.id.replace('prop-', '');
     var props = prop.split('-');
 
-    console.log(props);
     if(props.length > 1) {
       this.model.get(props[0]).set(props[1], e.target.value);
     }
@@ -251,26 +251,15 @@ var WidgetInfoView = Backbone.View.extend({
       statics.push(file);
     });
     this.model.get('content_attribs').set('src', _.last(files).url);
-    this.show(this.model);
+    //this.show(this.model);
   },
 
   changedProp: function(changedModel) {
+
     _(changedModel.changed).each(function(val, key) {
-      if(document.getElementById('prop-' + key)) {
-        $('input', document.getElementById('prop-' + key)).val(val);
+      if(document.getElementById('prop-' + changedModel.cid + '-' + key)) {
+        $(document.getElementById('prop-' + changedModel.cid + '-' + key)).val(val);
       }
-    });
-  },
-
-  changedContent: function(changedContextModel) {
-    _(changedContextModel.changed).each(function(val, key) {
-      $(document.getElementById('prop-context-' + key)).val(val);
-    });
-  },
-
-  changedLayout: function(changedLayoutModel) {
-    _(changedLayoutModel.attributes).each(function(val, key) {
-      $(document.getElementById('prop-layout-' + key)).val(val);
     });
   },
 

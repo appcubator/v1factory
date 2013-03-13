@@ -67,7 +67,6 @@ var UserEntityModel = EntityModel.extend({
     var json = {};
     json = _.clone(this.attributes);
     json.fields = this.get('fields').toJSON();
-    console.log( _.uniq(json.fields, function(val) { return val.name; }));
     json.fields = _.uniq(json.fields, function(val) { return val.name; });
 
     return json;
@@ -89,6 +88,17 @@ var ContentModel = Backbone.Model.extend({
 var AttribsModel = Backbone.Model.extend({
 });
 
+var ContainerInfoModel = Backbone.Model.extend({
+  initialize: function(bone) {
+    this.set('uielements', new WidgetCollection(bone.uielements));
+  },
+  toJSON: function() {
+    var json = this.attributes;
+    json.uielements = this.get('uielements').toJSON();
+    return json;
+  }
+});
+
 var WidgetModel = Backbone.Model.extend({
   selected: false,
 
@@ -102,27 +112,30 @@ var WidgetModel = Backbone.Model.extend({
 
     this.set('content_attribs', new ContentModel(this.get('content_attribs')));
     this.set('layout', new LayoutModel(this.get('layout')));
+    if(this.has('container_info')) {
+      this.set('container_info', new ContainerInfoModel(this.get('container_info')));
+    }
     //this.set('attribs', new AttribsModel(this.get('attribs')));
 
     _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
 
-    if(this.get('container_info')&&this.get('container_info').action&&this.get('container_info').uielements === undefined) {
+    if(this.get('container_info')&&this.get('container_info').has('action')) {
 
-      if(constantContainers[this.get('container_info').action]) {
-        this.get('container_info').uielements = [];
-        _(constantContainers[this.get('container_info').action]).each(function(element){
+      if(this.get('container_info').get('uielements').length) {
+        return;
+      }
+
+      if(constantContainers[this.get('container_info').get('action')]) {
+        this.get('container_info').set('uielements',  new WidgetCollection());
+        _(constantContainers[this.get('container_info').get('action')]).each(function(element){
           elementDefault = uieState[element.type][0];
           element = _.extend(elementDefault, element);
-          self.get('container_info').uielements.push(element);
+          self.get('container_info').get('uielements').push(element);
         });
       }
       else {
-        console.log(this.get('container_info').action);
-        this.containerHandler[this.get('container_info').action].call(this);
+        this.containerHandler[this.get('container_info').get('action')].call(this);
       }
-    }
-    else {
-
     }
   },
 
@@ -137,21 +150,20 @@ var WidgetModel = Backbone.Model.extend({
 
   toJSON : function() {
     var json = _.clone(this.attributes);
-    json = _.omit(json, 'selected');
+    json = _.omit(json, 'selected', 'deletable');
 
     json.content_attribs = this.get('content_attribs').toJSON()|| {};
     json.content = this.get('content')||'';
     json.layout  = this.get('layout').toJSON();
 
-    if(this.get('container_info')) {
+    if(this.has('container_info')) {
 
-      if(this.get('container_info').entity && typeof this.get('container_info').entity !== "string") {
-        json.container_info.entity = this.get('container_info').entity.get('name');
+      if(this.get('container_info').has('entity') && typeof this.get('container_info').get('entity') !== "string") {
+        json.container_info.entity = this.get('container_info').get('entity').name;
       }
 
-      if(this.has('childCollection')) {
-        json.container_info.uielements = this.get('childCollection');
-        delete this.childCollection;
+      if(this.get('container_info').has('uielements')) {
+        json.container_info.uielements = this.get('container_info').get('uielements').toJSON;
       }
     }
 
@@ -199,9 +211,9 @@ var WidgetModel = Backbone.Model.extend({
   containerHandler: {
     'Show' : function() {
       var self = this;
-      self.get('container_info').uielements = [];
+      self.get('container_info').set('uielements', new WidgetCollection());
 
-      _(this.get('container_info').entity.get('fields').models).each(function(model, ind){
+      _(this.get('container_info').get('entity').get('fields').models).each(function(model, ind){
 
         var coordinates = iui.unite({x: 1,
                                      y: 1 + (ind * 4)},
@@ -216,21 +228,20 @@ var WidgetModel = Backbone.Model.extend({
             width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
             height: 4
         };
-        widgetProps.content = '{{'+self.get('container_info').entity.get('name')+'_'+model.get('name')+'}}';
+        widgetProps.content = '{{'+self.get('container_info').get('entity').get('name')+'_'+model.get('name')+'}}';
 
         var widget = new WidgetModel(widgetProps);
-        self.get('container_info').uielements.push(widget);
+        self.get('container_info').get('uielements').push(widget);
       });
     },
     'create' : function() {
       var self = this;
       var container_info = self.get('container_info');
-      container_info.uielements = [];
+      container_info.set('uielements', new WidgetCollection());
       self.set('container_info', container_info);
-      self.get('container_info').uielements = [];
+      self.get('container_info').set('uielements', new WidgetCollection());
 
-      console.log(self.get('container_info').entity);
-      _(self.get('container_info').entity.get('fields').models).each(function(model, ind){
+      _(self.get('container_info').get('entity').get('fields').models).each(function(model, ind){
 
         var coordinates = iui.unite({x: 1,
                                      y: 1 + (ind * 2)},
@@ -246,16 +257,14 @@ var WidgetModel = Backbone.Model.extend({
             height: 4
         };
 
-        console.log(ind);
-
-        widgetProps.content_attribs.placeholder = self.get('container_info').entity.get('name')+' '+model.get('name');
+        widgetProps.content_attribs.placeholder = self.get('container_info').get('entity').get('name')+' '+model.get('name');
         widgetProps.content_attribs.name = model.get('name');
 
         var widget = new WidgetModel(widgetProps);
-        self.get('container_info').uielements.push(widget);
+        self.get('container_info').get('uielements').push(widget);
       });
 
-      var ind = this.get('container_info').entity.get('fields').length;
+      var ind = this.get('container_info').get('entity').get('fields').length;
       var coordinates = iui.unite({x: 1,
                                    y: 1 + (ind * 2)},
                                   {x: self.get('layout').get('width') + 1,
@@ -271,12 +280,12 @@ var WidgetModel = Backbone.Model.extend({
       };
       widgetProps.content_attribs.value = 'Create';
       var widget = new WidgetModel(widgetProps);
-      self.get('container_info').uielements.push(widget);
+      self.get('container_info').get('uielements').push(widget);
     },
     'addbutton' : function() {
       var self = this;
       var container_info = self.get('container_info');
-      container_info.uielements = [];
+      container_info.set('uielements', new WidgetCollection());
       self.set('container_info', container_info);
 
       var coordinates = iui.unite({x: 1,
@@ -295,11 +304,11 @@ var WidgetModel = Backbone.Model.extend({
 
       widgetProps.content_attribs.value = 'Add ' + this.get('container_info').entity.get('name');
       var widget = new WidgetModel(widgetProps);
-      self.get('container_info').uielements.push(widget);
+      self.get('container_info').get('uielements').push(widget);
     },
     'login' : function() {
       var self = this;
-      self.get('container_info').uielements = [];
+      self.get('container_info').set('uielements', new WidgetCollection());
 
       var coordinates = iui.unite({x: 1,
                                    y: 1 },
@@ -317,7 +326,7 @@ var WidgetModel = Backbone.Model.extend({
       };
 
       var widget = new WidgetModel(widgetProps);
-      self.get('container_info').uielements.push(widget);
+      self.get('container_info').get('uielements').push(widget);
 
       var coordinates = iui.unite({x: 1,
                                    y: 5 },
@@ -336,11 +345,11 @@ var WidgetModel = Backbone.Model.extend({
 
       widgetProps.content_attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
-      self.get('container_info').uielements.push(widget);
+      self.get('container_info').get('uielements').push(widget);
     },
     'signup' : function() {
       var self = this;
-      self.get('container_info').uielements = [];
+      self.get('container_info').set('uielements', new WidgetCollection());
 
       var coordinates = iui.unite({x: 1,
                                    y: 1 },
@@ -359,7 +368,7 @@ var WidgetModel = Backbone.Model.extend({
       };
 
       var widget = new WidgetModel(widgetProps);
-      self.get('container_info').uielements.push(widget);
+      self.get('container_info').get('uielements').push(widget);
 
       var coordinates = iui.unite({x: 1,
                                    y: 5 },
@@ -377,9 +386,7 @@ var WidgetModel = Backbone.Model.extend({
           height: 4
       };
 
-      //widgetProps.content_attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
-      console.log(widget);
       self.get('container_info').uielements.push(widget);
 
       var coordinates = iui.unite({x: 1,
@@ -399,7 +406,7 @@ var WidgetModel = Backbone.Model.extend({
       };
 
       var widget = new WidgetModel(widgetProps);
-      self.get('container_info').uielements.push(widget);
+      self.get('container_info').get('uielements').push(widget);
     }
   }
 });
