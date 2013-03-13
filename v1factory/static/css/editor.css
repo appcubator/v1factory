@@ -51,6 +51,14 @@
   overflow: hidden;
 }
 
+.section ul.sub-list {
+  width: 90%;
+  margin-left: 5%;
+  border: 1px solid #1b2535;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
 .section ul li {
   width: 100%;
   margin: 0;

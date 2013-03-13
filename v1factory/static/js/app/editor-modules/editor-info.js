@@ -65,7 +65,7 @@ var WidgetInfoView = Backbone.View.extend({
   render: function() {
     var span = document.createElement('span');
     span.className = "title";
-    span.innerText = this.model.get('type')+" Info";
+    span.innerText = (this.model.get('type')||"Container") +" Info";
     this.list = document.createElement('ul');
     this.el.appendChild(span);
     this.el.appendChild(this.list);
@@ -87,38 +87,49 @@ var WidgetInfoView = Backbone.View.extend({
 
   showUIElem: function(widgetModel) {
     var self = this;
-    var elemPicker = document.createElement('select');
-    elemPicker.id = 'prop-class_name';
-    elemPicker.innerHTML = '';
-    _(uieState[widgetModel.get('type')]).each(function(uie){
 
-      selected = (uie.class_name == widgetModel.get('class_name'))? 'selected' : '';
 
-      elemPicker.innerHTML += '<option '+ selected +'>' + uie.class_name + '</option>';
-    });
-    self.list.appendChild(elemPicker);
+    if(widgetModel.get('type')) {
+      var elemPicker = document.createElement('select');
+      elemPicker.id = 'prop-class_name';
+      elemPicker.innerHTML = '';
+      _(uieState[widgetModel.get('type')]).each(function(uie){
+
+        selected = (uie.class_name == widgetModel.get('class_name'))? 'selected' : '';
+
+        elemPicker.innerHTML += '<option '+ selected +'>' + uie.class_name + '</option>';
+      });
+      self.list.appendChild(elemPicker);
+    }
 
     _(widgetModel.attributes).each(function(val, key){
-      if(key == 'id' || key == 'selected'
-                     || key == 'lib_id'
-                     || key == 'container_info'
-                     || key == 'isSingle'
-                     || key == 'tagName'
-                     || key == 'tagType'
-                     || key == 'type'
-                     || key == 'Style'
-                     || key == 'class_name') return;
+      if( key == 'id' ||
+          key == 'selected' ||
+          key == 'lib_id' ||
+          key == 'container_info' ||
+          key == 'isSingle' ||
+          key == 'tagName' ||
+          key == 'tagType' ||
+          key == 'type' ||
+          key == 'Style' ||
+          key == 'class_name' ||
+          key == 'name' ||
+          key == 'deletable') return;
 
-        console.log(key);
-      console.log(self);
+      console.log(val);
 
-      if(val && val.attributes) {
+      if(val === null) {
+        return;
+      }
+
+      if(val && val.attributes) { // model
         self.list.appendChild(self.showModel(val, key));
       }
-      else if(val && val.models) {
+      else if(val && val.models) { // collection
         self.list.appendChild(self.showCollection(val, key));
       }
       else {
+        if(val == null||val == ""||val.attributes) return;
         self.list.appendChild(self.showAttribute(val, key, String('')));
       }
     });
@@ -128,7 +139,7 @@ var WidgetInfoView = Backbone.View.extend({
     var self = this;
     var li = document.createElement('li');
     li.className = 'model';
-
+    li.id = 'cid-'+model.cid;
 
     var span = document.createElement('span');
     span.innerText = lang[modelName]||modelName;
@@ -138,6 +149,7 @@ var WidgetInfoView = Backbone.View.extend({
     ul.className = 'prop-' + modelName;
 
     _(model.attributes).each(function(val, key) {
+      if(val==null) return;
       ul.appendChild(self.showAttribute(val, key, key, modelName));
     });
 
@@ -152,19 +164,25 @@ var WidgetInfoView = Backbone.View.extend({
     li.className = 'model';
 
     var span = document.createElement('span');
-    span.innerText = lang[collectionName]||collectionName;
+    span.innerText = lang[collectionName]||"";
     span.className = "title";
 
     var ul = document.createElement('ul');
-    ul.className = 'prop-' + collectionName;
-
-    _(coll.models).each(function(model) {
-      console.log(model);
-      ul.appendChild(self.showUIElem(model));
-    });
-
+    ul.className = 'sub-list';
+    //prop- + collectionName;
     li.appendChild(span);
     li.appendChild(ul);
+
+    _(coll.models).each(function(model) {
+      //console.log(model);
+      console.log(ul);
+      var elem = self.showModel(model);
+      ul.appendChild(elem);
+    });
+
+    console.log(ul);
+
+
     return li;
   },
 
