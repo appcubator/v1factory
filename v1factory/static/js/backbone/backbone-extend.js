@@ -3,8 +3,6 @@ Backbone.UIView = Backbone.View.extend({
   resizableAndDraggable: function() {
     var self = this;
 
-    console.log(self.el);
-
     self.$el.resizable({
       handles: "n, e, s, w, se",
       containment: $('#elements-container'),
@@ -22,9 +20,7 @@ Backbone.UIView = Backbone.View.extend({
   },
 
   draggable: function() {
-    alert('yolo');
     var self = this;
-    console.log(self.$el.draggable());
     self.$el.draggable({
       containment: $('#elements-container'),
       drag: self.moving,
@@ -119,7 +115,6 @@ Backbone.ModalView = Backbone.View.extend({
       div.style.opacity = '0.6';
       document.body.appendChild(div);
 
-      console.log(self);
       $(div).on('click', function() {
         self.$el.remove();
         $(self.backgroundDiv).remove();

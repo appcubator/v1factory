@@ -126,7 +126,6 @@ var EntityView = Backbone.View.extend({
 
   clickedPropDelete: function(e) {
     var cid = String(e.target.id).replace('delete-','');
-    console.log(cid);
     this.model.get('fields').remove(cid);
     $(e.target.parentNode).remove();
   }
@@ -165,8 +164,6 @@ var UserEntityView = EntityView.extend({
 
   render: function() {
     var self = this;
-
-    console.log(this.model);
 
     _(this.model.get('fields').models).each(function(fieldModel) {
       if(fieldModel.get('name') == 'First Name' ||
@@ -212,9 +209,6 @@ var UserEntityView = EntityView.extend({
     e.preventDefault();
     var name = $('.property-name-input', this.el).val();
 
-    console.log(this.model);
-    console.log(this.model.get('fields'));
-
     this.model.get('fields').add(new FieldModel({
       name: name,
       type: 'text',
@@ -245,7 +239,6 @@ var EntityListView = Backbone.View.extend({
     this.collection.add(initialEntities);
 
     this.userModel = new UserEntityModel(appState.users);
-    console.log(this.userModel);
     new UserEntityView(this.userModel);
 
   },
@@ -317,7 +310,6 @@ var EntitiesEditorView = Backbone.View.extend({
     appState.entities = this.entityList.collection.toJSON();
     appState.users = this.entityList.userModel.toJSON();
 
-    console.log(appState);
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/state/',

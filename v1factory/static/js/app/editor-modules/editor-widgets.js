@@ -59,8 +59,6 @@ var WidgetView = Backbone.UIView.extend({
                     'resized',
                     'keyHandler');
 
-    console.log(widgetModel);
-
     this.model = widgetModel;
 
     this.render();

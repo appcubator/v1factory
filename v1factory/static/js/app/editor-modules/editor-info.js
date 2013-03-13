@@ -51,7 +51,6 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   doBindings: function(model) {
-    console.log(model);
     model.bind("change", this.changedProp, this);
     model.bind("remove", this.clear, this);
   },
@@ -80,9 +79,6 @@ var WidgetInfoView = Backbone.View.extend({
   show: function(alphaVal, key, cid) {
 
     var li = document.createElement('li');
-
-
-    console.log(alphaVal);
 
     if(alphaVal.models) {
       return this.showCollection(alphaVal, key);
@@ -137,9 +133,6 @@ var WidgetInfoView = Backbone.View.extend({
           key == 'name' ||
           key == 'deletable') return;
 
-      console.log(key);
-      console.log(val);
-
       if(val === null) {
         return;
       }
@@ -152,8 +145,6 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   showCollection: function(coll, collectionName) {
-    console.log(collectionName);
-    console.log(coll);
 
     var self = this;
     var li = document.createElement('li');
@@ -169,15 +160,10 @@ var WidgetInfoView = Backbone.View.extend({
     li.appendChild(ul);
 
     _(coll.models).each(function(model) {
-      console.log(model);
-      console.log(ul);
       var elem = self.show(model, (model.get('type')||"SubElement"));
       elem.className += 'sub-element';
       ul.appendChild(elem);
     });
-
-    console.log(ul);
-
 
     return li;
   },
@@ -186,8 +172,6 @@ var WidgetInfoView = Backbone.View.extend({
     var temp, html;
     var self = this;
     var li = document.createElement('li');
-
-    console.log(cid);
 
     if(val!==null) {
       if(key == 'href') {
@@ -225,8 +209,7 @@ var WidgetInfoView = Backbone.View.extend({
   },
 
   inputChanged: function(e) {
-    console.log(this);
-    console.log(this._modelPointers);
+
     var hash = e.target.id.replace('prop-', '');
     var info = hash.split('-');
     var model = _.findWhere(this.globalModels, { cid : info[0] });
@@ -243,7 +226,6 @@ var WidgetInfoView = Backbone.View.extend({
     var prop = e.target.id.replace('prop-', '');
     var props = prop.split('-');
 
-    console.log(props);
     if(props.length > 1) {
       this.model.get(props[0]).set(props[1], e.target.value);
     }

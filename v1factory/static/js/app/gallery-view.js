@@ -168,7 +168,6 @@ var UIElementListView = Backbone.View.extend({
   },
 
   appendUIE: function(uieModel) {
-    console.log(uieModel);
     var newView = new UIElementView(uieModel);
     this.elems.appendChild(newView.el);
   }

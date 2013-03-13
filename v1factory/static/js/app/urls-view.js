@@ -22,8 +22,6 @@ var UrlView = Backbone.View.extend({
                     'lastEntityChanged',
                     'lastTextChanged');
 
-    console.log(item);
-
     this.model = item;
     if(!this.model.get('urlparts')) {
       this.model.set('urlparts', []);

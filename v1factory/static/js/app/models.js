@@ -67,7 +67,6 @@ var UserEntityModel = EntityModel.extend({
     var json = {};
     json = _.clone(this.attributes);
     json.fields = this.get('fields').toJSON();
-    console.log( _.uniq(json.fields, function(val) { return val.name; }));
     json.fields = _.uniq(json.fields, function(val) { return val.name; });
 
     return json;
@@ -91,9 +90,7 @@ var AttribsModel = Backbone.Model.extend({
 
 var ContainerInfoModel = Backbone.Model.extend({
   initialize: function(bone) {
-    console.log(bone);
     this.set('uielements', new WidgetCollection(bone.uielements));
-    console.log(this);
   },
   toJSON: function() {
     var json = this.attributes;
@@ -215,7 +212,7 @@ var WidgetModel = Backbone.Model.extend({
     'Show' : function() {
       var self = this;
       self.get('container_info').set('uielements', new WidgetCollection());
-      console.log(this);
+
       _(this.get('container_info').get('entity').get('fields').models).each(function(model, ind){
 
         var coordinates = iui.unite({x: 1,
@@ -244,7 +241,6 @@ var WidgetModel = Backbone.Model.extend({
       self.set('container_info', container_info);
       self.get('container_info').set('uielements', new WidgetCollection());
 
-      console.log(self.get('container_info').entity);
       _(self.get('container_info').get('entity').get('fields').models).each(function(model, ind){
 
         var coordinates = iui.unite({x: 1,
@@ -260,8 +256,6 @@ var WidgetModel = Backbone.Model.extend({
             width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
             height: 4
         };
-
-        console.log(ind);
 
         widgetProps.content_attribs.placeholder = self.get('container_info').get('entity').get('name')+' '+model.get('name');
         widgetProps.content_attribs.name = model.get('name');
@@ -392,9 +386,7 @@ var WidgetModel = Backbone.Model.extend({
           height: 4
       };
 
-      //widgetProps.content_attribs.value = 'Add ' + self.get('container_info').entity;
       var widget = new WidgetModel(widgetProps);
-      console.log(widget);
       self.get('container_info').uielements.push(widget);
 
       var coordinates = iui.unite({x: 1,
