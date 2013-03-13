@@ -78,7 +78,7 @@
                 {
                     "layout": {
                         "width": 16,
-                        "height": 13,
+                        "height": 64,
                         "top": 10,
                         "left": 16
                     },
@@ -88,9 +88,11 @@
                         "uielements": [
                             {
                                 "tagName": "input",
-                                "attribs": {
-                                    "type": "text",
-                                    "name": "username",
+                                "tagType": "text",
+                                "cons_attribs" : {
+                                    "name": "username"
+                                },
+                                "content_attribs": {
                                     "placeholder": "Username"
                                 },
                                 "content": "",
@@ -108,8 +110,10 @@
                                 "type"   : "password",
                                 "tagName": "input",
                                 "tagType": "password",
-                                "content_attribs": {
+                                "cons_attribs" : {
                                     "name": "password1",
+                                },
+                                "content_attribs": {
                                     "placeholder": "Password"
                                 },
                                 "content": "",
@@ -126,8 +130,10 @@
                                 "type"   : "password",
                                 "tagName": "input",
                                 "tagType": "password",
-                                "content_attribs": {
+                                "cons_attribs" : {
                                     "name": "password2",
+                                },
+                                "content_attribs": {
                                     "placeholder": "Password"
                                 },
                                 "content": "",
@@ -146,8 +152,10 @@
                                 "type"   : "text-input",
                                 "tagName": "input",
                                 "tagType": "text",
+                                "cons_attribs" : {
+                                    "name": "name"
+                                },
                                 "content_attribs": {
-                                    "name": "name",
                                     "placeholder": "Display Name"
                                 },
                                 "content": "",
@@ -164,8 +172,10 @@
                                 "type": "text-input",
                                 "tagName": "input",
                                 "tagType": "text",
+                                "cons_attribs" : {
+                                    "name": "email"
+                                },
                                 "content_attribs": {
-                                    "name": "email",
                                     "placeholder": "Email address"
                                 },
                                 "content": "",
@@ -197,63 +207,7 @@
                                 "container_info": null
                             }
                         ]
-                    },
-                    "uielements": [
-                        {
-                            "type": "text-input",
-                            "tagName": "input",
-                            "tagType":  "text",
-                            "content_attribs": {
-                                "name": "wrong-name",
-                                "placeholder": "Username..."
-                            },
-                            "content": "",
-                            "isSingle": true,
-                            "layout": {
-                                "top": 0,
-                                "left": 0,
-                                "width": 16,
-                                "height": 4
-                            },
-                            "container_info": null
-                        },
-                        {
-                            "type": "password",
-                            "tagName": "input",
-                            "tagType": "password",
-                            "content_attribs": {
-                                "name": "password",
-                                "placeholder": "Password..."
-                            },
-                            "content": "",
-                            "isSingle": true,
-                            "layout": {
-                                "top": 4,
-                                "left": 0,
-                                "width": 16,
-                                "height": 4
-                            },
-                            "container_info": null
-                        },
-                        {
-                            "tagName": "input",
-                            "tagType": "submit",
-                            "class_name": "btn",
-                            "content_attribs": {
-                                "value": "Sign Up"
-                            },
-                            "content": "",
-                            "isSingle": true,
-                            "type": "button",
-                            "layout": {
-                                "top": 8,
-                                "left": 0,
-                                "width": 16,
-                                "height": 4
-                            },
-                            "container_info": null
-                        }
-                    ]
+                    }
                 }
             ],
             "access_level": "all"

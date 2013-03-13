@@ -54,9 +54,15 @@
 .section ul.sub-list {
   width: 90%;
   margin-left: 5%;
-  border: 1px solid #1b2535;
   border-radius: 4px;
   margin-top: 4px;
+  border-width: 0;
+}
+
+.sub-element {
+  border: 1px solid #1b2535;
+  margin-top: 6px !important;
+  border-radius: 4px;
 }
 
 .section ul li {
@@ -721,6 +727,8 @@
 
 .item-info li select {
   width: 160px;
+  margin-left: 30px;
+  margin-top: 4px;
 }
 
 .widgets {
