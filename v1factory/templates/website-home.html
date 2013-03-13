@@ -14,38 +14,44 @@
  -->
 {% endblock %}
 {% block topbar %}
-{% endblock %}
-{% block page %}
-<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.6; top:0; left:0; z-index:1; width:100%;">
-  <div class="container">
-    <div class="offset1 toppanel  span12 logo-text" style="">
-      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> {{ title }}</h1>
-    </div>
-    <div class="offset10 toppanel hi6 span30">
-      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
-        <span class="span6 pad1"><strong style="line-height:14px;">User Login</strong><br><i class="micro"> (forgot password?)</i></span>
-        <span class="login span21 offset1">
-          {% if form.errors %}
-          <p>Your username and password didn't match. Please try again.</p>
-          {% endif %}
-
-          <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
-              {% csrf_token %}
-              <div class="line block hi1">
-               <input id="id_username" type="text" name="username" maxlength="30">
-              </div>
-              <div class="line block hi1">
-                <input type="password" name="password" id="id_password">
-              </div>
-              <input class="btn right" type="submit" value="Login" />
-              <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
-          </form>
-        </span>
+<div class="navbar logo-text navbar-inverse navbar-fixed-top ">
+  <div class="hi4 navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+        <ul class="nav">
+          <h1 class="name hoff1" style="display:inline-block;"><a class="" href="/">v1 Factory</a></h1>
+        </ul>
+        <div class="login hi2 pad1 pull-right" style="height:45px; margin-top: 10px; opacity:1.0;">
+          <span class="span6 pad1"><strong>User Login</strong><br><i class="micro"> (forgot password?)</i></span>
+          <span class="login span21 offset1">
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
+                {% csrf_token %}
+                <div class="line block hi1">
+                 <input id="id_username" type="text" name="username" placeholder="Username..." maxlength="30">
+                </div>
+                <div class="line block hi1">
+                  <input type="password" name="password" placeholder="Password..." id="id_password">
+                </div>
+                <input class="btn" type="submit" value="Login"/>
+                <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
+            </form>
+          </span>
+      </div>
       </div>
     </div>
   </div>
 </div>
-<div class="well" style="background-color:#26656e;">
+{% endblock %}
+{% block page %}
+<div class="well green-2">
   <div class="container">
     <div class="span64">
       <div class="hi28">
@@ -55,7 +61,7 @@
           <div class="btn btn-green hoff1" id="request">Request a Beta Invite</div>
           <script type="in/Login"></script>
         </div>
-        <div class="span26 hi18 hoff7 offset1 video-pane ">
+        <div class="span26 hi18 hoff7 offset1 video-pane">
           <div class="site-trackstudent"></div>
           <div class="mobile-trackstudent"></div>
           <div id="bluebuttonihopenooneclicks" class="btn btn-blue">See What Others Have Built <img src="{{ STATIC_URL }}img/right-arrow.png"></div>
@@ -76,8 +82,8 @@
         </div>
         </div>
       </div>
-      <div class="span22 light-green card">
-        <div class="hi12 users" style="color:#0f2d40;">
+      <div class="span22 green-1 card">
+        <div class="hi12 users">
           <p class=" hoff1 hi3">
             <span class="mtxt bold">Build.</span>
           </p>
@@ -87,7 +93,7 @@
         </div>
       </div>
       <div class="span14 green-2 card">
-        <div class="hi12 publish" style="color:#0f2d40;">
+        <div class="hi12 publish">
           <p class=" hoff1 hi3">
            <span class="mtxt bold">Launch.</span>
           </p>
@@ -97,7 +103,7 @@
         </div>
       </div>
       <div class="span14 green-3 card">
-        <div class="hi12 metrics" style="color:#0f2d40;">
+        <div class="hi12 metrics">
           <p class=" hoff1 hi3">
             <span class="mtxt bold">Watch.</span>
           </p>

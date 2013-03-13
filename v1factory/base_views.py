@@ -48,7 +48,10 @@ class MyUserCreationForm(forms.UserCreationForm):
 def homepage(request):
   if request.user.is_authenticated():
     return redirect('/app')
-  return render(request, 'website-home.html')
+
+  page_context = {}
+  page_context["title"] = "Homepage"
+  return render(request, 'website-home.html', page_context)
 
 @require_http_methods(["GET", "POST"])
 def signup(request):
