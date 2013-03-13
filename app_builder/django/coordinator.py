@@ -42,12 +42,14 @@ def analyzed_app_to_app_components(analyzed_app):
     t.properly_name_vars_in_q_container(models)
 
   for f in analyzed_app.forms.each():
-    from app_builder.analyzer import SignupForm
+    from app_builder.analyzer import SignupForm, LoginForm
     if isinstance(f, SignupForm):
       rec = DjangoFormReceiver.create_signup(f, analyzed_app)
       form_receivers.add(rec)
       u = DjangoUrl.create_post(rec, analyzed_app)
       urls.add(u)
+    elif isinstance(f, LoginForm):
+      pass
     else:
       rec = DjangoFormReceiver.create(f, analyzed_app)
       rec.find_model(models)

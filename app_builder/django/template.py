@@ -1,3 +1,5 @@
+import re
+
 class DjangoTemplate(object):
   from jinja2 import Environment, PackageLoader
   env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates'))
@@ -10,7 +12,8 @@ class DjangoTemplate(object):
   @classmethod
   def create(cls, page, analyzed_app):
     from app_builder.analyzer import Container, Page
-    self = cls(name=page.name, filename=page.name+".html", page=page)
+    name = page.name.replace(" ", "_")
+    self = cls(name=page.name, filename=name+".html", page=page)
 
     # resolve links, doesn't yet support dynamic links.
     for uie in self.page.uielements:

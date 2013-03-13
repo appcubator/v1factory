@@ -106,9 +106,11 @@ class Node(UIElement):
 
     super(Node, self).__init__(uie=uie)
 
-    self.attribs = uie['attribs']
+    self.attribs = uie['content_attribs']
+    if 'constant_attribs' in uie:
+      self.attribs.update(uie['constant_attribs'])
     self.attribs['style'] = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
-    self.content_dict = uie['content']
+    self._content = uie['content']
 
 
   @property
@@ -118,13 +120,13 @@ class Node(UIElement):
       return classes
 
   def content(self):
-    if 'text' in self.content_dict:
-      return self.content_dict['text']
+    if self._content is not None:
+      return self._content
     else:
       return ""
 
   def set_content(self, text):
-    self.content_dict['text'] = text
+    self._content = text
 
   def is_normal_tag(self):
     return self.tagname not in ['img', 'input']
@@ -209,6 +211,7 @@ class SignupForm(Form):
       try:
         assert(rf in field_names)
       except AssertionError:
+        print field_names
         raise Exception("\"{}\" missing as a field in the signup form.".format(rf))
 
 class EditForm(Form):

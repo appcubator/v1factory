@@ -35,7 +35,7 @@ class DjangoModel(object):
     if self.name == "User":
       return "UserProfile"
     else:
-      return self.name
+      return self.name.replace(' ', '_')
 
   def import_line(self):
     return "from webapp.models import " + self.identifier()
@@ -79,7 +79,7 @@ class DjangoField(object):
 
   def identifier(self):
     """What will this field be referred to as a variable?"""
-    return "m_" + self.name
+    return "m_" + self.name.replace(" ", "_")
 
   def django_type(self):
     return DjangoField._type_map[self.field_type]
