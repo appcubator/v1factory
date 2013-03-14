@@ -30,6 +30,7 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   style: function() {
+
     if(!this.pageModel.get('shouldStyle')) return;
 
     if(document.getElementById(this.options.id)) {
@@ -39,7 +40,7 @@ var DesignPropertyView = Backbone.View.extend({
     var styleTag = document.createElement('style');
     styleTag.id = this.options.id;
 
-    var styleContent = '.sample ' + (this.options.tag||'') + ' {';
+    var styleContent = '.page ' + (this.options.tag||'') + ' {';
     styleContent += this.options.css.replace(/<%=content%>/g, this.model.get('value'));
     styleContent += '}';
 

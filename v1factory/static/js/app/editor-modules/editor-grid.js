@@ -15,11 +15,12 @@
 var currentCoord;
 
 var GridEditorView = Backbone.View.extend({
-  el             : document.getElementById('body-container'),
+  // el             : document.getElementById('body-container'),
   initCor        : {},
   lastCor        : {},
   selectorActive : false,
   itemGallery    : document.getElementById('item-gallery'),
+  className : 'grid-container',
   events : {
     "click .widget-prev"         : "addWidget"
     //"click .item-gallery .header": "hideItemGallery"
@@ -45,14 +46,14 @@ var GridEditorView = Backbone.View.extend({
 
   render: function() {
 
-    for(var y=1; y < 19; y++) {
+    for(var y=1; y < 36; y++) {
       var row = document.createElement('div');
       $(row).addClass('row editing hi4');
       row.id = 'row_' + y;
       $(row).data('row', y);
-      for(var x=1; x < 17; x++) {
+      for(var x=1; x < 12; x++) {
         var square = document.createElement('div');
-        $(square).addClass('span4 hi4 editing');
+        $(square).addClass('span1 hi4 editing');
         $(square).data({
           xcor : x,
           ycor : y

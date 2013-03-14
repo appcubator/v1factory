@@ -12,6 +12,7 @@ var EditorView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, 'save',
+                    'style',
                     'hideSettings',
                     'showSettings',
                     'getContextEntities',
@@ -28,7 +29,8 @@ var EditorView = Backbone.View.extend({
     this.widgetsCollection= new WidgetCollection();
     this.galleryEditor    = new GalleryView(this.widgetsCollection, this.contextCollection, this.entityCollection);
     this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.contextCollection.models, page);
-    this.widgetInfoEditor = new WidgetInfoView(this.widgetsCollection);
+    // this.widgetInfoEditor = new WidgetInfoView(this.widgetsCollection);
+    this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
 
     this.designEditor     = new DesignEditorView(this.model, true);
     this.gridEditor       = new GridEditorView();
@@ -36,6 +38,7 @@ var EditorView = Backbone.View.extend({
     this.entityCollection.add(appState.entities);
     this.getContextEntities();
 
+    this.style();
     this.render();
     $('#loading-gif').fadeOut().remove();
     window.addEventListener('keydown', this.keydown);
@@ -44,7 +47,7 @@ var EditorView = Backbone.View.extend({
   render: function() {
     this.el.appendChild(this.galleryEditor.el);
     this.el.appendChild(this.widgetEditor.el);
-    this.el.appendChild(this.gridEditor.el);
+    // this.el.appendChild(this.gridEditor.el);
     this.el.appendChild(this.designEditor.el);
   },
 
@@ -66,6 +69,22 @@ var EditorView = Backbone.View.extend({
       marginBottom : -10
     });
     return false;
+  },
+
+  style: function() {
+    _(uieState).each(function(type) {
+      _(type).each(function(elem) {
+        var styleTag = document.createElement('style');
+        var styleContent = elem.tagName + '.' + elem.class_name + '{';
+        styleContent += elem.style;
+        styleContent += '}';
+
+        styleTag.innerHTML = styleContent;
+        this.styleTag = styleTag;
+
+        document.getElementsByTagName('head')[0].appendChild(styleTag);
+      });
+    });
   },
 
   hideSettings: function() {

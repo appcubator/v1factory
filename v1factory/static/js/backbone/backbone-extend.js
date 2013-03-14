@@ -5,15 +5,18 @@ Backbone.UIView = Backbone.View.extend({
 
     self.$el.resizable({
       handles: "n, e, s, w, se",
-      containment: $('#elements-container'),
+      grid: [80, 15],
+      containment: "parent",
       resize: self.resizing,
       stop  : self.resized
     });
 
     self.$el.draggable({
-      containment: $('#elements-container'),
+      containment: "parent",
+      grid: [80, 15],
       drag: self.moving,
-      stop: self.moved
+      stop: self.moved,
+      snapMode : "outer"
     });
 
     this.setPosition("absolute");
@@ -22,7 +25,8 @@ Backbone.UIView = Backbone.View.extend({
   draggable: function() {
     var self = this;
     self.$el.draggable({
-      containment: $('#elements-container'),
+      containment: parent,
+      grid: [80, 15],
       drag: self.moving,
       stop: self.moved
     });
@@ -30,12 +34,14 @@ Backbone.UIView = Backbone.View.extend({
 
   resizable: function() {
     var self = this;
-    $(this.el).resizable({
+    self.$el.resizable({
       handles: "n, e, s, w, se",
       grid: 30,
       resize: self.resizing,
       stop: self.resized
     });
+
+    this.setPosition("absolute");
   },
 
   disableResizeAndDraggable: function() {
