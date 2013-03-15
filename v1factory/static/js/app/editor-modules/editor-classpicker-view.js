@@ -15,11 +15,7 @@
 var WidgetClassPickerView = Backbone.View.extend({
   el     : document.getElementById('class-picker'),
   events : {
-    // 'change input'          : 'inputChanged',
-    // 'keydown input'         : 'keydownInput',
-    // 'change select.statics' : 'staticsChanged',
-    // 'change select'         : 'inputChanged',
-    'click .class-name-item'     : 'classChanged'
+    'click .class-name-item'   : 'classChanged'
   },
 
   initialize: function(widgetsCollection){

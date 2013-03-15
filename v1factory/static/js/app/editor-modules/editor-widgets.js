@@ -75,6 +75,8 @@ var WidgetView = Backbone.UIView.extend({
     this.model.get('layout').bind("change:top", this.changedTop, this);
     this.model.get('layout').bind("change:left", this.changedLeft, this);
     this.model.get('layout').bind("change:isFull", this.toggleFull, this);
+    this.model.get('layout').bind("change:alignment", this.changedAlignment, this);
+    this.model.get('layout').bind("change", this.changedPadding, this);
 
     this.model.bind("change:content", this.changedText, this);
     this.model.get('content_attribs').bind("change:src", this.changedSource, this);
@@ -95,6 +97,7 @@ var WidgetView = Backbone.UIView.extend({
     this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
     this.setHeight(height * GRID_HEIGHT);
     this.el.className += " span" + width;
+    this.el.style.textAlign = this.model.get('layout').get('alignment');
     this.el.innerHTML = this.renderElement();
 
     if(this.model.isFullWidth()) this.switchOnFullWidth();
@@ -132,6 +135,17 @@ var WidgetView = Backbone.UIView.extend({
     this.el.className += 'span' + this.model.get('layout').get('width');
     this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
 
+  },
+
+  changedAlignment: function() {
+    this.el.style.textAlign = this.model.get('layout').get('alignment');
+  },
+
+  changedPadding: function() {
+    this.el.style.paddingTop    = this.model.get('layout').get('t-padding');
+    this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
+    this.el.style.paddingLeft   = this.model.get('layout').get('l-padding');
+    this.el.style.paddingRight  = this.model.get('layout').get('r-padding');
   },
 
   toggleFull: function (argument) {

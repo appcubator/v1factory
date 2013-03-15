@@ -5,7 +5,7 @@ var DesignPropertiesCollection = Backbone.Collection.extend({
 var DesignPropertyView = Backbone.View.extend({
   el  : null,
   tagName : 'div',
-  className: 'property hi6 hoff1 span28 offset1',
+  className: 'property hi6 hoff1 span5 offset1',
 
   initialize: function(model, pageModel, ind, shouldStyle) {
     _.bindAll(this, 'render', 'renderTitle', 'style', 'select', 'amendAppState');
@@ -134,7 +134,7 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignSizePickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi6 hoff1 span10 offset1',
+  className: 'property hi6 hoff1 span1 offset1',
   events: {
     'change .size' : 'select'
   },
@@ -160,7 +160,7 @@ var DesignSizePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignFontPickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi6 hoff1 span17 offset1',
+  className: 'property hi6 hoff1 span4 offset1',
   events: {
     'change .size' : 'select'
   },

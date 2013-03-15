@@ -34,9 +34,9 @@
 {% block controllers %}
 <div class="section-select">
   <a href="/app/3/" class="menu-button home">
-  </a><div class="menu-button setting" id="settings">
-  </div><div class="menu-button save" id="save">
+  </a><div class="menu-button save" id="save">
     <span>Save</span>
+  </div><div class="menu-button setting" id="settings"><span>Design Settings</span>
   </div><div class="menu-button help"></div>
 </div>
 {% include "app-editor-settings.html" %}
@@ -88,6 +88,7 @@ var uieState = {{ app.uie_state_json|safe }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-info.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-design-view.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-classpicker-view.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-editlayout-view.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-view.js"></script>
 

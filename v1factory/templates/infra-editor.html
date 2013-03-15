@@ -18,15 +18,17 @@
   {% block controllers %}
   
   {% endblock %}
-  <div class="page">
-    <div class="container">
-    {% block topbar %}
-    {% endblock %}
+  <div class="page-wrapper">
+    <div class="page">
+      <div class="container">
+      {% block topbar %}
+      {% endblock %}
+      </div>
+      {% block navbar %}
+      {% endblock %}
+      {% block page %}
+      {% endblock %}  
     </div>
-    {% block navbar %}
-    {% endblock %}
-    {% block page %}
-    {% endblock %}  
   </div>
   <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
