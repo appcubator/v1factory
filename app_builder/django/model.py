@@ -29,6 +29,7 @@ class DjangoModel(object):
     return self
 
   def foreign_key_name(self):
+    # note, i'm also using this to generate variable names for the url-data in the view
     return self.name.lower()+"_id"
 
   def identifier(self):

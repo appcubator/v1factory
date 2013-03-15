@@ -109,7 +109,7 @@ class Node(UIElement):
     self.attribs = uie['content_attribs']
     if 'constant_attribs' in uie:
       self.attribs.update(uie['constant_attribs'])
-    self.attribs['style'] = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
+    self.position_css = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
     self._content = uie['content']
 
 
@@ -211,7 +211,6 @@ class SignupForm(Form):
       try:
         assert(rf in field_names)
       except AssertionError:
-        print field_names
         raise Exception("\"{}\" missing as a field in the signup form.".format(rf))
 
 class EditForm(Form):

@@ -8,6 +8,8 @@ class DjangoView(object):
   @classmethod
   def create(cls, page, analyzed_app, template):
     """Create a view from a page, analyzed app, and djangotemplate"""
+    def get_queries_out_of_page(page):
+      pass
     #queries = get_queries_out_of_page(page)
     queries = []
     self = cls(name=page.name, template=template, queries=queries)
@@ -19,9 +21,6 @@ class DjangoView(object):
 
   def view_path(self):
     return "webapp.views."+self.identifier()
-
-  def queries(self):
-    return []
 
   def url_keys(self):
     return []

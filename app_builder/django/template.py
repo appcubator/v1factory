@@ -31,25 +31,35 @@ class DjangoTemplate(object):
 
   def properly_name_vars_in_q_container(self, models):
     """Replaces the model handlebars with the template text require to render the for loop properly"""
-    from app_builder.analyzer import QuerysetWrapper
+    from app_builder.analyzer import QuerysetWrapper, Node
     query_containers = filter(lambda x: isinstance(x, QuerysetWrapper), self.page.uielements)
+    plain_old_nodes = filter(lambda x: isinstance(x, Node), self.page.uielements)
+
+    def fix_the_string(s, single=False):
+      handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', s)
+      # check validity
+      for mname, fname in handlebars_search:
+        m = models.get_by_name(mname)
+        assert(m is not None) # if err, then mname is not a model
+        f = m.fields.get_by_name(fname)
+        assert(f is not None) # if err, then fname is not a field of the model
+      # function to do the replacing
+      def repl_handlebars(match):
+        m = models.get_by_name(match.group(1))
+        f = m.fields.get_by_name(match.group(2))
+        if single:
+          return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
+        else:
+          return "{{ item."+f.identifier()+" }}"
+      # replace the content.
+      return re.sub(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', repl_handlebars, s)
+
     for uie in query_containers:
       for n in uie.nodes:
-        current_content = n.content()
-        handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', current_content)
-        # check validity
-        for mname, fname in handlebars_search:
-          m = models.get_by_name(mname)
-          assert(m is not None) # if err, then mname is not a model
-          f = m.fields.get_by_name(fname)
-          assert(f is not None) # if err, then fname is not a field of the model
-        # function to do the replacing
-        def repl_handlebars(match):
-          m = models.get_by_name(match.group(1))
-          f = m.fields.get_by_name(match.group(2))
-          return "{{ item."+f.identifier()+" }}"
-        # replace the content.
-        n.set_content(re.sub(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', repl_handlebars, current_content))
+        n.set_content(fix_the_string(n.content(), single=False))
+    for n in plain_old_nodes:
+      n.set_content(fix_the_string(n.content(), single=True))
+
 
   def render(self):
     template = DjangoTemplate.env.get_template('template.html')
