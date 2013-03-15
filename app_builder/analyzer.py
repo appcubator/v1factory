@@ -83,6 +83,7 @@ class UIElement(object):
       self.height = 5
       self.left = 5
       self.top = 5
+    self.position_css = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
 
 class Node(UIElement):
   """A Node can be thought of as a single element on the page.
@@ -90,8 +91,7 @@ class Node(UIElement):
      Nodes may reference data from a model."""
 
   def __init__(self, uie, page):
-    #from v1factory.models import UIElement as LibUI
-    #self.lib_id = uie['lib_id']
+    super(Node, self).__init__(uie=uie)
     self.page = page
     self.uie = uie
 
@@ -104,12 +104,10 @@ class Node(UIElement):
 
     self.html_id = ""
 
-    super(Node, self).__init__(uie=uie)
 
     self.attribs = uie['content_attribs']
     if 'constant_attribs' in uie:
       self.attribs.update(uie['constant_attribs'])
-    self.position_css = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
     self._content = uie['content']
 
 
@@ -188,6 +186,7 @@ class Form(Container):
 class LoginForm(Form):
   """A standard login form."""
   def __init__(self, uie, page):
+    super(LoginForm, self).__init__(uie=uie)
     # put the info here
     self.name = "Form{}".format(id(uie))
     self.uie = uie
@@ -197,7 +196,7 @@ class LoginForm(Form):
 class SignupForm(Form):
   """A standard signup form."""
   def __init__(self, uie, page):
-    # put the info here
+    super(SignupForm, self).__init__(uie=uie)
     self.name = "Form{}".format(id(uie))
     self.uie = uie
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
