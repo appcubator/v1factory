@@ -1,0 +1,432 @@
+{
+    "name": "Registration Page",
+    "design_props": [
+        {
+            "type": "background-image",
+            "value": "none"
+        },
+        {
+            "type": "background-color",
+            "value": "#FFFFFF"
+        },
+        {
+            "type": "text-color",
+            "value": "#000"
+        },
+        {
+            "type": "text-size",
+            "value": "12px"
+        },
+        {
+            "type": "text-family",
+            "value": "Georgia, serif"
+        },
+        {
+            "type": "header-color",
+            "value": "#666"
+        },
+        {
+            "type": "header-size",
+            "value": "16px"
+        },
+        {
+            "type": "header-family",
+            "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+        }
+    ],
+    "uielements": [
+        {
+            "tagName": "hr",
+            "tagType": null,
+            "cons_attribs": {
+                "class": "span12"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-color:#990000;\nbackground-color:#990000;\nheight: 4px;",
+            "class_name": "red-line",
+            "type": "line",
+            "layout": {
+                "top": 0,
+                "left": 0,
+                "height": 2,
+                "width": 4,
+                "isFull": true
+            },
+            "container_info": null,
+            "content_attribs": {}
+        },
+        {
+            "tagName": "h1",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "\"Who made this?\"",
+            "isSingle": false,
+            "style": "font-size: 106px;\nfont-weight: normal;\nfont-style: normal;\ntext-decoration: none;\ncolor: #990000;\nline-height: 130px;",
+            "class_name": "big-red",
+            "type": "header-text",
+            "layout": {
+                "top": 3,
+                "left": 0,
+                "height": 8,
+                "width": 12,
+                "alignment": "center"
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "https://www.filepicker.io/api/file/RqgWEQOTISxzy9anKAxH"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img",
+            "type": "image",
+            "layout": {
+                "top": 14,
+                "left": 0,
+                "height": 16,
+                "width": 4
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "https://www.filepicker.io/api/file/GLVfvQf1TQ2nGTKLyi56"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img",
+            "type": "image",
+            "layout": {
+                "top": 14,
+                "left": 4,
+                "height": 16,
+                "width": 4
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "https://www.filepicker.io/api/file/b0lC2CCdQl2jWnmLi12a"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img",
+            "type": "image",
+            "layout": {
+                "top": 14,
+                "left": 8,
+                "height": 16,
+                "width": 4
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "/static/img/placeholder.png"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img",
+            "type": "image",
+            "layout": {
+                "top": 37,
+                "left": 0,
+                "height": 15,
+                "width": 4
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "/static/img/placeholder.png"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img",
+            "type": "image",
+            "layout": {
+                "top": 37,
+                "left": 4,
+                "height": 15,
+                "width": 4
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "/static/img/placeholder.png"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img",
+            "type": "image",
+            "layout": {
+                "top": 37,
+                "left": 8,
+                "height": 15,
+                "width": 4
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "hr",
+            "tagType": null,
+            "cons_attribs": {
+                "class": "span12"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-color:#990000;\nbackground-color:#990000;\nheight: 4px;",
+            "class_name": "red-line",
+            "type": "line",
+            "layout": {
+                "top": 34,
+                "left": 0,
+                "height": 3,
+                "width": 4
+            },
+            "container_info": null,
+            "content_attribs": {}
+        },
+        {
+            "tagName": "hr",
+            "tagType": null,
+            "cons_attribs": {
+                "class": "span12"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-color:#990000;\nbackground-color:#990000;\nheight: 4px;",
+            "class_name": "red-line",
+            "type": "line",
+            "layout": {
+                "top": 34,
+                "left": 8,
+                "height": 3,
+                "width": 4
+            },
+            "container_info": null,
+            "content_attribs": {}
+        },
+        {
+            "tagName": "hr",
+            "tagType": null,
+            "cons_attribs": {
+                "class": "span12"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-color:#990000;\nbackground-color:#990000;\nheight: 4px;",
+            "class_name": "red-line",
+            "type": "line",
+            "layout": {
+                "top": 34,
+                "left": 4,
+                "height": 3,
+                "width": 4
+            },
+            "container_info": null,
+            "content_attribs": {}
+        },
+        {
+            "tagName": "div",
+            "tagType": null,
+            "content": "",
+            "cons_attribs": {
+                "style": "border:1px solud #333;"
+            },
+            "isSingle": false,
+            "style": "height: 100%;\nwidth: 100%;\nz-index: 3;\nbackground-color: rgba(0, 0, 0, 0.4);\npadding-left: 15px;\npadding-right:15px;",
+            "class_name": "semi-transparent",
+            "type": "box",
+            "layout": {
+                "top": 26,
+                "left": 0,
+                "height": 3,
+                "width": 4
+            },
+            "container_info": null,
+            "content_attribs": {}
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "https://www.filepicker.io/api/file/DndTCau3R0C24Z2Ovnab"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-radius: 6px;\nwidth: 180px;",
+            "class_name": "img-width-fixed",
+            "type": "image",
+            "layout": {
+                "top": 30,
+                "left": 0,
+                "height": 5,
+                "width": 1
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "h1",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "David Cohen",
+            "isSingle": false,
+            "style": "font-size: 26px;\nfont-weight: bold;",
+            "class_name": "header-2",
+            "type": "header-text",
+            "layout": {
+                "top": 30,
+                "left": 1,
+                "height": 2,
+                "width": 3
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "span",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "Engineer",
+            "isSingle": false,
+            "style": "",
+            "class_name": "txt",
+            "type": "text",
+            "layout": {
+                "top": 32,
+                "left": 1,
+                "height": 3,
+                "width": 3
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "https://www.filepicker.io/api/file/LFa50cJoQ42PmrasCU9S"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-radius: 6px;\nwidth: 180px;",
+            "class_name": "img-width-fixed",
+            "type": "image",
+            "layout": {
+                "top": 30,
+                "left": 4,
+                "height": 5,
+                "width": 1
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "h1",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "Christi Bore",
+            "isSingle": false,
+            "style": "font-size: 26px;\nfont-weight: bold;",
+            "class_name": "header-2",
+            "type": "header-text",
+            "layout": {
+                "top": 30,
+                "left": 5,
+                "height": 2,
+                "width": 3
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "span",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "Product Design",
+            "isSingle": false,
+            "style": "",
+            "class_name": "txt",
+            "type": "text",
+            "layout": {
+                "top": 32,
+                "left": 5,
+                "height": 2,
+                "width": 3
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "https://www.filepicker.io/api/file/dnxuj0uQEeVBV2Lp5xr9"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-radius: 6px;\nwidth: 180px;",
+            "class_name": "img-width-fixed",
+            "type": "image",
+            "layout": {
+                "top": 30,
+                "left": 8,
+                "height": 5,
+                "width": 1
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "h1",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "Harry Melon",
+            "isSingle": false,
+            "style": "font-size: 26px;\nfont-weight: bold;",
+            "class_name": "header-2",
+            "type": "header-text",
+            "layout": {
+                "top": 30,
+                "left": 9,
+                "height": 3,
+                "width": 3
+            },
+            "container_info": null
+        },
+        {
+            "tagName": "span",
+            "tagType": null,
+            "content_attribs": {},
+            "content": "QA",
+            "isSingle": false,
+            "style": "",
+            "class_name": "txt",
+            "type": "text",
+            "layout": {
+                "top": 32,
+                "left": 9,
+                "height": 3,
+                "width": 3
+            },
+            "container_info": null
+        }
+    ],
+    "access_level": "all"
+}

@@ -51,6 +51,7 @@
       <input class="span16" name="password1" type="password"><br>
       <h4>Confirm Password</h4>
       <input class="span16" name="password2" type="password"><br>
+      {% csrf_token %}
       <input class="span16 hoff2 btn btn-blue" type="submit" value="Join the Private Beta">
     </form>
   </div>

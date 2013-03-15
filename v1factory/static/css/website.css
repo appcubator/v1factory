@@ -12,11 +12,11 @@
 
 @font-face {
     font-family: 'verb_mediumregular';
-    src: url('VerbMedium-webfont.eot');
-    src: url('VerbMedium-webfont.eot?#iefix') format('embedded-opentype'),
-         url('VerbMedium-webfont.woff') format('woff'),
-         url('VerbMedium-webfont.ttf') format('truetype'),
-         url('VerbMedium-webfont.svg#verb_mediumregular') format('svg');
+    src: url('../font/verb_medium/VerbMedium-webfont.eot');
+    src: url('../font/verb_medium/VerbMedium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/verb_medium/VerbMedium-webfont.woff') format('woff'),
+         url('../font/verb_medium/VerbMedium-webfont.ttf') format('truetype'),
+         url('../font/verb_medium/VerbMedium-webfont.svg#verb_mediumregular') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -64,7 +64,13 @@ body {
   color: #0f2d40;
 }
 
-h2 {  
+h1,h2, h3 {
+  font-family: 'verb_regularbold';
+  font-weight: bold;
+  color: #0f2d40;
+}
+
+h2 {
   font-family: 'verb_regularbold';
   font-size: 28px;
   font-weight: bold;
@@ -75,9 +81,29 @@ h3 {
   font-size: 20px;
   font-weight: bold;
 }
+
 a.pane:hover {
   text-transform: none;
   text-decoration: none;
+}
+
+.green-1 {
+  background-color: #8ed26e;
+}
+
+.green-2 {
+  background-color: #26657a;
+}
+
+.green-3 {
+  background-color: #0c5070;
+}
+
+.navbar-inner {
+  opacity:0.8; 
+  background-color:#000; 
+  background-image: none; 
+  overflow:visible;
 }
 
 h1.name {
@@ -260,7 +286,7 @@ input[type="submit"] {
 }
 
 .left-menu li.selected {
-  background-color: #26656e;
+  background-color: #26657a;
   color: #fff;
 }
 
@@ -442,4 +468,16 @@ hr {
   background-position: center center;
   background-size: auto 100%;
   background-repeat: no-repeat;
+}
+
+.navbar .nav .dropdown{
+  font-family: 'verb_mediumregular';
+  margin-top: 10px;
+}
+
+.well {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 !important;
+  border:none;
 }

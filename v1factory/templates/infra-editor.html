@@ -8,22 +8,27 @@
 
 <!-- Le styles -->
 <link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/bootstrap-editor.css" rel="stylesheet">
 {% block css %}
 {% endblock %}
 <style type="text/css">
 </style>
 </head>
 <body class="sample">
-  <div class="page">
-    <div class="container">
-    {% block topbar %}
-    {% endblock %}
+  {% block controllers %}
+  
+  {% endblock %}
+  <div class="page-wrapper">
+    <div class="page">
+      <div class="container">
+      {% block topbar %}
+      {% endblock %}
+      </div>
+      {% block navbar %}
+      {% endblock %}
+      {% block page %}
+      {% endblock %}  
     </div>
-    {% block navbar %}
-    {% endblock %}
-    {% block page %}
-    {% endblock %}  
   </div>
   <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>

@@ -111,7 +111,7 @@
                                 "tagName": "input",
                                 "tagType": "password",
                                 "cons_attribs" : {
-                                    "name": "password1",
+                                    "name": "password1"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Password"
@@ -131,7 +131,7 @@
                                 "tagName": "input",
                                 "tagType": "password",
                                 "cons_attribs" : {
-                                    "name": "password2",
+                                    "name": "password2"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Password"

@@ -5,7 +5,7 @@ var DesignPropertiesCollection = Backbone.Collection.extend({
 var DesignPropertyView = Backbone.View.extend({
   el  : null,
   tagName : 'div',
-  className: 'property hi6 hoff1 span28 offset1',
+  className: 'property hi6 hoff1 span5 offset1',
 
   initialize: function(model, pageModel, ind, shouldStyle) {
     _.bindAll(this, 'render', 'renderTitle', 'style', 'select', 'amendAppState');
@@ -30,6 +30,7 @@ var DesignPropertyView = Backbone.View.extend({
   },
 
   style: function() {
+
     if(!this.pageModel.get('shouldStyle')) return;
 
     if(document.getElementById(this.options.id)) {
@@ -39,7 +40,7 @@ var DesignPropertyView = Backbone.View.extend({
     var styleTag = document.createElement('style');
     styleTag.id = this.options.id;
 
-    var styleContent = '.sample ' + (this.options.tag||'') + ' {';
+    var styleContent = '.page ' + (this.options.tag||'') + ' {';
     styleContent += this.options.css.replace(/<%=content%>/g, this.model.get('value'));
     styleContent += '}';
 
@@ -133,7 +134,7 @@ var DesignImagePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignSizePickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi6 hoff1 span10 offset1',
+  className: 'property hi6 hoff1 span1 offset1',
   events: {
     'change .size' : 'select'
   },
@@ -159,7 +160,7 @@ var DesignSizePickerPropertyView = DesignPropertyView.extend({
 
 
 var DesignFontPickerPropertyView = DesignPropertyView.extend({
-  className: 'property hi6 hoff1 span17 offset1',
+  className: 'property hi6 hoff1 span4 offset1',
   events: {
     'change .size' : 'select'
   },

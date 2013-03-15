@@ -78,7 +78,21 @@ var LayoutModel = Backbone.Model.extend({
     'top'    : 0,
     'left'   : 0,
     'height' : 8,
-    'width'  : 16
+    'width'  : 2
+  },
+  toJSON: function() {
+    var json = _.clone(this.model.attributes);
+    json.top = parseInt(this.get('top'));
+    json.left = parseInt(this.get('left'));
+    json.height = parseInt(this.get('height'));
+    json.width = this.get('width');
+    if(json.width !=parseInt(json.width) || json.width!='100%'){
+      json.width = parseInt(json.width);
+    }
+    json.isFull = this.get('isFull');
+    json.alignment = this.get('alignment');
+
+    return json;
   }
 });
 
@@ -93,7 +107,7 @@ var ContainerInfoModel = Backbone.Model.extend({
     this.set('uielements', new WidgetCollection(bone.uielements));
   },
   toJSON: function() {
-    var json = this.attributes;
+    var json = _.clone(this.attributes);
     json.uielements = this.get('uielements').toJSON();
     return json;
   }
@@ -184,7 +198,7 @@ var WidgetModel = Backbone.Model.extend({
   moveRight: function() {
     if(this.isFullWidth()) return;
 
-    if(this.get('layout').get('left') + this.get('layout').get('width') > 63) return;
+    if(this.get('layout').get('left') + this.get('layout').get('width') > 11) return;
     this.get('layout').set('left', this.get('layout').get('left') + 1);
   },
 
@@ -209,7 +223,7 @@ var WidgetModel = Backbone.Model.extend({
   },
 
   containerHandler: {
-    'Show' : function() {
+    'show' : function() {
       var self = this;
       self.get('container_info').set('uielements', new WidgetCollection());
 
@@ -302,7 +316,9 @@ var WidgetModel = Backbone.Model.extend({
           height: 4
       };
 
-      widgetProps.content_attribs.value = 'Add ' + this.get('container_info').entity.get('name');
+      console.log(this);
+
+      widgetProps.content_attribs.value = 'Add ' + this.get('container_info').get('entity').get('name');
       var widget = new WidgetModel(widgetProps);
       self.get('container_info').get('uielements').push(widget);
     },

@@ -14,22 +14,11 @@
 {% endblock %}
 
 {% block topbar %}
-<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.8; top:0; left:0; z-index:1; width:100%;">
-  <div class="container">
-    <div class="toppanel span18 logo-text" style="">
-      <h1 class="name hoff1"><a href="/">v1 Factory</a> | {{ title }}</h1>
-    </div>
-    <div class="offset4 toppanel hi6 span30">
-      <div class="login hi2 pad1" style="height:45px; margin-top: 10px; float:right;">
-        {{ user.username }} | <a href="/logout">Logout</a>
-      </div>
-    </div>
-  </div>
-</div>
+{% include "infra-topbar.html" %}
 {% endblock %}
 
 {% block page %}
-<div class="well" style="background-color:#26656e;">
+<div class="well green-2">
   <div class="container">
     <div class="span64">
       <div class="hi8">

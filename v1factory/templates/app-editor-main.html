@@ -3,7 +3,6 @@
 {% block css %}
 <link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/editor.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/design.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/jquery-ui.css" rel="stylesheet">
 
@@ -32,13 +31,14 @@
 </div> -->
 {% endblock %}
 
-{% block page %}
-{% include "app-editor-gallery.html" %}
-<div class="container editing" id="full-container">
+{% block controllers %}
+<div class="section-select">
+  <a href="/app/3/" class="menu-button home">
+  </a><div class="menu-button save" id="save">
+    <span>Save</span>
+  </div><div class="menu-button setting" id="settings"><span>Design Settings</span>
+  </div><div class="menu-button help"></div>
 </div>
-<div class="container editing" id="elements-container">
-</div>
-<div class="container editing" id="body-container"></div>
 {% include "app-editor-settings.html" %}
 {% include "app-editor-info.html" %}
 <div class="loading-gif" id="loading-gif">
@@ -47,6 +47,14 @@
     <span class="engine2"></span>
   </div>
 </div>
+{% include "app-editor-gallery.html" %}
+{% endblock %}
+{% block page %}
+<div class="container editing" id="full-container">
+</div>
+<div class="container editing" id="elements-container">
+</div>
+<div class="container editing" id="body-container"></div>
 {% endblock %}
 
 {% block js %}
@@ -79,12 +87,14 @@ var uieState = {{ app.uie_state_json|safe }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-gallery-view.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-info.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-design-view.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-classpicker-view.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-editlayout-view.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-view.js"></script>
 
 
 <script type="text/javascript">
-var GRID_WIDTH = 15;
+var GRID_WIDTH = 80;
 var GRID_HEIGHT = 15;
 
 var editorView = new EditorView();

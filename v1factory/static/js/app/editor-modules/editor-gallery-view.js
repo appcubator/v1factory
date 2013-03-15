@@ -103,7 +103,7 @@ var GalleryView = Backbone.View.extend({
 
 
     var self = this;
-    var tempLi   = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
+    var tempLi = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
                    '<span class="name">Show <%= name %> <%= attr %></span></li>';
 
 
@@ -143,7 +143,7 @@ var GalleryView = Backbone.View.extend({
       cid : entityModel.cid
     };
 
-    var tempLi   = '<li id="entity-<%= cid %>" class="Show entity">'+
+    var tempLi   = '<li id="entity-<%= cid %>" class="show entity">'+
                    '<span class="name">List of <%= name %></span></li>';
     var tempForm = '<li id="entity-<%= cid %>" class="create entity">'+
                    '<span class="name">Add <%= name %> Form</span></li>';
@@ -212,10 +212,14 @@ var GalleryView = Backbone.View.extend({
 
   appendElement: function(elementModel) {
     var self = this;
-    var tempLi = '<li class="<%= className %>"><span class="name"><%= text %></span></li>';
-    var html = _.template(tempLi, elementModel.attributes);
-    $(this.elementsList).append(html);
-    $(this.allList).append(html);
+    var li = document.createElement('li');
+    li.className = elementModel.get('className');
+    li.innerHTML = '<span class="name">'+ elementModel.get('text')+'</span>';
+
+    // var tempLi = '<li class="<%= className %>"></li>';
+    // var html = _.template(tempLi, elementModel.attributes);
+    $(this.elementsList).append(li);
+    $(this.allList).append(li);
 
     $('.' + elementModel.get('className')).draggable({
       cursor: "move",
@@ -230,6 +234,8 @@ var GalleryView = Backbone.View.extend({
     });
 
     this.setupSearch();
+
+    $(li).on('click', self.dropped);
   },
 
   sectionClicked: function(e) {
@@ -242,11 +248,11 @@ var GalleryView = Backbone.View.extend({
   },
 
   setupSearch: function() {
-    var options = {
-      valueNames: ['name']
-    };
+    // var options = {
+    //   valueNames: ['name']
+    // };
 
-    var featureList = new List('top-panel-bb', options);
+    // var featureList = new List('top-panel-bb', options);
   },
 
   mousemoveHandler: function(e) {
@@ -264,20 +270,31 @@ var GalleryView = Backbone.View.extend({
 
   dropped : function(e, ui) {
     this.dragActive = false;
+    var left, top;
 
-    var left = Math.round((e.pageX - $('#body-container')[0].offsetLeft)/GRID_WIDTH);
-    var top  = Math.round((e.pageY - $('#body-container')[0].offsetTop)/GRID_HEIGHT);
+    if(e.type != 'click') {
+      left = Math.round((e.pageX - $('.page')[0].offsetLeft - 120)/GRID_WIDTH);
+      top  = Math.round((e.pageY - $('.page')[0].offsetTop - 80)/GRID_HEIGHT);
+    }
+    else {
+      left = 0;
+      top = 1;
+      window.scrollTo(0,0);
+    }
+
 
     var widget = this.determineType(e.target.className, e.target.id);
     widget.layout = {
         top   : top,
         left  : left,
-        width : 16,
-        height: 16
+        width : 4,
+        height: 8
       };
 
     this.widgetsCollection.push(widget);
   },
+
+
 
   determineType: function(className, id) {
     var widget = {};
