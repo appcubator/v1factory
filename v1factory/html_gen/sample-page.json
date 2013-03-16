@@ -50,7 +50,7 @@
                 "top": 0,
                 "left": 0,
                 "height": 2,
-                "width": 4,
+                "width": 12,
                 "isFull": true
             },
             "container_info": null,
@@ -249,26 +249,6 @@
             "content_attribs": {}
         },
         {
-            "tagName": "div",
-            "tagType": null,
-            "content": "",
-            "cons_attribs": {
-                "style": "border:1px solud #333;"
-            },
-            "isSingle": false,
-            "style": "height: 100%;\nwidth: 100%;\nz-index: 3;\nbackground-color: rgba(0, 0, 0, 0.4);\npadding-left: 15px;\npadding-right:15px;",
-            "class_name": "semi-transparent",
-            "type": "box",
-            "layout": {
-                "top": 26,
-                "left": 0,
-                "height": 3,
-                "width": 4
-            },
-            "container_info": null,
-            "content_attribs": {}
-        },
-        {
             "tagName": "img",
             "tagType": null,
             "content_attribs": {
@@ -369,7 +349,7 @@
             "layout": {
                 "top": 32,
                 "left": 5,
-                "height": 2,
+                "height": 3,
                 "width": 3
             },
             "container_info": null
@@ -405,7 +385,7 @@
             "layout": {
                 "top": 30,
                 "left": 9,
-                "height": 3,
+                "height": 2,
                 "width": 3
             },
             "container_info": null

@@ -21,17 +21,18 @@
 {% endblock %}
 
 {% block page %}
-<!-- <div class="container" id="entities-page">
-  <div class="offset10 btn span12 hi2 ltxt" id="deploy">Deploy</div>
-</div> -->
 <div class="well" style="background-color:#26656e;">
-  <div class="container">
-    <div class="span64">
-      <div class="hi8">
-        <div class="span32 hoff6" style="color:#0f2d40;">
-          bla bla
+  <div class="container hoff5">
+    <div class="span58">
+      <div class="hi4">
+        <div class="" style="color:#0f2d40;">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </div>
       </div>
+    </div>
+    <div class="span6">
+      <a class="btn span6" id="save">Save</a>
+      <a class="btn span6 btn-reset">Reset</a>
     </div>
   </div>
 </div>
@@ -43,22 +44,19 @@
     <div class="span36">
       <div class="hoff1">
         <h3 class="span10">App Name</h3>
-        <input type="text" class="span26" value="Yolo app">
+        <input type="text" class="span26" id="app-name" placeholder="Name of the Applications...">
       </div>
       <hr>
       <div class="hoff2">
         <h3 class="span10">Description</h3>
-        <textarea class="span26 hi6">
-        YOLO App description
-        </textarea>
+        <textarea class="span26 hi6" id="app-description" placeholder="Description of the application..."></textarea>
       </div>
       <hr>
       <div class="hoff2">
         <h3 class="span10">Keywords</h3>
-        <textarea class="span26 hi6">
-        YOLO App description
-        </textarea>
+        <textarea class="span26 hi6" id="app-keywords" placeholder="Keywords..."></textarea>
       </div>
+      <div class="btn btn-danger right hoff2" id="delete">Delete the App</div>
     </div>
     <div class="span11 offset1">
       <ul class="">
@@ -72,16 +70,10 @@
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/app/appinfo-view.js"></script>
 <script type="text/javascript">
 var appId = {{ app_id|safe }};
-
-$('#deploy').on('click', function() {
-    $.ajax({
-      type: "POST",
-      url: '/app/'+appId+'/deploy/',
-      success: function() { alert("Deployed!")},
-      dataType: "JSON"
-    });
-});
+var appState = {{ app.state_json|safe }};
+var infoView = new InfoView();
 </script>
 {% endblock %}

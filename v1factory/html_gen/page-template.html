@@ -8,6 +8,7 @@
     <!-- Le styles -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="site.css" rel="stylesheet">
+    <link href="page.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -71,14 +72,19 @@
     <div class="container">
       <!-- Example row of columns -->
       {% for slice in slices %}
-        <div class="row hi{{slice.rows.length}} hoff{{slice.marginTop}}">
-        {% for element in slice.elements %}
-          <{{element.tagName}} {% if element.tagType %} type ="{{element.tagType}}" {% endif %} class="{{ element.class_name }} span{{element.layout.width}} hi{{element.layout.height}}" {% for attrib in element.content_attribs %} {{element.content_attribs|keys}}="{{attrib}}" {% endfor %}>
-          {% if element.isSingle != true %}
-            {{element.content}}
-          </{{element.tagName}}>
-          {% endif %}
-        {% endfor %}
+        <div class="row hoff{{slice.marginTop}}">
+          {% for column in slice.columns %}
+          <div class="span{{column.width}} offset{{column.marginLeft}}">
+            {% for element in column.elements %}
+              <{{element.tagName}} {% if element.tagType %} type ="{{element.tagType}}" {% endif %} class="{{ element.class_name }} span{{element.layout.width}} hi{{element.layout.height}}" {% for attrib in element.content_attribs %} {{element.content_attribs|keys}}="{{attrib}}" {% endfor %}>
+              {% if element.isSingle != true %}
+                {{element.content}}
+              </{{element.tagName}}>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% endfor %}
+
         </div>
       {% endfor %}
       
