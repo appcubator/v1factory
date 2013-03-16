@@ -70,11 +70,17 @@
 
     <div class="container">
       <!-- Example row of columns -->
-      {{#slices}}
-        <div class="row hi{{rows.length}} hoff{{marginTop}}">
-         HEY!!
+      {% for slice in slices %}
+        <div class="row hi{{slice.rows.length}} hoff{{slice.marginTop}}">
+        {% for element in slice.elements %}
+          <{{element.tagName}} {% if element.tagType %} type ="{{element.tagType}}" {% endif %} class="{{ element.class_name }} span{{element.layout.width}} hi{{element.layout.height}}" {% for attrib in element.content_attribs %} {{element.content_attribs|keys}}="{{attrib}}" {% endfor %}>
+          {% if element.isSingle != true %}
+            {{element.content}}
+          </{{element.tagName}}>
+          {% endif %}
+        {% endfor %}
         </div>
-      {{/slices}}
+      {% endfor %}
       
       <hr>
 

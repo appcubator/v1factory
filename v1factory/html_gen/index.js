@@ -1,5 +1,5 @@
 var sys = require('util');
-var Mustache = require("mustache");
+var tinyliquid = require("tinyliquid");
 var _ = require("underscore");
 var pageJSON = require('./sample-page.json');
 var cssJSON = require('./uie-state.json');
@@ -48,7 +48,7 @@ function generateCSSFile() {
 
   fs.readFile('./css-template.html', function (err, data) {
     if (err) throw err;
-    var output = Mustache.render(data.toString(), cssJSON);
+    var output = tinyliquid.render(data.toString(), cssJSON);
 
     fs.writeFile("./site.css", output, function(err) {
       if(err) throw err;
@@ -60,7 +60,8 @@ function generateCSSFile() {
 function generatePage() {
   fs.readFile('./page-template.html', function (err, data) {
     if (err) throw err;
-    var output = Mustache.render(data.toString(), { slices : slices });
+    console.log(slices);
+    var output = tinyliquid.render(data.toString(), { slices : slices });
     fs.writeFile("./generated-page.html", output, function(err) {
       if(err) throw err;
     }); 
@@ -69,7 +70,7 @@ function generatePage() {
 
 function isRowEmpty(row) {
   for(var ii = 0; ii < row.length; ii++) { 
-    if(row[ii] == 0 || row[ii]) {
+    if(row[ii] === 0 || row[ii]) {
       return false;
     }
   }
@@ -104,11 +105,42 @@ function sliceBitmap(bitmap) {
   return slices;
 }
 
+function mapBitmapToElements(slices) {
+  _(slices).each(function(slice){
+    var elements = [];
+    _(slice.rows).each(function(row) {
+      _(row).each(function(elemInd){
+        elements.push(elemInd);
+      });
+    });
+    elements = _.uniq(elements);
+    slice.elements = elements;
+  });
+
+  return slices;
+}
+
+function mapIdtoElements(slices, arrayElements) {
+  _(slices).each(function(slice){
+    _(slice.elements).each(function(elemendInd, ind) {
+      //console.log(ind);
+      slice.elements[ind] = arrayElements[elemendInd];
+    });
+  });
+
+  return slices;
+}
+
 generateCSSFile();
 
 var UIElements = indexElements(pageJSON.uielements);
 var bitmap     = createBitmap(UIElements);
-var slices     = sliceBitmap(bitmap);
+var slices; 
+
+slices = sliceBitmap(bitmap);
+slices = mapBitmapToElements(slices);
+slices = mapIdtoElements(slices, pageJSON.uielements);
+
 //var slices     = sliceWells();
 generatePage();
 

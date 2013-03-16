@@ -2,131 +2,131 @@
    Buttons
 * * * * * * * * * * */
 
-{{#button}}
+{% for b in button %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{b.tagName}}.{{b.class_name}} { 
+{{b.style}}
 }
 
-{{/button}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Images
 * * * * * * * * * * */
 
-{{#image}}
+{% for i in images %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{i.tagName}}.{{i.class_name}} { 
+{{i.style}}
 }
 
-{{/image}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Headers
 * * * * * * * * * * */
 
-{{#header-text}}
+{% for ht in header-text %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{ht.tagName}}.{{ht.class_name}} { 
+{{ht.style}}
 }
 
-{{/header-text}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Text
 * * * * * * * * * * */
 
-{{#text}}
+{% for t in text %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{t.tagName}}.{{t.class_name}} { 
+{{t.style}}
 }
 
-{{/text}}
+{% endfor %}
 
 
 /* * * * * * * * * * *
    Links
 * * * * * * * * * * */
 
-{{#link}}
+{% for l in link %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{l.tagName}}.{{l.class_name}} { 
+{{l.style}}
 }
 
-{{/link}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Text Input
 * * * * * * * * * * */
 
-{{#text-input}}
+{% for ti in text-input %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{ti.tagName}}.{{ti.class_name}} { 
+{{ti.style}}
 }
 
-{{/text-input}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Passwords
 * * * * * * * * * * */
 
-{{#password}}
+{% for p in password %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{p.tagName}}.{{p.class_name}} { 
+{{p.style}}
 }
 
-{{/password}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Text Areas
 * * * * * * * * * * */
 
-{{#text-area}}
+{% for ta in text-area %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{ta.tagName}}.{{ta.class_name}} { 
+{{ta.style}}
 }
 
-{{/text-area}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Lines
 * * * * * * * * * * */
 
-{{#line}}
+{% for l in line %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{l.tagName}}.{{l.class_name}} { 
+{{l.style}}
 }
 
-{{/line}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Dropdowns
 * * * * * * * * * * */
 
-{{#dropdown}}
+{% for d in dropdown %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{d.tagName}}.{{d.class_name}} { 
+{{d.style}}
 }
 
-{{/dropdown}}
+{% endfor %}
 
 /* * * * * * * * * * *
    Boxes
 * * * * * * * * * * */
 
-{{#box}}
+{% for b in box %}
 
-{{tagName}}.{{class_name}} { 
-{{style}}
+{{b.tagName}}.{{b.class_name}} { 
+{{b.style}}
 }
 
-{{/box}}
+{% endfor %}

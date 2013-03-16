@@ -6,7 +6,7 @@
             "content_attribs": {
                 "value": "Button1"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "  display: inline-block;\n  *display: inline;\n  padding: 4px 12px;\n  margin-bottom: 0;\n  *margin-left: .3em;\n  font-size: 14px;\n  line-height: 20px;\n  color: #333333;\n  text-align: center;\n  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);\n  vertical-align: middle;\n  cursor: pointer;\n  background-color: #f5f5f5;\n  *background-color: #e6e6e6;\n  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));\n  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);\n  background-repeat: repeat-x;\n  border: 1px solid #cccccc;\n  *border: 0;\n  border-color: #e6e6e6 #e6e6e6 #bfbfbf;\n  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n  border-bottom-color: #b3b3b3;\n  -webkit-border-radius: 4px;\n     -moz-border-radius: 4px;\n          border-radius: 4px;\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);\n  *zoom: 1;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n",
             "class_name": "btn-1"
@@ -17,7 +17,7 @@
             "content_attribs": {
                 "value": "Button1"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "  display: inline-block;\n  *display: inline;\n  padding: 4px 12px;\n  margin-bottom: 0;\n  *margin-left: .3em;\n  font-size: 14px;\n  line-height: 20px;\n  color: #333333;\n  text-align: center;\n  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);\n  vertical-align: middle;\n  cursor: pointer;\n  background-color: #f5f5f5;\n  *background-color: #e6e6e6;\n  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));\n  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);\n  background-repeat: repeat-x;\n  border: 1px solid #cccccc;\n  *border: 0;\n  border-color: #e6e6e6 #e6e6e6 #bfbfbf;\n  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n  border-bottom-color: #b3b3b3;\n  -webkit-border-radius: 4px;\n     -moz-border-radius: 4px;\n          border-radius: 4px;\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);\n  *zoom: 1;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n  color: #ffffff;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #006dcc;\n  *background-color: #0044cc;\n  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);\n  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));\n  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);\n  background-image: -o-linear-gradient(top, #0088cc, #0044cc);\n  background-image: linear-gradient(to bottom, #0088cc, #0044cc);\n  background-repeat: repeat-x;\n  border-color: #0044cc #0044cc #002a80;\n  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);\nborder-",
             "class_name": "btn-2"
@@ -28,7 +28,7 @@
             "content_attribs": {
                 "value": "Button1"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "  display: inline-block;\n  *display: inline;\n  padding: 4px 12px;\n  margin-bottom: 0;\n  *margin-left: .3em;\n  font-size: 14px;\n  line-height: 20px;\n  color: #333333;\n  text-align: center;\n  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);\n  vertical-align: middle;\n  cursor: pointer;\n  background-color: #f5f5f5;\n  *background-color: #e6e6e6;\n  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));\n  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);\n  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);\n  background-repeat: repeat-x;\n  border: 1px solid #cccccc;\n  *border: 0;\n  border-color: #e6e6e6 #e6e6e6 #bfbfbf;\n  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n  border-bottom-color: #b3b3b3;\n  -webkit-border-radius: 4px;\n     -moz-border-radius: 4px;\n          border-radius: 4px;\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);\n  *zoom: 1;\n  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n  color: #ffffff;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #da4f49;\n  *background-color: #bd362f;\n  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);\n  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));\n  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);\n  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);\n  background-image: linear-gradient(to bottom, #ee5f5b, #bd362f);\n  background-repeat: repeat-x;\n  border-color: #bd362f #bd362f #802420;\n  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);\n  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ffbd362f', GradientType=0);\n  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);",
             "class_name": "btn-3"
@@ -41,7 +41,7 @@
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "border-radius: 6px;\nwidth: 180px;",
             "class_name": "img-width-fixed"
@@ -52,7 +52,7 @@
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "border-radius: 6px;\nheight: 280px;",
             "class_name": "img-height-fixed"
@@ -63,10 +63,21 @@
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "  padding: 4px;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);",
             "class_name": "img-polaroid"
+        },
+        {
+            "tagName": "img",
+            "tagType": null,
+            "content_attribs": {
+                "src": "/static/img/placeholder.png"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "width:100%;\nheight: 100%;\npadding: 20px;",
+            "class_name": "full-img"
         }
     ],
     "header-text": [
@@ -87,6 +98,15 @@
             "isSingle": false,
             "style": "font-size: 26px;\nfont-weight: bold;",
             "class_name": "header-2"
+        },
+        {
+            "tagName": "h1",
+            "tagType": null,
+            "content_attribs": null,
+            "content": "Default header!",
+            "isSingle": false,
+            "style": "font-size: 106px;\nfont-weight: normal;\nfont-style: normal;\ntext-decoration: none;\ncolor: #990000;\nline-height: 130px;",
+            "class_name": "big-red"
         }
     ],
     "text": [
@@ -140,7 +160,7 @@
             "content_attribs": {
                 "placeholder": "Default placeholder..."
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "",
             "class_name": "inpt-1"
@@ -151,7 +171,7 @@
             "content_attribs": {
                 "placeholder": "Default placeholder..."
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "  border-color: #3a87ad;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);",
             "class_name": "inpt-blue"
@@ -164,7 +184,7 @@
             "content_attribs": {
                 "placeholder": "Default placeholder..."
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "border-width: 1px;",
             "class_name": "password-1"
@@ -188,7 +208,7 @@
             "cons_attribs": {
                 "class": "span12"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "border-color:#49afcd;",
             "class_name": "line-1"
@@ -199,7 +219,7 @@
             "cons_attribs": {
                 "class": "span12"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "border-color:#ccc;",
             "class_name": ""
@@ -210,10 +230,21 @@
             "cons_attribs": {
                 "class": "span12"
             },
-            "content": null,
+            "content": "",
             "isSingle": true,
             "style": "",
             "class_name": ""
+        },
+        {
+            "tagName": "hr",
+            "tagType": null,
+            "cons_attribs": {
+                "class": "span12"
+            },
+            "content": "",
+            "isSingle": true,
+            "style": "border-color:#990000;\nbackground-color:#990000;\nheight: 4px;",
+            "class_name": "red-line"
         }
     ],
     "dropdown": [
@@ -231,24 +262,35 @@
         {
             "tagName": "div",
             "tagType": null,
-            "content": null,
+            "content": "",
             "cons_attribs": {
                 "style": "border:1px solud #333;"
             },
             "isSingle": false,
-            "style": "background-color:#ccc;",
+            "style": "height: 100%;\nwidth: 100%;\nbackground-color: rgba(0, 0, 0, 0.4);",
             "class_name": "box-1"
         },
         {
             "tagName": "div",
             "tagType": null,
-            "content": null,
+            "content": "",
             "cons_attribs": {
                 "style": "border:1px solud #333;"
             },
             "isSingle": false,
             "style": "  padding: 19px;\n  background-color: #f5f5f5;\n  border: 1px solid #e3e3e3;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);\n     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);",
             "class_name": ""
+        },
+        {
+            "tagName": "div",
+            "tagType": null,
+            "content": "",
+            "cons_attribs": {
+                "style": "border:1px solud #333;"
+            },
+            "isSingle": false,
+            "style": "height: 100%;\nwidth: 100%;\nz-index: 3;\nbackground-color: rgba(0, 0, 0, 0.4);\npadding-left: 15px;\npadding-right:15px;\ndisplay: inline-block;",
+            "class_name": "semi-transparent"
         }
     ]
 }
