@@ -29,7 +29,7 @@ def analyzed_app_to_app_components(analyzed_app):
     templates.add(t)
     v = DjangoView.create(p, analyzed_app, t)
     views.add(v)
-    urls.add( DjangoUrl.create_get(p, v, analyzed_app) )
+    urls.add( DjangoUrl.create_get(p, v, analyzed_app, models) )
     v.queries = Manager(DjangoQuery)
     # create the djangoquery and find it's django model.
     for q in p.queries.each():
