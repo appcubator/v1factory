@@ -1164,7 +1164,7 @@ ul.list {
 }
 
 .info-section ul {
-  height: 200px;
+  height: 198px;
   overflow-y: scroll;
 }
 
@@ -1254,3 +1254,29 @@ ul.list {
   display: block;
   width: 110%;
 }*/
+
+.a-pick {
+  cursor: pointer;
+}
+
+.a-left {
+  background-image: url('../img/align_left_icon.png');
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  background-position: center center;
+}
+
+.a-center {
+  background-image: url('../img/align_center_icon.png');
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  background-position: center center;
+}
+
+.a-right {
+  background-image: url('../img/align_right_icon.png');
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  background-position: center center;
+}
+

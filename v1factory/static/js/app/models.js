@@ -81,7 +81,7 @@ var LayoutModel = Backbone.Model.extend({
     'width'  : 2
   },
   toJSON: function() {
-    var json = _.clone(this.model.attributes);
+    var json = _.clone(this.attributes);
     json.top = parseInt(this.get('top'));
     json.left = parseInt(this.get('left'));
     json.height = parseInt(this.get('height'));

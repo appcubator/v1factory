@@ -2,9 +2,11 @@
     "button": [
         {
             "tagName": "input",
-            "tagType": "submit",
             "content_attribs": {
-                "value": "Button1"
+                "value": "Button1",
+            },
+            "cons_attribs" : {
+                "type" : "submit"
             },
             "content": null,
             "isSingle": true,
@@ -13,9 +15,11 @@
         },
         {
             "tagName": "input",
-            "tagType": "submit",
             "content_attribs": {
                 "value": "Button1"
+            },
+            "cons_attribs" : {
+                "tagType": "submit"
             },
             "content": null,
             "isSingle": true,
@@ -24,9 +28,11 @@
         },
         {
             "tagName": "input",
-            "tagType": "submit",
             "content_attribs": {
                 "value": "Button1"
+            },
+            "cons_attribs" : {
+                "tagType": "submit",
             },
             "content": null,
             "isSingle": true,
@@ -37,7 +43,6 @@
     "image": [
         {
             "tagName": "img",
-            "tagType": null,
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
             },
@@ -48,7 +53,6 @@
         },
         {
             "tagName": "img",
-            "tagType": null,
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
             },
@@ -59,7 +63,6 @@
         },
         {
             "tagName": "img",
-            "tagType": null,
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
             },
@@ -72,7 +75,6 @@
     "header-text": [
         {
             "tagName": "h1",
-            "tagType": null,
             "content_attribs": null,
             "content": "Default header!",
             "isSingle": false,
@@ -81,7 +83,6 @@
         },
         {
             "tagName": "h1",
-            "tagType": null,
             "content_attribs": null,
             "content": "Default header!",
             "isSingle": false,
@@ -92,7 +93,6 @@
     "text": [
         {
             "tagName": "span",
-            "tagType": null,
             "content_attribs": null,
             "content": "Default text!",
             "isSingle": false,
@@ -101,7 +101,6 @@
         },
         {
             "tagName": "span",
-            "tagType": null,
             "content_attribs": null,
             "content": "Default text!",
             "isSingle": false,
@@ -112,7 +111,6 @@
     "link": [
         {
             "tagName": "a",
-            "tagType": null,
             "content_attribs": {
                 "href": "{{homepage}}"
             },
@@ -123,7 +121,6 @@
         },
         {
             "tagName": "a",
-            "tagType": null,
             "content_attribs": {
                 "href": "{{homepage}}"
             },
@@ -136,9 +133,11 @@
     "text-input": [
         {
             "tagName": "input",
-            "tagType": "text",
             "content_attribs": {
                 "placeholder": "Default placeholder..."
+            },
+            "cons_attribs": {
+                "tagType": "text",
             },
             "content": null,
             "isSingle": true,
@@ -147,9 +146,11 @@
         },
         {
             "tagName": "input",
-            "tagType": "text",
             "content_attribs": {
                 "placeholder": "Default placeholder..."
+            },
+            "cons_attribs": {
+                "tagType": "text",
             },
             "content": null,
             "isSingle": true,
@@ -160,9 +161,11 @@
     "password": [
         {
             "tagName": "input",
-            "tagType": "password",
             "content_attribs": {
                 "placeholder": "Default placeholder..."
+            },
+            "cons_attribs" : {
+                "tagType": "password",
             },
             "content": null,
             "isSingle": true,
@@ -173,7 +176,6 @@
     "text-area": [
         {
             "tagName": "textarea",
-            "tagType": null,
             "content_attribs": null,
             "content": "Default Text Area...",
             "isSingle": false,
@@ -184,7 +186,6 @@
     "line": [
         {
             "tagName": "hr",
-            "tagType": null,
             "cons_attribs": {
                 "class": "span12"
             },
@@ -195,7 +196,6 @@
         },
         {
             "tagName": "hr",
-            "tagType": null,
             "cons_attribs": {
                 "class": "span12"
             },
@@ -206,7 +206,6 @@
         },
         {
             "tagName": "hr",
-            "tagType": null,
             "cons_attribs": {
                 "class": "span12"
             },
@@ -219,7 +218,6 @@
     "dropdown": [
         {
             "tagName": "select",
-            "tagType": null,
             "content": "<option>Option 1</option>",
             "attribs": null,
             "isSingle": false,
@@ -230,7 +228,6 @@
     "box": [
         {
             "tagName": "div",
-            "tagType": null,
             "content": null,
             "cons_attribs": {
                 "style": "border:1px solud #333;"
@@ -241,7 +238,6 @@
         },
         {
             "tagName": "div",
-            "tagType": null,
             "content": null,
             "cons_attribs": {
                 "style": "border:1px solud #333;"

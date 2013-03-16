@@ -93,7 +93,7 @@ var WidgetLayoutEditorView = Backbone.View.extend({
   renderLayoutInfo: function() {
     var ul = document.createElement('ul');
     ul.className = "alignment-picker";
-    ul.innerHTML += '<li class="a-left a-pick">L</li><li class="a-center a-pick">C</li><li class="a-right a-pick">R</li>';
+    ul.innerHTML += '<li class="a-left a-pick"></li><li class="a-center a-pick"></li><li class="a-right a-pick"></li>';
     return ul;
   },
 
