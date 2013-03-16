@@ -20,6 +20,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/$', 'app_list'),
     url(r'^app/new/$', 'app_new'),
     url(r'^app/(\d+)/$', 'app_page'),
+    url(r'^app/(\d+)/delete/$', 'app_delete'),
     # entities
     url(r'^app/(\d+)/entities/$', 'entities'),
     # editor

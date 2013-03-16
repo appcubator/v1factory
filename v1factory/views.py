@@ -36,6 +36,15 @@ def app_page(request, app_id):
                                            'title': 'The Garage',
                                            'apps': request.user.apps.all()})
 
+@require_POST
+@login_required
+def app_delete(request, app_id):
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  app.delete()
+  return redirect("/")
+
+
+
 @login_required
 def app_state(request, app_id):
   app = get_object_or_404(App, id=app_id)
