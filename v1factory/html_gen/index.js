@@ -60,7 +60,6 @@ function generateCSSFile() {
   var pageCSSstring = '';
 
   _(pageJSON.design_props).each(function(val) {
-    console.log('oylo');
     var styleString = '';
     options = designOptions[val.type];
 
@@ -248,15 +247,11 @@ var slices;
 
 console.log(bitmap);
 slices = sliceBitmap(bitmap);
-console.log(slices.length);
 slices = sliceIntoColumns(slices);
-//console.log(slices[2].columns);
-//console.log(slices[2].columns[0].rows[0]);
 
 slices = mapBitmapToElements(slices);
 slices = mapIdtoElements(slices, pageJSON.uielements);
 
-//var slices     = sliceWells();
 generatePage();
 
 

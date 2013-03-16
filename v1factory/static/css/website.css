@@ -419,7 +419,7 @@ hr {
 .btn-green {
   display: inline-block;
   background-color: #7fc35f;
-  border-radius: 8px;
+  border-radius: 6px;
   color:#fff;
   font-size: 18px;
   padding: 16px 24px;
@@ -437,7 +437,7 @@ hr {
 .btn-blue {
   display: inline-block;
   background-color: #0f2d40;
-  border-radius: 8px;
+  border-radius: 6px;
   color:#fff;
   font-size: 14px;
   padding: 14px 20px;
@@ -480,4 +480,10 @@ hr {
   overflow: hidden;
   border-radius: 0 !important;
   border:none;
+}
+
+.mascot {
+  background-image: url(../img/mascot.png);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
 }

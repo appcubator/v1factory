@@ -1,0 +1,25 @@
+<div class="navbar logo-text navbar-inverse navbar-fixed-top ">
+  <div class="hi4 navbar-inner" style="opacity:0.8; background-color:#000; background-image: none; overflow:visible;">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+        <ul class="nav">
+          <h1 class="name hoff1" style="display:inline-block;"><a class="" href="/">v1 Factory</a> | {{ title }}</a></h1>
+        </ul>
+        <div class="login hi2 pad1 pull-right" style="height:45px; margin-top: 10px;">
+          <span class="span6 pad1"><strong style="line-height:14px;">User Login</strong><br><i class="micro"> (forgot password?)</i></span>
+          <span class="login span21 offset1">
+          {% if user.is_authenticated %}
+            <a href="{% url v1factory.views.app_list %}">Logged In</a>
+          {% else %}
+            {% include "registration/login.html" %}
+          {% endif %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

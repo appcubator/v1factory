@@ -7,27 +7,11 @@
  -->
 {% endblock %}
 {% block topbar %}
+{% include "infra-topbar-out.html" %}
 {% endblock %}
 {% block page %}
-<div class="row hi4" style="position:fixed; background-color:#000; opacity:0.6; top:0; left:0; z-index:1; width:100%;">
-  <div class="container">
-    <div class="offset1 toppanel  span12 logo-text" style="">
-      <h1 class="name hoff1"><a href="{% url v1factory.views.app_list %}">v1 Factory</a> {{ title }}</h1>
-    </div>
-    <div class="offset10 toppanel hi6 span30">
-      <div class="login hi2 pad1" style="height:45px; margin-top: 10px;">
-        <span class="span6 pad1"><strong style="line-height:14px;">User Login</strong><br><i class="micro"> (forgot password?)</i></span>
-        <span class="login span21 offset1">
-        {% if user.is_authenticated %}
-          <a href="{% url v1factory.views.app_list %}">Logged In</a>
-        {% else %}
-          {% include "registration/login.html" %}
-        {% endif %}</span>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="well" style="background-color:#26656e;">
+
+<div class="well green-2">
   <div class="container">
     <div class="span64">
       <div class="hi9 offset1">
