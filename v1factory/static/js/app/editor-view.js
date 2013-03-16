@@ -43,6 +43,8 @@ var EditorView = Backbone.View.extend({
     this.render();
     $('#loading-gif').fadeOut().remove();
     window.addEventListener('keydown', this.keydown);
+
+    key('⌘+s, ctrl+s', this.save);
   },
 
   render: function() {
@@ -63,6 +65,8 @@ var EditorView = Backbone.View.extend({
       success: function() {},
       dataType: "JSON"
     });
+
+    return false;
   },
 
   showSettings: function() {
@@ -119,21 +123,16 @@ var EditorView = Backbone.View.extend({
         break;
       case 38:
         this.widgetsCollection.selectedEl.moveUp();
-        e.preventDefault();
         break;
       case 39:
         this.widgetsCollection.selectedEl.moveRight();
-        e.preventDefault();
         break;
       case 40:
         this.widgetsCollection.selectedEl.moveDown();
-        e.preventDefault();
         break;
       case 8: //backspace
         if(this.widgetsCollection.selectedEl) {
-          e.preventDefault();
           this.widgetsCollection.removeSelected();
-          return false;
         }
         break;
       case 27: //escape

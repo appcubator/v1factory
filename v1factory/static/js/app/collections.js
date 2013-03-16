@@ -44,8 +44,10 @@ var WidgetCollection = Backbone.Collection.extend({
   },
 
   removeSelected  : function() {
-    this.remove(this.selectedEl);
-    this.selectedEl = null;
+    if(this.editMode !== true) {
+      this.remove(this.selectedEl);
+      this.selectedEl = null;
+    }
   }
 });
 

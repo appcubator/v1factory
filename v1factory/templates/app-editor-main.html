@@ -49,11 +49,10 @@
 </div>
 {% include "app-editor-gallery.html" %}
 {% endblock %}
+
 {% block page %}
-<div class="container editing" id="full-container">
-</div>
-<div class="container editing" id="elements-container">
-</div>
+<div class="container editing" id="full-container"></div>
+<div class="container editing" id="elements-container"></div>
 <div class="container editing" id="body-container"></div>
 {% endblock %}
 
@@ -77,6 +76,7 @@ var uieState = {{ app.uie_state_json|safe }};
 <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/tag-dict.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/list.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/keymaster.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/constant-containers.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>

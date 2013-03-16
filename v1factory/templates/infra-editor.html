@@ -15,21 +15,19 @@
 </style>
 </head>
 <body class="sample">
-  {% block controllers %}
-  
-  {% endblock %}
+  {% block controllers %}{% endblock %}
+
+  <div class="container">
+    {% block topbar %}{% endblock %}
+  </div>
+    {% block navbar %}{% endblock %}
   <div class="page-wrapper">
+    <div class="url-bar">http://127.0.0.1:8000/app/1/pages/editor/0</div>
     <div class="page">
-      <div class="container">
-      {% block topbar %}
-      {% endblock %}
-      </div>
-      {% block navbar %}
-      {% endblock %}
-      {% block page %}
-      {% endblock %}  
+      {% block page %}{% endblock %}  
     </div>
   </div>
+</body>
   <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/libs/underscore.js"></script>
@@ -38,5 +36,4 @@
   <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
   {% block js %}
   {% endblock %}
-</body>
 </html>

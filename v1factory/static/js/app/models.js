@@ -191,23 +191,24 @@ var WidgetModel = Backbone.Model.extend({
   moveLeft: function() {
     if(this.isFullWidth()) return;
 
-    if(this.get('layout').get('left') < 1) return;
+    if(this.get('layout').get('left') < 1 || this.collection.editMode) return;
     this.get('layout').set('left', this.get('layout').get('left') - 1);
   },
 
   moveRight: function() {
-    if(this.isFullWidth()) return;
+    if(this.isFullWidth() || this.collection.editMode) return;
 
     if(this.get('layout').get('left') + this.get('layout').get('width') > 11) return;
     this.get('layout').set('left', this.get('layout').get('left') + 1);
   },
 
   moveUp: function() {
-    if(this.get('layout').get('top') < 1) return;
+    if(this.get('layout').get('top') < 1 || this.collection.editMode) return;
     this.get('layout').set('top', this.get('layout').get('top') - 1);
   },
 
   moveDown: function() {
+    if(this.collection.editMode) return;
     this.get('layout').set('top', this.get('layout').get('top') + 1);
   },
 

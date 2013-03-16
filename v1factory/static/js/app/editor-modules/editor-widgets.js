@@ -44,6 +44,7 @@ var WidgetView = Backbone.UIView.extend({
                     'select',
                     'switchOnEditMode',
                     'switchOffEditMode',
+                    'switchOffEditModeWithoutSave',
                     'outlineSelected',
                     'changedWidth',
                     'changedHeight',
@@ -244,7 +245,7 @@ var WidgetView = Backbone.UIView.extend({
       return;
     }
     console.log(this);
-    this.editMode = true;
+    this.model.collection.editMode = true;
 
     var editedElem = this.el.firstChild;
     var top = $(editedElem).offset().top;
@@ -274,15 +275,11 @@ var WidgetView = Backbone.UIView.extend({
     elem.focus();
     elem.select();
 
-    // var range = document.createRange();
-    // range.selectNodeContents(elem);
-    // var sel = window.getSelection();
-    // sel.removeAllRanges();
-    // sel.addRange(range);
   },
 
   switchOffEditMode: function() {
-    console.log(this);
+    this.model.collection.editMode = false;
+
     if(this.model.get('type') == "text" || this.model.get('type') == "header-text" || this.model.get('type') == "link" ) {
       this.model.set('content', this.shadowElem.value);
     }
@@ -294,13 +291,21 @@ var WidgetView = Backbone.UIView.extend({
     $(this.editedElem).fadeIn();
   },
 
-  keyHandler: function (e) {
-    if(this.editMode === false) return;
+  switchOffEditModeWithoutSave: function() {
+    this.model.collection.editMode = false;
+    $(this.shadowElem).remove();
+    $(this.editedElem).fadeIn();
+  },
 
+  keyHandler: function (e) {
+    //if(this.editMode === false) return;
     switch(e.keyCode) {
       case 13: //enter
         this.switchOffEditMode();
-        return false;
+        //return false;
+        break;
+      case 27:
+        this.switchOffEditModeWithoutSave();
         break;
     }
 

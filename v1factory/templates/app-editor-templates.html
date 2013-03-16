@@ -1,4 +1,4 @@
-<script type="text/html" id="temp-meta">
+<script type="text/template" id="temp-meta">
 <ul class="meta" style="display:none;">
 <li><img class="delete" src="/static/img/delete-icon.png"></li>
 <li><img class="delete" src="/static/img/delete-icon.png"></li>
@@ -16,7 +16,7 @@ class = "<%= element.class_name %>"
 <% }; %></script>
 
 
-<script type="text/html" id="temp-href-select">
+<script type="text/template" id="temp-href-select">
 <select class="<%= hash %>" id="prop-<%= hash %>">
   <% _(appState.pages).each(function(page){ var b = ''; if(('{% templatetag openvariable %}'+page.name+'{% templatetag closevariable %}') == val){ b = 'selected';}%>
   <option value="{% templatetag openvariable %} <%= page.name %> {% templatetag closevariable %}" <%= b %>><%= page.name %></option>
@@ -24,7 +24,7 @@ class = "<%= element.class_name %>"
 </select>
 </script>
 
-<script type="text/html" id="temp-source-select">
+<script type="text/template" id="temp-source-select">
 <select class="statics"  id="prop-<%= hash %>">
   <option class="upload-image">Placeholder</option>
   <% _(statics).each(function(asset){ var b = ''; if(asset == val){ b = 'selected';} %>

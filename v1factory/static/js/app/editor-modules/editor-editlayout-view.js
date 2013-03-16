@@ -85,7 +85,7 @@ var WidgetLayoutEditorView = Backbone.View.extend({
 
   render: function() {
     var self = this;
- 
+
     this.el.appendChild(this.renderPaddingInfo());
     this.el.appendChild(this.renderLayoutInfo());
   },

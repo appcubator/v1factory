@@ -77,10 +77,10 @@
                 },
                 {
                     "layout": {
-                        "width": 16,
-                        "height": 64,
-                        "top": 10,
-                        "left": 16
+                        "width": 4,
+                        "height": 34,
+                        "top": 2,
+                        "left": 2
                     },
                     "container_info": {
                         "entity": "User",
