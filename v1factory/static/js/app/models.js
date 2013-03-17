@@ -38,7 +38,7 @@ var EntityModel = Backbone.Model.extend({
   initialize: function(bone) {
     var fieldCollection = new FieldsCollection();
     if(bone) fieldCollection.add(bone.fields);
-
+    //this.bind('change', iui.askBeforeLeave);
     this.set('fields', fieldCollection);
   },
   toJSON: function () {
@@ -59,7 +59,7 @@ var UserEntityModel = EntityModel.extend({
   initialize: function(bone) {
     var fieldCollection = new FieldsCollection();
     if(bone) fieldCollection.add(bone.fields);
-
+    //this.bind('change', function(){iui.askBeforeLeave});
     this.set('fields', fieldCollection);
   },
 

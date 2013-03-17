@@ -314,27 +314,40 @@ input[type="submit"] {
 
 .tbl {
   display: inline-block;
+  background-color: #fff;
+  border-top: 2px solid #AAA;
+  border: 2px solid #333;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .tbl .hdr {
   font-weight: bold;
-  border-bottom: 1px solid #AAA;
+  border-bottom: 2px solid #AAA;
   height: 30px;
   padding: 4px;
-}
-.tbl {
-  border-top: 1px solid #AAA;
-  border-bottom: 1px solid #AAA;
-  border-radius: 3px;
+  text-align: left;
 }
 
 .column > div {
   padding: 4px;
   border-bottom: 1px solid #AAA;
+  text-align: center;
 }
 
 .add-property-button {
-  padding: 6px;
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  height: 100%;
+}
+
+.add-property-column:hover {
+  background-color: rgba(19, 122, 126, 0.1);
+  transition: background-color 0.4s;
+  -moz-transition: background-color 0.4s; /* Firefox 4 */
+  -webkit-transition: background-color 0.4s; /* Safari and Chrome */
+  -o-transition: background-color 0.4s; /* Opera */
 }
 
 .sub-menu {

@@ -197,7 +197,7 @@ var UserEntityView = EntityView.extend({
 
     var page_context = {};
     page_context.name = fieldModel.get('name');
-    page_context.ind = fieldModel.cid;
+    page_context.cid = fieldModel.cid;
     page_context.other_models = entityEditor.collection.models;
 
     var template = _.template( $("#template-property").html(), page_context);

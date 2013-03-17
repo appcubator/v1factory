@@ -106,6 +106,16 @@ var iui = {
 
   getHTML: function(id) {
     return document.getElementById(id).innerHTML;
+  },
+
+  askBeforeLeave: function(message) {
+    window.onbeforeunload = function(){
+      return ('You have some unsave changes.');
+    };
+  },
+
+  dontAskBeforeLeave: function() {
+    window.onbeforeunload = null;
   }
 };
 

@@ -94,7 +94,7 @@
               <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
 <!--               <div class="hi1 remove prop-cross">Remove</div>           
  -->            </div>
-            <ul class="property-list"></ul><a class="column span8 right">
+            <ul class="property-list"></ul><a class="column span8 right add-property-column">
                 <form class="add-property-form" style="display:none">
                   <div class="hi2 hdr">
                     <input type="text" class="property-name-input span7" placeholder="Property Name...">
@@ -219,7 +219,7 @@
                       </select>
                   </div>
                   <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
-                  <div class="hi1 remove prop-cross">Remove</div>           
+                  <div class="hi2 prop-cross"><div class="remove">Remove</div></div>     
               </div>
             <% }); %>
             </ul><a class="column span8" style="float:none;">
@@ -254,7 +254,9 @@
   <div class="hi2">
     <input class="cb-login" id="linkedin" type="checkbox" value="linkedin">
   </div>
-  <div class="hi1 remove prop-cross" id="delete-<%- cid %>">Remove</div>
+  <div class="hi2 prop-cross" id="delete-<%- cid %>">
+    <div class="remove">Remove</div>
+  </div>
 </div>
 </script>
 {% endblock %}

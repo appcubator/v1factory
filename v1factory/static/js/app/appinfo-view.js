@@ -7,7 +7,8 @@ var InfoView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, 'render',
-                    'changeName', 
+                    'changeName',
+                    'deploy',
                     'changeDescription',
                     'changeKeywords');
 
@@ -25,17 +26,20 @@ var InfoView = Backbone.View.extend({
 
   changeName : function() {
     appState.name = iui.get('app-name').value;
+    iui.askBeforeLeave();
   },
 
   changeKeywords: function() {
     appState.info.keywords = iui.get('app-keywords').value;
+    iui.askBeforeLeave();
   },
 
   changeDescription: function() {
     appState.info.description = iui.get('app-description').value;
+    iui.askBeforeLeave();
   },
 
-  deplay: function() {
+  deploy: function() {
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/deploy/',
@@ -68,7 +72,9 @@ var InfoView = Backbone.View.extend({
       type: "POST",
       url: '/app/'+appId+'/state/',
       data: JSON.stringify(appState),
-      success: function() {},
+      success: function() {
+        iui.dontAskBeforeLeave();
+      },
       dataType: "JSON"
     });
   }
