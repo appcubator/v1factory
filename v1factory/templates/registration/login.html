@@ -1,15 +1,31 @@
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+{% extends "infra-html.html" %}
 
-<form class="" method="post" action="{% url django.contrib.auth.views.login %}">
-  {% csrf_token%}
-    <div class="line block hi1">
-     {{ form.username }}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
+<!--     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+ -->
+{% endblock %}
+{% block topbar %}
+{% include "infra-topbar-out.html" %}
+{% endblock %}
+{% block page %}
+
+<div class="well green-2">
+  <div class="container">
+    <div class="span64">
+      <div class="hi9 offset1">
+        <h1 class="hoff5">Sign Up Form</h1>
+      </div>
     </div>
-    <div class="line block hi1">
-     {{ form.password }}
-    </div>
-    <input class="btn right" type="submit" value="Login" />
-    <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
-</form>
+  </div>
+</div>
+<div class="container">
+  <div class="row meta">
+    
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

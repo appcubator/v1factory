@@ -279,16 +279,29 @@ input[type="submit"] {
 
 .left-menu li {
   height: 45px;
-  padding: 12px;
   font-weight: bold;
   border-top: 1px solid #fff;
   cursor: pointer;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 .left-menu li.selected {
   background-color: #26657a;
   color: #fff;
 }
+
+.left-menu li a {
+  padding: 12px;
+  display: block;
+}
+
+
+.left-menu li:hover {
+  color: #fff;
+  background-color: #26657a;
+}
+
 
 .column {
   border-left: 1px solid #AAA;

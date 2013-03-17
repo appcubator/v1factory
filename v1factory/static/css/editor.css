@@ -669,7 +669,9 @@ border: 2px solid #bbbbbb;
   width: 1160px;
   height: 1000px;
   margin: 80px auto;
-  border-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border: 1px solid #aaa;
 /*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
 */}
 
