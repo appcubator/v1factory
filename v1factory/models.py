@@ -12,9 +12,19 @@ import django.conf
 import random
 import string
 import time
+import shutil
 from django.core.exceptions import ValidationError
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
+
+def copytree(src, dst, symlinks=False, ignore=None):
+  for item in os.listdir(src):
+    s = os.path.join(src, item)
+    d = os.path.join(dst, item)
+    if os.path.isdir(s):
+      shutil.copytree(s, d, symlinks, ignore)
+    else:
+      shutil.copy2(s, d)
 
 def get_default_uie_state():
   f = open(os.path.join(DEFAULT_STATE_DIR, "uie_state.json"))
@@ -103,15 +113,15 @@ class App(models.Model):
 
   @property
   def config_path(self):
-    return "/var/www/config/{}".format(self.name)
+    return "/var/www/configs/{}".format(self.name)
 
   def randomly_name(self):
-    self.name = "".join( [ random.choice(string.letters) for i in xrange(6) ] )
+    self.name = "".join( [ random.choice(string.ascii_lowercase) for i in xrange(6) ] )
 
 
   def is_initialized(self):
     """checks if this app has already been initialized"""
-    return os.path.isfile(self.app_path) and os.path.isfile(self.config_path)
+    return os.path.isdir(self.app_path) and os.path.isfile(self.config_path)
 
   def apache_config(self):
     apache_config = """
@@ -120,7 +130,7 @@ class App(models.Model):
 	ServerAdmin founders@v1factory.com
 
 	WSGIScriptAlias / /var/www/apps/{}/wsgi.py
-	WSGIDaemonProcess {} python-path=/var/www/apps/{}:/var/www/apps/{}/venv/lib/python2.7/site-packages
+	WSGIDaemonProcess {} python-path=/var/www/apps/{}:/var/www/libs/lib/python2.7/site-packages
 	WSGIProcessGroup {}
 
 	<Directory /var/www/apps/{}>
@@ -158,37 +168,49 @@ class App(models.Model):
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
+    # GENERATE CODE
     a = AnalyzedApp(self.state)
     dw = analyzed_app_to_app_components(a)
     tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+    print "Project written to " + tmp_project_dir
 
+    # INITIALIZE APACHE
     if not self.is_initialized():
+      print "Project not initialized... Initializing"
       self.randomly_name()
       self.save()
       self.do_initial_config()
-
-    if django.conf.settings.PRODUCTION:
-      commands = []
-      commands.append('cp -r {}/* {}'.format(tmp_project_dir, self.app_path))
-      commands.append('python manage.py syncdb --noinput')
-
     else:
-      # this code is invalid
-      if "DJANGO_SETTINGS_MODULE" in os.environ: del os.environ["DJANGO_SETTINGS_MODULE"]
-      commands = []
-      commands.append('python manage.py syncdb --noinput')
-      commands.append(r"""osascript -e 'tell application "Terminal" to do script "cd {}; python manage.py runserver 127.0.0.1:8009"'""".format(tmp_project_dir))
-      commands.append(r"_sleep")
-      commands.append(r"open http://localhost:8009/")
+      print "Project already initialized... skipping this step"
 
-    for c in commands:
-      if c == "_sleep":
-        time.sleep(1)
+    child_env = os.environ.copy()
+    if "DJANGO_SETTINGS_MODULE" in child_env:
+      del child_env["DJANGO_SETTINGS_MODULE"]
+
+    # COPY THE CODE TO THE RIGHT DIRECTORY
+    print "Removing existing app code"
+    for f in os.listdir(self.app_path):
+      if f in ["db"]:
         continue
+      f_path = os.path.join(self.app_path, f)
+      if os.path.isfile(f_path):
+        os.remove(f_path)
+      else:
+        shutil.rmtree(f_path)
+    print "Copying temp project dir to the real path -> " + self.app_path
+    copytree(tmp_project_dir, self.app_path)
+    
+    # CODE TO RUN AFTER APP CODE HAS BEEN DEPLOYED
+    commands = []
+    commands.append('python manage.py syncdb --noinput')
+    for c in commands:
       print "Running `{}`".format(c)
-      subprocess.call(shlex.split(c), cwd=self.app_path, stdout=sys.stdout, stderr=sys.stderr)
+      subprocess.call(shlex.split(c), env=child_env, cwd=self.app_path, stdout=sys.stdout, stderr=sys.stderr)
 
     return ""
+      # code to open a terminal
+      #commands.append(r"""osascript -e 'tell application "Terminal" to do script "cd {}; python manage.py runserver 127.0.0.1:8009"'""".format(tmp_project_dir))
+
     #the old commands:
     #commands = []
     #commands.append('git init')
