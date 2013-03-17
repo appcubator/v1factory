@@ -93,10 +93,8 @@ var iui = {
             return true;
         }else if(node.setSelectionRange){
             node.setSelectionRange(pos,pos);
-            console.log('yo');
             return true;
         }
-                  console.log('yo');
         return false;
   },
 

@@ -62,7 +62,7 @@ var EditorView = Backbone.View.extend({
       type: "POST",
       url: '/app/'+appId+'/state/',
       data: JSON.stringify(appState),
-      success: function() {},
+      complete: function() { iui.dontAskBeforeLeave();},
       dataType: "JSON"
     });
 

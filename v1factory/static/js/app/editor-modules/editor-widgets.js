@@ -395,7 +395,8 @@ var WidgetEditorView = Backbone.View.extend({
     //this.style(page['design_props']);
 
     this.collection.add(page.uielements);
-
+    this.collection.bind('change', function() { iui.askBeforeLeave(); });
+    this.collection.bind('add',  function() { iui.askBeforeLeave(); });
   },
 
   render: function() {
