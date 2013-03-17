@@ -3,7 +3,16 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 import simplejson
 import re
+import os, sys, subprocess
+import traceback
 import os.path
+import shlex
+import subprocess
+import django.conf
+import random
+import string
+import time
+from django.core.exceptions import ValidationError
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 
@@ -60,7 +69,6 @@ class App(models.Model):
     return reverse('v1factory.views.app_page', args=[str(self.id)])
 
   def clean(self):
-    from django.core.exceptions import ValidationError
     try:
       simplejson.loads(self._state_json)
     except simplejson.JSONDecodeError, e:
@@ -89,30 +97,23 @@ class App(models.Model):
     summary += "Pages:\t\t\t{};".format(", ".join(['("{}", {})'.format(u['page_name'], u['urlparts']) for u in self.state['urls']]))
     return summary
 
-  def deploy(self):
-    from app_builder.analyzer import AnalyzedApp
-    from v1factory.models import App
-    from app_builder.django.coordinator import analyzed_app_to_app_components
-    from app_builder.django.writer import DjangoAppWriter
-    import sys, os
-    import subprocess
-    import shlex
-    import django.conf
-    import random
-    import string
+  @property
+  def app_path(self):
+    return "/var/www/apps/{}".format(self.name)
 
-    a = AnalyzedApp(self.state)
-    dw = analyzed_app_to_app_components(a)
-    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
-    tmp_name = "".join( [random.choice(string.letters) for i in xrange(6)] )
-    dest_dir = "/var/www/apps/{}".format(tmp_name)
-    conf_dir = "/var/www/configs/"
-    # set up stage:
-      # set up config
-      # write empty app files
-      # restart apache
+  @property
+  def config_path(self):
+    return "/var/www/config/{}"
 
-    if django.conf.settings.PRODUCTION:
+  def randomly_name(self):
+    self.name = "".join( [ random.choice(string.letters) for i in xrange(6) ] )
+
+
+  def is_initialized(self):
+    """checks if this app has already been initialized"""
+    return os.path.isfile(self.app_path) and os.path.isfile(self.config_path)
+
+  def apache_config(self):
       apache_config = """
 <VirtualHost *:80>
 	ServerName {}.v1factory.com
@@ -139,17 +140,36 @@ class App(models.Model):
 	ErrorLog /var/www/apps/{}/error.log
 	CustomLog /var/www/apps/{}/access.log combined
 </VirtualHost>
-""".format(*(11*[tmp_name])) # fill with a list of 11 tmp_names
-      a_conf = open("/var/www/configs/app_{}".format(tmp_name), "w")
-      a_conf.write(apache_config)
-      a_conf.close()
+""".format(*(11*[self.name])) # fill with a list of 11 names
+    return apache_config
+
+  def do_initial_config(self):
+    """setup apache config and write a blank app to the app path"""
+    a_conf = open(self.config_path, "w")
+    a_conf.write(self.apache_config())
+    a_conf.close()
+
+    os.mkdir(self.app_path)
+    # should probably restart apache2
+
+  def deploy(self):
+    from app_builder.analyzer import AnalyzedApp
+    from v1factory.models import App
+    from app_builder.django.coordinator import analyzed_app_to_app_components
+    from app_builder.django.writer import DjangoAppWriter
+
+    a = AnalyzedApp(self.state)
+    dw = analyzed_app_to_app_components(a)
+    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+    conf_dir = "/var/www/configs/"
+
+    if django.conf.settings.PRODUCTION:
       commands = []
-      import os
-      os.mkdir(dest_dir)
-      commands.append('cp -r {} /var/www/apps/{}'.format(tmp_project_dir, tmp_name))
+      commands.append('cp -r {}/* {}'.format(tmp_project_dir, self.app_path)
       commands.append('python manage.py syncdb --noinput')
-      
+
     else:
+      # this code is invalid
       if "DJANGO_SETTINGS_MODULE" in os.environ: del os.environ["DJANGO_SETTINGS_MODULE"]
       commands = []
       commands.append('python manage.py syncdb --noinput')
@@ -159,11 +179,10 @@ class App(models.Model):
 
     for c in commands:
       if c == "_sleep":
-        import time
         time.sleep(1)
         continue
       print "Running `{}`".format(c)
-      subprocess.call(shlex.split(c), cwd=dest_dir, stdout=sys.stdout, stderr=sys.stderr)
+      subprocess.call(shlex.split(c), cwd=self.app_path, stdout=sys.stdout, stderr=sys.stderr)
 
     return ""
     #the old commands:
@@ -191,7 +210,6 @@ class App(models.Model):
     ###
 
     def print_test(heading, test_output_fun):
-      import sys, traceback
       print "\n\n\n", 17*"#", 7*" ", heading, 7*" ", 17*"#"
       try:
         test_output = test_output_fun()
