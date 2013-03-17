@@ -92,21 +92,70 @@ class App(models.Model):
   def deploy(self):
     from app_builder.analyzer import AnalyzedApp
     from v1factory.models import App
-    a = AnalyzedApp(self.state)
     from app_builder.django.coordinator import analyzed_app_to_app_components
-    dw = analyzed_app_to_app_components(a)
     from app_builder.django.writer import DjangoAppWriter
-    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
-
     import sys, os
     import subprocess
     import shlex
-    if "DJANGO_SETTINGS_MODULE" in os.environ: del os.environ["DJANGO_SETTINGS_MODULE"]
-    commands = []
-    commands.append('python manage.py syncdb --noinput')
-    commands.append(r"""osascript -e 'tell application "Terminal" to do script "cd {}; python manage.py runserver 127.0.0.1:8009"'""".format(tmp_project_dir))
-    commands.append(r"_sleep")
-    commands.append(r"open http://localhost:8009/")
+    import django.conf
+    import random
+    import string
+
+    a = AnalyzedApp(self.state)
+    dw = analyzed_app_to_app_components(a)
+    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+    tmp_name = "".join( [random.choice(string.letters) for i in xrange(6)] )
+    dest_dir = "/var/www/apps/{}".format(tmp_name)
+    conf_dir = "/var/www/configs/"
+    # set up stage:
+      # set up config
+      # write empty app files
+      # restart apache
+
+    if django.conf.settings.PRODUCTION:
+      apache_config = """
+<VirtualHost *:80>
+	ServerName {}.v1factory.com
+	ServerAdmin founders@v1factory.com
+
+	WSGIScriptAlias / /var/www/apps/{}/wsgi.py
+	WSGIDaemonProcess {} python-path=/var/www/apps/{}:/var/www/apps/{}/venv/lib/python2.7/site-packages
+	WSGIProcessGroup {}
+
+	<Directory /var/www/apps/{}>
+	<Files wsgi.py>
+	Order deny,allow
+	Allow from all
+	</Files>
+	</Directory>
+
+	Alias /static/ /var/www/apps/{}/static/
+	<Directory /var/www/apps/{}/static/>
+	Order deny,allow
+	Allow from all
+	</Directory>
+
+	LogLevel info 
+	ErrorLog /var/www/apps/{}/error.log
+	CustomLog /var/www/apps/{}/access.log combined
+</VirtualHost>
+""".format(*(11*[tmp_name])) # fill with a list of 11 tmp_names
+      a_conf = open("/var/www/configs/app_{}".format(tmp_name), "w")
+      a_conf.write(apache_config)
+      a_conf.close()
+      commands = []
+      import os
+      os.mkdir(dest_dir)
+      commands.append('cp -r {} /var/www/apps/{}'.format(tmp_project_dir, tmp_name))
+      commands.append('python manage.py syncdb --noinput')
+      
+    else:
+      if "DJANGO_SETTINGS_MODULE" in os.environ: del os.environ["DJANGO_SETTINGS_MODULE"]
+      commands = []
+      commands.append('python manage.py syncdb --noinput')
+      commands.append(r"""osascript -e 'tell application "Terminal" to do script "cd {}; python manage.py runserver 127.0.0.1:8009"'""".format(tmp_project_dir))
+      commands.append(r"_sleep")
+      commands.append(r"open http://localhost:8009/")
 
     for c in commands:
       if c == "_sleep":
@@ -114,29 +163,18 @@ class App(models.Model):
         time.sleep(1)
         continue
       print "Running `{}`".format(c)
-      subprocess.call(shlex.split(c), cwd=tmp_project_dir, stdout=sys.stdout, stderr=sys.stderr)
+      subprocess.call(shlex.split(c), cwd=dest_dir, stdout=sys.stdout, stderr=sys.stderr)
 
     return ""
-    import sys, os
-    import traceback
-    import subprocess
-
-    analyzed_app = AnalyzedApp(self.state, self.name)
-    django_writer = DjangoWriter(analyzed_app)
-    tmp_project_dir = django_writer.write()
-
-    commands = []
-    commands.append('git init')
-    commands.append('git add .')
-    commands.append('git commit -m "deploy"')
-    commands.append('heroku keys:add')
-    commands.append('git remote add heroku git@heroku.com:warm-reaches-8765.git')
-    commands.append('git push -f heroku master')
-    commands.append('heroku run python manage.py syncdb')
-    for c in commands:
-      print "Running `{}`".format(c)
-      subprocess.call(c.split(' '), cwd=tmp_project_dir, env=os.environ.copy(), stdout=sys.stdout, stderr=sys.stderr)
-    return tmp_project_dir
+    #the old commands:
+    #commands = []
+    #commands.append('git init')
+    #commands.append('git add .')
+    #commands.append('git commit -m "deploy"')
+    #commands.append('heroku keys:add')
+    #commands.append('git remote add heroku git@heroku.com:warm-reaches-8765.git')
+    #commands.append('git push -f heroku master')
+    #commands.append('heroku run python manage.py syncdb')
 
   def deploy_test(self):
     return "do the funky chicken"
