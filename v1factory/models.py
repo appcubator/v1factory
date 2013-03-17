@@ -103,7 +103,7 @@ class App(models.Model):
 
   @property
   def config_path(self):
-    return "/var/www/config/{}"
+    return "/var/www/config/{}".format(self.name)
 
   def randomly_name(self):
     self.name = "".join( [ random.choice(string.letters) for i in xrange(6) ] )
@@ -161,6 +161,11 @@ class App(models.Model):
     a = AnalyzedApp(self.state)
     dw = analyzed_app_to_app_components(a)
     tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+
+    if not self.is_initialized():
+      self.randomly_name()
+      self.save()
+      self.do_initial_config()
 
     if django.conf.settings.PRODUCTION:
       commands = []
