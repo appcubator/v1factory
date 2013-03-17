@@ -114,7 +114,7 @@ class App(models.Model):
     return os.path.isfile(self.app_path) and os.path.isfile(self.config_path)
 
   def apache_config(self):
-      apache_config = """
+    apache_config = """
 <VirtualHost *:80>
 	ServerName {}.v1factory.com
 	ServerAdmin founders@v1factory.com
@@ -161,11 +161,10 @@ class App(models.Model):
     a = AnalyzedApp(self.state)
     dw = analyzed_app_to_app_components(a)
     tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
-    conf_dir = "/var/www/configs/"
 
     if django.conf.settings.PRODUCTION:
       commands = []
-      commands.append('cp -r {}/* {}'.format(tmp_project_dir, self.app_path)
+      commands.append('cp -r {}/* {}'.format(tmp_project_dir, self.app_path))
       commands.append('python manage.py syncdb --noinput')
 
     else:
