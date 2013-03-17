@@ -88,7 +88,6 @@ class App(models.Model):
     except simplejson.JSONDecodeError, e:
       raise ValidationError(e.msg)
 
-
   def summary_user_settings(self):
     """Human-readable summary of the user settings"""
     summary = ""
@@ -108,13 +107,18 @@ class App(models.Model):
     return summary
 
   @property
+  def subdomain(self):
+    return self.owner.username + "-" + self.name
+
+  @property
   def app_path(self):
-    return "/var/www/apps/{}".format(self.name)
+    return "/var/www/apps/{}/{}".format(self.owner.username, self.name)
 
   @property
   def config_path(self):
-    return "/var/www/configs/{}".format(self.name)
+    return "/var/www/configs/{}/{}".format(self.owner.username, self.name)
 
+  # TODO deprecate this.
   def randomly_name(self):
     self.name = "".join( [ random.choice(string.ascii_lowercase) for i in xrange(6) ] )
 
@@ -129,37 +133,41 @@ class App(models.Model):
 	ServerName {}.v1factory.com
 	ServerAdmin founders@v1factory.com
 
-	WSGIScriptAlias / /var/www/apps/{}/wsgi.py
-	WSGIDaemonProcess {} python-path=/var/www/apps/{}:/var/www/libs/lib/python2.7/site-packages
+	WSGIScriptAlias / {}/wsgi.py
+	WSGIDaemonProcess {} python-path={}:/var/www/libs/lib/python2.7/site-packages
 	WSGIProcessGroup {}
 
-	<Directory /var/www/apps/{}>
+	<Directory {}>
 	<Files wsgi.py>
 	Order deny,allow
 	Allow from all
 	</Files>
 	</Directory>
 
-	Alias /static/ /var/www/apps/{}/static/
-	<Directory /var/www/apps/{}/static/>
+	Alias /static/ {}/static/
+	<Directory {}/static/>
 	Order deny,allow
 	Allow from all
 	</Directory>
 
 	LogLevel info 
-	ErrorLog /var/www/apps/{}/error.log
-	CustomLog /var/www/apps/{}/access.log combined
+	ErrorLog {}/error.log
+	CustomLog {}/access.log combined
 </VirtualHost>
-""".format(*(11*[self.name])) # fill with a list of 11 names
+""".format(self.subdomain, self.app_path, self.subdomain, self.app_path, self.subdomain, *(5*[self.app_path]))
     return apache_config
 
   def do_initial_config(self):
     """setup apache config and write a blank app to the app path"""
+    try:
+      os.makedirs(os.path.dirname(self.config_path))
+    except OSError:
+      print "Config directory already exists."
     a_conf = open(self.config_path, "w")
     a_conf.write(self.apache_config())
     a_conf.close()
 
-    os.mkdir(self.app_path)
+    os.makedirs(self.app_path)
     # should probably restart apache2
 
   def deploy(self):
@@ -177,8 +185,8 @@ class App(models.Model):
     # INITIALIZE APACHE
     if not self.is_initialized():
       print "Project not initialized... Initializing"
-      self.randomly_name()
-      self.save()
+      #self.randomly_name()
+      #self.save()
       self.do_initial_config()
     else:
       print "Project already initialized... skipping this step"

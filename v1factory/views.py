@@ -22,9 +22,14 @@ def app_new(request):
   if request.method == 'GET':
     return render(request, 'apps-new.html')
   elif request.method == 'POST':
-    a = App(name="YOLO app", owner=request.user)
-    a.save()
-    a.name += str(a.id)
+    app_name = "Unnamed"
+    if 'name' in request.POST:
+      app_name = request.POST['name']
+    a = App(name=app_name, owner=request.user)
+    try:
+      a.full_clean()
+    except Exception, e:
+      return (400, str(e))
     a.save()
     return redirect(app_page, a.id)
 
@@ -42,8 +47,6 @@ def app_delete(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
   app.delete()
   return redirect("/")
-
-
 
 @login_required
 def app_state(request, app_id):

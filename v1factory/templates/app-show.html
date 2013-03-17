@@ -35,7 +35,7 @@
     <div class="span11 offsetr1">
       <ul class="left-menu">
         {% for a in apps %}
-        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">{{ a.state.name }}</a></li>
+        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">{{ a.name }}</a></li>
         {% endfor %}
         <li><a href="{% url v1factory.views.app_new %}">+ Create New</a></li>
       </ul>
