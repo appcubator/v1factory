@@ -10,12 +10,14 @@ DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("de
 def get_default_uie_state():
   f = open(os.path.join(DEFAULT_STATE_DIR, "uie_state.json"))
   s = f.read()
+  simplejson.loads(s) # makes sure it's actually valid
   f.close()
   return s
 
 def get_default_app_state():
   f = open(os.path.join(DEFAULT_STATE_DIR, "app_state.json"))
   s = f.read()
+  simplejson.loads(s) # makes sure it's actually valid
   f.close()
   return s
 
@@ -58,6 +60,7 @@ class App(models.Model):
     return reverse('v1factory.views.app_page', args=[str(self.id)])
 
   def clean(self):
+    from django.core.exceptions import ValidationError
     try:
       simplejson.loads(self._state_json)
     except simplejson.JSONDecodeError, e:

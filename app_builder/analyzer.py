@@ -106,8 +106,8 @@ class Node(UIElement):
 
 
     self.attribs = uie['content_attribs']
-    if 'constant_attribs' in uie:
-      self.attribs.update(uie['constant_attribs'])
+    if 'cons_attribs' in uie:
+      self.attribs.update(uie['cons_attribs'])
     self._content = uie['content']
 
 

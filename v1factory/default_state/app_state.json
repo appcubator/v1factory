@@ -89,8 +89,9 @@
                             {
                                 "tagName": "input",
                                 "tagType": "text",
-                                "cons_attribs" : {
-                                    "name": "username"
+                                "cons_attribs": {
+                                    "name": "username",
+                                    "type": "text"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Username"
@@ -110,8 +111,9 @@
                                 "type"   : "password",
                                 "tagName": "input",
                                 "tagType": "password",
-                                "cons_attribs" : {
-                                    "name": "password1"
+                                "cons_attribs": {
+                                    "name": "password1",
+                                    "type": "password"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Password"
@@ -130,8 +132,9 @@
                                 "type"   : "password",
                                 "tagName": "input",
                                 "tagType": "password",
-                                "cons_attribs" : {
-                                    "name": "password2"
+                                "cons_attribs": {
+                                    "name": "password2",
+                                    "type": "password"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Password"
@@ -152,8 +155,9 @@
                                 "type"   : "text-input",
                                 "tagName": "input",
                                 "tagType": "text",
-                                "cons_attribs" : {
-                                    "name": "name"
+                                "cons_attribs": {
+                                    "name": "name",
+                                    "type": "text"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Display Name"
@@ -172,8 +176,9 @@
                                 "type": "text-input",
                                 "tagName": "input",
                                 "tagType": "text",
-                                "cons_attribs" : {
-                                    "name": "email"
+                                "cons_attribs": {
+                                    "name": "email",
+                                    "type": "text"
                                 },
                                 "content_attribs": {
                                     "placeholder": "Email address"
