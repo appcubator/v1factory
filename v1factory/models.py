@@ -192,7 +192,7 @@ class App(models.Model):
     print "Project written to " + tmp_project_dir
 
     if not django.conf.settings.PRODUCTION:
-      return
+      return tmp_project_dir
 
     # INITIALIZE APACHE
     if not self.is_initialized():
