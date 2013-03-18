@@ -193,6 +193,7 @@
   top: 60px;
   min-height: 900px;
   width: 960px;
+  margin-left: 100px;
 }
 
 .right-panel {
@@ -1324,6 +1325,10 @@ ul.list {
   cursor: pointer;
 }
 
+.a-pick:hover {
+  background-color: #1b2535;
+}
+
 .a-left {
   background-image: url('../img/align_left_icon.png');
   background-repeat: no-repeat;
@@ -1351,3 +1356,20 @@ ul.list {
   color: #000;
 }
 
+.padding:hover {
+  background-color: #1b2535;
+}
+
+.padding.tb {
+  background-image: url('../img/tb-padding.png');
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  background-position: center center;
+}
+
+.padding.lr {
+  background-image: url('../img/lr-padding.png');
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  background-position: center center;
+}
