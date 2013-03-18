@@ -96,7 +96,7 @@ var constantContainers = {
       }
     },
     {
-      'type' : 'text',
+      'type' : 'text-input',
       'content_attribs' : {
         placeholder : 'Email'
       },
@@ -112,7 +112,7 @@ var constantContainers = {
       }
     },
     {
-      'type' : 'text',
+      'type' : 'text-input',
       'content_attribs' : {
         placeholder : 'Display Name'
       },
