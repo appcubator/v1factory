@@ -189,14 +189,15 @@
 }
 
 #elements-container {
+  position: relative;
   top: 60px;
-  position: absolute;
-  left: 50%;
-  margin-left: -470px;
   min-height: 900px;
+  width: 960px;
 }
 
-#top-panel-bb {
+.right-panel {
+  display: inline-block;
+  float: right;
   position: fixed;
   top: 0;
   z-index: 1007;
@@ -206,6 +207,12 @@
   height: 100%;
   background-color: #2b3545;
   border-left: 1px solid #1b2535;
+  overflow-y: scroll;
+}
+
+.page-container {
+  position: relative;
+  margin-right: 200px;
 }
 
 #LOL {
@@ -465,7 +472,7 @@
 }
 
 .item-gallery {
-  width: 190px;
+  width: 200px;
   right: 0;
   padding: 0;
   margin: 0;
@@ -481,13 +488,38 @@
   -o-transition: top 0.6s;*/
 }
 
+.item-gallery ::-webkit-scrollbar {
+    width: 6px;
+}
+ 
+.item-gallery ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 6px;
+}
+ 
+.item-gallery ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    /*-webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.8); */
+    background-color: rgba(255,255,255,0.4);
+}
+
+::-webkit-scrollbar {
+}
+
+::-webkit-scrollbar-track {
+  background-color: #2b3545;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0); 
+  border-radius: 6px;
+}
+ 
+
 .item-gallery ul {
   list-style: none;
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 0;
   height: 100px;
-  padding-bottom: 300px;
+  padding-bottom: 100px;
 }
 
 .item-gallery ul li {
@@ -668,7 +700,7 @@ border: 2px solid #bbbbbb;
   display: block;
   width: 1160px;
   height: 1000px;
-  margin: 80px auto;
+  margin: 10px auto;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
   border: 1px solid #aaa;

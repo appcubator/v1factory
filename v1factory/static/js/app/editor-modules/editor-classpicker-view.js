@@ -80,7 +80,7 @@ var WidgetClassPickerView = Backbone.View.extend({
   },
 
   renderNode: function(uie) {
-    var temp = document.getElementById('temp-node').innerHTML;
+    var temp = Templates.tempNode;
     var el = _.template(temp, { element: uie});
     return el;
   },

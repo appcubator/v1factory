@@ -1,12 +1,19 @@
-{% extends "infra-editor.html" %}
+<html lang="en">
 
-{% block css %}
-<link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/editor.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/design.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/jquery-ui.css" rel="stylesheet">
+<head>
+<meta charset="utf-8">
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/jscolor/jscolor.js"></script>
+<title> v1 Factory | {{ title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<link type="text/css" href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
+<link type="text/css" href="{{ STATIC_URL }}css/bootstrap-editor.css" rel="stylesheet">
+<link type="text/css" href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
+<link type="text/css" href="{{ STATIC_URL }}css/editor.css" rel="stylesheet">
+<link type="text/css" href="{{ STATIC_URL }}css/design.css" rel="stylesheet">
+<link type="text/css" href="{{ STATIC_URL }}css/jquery-ui.css" rel="stylesheet">
 <style type="text/css">
 {% for element in gallery_elements %}
 .{{element.class_name }} {
@@ -14,92 +21,124 @@
 }
 {% endfor %}
 </style>
-{% endblock %}
+</head>
+<body class="sample">
 
-{% block navbar %}
-<!-- <div class="navbar navbar-inverse navbar-fixed-top editing">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="#">Project name</a>
+  <!-- Loading GIF -->
+  <div class="loading-gif" id="loading-gif">
+    <div class="logo offsetr2 hoff1">
+      <span class="engine1"></span>
+      <span class="engine2"></span>
     </div>
   </div>
-</div> -->
-{% endblock %}
 
-{% block controllers %}
-<div class="section-select">
-  <a href="/app/3/" class="menu-button home">
-  </a><div class="menu-button save" id="save">
-    <span>Save</span>
-  </div><div class="menu-button setting" id="settings"><span>Design Settings</span>
-  </div><div class="menu-button help"></div>
-</div>
-{% include "app-editor-settings.html" %}
-{% include "app-editor-info.html" %}
-<div class="loading-gif" id="loading-gif">
-  <div class="logo offsetr2 hoff1">
-    <span class="engine1"></span>
-    <span class="engine2"></span>
+  <!-- Top Menu -->
+  <div class="section-select">
+    <a href="/app/3/" class="menu-button home">
+    </a><div class="menu-button save" id="save">
+      <span>Save</span>
+    </div><div class="menu-button setting" id="settings"><span>Design Settings</span>
+    </div><div class="menu-button help"></div>
   </div>
-</div>
-{% include "app-editor-gallery.html" %}
-{% endblock %}
 
-{% block page %}
-<div class="container editing" id="full-container"></div>
-<div class="container editing" id="elements-container"></div>
-<div class="container editing" id="body-container"></div>
-{% endblock %}
+  <!-- Page Settings -->
+  <div id="page-settings" class="settings section">
+    <h3 class="offset1 span7">Page Settings</h3>
+    <span id="settings-cross" class="right cross">×</span>
+  </div>
 
-{% block js %}
-<script type="text/javascript">
-var appState = {{ app.state_json|safe }};
-var appId = {{ app_id|safe }};
-var statics = {{ statics|safe }};
-var myUIElements = {{ myuielements|safe }};
-var library = {{ elements|safe }};
-var pageId = {{ page_id }};
-var uieState = {{ app.uie_state_json|safe }};
-</script>
-{% include "app-editor-templates.html" %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.js"></script>
+  <!-- Inside-Page -->
+  <div class="page-container">
+    <div class="page-wrapper">
+      <div class="url-bar">http://127.0.0.1:8000/app/1/pages/editor/0</div>
+      <div class="page">
+        <div class="container editing" id="full-container"></div>
+        <div class="editing" id="elements-container"></div>
+      </div>
+    </div>
+  </div>
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/lang.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/default-uielements.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/tag-dict.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/list.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/keymaster.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/constant-containers.js"></script>
-
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/collections.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-grid.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-widgets.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-gallery-view.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-info.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-design-view.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-classpicker-view.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-editlayout-view.js"></script>
-
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-view.js"></script>
+  <!-- Top Styling Menu -->
+  <div id="layout-editor" class="layout-editor">
+    Double click on elements to edit content.
+  </div>
 
 
-<script type="text/javascript">
-var GRID_WIDTH = 80;
-var GRID_HEIGHT = 15;
+  <!-- Right Gallery Panel -->
+  <div id="top-panel-bb" class="right-panel">
+    <div class="top-panel-title">
+      <span class="right-arrow"></span><h2>Element Options</h2>
+    </div>
+    <div class="info-section" id="class-picker">
+      <h2 class="tip">Choose elements from the pane below to start.</h2>
+      <div class="down-arrow"></div>
+    </div>
+    <div class="top-panel-title">
+      <h2>UI Elements </h2>
+    </div><div class="item-gallery section" id="item-gallery"><div class="elements-list" id="elements-list">
+        <div id="all-elements" class="interface-elements">
+          <ul id='all-list' class="list">
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-var editorView = new EditorView();
-</script>
-<script type="text/javascript">
-</script>
-{% endblock %}
+</body>
+  <script type="text/javascript">
+    var appState = {{ app.state_json|safe }};
+    var appId = {{ app_id|safe }};
+    var statics = {{ statics|safe }};
+    var myUIElements = {{ myuielements|safe }};
+    var library = {{ elements|safe }};
+    var pageId = {{ page_id }};
+    var uieState = {{ app.uie_state_json|safe }};
+  </script>
+  <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/require.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/underscore.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone.js"></script>
+  <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jscolor/jscolor.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.js"></script>
+
+  <script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/lang.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/default-uielements.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/tag-dict.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/list.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/keymaster.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/constant-containers.js"></script>
+
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/collections.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-templates.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-grid.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-widgets.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-gallery-view.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-info.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-design-view.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-classpicker-view.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-editlayout-view.js"></script>
+
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-view.js"></script>
+
+  <script type="text/javascript">
+    var GRID_WIDTH = 80;
+    var GRID_HEIGHT = 15;
+    var editorView = new EditorView();
+  </script>
+</html>
+
+
+
+
+
+
+
 

@@ -67,6 +67,9 @@ var iui = {
       grid: [ 15,15 ],
       drag: self.moved
     });
+
+    this.el.style.position = 'relative';
+    console.log('yolo');
     return el;
   },
 

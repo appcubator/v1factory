@@ -109,7 +109,7 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   renderElement: function() {
-    var temp = document.getElementById('temp-node').innerHTML;
+    var temp = Templates.tempNode;
     var node_context = _.clone(this.model.attributes);
     node_context.content_attribs = this.model.get('content_attribs').attributes;
     var el = _.template(temp, { element: node_context});
@@ -278,6 +278,7 @@ var WidgetView = Backbone.UIView.extend({
   },
 
   switchOffEditMode: function() {
+    console.log(this.model);
     this.model.collection.editMode = false;
 
     if(this.model.get('type') == "text" || this.model.get('type') == "header-text" || this.model.get('type') == "link" ) {

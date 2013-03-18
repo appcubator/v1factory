@@ -25,7 +25,6 @@ var EditorView = Backbone.View.extend({
     this.contextCollection= new EntityCollection();
 
 
-
     this.widgetsCollection= new WidgetCollection();
     this.galleryEditor    = new GalleryView(this.widgetsCollection, this.contextCollection, this.entityCollection);
     this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.contextCollection.models, page);
@@ -48,8 +47,7 @@ var EditorView = Backbone.View.extend({
   },
 
   render: function() {
-    this.el.appendChild(this.galleryEditor.el);
-    this.el.appendChild(this.widgetEditor.el);
+    //this.el.appendChild(this.galleryEditor.el);
     // this.el.appendChild(this.gridEditor.el);
     this.el.appendChild(this.designEditor.el);
   },
@@ -120,19 +118,23 @@ var EditorView = Backbone.View.extend({
     switch(e.keyCode) {
       case 37:
         this.widgetsCollection.selectedEl.moveLeft();
+        e.preventDefault();
         break;
       case 38:
         this.widgetsCollection.selectedEl.moveUp();
+        e.preventDefault();
         break;
       case 39:
         this.widgetsCollection.selectedEl.moveRight();
+        e.preventDefault();
         break;
       case 40:
         this.widgetsCollection.selectedEl.moveDown();
+        e.preventDefault();
         break;
       case 8: //backspace
         if(this.widgetsCollection.selectedEl) {
-          this.widgetsCollection.removeSelected();
+          this.widgetsCollection.removeSelected(e); 
         }
         break;
       case 27: //escape

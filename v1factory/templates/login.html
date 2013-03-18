@@ -1,0 +1,59 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
+<!--     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+ -->
+{% endblock %}
+{% block topbar %}
+{% include "infra-topbar-out.html" %}
+{% endblock %}
+{% block page %}
+
+<div class="well green-2">
+  <div class="container">
+    <div class="span64">
+      <div class="hi9 offset1">
+        <h1 class="hoff5">Sign Up Form</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row meta">
+    <form method="POST" class="span16 offset12" action="{% url v1factory.base_views.signup %}">
+      <h4>Username</h4>
+      <input class="span16" name="username" type="text"><br>
+      <h4>First Name</h4>
+      <input class="span16" name="first_name" type="text"><br>
+      <h4>Last Name</h4>
+      <input class="span16" name="last_name" type="text"><br>
+      <h4>Email Address</h4>
+      <input class="span16" name="email" type="text"><br>
+      <h4>Password</h4>
+      <input class="span16" name="password1" type="password"><br>
+      <h4>Confirm Password</h4>
+      <input class="span16" name="password2" type="password"><br>
+      {% csrf_token %}
+      <input class="span16 hoff2 btn btn-blue" type="submit" value="Join the Private Beta">
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+
+<form class="" method="post" action="/login/">
+  <div style="display:none"><input type="hidden" name="csrfmiddlewaretoken" value="maoCrrapOpfAolCIZv9C2djuyI6T67w6"></div>
+    <div class="line block hi1">
+     <input id="id_username" type="text" name="username" value="fasfdsadf" maxlength="30">
+    </div>
+    <div class="line block hi1">
+     <input type="password" name="password" id="id_password">
+    </div>
+    <input class="btn right" type="submit" value="Login">
+    <input type="hidden" name="next" value="/app">
+</form>
