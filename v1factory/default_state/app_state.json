@@ -46,7 +46,7 @@
                     "value": "12px"
                 },
                 {
-                    "type": "text-family",
+                    "type": "font-family",
                     "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
                 },
                 {
@@ -69,18 +69,18 @@
                     "content": "Sign Up",
                     "container_info": null,
                     "layout": {
-                        "width": 12,
-                        "height": 4,
-                        "top": 5,
-                        "left": 16
+                        "width": 3,
+                        "height": 1,
+                        "top": 1,
+                        "left": 4
                     }
                 },
                 {
                     "layout": {
-                        "width": 4,
-                        "height": 34,
-                        "top": 2,
-                        "left": 2
+                        "width": 1,
+                        "height": 8,
+                        "top": 0,
+                        "left": 0
                     },
                     "container_info": {
                         "entity": "User",
@@ -102,8 +102,8 @@
                                 "layout": {
                                     "top": 0,
                                     "left": 0,
-                                    "width": 16,
-                                    "height": 4
+                                    "width": 4,
+                                    "height": 1
                                 },
                                 "container_info": null
                             },
@@ -121,10 +121,10 @@
                                 "content": "",
                                 "isSingle": true,
                                 "layout": {
-                                    "top": 4,
+                                    "top": 1,
                                     "left": 0,
-                                    "width": 16,
-                                    "height": 4
+                                    "width": 4,
+                                    "height": 1
                                 },
                                 "container_info": null
                             },
@@ -142,10 +142,10 @@
                                 "content": "",
                                 "isSingle": true,
                                 "layout": {
-                                    "top": 8,
+                                    "top": 2,
                                     "left": 0,
-                                    "width": 16,
-                                    "height": 4
+                                    "width": 4,
+                                    "height": 1
                                 },
                                 "container_info": null,
                                 "lib_id": 1,
@@ -165,10 +165,10 @@
                                 "content": "",
                                 "isSingle": true,
                                 "layout": {
-                                    "top": 12,
+                                    "top": 3,
                                     "left": 0,
-                                    "width": 16,
-                                    "height": 4
+                                    "width": 4,
+                                    "height": 1
                                 },
                                 "container_info": null
                             },
@@ -186,10 +186,10 @@
                                 "content": "",
                                 "isSingle": true,
                                 "layout": {
-                                    "top": 16,
+                                    "top": 4,
                                     "left": 0,
-                                    "width": 16,
-                                    "height": 4
+                                    "width": 4,
+                                    "height": 1
                                 },
                                 "container_info": null
                             },
@@ -201,13 +201,16 @@
                                 "content_attribs": {
                                   "value": "Sign Up"
                                 },
+                                "cons_attribs": {
+                                  "type": "submit"
+                                },
                                 "content": "",
                                 "isSingle": true,
                                 "layout": {
-                                    "top": 20,
+                                    "top": 5,
                                     "left": 0,
-                                    "width": 16,
-                                    "height": 4
+                                    "width": 4,
+                                    "height": 1
                                 },
                                 "container_info": null
                             }
@@ -237,7 +240,7 @@
                     "value": "12px"
                 },
                 {
-                    "type": "text-family",
+                    "type": "font-family",
                     "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
                 },
                 {
@@ -260,10 +263,10 @@
                     "tagName": "h1",
                     "content": "Homepage",
                     "layout": {
-                        "width": 15,
-                        "height": 5,
-                        "top": 3,
-                        "left": 19
+                        "width": 4,
+                        "height": 1,
+                        "top": 1,
+                        "left": 5
                     }
                 },
                 {
@@ -275,10 +278,10 @@
                     "content": "Registration",
                     "isSingle": false,
                     "layout": {
-                        "top": 8,
-                        "left": 19,
-                        "width": 14,
-                        "height": 3
+                        "top": 2,
+                        "left": 5,
+                        "width": 4,
+                        "height": 1
                     },
                     "container_info": null
                 }

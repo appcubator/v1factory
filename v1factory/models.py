@@ -47,9 +47,13 @@ class App(models.Model):
   _state_json = models.TextField(blank=True, default=get_default_app_state)
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
-  @property
-  def state(self):
+  def get_state(self):
     return simplejson.loads(self._state_json)
+
+  def set_state(self, val):
+    self._state_json = simplejson.dumps(val)
+
+  state = property(get_state, set_state)
 
   @property
   def state_json(self):

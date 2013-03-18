@@ -453,7 +453,7 @@ var PageModel = Backbone.Model.extend({
         value : '12px'
       },
       {
-        type  : "text-family",
+        type  : "font-family",
         value : '"Palatino Linotype", "Book Antiqua", Palatino, serif'
       },
       {
