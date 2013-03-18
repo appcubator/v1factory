@@ -60,10 +60,6 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                           "left": { "_type": 0, "_min": 0, "_max": 64 }
                                                                          }
                                                             },
-                                                  "content_attribs": {
-                                                              "_type": {},
-                                                              "_mapping":{}
-                                                             },
                                                   "content": { "_type": "" },
                                                   "container_info": {
                                                                      "_null": True,
@@ -82,10 +78,6 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                                                                                                    "top": { "_type": 0, "_min": 0 },
                                                                                                                                    "left": { "_type": 0, "_min": 0, "_max": 64 }
                                                                                                                                   }
-                                                                                                                     },
-                                                                                                           "content_attribs": {
-                                                                                                                      "_type": {},
-                                                                                                                      "_mapping":{}
                                                                                                                      },
                                                                                                            "content": { "_type": "" },
                                                                                                            }}

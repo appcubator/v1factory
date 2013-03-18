@@ -112,16 +112,15 @@ class App(models.Model):
 
   @property
   def app_path(self):
-    return "/var/www/apps/{}/{}".format(self.owner.username, self.name)
+    return "/var/www/apps/" + self.owner.username + "/"+ self.name
 
   @property
   def config_path(self):
-    return "/var/www/configs/{}/{}".format(self.owner.username, self.name)
+    return "/var/www/configs/" + self.owner.username + "/" + self.name
 
   # TODO deprecate this.
   def randomly_name(self):
     self.name = "".join( [ random.choice(string.ascii_lowercase) for i in xrange(6) ] )
-
 
   def is_initialized(self):
     """checks if this app has already been initialized"""
@@ -170,17 +169,30 @@ class App(models.Model):
     os.makedirs(self.app_path)
     # should probably restart apache2
 
+  def write_to_fs(self):
+    from app_builder.analyzer import AnalyzedApp
+    from app_builder.django.coordinator import analyzed_app_to_app_components
+    from app_builder.django.writer import DjangoAppWriter
+
+    a = AnalyzedApp(self.state)
+    dw = analyzed_app_to_app_components(a)
+    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+
+    print "Project written to " + tmp_project_dir
+    return tmp_project_dir
+
+
   def deploy(self):
     from app_builder.analyzer import AnalyzedApp
-    from v1factory.models import App
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
     # GENERATE CODE
-    a = AnalyzedApp(self.state)
-    dw = analyzed_app_to_app_components(a)
-    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+    tmp_project_dir = self.write_to_fs()
     print "Project written to " + tmp_project_dir
+
+    if not django.conf.settings.PRODUCTION:
+      return
 
     # INITIALIZE APACHE
     if not self.is_initialized():
@@ -207,7 +219,7 @@ class App(models.Model):
         shutil.rmtree(f_path)
     print "Copying temp project dir to the real path -> " + self.app_path
     copytree(tmp_project_dir, self.app_path)
-    
+
     # CODE TO RUN AFTER APP CODE HAS BEEN DEPLOYED
     commands = []
     commands.append('python manage.py syncdb --noinput')
@@ -215,19 +227,7 @@ class App(models.Model):
       print "Running `{}`".format(c)
       subprocess.call(shlex.split(c), env=child_env, cwd=self.app_path, stdout=sys.stdout, stderr=sys.stderr)
 
-    return ""
-      # code to open a terminal
-      #commands.append(r"""osascript -e 'tell application "Terminal" to do script "cd {}; python manage.py runserver 127.0.0.1:8009"'""".format(tmp_project_dir))
-
-    #the old commands:
-    #commands = []
-    #commands.append('git init')
-    #commands.append('git add .')
-    #commands.append('git commit -m "deploy"')
-    #commands.append('heroku keys:add')
-    #commands.append('git remote add heroku git@heroku.com:warm-reaches-8765.git')
-    #commands.append('git push -f heroku master')
-    #commands.append('heroku run python manage.py syncdb')
+    return
 
   def deploy_test(self):
     return "do the funky chicken"
