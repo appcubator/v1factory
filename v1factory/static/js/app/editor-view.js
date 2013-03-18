@@ -6,12 +6,14 @@ var EditorView = Backbone.View.extend({
   events    : {
     'click #save'          : 'save',
     'click #settings'      : 'showSettings',
-    'click #settings-cross': 'hideSettings'
+    'click #settings-cross': 'hideSettings',
+    'click #deploy'        : 'deploy'
 
   },
 
   initialize: function() {
     _.bindAll(this, 'save',
+                    'deploy',
                     'style',
                     'hideSettings',
                     'showSettings',
@@ -65,6 +67,34 @@ var EditorView = Backbone.View.extend({
     });
 
     return false;
+  },
+
+  deploy: function() {
+    console.log('deploying');
+    this.save();
+
+    var ThanksView = Backbone.ModalView.extend({
+      tagName: 'div',
+      className: 'deployed',
+      initialize: function(text) {
+        console.log(text);
+        this.render(text.text);
+      },
+      render : function(text) {
+        console.log(text);
+        this.el.innerHTML = text;
+        return this;
+      }
+    });
+
+
+    $.ajax({
+      type: "POST",
+      url: '/app/'+appId+'/deploy/',
+      complete: function(data) { new ThanksView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'}); },
+      dataType: "JSON"
+    });
+
   },
 
   showSettings: function() {

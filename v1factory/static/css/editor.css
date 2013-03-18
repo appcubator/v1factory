@@ -1345,3 +1345,9 @@ ul.list {
   background-position: center center;
 }
 
+.deployed a {
+  display: inline-block;
+  width: 100%;
+  color: #000;
+}
+
