@@ -100,7 +100,7 @@ var WidgetLayoutEditorView = Backbone.View.extend({
   renderPaddingInfo: function() {
     var ul = document.createElement('ul');
     ul.className = "padding-picker right";
-    ul.innerHTML += '<li class="padding" id="padding-tb">TB</li><li class="padding" id="padding-lr">LR</li>';
+    ul.innerHTML += '<li class="padding tb" id="padding-tb"></li><li class="padding lr" id="padding-lr"></li>';
     return ul;
   },
 
