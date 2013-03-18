@@ -270,7 +270,7 @@
                     "type": "link",
                     "tagName": "a",
                     "content_attribs": {
-                        "href": "{{registration}}"
+                        "href": "{{Registration Page}}"
                     },
                     "content": "Registration",
                     "isSingle": false,
