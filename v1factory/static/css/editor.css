@@ -244,9 +244,14 @@
   position: absolute;
   cursor: move;
   border-radius: 3px;
+  line-height: 1em;
   overflow: visible;
   background-color: rgba(124, 192, 213, 0.0);
   -webkit-transition: backgroundColor 50ms linear;
+}
+
+.widget-wrapper:first-child  {
+  line-height: 1em;
 }
 
 .pseudo-outline {
@@ -659,7 +664,8 @@ body {
   background-color: #fff;
   color: #fff;
   background-image: url(../img/editor_bg.png);
-  font: normal 16px/20px "proxima-nova", Arial, sans-serif;
+  font: normal 16px "proxima-nova", Arial, sans-serif;
+  line-height: 1em;
 }
 
 .pages {
@@ -707,6 +713,10 @@ border: 2px solid #bbbbbb;
   border: 1px solid #aaa;
 /*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
 */}
+
+.page {
+  line-height: 1em;
+}
 
 .top-panel {
   position: absolute;
@@ -1421,3 +1431,4 @@ ul.list {
   background-size: auto 50%;
   background-position: center center;
 }
+

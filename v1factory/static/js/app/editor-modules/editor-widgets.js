@@ -53,6 +53,7 @@ var WidgetView = Backbone.UIView.extend({
                     'changedLeft',
                     'changedText',
                     'changedType',
+                    'changedStyle',
                     'changedSource',
                     'toggleFull',
                     'moving',
@@ -82,6 +83,7 @@ var WidgetView = Backbone.UIView.extend({
     this.model.bind("change:content", this.changedText, this);
     this.model.get('content_attribs').bind("change:src", this.changedSource, this);
     this.model.get('content_attribs').bind("change:value", this.changedValue, this);
+    this.model.get('content_attribs').bind("change:style", this.changedStyle, this);
 
     window.addEventListener('keydown', this.keyHandler);
   },
@@ -100,6 +102,7 @@ var WidgetView = Backbone.UIView.extend({
     this.el.className += " span" + width;
     this.el.style.textAlign = this.model.get('layout').get('alignment');
     this.el.innerHTML = this.renderElement();
+    this.el.firstChild.style.lineHeight = '1em';
 
     if(this.model.isFullWidth()) this.switchOnFullWidth();
 
@@ -198,6 +201,11 @@ var WidgetView = Backbone.UIView.extend({
 
   changedSource: function(a) {
     this.el.firstChild.src = this.model.get('content_attribs').get('src');
+  },
+
+  changedStyle: function() {
+    this.el.firstChild.setAttribute('style', this.model.get('content_attribs').get('style'));
+    this.el.firstChild.style.lineHeight = '1em';
   },
 
   resizing: function(e, ui) {
