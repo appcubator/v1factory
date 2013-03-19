@@ -32,6 +32,7 @@ var EditorView = Backbone.View.extend({
     this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.contextCollection.models, page);
     // this.widgetInfoEditor = new WidgetInfoView(this.widgetsCollection);
     this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
+    this.contentEditor    = new WidgetContentEditorView(this.widgetsCollection);
     this.layoutEditor     = new WidgetLayoutEditorView(this.widgetsCollection);
 
     this.designEditor     = new DesignEditorView(this.model, true);

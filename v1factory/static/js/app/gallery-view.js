@@ -286,7 +286,7 @@ var baseTags = {
 
   "text" : [
     {
-      tagName : 'span',
+      tagName : 'p',
       tagType: null,
       content_attribs: null,
       content : 'Default text!',

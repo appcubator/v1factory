@@ -22,8 +22,8 @@ Templates.tempNode = [
 
 Templates.tempHrefSelect = [
   '<select class="<%= hash %>" id="prop-<%= hash %>">',
-  "<% _(appState.pages).each(function(page){ var b = ''; if(('{% templatetag openvariable %}'+page.name+'{% templatetag closevariable %}') == val){ b = 'selected';}%>",
-  '<option value="{% templatetag openvariable %} <%= page.name %> {% templatetag closevariable %}" <%= b %>><%= page.name %></option>',
+  "<% _(appState.pages).each(function(page){ var b = ''; if(('{{'+page.name+'}}') == val){ b = 'selected';}%>",
+  '<option value="{{<%= page.name %>}}" <%= b %>><%= page.name %></option>',
   '<%  }) %>',
   '</select>'
 ].join('\n');

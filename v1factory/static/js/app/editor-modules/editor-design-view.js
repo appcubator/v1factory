@@ -212,6 +212,7 @@ var DesignEditorView = Backbone.View.extend({
     var ind = _.indexOf(this.collection.models, item);
 
     var newView;
+    console.log(type);
     switch(type){
       case "background-color":
       case "text-color":
@@ -226,7 +227,7 @@ var DesignEditorView = Backbone.View.extend({
         newView = new DesignSizePickerPropertyView(item, this.model, ind);
         break;
       case "header-family":
-      case "font-family":
+      case "text-family":
         newView = new DesignFontPickerPropertyView(item, this.model, ind);
         break;
     }

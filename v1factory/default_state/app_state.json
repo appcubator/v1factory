@@ -46,7 +46,7 @@
                     "value": "12px"
                 },
                 {
-                    "type": "font-family",
+                    "type": "text-family",
                     "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
                 },
                 {
@@ -240,7 +240,7 @@
                     "value": "12px"
                 },
                 {
-                    "type": "font-family",
+                    "type": "text-family",
                     "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
                 },
                 {

@@ -69,12 +69,21 @@ var GalleryView = Backbone.View.extend({
     // Logout
     // Update User
     // Attribs
+    var self = this;
 
     if(appState.users.local) {
       var tempLogin = '<li id="entity-<%= cid %>" class="login entity">'+
-                   '<span class="name">User Login Form</span></li>';
+                      '<span class="name">User Login Form</span></li>';
 
-      $(this.userList).append(tempLogin);
+      //$(this.userList).append(tempLogin);
+      $(this.allList).append(tempLogin);
+    }
+
+    if(appState.users.local) {
+      var tempLogin = '<li id="entity-<%= cid %>" class="signup entity">'+
+                      '<span class="name">User Signup Form</span></li>';
+
+      //$(this.userList).append(tempLogin);
       $(this.allList).append(tempLogin);
     }
 
@@ -82,14 +91,14 @@ var GalleryView = Backbone.View.extend({
       var tempFb = '<li id="entity-<%= cid %>" class="facebook entity">'+
                    '<span class="name">Facebook Login Button</span></li>';
 
-      $(this.userList).append(tempFb);
+      //$(this.userList).append(tempFb);
       $(this.allList).append(tempFb);
     }
     if(appState.users.twitter) {
       var tempTw = '<li id="entity-<%= cid %>" class="twitter entity">'+
                    '<span class="name"> Twitter Button</span></li>';
 
-      $(this.userList).append(tempTw);
+      //$(this.userList).append(tempTw);
       $(this.allList).append(tempTw);
     }
 
@@ -97,12 +106,21 @@ var GalleryView = Backbone.View.extend({
       var tempLi = '<li id="entity-<%= cid %>" class="linkedin entity">'+
                    '<span class="name">LinkedIn Login Button</span></li>';
 
-      $(this.userList).append(tempLi);
+      //$(this.userList).append(tempLi);
       $(this.allList).append(tempLi);
     }
 
 
-    var self = this;
+    $('.entity').draggable({
+      cursor: "move",
+      cursorAt: { top: 0, left: 0 },
+      helper: "clone",
+      start : function(e) {
+        self.dragActive = true;
+      },
+      stop: self.dropped
+    });
+
     var tempLi = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
                    '<span class="name">Show <%= name %> <%= attr %></span></li>';
 
@@ -118,7 +136,7 @@ var GalleryView = Backbone.View.extend({
         type : val.type
       };
 
-      $(self.userList).append(_.template(tempLi, context));
+      //$(self.userList).append(_.template(tempLi, context));
       $(self.allList).append(_.template(tempLi, context));
     });
 

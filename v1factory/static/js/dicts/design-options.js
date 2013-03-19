@@ -27,7 +27,7 @@ var designOptions = {
     options: ['10px', '11px', '12px', '13px', '14px'],
     css: 'font-size:<%=content%>; line-height:<%=content%>;'
   },
-  'font-family' : {
+  'text-family' : {
     id: "fontFamily",
     name: "Text Family",
     type: "font-picker",
