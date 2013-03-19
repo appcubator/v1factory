@@ -148,10 +148,12 @@ class Container(UIElement):
 
   @classmethod
   def create(cls, uie, page):
-    if uie['container_info']['action'] in ['login', 'signup', 'create', 'edit']:
+    if uie['container_info']['action'] in ['login', 'signup', 'create', 'edit',]:
       u = Form.create(uie, page)
     elif uie['container_info']['action'] == 'show':
       u = QuerysetWrapper(uie, page)
+    elif uie['container_info']['action'] in ['facebook', 'linkedin']:
+      assert(False) # this is where I do something to indicate that the app has linked in and facebook login...
     else:
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
 

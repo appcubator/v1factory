@@ -54,7 +54,8 @@ var constantContainers = {
         placeholder : 'Username'
       },
       'constant_attribs' : {
-        name : 'username'
+        name : 'username',
+        type : 'text'
       },
       'layout' : {
         top   : 0,
