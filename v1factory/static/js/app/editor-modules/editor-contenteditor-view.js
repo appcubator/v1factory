@@ -15,8 +15,11 @@
 var WidgetContentEditorView = Backbone.View.extend({
   el     : document.getElementById('content-editor'),
   className : 'content-editor',
+  tagName : 'ul',
   events : {
-    'change select'            : 'inputChanged'
+    'change select'   : 'inputChanged',
+    'keydown input'   : 'inputChanged',
+    'keydown textarea'   : 'inputChanged'
   },
 
   initialize: function(widgetsCollection){
@@ -47,6 +50,7 @@ var WidgetContentEditorView = Backbone.View.extend({
   },
 
   inputChanged: function(e) {
+    e.stopPropagation();
     var hash = e.target.id.replace('prop-', '');
     var info = hash.split('-');
 
@@ -55,6 +59,7 @@ var WidgetContentEditorView = Backbone.View.extend({
       this.model.get(info[0]).set(info[1], e.target.value);
     }
     else if(info.length == 1) {
+      console.log(e.target.value);
       this.model.set(info[0], e.target.value);
     }
   },
@@ -62,8 +67,9 @@ var WidgetContentEditorView = Backbone.View.extend({
   render: function() {
     var self = this;
 
-    if(this.model.has('content')) {
-      //this.el.appendChild(this.renderTextEditing());
+    console.log(this.model);
+    if(this.model.has('content') && this.model.get('content') !== null) {
+      this.el.appendChild(this.renderTextEditing());
     }
     if(this.model.get('content_attribs').has('href')) {
       this.el.appendChild(this.renderHrefInfo());
@@ -75,7 +81,15 @@ var WidgetContentEditorView = Backbone.View.extend({
     var hash     = 'content_attribs' + '-' + 'href';
     temp         = Templates.tempHrefSelect;
     html         = _.template(temp, {val : this.model.get('content_attribs').get('href'), hash: hash});
-    li.innerHTML = '<span class="key">Target</span>' + html;
+    li.innerHTML = '<span class="key" style="display:block;">Target</span>' + html;
+    return li;
+  },
+
+  renderTextEditing: function() {
+    var li       = document.createElement('li');
+    var hash     = 'content';
+    html         = '<textarea id="prop-content">'+ this.model.get('content')+'</textarea>';
+    li.innerHTML = '<span class="key" style="display:block;">Text</span>' + html;
     return li;
   },
 

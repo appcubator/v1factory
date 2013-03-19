@@ -50,7 +50,7 @@ var designOptions = {
     type: "color-picker",
     options: ['#333', '#444', '#555', '#666', '#777'],
     css: 'color:<%=content%>;',
-    tag: 'h2'
+    tag: 'h1'
   },
   'header-size' : {
     id: "headerSize",
@@ -58,7 +58,7 @@ var designOptions = {
     type: "size-picker",
     options: ['10px', '11px', '12px', '13px', '14px', '16px'],
     css: 'font-size:<%=content%>; line-height:<%=content%>;',
-    tag: 'h2'
+    tag: 'h1'
   },
   'header-family' : {
     id: "headerFamily",
