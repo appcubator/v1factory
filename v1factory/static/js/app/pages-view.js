@@ -43,7 +43,7 @@ var PageView = Backbone.View.extend({
 
   renderUrl: function() {
     var newView =  new UrlView(this.url);
-    this.el.appendChild(newView.el);
+    this.$el.append(newView.el);
   },
 
   renderMenu: function() {

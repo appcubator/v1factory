@@ -56,13 +56,17 @@ var EditorView = Backbone.View.extend({
   },
 
   save : function() {
-    appState.pages[pageId]['uielements'] = (this.widgetsCollection.toJSON() || []);
-    appState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
+    var curAppState = _.clone(appState);
+
+    curAppState.pages[pageId]['uielements'] = (this.widgetsCollection.toJSON() || []);
+    curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
+
+    console.log(curAppState);
 
     $.ajax({
       type: "POST",
       url: '/app/'+appId+'/state/',
-      data: JSON.stringify(appState),
+      data: JSON.stringify(curAppState),
       complete: function() { iui.dontAskBeforeLeave();},
       dataType: "JSON"
     });

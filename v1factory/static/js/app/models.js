@@ -109,10 +109,13 @@ var ContainerInfoModel = Backbone.Model.extend({
   toJSON: function() {
     var json = _.clone(this.attributes);
     json.uielements = this.get('uielements').toJSON();
-    // TODO GET RID OF THIS CHECK:
-    var ent = this.get('entity');
-    if (ent)
-      json.entity = ent.name;
+    if (this.has('entity')) {
+      json.entity = _.clone(this.get('entity').attributes);
+      if(typeof json.entity !== "string") {
+        json.entity = json.entity.name;
+      }
+    }
+
     return json;
   }
 });
@@ -173,18 +176,12 @@ var WidgetModel = Backbone.Model.extend({
     json.content_attribs = this.get('content_attribs').toJSON()|| {};
     json.content = this.get('content')||'';
     json.layout  = this.get('layout').toJSON();
+    if(json.container_info) {
+      json.container_info = this.get('container_info').toJSON();
+    }
 
     if(this.has('container_info')) {
-
-      console.log("in the block");
-      if(this.get('container_info').has('entity') && typeof this.get('container_info').get('entity') !== "string") {
-        json.container_info.entity = this.get('container_info').get('entity').name;
-      console.log("in the inner block!!"+ json.container_info.entity);
-      }
-
-      if(this.get('container_info').has('uielements')) {
-        json.container_info.uielements = this.get('container_info').get('uielements').toJSON;
-      }
+      json.container_info = this.get('container_info').toJSON();
     }
 
     return json;
