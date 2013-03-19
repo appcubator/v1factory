@@ -47,7 +47,7 @@
                 },
                 {
                     "type": "text-family",
-                    "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+                    "value": "\"Helvetica Neue\", Helvetica, \"Lucida Grande\""
                 },
                 {
                     "type": "header-color",
@@ -59,7 +59,7 @@
                 },
                 {
                     "type": "header-family",
-                    "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+                    "value": "\"Helvetica Neue\", Helvetica, \"Lucida Grande\""
                 }
             ],
             "uielements": [
@@ -241,7 +241,7 @@
                 },
                 {
                     "type": "text-family",
-                    "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+                    "value": "\"Helvetica Neue\", Helvetica, \"Lucida Grande\""
                 },
                 {
                     "type": "header-color",
@@ -253,7 +253,7 @@
                 },
                 {
                     "type": "header-family",
-                    "value": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
+                    "value": "\"Helvetica Neue\", Helvetica, \"Lucida Grande\""
                 }
             ],
             "uielements": [
