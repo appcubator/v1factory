@@ -39,4 +39,4 @@ def {{ form_receiver.identifier() }}(request):
     login(request, new_user)
     return redirect('/')
   else:
-    return HttpResponse("Error: Form was not valid")
+    return HttpResponse(simplejson.dumps(form.errors), mimetype="application/json")
