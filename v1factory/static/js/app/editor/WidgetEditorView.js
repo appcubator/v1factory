@@ -1,0 +1,72 @@
+define(['./WidgetView', './WidgetContainerView', 'backbone'],
+function(WidgetView, WidgetContainerView) {
+
+  var WidgetEditorView = Backbone.View.extend({
+    el : $('.page'),
+    widgetsContainer : document.getElementById('elements-container'),
+    widgets : [],
+    selectedEl: null,
+
+    events : {
+    },
+
+    initialize: function(widgetsCollection, contextEntities, page) {
+      _.bindAll(this, 'render',
+                      'placeWidget',
+                      'style');
+
+      this.render();
+      this.collection = widgetsCollection;
+      this.collection.bind('add', this.placeWidget);
+      //this.style(page['design_props']);
+
+      this.collection.add(page.uielements);
+      this.collection.bind('change', function() { iui.askBeforeLeave(); });
+      this.collection.bind('add',  function() { iui.askBeforeLeave(); });
+    },
+
+    render: function() {
+      this.widgetsContainer.innerHTML = '';
+    },
+
+    placeWidget: function(widgetModel) {
+      var curWidget;
+
+      if (widgetModel.get('container_info')) {
+        curWidget= new WidgetContainerView(widgetModel);
+      }
+      else {
+        curWidget = new WidgetView(widgetModel);
+      }
+
+      if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
+      else iui.get('full-container').appendChild(curWidget.el);
+
+      curWidget.resizableAndDraggable();
+    },
+
+    style: function (props) {
+
+      _(props).each(function(prop) {
+
+        if(document.getElementById('style-' + prop.type)) {
+          $(document.getElementById('style-' + prop.type)).remove();
+        }
+
+        var styleTag = document.createElement('style');
+        styleTag.id = 'style-' + prop.type;
+
+        var styleContent = '' + (designOptions[prop.type].tag||'.sample') + ' {';
+        styleContent += designOptions[prop.type].css.replace(/<%=content%>/g, prop.value);
+        styleContent += '}';
+
+        styleTag.innerHTML = styleContent;
+        this.styleTag = styleTag;
+
+        document.getElementsByTagName('head')[0].appendChild(styleTag);
+      });
+    }
+  });
+
+  return WidgetEditorView;
+});

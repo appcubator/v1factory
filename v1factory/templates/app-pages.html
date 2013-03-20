@@ -19,6 +19,7 @@
     <div class="span58">
       <div class="hi4">
         <div class="" style="color:#0f2d40;">
+          YOLO
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </div>
       </div>
@@ -159,20 +160,6 @@ var appId = {{ app_id|safe }};
 {% endblock %}
 
 {% block js %}
-
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/collections.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/urls-view.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/pages-view.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-pages.js"></script>
-<!-- <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-design-view.js"></script>
- -->
- <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
-
-<script type="text/javascript">
-var pagesView = new PagesView();
-</script>
-<script type="text/javascript"></script>
-
+<script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/pages-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

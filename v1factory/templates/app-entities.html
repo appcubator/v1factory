@@ -115,13 +115,6 @@
 
 </div>
  
-<!--   <div class="row">
-    <div class="span10 hoff1" id="entities-library-view">
-      <h2 class="offset1">Library</h2>
-      <ul id="entities-library" class="entity-list">
-      </ul>
-    </div>
-  </div> -->
 </div>
 
 <script>
@@ -251,26 +244,5 @@
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/collections.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/entities-view.js"></script>
-<script type="text/javascript">
-var entityEditor   = new EntitiesEditorView();
-// var entityList    = new EntityListView();
-// var entityLibrary = new EntitiesLibraryView();
-</script>
-<script type="text/javascript">
-// $(function() {
-//   $("#entities").sortable({
-//     update: function( event, ui ) {
-//       entityList.collection.add(entitiesLibrary[ui.item.attr('id').replace('entity-library-','')], {silent: true})
-//     }
-//   });
-//   $("#entities-library").sortable({
-//     connectWith: "#entities",
-//   });
-// });
-</script>
-
+<script data-main="{{ STATIC_URL }}js/app/entities-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}
