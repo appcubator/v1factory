@@ -1,160 +1,192 @@
-define(['../models/EntityModel', '../models/UserEntityModel', '../models/FieldModel', 'backbone', 'jquery-ui'], 
-function(EntityModel, UserEntityModel, FieldModel) {
+define(
+ ['../models/EntityModel', 
+  '../models/UserEntityModel', 
+  '../models/FieldModel', 
+  'backbone', 
+  'jquery-ui'],
 
-  var EntityCollection = Backbone.Collection.extend({
-    model: EntityModel
-  });
+  function(EntityModel, UserEntityModel, FieldModel) {
 
-  var EntityView = Backbone.View.extend({
-    el         : null,
-    tagName    : 'li',
-    collection : null,
-    parentName : "",
-    className  : 'span64 entity',
+    var EntityCollection = Backbone.Collection.extend({
+      model: EntityModel
+    });
 
-    events : {
-      'click .add-property-button' : 'clickedAdd',
-      'submit .add-property-form'  : 'formSubmitted',
-      'change .attribs'            : 'changedAttribs',
-      'click #cross'               : 'clickedDelete',
-      'click .prop-cross'          : 'clickedPropDelete'
-    },
+    var EntityView = Backbone.View.extend({
+      el         : null,
+      tagName    : 'li',
+      collection : null,
+      parentName : "",
+      className  : 'span64 entity',
 
-
-    initialize: function(item, name, entitiesColl){
-      _.bindAll(this, 'render',
-                      'appendField',
-                      'clickedAdd',
-                      'formSubmitted',
-                      'changedAttribs',
-                      'addedEntity',
-                      'clickedDelete',
-                      'modelRemoved',
-                      'clickedPropDelete');
-
-      this.model = item;
-      this.model.bind('change:owns', this.ownsChangedOutside);
-      this.model.bind('change:belongsTo', this.belongsToChangedOutside);
-
-      this.entitiesColl = entitiesColl;
-
-      this.parentCollection = item.collection;
-      this.parentCollection.bind('add', this.addedEntity);
-      this.parentCollection.bind('remove', this.modelRemoved);
-
-      this.name = item.get('name');
-      this.parentName = name;
-
-      this.model.get('fields').bind('add', this.appendField);
-      this.render();
-    },
+      events : {
+        'click .add-property-button' : 'clickedAdd',
+        'submit .add-property-form'  : 'formSubmitted',
+        'change .attribs'            : 'changedAttribs',
+        'click #cross'               : 'clickedDelete',
+        'click .prop-cross'          : 'clickedPropDelete'
+      },
 
 
-    render: function() {
-      var self = this;
-      var page_context = { name: self.name,
-                           attribs: self.model.get('fields').models,
-                           other_models: self.parentCollection.models };
+      initialize: function(item, name, entitiesColl){
+        _.bindAll(this, 'render',
+                        'appendField',
+                        'clickedAdd',
+                        'formSubmitted',
+                        'changedAttribs',
+                        'addedEntity',
+                        'clickedDelete',
+                        'modelRemoved',
+                        'clickedPropDelete');
 
-      var template = _.template($("#template-entity").html(), page_context);
-      $(this.el).append(template);
-    },
+        this.model = item;
+        this.model.bind('change:owns', this.ownsChangedOutside);
+        this.model.bind('change:belongsTo', this.belongsToChangedOutside);
+
+        this.entitiesColl = entitiesColl;
+
+        this.parentCollection = item.collection;
+        this.parentCollection.bind('add', this.addedEntity);
+        this.parentCollection.bind('remove', this.modelRemoved);
+
+        this.name = item.get('name');
+        this.parentName = name;
+
+        console.log(this.model.get('fields'));
+        this.model.get('fields').bind('add', this.appendField);
+        this.render();
+      },
 
 
-    clickedAdd: function(e) {
-      $('.add-property-button', this.el).hide();
-      $('.add-property-form', this.el).fadeIn();
-      $('.property-name-input', this.el).focus();
-    },
+      render: function() {
+        var self = this;
+        var page_context = { name: self.name,
+                             attribs: self.model.get('fields').models,
+                             other_models: self.parentCollection.models };
+
+        var template = _.template($("#template-entity").html(), page_context);
+        $(this.el).append(template);
+      },
 
 
-    formSubmitted: function(e) {
-      e.preventDefault();
-      var name = $('.property-name-input', this.el).val();
+      clickedAdd: function(e) {
+        $('.add-property-button', this.el).hide();
+        $('.add-property-form', this.el).fadeIn();
+        $('.property-name-input', this.el).focus();
+      },
 
-      var curFields = this.model.get('fields') || [];
 
-      curFields.add(new FieldModel({
-        name: name,
-        type: 'text',
-        required: true
-      }));
+      formSubmitted: function(e) {
+        e.preventDefault();
+        var name = $('.property-name-input', this.el).val();
 
-      $('.property-name-input', this.el).val('');
-      $('.add-property-form', this.el).hide();
-      $('.add-property-button', this.el).fadeIn();
-      return false;
-    },
+        var curFields = this.model.get('fields') || [];
 
-    appendField: function (fieldModel) {
-        var template = _.template( $("#template-property").html(), { name: fieldModel.get('name'),
-                                                                   cid : fieldModel.cid,
-                                                                   other_models: this.entitiesColl.models});
-        this.$el.find('.property-list').append(template);
-    },
+        curFields.add(new FieldModel({
+          name: name,
+          type: 'text',
+          required: true
+        }));
 
-    changedAttribs: function(e) {
-      var ind = String(e.target.id).replace('prop-', '');
-      this.model.attributes.fields[ind].type = e.target.options[e.target.selectedIndex].value;
-      //this.model.set(e.target.id, e.target.options[e.target.selectedIndex].value);
-    },
+        $('.property-name-input', this.el).val('');
+        $('.add-property-form', this.el).hide();
+        $('.add-property-button', this.el).fadeIn();
+        return false;
+      },
 
-    addedEntity: function(item) {
-      $('.attribs', this.el).append('<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>');
-    },
+      appendField: function (fieldModel) {
+          var template = _.template( $("#template-property").html(), { name: fieldModel.get('name'),
+                                                                     cid : fieldModel.cid,
+                                                                     other_models: this.entitiesColl.models});
+          this.$el.find('.property-list').append(template);
+      },
 
-    clickedDelete: function(e) {
-      this.parentCollection.remove(this.model.cid);
-    },
+      changedAttribs: function(e) {
+        var ind = String(e.target.id).replace('prop-', '');
+        this.model.attributes.fields[ind].type = e.target.options[e.target.selectedIndex].value;
+        //this.model.set(e.target.id, e.target.options[e.target.selectedIndex].value);
+      },
 
-    modelRemoved: function(model) {
-      if (model == this.model) {
-        this.remove();
+      addedEntity: function(item) {
+        $('.attribs', this.el).append('<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>');
+      },
+
+      clickedDelete: function(e) {
+        this.parentCollection.remove(this.model.cid);
+      },
+
+      modelRemoved: function(model) {
+        if (model == this.model) {
+          this.remove();
+        }
+      },
+
+      clickedPropDelete: function(e) {
+        var cid = String(e.target.id).replace('delete-','');
+        this.model.get('fields').remove(cid);
+        $(e.target.parentNode).remove();
       }
-    },
-
-    clickedPropDelete: function(e) {
-      var cid = String(e.target.id).replace('delete-','');
-      this.model.get('fields').remove(cid);
-      $(e.target.parentNode).remove();
-    }
-  });
+    });
 
 
-  var UserEntityView = EntityView.extend({
-    el : document.getElementById('user-entity'),
+    var UserEntityView = EntityView.extend({
+      el : document.getElementById('user-entity'),
 
-    events: {
-      'change .cb-login' : 'checkedBox',
-      'click .add-property-button' : 'clickedAdd',
-      'submit .add-property-form'  : 'formSubmitted',
-      'click .prop-cross'          : 'clickedPropDelete'
-    },
+      events: {
+        'change .cb-login' : 'checkedBox',
+        'click .add-property-button' : 'clickedAdd',
+        'submit .add-property-form'  : 'formSubmitted',
+        'click .prop-cross'          : 'clickedPropDelete'
+      },
 
-    initialize: function(userEntityModel) {
-      _.bindAll(this, 'render',
-                      'appendField',
-                      'clickedAdd',
-                      'checkedBox',
-                      'formSubmitted',
-                      'changedAttribs',
-                      'addedEntity',
-                      'clickedDelete',
-                      'modelRemoved',
-                      'clickedPropDelete');
+      initialize: function(userEntityModel, entitiesColl) {
+        _.bindAll(this, 'render',
+                        'appendField',
+                        'clickedAdd',
+                        'checkedBox',
+                        'formSubmitted',
+                        'changedAttribs',
+                        'addedEntity',
+                        'clickedDelete',
+                        'modelRemoved',
+                        'clickedPropDelete');
 
-      this.model = userEntityModel;
-      this.name = userEntityModel.get('name');
+        this.model = userEntityModel;
+        this.name = userEntityModel.get('name');
+        this.entitiesColl = entitiesColl;
 
-      this.model.get('fields').bind('add', this.appendField);
-      this.render();
+        this.model.get('fields').bind('add', this.appendField);
+        this.render();
+      },
 
-    },
+      render: function() {
+        var self = this;
 
-    render: function() {
-      var self = this;
+        _(this.model.get('fields').models).each(function(fieldModel) {
+          if(fieldModel.get('name') == 'First Name' ||
+             fieldModel.get('name') == 'Last Name'  ||
+             fieldModel.get('name') =='Email') return;
 
-      _(this.model.get('fields').models).each(function(fieldModel) {
+          var page_context = {};
+          page_context.name = fieldModel.get('name');
+          page_context.cid = fieldModel.cid;
+          page_context.other_models = appState.entities;
+
+          var template = _.template($("#template-property").html(), page_context);
+          self.$el.find('.property-list').append(template);
+        });
+
+        document.getElementById('facebook').checked = this.model.get('facebook');
+        document.getElementById('linkedin').checked = this.model.get('linkedin');
+        document.getElementById('local').checked = this.model.get('local');
+
+      },
+
+      checkedBox: function(e) {
+        this.model.set(e.target.value, e.target.checked);
+      },
+
+      appendField: function(fieldModel) {
+
         if(fieldModel.get('name') == 'First Name' ||
            fieldModel.get('name') == 'Last Name'  ||
            fieldModel.get('name') =='Email') return;
@@ -162,153 +194,129 @@ function(EntityModel, UserEntityModel, FieldModel) {
         var page_context = {};
         page_context.name = fieldModel.get('name');
         page_context.cid = fieldModel.cid;
-        page_context.other_models = appState.entities;
+        page_context.other_models = this.entitiesColl.models;
 
-        var template = _.template($("#template-property").html(), page_context);
-        self.$el.find('.property-list').append(template);
-      });
+        var template = _.template( $("#template-property").html(), page_context);
 
-      document.getElementById('facebook').checked = this.model.get('facebook');
-      document.getElementById('linkedin').checked = this.model.get('linkedin');
-      document.getElementById('local').checked = this.model.get('local');
+        $('.property-list', this.el).append(template);
+      },
 
-    },
+      formSubmitted: function(e) {
+        e.preventDefault();
+        var name = $('.property-name-input', this.el).val();
 
-    checkedBox: function(e) {
-      this.model.set(e.target.value, e.target.checked);
-    },
+        this.model.get('fields').add(new FieldModel({
+          name: name,
+          type: 'text',
+          required: true
+        }));
 
-    appendField: function(fieldModel) {
-
-      if(fieldModel.get('name') == 'First Name' ||
-         fieldModel.get('name') == 'Last Name'  ||
-         fieldModel.get('name') =='Email') return;
-
-      var page_context = {};
-      page_context.name = fieldModel.get('name');
-      page_context.cid = fieldModel.cid;
-      page_context.other_models = entityEditor.collection.models;
-
-      var template = _.template( $("#template-property").html(), page_context);
-
-      $('.property-list', this.el).append(template);
-    },
-
-    formSubmitted: function(e) {
-      e.preventDefault();
-      var name = $('.property-name-input', this.el).val();
-
-      this.model.get('fields').add(new FieldModel({
-        name: name,
-        type: 'text',
-        required: true
-      }));
-
-      $('.property-name-input', this.el).val('');
-      $('.add-property-form', this.el).hide();
-      $('.add-property-button', this.el).fadeIn();
-      return false;
-    }
-  });
+        $('.property-name-input', this.el).val('');
+        $('.add-property-form', this.el).hide();
+        $('.add-property-button', this.el).fadeIn();
+        return false;
+      }
+    });
 
 
-  var EntityListView = Backbone.View.extend({
-    el         : $('#entities'),
+    var EntityListView = Backbone.View.extend({
+      el         : $('#entities'),
 
-    initialize: function(entitiesColl) {
-      _.bindAll(this, 'render', 'appendItem', 'addEntity');
+      initialize: function(entitiesColl) {
+        _.bindAll(this, 'render', 'appendItem', 'addEntity');
 
-      var self = this;
-      var initialEntities = appState.entities || [];
+        var self = this;
+        var initialEntities = appState.entities || [];
 
-      this.render();
+        this.render();
 
-      this.collection = entitiesColl;
-      this.collection.bind("add", this.appendItem);
-      this.collection.add(initialEntities);
+        this.collection = entitiesColl;
+        this.collection.bind("add", this.appendItem);
+        this.collection.add(initialEntities);
 
-      this.userModel = new UserEntityModel(appState.users);
-      new UserEntityView(this.userModel);
+        this.userModel = new UserEntityModel(appState.users);
+        new UserEntityView(this.userModel, this.collection);
 
-    },
+      },
 
-    render: function(){
+      render: function(){
 
-    },
+      },
 
-    appendItem: function(entityModel) {
-      var entityView = new EntityView(entityModel, 'entity-list-', this.collection);
-      this.el.appendChild(entityView.el);
-    },
+      appendItem: function(entityModel) {
+        var entityView = new EntityView(entityModel, 'entity-list-', this.collection);
+        this.el.appendChild(entityView.el);
+      },
 
-    addEntity: function(item) {
-      var newModel = new EntityModel(item);
-      this.collection.add(newModel);
-    }
-  });
+      addEntity: function(item) {
+        var newModel = new EntityModel(item);
+        this.collection.add(newModel);
+      }
+    });
 
 
-  var EntitiesView = Backbone.View.extend({
-    el        : document.body,
-    addButton : $('#add-entity-button'),
-    addForm   : $('#add-entity-form'),
+    var EntitiesView = Backbone.View.extend({
+      el        : document.body,
+      addButton : $('#add-entity-button'),
+      addForm   : $('#add-entity-form'),
 
-    events : {
-      'click #save-entities'     : 'saveEntities',
-      'click #add-entity-button' : 'clickedAdd',
-      'submit #add-entity-form'  : 'formSubmitted'
-    },
+      events : {
+        'click #save-entities'     : 'saveEntities',
+        'click #add-entity-button' : 'clickedAdd',
+        'submit #add-entity-form'  : 'formSubmitted'
+      },
 
-    initialize: function() {
-      _.bindAll(this, 'render',
-                      'clickedAdd',
-                      'formSubmitted',
-                      'saveEntities');
+      initialize: function() {
+        _.bindAll(this, 'render',
+                        'clickedAdd',
+                        'formSubmitted',
+                        'saveEntities');
 
-      this.collection = new EntityCollection();
-      this.entityList = new EntityListView(this.collection);
-      //this.entityLibrary = new EntitiesLibraryView();
-    },
+        this.collection = new EntityCollection();
+        this.entityList = new EntityListView(this.collection);
+        //this.entityLibrary = new EntitiesLibraryView();
+      },
 
-    render : function() {
+      render : function() {
 
-    },
+      },
 
-    clickedAdd: function(e) {
-      var newForm = this.addForm.clone();
-      $(newForm).appendTo('#entities');
-      $(newForm).fadeIn();
-      $(this.addButton).hide();
-      $('#entity-name-input').focus();
-    },
+      clickedAdd: function(e) {
+        var newForm = this.addForm.clone();
+        $(newForm).appendTo('#entities');
+        $(newForm).fadeIn();
+        $(this.addButton).hide();
+        $('#entity-name-input').focus();
+      },
 
-    formSubmitted: function(e) {
-      e.preventDefault();
+      formSubmitted: function(e) {
+        e.preventDefault();
 
-      var elem = {};
-      elem.name = $('#entity-name-input').val();
-      elem.fields = [];
-      this.collection.add(elem);
+        var elem = {};
+        elem.name = $('#entity-name-input').val();
+        elem.fields = [];
+        this.collection.add(elem);
 
-      $('#entity-name-input').val('');
-      $(this.addButton).fadeIn();
-      $(e.target).remove();
-    },
+        $('#entity-name-input').val('');
+        $(this.addButton).fadeIn();
+        $(e.target).remove();
+      },
 
-    saveEntities : function(e) {
-      appState.entities = this.entityList.collection.toJSON();
-      appState.users = this.entityList.userModel.toJSON();
+      saveEntities : function(e) {
+        appState.entities = this.entityList.collection.toJSON();
+        appState.users = this.entityList.userModel.toJSON();
 
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
-        success: function() { },
-        dataType: "JSON"
-      });
-    }
-  });
+        $.ajax({
+          type: "POST",
+          url: '/app/'+appId+'/state/',
+          data: JSON.stringify(appState),
+          success: function() { },
+          dataType: "JSON"
+        });
+      }
+    });
 
-  return EntitiesView;
+    return EntitiesView;
 
-});
+  }
+);

@@ -1191,6 +1191,16 @@ ul.list {
   background-image: url('../img/page_layout_icon&48.png');
 }
 
+.table-gal {
+  background-image: url('../img/table_icon.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.signup, .login {
+  background-image: url('../img/users.png');
+}
+
 /*.widget-wrapper > * {
   width: 100%;
   height: 100%;
@@ -1432,3 +1442,6 @@ ul.list {
   background-position: center center;
 }
 
+.table {
+  color:  #000;
+}

@@ -28,7 +28,7 @@ require.config({
 
 });
 
-require(["./views/EntitiesView", "bootstrap"], function(EntitiesView) {
+require(["./views/EntitiesView", "bootstrap", "iui"], function(EntitiesView) {
   var entityEditor   = new EntitiesView();
 });
 

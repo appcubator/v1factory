@@ -1,12 +1,12 @@
 define(['backbone', 'jquery-ui'], function() {
-  //
+
   var BackboneUI = {};
 
   BackboneUI.UIView = Backbone.View.extend({
 
     resizableAndDraggable: function() {
       var self = this;
-      console.log($);
+
       $(self.el).resizable({
         handles: "n, e, s, w, se",
         grid: [80, 15],
@@ -100,7 +100,7 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     _configure: function(options) {
-      Backbone.ModalView.__super__._configure.call(this, options);
+      BackboneUI.ModalView.__super__._configure.call(this, options);
       this.backgroundDiv = this.setupModal();
       this.modalWindow = this.setupModalWindow();
 
@@ -108,7 +108,9 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     _ensureElement: function(options) {
-      Backbone.ModalView.__super__._ensureElement.call(this, options);
+      console.log(this);
+
+      BackboneUI.ModalView.__super__._ensureElement.call(this, options);
       this.modalWindow.appendChild(this.el);
     },
 

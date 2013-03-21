@@ -1,6 +1,7 @@
 define(['../models/PageModel',
         '../collections/EntityCollection',
         '../collections/WidgetCollection',
+        '../collections/ContainersCollection',
         'WidgetEditorView',
         'WidgetClassPickerView',
         'WidgetContentEditorView',
@@ -8,7 +9,7 @@ define(['../models/PageModel',
         'DesignEditorView',
         'EditorGalleryView'],
 
-  function(PageModel, EntityCollection, WidgetCollection, WidgetEditorView, WidgetClassPickerView, WidgetContentEditorView, WidgetLayoutEditorView, DesignEditorView, EditorGalleryView) {
+  function(PageModel, EntityCollection, WidgetCollection, ContainersCollection, WidgetEditorView, WidgetClassPickerView, WidgetContentEditorView, WidgetLayoutEditorView, DesignEditorView, EditorGalleryView) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -33,21 +34,20 @@ define(['../models/PageModel',
 
       var page = appState.pages[pageId];
 
-      this.model            = new PageModel(page);
-      this.entityCollection = new EntityCollection();
-      this.contextCollection= new EntityCollection();
+      this.model                = new PageModel(page);
+      this.entityCollection     = new EntityCollection();
+      this.contextCollection    = new EntityCollection();
+      this.containersCollection = new ContainersCollection();
+      this.widgetsCollection    = new WidgetCollection();
 
-
-      this.widgetsCollection= new WidgetCollection();
-      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.contextCollection, this.entityCollection);
-      this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.contextCollection.models, page);
+      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
+      this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
 
       this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
       this.contentEditor    = new WidgetContentEditorView(this.widgetsCollection);
       this.layoutEditor     = new WidgetLayoutEditorView(this.widgetsCollection);
 
       this.designEditor     = new DesignEditorView(this.model, true);
-      //this.gridEditor       = new GridEditorView();
 
       this.entityCollection.add(appState.entities);
       this.getContextEntities();
@@ -69,7 +69,19 @@ define(['../models/PageModel',
     save : function() {
       var curAppState = _.clone(appState);
 
-      curAppState.pages[pageId]['uielements'] = (this.widgetsCollection.toJSON() || []);
+      var newCollection = _.clone(this.widgetsCollection);
+
+      _(this.containersCollection.models).each(function(container) {
+        newCollection.remove(container.get('container_info').get('uielements').models);
+      });
+
+      var widgets = (newCollection.toJSON() || []);
+      var containers = (this.containersCollection.toJSON() || []);
+      var elems = _.union(widgets, containers);
+
+      console.log(elems);
+
+      curAppState.pages[pageId]['uielements'] = elems;
       curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
 
       $.ajax({

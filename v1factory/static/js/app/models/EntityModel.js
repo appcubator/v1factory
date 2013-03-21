@@ -1,16 +1,20 @@
-define(['backbone',
-        '../collections/FieldsCollection'], function(Backbone, FieldsCollection) {
+define(
+  ['../collections/FieldsCollection',
+  'backbone'], function(FieldsCollection) {
 
   var EntityModel = Backbone.Model.extend({
       defaults: {
         name: "default name"
       },
       initialize: function(bone) {
+        console.log(bone);
         var fieldCollection = new FieldsCollection();
 
         if(bone) fieldCollection.add(bone.fields);
-        //this.bind('change', iui.askBeforeLeave);
         this.set('fields', fieldCollection);
+        //this.bind('change', iui.askBeforeLeave);
+        console.log(this);
+        //bone.fields = fieldCollection;
       },
       toJSON: function () {
         var json = {};

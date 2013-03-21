@@ -1,10 +1,12 @@
-define(['../collections/ElementCollection'], function(ElementCollection) {
+define(['../collections/ElementCollection', 'backbone'], function(ElementCollection, Backbone) {
   var EditorGalleryView = Backbone.View.extend({
     el           : document.getElementById('top-panel-bb'),
     allList      : document.getElementById('all-list'),
     elementsList : document.getElementById('interface-list'),
     dataList     : document.getElementById('entities-list'),
     userList     : document.getElementById('user-list'),
+    widgetsCollection : null,
+    containersCollection:null,
     curId        : 'all-elements',
     dragActive   : false,
 
@@ -12,7 +14,7 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
       'click .header' : 'sectionClicked'
     },
 
-    initialize   : function(widgetsCollection, contextColl, entitiesColl) {
+    initialize   : function(widgetsCollection, containersCollection, contextColl, entitiesColl) {
        _.bindAll(this, 'render',
                        'appendEntity',
                        'appendContextEntity',
@@ -28,9 +30,11 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
       this.contextCollection   = contextColl;
       this.elementsCollection  = new ElementCollection();
       this.widgetsCollection   = widgetsCollection;
+      this.containersCollection = containersCollection;
+
 
       this.entitiesCollection.bind('add', this.appendEntity, this);
-      this.contextCollection.bind('add',  this.appendContextEntity);
+      this.contextCollection.bind('add',  this.appendContextEntity, this);
       this.elementsCollection.bind('add',  this.appendElement, this);
 
 
@@ -112,12 +116,12 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
 
       var model = this.entitiesCollection.push(appState.users, {silent : true});
 
-      _(appState.users.fields).each(function(val, key, ind) {
+      _(appState.users.fields.models).each(function(model) {
         var context = {
           name : "User",
           cid  : model.cid,
-          attr : val.name,
-          type : val.type
+          attr : model.get('name'),
+          type : model.get('type')
         };
 
         //$(self.userList).append(_.template(tempLi, context));
@@ -147,19 +151,19 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
 
       var tempLi   = '<li id="entity-<%= cid %>" class="show entity">'+
                      '<span class="name">List of <%= name %></span></li>';
+       $(this.allList).append(_.template(tempLi, context));
+
       var tempForm = '<li id="entity-<%= cid %>" class="create entity">'+
                      '<span class="name">Add <%= name %> Form</span></li>';
-      var tempBtn  = '<li id="entity-<%= cid %>" class="addbutton entity">'+
-                     '<span class="name">Add <%= name %> Button</span></li>';
-
-      $(this.dataList).append(_.template(tempLi, context));
-      $(this.allList).append(_.template(tempLi, context));
-
-      $(this.dataList).append(_.template(tempForm, context));
       $(this.allList).append(_.template(tempForm, context));
 
-      $(this.dataList).append(_.template(tempBtn, context));
+      var tempBtn  = '<li id="entity-<%= cid %>" class="addbutton entity">'+
+                     '<span class="name">Add <%= name %> Button</span></li>';
       $(this.allList).append(_.template(tempBtn, context));
+
+      var tempTable  = '<li id="entity-<%= cid %>" class="table-gal entity">'+
+                     '<span class="name"><%= name %> Table</span></li>';
+      $(this.allList).append(_.template(tempTable, context));
 
 
       $('.entity').draggable({
@@ -271,6 +275,7 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
     },
 
     dropped : function(e, ui) {
+      var self = this;
       this.dragActive = false;
       var left, top;
 
@@ -285,21 +290,16 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
       }
 
 
-      var widget = this.determineType(e.target.className, e.target.id);
-      widget.layout = {
-          top   : top,
-          left  : left,
-          width : 4,
-          height: 8
-        };
-
-      this.widgetsCollection.push(widget);
-    },
-
-
-
-    determineType: function(className, id) {
       var widget = {};
+      widget.layout = {
+        top   : top,
+        left  : left,
+        width : 4,
+        height: 8
+      };
+
+      var className = e.target.className;
+      var id = e.target.id;
 
       if(/(entity)/.exec(className)) {
         var cid = String(id).replace('entity-','');
@@ -310,6 +310,8 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
            entity : entity,
            action : action
         };
+
+        this.containersCollection.push(widget);
       }
       else if (/(single-data)/.exec(className)) {
         var id = String(id).replace('entity-','');
@@ -318,16 +320,20 @@ define(['../collections/ElementCollection'], function(ElementCollection) {
 
         widget = uieState['text'][0];
         widget.content =  '{{'+entity.get('name')+'_'+field+'}}';
+        this.widgetsCollection.push(widget);
       }
       else {
         var type = className.replace(' ui-draggable','');
-        widget = uieState[type][0];
+        widget = _.extend(widget, uieState[type][0]);
         widget.type = type;
+        //self.widgetsCollection.push(widget);
+        this.widgetsCollection.push(widget);
       }
+    },
 
-      return widget;
+    determineType: function(className, id, widget) {
+      var self = this;
     }
-
   });
 
   return EditorGalleryView;

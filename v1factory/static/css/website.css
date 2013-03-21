@@ -259,6 +259,10 @@ input[type="submit"] {
   opacity: 1.0;
   background-color: #fff;
   padding: 30px;
+  color:  #000;
+}
+.modal .title, .modal h2, .modal h1 {
+  color: #000;
 }
 
 .element-node {

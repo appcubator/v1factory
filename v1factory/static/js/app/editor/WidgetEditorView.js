@@ -1,4 +1,7 @@
-define(['./WidgetView', './WidgetContainerView', 'backbone'],
+define(
+ ['./WidgetView',
+  './WidgetContainerView',
+  'backbone'],
 function(WidgetView, WidgetContainerView) {
 
   var WidgetEditorView = Backbone.View.extend({
@@ -10,19 +13,32 @@ function(WidgetView, WidgetContainerView) {
     events : {
     },
 
-    initialize: function(widgetsCollection, contextEntities, page) {
+    initialize: function(widgetsCollection, containersCollection, contextEntities, page) {
       _.bindAll(this, 'render',
                       'placeWidget',
+                      'placeContainer',
                       'style');
 
-      this.render();
-      this.collection = widgetsCollection;
-      this.collection.bind('add', this.placeWidget);
-      //this.style(page['design_props']);
+      var self = this;
 
-      this.collection.add(page.uielements);
-      this.collection.bind('change', function() { iui.askBeforeLeave(); });
-      this.collection.bind('add',  function() { iui.askBeforeLeave(); });
+      this.render();
+      this.widgetsCollection = widgetsCollection;
+      this.widgetsCollection.bind('add', this.placeWidget);
+
+      this.containersCollection = containersCollection;
+      this.containersCollection.bind('add', this.placeContainer);
+
+      this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
+      this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
+
+      _(page.uielements).each(function(element) {
+        if(element.container_info) {
+          self.containersCollection.add(element);
+        }
+        else {
+          self.widgetsCollection.add(element);
+        }
+      });
     },
 
     render: function() {
@@ -30,18 +46,18 @@ function(WidgetView, WidgetContainerView) {
     },
 
     placeWidget: function(widgetModel) {
-      var curWidget;
-
-      if (widgetModel.get('container_info')) {
-        curWidget= new WidgetContainerView(widgetModel);
-      }
-      else {
-        curWidget = new WidgetView(widgetModel);
-      }
+      var curWidget = new WidgetView(widgetModel);
 
       if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
       else iui.get('full-container').appendChild(curWidget.el);
+      curWidget.resizableAndDraggable();
+    },
 
+    placeContainer: function(containerWidgetModel) {
+      var curWidget= new WidgetContainerView(containerWidgetModel);
+
+      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
+      else iui.get('full-container').appendChild(curWidget.el);
       curWidget.resizableAndDraggable();
     },
 

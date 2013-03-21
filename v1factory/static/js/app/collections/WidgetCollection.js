@@ -1,6 +1,5 @@
-define(['backbone', '../models/WidgetModel'], function(Backbone) {
+define(['../models/WidgetModel', 'backbone'], function(WidgetModel, Backbone) {
 
-  var WidgetModel = require('../models/WidgetModel');
   var WidgetCollection = Backbone.Collection.extend({
     model : WidgetModel,
     selectedEl: null,

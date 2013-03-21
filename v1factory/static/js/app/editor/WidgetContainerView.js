@@ -1,4 +1,4 @@
-define(['../collections/WidgetCollection', './WidgetView', 'backbone'], function(WidgetCollection, WidgetView) {
+define(['../collections/WidgetCollection', './WidgetView', 'backbone', './editor-templates'], function(WidgetCollection, WidgetView) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -40,6 +40,14 @@ define(['../collections/WidgetCollection', './WidgetView', 'backbone'], function
       this.setHeight(height * GRID_HEIGHT);
 
       this.el.className += ' widget-wrapper span'+width;
+
+      if(this.model.get('container_info').has('query')) {
+        var tableDiv = document.createElement('div');
+        console.log(this.model.get('container_info').get('query').attributes);
+        console.log(Templates.tableNode);
+        tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
+        this.el.appendChild(tableDiv);
+      }
 
       //this.resizableAndDraggable();
 

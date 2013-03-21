@@ -38,3 +38,13 @@ Templates.tempSourceSelect = [
   '<option class="upload-image" value="upload-image">+ Upload an image</option>',
   '</select>'
 ].join('\n');
+
+Templates.tableNode = [
+  '<table class="table table-bordered">',
+    '<tr><% _(fieldsToDisplay).each(function(field) { %> <td><%= field %></td> <% }); %></tr>',
+    '<tr><% _(fieldsToDisplay).each(function(field) { %> <td><i><%= field %>Data</i></td> <% }); %></tr>',
+    '<tr><% _(fieldsToDisplay).each(function(field) { %> <td><i><%= field %>Data</i></td> <% }); %></tr>',
+    '<tr><% _(fieldsToDisplay).each(function(field) { %> <td><i><%= field %>Data</i></td> <% }); %></tr>',
+    '<tr><% _(fieldsToDisplay).each(function(field) { %> <td><i><%= field %>Data</i></td> <% }); %></tr>',
+  '</table>'
+].join('\n');
