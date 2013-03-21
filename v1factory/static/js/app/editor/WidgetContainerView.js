@@ -1,4 +1,9 @@
-define(['../collections/WidgetCollection', './WidgetView', 'backbone', './editor-templates'], function(WidgetCollection, WidgetView) {
+define(
+ ['../collections/WidgetCollection',
+  './TableQueryView',
+  './WidgetView',
+  'backbone',
+  './editor-templates'], function(WidgetCollection, TableQueryView, WidgetView) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -8,12 +13,13 @@ define(['../collections/WidgetCollection', './WidgetView', 'backbone', './editor
     type: null,
     events: {
       'mousedown'     : 'select',
-      'click .delete' : 'remove'
+      'click .delete' : 'remove',
+      'dblclick'      : 'showDetails'
     },
 
     initialize: function(widgetModel) {
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
-      _.bindAll(this, 'placeWidget', 'renderElements');
+      _.bindAll(this, 'placeWidget', 'renderElements', 'showDetails');
 
       var collection = new WidgetCollection();
       //this.model.set('uielements', collection);
@@ -64,6 +70,12 @@ define(['../collections/WidgetCollection', './WidgetView', 'backbone', './editor
       _(this.model.get('container_info').get('uielements').models).each(function(widgetModel) {
         self.placeWidget(widgetModel);
       });
+    },
+
+    showDetails: function() {
+      if(this.model.get('container_info').get('action') === "table") {
+        new TableQueryView(this.model, this.model.get('container_info').get('query'));
+      }
     }
   });
 

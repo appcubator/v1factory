@@ -1,20 +1,19 @@
 define(
-  ['../collections/FieldsCollection',
-  'backbone'], function(FieldsCollection) {
+ ['../collections/FieldsCollection',
+  'backbone'],
+  function(FieldsCollection) {
 
   var EntityModel = Backbone.Model.extend({
-      defaults: {
-        name: "default name"
-      },
       initialize: function(bone) {
-        console.log(bone);
-        var fieldCollection = new FieldsCollection();
 
+        if(typeof bone === "string") {
+          bone = _.findWhere(appState.entities, {name : bone});
+        }
+
+        this.set('name', bone.name);
+        var fieldCollection = new FieldsCollection();
         if(bone) fieldCollection.add(bone.fields);
         this.set('fields', fieldCollection);
-        //this.bind('change', iui.askBeforeLeave);
-        console.log(this);
-        //bone.fields = fieldCollection;
       },
       toJSON: function () {
         var json = {};

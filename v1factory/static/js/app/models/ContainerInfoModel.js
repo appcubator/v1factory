@@ -1,13 +1,14 @@
 define(
  ['../collections/WidgetCollection',
-  './QueryModel'], 
-  function(WidgetCollection, QueryModel) {
+  './QueryModel',
+  './EntityModel'],
+  function(WidgetCollection, QueryModel, EntityModel) {
 
   var ContainerInfoModel = Backbone.Model.extend({
     initialize: function(bone) {
       var WidgetCollection = require('../collections/WidgetCollection');
       this.set('uielements', new WidgetCollection(bone.uielements));
-
+      this.set('entity', new EntityModel(bone.entity));
       if(bone.query) {
         this.set('query', new QueryModel(bone.query, this.get('entity')));
       }
