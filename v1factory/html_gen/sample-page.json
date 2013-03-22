@@ -200,7 +200,7 @@
             "class_name": "red-line",
             "type": "line",
             "layout": {
-                "top": 34,
+                "top": 35,
                 "left": 0,
                 "height": 3,
                 "width": 4
@@ -220,7 +220,7 @@
             "class_name": "red-line",
             "type": "line",
             "layout": {
-                "top": 34,
+                "top": 35,
                 "left": 8,
                 "height": 3,
                 "width": 4
@@ -240,7 +240,7 @@
             "class_name": "red-line",
             "type": "line",
             "layout": {
-                "top": 34,
+                "top": 35,
                 "left": 4,
                 "height": 3,
                 "width": 4
