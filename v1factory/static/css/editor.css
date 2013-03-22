@@ -674,32 +674,33 @@ body {
 
 
 .page-wrapper {
-  background-color:rgba(0, 136, 204, 0.6);
+
+  background-color:rgba(216, 216, 219, 0.6);
   position: absolute;
   display: block;
   left: 50%;
   top: 72px;
-  margin-left: -595px;
-  width: 1190px;
+  margin-left: -563px;
+  width: 1162px;
   height: 1066px;
 /*  margin: 80px auto;
 */  border-radius: 6px;
-border: 2px solid #bbbbbb;
-  border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
+  border: 2px solid #666;
+  border-color: rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.45);
   box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
 }
 
 .url-bar {
   background-color: #fff;
   border-radius: 4px;
-  width: 1160px;
-  height: 30px;
-  margin-top: 8px;
-  margin-left: 15px;
+  width: 1146px;
+  height: 36px;
+  margin-top: 7px;
+  margin-left: 6px;
   color: #000;
-  padding-top: 6px;
+  padding-top: 9px;
   padding-left: 10px;
-  border-color: #333;
+  border:1px solid #CCC;
 }
 
 .page {
@@ -707,11 +708,14 @@ border: 2px solid #bbbbbb;
   display: block;
   width: 1160px;
   height: 1000px;
-  margin: 10px auto;
+  margin: 7px auto;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
-  border: 1px solid #aaa;
-/*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+  border-color: rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.45);
+/*  border: 1px solid #aaa;
+*//*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
 */}
 
 .page {
@@ -1191,6 +1195,16 @@ ul.list {
   background-image: url('../img/page_layout_icon&48.png');
 }
 
+.table-gal {
+  background-image: url('../img/table_icon.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.signup, .login {
+  background-image: url('../img/users.png');
+}
+
 /*.widget-wrapper > * {
   width: 100%;
   height: 100%;
@@ -1220,8 +1234,8 @@ ul.list {
   display: block;
   height: 80px;
   overflow: hidden;
-  border-bottom: 1px solid #1b2535;
-  border-top: 1px solid #3b4555; 
+  border-bottom: 1px solid rgba(90, 90, 90, 0.6);
+  border-top: 1px solid rgba(90, 90, 90, 0.4);
 }
 
 .node { 
@@ -1432,3 +1446,6 @@ ul.list {
   background-position: center center;
 }
 
+.table {
+  color:  #000;
+}

@@ -96,45 +96,20 @@
     var library = {{ elements|safe }};
     var pageId = {{ page_id }};
     var uieState = {{ app.uie_state_json|safe }};
-  </script>
-  <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/require.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/underscore.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone.js"></script>
-  <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jscolor/jscolor.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery-ui.js"></script>
-
-  <script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/lang.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/default-uielements.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/tag-dict.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/list.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/libs/keymaster.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/constant-containers.js"></script>
-
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/models.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/collections.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-templates.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-grid.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-widgets.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-gallery-view.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-info.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-design-view.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-classpicker-view.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-editlayout-view.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-modules/editor-contenteditor-view.js"></script>
-
-  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor-view.js"></script>
-
-  <script type="text/javascript">
     var GRID_WIDTH = 80;
     var GRID_HEIGHT = 15;
-    var editorView = new EditorView();
   </script>
+
+
+  <script type="text/javascript">
+    // var GRID_WIDTH = 80;
+    // var GRID_HEIGHT = 15;
+    // var editorView = new EditorView();
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor/editor-templates.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/default-uielements.js"></script>
+
+  <script data-main="{{ STATIC_URL }}js/app/editor/main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+
 </html>

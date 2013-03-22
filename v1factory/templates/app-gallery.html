@@ -133,11 +133,6 @@ class = "<%= element.class_name %>"
 <% if(!element.isSingle) {%>
 </<%= element.tagName%>>
 <% } %></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/backbone/backbone-extend.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/app/gallery-view.js"></script>
-<script type="text/javascript">
-var galleryView = new GalleryView();
 
-</script>
+<script data-main="{{ STATIC_URL }}js/app/gallery-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}
