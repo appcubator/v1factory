@@ -1,0 +1,7 @@
+<div class="span{{col.width}} offset{{col.margin_left}}">
+{% if col.tree == None %}{% for element in col.uiels %}
+{% include "uiel.html" %}{% endfor %}
+{% else %}
+{{ col.tree.render() }}
+{% endif %}
+</div>
