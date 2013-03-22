@@ -96,7 +96,8 @@ define(['backbone', 'jquery-ui'], function() {
   BackboneUI.ModalView = Backbone.View.extend({
 
     events : {
-      'click .modal-bg' : 'closeModal'
+      'click .modal-bg' : 'closeModal',
+      'keydown'         : 'handleKey'
     },
 
     _configure: function(options) {
@@ -104,7 +105,7 @@ define(['backbone', 'jquery-ui'], function() {
       this.backgroundDiv = this.setupModal();
       this.modalWindow = this.setupModalWindow();
 
-      _.bindAll(this, 'closeModal');
+      _.bindAll(this, 'closeModal', 'handleKey');
     },
 
     _ensureElement: function(options) {
@@ -170,6 +171,14 @@ define(['backbone', 'jquery-ui'], function() {
 
     closeModal: function() {
       this.remove();
+    },
+
+    handleKey: function(e) {
+      console.log(e.keyCode);
+      if(e.keyCode == 27) { //escape
+        this.closeModal();
+        e.stopPropagation();
+      }
     }
 
   });

@@ -315,7 +315,6 @@ function(ElementCollection, UserEntityModel, Backbone) {
           entity = new UserEntityModel(appState.users);
         }
         else {
-          alert(cid);
           console.log(this.entitiesCollection);
           entity = this.entitiesCollection.get(cid);
           console.log(entity);

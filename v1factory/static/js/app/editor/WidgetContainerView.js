@@ -75,7 +75,8 @@ define([
     },
 
     showDetails: function() {
-      if(this.model.get('container_info').get('action') === "table") {
+      console.log(this.model);
+      if(this.model.get('container_info').get('action') === "table-gal") {
         new TableQueryView(this.model, this.model.get('container_info').get('query'));
       }
     }
