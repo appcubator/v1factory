@@ -1,9 +1,8 @@
-define(
- ['backboneui', 'backbone',
-  'iui'],
-  function(BackboneUI) {
-
-console.log(BackboneUI);
+define([
+  'backboneui',
+  'backbone',
+  'iui'
+],function(BackboneUI) {
 
   var TableQueryView = BackboneUI.ModalView.extend({
     className : 'query-modal',

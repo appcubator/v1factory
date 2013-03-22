@@ -1,4 +1,7 @@
-define(['backbone', 'iui'], function(Backbone, iui) {
+define([
+  'backbone',
+  'iui'
+],function(Backbone, iui) {
 
   var DesignProperty = Backbone.Model.extend({});
 

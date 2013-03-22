@@ -1,4 +1,8 @@
-define(['backbone', '../models/EntityModel'], function(Backbone, EntityModel) {
+define([
+  'backbone',
+  '../models/EntityModel'
+],function(Backbone, EntityModel) {
+
   var EntityCollection = Backbone.Collection.extend({
     model: EntityModel
   });

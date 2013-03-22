@@ -1,4 +1,6 @@
-define(['backbone'], function() {
+define([
+  'backbone'
+],function() {
 
   var WidgetClassPickerView = Backbone.View.extend({
     el     : document.getElementById('class-picker'),

@@ -25,7 +25,6 @@ define(
 
       var self = this;
       this.set('container_info', new ContainerInfoModel(this.get('container_info')));
-
       
       if(this.get('container_info').get('uielements').length || this.get('container_info').has('query')) {
         return;
@@ -39,6 +38,7 @@ define(
           elementDefault = uieState[element.type][0];
           element = _.extend(elementDefault, element);
           self.get('container_info').get('uielements').push(element);
+          self.widgetsCollections.push(element);
         });
       }
       else {

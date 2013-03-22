@@ -1,8 +1,8 @@
-define(
- ['./WidgetView',
+define([
+  './WidgetView',
   './WidgetContainerView',
-  'backbone'],
-function(WidgetView, WidgetContainerView) {
+  'backbone'
+],function(WidgetView, WidgetContainerView) {
 
   var WidgetEditorView = Backbone.View.extend({
     el : $('.page'),
@@ -11,6 +11,7 @@ function(WidgetView, WidgetContainerView) {
     selectedEl: null,
 
     events : {
+      
     },
 
     initialize: function(widgetsCollection, containersCollection, contextEntities, page) {
@@ -33,7 +34,7 @@ function(WidgetView, WidgetContainerView) {
 
       _(page.uielements).each(function(element) {
         if(element.container_info) {
-          self.containersCollection.add(element);
+          self.containersCollection.add(element, self.widgetsCollection);
         }
         else {
           self.widgetsCollection.add(element);

@@ -1,4 +1,8 @@
-define(['backboneui', 'iui'], function(BackboneUI) {
+define([
+  'backboneui',
+  'iui'
+],function(BackboneUI) {
+
   var UIElementAttributesModel = Backbone.Model.extend({
   });
 

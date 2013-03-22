@@ -1,7 +1,7 @@
-define(
- ['../models/ContainerWidgetModel',
-  'backbone'], 
-  function(ContainerWidgetModel, Backbone) {
+define([
+  '../models/ContainerWidgetModel',
+  'backbone'
+],function(ContainerWidgetModel, Backbone) {
 
   var ContainersCollection = Backbone.Collection.extend({
     model : ContainerWidgetModel,
@@ -33,6 +33,7 @@ define(
     select : function(model) {
       this.unselectAll();
       this.selectedEl = model;
+      this.trigger('selected');
     },
 
     removeSelected  : function(e) {

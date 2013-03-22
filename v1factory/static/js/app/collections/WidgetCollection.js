@@ -1,4 +1,7 @@
-define(['../models/WidgetModel', 'backbone'], function(WidgetModel, Backbone) {
+define([
+  '../models/WidgetModel',
+  'backbone'
+],function(WidgetModel, Backbone) {
 
   var WidgetCollection = Backbone.Collection.extend({
     model : WidgetModel,
@@ -30,6 +33,7 @@ define(['../models/WidgetModel', 'backbone'], function(WidgetModel, Backbone) {
     select : function(model) {
       this.unselectAll();
       this.selectedEl = model;
+      this.trigger('selected');
     },
 
     removeSelected  : function(e) {

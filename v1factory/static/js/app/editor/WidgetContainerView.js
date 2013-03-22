@@ -1,9 +1,10 @@
-define(
- ['../collections/WidgetCollection',
+define([
+  '../collections/WidgetCollection',
   './TableQueryView',
   './WidgetView',
   'backbone',
-  './editor-templates'], function(WidgetCollection, TableQueryView, WidgetView) {
+  './editor-templates'
+],function(WidgetCollection, TableQueryView, WidgetView) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -12,7 +13,7 @@ define(
     entity: null,
     type: null,
     events: {
-      'mousedown'     : 'select',
+      'click'         : 'select',
       'click .delete' : 'remove',
       'dblclick'      : 'showDetails'
     },
@@ -28,6 +29,9 @@ define(
       //this.model.get('container_info').get('uielements').add(widgetModel.)
       //var uielements = widgetModel.get('container_info').uielements;
       //this.model.get('uielements').add(uielements);
+      if(this.model.get('container_info').has('query')) {
+        this.model.get('container_info').get('query').bind('change', this.render);
+      }
 
       this.render();
       this.resizableAndDraggable();
@@ -49,8 +53,6 @@ define(
 
       if(this.model.get('container_info').has('query')) {
         var tableDiv = document.createElement('div');
-        console.log(this.model.get('container_info').get('query').attributes);
-        console.log(Templates.tableNode);
         tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
         this.el.appendChild(tableDiv);
       }

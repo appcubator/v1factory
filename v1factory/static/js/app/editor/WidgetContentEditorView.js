@@ -1,4 +1,6 @@
-define(['backbone'], function() {
+define([
+  'backbone'
+], function() {
 
   var WidgetContentEditorView = Backbone.View.extend({
     el     : document.getElementById('content-editor'),
@@ -83,6 +85,7 @@ define(['backbone'], function() {
 
       if(this.widgetsCollection.selectedEl === null) {
         this.model = null;
+        this.clear();
         //this.el.innerHTML = '';
       }
       else if(this.widgetsCollection.selectedEl != this.model) {

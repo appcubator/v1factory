@@ -1,4 +1,8 @@
-define(['../collections/ElementCollection', 'backbone'], function(ElementCollection, Backbone) {
+define([
+  '../collections/ElementCollection',
+  'backbone'
+],function(ElementCollection, Backbone) {
+
   var EditorGalleryView = Backbone.View.extend({
     el           : document.getElementById('top-panel-bb'),
     allList      : document.getElementById('all-list'),

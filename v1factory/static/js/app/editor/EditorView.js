@@ -1,15 +1,25 @@
-define(['../models/PageModel',
-        '../collections/EntityCollection',
-        '../collections/WidgetCollection',
-        '../collections/ContainersCollection',
-        'WidgetEditorView',
-        'WidgetClassPickerView',
-        'WidgetContentEditorView',
-        'WidgetLayoutEditorView',
-        'DesignEditorView',
-        'EditorGalleryView'],
-
-  function(PageModel, EntityCollection, WidgetCollection, ContainersCollection, WidgetEditorView, WidgetClassPickerView, WidgetContentEditorView, WidgetLayoutEditorView, DesignEditorView, EditorGalleryView) {
+define([
+  '../models/PageModel',
+  '../collections/EntityCollection',
+  '../collections/WidgetCollection',
+  '../collections/ContainersCollection',
+  'WidgetEditorView',
+  'WidgetClassPickerView',
+  'WidgetContentEditorView',
+  'WidgetLayoutEditorView',
+  'DesignEditorView',
+  'EditorGalleryView',
+  '../../libs/keymaster/keymaster.min'
+],function(PageModel,
+           EntityCollection,
+           WidgetCollection,
+           ContainersCollection,
+           WidgetEditorView,
+           WidgetClassPickerView,
+           WidgetContentEditorView,
+           WidgetLayoutEditorView,
+           DesignEditorView,
+           EditorGalleryView) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -19,17 +29,20 @@ define(['../models/PageModel',
       'click #save'          : 'save',
       'click #settings'      : 'showSettings',
       'click #settings-cross': 'hideSettings',
-      'click #deploy'        : 'deploy'
-
+      'click #deploy'        : 'deploy',
+      'click .page'          : 'clickedPage'
     },
 
     initialize: function() {
       _.bindAll(this, 'save',
                       'deploy',
                       'style',
+                      'clickedPage',
                       'hideSettings',
                       'showSettings',
                       'getContextEntities',
+                      'containerSelected',
+                      'widgetSelected',
                       'keydown');
 
       var page = appState.pages[pageId];
@@ -51,6 +64,9 @@ define(['../models/PageModel',
 
       this.entityCollection.add(appState.entities);
       this.getContextEntities();
+
+      this.containersCollection.on('selected', this.containerSelected);
+      this.widgetsCollection.on('selected', this.widgetSelected);
 
       this.style();
       this.render();
@@ -78,8 +94,6 @@ define(['../models/PageModel',
       var widgets = (newCollection.toJSON() || []);
       var containers = (this.containersCollection.toJSON() || []);
       var elems = _.union(widgets, containers);
-
-      console.log(elems);
 
       curAppState.pages[pageId]['uielements'] = elems;
       curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
@@ -170,24 +184,47 @@ define(['../models/PageModel',
     keydown: function(e) {
       switch(e.keyCode) {
         case 37:
-          this.widgetsCollection.selectedEl.moveLeft();
+          if(this.containersCollection.selectedEl) {
+            this.containersCollection.selectedEl.moveLeft();
+          }
+          else {
+            this.widgetsCollection.selectedEl.moveLeft();
+          }
           e.preventDefault();
           break;
         case 38:
-          this.widgetsCollection.selectedEl.moveUp();
+          if(this.containersCollection.selectedEl) {
+            this.containersCollection.selectedEl.moveUp();
+          }
+          else {
+            this.widgetsCollection.selectedEl.moveUp();
+          }
           e.preventDefault();
           break;
         case 39:
-          this.widgetsCollection.selectedEl.moveRight();
+          if(this.containersCollection.selectedEl) {
+            this.containersCollection.selectedEl.moveRight();
+          }
+          else {
+            this.widgetsCollection.selectedEl.moveRight();
+          }
           e.preventDefault();
           break;
         case 40:
-          this.widgetsCollection.selectedEl.moveDown();
+          if(this.containersCollection.selectedEl) {
+            this.containersCollection.selectedEl.moveDown();
+          }
+          else {
+            this.widgetsCollection.selectedEl.moveDown();
+          }
           e.preventDefault();
           break;
         case 8: //backspace
           if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.removeSelected(e);
+          }
+          if(this.containersCollection.selectedEl) {
+            this.containersCollection.removeSelected(e);
           }
           break;
         case 27: //escape
@@ -195,9 +232,35 @@ define(['../models/PageModel',
             this.widgetsCollection.selectedEl = null;
             this.widgetsCollection.unselectAll();
           }
+
+          if(this.containersCollection.selectedEl) {
+            this.containersCollection.selectedEl = null;
+            this.containersCollection.unselectAll();
+          }
           return false;
       }
+    },
+
+    clickedPage: function() {
+      if(this.widgetsCollection.selectedEl) {
+        this.widgetsCollection.selectedEl = null;
+        this.widgetsCollection.unselectAll();
+      }
+
+      if(this.containersCollection.selectedEl) {
+        this.containersCollection.selectedEl = null;
+        this.containersCollection.unselectAll();
+      }
+    },
+
+    containerSelected: function(e) {
+      this.widgetsCollection.unselectAll();
+    },
+
+    widgetSelected: function(a, b) {
+      this.containersCollection.unselectAll();
     }
+
   });
 
   return EditorView;

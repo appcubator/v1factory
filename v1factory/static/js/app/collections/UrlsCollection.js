@@ -1,4 +1,8 @@
-define(['../models/UrlModel', 'backbone'], function(UrlModel, Backbone) {
+define([
+  '../models/UrlModel',
+  'backbone'
+],function(UrlModel, Backbone) {
+
   var UrlsCollection = Backbone.Collection.extend({
     model: UrlModel
   });

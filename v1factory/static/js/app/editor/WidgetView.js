@@ -1,4 +1,7 @@
-define(['backbone', 'backboneui'], function(Backbone, BackboneUI) {
+define([
+  'backbone',
+  'backboneui'
+],function(Backbone, BackboneUI) {
 
   var WidgetView = BackboneUI.UIView.extend({
     el: null,
@@ -11,7 +14,7 @@ define(['backbone', 'backboneui'], function(Backbone, BackboneUI) {
     shadowElem : null,
 
     events: {
-      'mousedown' : 'select',
+      'click' : 'select',
       'click .delete' : 'remove',
       'dblclick' : 'switchOnEditMode',
       'keyDown'  : 'keyHandler'
@@ -101,6 +104,7 @@ define(['backbone', 'backboneui'], function(Backbone, BackboneUI) {
 
     select: function(e) {
       this.model.select();
+      e.stopPropagation();
     },
 
     outlineSelected: function() {

@@ -1,4 +1,7 @@
-define(['backbone'], function() {
+define([
+  'backbone'
+],function() {
+
   var WidgetLayoutEditorView = Backbone.View.extend({
     el     : document.getElementById('layout-editor'),
     className : 'layout-editor',
@@ -26,7 +29,7 @@ define(['backbone'], function() {
 
       if(this.widgetsCollection.selectedEl === null) {
         this.model = null;
-        //this.el.innerHTML = '';
+        this.clear();
       }
       else if(this.widgetsCollection.selectedEl != this.model) {
         this.clear();
