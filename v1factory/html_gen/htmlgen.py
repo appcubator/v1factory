@@ -91,7 +91,7 @@ def split_to_rows(uiels, top_offset=0):
 
   return rows
 
-def split_to_cols(uiels):
+def split_to_cols(uiels, left_offset=0):
   """Given some uielements, separate them into non-overlapping columns"""
   cols = []
   if len(uiels) == 0:
@@ -105,7 +105,7 @@ def split_to_cols(uiels):
   cols.append(current_col)
   current_block = sorted_uiels.pop(0)
   current_col.uiels.append(current_block)
-  current_col.margin_left = current_block['layout']['left']
+  current_col.margin_left = current_block['layout']['left'] - left_offset
 
   # iterate over the uiels left down
   for u in sorted_uiels:
@@ -138,13 +138,13 @@ def split_to_cols(uiels):
 
   return cols
 
-def create_tree(uiels, recursive_num=0, top_offset=0):
+def create_tree(uiels, recursive_num=0, top_offset=0, left_offset=0):
   """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
   tree = DomTree()
 
   tree.rows = split_to_rows(uiels, top_offset=top_offset)
   for r in tree.rows:
-    r.cols = split_to_cols(r.uiels)
+    r.cols = split_to_cols(r.uiels, left_offset=left_offset)
     for c in r.cols:
       if len(c.uiels) == 1:
         c.tree = None # termination of recursion
@@ -154,7 +154,7 @@ def create_tree(uiels, recursive_num=0, top_offset=0):
           # create a relative container and absolute position the contents.
           c.tree = None
         else:
-          c.tree = create_tree(c.uiels, top_offset=r.uiels[0]['layout']['top'])
+          c.tree = create_tree(c.uiels, top_offset=r.uiels[0]['layout']['top'], left_offset=c.uiels[0]['layout']['left'])
   return tree
 
 test_file = open('sample-page.json')

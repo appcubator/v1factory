@@ -143,7 +143,7 @@
             "class_name": "full-img",
             "type": "image",
             "layout": {
-                "top": 37,
+                "top": 38,
                 "left": 0,
                 "height": 15,
                 "width": 4
@@ -162,7 +162,7 @@
             "class_name": "full-img",
             "type": "image",
             "layout": {
-                "top": 37,
+                "top": 38,
                 "left": 4,
                 "height": 15,
                 "width": 4
@@ -181,7 +181,7 @@
             "class_name": "full-img",
             "type": "image",
             "layout": {
-                "top": 37,
+                "top": 38,
                 "left": 8,
                 "height": 15,
                 "width": 4
