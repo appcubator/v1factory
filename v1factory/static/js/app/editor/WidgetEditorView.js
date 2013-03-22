@@ -1,6 +1,6 @@
 define([
-  './WidgetView',
-  './WidgetContainerView',
+  'editor/WidgetView',
+  'editor/WidgetContainerView',
   'backbone'
 ],function(WidgetView, WidgetContainerView) {
 

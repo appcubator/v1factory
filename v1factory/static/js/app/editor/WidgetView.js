@@ -36,9 +36,7 @@ define([
                       'changedSource',
                       'toggleFull',
                       'moving',
-                      'moved',
                       'resizing',
-                      'resized',
                       'staticsAdded',
                       'keyHandler');
 
@@ -195,25 +193,11 @@ define([
       this.model.get('layout').set('height', deltaHeight);
     },
 
-    resized: function (argument) {
-      // this.clear();
-      // this.el.innerHTML = this.renderElement();
-      // this.model.select();
-      // this.resizableAndDraggable();
-    },
-
     moving: function(e, ui) {
       var top = Math.round((ui.position.top / GRID_HEIGHT));
       var left = Math.round((ui.position.left / GRID_WIDTH));
       this.model.get('layout').set('top', top);
       this.model.get('layout').set('left', left);
-    },
-
-    moved: function () {
-      // console.log(this);
-      // this.render();
-      // this.model.select();
-      // this.resizableAndDraggable();
     },
 
     staticsAdded: function(files) {

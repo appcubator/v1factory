@@ -1,10 +1,11 @@
 define([
-  '../collections/WidgetCollection',
-  './TableQueryView',
-  './WidgetView',
+  'app/collections/WidgetCollection',
+  'editor/TableQueryView',
+  'editor/WidgetView',
+  'editor/SubWidgetView',
   'backbone',
-  './editor-templates'
-],function(WidgetCollection, TableQueryView, WidgetView) {
+  'editor/editor-templates'
+],function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -23,12 +24,9 @@ define([
       _.bindAll(this, 'placeWidget', 'renderElements', 'showDetails');
 
       var collection = new WidgetCollection();
-      //this.model.set('uielements', collection);
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
-      //this.model.get('container_info').get('uielements').add(widgetModel.)
-      //var uielements = widgetModel.get('container_info').uielements;
-      //this.model.get('uielements').add(uielements);
+
       if(this.model.get('container_info').has('query')) {
         this.model.get('container_info').get('query').bind('change', this.render);
       }
@@ -63,7 +61,7 @@ define([
     },
 
     placeWidget: function(model, a) {
-      var widgetView = new WidgetView(model);
+      var widgetView = new SubWidgetView(model);
       this.el.appendChild(widgetView.el);
     },
 

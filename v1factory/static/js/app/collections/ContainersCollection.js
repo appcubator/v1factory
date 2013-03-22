@@ -1,5 +1,5 @@
 define([
-  '../models/ContainerWidgetModel',
+  'app/models/ContainerWidgetModel',
   'backbone'
 ],function(ContainerWidgetModel, Backbone) {
 

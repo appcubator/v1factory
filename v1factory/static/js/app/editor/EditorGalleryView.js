@@ -1,6 +1,6 @@
 define([
-  '../collections/ElementCollection',
-  '../models/UserEntityModel',
+  'app/collections/ElementCollection',
+  'app/models/UserEntityModel',
   'backbone'
 ],
 function(ElementCollection, UserEntityModel, Backbone) {

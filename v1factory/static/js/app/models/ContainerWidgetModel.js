@@ -1,14 +1,14 @@
 define(
- ['./WidgetModel',
-  './ContentModel',
-  './LayoutModel',
-  './ContainerInfoModel',
-  '../editor/TableQueryView',
-  './QueryModel',
-  '../collections/WidgetCollection',
+ ['app/models/WidgetModel',
+  'app/models/ContentModel',
+  'app/models/LayoutModel',
+  'app/models/ContainerInfoModel',
+  'editor/TableQueryView',
+  'app/models/QueryModel',
+  'app/collections/WidgetCollection',
   'backboneui',
   'backbone',
-  '../../dicts/constant-containers'],
+  'dicts/constant-containers'],
   function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryView, QueryModel, WidgetCollection, BackboneUI, Backbone) {
 
 
@@ -151,7 +151,6 @@ define(
       'addbutton' : function() {
         var self = this;
         var container_info = self.get('container_info');
-        var WidgetCollection = require('../collections/WidgetCollection');
 
         container_info.set('uielements', new WidgetCollection());
         self.set('container_info', container_info);

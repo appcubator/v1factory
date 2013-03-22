@@ -1,14 +1,14 @@
 define([
-  '../models/PageModel',
-  '../collections/EntityCollection',
-  '../collections/WidgetCollection',
-  '../collections/ContainersCollection',
-  'WidgetEditorView',
-  'WidgetClassPickerView',
-  'WidgetContentEditorView',
-  'WidgetLayoutEditorView',
-  'DesignEditorView',
-  'EditorGalleryView',
+  'app/models/PageModel',
+  'app/collections/EntityCollection',
+  'app/collections/WidgetCollection',
+  'app/collections/ContainersCollection',
+  'editor/WidgetEditorView',
+  'editor/WidgetClassPickerView',
+  'editor/WidgetContentEditorView',
+  'editor/WidgetLayoutEditorView',
+  'editor/DesignEditorView',
+  'editor/EditorGalleryView',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            EntityCollection,
@@ -35,6 +35,7 @@ define([
 
     initialize: function() {
       _.bindAll(this, 'save',
+                      'amendAppState',
                       'deploy',
                       'style',
                       'clickedPage',
@@ -83,6 +84,20 @@ define([
     },
 
     save : function() {
+
+      var curAppState = this.amendAppState();
+      $.ajax({
+        type: "POST",
+        url: '/app/'+appId+'/state/',
+        data: JSON.stringify(curAppState),
+        complete: function() { iui.dontAskBeforeLeave();},
+        dataType: "JSON"
+      });
+
+      return false;
+    },
+
+    amendAppState : function() {
       var curAppState = _.clone(appState);
 
       var newCollection = _.clone(this.widgetsCollection);
@@ -98,15 +113,7 @@ define([
       curAppState.pages[pageId]['uielements'] = elems;
       curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
 
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(curAppState),
-        complete: function() { iui.dontAskBeforeLeave();},
-        dataType: "JSON"
-      });
-
-      return false;
+      return curAppState;
     },
 
     deploy: function() {

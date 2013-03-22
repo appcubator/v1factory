@@ -6,7 +6,10 @@ require.config({
     "backbone" : "../../libs/backbone-amd/backbone",
     "backboneui" : "../../backbone/BackboneUI",
     "key" : "../../libs/keymaster/keymaster",
-    "iui" : "../../libs/iui/iui"
+    "iui" : "../../libs/iui/iui",
+    "app" : "../",
+    "editor" : "./",
+    "dicts" : "../../dicts"
   },
 
   shim: {
