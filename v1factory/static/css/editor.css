@@ -1449,3 +1449,8 @@ ul.list {
 .table {
   color:  #000;
 }
+
+.modal-cross {
+  font-size: 16px;
+  cursor: pointer;
+}

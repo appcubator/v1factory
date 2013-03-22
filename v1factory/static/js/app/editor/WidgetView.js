@@ -16,7 +16,6 @@ define([
     events: {
       'click' : 'select',
       'click .delete' : 'remove',
-      'dblclick' : 'switchOnEditMode',
       'keyDown'  : 'keyHandler'
     },
 
@@ -25,9 +24,6 @@ define([
       _.bindAll(this, 'render',
                       'renderElement',
                       'select',
-                      'switchOnEditMode',
-                      'switchOffEditMode',
-                      'switchOffEditModeWithoutSave',
                       'outlineSelected',
                       'changedWidth',
                       'changedHeight',
@@ -229,73 +225,13 @@ define([
       //this.show(this.model);
     },
 
-    switchOnEditMode: function(e) {
-
-      if(this.model.get('type') == "image") {
-        iui.openFilePick(function(files, f) {f(files);}, this.staticsAdded, appId);
-        return;
-      }
-
-      this.model.collection.editMode = true;
-
-      var editedElem = this.el.firstChild;
-      var top = $(editedElem).offset().top;
-      var left = $(editedElem).offset().left;
-      this.editedElem = editedElem;
-
-
-      elem = document.createElement('input');
-      elem.setAttribute('type', "text");
-      //editedElem.cloneNode(true);
-      //elem.setAttribute('contenteditable', true);
-      elem.style.position = 'absolute';
-      elem.style.top = top;
-      elem.style.left = left;
-      elem.style.zIndex = 1001;
-      this.shadowElem = elem;
-
-      elem.value = editedElem.value||editedElem.innerText;
-      //$(editedElem).hide();
-
-      document.body.appendChild(elem);
-      elem.focus();
-      elem.select();
-
-    },
-
-    switchOffEditMode: function() {
-
-      this.model.collection.editMode = false;
-
-      if(this.model.get('type') == "text" || this.model.get('type') == "header-text" || this.model.get('type') == "link" ) {
-        this.model.set('content', this.shadowElem.value);
-      }
-      else if(this.model.get('type') == "button") {
-        this.model.get('content_attribs').set('value', this.shadowElem.value);
-      }
-
-      $(this.shadowElem).remove();
-      $(this.editedElem).fadeIn();
-    },
-
-    switchOffEditModeWithoutSave: function() {
-      this.model.collection.editMode = false;
-      $(this.shadowElem).remove();
-      $(this.editedElem).fadeIn();
-    },
-
     keyHandler: function (e) {
-      //if(this.editMode === false) return;
       switch(e.keyCode) {
         case 13: //enter
-          this.switchOffEditMode();
-          //return false;
           break;
         case 27:
-          this.switchOffEditModeWithoutSave();
           break;
       }
-
       return false;
     }
   });

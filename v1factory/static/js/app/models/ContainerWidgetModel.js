@@ -24,28 +24,33 @@ define(
       ContainerWidgetModel.__super__.initialize.call(this, bone);
 
       var self = this;
+      console.log(this);
+      console.log(this.get('container_info'));
+
       this.set('container_info', new ContainerInfoModel(this.get('container_info')));
-      
+
       if(this.get('container_info').get('uielements').length || this.get('container_info').has('query')) {
         return;
       }
 
+      console.log(this.get('container_info'));
+
       if(constantContainers[this.get('container_info').get('action')]) {
-        var WidgetCollection = require('../collections/WidgetCollection');
         this.get('container_info').set('uielements',  new WidgetCollection());
 
         _(constantContainers[this.get('container_info').get('action')]).each(function(element){
           elementDefault = uieState[element.type][0];
           element = _.extend(elementDefault, element);
           self.get('container_info').get('uielements').push(element);
-          self.widgetsCollections.push(element);
+          //self.get('container_info')widgetsCollections.push(element);
         });
       }
       else {
+        console.log(this.get('container_info').get('action'));
         this.containerHandler[this.get('container_info').get('action')].call(this);
         if(this.get('container_info').get('action') == 'table') { };
       }
-  
+
     },
 
     toJSON : function() {
@@ -66,9 +71,10 @@ define(
       return json;
     },
 
- 
+
     containerHandler: {
       'show' : function() {
+        console.log(this);
         var self = this;
         self.get('container_info').set('uielements', new WidgetCollection());
 
@@ -94,16 +100,14 @@ define(
         });
       },
       'create' : function() {
-        console.log(this);
         var self = this;
-        var container_info = self.get('container_info');
-        var WidgetCollection = require('../collections/WidgetCollection');
-
-        container_info.set('uielements', new WidgetCollection());
-        self.set('container_info', container_info);
         self.get('container_info').set('uielements', new WidgetCollection());
 
+        console.log(self.get('container_info').get('entity'));
+
         _(self.get('container_info').get('entity').get('fields').models).each(function(model, ind){
+
+          console.log(model);
 
           var coordinates = iui.unite({x: 1,
                                        y: 1 + (ind * 2)},
@@ -272,7 +276,7 @@ define(
         var widget = new WidgetModel(widgetProps);
         self.get('container_info').get('uielements').push(widget);
       },
-      'table' : function() {
+      'table-gal' : function() {
         var self = this;
         var isNew = false;
 

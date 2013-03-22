@@ -26,5 +26,8 @@ require.config({
 });
 
 require(["EditorView", '../../libs/keymaster/keymaster'], function(EditorView) {
+  window.onerror = function(error) {
+    alert('Segfault: '+ error);
+  };
   var editorView = new EditorView();
 });

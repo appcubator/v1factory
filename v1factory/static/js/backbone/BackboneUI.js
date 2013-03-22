@@ -138,6 +138,8 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     setupModalWindow: function() {
+      var self = this;
+
       var div = document.createElement('div');
       div.style.position = 'fixed';
       div.className = 'modal';
@@ -147,7 +149,22 @@ define(['backbone', 'jquery-ui'], function() {
       div.style.left = '50%';
       div.style.marginLeft= '-250px';
       div.style.marginTop = '-250px';
+      var span = document.createElement('span');
+      span.className = 'modal-cross';
+      span.style.position = 'absolute';
+      span.style.right = '15px';
+      span.style.top = '15px';
+      span.innerText = '×';
+      div.appendChild(span);
       document.body.appendChild(div);
+
+      $(span).on('click', function(){
+        self.$el.remove();
+        $(self.backgroundDiv).remove();
+        $(self.modalWindow).remove();
+        self.stopListening();
+      });
+
       return div;
     },
 
