@@ -47,7 +47,7 @@ define([
       var styleTag = document.createElement('style');
       styleTag.id = this.options.id;
 
-      var styleContent = '.page ' + (this.options.tag||'') + ' {';
+      var styleContent = '.page ' + (this.options.tag||'') + ', ' + '.class-picker ' + (this.options.tag||'') + ' {';
       styleContent += this.options.css.replace(/<%=content%>/g, this.model.get('value'));
       styleContent += '}';
 

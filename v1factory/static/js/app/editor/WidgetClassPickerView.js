@@ -43,6 +43,7 @@ define([
     render: function() {
       var self = this;
       this.list = document.createElement('ul');
+      this.list.className = "class-picker";
       var type = this.model.get('type');
 
       _(uieState[type]).each(function(uie){

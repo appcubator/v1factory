@@ -9,8 +9,10 @@ Templates.tempMeta = [
 
 
 Templates.tempNode = [
-  '<<%= element.tagName %> <% if(element.tagType) { %>type ="<%= element.tagType %>" <% }; %>',
+  '<<%= element.tagName %>',
   'class = "<%= element.class_name %>"',
+  '<% _(element.cons_attribs).each(function(val, key) { %>',
+  '<%=key%> = "<%=val%>"<% }); %>',
   '<% _(element.content_attribs).each(function(val, key) { %>',
   '<%=key%> = "<%=val%>"<% }); %>>',
   '<% if(!element.isSingle) { %>',
