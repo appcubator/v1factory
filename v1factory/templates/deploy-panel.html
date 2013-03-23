@@ -21,6 +21,17 @@ body {
     <h1>Deployments</h1>
   </div>
   <ul class="hoff3">
+    {% for d in deployments %}
+    <li class="container" id="container-X">
+      <div class="span10">
+        <input type="text" placeholder="subdomain" value="{{ d.subdomain }}" />
+        <p>Last Modified: {{ d.updated_on }}</p>
+        <p>Created: {{ d.created_on }}</p>
+      </div>
+      <textarea id="appstate-X" placeholder="appstate" class="span32 hi15 offset2">{{ d.app_state_json }}</textarea>
+      <input type="submit" class=" deploy btn btn-primary" id="deploy-x"value="Deploy">
+    </li>
+    {% endfor %}
     <li class="container" id="container-X">
       <div class="span10">
         <input type="text" placeholder="subdomain">

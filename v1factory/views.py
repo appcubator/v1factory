@@ -4,6 +4,7 @@ from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile
+import requests
 
 def add_statics_to_context(context, app):
   context['statics'] = simplejson.dumps(list(StaticFile.objects.filter(app=app).values()))
@@ -281,13 +282,13 @@ def new_uielement(request):
     return HttpResponse("Only GET and POST allowed", status=405)
 
 @require_GET
-@require_login
+@login_required
 def designer_interface(request):
   # want to show all the designers themes
   pass
 
 @require_POST
-@require_login
+@login_required
 def clone_theme(request, theme_id):
   # want to start a new theme from an existing theme
   theme = get_object_or_404(UITheme, pk=theme_id)
@@ -295,9 +296,22 @@ def clone_theme(request, theme_id):
   return HttpResponse(simplejson.dumps(new_theme.to_dict), mimetype="application/json")
 
 @require_POST
-@require_login
+@login_required
 def delete_theme(request, theme_id):
   # want to get a specific theme
   theme = get_object_or_404(UITheme, pk=theme_id)
   theme.delete()
   return HttpResponse("ok")
+
+@require_GET
+@login_required
+def deploy_panel(request):
+  r = requests.post('http://v1factory.com/deploy_list/')
+  if r.status_code >= 500:
+    return HttpResponse("v1factory.com returned status of "+r.status_code)
+  if r.status_code == 200:
+    deployments = simplejson.loads(r.body)
+  else:
+    deployments = []
+  return render(request, 'deploy-panel.html')
+

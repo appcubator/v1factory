@@ -35,7 +35,7 @@ urlpatterns += patterns('v1factory.views',
     # getting/setting uie state
     url(r'^app/(\d+)/uiestate/$', 'uie_state'),
     # deploy this ship!
-    url(r'^app/(\d+)/deploy/$', 'app_deploy'),
+    #url(r'^app/(\d+)/deploy/$', 'app_deploy'),
     # the rest
     url(r'^app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^app/(\d+)/design/$', 'app_design'),
@@ -51,6 +51,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^uielement/new/$', 'new_uielement'),
 
     url(r'^hipsterdesignersonly/$', 'designer_page'),
+    url(r'^deploythisship/$', 'deploy_panel'), # list the deployments and their statuses
 )
 
 if settings.PRODUCTION:

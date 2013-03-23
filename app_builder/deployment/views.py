@@ -19,7 +19,7 @@ from app_builder.deployment.models import Deployment
 #3. destroy - deactivate the subdomain.
 
 @require_GET
-@require_login
+@login_required
 def list_deployments(request):
   d = Deployment.objects.all()
   if request.is_ajax():
@@ -35,7 +35,7 @@ def available_check(request):
     return HttpResponse("1")
 
 @require_POST
-@require_login
+@login_required
 def init_subdomain(request):
   s = request.POST['subdomain']
   if Deployment.objects.filter(subdomain=request.POST['subdomain']).exists():
@@ -52,7 +52,7 @@ def init_subdomain(request):
     return HttpResponse("Error creating initial directories. Error msg: " + e.msg)
 
 @require_POST
-@require_login
+@login_required
 def deploy_code(request):
   s = request.POST['subdomain']
   app_json = request.POST['app_state']
@@ -61,7 +61,7 @@ def deploy_code(request):
   d.deploy()
 
 @require_POST
-@require_login
+@login_required
 def delete_deployment(request):
   s = request.POST['subdomain']
   d = get_object_or_404(Deployment, subdomain=s)
