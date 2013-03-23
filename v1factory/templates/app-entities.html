@@ -77,7 +77,7 @@
               <div class="hi3 hdr">Email</div>
               <div class="hi3">
                   <select class="attribs" id="Name" disabled>
-                    <option value="text" selected="">Text</option>
+                    <option value="email" selected="">Email</option>
                   </select>
               </div>
               <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
@@ -120,127 +120,8 @@
 <script>
   var appState = {{ app.state_json|safe }};
   var appId = {{ app_id|safe }};
+</script>
 
-  var entitiesLibrary = [
-                  {
-                    name : "Post",
-                    fields : [
-                      {
-                        name    : "Content",
-                        type    : "text",
-                        required: true
-                      },
-                      {
-                        name    : "Date",
-                        type    : "text",
-                        required: true
-                      },
-                      {
-                        name    : "Title",
-                        type    : "text",
-                        required: true
-                      }
-                    ]
-                  },
-                  {
-                    name : "Glasses",
-                    fields : [
-                      {
-                        name    : "Content",
-                        type    : "text",
-                        required: true
-                      },
-                      {
-                        name    : "Date",
-                        type    : "text",
-                        required: true
-                      },
-                      {
-                        name    : "Title",
-                        type    : "text",
-                        required: true
-                      }
-                    ]
-                  }
-               ];
-               entitiesLibrary = [];
-
-</script>
-<script type="text/html" id="template-entity">
-  <div class="row hoff1">
-    <ul class="span6 hoff1 sub-menu">
-      <li>Upload Excel</li>
-      <li>Delete</li>
-    </ul>
-    <div class="span58">
-      <div class="pane hi12" style="padding:0;">
-        <div class="span10 hi9 offset1 hoff2">
-          <h2><%- name %></h2>
-        </div>
-        <span class="tbl-wrapper hi9 span44 hoff2">
-          <span class="tbl">
-            <div class="column span6">
-              <div class="hi3 hdr">Property</div>
-              <div class="hi3">Type</div>
-              <div class="hi2">Is Required?</div>
-            </div>
-            <ul class="property-list">
-            <% _(attribs).each(function(attrib, ind){ console.log(attrib); %>
-              <div class="column span6">
-                  <div class="hi3 hdr"><%- attrib.get('name') %></div>
-                  <div class="hi3">
-                      <select class="attribs" id="Name" disabled>
-                        <option value="text" <% if(attrib.type=="text") %> selected <% %>>Text</option>
-                        <option value="number" <% if(attrib.type=="number") %> selected <% %>>Number</option>
-                        <option value="email" <% if(attrib.type=="email") %> selected <% %>>Email</option>
-                        <% _.each( other_models, function( model ){ %>
-                          <% if(model.get('name')!= name) %>
-                          <option value="{<%- model.get('name') %>}">List of <%- model.get('name') %>s</option>
-                          <% %>
-                        <% }); %>
-                      </select>
-                  </div>
-                  <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
-                  <div class="hi2 prop-cross"><div class="remove">Remove</div></div>     
-              </div>
-            <% }); %>
-            </ul><a class="column span8" style="float:none;">
-              <form class="add-property-form" style="display:none">
-                <div class="hi2 hdr">
-                  <input type="text" class="property-name-input span7" placeholder="Property Name...">
-                </div>
-              </form>
-              <span class="add-property-button"><span class="plus">+</span> Add Property</span>
-            </a>
-          </span>
-        </span>
-      </div>
-    </div>
-  </div>
-</script>
-<script type="text/html" id="template-property">
-<div class="column span6">
-  <div class="hi3 hdr"><%- name %></div>
-  <div class="hi3">
-    <select class="attribs" id="<%- cid %>">
-      <option value="text" selected>Text</option>
-      <option value="number">Number</option>
-      <option value="email">Email</option>
-      <% _.each(other_models, function(model){ %>
-        <% if(model.name != name) %>
-        <option value="{<%- model.name %>}">List of <%- model.name %>s</option>
-        <% %>
-      <% }); %>
-    </select>
-  </div>
-  <div class="hi2">
-    <input class="cb-login" id="linkedin" type="checkbox" value="linkedin">
-  </div>
-  <div class="hi2 prop-cross" id="delete-<%- cid %>">
-    <div class="remove">Remove</div>
-  </div>
-</div>
-</script>
 {% endblock %}
 
 {% block js %}
