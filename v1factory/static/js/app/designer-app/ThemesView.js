@@ -40,6 +40,8 @@ function(Backbone) {
       });
 
       e.preventDefault();
+      $(e.target).hide();
+      $('.create-theme').fadeIn();
     }
   });
 

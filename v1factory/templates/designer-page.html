@@ -23,9 +23,15 @@
 <div class="container">
   <ul>
     {% for theme in themes %}
-    <li class="hi3 hoff1 span36"><a href="/theme/{{ theme.pk }}/">{{ theme.name }}</a></li>
+    <li class="hi5 hoff1 span29 offset1 pane border">
+      <a href="/theme/{{ theme.pk }}/">{{ theme.name }}</a>
+      <form method="POST" action="/theme/{{theme.pk}}/delete/">
+        {% csrf_token %}
+        <input type="submit"  class="btn btn-warning right" value="Delete">
+      </form>
+    </li>
     {% endfor %}
-    <li class="create-theme hi3 hoff1 span36">+ Create a new theme</li>
+    <li class="hi5 hoff1 span29 offset1 pane border create-theme">+ Create a new theme</li>
     <li class="create-container hi3 hoff1 span36" style="display:none;"><form class="create-form"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form></li>
   </ul>
 </div>
