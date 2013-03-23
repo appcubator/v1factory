@@ -57,7 +57,7 @@ function() {
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/delete/',
-          success: function() { window.location.href='/app/'; },
+          complete: function() { window.location.href='/app/'; },
           dataType: "JSON"
         });
       }

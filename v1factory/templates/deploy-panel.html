@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title> v1 Factory | {{ title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- Le styles -->
+<link href="../static/css/reset.css" rel="stylesheet">
+<link href="../static/css/bootstrap.css" rel="stylesheet">
+<style type="text/css">
+body {
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   font-weight: 300;
+}
+</style>
+</head>
+<body>
+  <div class="container hoff3">
+    <h1>Deployments</h1>
+  </div>
+  <ul class="hoff3">
+    <li class="container" id="container-X">
+      <div class="span10">
+        <input type="text" placeholder="subdomain">
+        <p>Last Modified: </p>
+        <p>Created: </p>
+      </div>
+      <textarea id="appstate-X" placeholder="appstate" class="span32 hi15 offset2"></textarea>
+      <input type="submit" class=" deploy btn btn-primary" id="deploy-x"value="Deploy">
+    </li>
+  </ul>
+  <script type="text/javascript">
+    $('.deploy').on('click', function(e) {
+      var appId = String(e.target.id).replace('deploy-','');
+      var appState = $('#appstate-' + appId).html();
+      var appStateJSON ='';
+
+      try {
+        appStateJSON = = jQuery.parseJSON(appState);
+        $('#container-' + appId).removeClass('error');
+        $.ajax({
+          type: "POST",
+          url: '/app/deploy/'+appId+'/',
+          data: JSON.stringify(appState),
+          complete: function(r) { 
+            alert(r.responseText);
+          },
+          dataType: "JSON"
+        });
+      } 
+      catch(err) {
+        alert(err);
+        $('#container-' + appId).addClass('error')
+      }
+    })
+  </script>
+</body>
+</html>
