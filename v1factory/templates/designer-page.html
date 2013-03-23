@@ -14,24 +14,22 @@
     <div class="span64">
       <div class="hi8">
         <div class="hi8">
-          <h2 class="hoff5">Start a New App</h2>
+          <h2 class="hoff5">Designer Interface</h2>
         </div>
       </div>
     </div>
   </div>
 </div>
 <div class="container">
-  <div class="hoff2 span32">
-      <form method="post" action="{% url v1factory.views.app_new %}">
-      {% csrf_token %}
-      <h4 class="span12">Name of the app</h4>
-      <input class="span16 hoff1" name="name" type="text" placeholder="Easy App"><hr>
-      <input type='submit'class="span16 hoff2 btn btn-blue offset6" type="submit" value="Let Racoon guide me!"><br>
-      <input type='submit' class="span16 hoff1 btn hi3 offset6" value="Start Building My App »">
-      </form>
-  </div>
-  <div class="mascot hoff2 span24 hi16 offset4">
-  </div>
+  <ul>
+    {% for el in els %}
+    <li>{{ el }}</li>
+    {% endfor %}
+    <li class="create-theme">+ Create a new theme</li>
+    <li class="create-container" style="display:none;"><form class="create-form"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form></li>
+  </ul>
 </div>
 {% endblock %}
-
+{% block js %}
+<script data-main="{{ STATIC_URL }}js/app/designer-app/designer-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+{% endblock %}
