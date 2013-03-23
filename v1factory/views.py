@@ -277,8 +277,8 @@ def new_uielement(request):
 
 @login_required
 def designer_page(request):
-  els = UIElement.get_library()
-  page_context = { 'title' : 'Gallery', 'elements' : els }
+  themes = UITheme.objects.all()
+  page_context = { 'title' : 'Gallery', 'themes' : themes }
   return render(request, 'designer-page.html', page_context)
 
 @require_POST
@@ -288,7 +288,7 @@ def theme_new(request):
     name = request.POST['name']
     theme = UITheme(name=name, designer=request.user)
     theme.save()
-    return HttpResponse(simplejson.dumps(theme.to_dict), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(theme.to_dict()), mimetype="application/json")
 
 
 def single_theme(f):

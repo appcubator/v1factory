@@ -1,5 +1,6 @@
 define([
-  'backbone'
+  'backbone',
+  'iui'
 ],
 function(Backbone) {
 
@@ -17,13 +18,10 @@ function(Backbone) {
                        'createFormSubmitted');
 
       this.render();
-
     },
 
     render: function() {
-      // $('#item-gallery').css('top', -180);
-      // this.mY = 0;
-      $('body').mousemove(this.mousemoveHandler);
+
     },
 
     createTheme: function() {
@@ -31,15 +29,17 @@ function(Backbone) {
       $('.create-container').fadeIn();
     },
 
-    createFormSubmitted: function() {
+    createFormSubmitted: function(e) {
       var name = $('.theme-name').val();
       $.ajax({
         type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
-        success: function() {},
+        url: '/theme/new/',
+        data: { name : name },
+        success: function(data) { console.log(data); },
         dataType: "JSON"
       });
+
+      e.preventDefault();
     }
   });
 
