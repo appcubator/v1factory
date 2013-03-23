@@ -109,12 +109,14 @@ def app_save_uie_state(request, app):
   app.save()
   return (200, 'ok')
 
+"""
 @login_required
 @require_POST
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id)
   m = app.deploy() # returns a dir if production = false
   return HttpResponse(m)
+"""
 
 def app_urls(request, app_id):
   app_id = long(app_id)
