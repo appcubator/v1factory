@@ -142,12 +142,6 @@ def app_gallery(request, app_id):
   add_statics_to_context(page_context, app)
   return render(request, 'app-gallery.html', page_context)
 
-@login_required
-def designer_page(request):
-  els = UIElement.get_library()
-  page_context = { 'title' : 'Gallery', 'elements' : els }
-  return render(request, 'designer-page.html', page_context)
-
 def app_pages(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id)
@@ -281,25 +275,62 @@ def new_uielement(request):
   else:
     return HttpResponse("Only GET and POST allowed", status=405)
 
-@require_GET
 @login_required
-def designer_interface(request):
-  # want to show all the designers themes
+def designer_page(request):
+  els = UIElement.get_library()
+  page_context = { 'title' : 'Gallery', 'elements' : els }
+  return render(request, 'designer-page.html', page_context)
+
+@require_POST
+@login_required
+def theme_new(request):
+  if request.method=="POST":
+    name = request.POST['name']
+    theme = UITheme(name=name, designer=request.user)
+    theme.save()
+    return HttpResponse(simplejson.dumps(theme.to_dict), mimetype="application/json")
+
+
+def single_theme(f):
+  def ret_f(request, theme_id, *args, **kwargs):
+    # permissions plz...
+    theme = get_object_or_404(UITheme, pk=theme_id)
+    return f(request, theme, *args, **kwargs)
+  return ret_f
+
+@login_required
+@single_theme
+def theme_show(request, theme):
+  # show a theme editor page
   pass
 
 @require_POST
 @login_required
-def clone_theme(request, theme_id):
+@single_theme
+def theme_edit(request, theme):
+  if 'name' in request.POST:
+    theme.name = request.POST['name']
+
+  if 'uie_state' in request.POST:
+    uie_json = request.POST['name']
+    theme.uie_state = simplejson.loads(uie_json)
+
+  theme.save()
+  return HttpResponse("ok")
+
+@require_POST
+@login_required
+@single_theme
+def theme_clone(request, theme):
   # want to start a new theme from an existing theme
-  theme = get_object_or_404(UITheme, pk=theme_id)
   new_theme = theme.clone(user=request.user)
   return HttpResponse(simplejson.dumps(new_theme.to_dict), mimetype="application/json")
 
 @require_POST
 @login_required
-def delete_theme(request, theme_id):
+@single_theme
+def theme_delete(request, theme):
   # want to get a specific theme
-  theme = get_object_or_404(UITheme, pk=theme_id)
   theme.delete()
   return HttpResponse("ok")
 
@@ -307,6 +338,7 @@ def delete_theme(request, theme_id):
 @login_required
 def deploy_panel(request):
   r = requests.post('http://v1factory.com/deploy_list/')
+  import pdb; pdb.set_trace()
   if r.status_code >= 500:
     return HttpResponse("v1factory.com returned status of "+r.status_code)
   if r.status_code == 200:

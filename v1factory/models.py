@@ -178,7 +178,7 @@ class StaticFile(models.Model):
 class UITheme(models.Model):
   name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
-  parent_theme = models.ForeignKey('self', blank=True, null=True)
+  parent_theme = models.ForeignKey('self', blank=True, null=True, default=None)
 
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
