@@ -178,7 +178,7 @@ class StaticFile(models.Model):
 class UITheme(models.Model):
   name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
-  parent_theme = models.ForeignKey('self', blank=True, null=True)
+  parent_theme = models.ForeignKey('self', blank=True, null=True, default=None)
 
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
@@ -195,8 +195,9 @@ class UITheme(models.Model):
   uie_state = property(get_state, set_state)
 
   def to_dict(self):
-    return { 'name' : self.name,
-             'designer' : User.objects.values().get(pk=designer_id),
+    return { 'id' : self.id,
+             'name' : self.name,
+             #'designer' : User.objects.values().get(pk=self.designer_id),
              'uie_state' : self.uie_state }
 
   def clone(self, user=None):

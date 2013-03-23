@@ -17,8 +17,6 @@ define(
     initialize: function(bone) {
       var self = this;
 
-      console.log(bone);
-
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
 
