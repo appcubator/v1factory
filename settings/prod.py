@@ -3,7 +3,7 @@
 
 from settings.common import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PRODUCTION = True
 

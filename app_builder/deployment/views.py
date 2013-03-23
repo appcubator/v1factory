@@ -5,54 +5,69 @@
 3. create basic deployer interface
 
 """
-
-
-
-
-
-
+import re
+import datetime
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET, require_POST
+from django.utils import simplejson
+from django.shortcuts import redirect,render, get_object_or_404
 from app_builder.deployment.models import Deployment
+from django.views.decorators.csrf import csrf_exempt
 
 # user facing actions
 #1. initialize(subdomain) - setup a blank app at the requested subdomain, get a deploy token back.
 #2. deploy(src tree, dest subdomain) - push new code to the requested subdomain
 #3. destroy - deactivate the subdomain.
 
+class ProJSON(simplejson.JSONEncoder):
+  """It's about time we handled datetime"""
+  def default(self, obj):
+    if isinstance(obj, datetime.datetime):
+      return obj.isoformat()
+    else:
+      return super(DateTimeJSONEncoder, self).default(obj)
+
 @require_GET
-@require_login
+#@login_required
 def list_deployments(request):
   d = Deployment.objects.all()
-  if request.is_ajax():
-    return HttpResponse(simplejson.dumps(d.values()), mimetype="application/json")
-  else:
-    # render an html page.
+  return HttpResponse(simplejson.dumps(list(d.values()), cls=ProJSON), mimetype="application/json")
+
+def is_valid_subdomain(subdomain):
+  return len(subdomain) >= 2 and len(subdomain) <= 20 and re.match(r'[a-z0-9][a-z0-9\-]*[a-z0-9]$', subdomain)
 
 @require_GET
 def available_check(request):
-  if Deployment.objects.filter(subdomain=request.GET['subdomain']).exists():
+  subdomain = request.GET['subdomain']
+  assert(is_valid_subdomain(subdomain))
+  if Deployment.objects.filter(subdomain=subdomain).exists():
     return HttpResponse("0")
   else:
     return HttpResponse("1")
 
 @require_POST
-@require_login
+@csrf_exempt
+#@login_required
 def init_subdomain(request):
   s = request.POST['subdomain']
-  if Deployment.objects.filter(subdomain=request.POST['subdomain']).exists():
+  assert(is_valid_subdomain(s))
+  if Deployment.objects.filter(subdomain=s).exists():
     return HttpResponse("This subdomain is already taken.", status=409)
-  d = Deployment.create(s, init=True)
+  d = Deployment.create(s)
   try:
     d.save()
   except Exception, e:
-    return HttpResponse("Error saving the deployment object. Error msg: " + e.msg)
+    return HttpResponse("Error saving the deployment object. Error msg: " + str(e))
   try:
     d.initialize()
   except Exception, e:
     d.delete()
-    return HttpResponse("Error creating initial directories. Error msg: " + e.msg)
+    return HttpResponse("Error creating initial directories. Error msg: " + str(e))
+  return HttpResponse("ok")
 
 @require_POST
-@require_login
+#@login_required
 def deploy_code(request):
   s = request.POST['subdomain']
   app_json = request.POST['app_state']
@@ -61,7 +76,7 @@ def deploy_code(request):
   d.deploy()
 
 @require_POST
-@require_login
+#@login_required
 def delete_deployment(request):
   s = request.POST['subdomain']
   d = get_object_or_404(Deployment, subdomain=s)

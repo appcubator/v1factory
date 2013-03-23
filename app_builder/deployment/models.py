@@ -28,33 +28,32 @@ def copytree(src, dst, symlinks=False, ignore=None):
 
 class Deployment(models.Model):
   subdomain = models.CharField(max_length=255, unique=True)
-  app_dir = models.CharField(max_length=255, unique=True)
-  config_file_path = models.CharField(max_length=255, unique=True)
-  app_state_json = models.TextField()
+  app_state_json = models.TextField(blank=True)
+  app_dir = models.TextField()
+  config_file_path = models.TextField()
 
   #Audit field
   created_on = models.DateTimeField(auto_now_add = True)
   updated_on = models.DateTimeField(auto_now = True)
 
   @classmethod
-  def create(cls, subdomain, app_state=''):
+  def create(cls, subdomain, app_state=None):
     self = cls(subdomain=subdomain)
-    self.app_dir = "/var/www/apps/anon/" + subdomain
-    self.app_state_json = simplejson.dumps(app_state)
+    self.app_dir = "/var/www/apps/" + subdomain
+    self.config_file_path = "/var/www/configs/" + subdomain
+    if app_state is not None: 
+      self.app_state_json = simplejson.dumps(app_state)
+    return self
 
   def apache_config(self):
-    return fillout_config(APACHE_STRING, self.subdomain, self.app_dir)
+    return fillout_config(self.subdomain, self.app_dir)
 
   def initialize(self):
     """Setup apache config and write a blank app to the app path"""
     try:
-      os.makedirs(os.path.dirname(self.config_file_path))
-    except OSError:
-      raise Exception("Error - could not initialize config.")
-    try:
       os.makedirs(self.app_dir)
     except OSError:
-      raise Exception("Error - could not make app dir.")
+      pass
 
     a_conf = open(self.config_file_path, "w")
     a_conf.write(self.apache_config())
@@ -83,42 +82,10 @@ def require_valid_subdomain(f):
   def ret_fun(subdomain, *args, **kwargs):
     if is_valid_subdomain(subdomain):
       return f(subdomain, *args, **kwargs)
-    else
+    else:
       raise Exception()
   return ret_fun
 
-
-@require_valid_subdomain
-def initialize(subdomain):
-  """setup apache config and write a blank app to the app path"""
-  # TODO if the config already exists, raise an exception
-  try:
-    os.makedirs(os.path.dirname(self.config_file_path))
-  except OSError:
-    print "Config directory already exists."
-  a_conf = open(self.config_file_path, "w")
-  a_conf.write(self.apache_config())
-  a_conf.close()
-
-  os.makedirs(self.app_dir)
-  # should probably restart apache2
-
-
-
-
-
-
-  @property
-  def subdomain(self):
-    return self.owner.username + "-" + self.name
-
-  @property
-  def app_dir(self):
-    return "/var/www/apps/" + self.owner.username + "/"+ self.name
-
-  @property
-  def config_file_path(self):
-    return "/var/www/configs/" + self.owner.username + "/" + self.name
 
   #def randomly_name(self):
   #  self.name = "".join( [ random.choice(string.ascii_lowercase) for i in xrange(6) ] )
@@ -142,6 +109,7 @@ def initialize(subdomain):
     # should probably restart apache2
 
   def do_initial_config(self):
+    pass
 
   def write_to_fs(self):
     from app_builder.analyzer import AnalyzedApp
@@ -201,7 +169,7 @@ def initialize(subdomain):
 
     return
 
-  def delete(*args, delete_files=True, **kwargs):
+  def delete(delete_files=True, *args, **kwargs):
     if delete_files:
       # TODO actually delete all the files.
       pass
@@ -242,5 +210,5 @@ APACHE_CONFIG_TMPL = """
 	CustomLog {}/access.log combined
 </VirtualHost>
 """
-def fillout_config(self, subdomain, app_dir):
+def fillout_config(subdomain, app_dir):
   return APACHE_CONFIG_TMPL.format(subdomain, app_dir, subdomain, app_dir, subdomain, *(5*[app_dir]))
