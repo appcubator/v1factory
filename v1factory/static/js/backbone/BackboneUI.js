@@ -94,7 +94,7 @@ define(['backbone', 'jquery-ui'], function() {
   });
 
   BackboneUI.ModalView = Backbone.View.extend({
-
+    width: 500,
     events : {
       'click .modal-bg' : 'closeModal',
       'keydown'         : 'handleKey'
@@ -109,10 +109,7 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     _ensureElement: function(options) {
-      console.log(this);
-
       BackboneUI.ModalView.__super__._ensureElement.call(this, options);
-      this.modalWindow.appendChild(this.el);
     },
 
     setupModal: function() {
@@ -144,12 +141,13 @@ define(['backbone', 'jquery-ui'], function() {
       var div = document.createElement('div');
       div.style.position = 'fixed';
       div.className = 'modal';
-      div.style.width = '500px';
+      div.style.width = this.width + 'px';
       div.style.minHeight = '300px';
       div.style.top = '50%';
       div.style.left = '50%';
-      div.style.marginLeft= '-250px';
-      div.style.marginTop = '-250px';
+      div.style.marginLeft= '-'+ (this.width/2) +'px';
+      div.style.marginTop = '-300px';
+
       var span = document.createElement('span');
       span.className = 'modal-cross';
       span.style.position = 'absolute';
@@ -157,6 +155,11 @@ define(['backbone', 'jquery-ui'], function() {
       span.style.top = '15px';
       span.innerText = '×';
       div.appendChild(span);
+
+      var content = document.createElement('div');
+      content.style.width = '100%';
+      div.appendChild(content);
+
       document.body.appendChild(div);
 
       $(span).on('click', function(){
@@ -166,11 +169,13 @@ define(['backbone', 'jquery-ui'], function() {
         self.stopListening();
       });
 
+      this.el = content;
       return div;
     },
 
     closeModal: function() {
       this.remove();
+      $(this.modalWindow).remove();
     },
 
     handleKey: function(e) {

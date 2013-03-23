@@ -32,13 +32,7 @@
 </div>
 
 <div class="container" id="pages-view">
-  <div class="span11 offsetr1">
-      <ul class="left-menu">
-        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">Page1</a></li>
-        <li><a href="{% url v1factory.views.app_new %}">+ Create New</a></li>
-      </ul>
-  </div>
-  <div class="span48">
+  <div class="span64">
     <h3>Navigation Bars</h3>
     <div class="row" id="list-navbars">
       <div class="page-view span64 hoff2 pane">
@@ -83,79 +77,28 @@ var appId = {{ app_id|safe }};
 </script>
 
 <script type="text/html" id="temp-page">
-  <div class="hi4">
-    <h2 class="offset1 span20 hoff2"><%= page_name %></h2>
-    <div class="offset1 span8 hi3 hoff1 offsetr1 right">
-      <a class="edit span3 hi3" href="editor/<%= ind %>"></a>
-      <a class="delete span3 hi3 offset1"></a>
+  <div class="span20">
+    <h3 class="offset1  hoff2"><%= page_name %></h3>
+    <div class="offset1 span8 hoff1 offsetr1 row">
+      <a class="edit span16 btn hoff1" href="editor/<%= ind %>">Edit Page</a>
+      <a class="delete span16 btn hoff1">Delete Page</a>
     </div>
+  </div>
+  <div class="span20">
+   <div class="btn edit-url offset1 span16 hoff1">Edit URL</div>
   </div>
 </script>
 
-<script type="text/html" id="template-url">
-      <h3 class="hi3 span8 hoff1">URL</h3>
-      <div class="hi3 hoff1">
-        <div class="span24 url">
-        <% var endsWithEnt = 1;
-           _.each(urls, function(url, i) { %>
-          <span class="slash">/</span>
-          <% if (/\{\{([^\}]+)}}/g.exec(url)) { var urlEnt = /\{\{([^\}]+)}}/g.exec(url); endsWithEnt = 1 %>
-          <select class="id url-part" id="inp-<%= i %>">
-          <% _.each(entities, function(entity, i) { %>
-            <option <% if(entity.name == urlEnt[1]) { %> selected <% } %> > <%= entity.name %> ID</option>
-          <% }); %>
-            <option>Add ID</option>
-          </select>
-          <% } else { endsWithEnt = 0; %>
-          <input type="text" class="url-part" placeholder="url_string" id="inp-<%= i %>" value='<%= url %>'>
-          <% } %>
-        <% }); %>
-
-        <% if(!endsWithEnt) {%>
-          <span class="slash">/</span>
-          <select class="id url-part last" id="inp-new" %>>
-            <option>Add ID</option>
-            <option value="User"> User ID</option>
-            <% _.each(entities, function(entity, i) { %>
-              <option value="<%= entity.name %>"> <%= entity.name %> ID </option>
-            <% }); %>
-          </select>
-        <% } else {%>
-          <span class="slash">/</span>
-          <input type="text" class="url-part last" id="inp-new" placeholder="url_string" value=''>
-        <% } %>
-        </div>
-      </div>
-</script>
-
-
 <script type="text/html" id="temp-menu">
-<span class="span24">
-<h3 class="hi3 span12 hoff1 offset1">Access Level</h3>
-<div>
-  <select class="span8 hoff1" id="access_level">
+<span class="span24 hi6">
+<h3 class="hi2 span18 hoff1 offset1">Access Level</h3>
+<div class="offset1">
+  <select class="span16" id="access_level">
     <option <% if(access_level == 'all') { %> selected <% } %> value="all">Everyone</option>
     <option <% if(access_level == 'users') { %> selected <% } %> value="users">Only Users</option>
   </select>
 </div>
 </div>
-</script>
-
-
-<script type="text/html" id="template-entity">
-<span class="slash">/</span>
-<select class="id url-part last" id="inp-new" %>>
-  <option>Add ID</option>
-  <option value="User"> User ID</option>
-  <% _.each(entities, function(entity, i) { %>
-  <option value="<%= entity.name %>"> <%= entity.name %> ID</option>
-  <% }); %>
-</select>
-</script>
-
-<script type="text/html" id="template-text">
-<span class="slash">/</span>
-<input type="text" class="url-part last" id="inp-new" placeholder="url_string" value=''>
 </script>
 {% endblock %}
 

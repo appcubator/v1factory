@@ -3,11 +3,12 @@ define(['./UrlView', 'iui', 'backbone'], function(UrlView) {
   var PageView = Backbone.View.extend({
     el: null,
     tagName : 'div',
-    className: 'page-view span64 hoff2 pane',
+    className: 'page-view span20 hoff2 offsetr1 pane',
     expanded: false,
     events: {
       'click .delete' : 'deletePage',
-      'change #access_level' : 'accessLevelChanged'
+      'change #access_level' : 'accessLevelChanged',
+      'click .edit-url' : 'renderUrl'
     },
 
     initialize: function(pageModel, ind, urlModel) {
@@ -20,9 +21,8 @@ define(['./UrlView', 'iui', 'backbone'], function(UrlView) {
       this.model = pageModel;
       this.ind = ind;
 
-      this.url = urlModel;
+      this.urlModel = urlModel;
       this.render();
-      this.renderUrl();
       this.renderMenu();
       //var designEditor = new DesignEditorView(this.model, false);
       //this.el.appendChild(designEditor.el);
@@ -40,8 +40,7 @@ define(['./UrlView', 'iui', 'backbone'], function(UrlView) {
     },
 
     renderUrl: function() {
-      var newView =  new UrlView(this.url);
-      this.$el.append(newView.el);
+      var newView =  new UrlView(this.urlModel);
     },
 
     renderMenu: function() {
@@ -68,6 +67,6 @@ define(['./UrlView', 'iui', 'backbone'], function(UrlView) {
       this.remove();
     }
   });
-  
+
   return PageView;
 });
