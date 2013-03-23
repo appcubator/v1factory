@@ -11,6 +11,8 @@ def add_statics_to_context(context, app):
 
 @login_required
 def app_list(request):
+  if request.user.username in ['ican', 'icanberk']:
+    return redirect(designer_page)
   if request.user.apps.count() == 0:
     return redirect(app_new)
   else:
@@ -138,6 +140,12 @@ def app_gallery(request, app_id):
   page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els, 'app_id': app_id  }
   add_statics_to_context(page_context, app)
   return render(request, 'app-gallery.html', page_context)
+
+@login_required
+def designer_page(request):
+  els = UIElement.get_library()
+  page_context = { 'title' : 'Gallery', 'elements' : els }
+  return render(request, 'designer-page.html', page_context)
 
 def app_pages(request, app_id):
   app_id = long(app_id)

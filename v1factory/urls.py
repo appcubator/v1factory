@@ -50,6 +50,7 @@ urlpatterns += patterns('v1factory.views',
 
     url(r'^uielement/new/$', 'new_uielement'),
 
+    url(r'^hipsterdesignersonly/$', 'designer_page'),
 )
 
 if settings.PRODUCTION:
