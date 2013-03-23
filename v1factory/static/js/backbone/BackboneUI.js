@@ -96,7 +96,8 @@ define(['backbone', 'jquery-ui'], function() {
   BackboneUI.ModalView = Backbone.View.extend({
 
     events : {
-      'click .modal-bg' : 'closeModal'
+      'click .modal-bg' : 'closeModal',
+      'keydown'         : 'handleKey'
     },
 
     _configure: function(options) {
@@ -104,7 +105,7 @@ define(['backbone', 'jquery-ui'], function() {
       this.backgroundDiv = this.setupModal();
       this.modalWindow = this.setupModalWindow();
 
-      _.bindAll(this, 'closeModal');
+      _.bindAll(this, 'closeModal', 'handleKey');
     },
 
     _ensureElement: function(options) {
@@ -138,6 +139,8 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     setupModalWindow: function() {
+      var self = this;
+
       var div = document.createElement('div');
       div.style.position = 'fixed';
       div.className = 'modal';
@@ -147,12 +150,35 @@ define(['backbone', 'jquery-ui'], function() {
       div.style.left = '50%';
       div.style.marginLeft= '-250px';
       div.style.marginTop = '-250px';
+      var span = document.createElement('span');
+      span.className = 'modal-cross';
+      span.style.position = 'absolute';
+      span.style.right = '15px';
+      span.style.top = '15px';
+      span.innerText = '×';
+      div.appendChild(span);
       document.body.appendChild(div);
+
+      $(span).on('click', function(){
+        self.$el.remove();
+        $(self.backgroundDiv).remove();
+        $(self.modalWindow).remove();
+        self.stopListening();
+      });
+
       return div;
     },
 
     closeModal: function() {
       this.remove();
+    },
+
+    handleKey: function(e) {
+      console.log(e.keyCode);
+      if(e.keyCode == 27) { //escape
+        this.closeModal();
+        e.stopPropagation();
+      }
     }
 
   });

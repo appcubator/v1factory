@@ -1,7 +1,9 @@
 define([
-  '../collections/ElementCollection',
+  'app/collections/ElementCollection',
+  'app/models/UserEntityModel',
   'backbone'
-],function(ElementCollection, Backbone) {
+],
+function(ElementCollection, UserEntityModel, Backbone) {
 
   var EditorGalleryView = Backbone.View.extend({
     el           : document.getElementById('top-panel-bb'),
@@ -64,7 +66,7 @@ define([
       var self = this;
 
       if(appState.users.local) {
-        var tempLogin = '<li id="entity-<%= cid %>" class="login entity">'+
+        var tempLogin = '<li id="entity-user" class="login entity">'+
                         '<span class="name">User Login Form</span></li>';
 
         //$(this.userList).append(tempLogin);
@@ -72,7 +74,7 @@ define([
       }
 
       if(appState.users.local) {
-        var tempLogin = '<li id="entity-<%= cid %>" class="signup entity">'+
+        var tempLogin = '<li id="entity-user" class="signup entity">'+
                         '<span class="name">User Signup Form</span></li>';
 
         //$(this.userList).append(tempLogin);
@@ -80,14 +82,14 @@ define([
       }
 
       if(appState.users.facebook) {
-        var tempFb = '<li id="entity-<%= cid %>" class="facebook entity">'+
+        var tempFb = '<li id="entity-user" class="facebook entity">'+
                      '<span class="name">Facebook Login Button</span></li>';
 
         //$(this.userList).append(tempFb);
         $(this.allList).append(tempFb);
       }
       if(appState.users.twitter) {
-        var tempTw = '<li id="entity-<%= cid %>" class="twitter entity">'+
+        var tempTw = '<li id="entity-user" class="twitter entity">'+
                      '<span class="name"> Twitter Button</span></li>';
 
         //$(this.userList).append(tempTw);
@@ -95,7 +97,7 @@ define([
       }
 
       if(appState.users.linkedin) {
-        var tempLi = '<li id="entity-<%= cid %>" class="linkedin entity">'+
+        var tempLi = '<li id="entity-user" class="linkedin entity">'+
                      '<span class="name">LinkedIn Login Button</span></li>';
 
         //$(this.userList).append(tempLi);
@@ -113,19 +115,18 @@ define([
         stop: self.dropped
       });
 
-      var tempLi = '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">'+
+      var tempLi = '<li id="entity-user-<%= attr %>" class="large single-data">'+
                      '<span class="name">Show <%= name %> <%= attr %></span></li>';
 
 
 
       var model = this.entitiesCollection.push(appState.users, {silent : true});
 
-      _(appState.users.fields.models).each(function(model) {
+      _(appState.users.fields).each(function(field) {
         var context = {
           name : "User",
-          cid  : model.cid,
-          attr : model.get('name'),
-          type : model.get('type')
+          attr : field.name,
+          type : field.type
         };
 
         //$(self.userList).append(_.template(tempLi, context));
@@ -307,7 +308,18 @@ define([
 
       if(/(entity)/.exec(className)) {
         var cid = String(id).replace('entity-','');
-        var entity = this.entitiesCollection.get(cid);
+
+        var entity;
+
+        if(cid === 'user'){
+          entity = new UserEntityModel(appState.users);
+        }
+        else {
+          console.log(this.entitiesCollection);
+          entity = this.entitiesCollection.get(cid);
+          console.log(entity);
+        }
+
         var action = className.split(' ')[0];
 
         widget.container_info = {
@@ -319,10 +331,18 @@ define([
       }
       else if (/(single-data)/.exec(className)) {
         var id = String(id).replace('entity-','');
-        var entity = this.entitiesCollection.get(id.split('-')[0]);
+        var cid = id.split('-')[0];
+        var entity, field;
+
+        if(cid === 'user') {
+          entity = new UserEntityModel(appState.users);
+        }
+        else {
+          entity = this.entitiesCollection.get();
+        }
         var field = id.split('-')[1];
 
-        widget = uieState['text'][0];
+        widget = _.extend(widget, uieState['text'][0]);
         widget.content =  '{{'+entity.get('name')+'_'+field+'}}';
         this.widgetsCollection.push(widget);
       }

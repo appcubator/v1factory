@@ -10,7 +10,7 @@ define(['backbone'], function(Backbone) {
         },
         {
           type  : "background-color",
-          value : "#eee"
+          value : "#fff"
         },
         {
           type  : "text-color",

@@ -2,7 +2,7 @@ define(
  ['./ContentModel',
   './LayoutModel',
   'backboneui',
-  '../../dicts/constant-containers',
+  'dicts/constant-containers',
   'backbone'],
   function(ContentModel, LayoutModel, QueryModel, BackboneUI) {
 

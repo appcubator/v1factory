@@ -1,12 +1,6 @@
 define(['backbone'], function() {
 
   var QueryModel = Backbone.Model.extend({
-    defaults: {
-      fieldsToDisplay: [],
-      belongsToUser: false,
-      sortAccordingTo: "Date",
-      numberOfRows: "All"
-    },
 
     initialize: function(bone, entityModel) {
       this.entity = entityModel;
