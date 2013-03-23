@@ -27,9 +27,9 @@ def copytree(src, dst, symlinks=False, ignore=None):
       shutil.copy2(s, d)
 
 class Deployment(models.Model):
-  subdomain = models.CharField(unique=True)
-  app_dir = models.CharField(unique=True)
-  config_file_path = models.Charfield(unique=True)
+  subdomain = models.CharField(max_length=255, unique=True)
+  app_dir = models.CharField(max_length=255, unique=True)
+  config_file_path = models.CharField(max_length=255, unique=True)
   app_state_json = models.TextField()
 
   #Audit field

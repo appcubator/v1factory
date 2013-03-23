@@ -176,7 +176,7 @@ class StaticFile(models.Model):
 
 
 class UITheme(models.Model):
-  name = models.CharField(blank=True)
+  name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
   parent_theme = models.ForeignKey('self', blank=True, null=True)
 
