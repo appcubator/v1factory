@@ -301,8 +301,9 @@ def single_theme(f):
 @login_required
 @single_theme
 def theme_show(request, theme):
-  # show a theme editor page
-  pass
+  #theme = get_object_or_404(UITheme, pk = theme_id)
+  page_context = { 'title' : theme.name , 'theme' : theme }
+  return render(request, 'designer-theme-show.html', page_context)
 
 @require_POST
 @login_required
