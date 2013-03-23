@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
-from v1factory.models import App, UIElement, StaticFile
+from v1factory.models import App, UIElement, StaticFile, UITheme
 import requests
 
 def add_statics_to_context(context, app):

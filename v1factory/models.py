@@ -195,7 +195,8 @@ class UITheme(models.Model):
   uie_state = property(get_state, set_state)
 
   def to_dict(self):
-    return { 'name' : self.name,
+    return { 'id' : self.id,
+             'name' : self.name,
              'designer' : User.objects.values().get(pk=designer_id),
              'uie_state' : self.uie_state }
 
