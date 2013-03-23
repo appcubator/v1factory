@@ -271,3 +271,25 @@ def new_uielement(request):
 
   else:
     return HttpResponse("Only GET and POST allowed", status=405)
+
+@require_GET
+@require_login
+def designer_interface(request):
+  # want to show all the designers themes
+  pass
+
+@require_POST
+@require_login
+def clone_theme(request, theme_id):
+  # want to start a new theme from an existing theme
+  theme = get_object_or_404(UITheme, pk=theme_id)
+  new_theme = theme.clone(user=request.user)
+  return HttpResponse(simplejson.dumps(new_theme.to_dict), mimetype="application/json")
+
+@require_POST
+@require_login
+def delete_theme(request, theme_id):
+  # want to get a specific theme
+  theme = get_object_or_404(UITheme, pk=theme_id)
+  theme.delete()
+  return HttpResponse("ok")

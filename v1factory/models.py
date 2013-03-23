@@ -4,17 +4,9 @@ from django.contrib.auth.models import User
 import simplejson
 import re
 from django.core.exceptions import ValidationError
+import os.path
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
-
-def copytree(src, dst, symlinks=False, ignore=None):
-  for item in os.listdir(src):
-    s = os.path.join(src, item)
-    d = os.path.join(dst, item)
-    if os.path.isdir(s):
-      shutil.copytree(s, d, symlinks, ignore)
-    else:
-      shutil.copy2(s, d)
 
 def get_default_uie_state():
   f = open(os.path.join(DEFAULT_STATE_DIR, "uie_state.json"))
@@ -181,3 +173,35 @@ class StaticFile(models.Model):
   url = models.TextField()
   type = models.CharField(max_length=100)
   app = models.ForeignKey(App)
+
+
+class UITheme(models.Model):
+  name = models.CharField(blank=True)
+  designer = models.ForeignKey(User, blank=True, null=True)
+  parent_theme = models.ForeignKey('self', blank=True, null=True)
+
+  _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
+
+  #Audit field
+  created_on = models.DateTimeField(auto_now_add = True)
+  updated_on = models.DateTimeField(auto_now = True)
+
+  def get_state(self):
+    return simplejson.loads(self._uie_state_json)
+
+  def set_state(self, val):
+    self._uie_state_json = simplejson.dumps(val)
+
+  uie_state = property(get_state, set_state)
+
+  def to_dict(self):
+    return { 'name' : self.name,
+             'designer' : User.objects.values().get(pk=designer_id),
+             'uie_state' : self.uie_state }
+
+  def clone(self, user=None):
+    new_self = UITheme(name=self.name,
+                       _uie_state_json=self._uie_state_json,
+                       parent_theme=self,
+                       designer=user)
+    return new_self
