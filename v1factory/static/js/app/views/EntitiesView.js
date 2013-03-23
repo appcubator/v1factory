@@ -116,8 +116,8 @@ function(EntityModel, UserEntityModel, FieldModel) {
         var props = String(e.target.id).split('-');
         var cid = props[1];
         var attrib = props[0];
+        var value = 
         this.model.get('fields').get(cid).set(attrib, e.target.options[e.target.selectedIndex].value||e.target.value);
-        //this.model.set(e.target.id, e.target.options[e.target.selectedIndex].value);
       },
 
       addedEntity: function(item) {
@@ -247,7 +247,8 @@ function(EntityModel, UserEntityModel, FieldModel) {
         var props = String(e.target.id).split('-');
         var cid = props[1];
         var attrib = props[0];
-        this.model.get('fields').get(cid).set(attrib, e.target.options[e.target.selectedIndex].value||e.target.value);
+        var value = e.target.options[e.target.selectedIndex].value||e.target.value;
+        this.model.get('fields').get(cid).set(attrib, value);
       }
     });
 
@@ -303,7 +304,6 @@ function(EntityModel, UserEntityModel, FieldModel) {
 
         this.collection = new EntityCollection();
         this.entityList = new EntityListView(this.collection);
-        //this.entityLibrary = new EntitiesLibraryView();
       },
 
       render : function() {
