@@ -337,13 +337,11 @@ def theme_delete(request, theme):
 @require_GET
 @login_required
 def deploy_panel(request):
-  r = requests.post('http://v1factory.com/deploy_list/')
-  import pdb; pdb.set_trace()
-  if r.status_code >= 500:
-    return HttpResponse("v1factory.com returned status of "+r.status_code)
+  r = requests.get('http://v1factory.com/deployment/')
   if r.status_code == 200:
-    deployments = simplejson.loads(r.body)
+    page_context = {}
+    page_context['deployments'] = simplejson.loads(r.content)
+    return render(request, 'deploy-panel.html', page_context)
   else:
-    deployments = []
-  return render(request, 'deploy-panel.html')
+    return HttpResponse("v1factory.com returned status of %s" % r.status_code)
 
