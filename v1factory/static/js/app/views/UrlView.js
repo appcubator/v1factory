@@ -1,30 +1,29 @@
-define(['backbone', '../collections/UrlsCollection'], function(Backbone, UrlsCollection) {
+define([
+  'backboneui',
+  'backbone',
+  '../collections/UrlsCollection',
+  '../templates/UrlTemplates'
+],
+function(BackboneUI, Backbone, UrlsCollection) {
 
-  var UrlView = Backbone.View.extend({
-    el: null,
-    tagName: 'div',
-    className: 'row offset1',
+  var UrlView = BackboneUI.ModalView.extend({
     events: {
       'change .url-part'      : 'urlPartChanged',
       'change .page'          : 'pageChanged',
       'click .cross'          : 'urlRemoved',
-      'submit .add-page-form' : 'newPageSubmitted',
       'change .last'          : 'lastEntityChanged',
       'keypress .last'        : 'lastTextChanged'
     },
 
-    initialize: function(item){
+    initialize: function(urlModel){
       var self = this;
-      _.bindAll(this, 'render',
-                      'remove',
-                      'urlPartChanged',
+      _.bindAll(this, 'urlPartChanged',
                       'pageChanged',
                       'urlRemoved',
-                      'newPageSubmitted',
                       'lastEntityChanged',
                       'lastTextChanged');
 
-      this.model = item;
+      this.model = urlModel;
       if(!this.model.get('urlparts')) {
         this.model.set('urlparts', []);
       }
@@ -32,12 +31,15 @@ define(['backbone', '../collections/UrlsCollection'], function(Backbone, UrlsCol
     },
 
     render: function() {
-      var temp = document.getElementById('template-url').innerHTML;
+      var temp = UrlTemplate.mainTemplate;
       var html = _.template(temp, { 'urls': this.model.get('urlparts'),
                                     'entities': appState.entities,
                                     'pages': appState.pages,
                                     'page_name': this.model.get('page_name') });
+
       this.el.innerHTML = html;
+
+      return this;
     },
 
     urlPartChanged: function(e) {
@@ -71,92 +73,24 @@ define(['backbone', '../collections/UrlsCollection'], function(Backbone, UrlsCol
       this.remove();
     },
 
-    newPageSubmitted: function(e) {
-      var name = $('.page-name-input', this.el).val();
-      urlsEditor.createPage(name);
-      e.preventDefault();
-      $('.page-name-input').val('');
-      $('.add-page-form').hide();
-      $('select.page', this.el).fadeIn();
-      $('select').append('<option>' + name + '</option>');
-      $('select option:last', this.el).attr('selected','selected');
-    },
-
     remove: function() {
       $(this.el).remove();
     },
 
     lastEntityChanged: function(e) {
       $(e.target).removeClass('last');
-      var temp = document.getElementById('template-text').innerHTML;
+      var temp = UrlTemplate.templateText;
       var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
       $('.url', this.el).append(html);
     },
 
     lastTextChanged: function(e) {
       $(e.target).removeClass('last');
-      var temp = document.getElementById('template-entity').innerHTML;
+      var temp = UrlTemplate.templateEntity;
       var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
       $('.url', this.el).append(html);
     }
   });
-
-  var UrlsEditorView = Backbone.View.extend({
-    el: document.getElementById('urls-editor'),
-
-    initialize: function(){
-      var self = this;
-      _.bindAll(this, 'render',
-                      'placeUrls',
-                      'newWUrl',
-                      'saveUrls',
-                      'createPage');
-
-      this.collection = new UrlsCollection();
-      this.collection.bind('add', this.placeUrls);
-      this.render();
-
-      var initUrls = appState.urls || [];
-      this.collection.add(initUrls);
-
-      $('#create-url').on('click', this.newWUrl);
-      $('#save-urls').on('click', this.saveUrls);
-    },
-
-    render: function() {
-
-    },
-
-    placeUrls: function(url) {
-      var elem = new UrlView(url);
-      this.el.appendChild(elem.el);
-    },
-
-    newWUrl: function(){
-      var newModel = new UrlModel();
-      this.collection.push(newModel);
-    },
-
-    saveUrls: function() {
-      appState.urls = this.collection.toJSON();
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
-        success: function() {},
-        dataType: "JSON"
-      });
-    },
-
-    createPage: function (name) {
-      var newPage = new PageModel({ name: name});
-      var pages = appState.pages;
-      pages.push(newPage.toJSON());
-      appState.pages = pages;
-    }
-  });
-
-  var urlsEditor = new UrlsEditorView();
 
   return UrlView;
 });
