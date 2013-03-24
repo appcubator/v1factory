@@ -302,7 +302,7 @@ def single_theme(f):
 @single_theme
 def theme_show(request, theme):
   #theme = get_object_or_404(UITheme, pk = theme_id)
-  page_context = { 'title' : theme.name , 'theme' : theme }
+  page_context = { 'title' : theme.name , 'themeId': theme.pk, 'theme' : theme._uie_state_json }
   return render(request, 'designer-theme-show.html', page_context)
 
 @require_POST
@@ -313,7 +313,7 @@ def theme_edit(request, theme):
     theme.name = request.POST['name']
 
   if 'uie_state' in request.POST:
-    uie_json = request.POST['name']
+    uie_json = request.POST['uie_state']
     theme.uie_state = simplejson.loads(uie_json)
 
   theme.save()
