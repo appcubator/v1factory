@@ -36,7 +36,9 @@ define([
                       'changedSource',
                       'toggleFull',
                       'moving',
+                      'moved',
                       'resizing',
+                      'resized',
                       'staticsAdded',
                       'keyHandler');
 
@@ -80,6 +82,7 @@ define([
       this.el.style.textAlign = this.model.get('layout').get('alignment');
       this.el.innerHTML = this.renderElement();
       this.el.firstChild.style.lineHeight = '1em';
+      this.el.id = 'widget-wrapper-' + this.model.cid;
 
       if(this.model.isFullWidth()) this.switchOnFullWidth();
 
@@ -187,10 +190,21 @@ define([
     },
 
     resizing: function(e, ui) {
+      var dHeight = (ui.size.height + 2) / GRID_HEIGHT;
+      var dWidth = (ui.size.width + 2) / GRID_WIDTH;
+
       var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
+
       this.model.get('layout').set('width', deltaWidth);
       this.model.get('layout').set('height', deltaHeight);
+    },
+
+    resized: function(e, ui) {
+      this.el.style.width ='';
+      this.el.style.height = '';
+      this.changedWidth();
+      this.changedHeight();
     },
 
     moving: function(e, ui) {
@@ -198,6 +212,13 @@ define([
       var left = Math.round((ui.position.left / GRID_WIDTH));
       this.model.get('layout').set('top', top);
       this.model.get('layout').set('left', left);
+    },
+
+    moved: function(e, ui) {
+      this.el.style.left ='';
+      this.el.style.top = '';
+      this.changedLeft();
+      this.changedTop();
     },
 
     staticsAdded: function(files) {

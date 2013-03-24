@@ -10,35 +10,19 @@ define([
       'click .padding'           : 'changePadding'
     },
 
-    initialize: function(widgetsCollection){
+    initialize: function(widgetModel){
       _.bindAll(this, 'render',
                       'clear',
-                      'selectChanged',
                       'changeAlignment',
                       'changePadding');
 
-      this.widgetsCollection = widgetsCollection;
-      this.model = widgetsCollection.selectedEl;
-      this.widgetsCollection.bind('change', this.selectChanged, this);
-      if(this.widgetsCollection.selectedEl) {
-        this.render();
-      }
+      this.model = widgetModel;
+      this.render();
     },
 
-    selectChanged : function(chg, ch2) {
-
-      if(this.widgetsCollection.selectedEl === null) {
-        this.model = null;
-        this.clear();
-      }
-      else if(this.widgetsCollection.selectedEl != this.model) {
-        this.clear();
-        this.model = this.widgetsCollection.selectedEl;
-        this.render();
-      }
-    },
 
     changeAlignment: function(e) {
+      console.log(this);
       $('.selected', '.alignment-picker').removeClass('selected');
       var direction = (e.target.className).replace(' a-pick', '');
       direction = direction.replace('a-','');
@@ -97,6 +81,7 @@ define([
     clear: function() {
       this.el.innerHTML = '';
       this.model = null;
+      this.remove();
     }
   });
 

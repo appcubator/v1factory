@@ -61,7 +61,7 @@ define(['jquery-ui'], function() {
     resizableAndDraggable: function(el, self) {
       $(el).resizable({
         handles: "n, e, s, w, se",
-        grid: 15,
+        // grid: 15,
         resize: self.resized
       });
 

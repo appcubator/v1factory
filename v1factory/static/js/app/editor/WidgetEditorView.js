@@ -1,89 +1,80 @@
 define([
-  'editor/WidgetView',
-  'editor/WidgetContainerView',
-  'backbone'
-],function(WidgetView, WidgetContainerView) {
+  'backbone',
+  'backboneui',
+  'editor/WidgetContentEditorView',
+  'editor/WidgetLayoutEditorView',
+  'iui'
+], 
+function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
 
-  var WidgetEditorView = Backbone.View.extend({
-    el : $('.page'),
-    widgetsContainer : document.getElementById('elements-container'),
-    widgets : [],
-    selectedEl: null,
+  var WidgetEditorView = BackboneUI.UIView.extend({
+    el     : document.getElementById('editor-page'),
+    className : 'editor-page fadeIn',
+    tagName : 'div',
 
-    events : {
-      
-    },
-
-    initialize: function(widgetsCollection, containersCollection, contextEntities, page) {
+    initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
-                      'placeWidget',
-                      'placeContainer',
-                      'style');
+                      'clear',
+                      'setLocation',
+                      'bindLocation',
+                      'selectChanged');
 
-      var self = this;
-
-      this.render();
       this.widgetsCollection = widgetsCollection;
-      this.widgetsCollection.bind('add', this.placeWidget);
-
-      this.containersCollection = containersCollection;
-      this.containersCollection.bind('add', this.placeContainer);
-
-      this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
-      this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
-
-      _(page.uielements).each(function(element) {
-        if(element.container_info) {
-          self.containersCollection.add(element, self.widgetsCollection);
-        }
-        else {
-          self.widgetsCollection.add(element);
-        }
-      });
+      this.model = widgetsCollection.selectedEl;
+      this.widgetsCollection.bind('change', this.selectChanged, this);
+      
+      if(this.model) {
+        this.contentEditor = new WidgetContentEditor(this.model);
+        this.layoutEditor = new WidgetLayoutEditor(this.model);
+        this.render();
+        this.bindLocation();
+      }
     },
 
     render: function() {
-      this.widgetsContainer.innerHTML = '';
+      var self = this;
+
+      // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
+      console.log(iui);
+      iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
+      this.el.appendChild(this.layoutEditor.el);
+      this.el.appendChild(this.contentEditor.el);
     },
 
-    placeWidget: function(widgetModel) {
-      var curWidget = new WidgetView(widgetModel);
-
-      if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
-      else iui.get('full-container').appendChild(curWidget.el);
-      curWidget.resizableAndDraggable();
+    setLocation: function() {
+      // this.setTop(GRID_HEIGHT * ((this.model.get('layout').get('top')+this.model.get('layout').get('height'))));
+      // this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
     },
 
-    placeContainer: function(containerWidgetModel) {
-      var curWidget= new WidgetContainerView(containerWidgetModel);
+    bindLocation: function() {    },
 
-      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
-      else iui.get('full-container').appendChild(curWidget.el);
-      curWidget.resizableAndDraggable();
+    selectChanged : function(chg, ch2) {
+
+      if(this.widgetsCollection.selectedEl === null) {
+        this.model = null;
+        this.clear();
+      }
+      else if(this.widgetsCollection.selectedEl != this.model) {
+        this.clear();
+        this.model = this.widgetsCollection.selectedEl;
+        this.contentEditor = new WidgetContentEditor(this.model);
+        this.layoutEditor = new WidgetLayoutEditor(this.model);
+        this.render();
+        this.bindLocation();
+        this.$el.fadeIn();
+      }
     },
 
-    style: function (props) {
-
-      _(props).each(function(prop) {
-
-        if(document.getElementById('style-' + prop.type)) {
-          $(document.getElementById('style-' + prop.type)).remove();
-        }
-
-        var styleTag = document.createElement('style');
-        styleTag.id = 'style-' + prop.type;
-
-        var styleContent = '' + (designOptions[prop.type].tag||'.sample') + ' {';
-        styleContent += designOptions[prop.type].css.replace(/<%=content%>/g, prop.value);
-        styleContent += '}';
-
-        styleTag.innerHTML = styleContent;
-        this.styleTag = styleTag;
-
-        document.getElementsByTagName('head')[0].appendChild(styleTag);
-      });
+    clear: function() {
+      if(this.contentEditor) this.contentEditor.clear();
+      if(this.layoutEditor) this.layoutEditor.clear();
+      this.el.innerHTML = '';
+      this.model = null;
+      this.$el.hide();
     }
   });
 
   return WidgetEditorView;
+
 });
+

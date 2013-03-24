@@ -3,23 +3,23 @@ define([
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
-  'editor/WidgetEditorView',
+  'editor/WidgetsManagerView',
   'editor/WidgetClassPickerView',
-  'editor/WidgetContentEditorView',
-  'editor/WidgetLayoutEditorView',
+  'editor/WidgetEditorView',
   'editor/DesignEditorView',
   'editor/EditorGalleryView',
+  'backbone',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            EntityCollection,
            WidgetCollection,
            ContainersCollection,
-           WidgetEditorView,
+           WidgetsManagerView,
            WidgetClassPickerView,
-           WidgetContentEditorView,
-           WidgetLayoutEditorView,
+           WidgetEditorView,
            DesignEditorView,
-           EditorGalleryView) {
+           EditorGalleryView,
+           Backbone) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -55,11 +55,10 @@ define([
       this.widgetsCollection    = new WidgetCollection();
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
-      this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
 
       this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
-      this.contentEditor    = new WidgetContentEditorView(this.widgetsCollection);
-      this.layoutEditor     = new WidgetLayoutEditorView(this.widgetsCollection);
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
       this.designEditor     = new DesignEditorView(this.model, true);
 
@@ -135,7 +134,9 @@ define([
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/',
-        complete: function(data) { new ThanksView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'}); },
+        complete: function(data) {
+          new ThanksView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+        },
         dataType: "JSON"
       });
 
@@ -184,7 +185,7 @@ define([
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
       _(contextEntites).each(function(entityName) {
-        self.contextCollection.add(self.entityCollection.findWhere({ name : entityName}));
+        self.contextCollection.add(self.entityCollection.where({ name : entityName})[0]);
       });
     },
 

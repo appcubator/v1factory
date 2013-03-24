@@ -12,18 +12,14 @@ define([
       'keyup textarea': 'inputChanged'
     },
 
-    initialize: function(widgetsCollection){
+    initialize: function(widgetModel){
       _.bindAll(this, 'render',
                       'clear',
-                      'selectChanged',
                       'inputChanged');
 
-      this.widgetsCollection = widgetsCollection;
-      this.model = widgetsCollection.selectedEl;
-      this.widgetsCollection.bind('change', this.selectChanged, this);
-      if(this.widgetsCollection.selectedEl) {
-        this.render();
-      }
+      console.log(widgetModel);
+      this.model = widgetModel;
+      this.render();
     },
 
     render: function() {
@@ -59,8 +55,11 @@ define([
       var li       = document.createElement('li');
       var currentFont = (this.model.get('content_attribs').get('style')||'font-size:12px').replace('font-size:','');
 
+
+      var sizeDiv = document.createElement('div');
+      sizeDiv.className = 'size-picker';
       var hash     = 'content_attribs' + '-' + 'style';
-      html         = '<select id="'+ hash +'">' +
+      html         = '<select id="'+ hash +'" class="font-picker">' +
                         '<option value="font-size:'+ currentFont +';">'+ currentFont +'</option>'+
                         '<option value="font-size:10px;">'+ '10px' +'</option>'+
                         '<option value="font-size:12px;">'+ '12px' +'</option>'+
@@ -77,22 +76,16 @@ define([
                         '<option value="font-size:72px;">'+ '72px' +'</option>'+
                         '<option value="font-size:90px;">'+ '90px' +'</option>'+
                       '</select>';
-      li.innerHTML = '<span class="key" style="display:block;">Font Size</span>' + html;
+      sizeDiv.innerHTML = '<span class="key">Font Size</span>' + html;
+
+      var optionsDiv = document.createElement('div');
+      optionsDiv.className = 'font-options';
+      optionsDiv.innerHTML = '<span class="option-button"><strong>B</strong></span>';
+
+      li.appendChild(sizeDiv);
+      li.appendChild(optionsDiv);
+
       return li;
-    },
-
-    selectChanged : function(chg, ch2) {
-
-      if(this.widgetsCollection.selectedEl === null) {
-        this.model = null;
-        this.clear();
-        //this.el.innerHTML = '';
-      }
-      else if(this.widgetsCollection.selectedEl != this.model) {
-        this.clear();
-        this.model = this.widgetsCollection.selectedEl;
-        this.render();
-      }
     },
 
     inputChanged: function(e) {
@@ -111,10 +104,10 @@ define([
     clear: function() {
       this.el.innerHTML = '';
       this.model = null;
+      this.remove();
     }
   });
 
   return WidgetContentEditorView;
-
 });
 
