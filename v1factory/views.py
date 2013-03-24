@@ -4,6 +4,7 @@ from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile, UITheme
+from django.views.decorators.csrf import csrf_exempt
 import requests
 
 def add_statics_to_context(context, app):
@@ -335,14 +336,23 @@ def theme_delete(request, theme):
   theme.delete()
   return HttpResponse("ok")
 
-@require_GET
 @login_required
+@csrf_exempt
 def deploy_panel(request):
-  r = requests.get('http://v1factory.com/deployment/')
-  if r.status_code == 200:
-    page_context = {}
-    page_context['deployments'] = simplejson.loads(r.content)
-    return render(request, 'deploy-panel.html', page_context)
-  else:
-    return HttpResponse("v1factory.com returned status of %s" % r.status_code)
+  if request.method == "GET":
+    r = requests.get('http://v1factory.com/deployment/')
+    if r.status_code == 200:
+      page_context = {}
+      page_context['deployments'] = simplejson.loads(r.content)
+      return render(request, 'deploy-panel.html', page_context)
+    else:
+      return HttpResponse("v1factory.com returned status of %s" % r.status_code)
+  elif request.method == "POST":
+    # this will post the data to v1factory.com
+    subdomain = request.POST['subdomain']
+    app_json = request.POST['app_json']
+    post_data = {"subdomain": subdomain, "app_json": app_json}
+    r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+    return HttpResponse(r.content)
+
 
