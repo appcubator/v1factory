@@ -22,7 +22,6 @@ define([
 
 
     changeAlignment: function(e) {
-      console.log(this);
       $('.selected', '.alignment-picker').removeClass('selected');
       var direction = (e.target.className).replace(' a-pick', '');
       direction = direction.replace('a-','');

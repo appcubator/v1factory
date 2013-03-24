@@ -1,6 +1,6 @@
 {% if uie.is_normal_tag() %}
 <div style="{{ uie.position_css }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}">
-  <{{ uie.tagname }} id="{{ uie.html_id }}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
+  <{{ uie.tagname }} id="{{ uie.html_id }}" {% for k,v in uie.content_attribs.items() %}{{ k }}="{{ v }}" {% endfor %} {% for k,v in uie.cons_attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
     {{ uie.content() }}
   </{{ uie.tagname }}>
 </div>

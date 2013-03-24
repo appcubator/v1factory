@@ -27,10 +27,15 @@ define([
     render: function() {
       var self = this;
 
-      if(this.model.has('content') && this.model.get('content') !== null) {
+      if(this.model.has('content') && this.model.get('content') !== null &&
+        !this.model.get('content_attribs').has('src')) {
+
         this.el.appendChild(this.renderFontPicker());
         this.el.appendChild(this.renderTextEditing());
       }
+
+
+
       if(this.model.get('content_attribs').has('href')) {
         this.el.appendChild(this.renderHrefInfo());
       }
