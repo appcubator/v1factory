@@ -98,41 +98,5 @@ var appId = {{ app_id|safe }};
 var statics = {{ statics|safe }};
 var uieState = {{ app.uie_state_json|safe }};
 </script>
-
-<script type="text/template" id="temp-create">
-<div class="span9 hoff1 create-text">
-  <div class="pane border minhi">
-    <span class="">+ Create an element</span>
-  </div>
-</div>
-</script>
-<script type="text/template" id="temp-element-node">
-<div class="element-node">
-<<%= info.tagName %> type="<%= info.tagType %>" <% _(info.content_attribs).each(function(val, key){ %>
-<%= key %> = <%= val %>
-<% }); %> style="<%= info.style %>">
-<% if(!info.isSingle) { %>
-<%= info.content %></<%=info.tagName%>>
-<% } %>
-</div>
-</script>
-<script type="text/template" id="temp-element-pane">
-<form class="element-create-form">
-  <input type="text" name="className" class="class_name" value="<%= info.class_name %>" placeholder="Class Name...">
-  <textarea name="style" class="style" placeholder="Styling here..."><%= info.style %></textarea>
-  <input type="submit" value="Done" class="btn">
-</form>
-</script>
-<script type="text/template" id="temp-node"><<%= element.tagName%> 
-class = "<%= element.class_name %>"
-<% _(element.attribs).each(function(val, key) { %>
-<%=key%>="<%=val%>"<% }); %>>
-<% _(element.content).each(function(val, key) { %>
-<%= val %>
-<% }); %>
-<% if(!element.isSingle) {%>
-</<%= element.tagName%>>
-<% } %></script>
-
 <script data-main="{{ STATIC_URL }}js/app/gallery-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

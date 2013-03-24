@@ -66,7 +66,7 @@ if settings.PRODUCTION:
       url(r'^deployment/$', 'list_deployments'), # list the deployments and their statuses
       url(r'^deployment/available_check/$', 'available_check'), # check if the domain is available
       url(r'^deployment/init/$', 'init_subdomain'), # set up directories and apache
-      url(r'^deployment/(\d)/push/$', 'deploy_code'), # push the new code into the directory
+      url(r'^deployment/push/$', 'deploy_code'), # push the new code into the directory
   )
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

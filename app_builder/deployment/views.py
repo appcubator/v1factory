@@ -67,13 +67,16 @@ def init_subdomain(request):
   return HttpResponse("ok")
 
 @require_POST
+@csrf_exempt
 #@login_required
 def deploy_code(request):
   s = request.POST['subdomain']
-  app_json = request.POST['app_state']
+  app_json = request.POST['app_json']
   d = get_object_or_404(Deployment, subdomain=s)
-  d.update_app_state_json(app_json)
-  d.deploy()
+  d.update_app_state(simplejson.loads(app_json))
+  d.save()
+  msgs = d.deploy()
+  return HttpResponse(msgs)
 
 @require_POST
 #@login_required
@@ -82,13 +85,3 @@ def delete_deployment(request):
   d = get_object_or_404(Deployment, subdomain=s)
   d.delete()
   return HttpResponse("ok")
-
-
-
-
-
-
-
-
-
-

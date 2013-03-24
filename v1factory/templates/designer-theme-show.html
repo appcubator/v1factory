@@ -10,26 +10,65 @@
 
 {% block page %}
 <div class="well green-2">
-  <div class="container">
-    <div class="span64">
-      <div class="hi8">
-        <div class="hi8">
-          <h2 class="hoff5">Designer Interface</h2>
+  <div class="container hoff4">
+    <div class="span58">
+      <div class="hi5">
+        <div class="hi5">
+          Lorem ipsum.
         </div>
       </div>
     </div>
+    <div class="span6">
+      <a class="btn span6" id="save">Save</a>
+      <a class="btn span6 btn-reset">Reset</a>
+    </div>
+
   </div>
 </div>
 <div class="container">
-  <ul>
-    {% for theme in themes %}
-    <li class="hi3 hoff1 span36"><a href="/theme/{{ theme.pk }}/">{{ theme.name }}</a></li>
-    {% endfor %}
-    <li class="create-theme hi3 hoff1 span36">+ Create a new theme</li>
-    <li class="create-container hi3 hoff1 span36" style="display:none;"><form class="create-form"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form></li>
-  </ul>
+    <span class="span62">
+      <ul class="hoff2 uie-gallery">
+        <li class="" id="button">
+          <h3>Button</h3>
+        </li>
+        <li class="" id="image">
+          <h3>Image</h3>
+        </li>
+        <li class="" id="header-text">
+          <h3>Header</h3>
+        </li>
+        <li class="" id="text">
+          <h3>Text</h3>
+        </li>
+        <li class="" id="link">
+          <h3>Link</h3>
+        </li>
+        <li class="" id="text-input">
+          <h3>Input</h3>
+        </li>
+        <li class="" id="password">
+          <h3>Password Field</h3>
+        </li>
+        <li class="" id="text-area">
+          <h3>Text Area</h3>
+        </li>
+        <li class="" id="line">
+          <h3>Line</h3>
+        </li>
+        <li class="" id="dropdown">
+          <h3>Dropdown</h3>
+        </li>
+        <li class="" id="box">
+          <h3>Box</h3>
+        </li>
+      </ul>
+    </span>
 </div>
 {% endblock %}
 {% block js %}
-<script data-main="{{ STATIC_URL }}js/app/designer-app/designer-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script>
+var uieState = {{ theme|safe }}
+var themeId = {{ themeId|safe }}
+</script>
+<script data-main="{{ STATIC_URL }}js/app/designer-app/theme-show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

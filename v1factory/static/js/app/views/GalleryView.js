@@ -1,5 +1,9 @@
-define(['backboneui', 'iui'], function(BackboneUI) {
-  
+define([
+  'backboneui',
+  'iui',
+  '../templates/ThemeTemplates'
+],function(BackboneUI) {
+
   var UIElementAttributesModel = Backbone.Model.extend({ });
 
   var UIElementStyleModel = Backbone.Model.extend({ });
@@ -46,11 +50,11 @@ define(['backboneui', 'iui'], function(BackboneUI) {
       var div = document.createElement('div');
       div.className = "node-wrapper";
 
-      var elDiv = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes});
+      var elDiv = _.template(ThemeTemplates.tempNode, {info: this.model.attributes});
       div.innerHTML = elDiv;
       this.el.appendChild(div);
 
-      var form = _.template(iui.getHTML('temp-element-pane'),{info: this.model.attributes});
+      var form = _.template(ThemeTemplates.tempPane, {info: this.model.attributes});
 
       this.el.innerHTML += form;
 
@@ -70,7 +74,7 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     },
 
     reRenderElement: function() {
-      this.$el.find('.node-wrapper').html(_.template(iui.getHTML('temp-element-node'), {info: this.model.attributes}));
+      this.$el.find('.node-wrapper').html(_.template(ThemeTemplates.tempNode, {info: this.model.attributes}));
     }
 
   });
@@ -99,9 +103,9 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     render: function() {
       this.el.innerHTML ='';
       var div = document.createElement('div');
-      div.className = 'pane-inline offsetr1 border minhi hi6 span9 hoff1 elem-' + this.model.cid;
+      div.className = 'pane-inline offsetr1 border minhi hi9 span12 hoff1 elem-' + this.model.cid;
 
-      div.innerHTML = _.template(iui.getHTML('temp-element-node'), {info: this.model.attributes});
+      div.innerHTML = _.template(ThemeTemplates.tempNode, {info: this.model.attributes});
       div.innerHTML += '<span class="remove">×</span>';
       this.el.appendChild(div);
       this.el.style.display = 'inline-block';
@@ -151,7 +155,7 @@ define(['backboneui', 'iui'], function(BackboneUI) {
       });
 
       var createBtn = document.createElement('span');
-      createBtn.innerHTML = _.template(iui.getHTML('temp-create'), {});
+      createBtn.innerHTML = _.template(ThemeTemplates.tempCreate, {});
 
       this.el.appendChild(createBtn);
       return this;
@@ -240,8 +244,8 @@ define(['backboneui', 'iui'], function(BackboneUI) {
 
       $.ajax({
         type: "POST",
-        url: '/app/'+appId+'/uiestate/',
-        data: JSON.stringify(json),
+        url: '/theme/'+themeId+'/edit/',
+        data: { uie_state : JSON.stringify(json) },
         success: function() { },
         dataType: "JSON"
       });
@@ -253,7 +257,9 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "button": [
       {
         tagName : 'input',
-        tagType : 'submit',
+        cons_attribs: {
+          type : 'submit'
+        },
         content_attribs: {
           value : "Button1"
         },
@@ -265,7 +271,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "image" : [
       {
         tagName : 'img',
-        tagType: null,
         content_attribs : {
           src : '/static/img/placeholder.png'
         },
@@ -277,7 +282,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "header-text": [
       {
         tagName : 'h1',
-        tagType: null,
         content_attribs: null,
         content : 'Default header!',
         isSingle: false
@@ -287,7 +291,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "text" : [
       {
         tagName : 'p',
-        tagType: null,
         content_attribs: null,
         content : 'Default text!',
         isSingle: false
@@ -297,7 +300,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "link" : [
       {
         tagName  : 'a',
-        tagType : null,
         content_attribs  : {
           'href' : '{{homepage}}'
         },
@@ -309,7 +311,9 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "text-input" : [
       {
         tagName : 'input',
-        tagType : 'text',
+        cons_attribs: {
+          type : 'text'
+        },
         content_attribs : {
           placeholder: 'Default placeholder...'
         },
@@ -333,7 +337,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "text-area" : [
       {
         tagName  : 'textarea',
-        tagType : null,
         content_attribs: null,
         content  : 'Default Text Area...',
         isSingle : false
@@ -343,7 +346,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "line" : [
       {
         tagName : 'hr',
-        tagType : null,
         cons_attribs : {
           class : 'span12'
         },
@@ -355,7 +357,6 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "dropdown" : [
       {
         tagName : 'select',
-        tagType : null,
         content: '<option>Option 1</option>',
         attribs : null,
         isSingle: false
@@ -365,10 +366,9 @@ define(['backboneui', 'iui'], function(BackboneUI) {
     "box" : [
       {
         tagName : 'div',
-        tagType : null,
         content: null,
         cons_attribs : {
-          style : 'border:1px solud #333;'
+          style : 'border:1px solid #333;'
         },
         isSingle: false
       }

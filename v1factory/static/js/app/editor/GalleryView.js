@@ -1,7 +1,8 @@
 define([
   'backboneui',
-  'iui'
-],function(BackboneUI) {
+  'iui',
+  '../templates/ThemeTemplates'
+],function(BackboneUI, iui, ThemeTemplates ) {
 
   var UIElementAttributesModel = Backbone.Model.extend({
   });
