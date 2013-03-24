@@ -92,6 +92,32 @@ class App(models.Model):
     summary += "Pages:\t\t\t{};".format(", ".join(['("{}", {})'.format(u['page_name'], u['urlparts']) for u in self.state['urls']]))
     return summary
 
+  def init_deploy(self):
+    pass
+
+  def deploy(self, remote=True):
+    if remote:
+      # this will post the data to v1factory.com
+      subdomain = self.owner.username + "-" + self.name
+      if not settings.PRODUCTION:
+        subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
+
+      post_data = {"subdomain": subdomain, "app_json": self.state_json}
+      r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+
+      if r.status_code == 200:
+        return "http://%s.v1factory.com" % subdomain
+      else:
+        raise Exception(r.content)
+
+    else: # just output the files to a temp dir
+      from app_builder.analyzer import AnalyzedApp
+      from app_builder.django.coordinator import analyzed_app_to_app_components
+      from app_builder.django.writer import DjangoAppWriter
+
+      tmp_project_dir = self.write_to_tmpdir()
+      return tmp_project_dir
+
   def deploy_test(self):
     return "do the funky chicken"
     analyzed_app = AnalyzedApp(self.state, self.name)
