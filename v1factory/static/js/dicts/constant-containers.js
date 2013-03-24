@@ -5,7 +5,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Username'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'username'
       },
       'layout' : {
@@ -20,7 +20,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Password'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'password',
         type : 'password'
       },
@@ -36,7 +36,7 @@ var constantContainers = {
       'content_attribs' : {
         value : 'Log In'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         type : 'submit'
       },
       'layout' : {
@@ -53,7 +53,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Username'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'username',
         type : 'text'
       },
@@ -69,7 +69,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Password'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'password1',
         type : 'password'
       },
@@ -85,7 +85,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Confirm password'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'password2',
         type : 'password'
       },
@@ -101,7 +101,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Email'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'email',
         type : 'text'
       },
@@ -117,7 +117,7 @@ var constantContainers = {
       'content_attribs' : {
         placeholder : 'Display Name'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         name : 'name',
         type : 'text'
       },
@@ -133,7 +133,7 @@ var constantContainers = {
       'content_attribs' : {
         value : 'Log In'
       },
-      'constant_attribs' : {
+      'cons_attribs' : {
         type : 'submit'
       },
       'layout' : {
@@ -147,7 +147,7 @@ var constantContainers = {
   'facebook' : [
     {
       'type' : 'button',
-      'constant_attribs' : {
+      'cons_attribs' : {
         type : 'submit'
       },
       'content_attribs' : {
@@ -164,7 +164,7 @@ var constantContainers = {
   'twitter' : [
     {
       'type' : 'button',
-      'constant_attribs' : {
+      'cons_attribs' : {
         type : 'submit'
       },
       'content_attribs' : {
@@ -181,7 +181,7 @@ var constantContainers = {
   'linkedin' : [
     {
       'type' : 'button',
-      'constant_attribs' : {
+      'cons_attribs' : {
         type : 'submit'
       },
       'content_attribs' : {

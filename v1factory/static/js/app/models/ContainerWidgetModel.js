@@ -1,5 +1,5 @@
-define(
- ['app/models/WidgetModel',
+define([
+  'app/models/WidgetModel',
   'app/models/ContentModel',
   'app/models/LayoutModel',
   'app/models/ContainerInfoModel',
@@ -8,8 +8,9 @@ define(
   'app/collections/WidgetCollection',
   'backboneui',
   'backbone',
-  'dicts/constant-containers'],
-  function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryView, QueryModel, WidgetCollection, BackboneUI, Backbone) {
+  'dicts/constant-containers'
+],
+function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryView, QueryModel, WidgetCollection, BackboneUI, Backbone) {
 
 
   var ContainerWidgetModel = WidgetModel.extend({

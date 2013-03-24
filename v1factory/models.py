@@ -99,8 +99,14 @@ class App(models.Model):
     if remote:
       # this will post the data to v1factory.com
       subdomain = self.owner.username + "-" + self.name
+      from django.conf import settings
+      import requests 
       if not settings.PRODUCTION:
         subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
+
+      subdomain = subdomain.lower()
+
+      print subdomain # wassup, la
 
       post_data = {"subdomain": subdomain, "app_json": self.state_json}
       r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})

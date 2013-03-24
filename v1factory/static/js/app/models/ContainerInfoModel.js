@@ -8,7 +8,7 @@ define(
     initialize: function(bone) {
       this.set('uielements', new WidgetCollection(bone.uielements));
 
-      if(!bone.entity.attributes) {
+      if(bone.entity && !bone.entity.attributes) {
         this.set('entity', new EntityModel(bone.entity));
       }
 

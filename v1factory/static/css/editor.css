@@ -1464,12 +1464,14 @@ ul.list {
 
 select.font-picker {
   width: 70px;
+  margin-left: 8px;
 }
 
 .size-picker {
   display: inline-block;
-  width: 80px;
+  width: 160px;
   margin-left: 4px;
+  margin-top: 6px;
 }
 
 .option-button {
@@ -1485,6 +1487,7 @@ select.font-picker {
   cursor: pointer;
   font-size: 14px;
   padding: 9px;
+  margin-top: 6px;
 }
 
 .option-button:hover {
@@ -1494,7 +1497,6 @@ select.font-picker {
 .font-options {
   display: inline-block;
   vertical-align: top;
-  padding-top: 40px;
 }
 
 strong {

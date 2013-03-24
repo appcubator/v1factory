@@ -9,6 +9,7 @@ define([
   'editor/DesignEditorView',
   'editor/EditorGalleryView',
   'backbone',
+  'backboneui',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            EntityCollection,
@@ -19,7 +20,8 @@ define([
            WidgetEditorView,
            DesignEditorView,
            EditorGalleryView,
-           Backbone) {
+           Backbone,
+           BackboneUI) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -118,7 +120,7 @@ define([
     deploy: function() {
       this.save();
 
-      var ThanksView = Backbone.ModalView.extend({
+      var ThanksView = BackboneUI.ModalView.extend({
         tagName: 'div',
         className: 'deployed',
         initialize: function(text) {

@@ -7,17 +7,19 @@ define([
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'change select'   : 'inputChanged',
-      'keyup input'   : 'inputChanged',
-      'keyup textarea': 'inputChanged'
+      'keyup input'         : 'inputChanged',
+      'keyup textarea'      : 'inputChanged',
+      'click #toggle-bold'  : 'toggleBold',
+      'change .font-picker' : 'changeFont'
     },
 
     initialize: function(widgetModel){
       _.bindAll(this, 'render',
                       'clear',
-                      'inputChanged');
+                      'inputChanged',
+                      'toggleBold',
+                      'changeFont');
 
-      console.log(widgetModel);
       this.model = widgetModel;
       this.render();
     },
@@ -53,8 +55,8 @@ define([
 
     renderFontPicker: function() {
       var li       = document.createElement('li');
-      var currentFont = (this.model.get('content_attribs').get('style')||'font-size:12px').replace('font-size:','');
-
+      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:12px;');
+      var currentFont = /font-size:([^]+);/g.exec(curStyle)[1];
 
       var sizeDiv = document.createElement('div');
       sizeDiv.className = 'size-picker';
@@ -80,7 +82,7 @@ define([
 
       var optionsDiv = document.createElement('div');
       optionsDiv.className = 'font-options';
-      optionsDiv.innerHTML = '<span class="option-button"><strong>B</strong></span>';
+      optionsDiv.innerHTML = '<span id="toggle-bold" class="option-button"><strong>B</strong></span>';
 
       li.appendChild(sizeDiv);
       li.appendChild(optionsDiv);
@@ -98,7 +100,25 @@ define([
       else if(info.length == 1) {
         this.model.set(info[0], e.target.value);
       }
-      //e.stopPropagation();
+      e.stopPropagation();
+    },
+
+    changeFont: function(e) {
+      var curStyle = this.model.get('content_attribs').get('style');
+      curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+      this.model.get('content_attribs').set('style', curStyle);
+    },
+
+    toggleBold: function(e) {
+      var curStyle = this.model.get('content_attribs').get('style');
+      if(curStyle.indexOf('font-weight:bold;') < 0) {
+        curStyle += 'font-weight:bold;';
+        this.model.get('content_attribs').set('style', curStyle);
+      }
+      else {
+        curStyle = curStyle.replace('font-weight:bold;', '');
+        this.model.get('content_attribs').set('style', curStyle);
+      }
     },
 
     clear: function() {

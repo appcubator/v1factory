@@ -153,7 +153,8 @@ class Container(UIElement):
     elif uie['container_info']['action'] == 'show':
       u = QuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
-      assert(False) # this is where I do something to indicate that the app has linked in and facebook login...
+      #assert(False) # this is where I do something to indicate that the app has linked in and facebook login...
+      pass
     else:
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
 
