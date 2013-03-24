@@ -1,4 +1,5 @@
 import os, sys, subprocess
+import simplejson
 import traceback
 import os.path
 import shlex
@@ -10,14 +11,8 @@ import time
 import shutil
 from django.db import models
 
-"""
-design decisions.
-
-always deploy in prefix-suffix form.
-"""
-
-
 def copytree(src, dst, symlinks=False, ignore=None):
+  """shutil.copytree wrapper which works even when the dest dir exists"""
   for item in os.listdir(src):
     s = os.path.join(src, item)
     d = os.path.join(dst, item)
@@ -60,69 +55,26 @@ class Deployment(models.Model):
     a_conf.close()
 
     # should probably restart apache2
-
-
-
-# what are the inputs needed to deploy an app?
-# the app state
-# the subdomain you want the app to go
-
-# this module should manage:
-# the path of app it will end up in
-# the path of the configuration file
-
-
-
-
-def require_valid_subdomain(f):
-  def is_valid_subdomain(s):
-    if s.find('\n') != -1:
-      return False
-    return bool(re.match(r"[a-zA-Z]$"))
-  def ret_fun(subdomain, *args, **kwargs):
-    if is_valid_subdomain(subdomain):
-      return f(subdomain, *args, **kwargs)
-    else:
-      raise Exception()
-  return ret_fun
-
-
-  #def randomly_name(self):
-  #  self.name = "".join( [ random.choice(string.ascii_lowercase) for i in xrange(6) ] )
-
+  
   def is_initialized(self):
     """checks if this app has already been initialized"""
     return os.path.isdir(self.app_dir) and os.path.isfile(self.config_file_path)
 
-
-  def _configure_dat_app(self):
-    """setup apache config and write a blank app to the app path"""
-    try:
-      os.makedirs(os.path.dirname(self.config_file_path))
-    except OSError:
-      print "Config directory already exists."
-    a_conf = open(self.config_file_path, "w")
-    a_conf.write(self.apache_config())
-    a_conf.close()
-
-    os.makedirs(self.app_dir)
-    # should probably restart apache2
-
-  def do_initial_config(self):
-    pass
-
-  def write_to_fs(self):
+  def write_to_tmpdir(self):
     from app_builder.analyzer import AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
-    a = AnalyzedApp(self.state)
+    a = AnalyzedApp(simplejson.loads(self.app_state_json))
     dw = analyzed_app_to_app_components(a)
     tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
 
     print "Project written to " + tmp_project_dir
     return tmp_project_dir
 
+  def update_app_state(self, app_dict):
+    self.app_state_json = simplejson.dumps(app_dict)
+    return self
 
   def deploy(self):
     from app_builder.analyzer import AnalyzedApp
@@ -130,22 +82,17 @@ def require_valid_subdomain(f):
     from app_builder.django.writer import DjangoAppWriter
 
     # GENERATE CODE
-    tmp_project_dir = self.write_to_fs()
+    tmp_project_dir = self.write_to_tmpdir()
     print "Project written to " + tmp_project_dir
 
     if not django.conf.settings.PRODUCTION:
       return tmp_project_dir
 
-    # INITIALIZE APACHE
-    if not self.is_initialized():
-      print "Project not initialized... Initializing"
-      self.do_initial_config()
-    else:
-      print "Project already initialized... skipping this step"
-
     child_env = os.environ.copy()
     if "DJANGO_SETTINGS_MODULE" in child_env:
       del child_env["DJANGO_SETTINGS_MODULE"]
+    # Hack to make syncdb work.
+    child_env["PATH"] = "/var/www/v1factory/venv/bin:" + child_env["PATH"]
 
     # COPY THE CODE TO THE RIGHT DIRECTORY
     print "Removing existing app code"
@@ -160,14 +107,19 @@ def require_valid_subdomain(f):
     print "Copying temp project dir to the real path -> " + self.app_dir
     copytree(tmp_project_dir, self.app_dir)
 
-    # CODE TO RUN AFTER APP CODE HAS BEEN DEPLOYED
+    # COMMANDS TO RUN AFTER APP CODE HAS BEEN DEPLOYED
     commands = []
     commands.append('python manage.py syncdb --noinput')
+    debug_info = []
     for c in commands:
       print "Running `{}`".format(c)
-      subprocess.call(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=sys.stdout, stderr=sys.stderr)
+      #subprocess.call(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=sys.stdout, stderr=sys.stderr)
+      p = subprocess.Popen(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      out, err = p.communicate()
+      log_msg = "Out: {}\nErr: {}".format(out,err)
+      debug_info.append(log_msg)
 
-    return
+    return "\n".join(debug_info)
 
   def delete(delete_files=True, *args, **kwargs):
     if delete_files:
