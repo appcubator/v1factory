@@ -9,7 +9,7 @@ define(['backbone', 'jquery-ui'], function() {
 
       $(self.el).resizable({
         handles: "n, e, s, w, se",
-        grid: [80, 15],
+        // grid: [80, 15],
         containment: "parent",
         resize: self.resizing,
         stop  : self.resized
@@ -17,7 +17,7 @@ define(['backbone', 'jquery-ui'], function() {
 
       self.$el.draggable({
         containment: "parent",
-        grid: [80, 15],
+        //grid: [80, 15],
         drag: self.moving,
         stop: self.moved,
         snapMode : "outer"
@@ -126,10 +126,7 @@ define(['backbone', 'jquery-ui'], function() {
       document.body.appendChild(div);
 
       $(div).on('click', function() {
-        self.$el.remove();
-        $(self.backgroundDiv).remove();
-        $(self.modalWindow).remove();
-        self.stopListening();
+        self.closeModal();
       });
 
       return div;
@@ -163,10 +160,7 @@ define(['backbone', 'jquery-ui'], function() {
       document.body.appendChild(div);
 
       $(span).on('click', function(){
-        self.$el.remove();
-        $(self.backgroundDiv).remove();
-        $(self.modalWindow).remove();
-        self.stopListening();
+        self.closeModal();
       });
 
       this.el = content;
@@ -174,12 +168,15 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     closeModal: function() {
-      this.remove();
+      if(this.onClose) this.onClose();
+      this.$el.remove();
+      $(this.backgroundDiv).remove();
       $(this.modalWindow).remove();
+      this.stopListening();
+      this.remove();
     },
 
     handleKey: function(e) {
-      console.log(e.keyCode);
       if(e.keyCode == 27) { //escape
         this.closeModal();
         e.stopPropagation();

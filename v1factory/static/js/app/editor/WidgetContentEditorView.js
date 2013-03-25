@@ -7,33 +7,41 @@ define([
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'change select'   : 'inputChanged',
-      'keyup input'   : 'inputChanged',
-      'keyup textarea': 'inputChanged'
+      'keyup input'                 : 'inputChanged',
+      'keyup textarea'              : 'inputChanged',
+      'click #toggle-bold'          : 'toggleBold',
+      'change .font-picker'         : 'changeFont',
+      'change .statics'             : 'changeSrc'
     },
 
-    initialize: function(widgetsCollection){
+    initialize: function(widgetModel){
       _.bindAll(this, 'render',
                       'clear',
-                      'selectChanged',
-                      'inputChanged');
+                      'inputChanged',
+                      'toggleBold',
+                      'changeFont',
+                      'changeSrc');
 
-      this.widgetsCollection = widgetsCollection;
-      this.model = widgetsCollection.selectedEl;
-      this.widgetsCollection.bind('change', this.selectChanged, this);
-      if(this.widgetsCollection.selectedEl) {
-        this.render();
-      }
+      this.model = widgetModel;
+      this.render();
     },
 
     render: function() {
       var self = this;
 
-      if(this.model.has('content') && this.model.get('content') !== null) {
+      if(this.model.has('content') && this.model.get('content') !== null &&
+        !this.model.get('content_attribs').has('src')) {
+
         this.el.appendChild(this.renderFontPicker());
         this.el.appendChild(this.renderTextEditing());
       }
+
       if(this.model.get('content_attribs').has('href')) {
+        this.el.appendChild(this.renderHrefInfo());
+      }
+
+      if(this.model.get('content_attribs').has('src')) {
+        this.el.appendChild(this.renderSrcInfo());
         this.el.appendChild(this.renderHrefInfo());
       }
     },
@@ -47,6 +55,15 @@ define([
       return li;
     },
 
+    renderSrcInfo: function() {
+      var li       = document.createElement('li');
+      var hash     = 'content_attribs' + '-' + 'src';
+      temp         = Templates.tempSourceSelect;
+      html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
+      li.innerHTML = '<span class="key" style="display:block;">Image Source</span>' + html;
+      return li;
+    },
+
     renderTextEditing: function() {
       var li       = document.createElement('li');
       var hash     = 'content';
@@ -57,10 +74,13 @@ define([
 
     renderFontPicker: function() {
       var li       = document.createElement('li');
-      var currentFont = (this.model.get('content_attribs').get('style')||'font-size:12px').replace('font-size:','');
+      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:12px;');
+      var currentFont = /font-size:([^]+);/g.exec(curStyle)[1];
 
+      var sizeDiv = document.createElement('div');
+      sizeDiv.className = 'size-picker';
       var hash     = 'content_attribs' + '-' + 'style';
-      html         = '<select id="'+ hash +'">' +
+      html         = '<select id="'+ hash +'" class="font-picker">' +
                         '<option value="font-size:'+ currentFont +';">'+ currentFont +'</option>'+
                         '<option value="font-size:10px;">'+ '10px' +'</option>'+
                         '<option value="font-size:12px;">'+ '12px' +'</option>'+
@@ -77,22 +97,16 @@ define([
                         '<option value="font-size:72px;">'+ '72px' +'</option>'+
                         '<option value="font-size:90px;">'+ '90px' +'</option>'+
                       '</select>';
-      li.innerHTML = '<span class="key" style="display:block;">Font Size</span>' + html;
+      sizeDiv.innerHTML = '<span class="key">Font Size</span>' + html;
+
+      var optionsDiv = document.createElement('div');
+      optionsDiv.className = 'font-options';
+      optionsDiv.innerHTML = '<span id="toggle-bold" class="option-button"><strong>B</strong></span>';
+
+      li.appendChild(sizeDiv);
+      li.appendChild(optionsDiv);
+
       return li;
-    },
-
-    selectChanged : function(chg, ch2) {
-
-      if(this.widgetsCollection.selectedEl === null) {
-        this.model = null;
-        this.clear();
-        //this.el.innerHTML = '';
-      }
-      else if(this.widgetsCollection.selectedEl != this.model) {
-        this.clear();
-        this.model = this.widgetsCollection.selectedEl;
-        this.render();
-      }
     },
 
     inputChanged: function(e) {
@@ -105,16 +119,55 @@ define([
       else if(info.length == 1) {
         this.model.set(info[0], e.target.value);
       }
-      //e.stopPropagation();
+      e.stopPropagation();
+    },
+
+    changeFont: function(e) {
+      if(!this.model.get('content_attribs').has('style')) {
+        this.model.get('content_attribs').set('style', 'font-size:12px;');
+      }
+      var curStyle = this.model.get('content_attribs').get('style');
+      curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+      this.model.get('content_attribs').set('style', curStyle);
+    },
+
+    toggleBold: function(e) {
+      var curStyle = this.model.get('content_attribs').get('style');
+      if(curStyle.indexOf('font-weight:bold;') < 0) {
+        curStyle += 'font-weight:bold;';
+        this.model.get('content_attribs').set('style', curStyle);
+      }
+      else {
+        curStyle = curStyle.replace('font-weight:bold;', '');
+        this.model.get('content_attribs').set('style', curStyle);
+      }
+    },
+
+    staticsAdded: function(files, self) {
+      _(files).each(function(file){
+        file.name = file.filename;
+        statics.push(file);
+      });
+      self.model.get('content_attribs').set('src', _.last(files).url);
+    },
+
+    changeSrc: function(e) {
+      var self = this;
+      if(e.target.value == 'upload-image') {
+        iui.openFilePick(self.staticsAdded, self, appId);
+      }
+      else {
+        this.get('content_attribs').set('src', e.target.value);
+      }
     },
 
     clear: function() {
       this.el.innerHTML = '';
       this.model = null;
+      this.remove();
     }
   });
 
   return WidgetContentEditorView;
-
 });
 

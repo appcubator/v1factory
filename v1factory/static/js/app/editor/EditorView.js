@@ -3,23 +3,31 @@ define([
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
-  'editor/WidgetEditorView',
+  'app/collections/UrlsCollection',
+  'app/views/UrlView',
+  'app/views/SimpleModalView',
+  'editor/WidgetsManagerView',
   'editor/WidgetClassPickerView',
-  'editor/WidgetContentEditorView',
-  'editor/WidgetLayoutEditorView',
+  'editor/WidgetEditorView',
   'editor/DesignEditorView',
   'editor/EditorGalleryView',
+  'backbone',
+  'backboneui',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            EntityCollection,
            WidgetCollection,
            ContainersCollection,
-           WidgetEditorView,
+           UrlsCollection,
+           UrlView,
+           SimpleModalView,
+           WidgetsManagerView,
            WidgetClassPickerView,
-           WidgetContentEditorView,
-           WidgetLayoutEditorView,
+           WidgetEditorView,
            DesignEditorView,
-           EditorGalleryView) {
+           EditorGalleryView,
+           Backbone,
+           BackboneUI) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -30,11 +38,14 @@ define([
       'click #settings'      : 'showSettings',
       'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
-      'click .page'          : 'clickedPage'
+      'click .page'          : 'clickedPage',
+      'click .url-bar'       : 'clickedUrl'
     },
 
     initialize: function() {
-      _.bindAll(this, 'save',
+      _.bindAll(this, 'render',
+                      'renderUrlBar',
+                      'save',
                       'amendAppState',
                       'deploy',
                       'style',
@@ -44,7 +55,8 @@ define([
                       'getContextEntities',
                       'containerSelected',
                       'widgetSelected',
-                      'keydown');
+                      'keydown',
+                      'clickedUrl');
 
       var page = appState.pages[pageId];
 
@@ -55,13 +67,15 @@ define([
       this.widgetsCollection    = new WidgetCollection();
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
-      this.widgetEditor     = new WidgetEditorView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
 
       this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
-      this.contentEditor    = new WidgetContentEditorView(this.widgetsCollection);
-      this.layoutEditor     = new WidgetLayoutEditorView(this.widgetsCollection);
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
       this.designEditor     = new DesignEditorView(this.model, true);
+
+      var urlsCollection  = new UrlsCollection(appState.urls);
+      this.urlModel = urlsCollection.where({ page_name : this.model.get('name')})[0];
 
       this.entityCollection.add(appState.entities);
       this.getContextEntities();
@@ -78,9 +92,12 @@ define([
     },
 
     render: function() {
-      //this.el.appendChild(this.galleryEditor.el);
-      // this.el.appendChild(this.gridEditor.el);
       this.el.appendChild(this.designEditor.el);
+      this.renderUrlBar();
+    },
+
+    renderUrlBar: function() {
+      this.$el.find('.url-bar').html(this.urlModel.getUrlString());
     },
 
     save : function() {
@@ -90,8 +107,7 @@ define([
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(curAppState),
-        complete: function() { iui.dontAskBeforeLeave();},
-        dataType: "JSON"
+        complete: function() { iui.dontAskBeforeLeave();}
       });
 
       return false;
@@ -119,23 +135,12 @@ define([
     deploy: function() {
       this.save();
 
-      var ThanksView = Backbone.ModalView.extend({
-        tagName: 'div',
-        className: 'deployed',
-        initialize: function(text) {
-          this.render(text.text);
-        },
-        render : function(text) {
-          this.el.innerHTML = text;
-          return this;
-        }
-      });
-
-
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/',
-        complete: function(data) { new ThanksView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'}); },
+        complete: function(data) {
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+        },
         dataType: "JSON"
       });
 
@@ -184,7 +189,7 @@ define([
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
       _(contextEntites).each(function(entityName) {
-        self.contextCollection.add(self.entityCollection.findWhere({ name : entityName}));
+        self.contextCollection.add(self.entityCollection.where({ name : entityName})[0]);
       });
     },
 
@@ -258,6 +263,11 @@ define([
         this.containersCollection.selectedEl = null;
         this.containersCollection.unselectAll();
       }
+    },
+
+    clickedUrl: function() {
+      var newView =  new UrlView(this.urlModel);
+      newView.onClose = this.renderUrlBar;
     },
 
     containerSelected: function(e) {

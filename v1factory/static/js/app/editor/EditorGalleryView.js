@@ -338,7 +338,7 @@ function(ElementCollection, UserEntityModel, Backbone) {
           entity = new UserEntityModel(appState.users);
         }
         else {
-          entity = this.entitiesCollection.get();
+          entity = this.entitiesCollection.get(cid);
         }
         var field = id.split('-')[1];
 

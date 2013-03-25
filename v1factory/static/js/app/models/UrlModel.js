@@ -3,6 +3,10 @@ define(['backbone'], function(Backbone) {
     defaults : {
       urlparts : [],
       page_name : "defaults"
+    },
+
+    getUrlString: function(appSubdomain) {
+      return 'http://' + (appSubdomain||'yourapp.com') + '/' +this.get('urlparts').join('/');
     }
   });
 

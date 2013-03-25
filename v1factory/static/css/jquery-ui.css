@@ -558,13 +558,13 @@ button.ui-button::-moz-focus-inner {
   cursor: ns-resize;
   height: 7px;
   width: 100%;
-  bottom: -5px;
+  bottom: -4px;
   left: 0;
 }
 .ui-resizable-e {
   cursor: ew-resize;
   width: 7px;
-  right: -5px;
+  right: -4px;
   top: 0;
   height: 100%;
 }
