@@ -157,15 +157,16 @@ def create_tree(uiels, recursive_num=0, top_offset=0, left_offset=0):
           c.tree = create_tree(c.uiels, top_offset=r.uiels[0]['layout']['top'], left_offset=c.uiels[0]['layout']['left'])
   return tree
 
-test_file = open('sample-page.json')
+if __name__ == "__main__":
+  test_file = open('sample-page.json')
 
-test_page = simplejson.load(test_file)
-test_file.close()
-uielements = test_page['uielements']
-dom_tree = create_tree(uielements)
+  test_page = simplejson.load(test_file)
+  test_file.close()
+  uielements = test_page['uielements']
+  dom_tree = create_tree(uielements)
 
-result = j2_env.get_template("base.html").render(domtree=dom_tree)
-import codecs
-f = codecs.open("test_output.html", "w", "utf-8")
-f.write(result)
-f.close()
+  result = j2_env.get_template("base.html").render(domtree=dom_tree)
+  import codecs
+  f = codecs.open("test_output.html", "w", "utf-8")
+  f.write(result)
+  f.close()
