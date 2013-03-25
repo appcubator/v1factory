@@ -27,7 +27,8 @@ function(EntityModel, UserEntityModel, FieldModel, UploadExcelView) {
       'change .attribs'            : 'changedAttribs',
       'click #cross'               : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
-      'click .upload-excel'        : 'clickedUploadExcel'
+      'click .upload-excel'        : 'clickedUploadExcel',
+      'click .show-data'           : 'showData'
     },
 
 
@@ -42,7 +43,8 @@ function(EntityModel, UserEntityModel, FieldModel, UploadExcelView) {
                       'clickedDelete',
                       'modelRemoved',
                       'clickedPropDelete',
-                      'clickedUploadExcel');
+                      'clickedUploadExcel',
+                      'showData');
 
       this.model = item;
       this.model.bind('change:owns', this.ownsChangedOutside);
@@ -145,6 +147,18 @@ function(EntityModel, UserEntityModel, FieldModel, UploadExcelView) {
 
       clickedUploadExcel: function(e) {
         new UploadExcelView();
+      },
+
+      showData: function(e) {
+        $.ajax({
+          type: "POST",
+          url: '/app/'+appId+'/entities/fetch_data/',
+          data: {
+            model_name : this.model.get('name')
+          },
+          success: function(data) { console.log(data.responseText); },
+          dataType: "JSON"
+        });
       }
     });
 
