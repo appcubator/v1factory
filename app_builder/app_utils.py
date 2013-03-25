@@ -10,9 +10,9 @@ def get_xl_data(xl_file):
     for sheet_name in xf.sheet_names():
 	
         curr_sheet = xf.sheet_by_name(sheet_name)
-        schema = []
+        schema = ['id']
         for colnum in range(curr_sheet.ncols):
-            schema.append(curr_sheet.cell(0, colnum))
+            schema.append('m_' + curr_sheet.cell(0, colnum).value)
         # ensure no empty sheets are added unnecessarily
         if len(schema) > 0:
             xl_dict[sheet_name] = dict()
@@ -23,7 +23,7 @@ def get_xl_data(xl_file):
                 if r > 0:
                     datar = []
                     for c in range(curr_sheet.ncols):
-                        datar.append(curr_sheet.cell(r,c))
+                        datar.append(curr_sheet.cell(r,c).value)
                     data.append(datar)
             xl_dict[sheet_name]['data'] = data
     return xl_dict
@@ -31,11 +31,16 @@ def get_xl_data(xl_file):
 def add_xl_data(xl_data, db_path):
     con = sql.connect(db_path)
     cr = con.cursor()
-    model_name = xl_data['model_name']
-    model_schema = ', '.join(xl_data['schema'])
-    for r in xl_data['data']:
-        cr.execute("insert or replace into " + model_name + "(" + model_schema + ") values (" + qn_str + ")", r)
-    con.commit()
+    for sheet in xl_data:
+	model_name = "webapp_" + xl_data[sheet]['model_name'].lower()
+        model_schema = ', '.join(xl_data[sheet]['schema'])
+	qn_list = []
+	for i in range(len(xl_data[sheet]['schema'])-1):
+	    qn_list.append('?')
+	qn_str = ','.join(qn_list)
+        for r in xl_data[sheet]['data']:
+            cr.execute("insert or replace into " + model_name + "(" + model_schema + ") values ((SELECT 1 + coalesce((SELECT max(id) FROM " + model_name + "), 0))," + qn_str + ")", tuple(r))
+        con.commit()
     con.close()
 
 # REPL for django shell of generated app
