@@ -196,11 +196,12 @@ def process_excel(request, app_id):
     raise Exception("App has not been deployed yet")
   state = app.get_state()
   xl_data = get_xl_data(file_name)
+  entity_names_in_the_app_state = [e['name'] for e in state['entities'] ]
   for sheet in xl_data:
-    if state['entities']['_mapping']['name'] != sheet:
-      return (404, "Excel file is inconsistent with schema")
+    if sheet not in entity_names_in_the_app_state:
+      raise Exception("None of the sheet names matched a model name")
   add_xl_data(xl_data, d.app_dir + "/db")
-  return (200, "ok")
+  return HttpResponse("ok")
 
 from django.forms import ModelForm
 class StaticFileForm(ModelForm):
