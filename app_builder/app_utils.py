@@ -6,8 +6,9 @@ import shlex
 
 def get_xl_data(xl_file):
     xl_dict = dict()
-    xf = xls.open_workbook(xl_file)
+    xf = xls.open_workbook(file_contents=xl_file.read())
     for sheet_name in xf.sheet_names():
+	
         curr_sheet = xf.sheet_by_name(sheet_name)
         schema = []
         for colnum in range(curr_sheet.ncols):
