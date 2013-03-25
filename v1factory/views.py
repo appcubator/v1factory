@@ -184,6 +184,7 @@ def entities(request, app_id):
   return render(request, 'app-entities.html', page_context)
 
 @login_required
+@csrf_exempt
 def process_excel(request, app_id):
   app_id = long(app_id)
   file_name = request.POST['file_name']
