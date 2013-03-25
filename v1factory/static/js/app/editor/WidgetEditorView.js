@@ -4,7 +4,7 @@ define([
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
   'iui'
-], 
+],
 function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
 
   var WidgetEditorView = BackboneUI.UIView.extend({
@@ -22,7 +22,7 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
       this.widgetsCollection = widgetsCollection;
       this.model = widgetsCollection.selectedEl;
       this.widgetsCollection.bind('change', this.selectChanged, this);
-      
+
       if(this.model) {
         this.contentEditor = new WidgetContentEditor(this.model);
         this.layoutEditor = new WidgetLayoutEditor(this.model);
@@ -33,9 +33,7 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
 
     render: function() {
       var self = this;
-
       // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
-      console.log(iui);
       iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
       this.el.appendChild(this.layoutEditor.el);
       this.el.appendChild(this.contentEditor.el);

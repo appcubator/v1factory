@@ -1,10 +1,12 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 import simplejson
 import re
 from django.core.exceptions import ValidationError
 import os.path
+import requests
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 
@@ -95,19 +97,16 @@ class App(models.Model):
   def init_deploy(self):
     pass
 
+  def subdomain(self):
+    subdomain = self.owner.username + "-" + self.name
+    if not settings.PRODUCTION:
+      subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
+    return subdomain
+
   def deploy(self, remote=True):
     if remote:
       # this will post the data to v1factory.com
-      subdomain = self.owner.username + "-" + self.name
-      from django.conf import settings
-      import requests 
-      if not settings.PRODUCTION:
-        subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
-
-      subdomain = subdomain.lower()
-
-      print subdomain # wassup, la
-
+      subdomain = self.subdomain()
       post_data = {"subdomain": subdomain, "app_json": self.state_json}
       r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 

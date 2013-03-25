@@ -7,10 +7,11 @@ define([
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'keyup input'         : 'inputChanged',
-      'keyup textarea'      : 'inputChanged',
-      'click #toggle-bold'  : 'toggleBold',
-      'change .font-picker' : 'changeFont'
+      'keyup input'                 : 'inputChanged',
+      'keyup textarea'              : 'inputChanged',
+      'click #toggle-bold'          : 'toggleBold',
+      'change .font-picker'         : 'changeFont',
+      'change .statics'             : 'changeSrc'
     },
 
     initialize: function(widgetModel){
@@ -18,7 +19,8 @@ define([
                       'clear',
                       'inputChanged',
                       'toggleBold',
-                      'changeFont');
+                      'changeFont',
+                      'changeSrc');
 
       this.model = widgetModel;
       this.render();
@@ -34,9 +36,12 @@ define([
         this.el.appendChild(this.renderTextEditing());
       }
 
-
-
       if(this.model.get('content_attribs').has('href')) {
+        this.el.appendChild(this.renderHrefInfo());
+      }
+
+      if(this.model.get('content_attribs').has('src')) {
+        this.el.appendChild(this.renderSrcInfo());
         this.el.appendChild(this.renderHrefInfo());
       }
     },
@@ -47,6 +52,15 @@ define([
       temp         = Templates.tempHrefSelect;
       html         = _.template(temp, {val : this.model.get('content_attribs').get('href'), hash: hash});
       li.innerHTML = '<span class="key" style="display:block;">Target</span>' + html;
+      return li;
+    },
+
+    renderSrcInfo: function() {
+      var li       = document.createElement('li');
+      var hash     = 'content_attribs' + '-' + 'src';
+      temp         = Templates.tempSourceSelect;
+      html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
+      li.innerHTML = '<span class="key" style="display:block;">Image Source</span>' + html;
       return li;
     },
 
@@ -109,6 +123,9 @@ define([
     },
 
     changeFont: function(e) {
+      if(!this.model.get('content_attribs').has('style')) {
+        this.model.get('content_attribs').set('style', 'font-size:12px;');
+      }
       var curStyle = this.model.get('content_attribs').get('style');
       curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
       this.model.get('content_attribs').set('style', curStyle);
@@ -123,6 +140,24 @@ define([
       else {
         curStyle = curStyle.replace('font-weight:bold;', '');
         this.model.get('content_attribs').set('style', curStyle);
+      }
+    },
+
+    staticsAdded: function(files, self) {
+      _(files).each(function(file){
+        file.name = file.filename;
+        statics.push(file);
+      });
+      self.model.get('content_attribs').set('src', _.last(files).url);
+    },
+
+    changeSrc: function(e) {
+      var self = this;
+      if(e.target.value == 'upload-image') {
+        iui.openFilePick(self.staticsAdded, self, appId);
+      }
+      else {
+        this.get('content_attribs').set('src', e.target.value);
       }
     },
 
