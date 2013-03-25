@@ -9,10 +9,11 @@ define(
         if(typeof bone === "string") {
           bone = _.findWhere(appState.entities, {name : bone});
         }
-        console.log(bone);
+
         if(bone) {
           this.set('name', bone.name);
         }
+
         var fieldCollection = new FieldsCollection();
         if(bone) fieldCollection.add(bone.fields);
         this.set('fields', fieldCollection);

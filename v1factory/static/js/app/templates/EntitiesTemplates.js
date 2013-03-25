@@ -3,7 +3,7 @@ var Templates = {};
 Templates.Entity = [
   '<div class="row hoff1">',
     '<ul class="span6 hoff1 sub-menu">',
-      '<li>Upload Excel</li>',
+      '<li class="upload-excel">Upload Excel</li>',
       '<li>Delete</li>',
     '</ul>',
     '<div class="span58">',

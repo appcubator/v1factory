@@ -701,6 +701,14 @@ body {
   padding-top: 9px;
   padding-left: 10px;
   border:1px solid #CCC;
+  cursor: pointer;
+  -webkit-transition: border-color 60ms linear;
+  -webkit-transition: box-shadow 60ms linear;
+}
+
+.url-bar:hover {
+  border-color: #71c5ef;
+  box-shadow: 0 0 4px 0 rgba(60, 60, 60, 0.4);
 }
 
 .page {
@@ -915,6 +923,7 @@ body {
   z-index: 2000;
   background-position: center center;
   background-repeat: no-repeat;
+  background-image: url(../img/loading.gif);
 }
 
 .logo {
@@ -1019,73 +1028,6 @@ select.font {
   background-repeat: no-repeat;
   background-position: center center;
 }
-/*.ui-resizable-e:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  top: 50%;
-  margin-top: -3px;
-  margin-left: -2px;
-}
-
-.ui-resizable-w:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  top: 50%;
-  margin-top: -3px;
-  margin-left: 1px;
-}
-
-.ui-resizable-e:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  top: 50%;
-  margin-top: -3px;
-  margin-left: -2px;
-}
-
-.ui-resizable-n:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  left: 50%;
-  margin-left: -2px;
-}
-
-.ui-resizable-s:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  left: 50%;
-  margin-left: -2px;
-}*/
 
 .section ul li .key {
   display: inline-block;
@@ -1501,4 +1443,18 @@ select.font-picker {
 
 strong {
   font-weight: bold !important;
+}
+
+
+select.url-part {
+  width: 76px;
+  display: inline-block;
+  margin: 0;
+  padding: 4px 2px;
+  text-align: left;
+}
+
+h3.edit-url {
+  font-size: 20px;
+  font-weight: bold;
 }

@@ -2,11 +2,12 @@ define([
   '../models/EntityModel',
   '../models/UserEntityModel',
   '../models/FieldModel',
+  './UploadExcelView',
   'backbone',
   'jquery-ui'
 ],
 
-function(EntityModel, UserEntityModel, FieldModel) {
+function(EntityModel, UserEntityModel, FieldModel, UploadExcelView) {
 
   var EntityCollection = Backbone.Collection.extend({
     model: EntityModel
@@ -25,7 +26,8 @@ function(EntityModel, UserEntityModel, FieldModel) {
       'submit .add-property-form'  : 'formSubmitted',
       'change .attribs'            : 'changedAttribs',
       'click #cross'               : 'clickedDelete',
-      'click .prop-cross'          : 'clickedPropDelete'
+      'click .prop-cross'          : 'clickedPropDelete',
+      'click .upload-excel'        : 'clickedUploadExcel'
     },
 
 
@@ -39,7 +41,8 @@ function(EntityModel, UserEntityModel, FieldModel) {
                       'addedEntity',
                       'clickedDelete',
                       'modelRemoved',
-                      'clickedPropDelete');
+                      'clickedPropDelete',
+                      'clickedUploadExcel');
 
       this.model = item;
       this.model.bind('change:owns', this.ownsChangedOutside);
@@ -116,7 +119,7 @@ function(EntityModel, UserEntityModel, FieldModel) {
         var props = String(e.target.id).split('-');
         var cid = props[1];
         var attrib = props[0];
-        var value = 
+        //var value = 
         this.model.get('fields').get(cid).set(attrib, e.target.options[e.target.selectedIndex].value||e.target.value);
       },
 
@@ -138,6 +141,10 @@ function(EntityModel, UserEntityModel, FieldModel) {
         var cid = String(e.target.id||e.target.parentNode.id).replace('delete-','');
         this.model.get('fields').remove(cid);
         $('#column-' + cid).remove();
+      },
+
+      clickedUploadExcel: function(e) {
+        new UploadExcelView();
       }
     });
 

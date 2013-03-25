@@ -5,6 +5,8 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile, UITheme
 from django.views.decorators.csrf import csrf_exempt
+from app_builder.app_utils import get_xl_data, add_xl_data
+from app_builder.deployment.models import Deployment
 import requests
 
 def add_statics_to_context(context, app):
@@ -180,6 +182,25 @@ def entities(request, app_id):
   app = get_object_or_404(App, id=app_id)
   page_context = { 'app': app, 'title' : 'Entities', 'app_id': app_id  }
   return render(request, 'app-entities.html', page_context)
+
+@login_required
+@csrf_exempt
+@require_POST
+def process_excel(request, app_id):
+  app_id = long(app_id)
+  file_name = request.FILES['file_name']
+  app = get_object_or_404(App, id=app_id)
+  try:
+    d = Deployment.objects.get(subdomain=app.subdomain())
+  except Deployment.DoesNotExist:
+    raise Exception("App has not been deployed yet")
+  state = app.get_state()
+  xl_data = get_xl_data(file_name)
+  for sheet in xl_data:
+    if state['entities']['_mapping']['name'] != sheet:
+      return (404, "Excel file is inconsistent with schema")
+  add_xl_data(xl_data, d.app_dir + "/db")
+  return (200, "ok")
 
 from django.forms import ModelForm
 class StaticFileForm(ModelForm):
