@@ -915,6 +915,7 @@ body {
   z-index: 2000;
   background-position: center center;
   background-repeat: no-repeat;
+  background-image: url(../img/loading.gif);
 }
 
 .logo {
@@ -1019,73 +1020,6 @@ select.font {
   background-repeat: no-repeat;
   background-position: center center;
 }
-/*.ui-resizable-e:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  top: 50%;
-  margin-top: -3px;
-  margin-left: -2px;
-}
-
-.ui-resizable-w:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  top: 50%;
-  margin-top: -3px;
-  margin-left: 1px;
-}
-
-.ui-resizable-e:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  top: 50%;
-  margin-top: -3px;
-  margin-left: -2px;
-}
-
-.ui-resizable-n:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  left: 50%;
-  margin-left: -2px;
-}
-
-.ui-resizable-s:after {
-  position: absolute;
-  display: inline-block;
-  content: ' ';
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
-  width: 6px;
-  height: 6px;
-  left: 50%;
-  margin-left: -2px;
-}*/
 
 .section ul li .key {
   display: inline-block;

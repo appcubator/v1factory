@@ -3,6 +3,8 @@ define([
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
+  'app/collections/UrlsCollection',
+  'app/views/UrlView',
   'editor/WidgetsManagerView',
   'editor/WidgetClassPickerView',
   'editor/WidgetEditorView',
@@ -15,6 +17,8 @@ define([
            EntityCollection,
            WidgetCollection,
            ContainersCollection,
+           UrlsCollection,
+           UrlView,
            WidgetsManagerView,
            WidgetClassPickerView,
            WidgetEditorView,
@@ -32,7 +36,8 @@ define([
       'click #settings'      : 'showSettings',
       'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
-      'click .page'          : 'clickedPage'
+      'click .page'          : 'clickedPage',
+      'click .url-bar'       : 'clickedUrl'
     },
 
     initialize: function() {
@@ -46,7 +51,8 @@ define([
                       'getContextEntities',
                       'containerSelected',
                       'widgetSelected',
-                      'keydown');
+                      'keydown',
+                      'clickedUrl');
 
       var page = appState.pages[pageId];
 
@@ -261,6 +267,12 @@ define([
         this.containersCollection.selectedEl = null;
         this.containersCollection.unselectAll();
       }
+    },
+
+    clickedUrl: function() {
+      var urlsCollection  = new UrlsCollection(appState.urls);
+      var urlModel = urlsCollection.where({ page_name : this.model.get('name')})[0];
+      var newView =  new UrlView(urlModel);
     },
 
     containerSelected: function(e) {
