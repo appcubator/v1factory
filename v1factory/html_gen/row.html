@@ -1,3 +1,7 @@
-<div class="row hoff{{row.margin_top}}">{% for col in row.cols %}
-  {{ col.render() }}{% endfor %}
+{% if context.cols %}
+<div class="row hoff{{context.margin_top}}">
+{% for col in context.cols %}
+  {{ col.render(env) }}
+{% endfor %}
 </div>
+{% endif %}
