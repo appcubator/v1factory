@@ -28,16 +28,23 @@ def get_xl_data(xl_file):
             xl_dict[sheet_name]['data'] = data
     return xl_dict
 
-def get_model_data(query, model_name, db_path, limit=100):
+def get_model_data(model_name, db_path, limit=100):
     con = sql.connect(db_path)
     cr = con.cursor()
     li = []
-    for row in cr.execute("select * from webapp_" + model_name + " limit + " limit):
+    for row in cr.execute("select * from webapp_" + model_name + " limit " + str(limit)):
         li.append(row)
     ans = dict()
-    cr.execute("SELECT sql FROM sqlite_master WHERE type='table' and name='?'", "webapp_" + model_name)
-    ans['schema'] = cr.fetchall().split('\n')[1:]
+    cr.execute("SELECT sql FROM sqlite_master WHERE type='table' and name='webapp_" + model_name + "'")
+    schema_out =  cr.fetchall()
+    # Hack to extract fields out of SQL output
+    schema_fields = schema_out[0][0].split('"')[3:]
+    schema_li = []
+    for i in range(len(schema_fields)):
+        if i%2 == 0:
+            schema_li.append(schema_fields[i])
     con.close()
+    ans['schema'] = schema_li
     ans['data'] = li
     return simplejson.dumps(ans)
 
