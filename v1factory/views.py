@@ -187,7 +187,7 @@ def entities(request, app_id):
 @csrf_exempt
 def process_excel(request, app_id):
   app_id = long(app_id)
-  file_name = request.POST['file_name']
+  file_name = request.FILES('file_name')
   app = get_object_or_404(App, id=app_id)
   try:
     d = Deployment.objects.get(subdomain=app.subdomain())
