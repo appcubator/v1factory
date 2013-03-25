@@ -126,10 +126,7 @@ define(['backbone', 'jquery-ui'], function() {
       document.body.appendChild(div);
 
       $(div).on('click', function() {
-        self.$el.remove();
-        $(self.backgroundDiv).remove();
-        $(self.modalWindow).remove();
-        self.stopListening();
+        self.closeModal();
       });
 
       return div;
@@ -163,10 +160,7 @@ define(['backbone', 'jquery-ui'], function() {
       document.body.appendChild(div);
 
       $(span).on('click', function(){
-        self.$el.remove();
-        $(self.backgroundDiv).remove();
-        $(self.modalWindow).remove();
-        self.stopListening();
+        self.closeModal();
       });
 
       this.el = content;
@@ -174,8 +168,12 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     closeModal: function() {
-      this.remove();
+      this.onClose();
+      this.$el.remove();
+      $(this.backgroundDiv).remove();
       $(this.modalWindow).remove();
+      this.stopListening();
+      this.remove();
     },
 
     handleKey: function(e) {

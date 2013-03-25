@@ -5,6 +5,7 @@ define([
   'app/collections/ContainersCollection',
   'app/collections/UrlsCollection',
   'app/views/UrlView',
+  'app/views/SimpleModalView',
   'editor/WidgetsManagerView',
   'editor/WidgetClassPickerView',
   'editor/WidgetEditorView',
@@ -19,6 +20,7 @@ define([
            ContainersCollection,
            UrlsCollection,
            UrlView,
+           SimpleModalView,
            WidgetsManagerView,
            WidgetClassPickerView,
            WidgetEditorView,
@@ -41,7 +43,9 @@ define([
     },
 
     initialize: function() {
-      _.bindAll(this, 'save',
+      _.bindAll(this, 'render',
+                      'renderUrlBar',
+                      'save',
                       'amendAppState',
                       'deploy',
                       'style',
@@ -70,6 +74,9 @@ define([
 
       this.designEditor     = new DesignEditorView(this.model, true);
 
+      var urlsCollection  = new UrlsCollection(appState.urls);
+      this.urlModel = urlsCollection.where({ page_name : this.model.get('name')})[0];
+
       this.entityCollection.add(appState.entities);
       this.getContextEntities();
 
@@ -85,9 +92,12 @@ define([
     },
 
     render: function() {
-      //this.el.appendChild(this.galleryEditor.el);
-      // this.el.appendChild(this.gridEditor.el);
       this.el.appendChild(this.designEditor.el);
+      this.renderUrlBar();
+    },
+
+    renderUrlBar: function() {
+      this.$el.find('.url-bar').html(this.urlModel.getUrlString());
     },
 
     save : function() {
@@ -97,8 +107,7 @@ define([
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(curAppState),
-        complete: function() { iui.dontAskBeforeLeave();},
-        dataType: "JSON"
+        complete: function() { iui.dontAskBeforeLeave();}
       });
 
       return false;
@@ -126,24 +135,11 @@ define([
     deploy: function() {
       this.save();
 
-      var ThanksView = BackboneUI.ModalView.extend({
-        tagName: 'div',
-        className: 'deployed',
-        initialize: function(text) {
-          this.render(text.text);
-        },
-        render : function(text) {
-          this.el.innerHTML = text;
-          return this;
-        }
-      });
-
-
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/',
         complete: function(data) {
-          new ThanksView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
         },
         dataType: "JSON"
       });
@@ -270,9 +266,8 @@ define([
     },
 
     clickedUrl: function() {
-      var urlsCollection  = new UrlsCollection(appState.urls);
-      var urlModel = urlsCollection.where({ page_name : this.model.get('name')})[0];
-      var newView =  new UrlView(urlModel);
+      var newView =  new UrlView(this.urlModel);
+      newView.onClose = this.renderUrlBar;
     },
 
     containerSelected: function(e) {
