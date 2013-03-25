@@ -107,7 +107,9 @@ define([
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(curAppState),
-        complete: function() { iui.dontAskBeforeLeave();}
+        complete: function() { iui.dontAskBeforeLeave();},
+        success: function() { alert('save successful'); },
+        error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
       });
 
       return false;

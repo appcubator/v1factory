@@ -97,6 +97,17 @@ class App(models.Model):
   def init_deploy(self):
     pass
 
+  def write_to_tmpdir(self):
+    from app_builder.analyzer import AnalyzedApp
+    from app_builder.django.coordinator import analyzed_app_to_app_components
+    from app_builder.django.writer import DjangoAppWriter
+
+    a = AnalyzedApp(self.state)
+    dw = analyzed_app_to_app_components(a)
+    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+
+    return tmp_project_dir
+
   def subdomain(self):
     subdomain = self.owner.username.lower() + "-" + self.name.lower()
     if not settings.PRODUCTION:

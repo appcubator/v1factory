@@ -33,11 +33,8 @@ class DjangoAppWriter:
     return template.render(form_receivers=self.django_app.form_receivers.each(), models=self.django_app.models.each())
 
   def render_templates(self):
-    templates = []
     for t in self.django_app.templates.each():
-      templates.append( (t.filename, t.render(),) )
-
-    return templates
+      yield (t.filename, t.render(),)
 
   def render_css(self):
     return ""
