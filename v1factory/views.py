@@ -5,7 +5,7 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile, UITheme
 from django.views.decorators.csrf import csrf_exempt
-from app_builder.app_utils import get_xl_data, add_xl_data
+from app_builder.app_utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
 import requests
 
@@ -203,6 +203,18 @@ def process_excel(request, app_id):
   add_xl_data(xl_data, d.app_dir + "/db")
   return HttpResponse("ok")
 
+@login_required
+@require_POST
+def fetch_data(request, app_id):
+  app_id = long(app_id)
+  model_name = request.POST['model_name']
+  app = get_object_or_404(App, id=app_id)
+  try:
+    d = Deployment.objects.get(subdomain=app.subdomain())
+  except Deployment.DoesNotExist:
+    raise Exception("App has not been deployed yet")
+  return JSONResponse(get_model_data(model_name, d.app_dir + "/db"))
+  
 from django.forms import ModelForm
 class StaticFileForm(ModelForm):
   class Meta:
