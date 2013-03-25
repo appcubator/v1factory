@@ -3,7 +3,7 @@ import sqlite3 as sql
 import subprocess
 import os
 import shlex
-
+import simplejson
 def get_xl_data(xl_file):
     xl_dict = dict()
     xf = xls.open_workbook(file_contents=xl_file.read())
@@ -27,6 +27,19 @@ def get_xl_data(xl_file):
                     data.append(datar)
             xl_dict[sheet_name]['data'] = data
     return xl_dict
+
+def get_model_data(query, model_name, db_path, limit=100):
+    con = sql.connect(db_path)
+    cr = con.cursor()
+    li = []
+    for row in cr.execute("select * from webapp_" + model_name + " limit + " limit):
+        li.append(row)
+    ans = dict()
+    cr.execute("SELECT sql FROM sqlite_master WHERE type='table' and name='?'", "webapp_" + model_name)
+    ans['schema'] = cr.fetchall().split('\n')[1:]
+    con.close()
+    ans['data'] = li
+    return simplejson.dumps(ans)
 
 def add_xl_data(xl_data, db_path):
     con = sql.connect(db_path)
