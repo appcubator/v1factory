@@ -185,6 +185,7 @@ def entities(request, app_id):
 
 @login_required
 @csrf_exempt
+@require_POST
 def process_excel(request, app_id):
   app_id = long(app_id)
   file_name = request.FILES['file_name']
