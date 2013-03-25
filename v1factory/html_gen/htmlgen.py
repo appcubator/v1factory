@@ -1,17 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# SET UP SOME TYPES
+import codecs
+import os.path
 import pdb
 import simplejson
-import jinja2
+
 from jinja2 import Environment, FileSystemLoader
 
-import os.path
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-j2_env = Environment(loader=FileSystemLoader(THIS_DIR))
+class Renderable(object):
+  """ Mixin representing a context that can render itself into a given
+  environment. """
+  def render(self, env):
+    template_name = "{}.html".format(type(self).__name__.lower())
+    return env.get_template(template_name).render(context=self, env=env)
 
-class Column(object):
+class Column(Renderable):
   def __init__(self):
     # will either be a dictionary representing uielement, or a DomTree.
     self.uiels = []
@@ -19,154 +23,150 @@ class Column(object):
     self.width = 0
     self.tree = None # uninitialized state
 
-  def render(self):
-    return j2_env.get_template("column.html").render(col=self)
-
-
-class Row(object):
+class Row(Renderable):
   def __init__(self):
     self.uiels = []
     margin_top = 0
     self.cols = None # uninitialized state
 
-  def render(self):
-    if self.cols is None:
-      raise Exception()
-    return j2_env.get_template("row.html").render(row=self)
-
-
-class DomTree(object):
+class DomTree(Renderable):
   def __init__(self):
     self.rows = []
 
-  def render(self):
-    return "\n".join([r.render() for r in self.rows ])
+class TemplateRenderer(Renderable):
+  """ Write a template using the new HTMLGen code """
+  def __init__(self, state):
+    self.state = state
+    self.dom_tree = self.create_tree(self.state['uielements']) # TODO FIXME: expensive action in __init__
 
+  def create_tree(self, uiels, recursive_num=0, top_offset=0, left_offset=0):
+    """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
+    tree = DomTree()
 
-# FUNCTIONS TO CREATE THOSE TYPES
+    tree.rows = self.split_to_rows(uiels, top_offset=top_offset)
+    for r in tree.rows:
+      r.cols = self.split_to_cols(r.uiels, left_offset=left_offset)
+      for c in r.cols:
+        if len(c.uiels) == 1:
+          c.tree = None # termination of recursion
+        else:
+          if len(tree.rows) == 1 and len(r.cols) == 1:
+            # in this case, recursion will not terminate since input is not subdivided into smaller components
+            # create a relative container and absolute position the contents.
+            c.tree = None
+          else:
+            c.tree = self.create_tree(c.uiels, top_offset=r.uiels[0]['layout']['top'], left_offset=c.uiels[0]['layout']['left'])
+    return tree
 
-def split_to_rows(uiels, top_offset=0):
-  """Given some uielements, separate them into non-overlapping rows"""
-  # do a top down sweep, to identify continuous areas of emptiness
-  # start with an empty row, and include the top-most block
-  # then see if there are other blocks which lie on top of this.bottom_boundary.
-  # if there are, add it to this row. start with that block and try again
-  # if not, then end the row. create a new row and repeat if there are more blocks to place.
+  def split_to_cols(self, uiels, left_offset=0):
+    """Given some uielements, separate them into non-overlapping columns"""
+    cols = []
+    if len(uiels) == 0:
+      return cols
 
-  rows = []
-  if len(uiels) == 0:
-    return rows
+    sorted_uiels = sorted(uiels, key=lambda u: u['layout']['left'])
+    #pdb.set_trace()
 
-  sorted_uiels = sorted(uiels, key=lambda u: u['layout']['top'])
+    # leftmost uiel must be in the row
+    current_col = Column()
+    cols.append(current_col)
+    current_block = sorted_uiels.pop(0)
+    current_col.uiels.append(current_block)
+    current_col.margin_left = current_block['layout']['left'] - left_offset
 
-  # topmost uiel must be in the row
-  current_row = Row()
-  rows.append(current_row)
-  current_block = sorted_uiels.pop(0)
-  current_row.uiels.append(current_block)
-  current_row.margin_top = current_block['layout']['top'] - top_offset
+    # iterate over the uiels left down
+    for u in sorted_uiels:
+      current_right = current_block['layout']['left'] + current_block['layout']['width']
+      u_left = u['layout']['left']
+      u_right = u_left + u['layout']['width']
 
-  # iterate over the uiels top down
-  for u in sorted_uiels:
-    current_bottom = current_block['layout']['top'] + current_block['layout']['height']
-    u_top = u['layout']['top']
-    u_bottom = u_top + u['layout']['height']
+      #Two cases:
+      #1. this block is in the current row.
+      if u_left < current_right:
+        current_col.uiels.append(u)
+          #a. this block is extends longer than the current block
+        if u_right > current_right:
+          current_block = u
+      #2. this block must be the left-most block in a new row
+      else:
+        current_col.width = current_right - current_col.uiels[0]['layout']['left']
 
-    #Two cases:
-    #1. this block is in the current row.
-    if u_top < current_bottom:
-      current_row.uiels.append(u)
-        #a. this block is extends longer than the current block
-      if u_bottom > current_bottom:
+        current_col = Column()
+        cols.append(current_col)
+
+        current_col.uiels.append(u)
+        current_col.margin_left = u_left - current_right
+
         current_block = u
-    #2. this block must be the top-most block in a new row
-    else:
-      current_row = Row()
-      rows.append(current_row)
 
-      current_row.uiels.append(u)
-      current_row.margin_top = u_top - current_bottom
+    # set the width of the last column
+    current_right = current_block['layout']['left'] + current_block['layout']['width']
+    current_col.width = current_right - current_col.uiels[0]['layout']['left']
 
-      current_block = u
-
-  return rows
-
-def split_to_cols(uiels, left_offset=0):
-  """Given some uielements, separate them into non-overlapping columns"""
-  cols = []
-  if len(uiels) == 0:
     return cols
 
-  sorted_uiels = sorted(uiels, key=lambda u: u['layout']['left'])
-  #pdb.set_trace()
+  def split_to_rows(self, uiels, top_offset=0):
+    """Given some uielements, separate them into non-overlapping rows"""
+    # do a top down sweep, to identify continuous areas of emptiness
+    # start with an empty row, and include the top-most block
+    # then see if there are other blocks which lie on top of this.bottom_boundary.
+    # if there are, add it to this row. start with that block and try again
+    # if not, then end the row. create a new row and repeat if there are more blocks to place.
 
-  # leftmost uiel must be in the row
-  current_col = Column()
-  cols.append(current_col)
-  current_block = sorted_uiels.pop(0)
-  current_col.uiels.append(current_block)
-  current_col.margin_left = current_block['layout']['left'] - left_offset
+    rows = []
+    if len(uiels) == 0:
+      return rows
 
-  # iterate over the uiels left down
-  for u in sorted_uiels:
-    current_right = current_block['layout']['left'] + current_block['layout']['width']
-    u_left = u['layout']['left']
-    u_right = u_left + u['layout']['width']
+    sorted_uiels = sorted(uiels, key=lambda u: u['layout']['top'])
 
-    #Two cases:
-    #1. this block is in the current row.
-    if u_left < current_right:
-      current_col.uiels.append(u)
-        #a. this block is extends longer than the current block
-      if u_right > current_right:
-        current_block = u
-    #2. this block must be the left-most block in a new row
-    else:
-      current_col.width = current_right - current_col.uiels[0]['layout']['left']
+    # topmost uiel must be in the row
+    current_row = Row()
+    rows.append(current_row)
+    current_block = sorted_uiels.pop(0)
+    current_row.uiels.append(current_block)
+    current_row.margin_top = current_block['layout']['top'] - top_offset
 
-      current_col = Column()
-      cols.append(current_col)
+    # iterate over the uiels top down
+    for u in sorted_uiels:
+      current_bottom = current_block['layout']['top'] + current_block['layout']['height']
+      u_top = u['layout']['top']
+      u_bottom = u_top + u['layout']['height']
 
-      current_col.uiels.append(u)
-      current_col.margin_left = u_left - current_right
-
-      current_block = u
-
-  # set the width of the last column
-  current_right = current_block['layout']['left'] + current_block['layout']['width']
-  current_col.width = current_right - current_col.uiels[0]['layout']['left']
-
-  return cols
-
-def create_tree(uiels, recursive_num=0, top_offset=0, left_offset=0):
-  """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
-  tree = DomTree()
-
-  tree.rows = split_to_rows(uiels, top_offset=top_offset)
-  for r in tree.rows:
-    r.cols = split_to_cols(r.uiels, left_offset=left_offset)
-    for c in r.cols:
-      if len(c.uiels) == 1:
-        c.tree = None # termination of recursion
+      #Two cases:
+      #1. this block is in the current row.
+      if u_top < current_bottom:
+        current_row.uiels.append(u)
+          #a. this block is extends longer than the current block
+        if u_bottom > current_bottom:
+          current_block = u
+      #2. this block must be the top-most block in a new row
       else:
-        if len(tree.rows) == 1 and len(r.cols) == 1:
-          # in this case, recursion will not terminate since input is not subdivided into smaller components
-          # create a relative container and absolute position the contents.
-          c.tree = None
-        else:
-          c.tree = create_tree(c.uiels, top_offset=r.uiels[0]['layout']['top'], left_offset=c.uiels[0]['layout']['left'])
-  return tree
+        current_row = Row()
+        rows.append(current_row)
+
+        current_row.uiels.append(u)
+        current_row.margin_top = u_top - current_bottom
+
+        current_block = u
+
+    return rows
 
 if __name__ == "__main__":
+  # Load the state from sample-page.json
   test_file = open('sample-page.json')
-
-  test_page = simplejson.load(test_file)
+  state = simplejson.load(test_file)
   test_file.close()
-  uielements = test_page['uielements']
-  dom_tree = create_tree(uielements)
 
-  result = j2_env.get_template("base.html").render(domtree=dom_tree)
-  import codecs
+  # Create the TemplateRenderer
+  renderer = TemplateRenderer(state)
+
+  # Create the template environment
+  THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+  env = Environment(loader=FileSystemLoader(THIS_DIR))
+
+  # Render the state into the environment
+  output = renderer.render(env)
+
   f = codecs.open("test_output.html", "w", "utf-8")
-  f.write(result)
+  f.write(output)
   f.close()
