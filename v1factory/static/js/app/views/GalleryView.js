@@ -8,27 +8,6 @@ define([
 
   var UIElementStyleModel = Backbone.Model.extend({ });
 
-  var UIElementModel = Backbone.Model.extend({
-    initialize: function(bone) {
-      this.set('style', bone.style||'');
-      this.set('class_name', bone.class_name||'');
-    },
-    toJSON: function() {
-      json = this.attributes;
-      if(json.content == null) json.content = '';
-      //json.attribs = this.get('attribs').attributes;
-      return json;
-    }
-  });
-
-  var UIElementCollection = Backbone.Collection.extend({
-    model : UIElementModel,
-    initialize: function (models, type) {
-      this.type = type;
-    }
-  });
-
-
   var UIElementModalView = BackboneUI.ModalView.extend({
     tagName : 'div',
     className : 'element-view',
@@ -184,42 +163,32 @@ define([
       'click #save' : 'save'
     },
 
-    initialize: function() {
+    initialize: function(themeModel) {
       _.bindAll(this,'save', 'render');
+      var self = this;
+      this.model = themeModel;
 
-      this.buttonCollection     = new UIElementCollection(uieState["button"], "button");
-      this.imageCollection      = new UIElementCollection(uieState["image"], "image");
-      this.headerTextCollection = new UIElementCollection(uieState["header-text"], "header-text");
-      this.textCollection       = new UIElementCollection(uieState["text"], "text");
-      this.linkCollection       = new UIElementCollection(uieState["link"], "link");
-      this.textInputCollection  = new UIElementCollection(uieState["text-input"], "text-input");
-      this.passwordCollection   = new UIElementCollection(uieState["password"], "password");
-      this.textAreaCollection   = new UIElementCollection(uieState["text-area"], "text-area");
-      this.lineCollection       = new UIElementCollection(uieState["line"], "line");
-      this.dropdownCollection   = new UIElementCollection(uieState["dropdown"], "dropdown");
-      this.boxCollection        = new UIElementCollection(uieState["box"], "box");
-
-      var buttonView     = new UIElementListView(this.buttonCollection, 'button');
+      var buttonView     = new UIElementListView(this.model.get('buttons'), 'button');
       iui.get('button').appendChild(buttonView.el);
-      var imageView      = new UIElementListView(this.imageCollection, 'image');
+      var imageView      = new UIElementListView(this.model.get('images'), 'image');
       iui.get('image').appendChild(imageView.el);
-      var headerTextView = new UIElementListView(this.headerTextCollection, 'header-text');
+      var headerTextView = new UIElementListView(this.model.get('headerTexts'), 'header-text');
       iui.get('header-text').appendChild(headerTextView.el);
-      var textView       = new UIElementListView(this.textCollection, 'text');
+      var textView       = new UIElementListView(this.model.get('texts'), 'text');
       iui.get('text').appendChild(textView.el);
-      var linkView       = new UIElementListView(this.linkCollection, 'link');
+      var linkView       = new UIElementListView(this.model.get('links'), 'link');
       iui.get('link').appendChild(linkView.el);
-      var textInputView  = new UIElementListView(this.textInputCollection, 'text-input');
+      var textInputView  = new UIElementListView(this.model.get('textInputs'), 'text-input');
       iui.get('text-input').appendChild(textInputView.el);
-      var passwordView   = new UIElementListView(this.passwordCollection, 'password');
+      var passwordView   = new UIElementListView(this.model.get('passwords'), 'password');
       iui.get('password').appendChild(passwordView.el);
-      var textAreaView   = new UIElementListView(this.textAreaCollection, 'text-area');
+      var textAreaView   = new UIElementListView(this.model.get('textAreas'), 'text-area');
       iui.get('text-area').appendChild(textAreaView.el);
-      var lineView       = new UIElementListView(this.lineCollection, 'line');
+      var lineView       = new UIElementListView(this.model.get('lines'), 'line');
       iui.get('line').appendChild(lineView.el);
-      var dropdownView   = new UIElementListView(this.dropdownCollection, 'dropdown');
+      var dropdownView   = new UIElementListView(this.model.get('dropdowns'), 'dropdown');
       iui.get('dropdown').appendChild(dropdownView.el);
-      var boxView        = new UIElementListView(this.boxCollection, 'box');
+      var boxView        = new UIElementListView(this.model.get('boxes'), 'box');
       iui.get('box').appendChild(boxView.el);
 
     },
