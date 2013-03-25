@@ -196,7 +196,7 @@ def process_excel(request, app_id):
     raise Exception("App has not been deployed yet")
   state = app.get_state()
   xl_data = get_xl_data(file_name)
-  for sheet in xl_schema:
+  for sheet in xl_data:
     if state['entities']['_mapping']['name'] != sheet:
       return (404, "Excel file is inconsistent with schema")
   add_xl_data(xl_data, d.app_dir + "/db")
