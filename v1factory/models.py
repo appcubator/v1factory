@@ -6,6 +6,7 @@ import simplejson
 import re
 from django.core.exceptions import ValidationError
 import os.path
+import requests
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 

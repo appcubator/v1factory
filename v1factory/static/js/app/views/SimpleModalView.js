@@ -10,7 +10,7 @@ function(Backbone, BackboneUI) {
     className: 'deployed',
     
     initialize: function(text) {
-        his.render(text.text);
+      this.render(text.text);
     },
     
     render : function(text) {
