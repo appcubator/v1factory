@@ -200,7 +200,7 @@ def process_excel(request, app_id):
     if state['entities']['_mapping']['name'] != sheet:
       return (404, "Excel file is inconsistent with schema")
   add_xl_data(xl_data, d.app_dir + "/db")
-  return (200, "ok")
+  return HttpResponse("ok")
 
 from django.forms import ModelForm
 class StaticFileForm(ModelForm):

@@ -26,7 +26,7 @@ def get_xl_data(xl_file):
                         datar.append(curr_sheet.cell(r,c))
                     data.append(datar)
             xl_dict[sheet_name]['data'] = data
-    print xl_dict
+    return xl_dict
 
 def add_xl_data(xl_data, db_path):
     con = sql.connect(db_path)
