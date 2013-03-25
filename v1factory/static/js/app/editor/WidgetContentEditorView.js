@@ -109,6 +109,9 @@ define([
     },
 
     changeFont: function(e) {
+      if(!this.model.get('content_attribs').has('style')) {
+        this.model.get('content_attribs').set('style', 'font-size:12px;');
+      }
       var curStyle = this.model.get('content_attribs').get('style');
       curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
       this.model.get('content_attribs').set('style', curStyle);
