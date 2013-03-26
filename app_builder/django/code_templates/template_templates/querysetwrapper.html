@@ -2,7 +2,7 @@
 {{ '{%' }} for item in {{ context.django_query.identifier() }} {{ '%}' }}
   <div style="position:relative;" class="span{{context.width}} hi{{context.height}}">
     {% for context in context.nodes %}
-    {% include "node.html" %}
+      {{ context.render(env) }}
     {% endfor %}
   </div>
 {{ "{% endfor %}" }}

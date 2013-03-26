@@ -4,7 +4,6 @@
 
 import re
 from manager import Manager
-from app_builder.html_gen import htmlgen
 
 """ MODELS """
 
@@ -61,7 +60,14 @@ class Route(object):
 
 """ UIEls """
 
-class UIElement(htmlgen.Renderable):
+class Renderable(object):
+  """ Mixin representing a context that can render itself into a given
+  environment. """
+  def render(self, env):
+    template_name = "{}.html".format(type(self).__name__.lower())
+    return env.get_template(template_name).render(context=self, env=env)
+
+class UIElement(Renderable):
   """A UIElement is either a Container or Node."""
 
   @classmethod
