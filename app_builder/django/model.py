@@ -31,7 +31,7 @@ class DjangoModel(object):
 
   def foreign_key_name(self):
     # note, i'm also using this to generate variable names for the url-data in the view
-    return self.name.lower()+"_id"
+    return self.name.lower()+"_related_id"
 
   def identifier(self):
     # FIXME need to do users better... wtf is this
@@ -65,6 +65,7 @@ class DjangoField(object):
     self.name = field.name
     self.field_type = field.content_type
     self.required = field.required
+    self.is_fk = field.is_fk
 
     # case on the model type to add the correct type of object as the model
     if isinstance(model, DjangoModel):
@@ -77,7 +78,7 @@ class DjangoField(object):
       raise Exception("Didn't recognized the type of the given model (not a DjangoModel or str)")
 
     # ensure the field type is recognized
-    if self.field_type not in DjangoField._type_map:
+    if self.field_type not in DjangoField._type_map and is not self.is_fk:
       raise Exception("This field type is not yet implemented: %s" % self.field_type)
 
   @classmethod
@@ -86,13 +87,23 @@ class DjangoField(object):
 
   def identifier(self):
     """What will this field be referred to as a variable?"""
-    return "m_" + self.name.replace(" ", "_")
+    id = "m_" + self.name.replace(" ", "_")
+    if self.is_fk:
+      return "fk_" + id
+    else:
+      return id
 
   def django_type(self):
-    return DjangoField._type_map[self.field_type]
+    if self.is_fk:
+      return "ForeignKey"
+    else:
+      return DjangoField._type_map[self.field_type] + "Field"
 
   def args(self):
-    return []
+    if self.is_fk:
+      return [self.name]
+    else:
+      return []
 
   def kwargs(self):
     kwargs = {}
@@ -102,6 +113,8 @@ class DjangoField(object):
       kwargs['auto_now'] = repr(True)
     if not self.required:
       kwargs['blank'] = repr(True)
+    if self.is_fk:
+      kwargs['related_name'] = 'fk_' + self.name
     return kwargs
 
   def render(self):

@@ -31,6 +31,7 @@ class Field(object):
     self.required = required
     self.content_type = content_type
     self.model = model
+    self.is_fk = False
 
   @classmethod
   def create_for_model(cls, field_dict, model):
@@ -328,6 +329,7 @@ class AnalyzedApp:
       r = Route(u)
       self.routes.add(r)
 
+    self.init_models()
     self.link_models_to_routes()
     self.link_routes_and_pages()
     self.fill_in_hrefs()
