@@ -23,8 +23,9 @@ class DjangoModel(object):
     self = cls(name=name, fields=fields)
 
     for f in abs_model.fields:
-      df = DjangoField(f, self, analyzed_app)
-      self.fields.add(df)
+      df = DjangoField.create(f, self, analyzed_app)
+      if df is not None:
+        self.fields.add(df)
 
     return self
 
@@ -33,6 +34,7 @@ class DjangoModel(object):
     return self.name.lower()+"_id"
 
   def identifier(self):
+    # FIXME need to do users better... wtf is this
     if self.name == "User":
       return "UserProfile"
     else:
@@ -77,6 +79,10 @@ class DjangoField(object):
     # ensure the field type is recognized
     if self.field_type not in DjangoField._type_map:
       raise Exception("This field type is not yet implemented: %s" % self.field_type)
+
+  @classmethod
+  def create(cls, field, model, analyzed_app):
+    pass
 
   def identifier(self):
     """What will this field be referred to as a variable?"""
