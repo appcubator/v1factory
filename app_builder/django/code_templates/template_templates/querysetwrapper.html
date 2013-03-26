@@ -1,6 +1,6 @@
-<div style="position:absolute; top:{{ context.top * 15 }}px; left:{{ context.left * 15 }}px;">
+<div class="row">
 {{ '{%' }} for item in {{ context.django_query.identifier() }} {{ '%}' }}
-  <div style="position:relative;" class="span{{context.width}} hi{{context.height}}">
+  <div class="span{{context.width}} hi{{context.height}}">
     {% for context in context.nodes %}
       {{ context.render(env) }}
     {% endfor %}

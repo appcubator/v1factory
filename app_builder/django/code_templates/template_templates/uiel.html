@@ -1,3 +1,5 @@
+<!-- uie {{ element }} -->
 <{{element.uie.tagName}} {% if element.uie.tagType %}type ="{{element.uie.tagType}}" {% endif %}class="{{ element.uie.class_name }} span{{element.uie.layout.width}} hi{{element.uie.layout.height}}" {% for attrib in element.uie.content_attribs %}{{ attrib }}="{{ element.uie.content_attribs[attrib] }}" {% endfor %}>
   {% if not element.uie.isSingle %}{{element.uie.content}}
 </{{element.uie.tagName}}>{% endif %}
+<!-- /uie {{ element }} -->

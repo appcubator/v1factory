@@ -1,11 +1,21 @@
+{# Left over from uiel.html in the htmlgen.py script
+<{{element.uie.tagName}} {% if element.uie.tagType %}type ="{{element.uie.tagType}}" {% endif %}class="{{ element.uie.class_name }} span{{element.uie.layout.width}} hi{{element.uie.layout.height}}" {% for attrib in element.uie.content_attribs %}{{ attrib }}="{{ element.uie.content_attribs[attrib] }}" {% endfor %}>
+  {% if not element.uie.isSingle %}{{element.uie.content}}
+</{{element.uie.tagName}}>{% endif %}
+#}
+
 {% if context.is_normal_tag() %}
-<div style="{{ context.position_css }}" class="{% for c in context.classes %}{{ c }} {% endfor %}">
+<!-- node is_normal_tag -->
+<div class="{% for c in context.classes %}{{ c }} {% endfor %}">
   <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
     {{ context.content() }}
   </{{ context.tagname }}>
 </div>
+<!-- /node is_normal_tag -->
 {% else %}
-<div style="{{ context.position_css }}" class="{% for c in context.classes %}{{ c }} {% endfor %}">
+<!-- node !is_normal_tag -->
+<div class="{% for c in context.classes %}{{ c }} {% endfor %}">
   <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
 </div>
+<!-- /node !is_normal_tag -->
 {% endif %}

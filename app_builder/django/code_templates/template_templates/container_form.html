@@ -1,6 +1,8 @@
-<form style="{{ context.position_css }}" method="POST" {% if context.__class__.__name__ == "LoginForm" %}action="{{ '{%' }} url django.contrib.auth.views.login {{ '%}' }}"{% else %}action="{{ '{%' }} url {{ context.form_receiver.view_path() }} {{ '%}' }}"{% endif %}>
+<!-- container_form -->
+<form method="POST" {% if context.__class__.__name__ == "LoginForm" %}action="{{ '{%' }} url django.contrib.auth.views.login {{ '%}' }}"{% else %}action="{{ '{%' }} url {{ context.form_receiver.view_path() }} {{ '%}' }}"{% endif %}>
   {{ "{% csrf_token %}" }}
   {% for context in context.nodes %}
-  {% include "node.html" %}
+    {{ context.render(env) }}
   {% endfor %}
 </form>
+<!-- /container_form -->

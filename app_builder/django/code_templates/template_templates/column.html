@@ -1,3 +1,4 @@
+<!-- column -->
 <div class="span{{context.width}} offset{{context.margin_left}}">
 {% if context.tree == None %}
   {% for element in context.uiels %}
@@ -7,3 +8,4 @@
   {{ context.tree.render(env) }}
 {% endif %}
 </div>
+<!-- /column -->
