@@ -24,8 +24,6 @@ define(['./UrlView', 'iui', 'backbone'], function(UrlView) {
       this.urlModel = urlModel;
       this.render();
       this.renderMenu();
-      //var designEditor = new DesignEditorView(this.model, false);
-      //this.el.appendChild(designEditor.el);
     },
 
     render: function() {
