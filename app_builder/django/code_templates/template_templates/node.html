@@ -1,11 +1,11 @@
-{% if uie.is_normal_tag() %}
-<div style="{{ uie.position_css }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}">
-  <{{ uie.tagname }} id="{{ uie.html_id }}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
-    {{ uie.content() }}
-  </{{ uie.tagname }}>
+{% if context.is_normal_tag() %}
+<div style="{{ context.position_css }}" class="{% for c in context.classes %}{{ c }} {% endfor %}">
+  <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
+    {{ context.content() }}
+  </{{ context.tagname }}>
 </div>
 {% else %}
-<div style="{{ uie.position_css }}" class="{% for c in uie.classes %}{{ c }} {% endfor %}">
-  <{{ uie.tagname }} id="{{ uie.html_id }}" {% for k,v in uie.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
+<div style="{{ context.position_css }}" class="{% for c in context.classes %}{{ c }} {% endfor %}">
+  <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
 </div>
 {% endif %}

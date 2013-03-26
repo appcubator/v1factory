@@ -1,19 +1,7 @@
 {{ "{%" }} extends "base.html" {{ "%}" }}
 {{ "{% block content %}" }}
 {% for uie in context.page.uielements %}
-  {% if uie.__class__.__name__ == "LoginForm" %}
-  {% include "container_form.html" %}
-  {% elif uie.__class__.__name__ == "SignupForm" %}
-  {% include "container_form.html" %}
-  {% elif uie.__class__.__name__ == "EditForm" %}
-{% include "container_form.html" %}
-  {% elif uie.__class__.__name__ == "CreateForm" %}
-{% include "container_form.html" %}
-  {% elif uie.__class__.__name__ == "QuerysetWrapper" %}
-{% include "container_query.html" %}
-  {% elif uie.__class__.__name__ == "Node" %}
-{% include "node.html" %}
-  {% endif %}
+  {{ uie.render(env) }}
 {% endfor %}
 {{ "{% endblock %}" }}
 {{ "{% block css %}" }}
