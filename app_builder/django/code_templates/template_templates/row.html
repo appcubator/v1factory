@@ -1,0 +1,7 @@
+{% if context.cols %}
+<div class="row hoff{{context.margin_top}}">
+{% for col in context.cols %}
+  {{ col.render(env) }}
+{% endfor %}
+</div>
+{% endif %}

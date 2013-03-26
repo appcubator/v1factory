@@ -5,8 +5,9 @@ from jinja2 import Environment, PackageLoader
 from app_builder.html_gen import htmlgen
 from app_builder.analyzer import Container, Node, Page, QuerysetWrapper
 
-class DjangoTemplate(htmlgen.Renderable):
+class DjangoTemplate(htmlgen.TemplateRenderer):
   def __init__(self, name=None, filename=None, page=None):
+    super(DjangoTemplate, self).__init__(page.uielements)
     self.name = name
     self.filename = filename
     self.page = page

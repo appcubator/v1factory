@@ -1,0 +1,9 @@
+<div class="span{{context.width}} offset{{context.margin_left}}">
+{% if context.tree == None %}
+  {% for element in context.uiels %}
+    {% include "uiel.html" %}
+  {% endfor %}
+{% else %}
+  {{ context.tree.render(env) }}
+{% endif %}
+</div>
