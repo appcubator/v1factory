@@ -20,8 +20,31 @@ class Field(object):
     self.required = field['required']
     self.content_type = field['type']
     self.model = model
+    self.is_fk = False
 
+  def resolve_entity(self, analyzed_app):
+    self.entity = analyzed_app.models.get_by_name(self.entity_name)
+    self.included_fields = []
+    for f in self.entity.fields:
+      if f.name in self.included_field_names:
+        self.included_fields.append(f)
 
+  def resolve_foreign_keys(self, analyzed_app):
+    def extract_from_brace(s):
+      "Takes a string out of the brace wrappers"
+      m = re.match(r'\{\{(.+)\}\}', s)
+      if m is None: return None
+      else:
+        return m.groups()[0].strip()
+
+    self.models = analyzed_app.models
+    model_check = extract_from_brace(self.content_type)
+    if model_check != None:
+      for f in self.models:
+        if f == model_check:
+          self.name = model_check
+          self.is_fk = True
+          break
 
 """ PAGES """
 
@@ -296,6 +319,7 @@ class AnalyzedApp:
       r = Route(u)
       self.routes.add(r)
 
+    self.init_models()
     self.link_models_to_routes()
     self.link_routes_and_pages()
     self.fill_in_hrefs()
@@ -333,6 +357,11 @@ class AnalyzedApp:
     for p in self.pages.each():
       for uie in p.uielements:
         uie.resolve_links(self.pages)
+
+  def init_models(self):
+    for m in self.models:
+      for f in m.fields:
+        f.resolve_foreign_keys(self)
 
   def init_forms(self):
     self.forms = Manager(Form)
