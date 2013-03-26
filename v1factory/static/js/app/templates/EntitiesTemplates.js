@@ -1,5 +1,13 @@
 var Templates = {};
 
+Templates.Form = [
+  '<div class="span6" id="form-<%= form.cid %>">',
+    '<div class="hi3 hdr"><%= form.get("name") %></div>',
+    '<div class="hi2 edit-form" id="edit-<%- form.cid %>">Edit Form</div>',
+    '<div class="hi2 remove-form" id="remove-<%- form.cid %>"><div class="remove-form btn">Remove</div></div>',
+  '</div>'
+].join('\n');
+
 Templates.Entity = [
   '<div class="row hoff1">',
     '<ul class="span6 hoff1 sub-menu">',
@@ -51,9 +59,23 @@ Templates.Entity = [
           '</span>',
         '</span>',
       '</div>',
+      '<div class="hi12 pane span56" style="padding:0;">',
+        '<h3 class="hi10 offset1 hoff2 span8">Forms</h3>',
+        '<ul class="form-list"><% _.each(forms, function(form) { %>',
+        Templates.Form,
+        '<% }); %></ul><a class="span8 hi15" style="float:none;">',
+          '<form class="add-form-form" style="display:none">',
+            '<div class="hi2 hdr">',
+              '<input type="text" class="form-name-input span7" placeholder="Form Name...">',
+            '</div>',
+          '</form>',
+          '<span class="add-form-button"><span class="plus">+</span> Add New Form</span>',
+        '</a>',
+      '</div>',
     '</div>',
   '</div>'
 ].join('\n');
+
 
 Templates.Property = [
 '<div class="column span6" id="column-<%- cid %>">',
