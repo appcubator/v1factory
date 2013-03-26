@@ -1,15 +1,22 @@
-define(
- ['app/collections/WidgetCollection',
+define([
+  'app/collections/WidgetCollection',
   'app/models/QueryModel',
-  'app/models/EntityModel'],
-  function(WidgetCollection, QueryModel, EntityModel) {
+  'app/models/EntityModel',
+  'app/models/UserEntityModel'
+],
+function(WidgetCollection, QueryModel, EntityModel, UserEntityModel) {
 
   var ContainerInfoModel = Backbone.Model.extend({
     initialize: function(bone) {
       this.set('uielements', new WidgetCollection(bone.uielements));
 
       if(bone.entity && !bone.entity.attributes) {
-        this.set('entity', new EntityModel(bone.entity));
+        if(bone.entity == "User") {
+          this.set('entity', new UserEntityModel(bone.entity));
+        }
+        else {
+          this.set('entity', new EntityModel(bone.entity));
+        }
       }
 
       if(bone.query) {

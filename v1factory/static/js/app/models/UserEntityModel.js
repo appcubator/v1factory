@@ -1,6 +1,11 @@
-define(['backbone', './EntityModel', './FieldModel', '../collections/FieldsCollection'], 
-  function(Backbone, EntityModel, FieldModel, FieldsCollection) {
-
+define([
+  './EntityModel',
+  './FieldModel',
+  'app/collections/FieldsCollection',
+  'backbone'
+],
+function(EntityModel, FieldModel, FieldsCollection, Backbone) {
+  console.log(EntityModel);
   var UserEntityModel = EntityModel.extend({
     defaults : {
       facebook : false,

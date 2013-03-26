@@ -1,0 +1,31 @@
+var FormEditorTemplates = { };
+
+FormEditorTemplates.template = [
+  '<div class="fields-panel panel">',
+    '<h3><%= form.get("name") %></h3>',
+    '<% _(entity.get("fields").models).each(function(field) { %>',
+      '<label><input type="checkbox" value="<%= field.get(\'name\') %>"><%= field.get(\'name\') %></label>',
+    '<% }); %>',
+  '</div><div class="details-panel panel">',
+    '<input type="text" placeholder="Field Label Field1">',
+    '<ul>',
+      '<li>Single Line Text</li>',
+      '<li>Paragraph Text</li>',
+      '<li>Multiple Choice</li>',
+      '<li>Section Break</li>',
+      '<li>Dropdown</li>',
+      '<li>Option Boxes</li>',
+    '</ul>',
+  '</div><div class="form-panel panel">',
+    '<ul class="form-file">',
+      '<li>Field1</li>',
+      '<li>Field2</li>',
+    '</ul>',
+  '</div><div class="action-panel panel">',
+    '<h4>Form Actions</h4>',
+    '<span>Go to</span>',
+    '<select><option>Page 1</option><option>Page 2</option></select>',
+    '<span>Email</span>',
+    '<select><option>Email 1</option><option>Email 2</option></select>',
+  '</div>'
+].join('\n');

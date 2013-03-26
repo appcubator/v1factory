@@ -1,9 +1,10 @@
 define([
   'backbone',
   'app/models/FieldModel',
-  'app/models/FormModel'
+  'app/models/FormModel',
+  'app/views/FormEditorView'
 ],
-function(Backbone, FieldModel, FormModel) {
+function(Backbone, FieldModel, FormModel, FormEditorView) {
 
   var EntityView = Backbone.View.extend({
     el         : null,
@@ -22,7 +23,8 @@ function(Backbone, FieldModel, FormModel) {
       'click .prop-cross'          : 'clickedPropDelete',
       'click .remove-form'         : 'clickedFormRemove',
       'click .upload-excel'        : 'clickedUploadExcel',
-      'click .show-data'           : 'showData'
+      'click .show-data'           : 'showData',
+      'click .edit-form'           : 'clickedEditForm'
     },
 
 
@@ -41,6 +43,7 @@ function(Backbone, FieldModel, FormModel) {
                       'clickedPropDelete',
                       'clickedUploadExcel',
                       'clickedFormRemove',
+                      'clickedEditForm',
                       'showData');
 
       this.model = item;
@@ -69,6 +72,7 @@ function(Backbone, FieldModel, FormModel) {
                            attribs: self.model.get('fields').models,
                            other_models: self.parentCollection.models,
                            forms: self.model.get('forms').models };
+
       var template = _.template(Templates.Entity, page_context);
       $(this.el).append(template);
     },
@@ -141,12 +145,13 @@ function(Backbone, FieldModel, FormModel) {
       var props = String(e.target.id).split('-');
       var cid = props[1];
       var attrib = props[0];
-      //var value = 
-      this.model.get('fields').get(cid).set(attrib, e.target.options[e.target.selectedIndex].value||e.target.value);
+      var value = e.target.options[e.target.selectedIndex].value||e.target.value;
+      this.model.get('fields').get(cid).set(attrib, value);
     },
 
     addedEntity: function(item) {
-      $('.attribs', this.el).append('<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>');
+      var optString = '<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>';
+      $('.attribs', this.el).append(optString);
     },
 
     clickedDelete: function(e) {
@@ -173,6 +178,12 @@ function(Backbone, FieldModel, FormModel) {
 
     clickedUploadExcel: function(e) {
       new UploadExcelView();
+    },
+
+    clickedEditForm: function(e) {
+      var cid = String(e.target.id).replace('edit-', '');
+      var formModel = this.model.get('forms').get(cid);
+      new FormEditorView(formModel, this.model);
     },
 
     showData: function(e) {

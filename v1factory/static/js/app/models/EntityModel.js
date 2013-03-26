@@ -8,12 +8,18 @@ define([
       initialize: function(bone) {
 
         if(typeof bone === "string") {
+          if(bone === "User") {
+            alert('EntityModel init isnt supposed to receive user');
+            return;
+          }
+
           bone = _.findWhere(appState.entities, {name : bone});
         }
 
         if(bone.name) {
           this.set('name', bone.name);
         }
+
         else {
           alert('Entity should have a name. Something is wrong.');
         }
