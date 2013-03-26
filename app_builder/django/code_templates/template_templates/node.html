@@ -3,11 +3,10 @@
   {% if not element.uie.isSingle %}{{element.uie.content}}
 </{{element.uie.tagName}}>{% endif %}
 #}
-
 {% if context.is_normal_tag() %}
 <!-- node is_normal_tag -->
 <div class="{% for c in context.classes %}{{ c }} {% endfor %}">
-  <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
+  <{{ context.tagname }}{% if contenxt.html_id %} id="{{ context.html_id }}"{% endif %}{% for k,v in context.attribs.items() %} {{ k }}="{{ v }}"{% endfor %}>
     {{ context.content() }}
   </{{ context.tagname }}>
 </div>
@@ -15,7 +14,7 @@
 {% else %}
 <!-- node !is_normal_tag -->
 <div class="{% for c in context.classes %}{{ c }} {% endfor %}">
-  <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
+  <{{ context.tagname }}{% if context.html_id %} id="{{ context.html_id }}"{% endif %}{% for k,v in context.attribs.items() %} {{ k }}="{{ v }}"{% endfor %} />
 </div>
 <!-- /node !is_normal_tag -->
 {% endif %}
