@@ -10,8 +10,7 @@ class DjangoTemplate(object):
     self.page = page
 
   @classmethod
-  def create(cls, page, analyzed_app):
-    from app_builder.analyzer import Container, Page
+  def create(cls, page):
     name = page.name.replace(" ", "_")
     self = cls(name=page.name, filename=name+".html", page=page)
 
