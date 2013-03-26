@@ -2,11 +2,13 @@ import os
 import os.path
 import shutil
 import tempfile
+
 from os.path import join
+from jinja2 import Environment, PackageLoader
+
 
 class DjangoAppWriter:
   """Write django apps. Nuff said"""
-  from jinja2 import Environment, PackageLoader
   env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))

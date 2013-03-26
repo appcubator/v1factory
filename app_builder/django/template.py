@@ -1,7 +1,9 @@
 import re
 
+from jinja2 import Environment, PackageLoader
+from app_builder.analyzer import Container, Node, Page, QuerysetWrapper
+
 class DjangoTemplate(object):
-  from jinja2 import Environment, PackageLoader
   env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates'))
 
   def __init__(self, name=None, filename=None, page=None):
@@ -30,7 +32,6 @@ class DjangoTemplate(object):
 
   def properly_name_vars_in_q_container(self, models):
     """Replaces the model handlebars with the template text require to render the for loop properly"""
-    from app_builder.analyzer import QuerysetWrapper, Node
     query_containers = filter(lambda x: isinstance(x, QuerysetWrapper), self.page.uielements)
     plain_old_nodes = filter(lambda x: isinstance(x, Node), self.page.uielements)
 
