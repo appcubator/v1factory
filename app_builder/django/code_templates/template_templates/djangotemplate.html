@@ -1,6 +1,6 @@
 {{ "{%" }} extends "base.html" {{ "%}" }}
 {{ "{% block content %}" }}
-{% for uie in uielements %}
+{% for uie in context.page.uielements %}
   {% if uie.__class__.__name__ == "LoginForm" %}
   {% include "container_form.html" %}
   {% elif uie.__class__.__name__ == "SignupForm" %}
@@ -18,7 +18,7 @@
 {{ "{% endblock %}" }}
 {{ "{% block css %}" }}
 body {
-{% for s in css_props %}
+{% for s in context.page.design_props %}
   {{ s.type }}: {{ s.value }};
 {% endfor %}
 }

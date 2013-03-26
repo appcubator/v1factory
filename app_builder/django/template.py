@@ -1,11 +1,11 @@
 import re
 
 from jinja2 import Environment, PackageLoader
+
+from app_builder.html_gen import htmlgen
 from app_builder.analyzer import Container, Node, Page, QuerysetWrapper
 
-class DjangoTemplate(object):
-  env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates'))
-
+class DjangoTemplate(htmlgen.Renderable):
   def __init__(self, name=None, filename=None, page=None):
     self.name = name
     self.filename = filename
@@ -59,8 +59,3 @@ class DjangoTemplate(object):
         n.set_content(fix_the_string(n.content(), single=False))
     for n in plain_old_nodes:
       n.set_content(fix_the_string(n.content(), single=True))
-
-
-  def render(self):
-    template = DjangoTemplate.env.get_template('template.html')
-    return template.render(uielements=self.page.uielements, css_props=self.page.design_props)
