@@ -1,3 +1,5 @@
+<!-- node -->
 <{{context.uie.tagName}}{% for attrib in context.uie.cons_attribs %} {{ attrib }}="{{ context.uie.cons_attribs[attrib] }}"{% endfor %} class="{{ context.uie.class_name }} span{{context.uie.layout.width}} hi{{context.uie.layout.height}}" {% for attrib in context.uie.content_attribs %}{{ attrib }}="{{ context.uie.content_attribs[attrib] }}" {% endfor %}>
   {% if not context.uie.isSingle %}{{context.uie.content}}
 </{{context.uie.tagName}}>{% endif %}
+<!-- /node -->
