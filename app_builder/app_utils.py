@@ -29,11 +29,15 @@ def get_xl_data(xl_file):
     return xl_dict
 
 def get_model_data(model_name, db_path, limit=100):
+    model_name = model_name.lower()
     con = sql.connect(db_path)
     cr = con.cursor()
     li = []
     for row in cr.execute("select * from webapp_" + model_name + " limit " + str(limit)):
-        li.append(row)
+        row_str = str(row)
+        # replace raw escaped characters in the sql output
+        row_str = row_str.replace('\"','')
+        li.append(row_str)
     ans = dict()
     cr.execute("SELECT sql FROM sqlite_master WHERE type='table' and name='webapp_" + model_name + "'")
     schema_out =  cr.fetchall()
@@ -42,7 +46,8 @@ def get_model_data(model_name, db_path, limit=100):
     schema_li = []
     for i in range(len(schema_fields)):
         if i%2 == 0:
-            schema_li.append(schema_fields[i])
+            # Get rid of m_ prefixes for fields
+            schema_li.append(schema_fields[i][2:])
     con.close()
     ans['schema'] = schema_li
     ans['data'] = li
