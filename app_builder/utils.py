@@ -4,6 +4,7 @@ import subprocess
 import os
 import shlex
 import simplejson
+import re
 
 def extract_from_brace(s):
   "Takes a string out of the brace wrappers"

@@ -26,35 +26,34 @@ class Model(object):
 
 class Field(object):
   """A Field belongs to a model and has a name and type"""
-  def __init__(self, name, required, content_type, model=None):
+  def __init__(self, name=None, required=None, content_type=None, model=None):
     self.name = name
     self.required = required
     self.content_type = content_type
     self.model = model
-    self.is_fk = False
 
   @classmethod
   def create_for_model(cls, field_dict, model):
-    self = cls(name = field['name'],
-               required = field['required'],
-               content_type = field['type'],
+    self = cls(name = field_dict['name'],
+               required = field_dict['required'],
+               content_type = field_dict['type'],
                model = model)
 
     # if it's not a normal field, it must be a list of models field, or it's unrecognized.
     if self.content_type not in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email']:
-      list_of_model_name = utils.extract_from_brace(self.field['type']) # "{{Blog}}" => "Blog"
-      assert(list_of_model_name is not None, "Field type not recognized: %s" % self.content_type)
-      self.content_type = "list of blah"
+      list_of_model_name = utils.extract_from_brace(field_dict['type']) # "{{Blog}}" => "Blog"
+      assert list_of_model_name is not None, "Field type not recognized: %s" % self.content_type
+      self.content_type = 'list of blah'
       # this field only exists if content_type = list of blah. in an instance attribute
       self.related_model_name = list_of_model_name
-    assert self.content_type in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email', 'list of blah']:
+    assert self.content_type in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email', 'list of blah']
     return self
 
   def resolve_model_if_list_of_blah(self, analyzed_app):
     models = analyzed_app.models
     if self.content_type == "list of blah":
-    m = models.get_by_name(self.related_model_name)
-    assert(m is not None, "Model has a list of \"%s\", which is nonexistent AFAIK." % model_name)
+      m = models.get_by_name(self.related_model_name)
+      assert m is not None, 'Model has a list of "%s", which is nonexistent AFAIK.' % model_name
 
 """ PAGES """
 
@@ -73,7 +72,8 @@ class Page(object):
         if d['type'] == 'background-image':
           d['value'] = 'url({})'.format(d['value'])
     for uie in page['uielements']:
-      self.uielements.append(UIElement.create(uie, self))
+      if uie['container_info'] is None or uie['container_info']['action'] not in ['facebook', 'linkedin']:
+        self.uielements.append(UIElement.create(uie, self))
 
 class Route(object):
   """A Route is exactly what you think, except it can sometimes have dynamic inputs,
@@ -93,7 +93,14 @@ class Route(object):
 
 """ UIEls """
 
-class UIElement(object):
+class Renderable(object):
+  """ Mixin representing a context that can render itself into a given
+  environment. """
+  def render(self, env):
+    template_name = "{}.html".format(type(self).__name__.lower())
+    return env.get_template(template_name).render(context=self, env=env)
+
+class UIElement(Renderable):
   """A UIElement is either a Container or Node."""
 
   @classmethod
@@ -183,7 +190,7 @@ class Container(UIElement):
   def create(cls, uie, page):
     if uie['container_info']['action'] in ['login', 'signup', 'create', 'edit',]:
       u = Form.create(uie, page)
-    elif uie['container_info']['action'] == 'show':
+    elif uie['container_info']['action'] == 'table-gal':
       u = QuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
       #assert(False) # this is where I do something to indicate that the app has linked in and facebook login...
@@ -308,7 +315,7 @@ class AnalyzedApp:
     if app_state['users']['local']:
       self.local_login = True
       base_user['fields'] = app_state['users']['fields']
-      m = Model(base_user)
+      m = Model.create(base_user)
       self.models.add(m)
 
     if app_state['users']['facebook']:
@@ -318,6 +325,7 @@ class AnalyzedApp:
     for ent in app_state['entities']:
       m = Model.create(ent)
       self.models.add(m)
+    self.init_models()
 
     # create pages from app_state pages
     for p in app_state['pages']:
@@ -329,14 +337,12 @@ class AnalyzedApp:
       r = Route(u)
       self.routes.add(r)
 
-    self.init_models()
     self.link_models_to_routes()
     self.link_routes_and_pages()
     self.fill_in_hrefs()
     # will eventually do forms.
     self.init_forms()
     self.init_queries()
-
 
   # link routes and models
   def link_models_to_routes(self):
@@ -362,9 +368,9 @@ class AnalyzedApp:
         uie.resolve_links(self.pages)
 
   def init_models(self):
-    for m in self.models:
-      for f in m.fields:
-        f.resolve_model_if_list_of_blah(self)
+    for m in self.models.each():
+        for f in m.fields:
+          f.resolve_model_if_list_of_blah(self)
 
   def init_forms(self):
     self.forms = Manager(Form)

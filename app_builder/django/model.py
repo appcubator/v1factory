@@ -22,16 +22,17 @@ class DjangoModel(object):
     fields = Manager(DjangoField)
     self = cls(name=name, fields=fields)
 
-    for f in abs_model.fields:
-      df = DjangoField.create(f, self, analyzed_app)
-      if df is not None:
-        self.fields.add(df)
+    if abs_model.fields is not None:
+      for f in abs_model.fields:
+        df = DjangoField.create(f, self, analyzed_app)
+        if df is not None:
+          self.fields.add(df)
 
     return self
 
   def foreign_key_name(self):
     # note, i'm also using this to generate variable names for the url-data in the view
-    return self.name.lower()+"_related_id"
+    return self.name.lower()+"_id"
 
   def identifier(self):
     # FIXME need to do users better... wtf is this
@@ -78,7 +79,7 @@ class DjangoField(object):
       raise Exception("Didn't recognized the type of the given model (not a DjangoModel or str)")
 
     # ensure the field type is recognized
-    if self.field_type not in DjangoField._type_map and is not self.is_fk:
+    if self.field_type not in DjangoField._type_map and not self.is_fk:
       raise Exception("This field type is not yet implemented: %s" % self.field_type)
 
   @classmethod
