@@ -12,7 +12,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
     width: 900,
     padding: 0,
     className: 'form-editor',
-    
+
     events: {
       'change .field-name-box' : 'fieldBoxChanged',
       'click .field-li-item'   : 'clickedField',
@@ -41,9 +41,12 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
       this.render();
 
-      this.selectedNew(_.last(this.model.get('fields').models));
+      if(this.model.get('fields').models.length > 0) {
+        this.selectedNew(_.last(this.model.get('fields').models));
+      }
+
     },
-    
+
     render : function(text) {
       var self = this;
       var html = _.template(FormEditorTemplates.template, { form: self.model, entity: self.entity});
@@ -74,6 +77,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
+      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);

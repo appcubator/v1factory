@@ -25,8 +25,6 @@ function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryV
       ContainerWidgetModel.__super__.initialize.call(this, bone);
 
       var self = this;
-      console.log(this);
-      console.log(this.get('container_info'));
 
       this.set('container_info', new ContainerInfoModel(this.get('container_info')));
 
@@ -34,9 +32,10 @@ function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryV
         return;
       }
 
-      console.log(this.get('container_info'));
-
-      if(constantContainers[this.get('container_info').get('action')]) {
+      if(this.get('container_info').has('form')) {
+        console.log(this.get('container_info').get('form'));
+      }
+      else if(constantContainers[this.get('container_info').get('action')]) {
         this.get('container_info').set('uielements',  new WidgetCollection());
 
         _(constantContainers[this.get('container_info').get('action')]).each(function(element){
@@ -99,80 +98,6 @@ function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryV
           var widget = new WidgetModel(widgetProps);
           self.get('container_info').get('uielements').push(widget);
         });
-      },
-      'create' : function() {
-        var self = this;
-        self.get('container_info').set('uielements', new WidgetCollection());
-
-        console.log(self.get('container_info').get('entity'));
-
-        _(self.get('container_info').get('entity').get('fields').models).each(function(model, ind){
-
-          console.log(model);
-
-          var coordinates = iui.unite({x: 1,
-                                       y: 1 + (ind * 2)},
-                                      {x: self.get('layout').get('width') + 1,
-                                       y: 1 + ((ind+1) * 2)});
-          var type = "text-input";
-          var widgetProps = uieState[type][0];
-          widgetProps.type = type;
-          widgetProps.layout = {
-              top   : coordinates.topLeft.y,
-              left  : coordinates.topLeft.x,
-              width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-              height: 4
-          };
-
-          widgetProps.content_attribs.placeholder = self.get('container_info').get('entity').get('name')+' '+model.get('name');
-          widgetProps.content_attribs.name = model.get('name');
-
-          var widget = new WidgetModel(widgetProps);
-          self.get('container_info').get('uielements').push(widget);
-        });
-
-        var ind = this.get('container_info').get('entity').get('fields').length;
-        var coordinates = iui.unite({x: 1,
-                                     y: 1 + (ind * 2)},
-                                    {x: self.get('layout').get('width') + 1,
-                                     y: 1 + ((ind+1) * 2)});
-        var type = "button";
-        var widgetProps = uieState[type][0];
-        widgetProps.type = type;
-        widgetProps.layout = {
-            top   : coordinates.topLeft.y,
-            left  : coordinates.topLeft.x,
-            width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-            height: 4
-        };
-        widgetProps.content_attribs.value = 'Create';
-        var widget = new WidgetModel(widgetProps);
-        self.get('container_info').get('uielements').push(widget);
-      },
-      'addbutton' : function() {
-        var self = this;
-        var container_info = self.get('container_info');
-
-        container_info.set('uielements', new WidgetCollection());
-        self.set('container_info', container_info);
-
-        var coordinates = iui.unite({x: 1,
-                                     y: 1 },
-                                    {x: self.get('layout').get('width') + 1,
-                                     y: 1 });
-        var type = "button";
-        var widgetProps = uieState[type][0];
-        widgetProps.type = type;
-        widgetProps.layout = {
-            top   : coordinates.topLeft.y,
-            left  : coordinates.topLeft.x,
-            width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-            height: 4
-        };
-
-        widgetProps.content_attribs.value = 'Add ' + this.get('container_info').get('entity').get('name');
-        var widget = new WidgetModel(widgetProps);
-        self.get('container_info').get('uielements').push(widget);
       },
       'login' : function() {
         var self = this;

@@ -50,3 +50,26 @@ Templates.tableNode = [
     '<tr><% _(fieldsToDisplay).each(function(field) { %> <td><i><%= field %>Data</i></td> <% }); %></tr>',
   '</table>'
 ].join('\n');
+
+Templates.createFormButton = [
+  '<li id="entity-<%= entity.cid %>-<%= form.cid %>" class="create entity">',
+  '<span class="name"><%= form.get(\'name\') %> Form</span></li>'
+].join('\n');
+
+
+var FieldTypes = {
+  "single-line-text" : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">',
+  "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>"></textarea>'
+};
+
+Templates.fieldNode = [
+'<label><%= field.get(\'label\') %><br>',
+  '<% if(field.get(\'type\') == "single-line-text") { %>',
+    FieldTypes['single-line-text'],
+  '<% } %>',
+  '<% if(field.get(\'type\') == "paragraph-text") { %>',
+    FieldTypes['paragraph-text'],
+  '<% } %>',
+'</label>'
+].join('\n');
+
