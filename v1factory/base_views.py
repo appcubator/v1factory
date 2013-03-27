@@ -56,7 +56,7 @@ def homepage(request):
 @require_http_methods(["GET", "POST"])
 def signup(request):
   if request.method == "GET":
-    return render(request, "signup.html")
+    return render(request, "registration/signup.html")
 
   else:
     form = MyUserCreationForm(request.POST)
