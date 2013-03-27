@@ -2,12 +2,15 @@ import os
 import os.path
 import shutil
 import tempfile
+
 from os.path import join
+from jinja2 import Environment, PackageLoader
+
 
 class DjangoAppWriter:
   """Write django apps. Nuff said"""
-  from jinja2 import Environment, PackageLoader
   env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
+  template_env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates'))
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 
@@ -34,7 +37,7 @@ class DjangoAppWriter:
 
   def render_templates(self):
     for t in self.django_app.templates.each():
-      yield (t.filename, t.render(),)
+      yield (t.filename, t.render(self.template_env),)
 
   def render_css(self):
     return ""
