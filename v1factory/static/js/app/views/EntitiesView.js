@@ -1,167 +1,20 @@
 define([
-  '../models/EntityModel',
-  '../models/UserEntityModel',
-  '../models/FieldModel',
-  './UploadExcelView',
+  'app/models/EntityModel',
+  'app/models/UserEntityModel',
+  'app/models/FieldModel',
+  'app/views/UploadExcelView',
+  'app/views/EntityView',
+  'app/collections/EntityCollection',
   'backbone',
   'jquery-ui'
 ],
 
-function(EntityModel, UserEntityModel, FieldModel, UploadExcelView) {
-
-  var EntityCollection = Backbone.Collection.extend({
-    model: EntityModel
-  });
-
-
-  var EntityView = Backbone.View.extend({
-    el         : null,
-    tagName    : 'li',
-    collection : null,
-    parentName : "",
-    className  : 'span64 entity',
-
-    events : {
-      'click .add-property-button' : 'clickedAdd',
-      'submit .add-property-form'  : 'formSubmitted',
-      'change .attribs'            : 'changedAttribs',
-      'click #cross'               : 'clickedDelete',
-      'click .prop-cross'          : 'clickedPropDelete',
-      'click .upload-excel'        : 'clickedUploadExcel',
-      'click .show-data'           : 'showData'
-    },
-
-
-    initialize: function(item, name, entitiesColl){
-      _.bindAll(this, 'render',
-                      'doBindings',
-                      'appendField',
-                      'clickedAdd',
-                      'formSubmitted',
-                      'changedAttribs',
-                      'addedEntity',
-                      'clickedDelete',
-                      'modelRemoved',
-                      'clickedPropDelete',
-                      'clickedUploadExcel',
-                      'showData');
-
-      this.model = item;
-      this.model.bind('change:owns', this.ownsChangedOutside);
-      this.model.bind('change:belongsTo', this.belongsToChangedOutside);
-
-      this.parentCollection = item.collection;
-      this.parentCollection.bind('initialized', this.doBindings);
-
-      this.name = item.get('name');
-        this.parentName = name;
-
-        console.log(this.model.get('fields'));
-        this.model.get('fields').bind('add', this.appendField);
-        this.render();
-      },
-
-      doBindings: function() {
-        this.parentCollection.bind('add', this.addedEntity);
-        this.parentCollection.bind('remove', this.modelRemoved);
-      },
-
-      render: function() {
-        var self = this;
-        console.log(self.parentCollection.models);
-
-        var page_context = { name: self.name,
-                             attribs: self.model.get('fields').models,
-                             other_models: self.parentCollection.models };
-
-        var template = _.template(Templates.Entity, page_context);
-        $(this.el).append(template);
-      },
-
-
-      clickedAdd: function(e) {
-        $('.add-property-button', this.el).hide();
-        $('.add-property-form', this.el).fadeIn();
-        $('.property-name-input', this.el).focus();
-      },
-
-
-      formSubmitted: function(e) {
-        e.preventDefault();
-        var name = $('.property-name-input', this.el).val();
-
-        var curFields = this.model.get('fields') || [];
-
-        curFields.add(new FieldModel({
-          name: name,
-          type: 'text',
-          required: true
-        }));
-
-        $('.property-name-input', this.el).val('');
-        $('.add-property-form', this.el).hide();
-        $('.add-property-button', this.el).fadeIn();
-        return false;
-      },
-
-      appendField: function (fieldModel) {
-        var self = this;
-        console.log(self.parentCollection.models);
-
-        var template = _.template( Templates.Property, {  name: fieldModel.get('name'),
-                                                          cid : fieldModel.cid,
-                                                          type: fieldModel.get('type'),
-                                                          entityName : self.model.get('name'),
-                                                          other_models: self.parentCollection.models});
-
-        this.$el.find('.property-list').append(template);
-      },
-
-      changedAttribs: function(e) {
-        var props = String(e.target.id).split('-');
-        var cid = props[1];
-        var attrib = props[0];
-        //var value = 
-        this.model.get('fields').get(cid).set(attrib, e.target.options[e.target.selectedIndex].value||e.target.value);
-      },
-
-      addedEntity: function(item) {
-        $('.attribs', this.el).append('<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>');
-      },
-
-      clickedDelete: function(e) {
-        this.parentCollection.remove(this.model.cid);
-      },
-
-      modelRemoved: function(model) {
-        if (model == this.model) {
-          this.remove();
-        }
-      },
-
-      clickedPropDelete: function(e) {
-        var cid = String(e.target.id||e.target.parentNode.id).replace('delete-','');
-        this.model.get('fields').remove(cid);
-        $('#column-' + cid).remove();
-      },
-
-      clickedUploadExcel: function(e) {
-        new UploadExcelView();
-      },
-
-      showData: function(e) {
-        $.ajax({
-          type: "POST",
-          url: '/app/'+appId+'/entities/fetch_data/',
-          data: {
-            model_name : this.model.get('name')
-          },
-          success: function(data) { console.log(data.responseText); },
-          dataType: "JSON"
-        });
-      }
-    });
-
+function(EntityModel,
+         UserEntityModel,
+         FieldModel,
+         UploadExcelView,
+         EntityView,
+         EntityCollection) {
 
     var UserEntityView = EntityView.extend({
       el : document.getElementById('user-entity'),
@@ -353,7 +206,7 @@ function(EntityModel, UserEntityModel, FieldModel, UploadExcelView) {
       },
 
       saveEntities : function(e) {
-        appState.entities = this.entityList.collection.toJSON();
+        appState.entities = this.collection.toJSON();
         appState.users = this.entityList.userModel.toJSON();
 
         $.ajax({

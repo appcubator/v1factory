@@ -1,27 +1,46 @@
-define(
- ['../collections/FieldsCollection',
-  'backbone'],
-  function(FieldsCollection) {
+define([
+  'app/collections/FieldsCollection',
+  'app/collections/FormCollection',
+  'backbone'
+], function(FieldsCollection, FormCollection) {
 
   var EntityModel = Backbone.Model.extend({
       initialize: function(bone) {
 
         if(typeof bone === "string") {
+          if(bone === "User") {
+            alert('EntityModel init isnt supposed to receive user');
+            return;
+          }
+
           bone = _.findWhere(appState.entities, {name : bone});
         }
 
-        if(bone) {
+        if(bone.name) {
           this.set('name', bone.name);
         }
 
-        var fieldCollection = new FieldsCollection();
-        if(bone) fieldCollection.add(bone.fields);
-        this.set('fields', fieldCollection);
+        else {
+          alert('Entity should have a name. Something is wrong.');
+        }
+
+        this.set('fields', new FieldsCollection());
+        if(bone.fields) {
+          this.get('fields').add(bone.fields);
+        }
+
+        this.set('forms', new FormCollection());
+        if(bone.forms) {
+          this.get('forms').add(bone.forms);
+        }
+
       },
       toJSON: function () {
+        alert('yolo');
         var json = {};
         json = _.clone(this.attributes);
         json.fields = this.get('fields').toJSON();
+        //json.forms = this.get('forms').toJSON();
         return json;
       }
   });

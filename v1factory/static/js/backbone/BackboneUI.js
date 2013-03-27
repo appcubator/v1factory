@@ -95,6 +95,7 @@ define(['backbone', 'jquery-ui'], function() {
 
   BackboneUI.ModalView = Backbone.View.extend({
     width: 500,
+    padding: 30,
     events : {
       'click .modal-bg' : 'closeModal',
       'keydown'         : 'handleKey'
@@ -144,6 +145,7 @@ define(['backbone', 'jquery-ui'], function() {
       div.style.left = '50%';
       div.style.marginLeft= '-'+ (this.width/2) +'px';
       div.style.marginTop = '-300px';
+      div.style.padding = this.padding + 'px';
 
       var span = document.createElement('span');
       span.className = 'modal-cross';

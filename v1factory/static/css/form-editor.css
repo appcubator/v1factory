@@ -1,0 +1,30 @@
+.panel {
+  height: 400px;
+  display: inline-block;
+  padding: 20px;
+  vertical-align: top;
+  padding-top: 50px;
+}
+
+.fields-panel {
+  width: 180px;
+  border-right:1px solid #ddd;
+  padding-top: 20px;
+}
+
+.details-panel {
+  width: 200px;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #ddd;
+}
+
+.form-panel {
+  width: 300px;
+  background-color: #eee;
+  box-shadow: inset 0 0 5px 0 rgba(30, 30, 30, 0.4);
+}
+
+.action-panel {
+  width: 120px;
+  border-left: 1px solid #aaa;
+}

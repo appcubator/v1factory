@@ -25,7 +25,7 @@ def analyzed_app_to_app_components(analyzed_app):
     models.add( DjangoModel.create(m, analyzed_app) )
 
   for p in analyzed_app.pages.each():
-    t = DjangoTemplate.create(p, analyzed_app)
+    t = DjangoTemplate.create(p)
     templates.add(t)
     v = DjangoView.create(p, analyzed_app, t)
     views.add(v)
