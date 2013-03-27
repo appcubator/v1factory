@@ -1,0 +1,13 @@
+{{ "{%" }} extends "base.html" {{ "%}" }}
+{{ "{% block content %}" }}
+
+{{ context.dom_tree.render(env)}}
+
+{{ "{% endblock %}" }}
+{{ "{% block css %}" }}
+body {
+{% for s in context.page.design_props %}
+  {{ s.type }}: {{ s.value }};
+{% endfor %}
+}
+{{ "{% endblock %}" }}
