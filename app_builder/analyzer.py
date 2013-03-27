@@ -160,8 +160,7 @@ class Container(UIElement):
     elif uie['container_info']['action'] == 'show':
       u = QuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
-      #assert(False) # this is where I do something to indicate that the app has linked in and facebook login...
-      pass
+      u = ThirdPartyLogin(uie, page)
     else:
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
 
@@ -266,6 +265,16 @@ class QuerysetWrapper(Container):
 
   def resolve_entity(self, analyzed_app):
     self.entity = analyzed_app.models.get_by_name(self.entity_name)
+
+class ThirdPartyLogin(Container):
+  """ A container that wraps a third party login action """
+  def __init__(self, uie, page):
+    super(ThirdPartyLogin, self).__init__(uie=uie)
+    self.name = "ThirdParty{}Login{}".format(uie['container_info']['action'].capitalize(), id(uie))
+    self.uie = uie
+    self.provider = uie['container_info']['action'] # this will be one of 'facebook', 'linkedin'
+    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
+    self.page = page
 
 """ ANALYZED APP """
 
