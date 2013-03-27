@@ -22,9 +22,28 @@
   width: 300px;
   background-color: #eee;
   box-shadow: inset 0 0 5px 0 rgba(30, 30, 30, 0.4);
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .action-panel {
   width: 120px;
   border-left: 1px solid #aaa;
+}
+
+.field-li-item {
+  width: 100%;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  padding: 8px 20px;
+  background-color: transparent;
+  -webkit-transition: background-color 50ms linear;
+}
+
+.field-li-item.selected {
+  background-color: rgba(25, 142, 58, 0.3);
+}
+
+.field-li-item:hover {
+  background-color: rgba(25, 142, 58, 0.3);
 }

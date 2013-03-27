@@ -171,6 +171,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView) {
     },
 
     clickedFormRemove: function(e) {
+      e.preventDefault();
       var cid = String(e.target.id||e.target.parentNode.id).replace('remove-', '');
       this.model.get('forms').remove(cid);
       $('#form-'+cid).remove();
