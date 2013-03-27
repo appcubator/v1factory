@@ -115,23 +115,6 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates"),
 )
 
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-
-    "django.core.context_processors.request",
-)
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,9 +122,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webapp',
     'django.contrib.admin',
-    'facebook',
+    'social_auth', # django-social-auth
+    'webapp',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -175,13 +158,26 @@ LOGGING = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+    "social_auth.context_processors.social_auth_backends",
+)
+
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
 FACEBOOK_APP_ID = '145000778994158'
 FACEBOOK_API_SECRET = 'f5f3f2a69011b36da2005fbea8aa3476'
-FACEBOOK_REDIRECT_URI = 'http://localhost:8000/facebooklogin/'
-
-AUTHENTICATION_BACKENDS += (
-    'facebook.backends.FacebookBackend',
-)
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']

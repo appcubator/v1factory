@@ -123,7 +123,6 @@ class DjangoAppWriter:
     copy_file('manage.py', 'manage.py')
     copy_file('settings.py', 'settings.py')
     copy_file('wsgi.py', 'wsgi.py')
-    f_transporter('facebook_templates', 'facebook', shutil.copytree)
 
     # main webapp files
     copy_file('__init__.py', 'webapp/__init__.py')
