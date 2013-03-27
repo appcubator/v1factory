@@ -116,6 +116,7 @@ class DjangoAppWriter:
 
     # copy boilerplate
     copy_file('heroku/Procfile', 'Procfile')
+    copy_file('.gitignore', '.gitignore')
     copy_file('heroku/runtime.txt', 'runtime.txt')
     copy_file('requirements.txt', 'requirements.txt')
     copy_file('__init__.py', '__init__.py')
