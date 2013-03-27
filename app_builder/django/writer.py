@@ -116,13 +116,13 @@ class DjangoAppWriter:
 
     # copy boilerplate
     copy_file('heroku/Procfile', 'Procfile')
+    copy_file('.gitignore', '.gitignore')
     copy_file('heroku/runtime.txt', 'runtime.txt')
     copy_file('requirements.txt', 'requirements.txt')
     copy_file('__init__.py', '__init__.py')
     copy_file('manage.py', 'manage.py')
     copy_file('settings.py', 'settings.py')
     copy_file('wsgi.py', 'wsgi.py')
-    f_transporter('facebook_templates', 'facebook', shutil.copytree)
 
     # main webapp files
     copy_file('__init__.py', 'webapp/__init__.py')
