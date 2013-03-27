@@ -53,6 +53,7 @@ class Field(object):
     models = analyzed_app.models
     if self.content_type == "list of blah":
       m = models.get_by_name(self.related_model_name)
+      self.related_model = m
       assert m is not None, 'Model has a list of "%s", which is nonexistent AFAIK.' % model_name
 
 """ PAGES """
