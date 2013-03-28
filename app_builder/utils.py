@@ -4,6 +4,15 @@ import subprocess
 import os
 import shlex
 import simplejson
+import re
+
+def extract_from_brace(s):
+  "Takes a string out of the brace wrappers"
+  m = re.match(r'\{\{(.+)\}\}', s)
+  if m is None: return None
+  else:
+    return m.groups()[0].strip()
+
 def get_xl_data(xl_file):
     xl_dict = dict()
     xf = xls.open_workbook(file_contents=xl_file.read())

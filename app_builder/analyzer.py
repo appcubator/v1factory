@@ -4,24 +4,57 @@
 
 import re
 from manager import Manager
+from app_builder import utils
 
 """ MODELS """
 
 class Model(object):
   """User, Profile, Student, Book, Rental, anything you name it."""
-  def __init__(self, entity):
-    self.name = entity['name']
-    self.fields = [ Field(f, self) for f in entity['fields'] ]
+  def __init__(self, name=None, fields=None):
+    self.name = name
+    self.fields = fields
+
+  @classmethod
+  def create(cls, entity):
+    self  = cls(name=entity['name'])
+    # create fields
+    self.fields = []
+    for f_dict in entity['fields']:
+      f = Field.create_for_model(f_dict, self)
+      self.fields.append(f)
+    return self
 
 class Field(object):
   """A Field belongs to a model and has a name and type"""
-  def __init__(self, field, model):
-    self.name = field['name']
-    self.required = field['required']
-    self.content_type = field['type']
+  def __init__(self, name=None, required=None, content_type=None, model=None):
+    self.name = name
+    self.required = required
+    self.content_type = content_type
     self.model = model
 
+  @classmethod
+  def create_for_model(cls, field_dict, model):
+    self = cls(name = field_dict['name'],
+               required = field_dict['required'],
+               content_type = field_dict['type'],
+               model = model)
 
+    # if it's not a normal field, it must be a list of models field, or it's unrecognized.
+    if self.content_type not in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email']:
+      list_of_model_name = utils.extract_from_brace(field_dict['type']) # "{{Blog}}" => "Blog"
+      assert list_of_model_name is not None, "Field type not recognized: %s" % self.content_type
+      self.content_type = 'list of blah'
+      # this field only exists if content_type = list of blah. in an instance attribute
+      self.related_model_name = list_of_model_name
+    assert self.content_type in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email', 'list of blah']
+    return self
+
+  def resolve_model_if_list_of_blah(self, analyzed_app):
+    models = analyzed_app.models
+    if self.content_type == "list of blah":
+      m = models.get_by_name(self.related_model_name)
+      self.related_model = m
+      assert m is not None, 'Model has a list of "%s", which is nonexistent AFAIK.' % model_name
 
 """ PAGES """
 
@@ -40,7 +73,8 @@ class Page(object):
         if d['type'] == 'background-image':
           d['value'] = 'url({})'.format(d['value'])
     for uie in page['uielements']:
-      self.uielements.append(UIElement.create(uie, self))
+      if uie['container_info'] is None or uie['container_info']['action'] not in ['facebook', 'linkedin']:
+        self.uielements.append(UIElement.create(uie, self))
 
 class Route(object):
   """A Route is exactly what you think, except it can sometimes have dynamic inputs,
@@ -159,6 +193,8 @@ class Container(UIElement):
       u = Form.create(uie, page)
     elif uie['container_info']['action'] == 'show':
       u = QuerysetWrapper(uie, page)
+    elif uie['container_info']['action'] == 'table-gal':
+      u = TableQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
       u = ThirdPartyLogin(uie, page)
     else:
@@ -262,9 +298,19 @@ class QuerysetWrapper(Container):
     self.entity_name = uie['container_info']['entity']
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
+    query = uie['container_info']['query']
+    self.fields = query['fieldsToDisplay']
+    self.user_filter = query['belongsToUser']
+    #self.model = utils.extract_from_brace(query['belongsTo'])
+    self.sort_on = query['sortAccordingTo']
+    self.nrows = query['numberOfRows']
 
   def resolve_entity(self, analyzed_app):
     self.entity = analyzed_app.models.get_by_name(self.entity_name)
+
+class TableQuerysetWrapper(QuerysetWrapper):
+  def __init__(self, uie, page):
+    super(TableQuerysetWrapper, self).__init__(uie, page)
 
 class ThirdPartyLogin(Container):
   """ A container that wraps a third party login action """
@@ -291,7 +337,7 @@ class AnalyzedApp:
     if app_state['users']['local']:
       self.local_login = True
       base_user['fields'] = app_state['users']['fields']
-      m = Model(base_user)
+      m = Model.create(base_user)
       self.models.add(m)
 
     if app_state['users']['facebook']:
@@ -299,8 +345,9 @@ class AnalyzedApp:
 
     # create models from app_state entities
     for ent in app_state['entities']:
-      m = Model(ent)
+      m = Model.create(ent)
       self.models.add(m)
+    self.init_models()
 
     # create pages from app_state pages
     for p in app_state['pages']:
@@ -319,23 +366,15 @@ class AnalyzedApp:
     self.init_forms()
     self.init_queries()
 
-
   # link routes and models
   def link_models_to_routes(self):
-    def extract_from_brace(s):
-      "Takes a string out of the brace wrappers"
-      m = re.match(r'\{\{(.+)\}\}', s)
-      if m is None: return None
-      else:
-        return m.groups()[0].strip()
-
     for r in self.routes.each():
       r.models = Manager(Model)
 
       for idx, u in enumerate(r.urlparts):
         # if this string resembles a model type thing, replace it with a model
-        if extract_from_brace(u) is not None:
-          m = self.models.get_by_name(extract_from_brace(u))
+        if utils.extract_from_brace(u) is not None:
+          m = self.models.get_by_name(utils.extract_from_brace(u))
           r.urlparts[idx] = m
           r.models.add(m)
 
@@ -349,6 +388,11 @@ class AnalyzedApp:
     for p in self.pages.each():
       for uie in p.uielements:
         uie.resolve_links(self.pages)
+
+  def init_models(self):
+    for m in self.models.each():
+        for f in m.fields:
+          f.resolve_model_if_list_of_blah(self)
 
   def init_forms(self):
     self.forms = Manager(Form)
