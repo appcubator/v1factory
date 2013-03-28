@@ -100,6 +100,7 @@ define([
     },
 
     select: function(e) {
+      this.el.style.zIndex = 2000;
       this.model.select();
       e.stopPropagation();
     },
@@ -107,11 +108,13 @@ define([
     outlineSelected: function() {
       if(this.model.attributes.selected && this.selected === false) {
         $(this.el).addClass('selected');
+        this.el.style.zIndex = 2000;
         this.selected = true;
       }
       else {
         $(this.el).removeClass('selected');
         this.selected = false;
+        this.el.style.zIndex = '';
       }
     },
 

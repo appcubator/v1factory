@@ -12,7 +12,7 @@ define([
     tagName : 'div',
     className : 'element-view',
     events: {
-      'change input' : 'inputChanged',
+      'change input'   : 'inputChanged',
       'keyup textarea' : 'inputChanged'
     },
     initialize: function(uieModel) {

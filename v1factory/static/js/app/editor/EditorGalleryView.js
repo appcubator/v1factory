@@ -162,7 +162,6 @@ function(ElementCollection, UserEntityModel, Backbone) {
             var html = _.template(Templates.createFormButton, {entity: entityModel,
                                                                form: form});
 
-            console.log(html);
             $(self.allList).append(html);
           //}
         });
@@ -280,9 +279,10 @@ function(ElementCollection, UserEntityModel, Backbone) {
       var self = this;
       this.dragActive = false;
       var left, top;
+      var offsetLeft = document.getElementById('page-wrapper').offsetLeft + 100;
 
       if(e.type != 'click') {
-        left = Math.round((e.pageX - $('.page')[0].offsetLeft - 150)/GRID_WIDTH);
+        left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
         top  = Math.round((e.pageY - $('.page')[0].offsetTop - 180)/GRID_HEIGHT);
       }
       else {

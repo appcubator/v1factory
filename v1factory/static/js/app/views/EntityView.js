@@ -88,7 +88,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
     clickedAddForm: function(e) {
       $('.add-form-button', this.el).hide();
       $('.add-form-form', this.el).fadeIn();
-      $('.form-name-input', this.el).focus();      
+      $('.form-name-input', this.el).focus();
     },
 
     formSubmitted: function(e) {
@@ -121,7 +121,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
       $('.form-name-input', this.el).val('');
       $('.add-form-form', this.el).hide();
       $('.add-form-button', this.el).fadeIn();
-      return false;     
+      return false;
     },
 
     appendField: function (fieldModel) {

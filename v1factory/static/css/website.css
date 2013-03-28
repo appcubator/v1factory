@@ -373,13 +373,14 @@ input[type="submit"] {
 }
 
 .theme-gallery {
-  border-left: 1px solid #ccc;
-  text-align: center;
+  text-align: left;
   padding-top: 10px;
   padding-left: 4px;
+  margin-top: 18px;
 }
 
 .theme-gallery li {
+  display: inline-block;
   margin-bottom: 20px;
   cursor: pointer;
   border-radius: 6px;
@@ -494,4 +495,12 @@ hr {
   top: 80px;
   left: 50%;
   margin-left: 500px;
+}
+
+.small-t {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 10px;
+  height: 12px;
+  line-height: 12px;
 }

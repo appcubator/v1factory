@@ -1,10 +1,11 @@
 define([
-  './EntityModel',
-  './FieldModel',
+  'app/models/EntityModel',
+  'app/models/FieldModel',
+  'app/collections/FormCollection',
   'app/collections/FieldsCollection',
   'backbone'
 ],
-function(EntityModel, FieldModel, FieldsCollection, Backbone) {
+function(EntityModel, FieldModel,FormCollection, FieldsCollection, Backbone) {
   console.log(EntityModel);
   var UserEntityModel = EntityModel.extend({
     defaults : {
@@ -18,6 +19,11 @@ function(EntityModel, FieldModel, FieldsCollection, Backbone) {
       if(bone) fieldCollection.add(bone.fields);
       //this.bind('change', function(){iui.askBeforeLeave});
       this.set('fields', fieldCollection);
+
+      this.set('forms', new FormCollection());
+      if(bone.forms) {
+        this.get('forms').add(bone.forms);
+      }
     },
 
     toJSON: function () {

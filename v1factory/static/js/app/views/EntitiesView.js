@@ -20,11 +20,17 @@ function(EntityModel,
       el : document.getElementById('user-entity'),
 
       events: {
-        'change .cb-login' : 'checkedBox',
+        'change .cb-login'           : 'checkedBox',
         'click .add-property-button' : 'clickedAdd',
         'submit .add-property-form'  : 'formSubmitted',
         'click .prop-cross'          : 'clickedPropDelete',
-        'change .attribs'            : 'changedAttribs'
+        'change .attribs'            : 'changedAttribs',
+        'click .remove-form'         : 'clickedFormRemove',
+        'click .upload-excel'        : 'clickedUploadExcel',
+        'click .show-data'           : 'showData',
+        'click .edit-form'           : 'clickedEditForm',
+        'click .add-form-button'     : 'clickedAddForm',
+        'submit .add-form-form'      : 'formFormSubmitted'
       },
 
       initialize: function(userEntityModel, entitiesColl) {
@@ -71,6 +77,11 @@ function(EntityModel,
         document.getElementById('linkedin').checked = this.model.get('linkedin');
         document.getElementById('local').checked = this.model.get('local');
 
+        var formsHtml = '';
+        _(self.model.get('forms').models).each(function(form){
+          formsHtml += _.template(Templates.Form, {form: form});
+        });
+        self.$el.find('.form-list').append(formsHtml);
       },
 
       checkedBox: function(e) {

@@ -78,7 +78,6 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
-      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
@@ -97,7 +96,6 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     renderField: function() {
       var field = this.selected;
-      console.log(FieldTypes[field.get('type')]);
       this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('type')], {field: field}) + '</label>');
     },
 
@@ -107,11 +105,11 @@ function(Backbone, BackboneUI, FormFieldModel) {
         var newType = e.target.value;
         this.selected.set('type', newType);
 
-        var curOptions = (this.$el.find('options-input').val() || '');
-        this.$el.find('.options-input').remove();
+        var curOptions = (this.$el.find('.options-input').val() || '');
+        this.$el.find('.options-input-area').remove();
         if(newType == "option-boxes" || newType == "dropdown") {
           this.selected.set('options', curOptions.split(','));
-          this.$el.find('.field-types').append('Options<br><input class="options-input" type="text" value="' + curOptions + '">');
+          this.$el.find('.field-types').append('<span class="options-input-area">Options<br><input class="options-input" type="text" value="' + curOptions + '"></span>');
         }
       }
     },
@@ -126,7 +124,6 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     changedOptions: function(e) {
       var options = String(this.$el.find('.options-input').val()).split(',');
-      console.log(options);
       this.selected.set('options', options);
     }
   });

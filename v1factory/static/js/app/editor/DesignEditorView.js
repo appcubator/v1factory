@@ -1,6 +1,7 @@
 define([
   'backbone',
-  'iui'
+  'iui',
+  '../../../libs/jscolor/jscolor'
 ],function(Backbone, iui) {
 
   var DesignProperty = Backbone.Model.extend({});
