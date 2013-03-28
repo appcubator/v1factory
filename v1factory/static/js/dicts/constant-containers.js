@@ -47,7 +47,7 @@ var constantContainers = {
       }
     }
   ],
-  'signup' : [
+  'Sign Up' : [
     {
       'type' : 'text-input',
       'content_attribs' : {

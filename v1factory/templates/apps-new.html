@@ -9,18 +9,8 @@
 {% endblock %}
 
 {% block page %}
-<div class="well green-2">
-  <div class="container">
-    <div class="span64">
-      <div class="hi8">
-        <div class="hi8">
-          <h2 class="hoff5">Start a New App</h2>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="container">
+<div class="container hoff3">
+  <h2 class="hoff5">Start a New App</h2>
   <div class="hoff2 span32">
       <form method="post" action="{% url v1factory.views.app_new %}">
       {% csrf_token %}

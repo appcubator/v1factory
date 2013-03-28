@@ -22,7 +22,49 @@
                 "type": "text"
             }
         ],
-        "name": "User"
+        "name": "User",
+        "forms": [
+            {
+                "name": "Sign Up",
+                "fields": [
+                     {
+                        "name": "Username",
+                        "type": "single-line-text",
+                        "label": "Username",
+                        "placeholder": "Username",
+                        "options": []
+                    },
+                    {
+                        "name": "Password",
+                        "type": "password-text",
+                        "label": "Password",
+                        "placeholder": "Password",
+                        "options": []
+                    },
+                    {
+                        "name": "Confirm Password",
+                        "type": "password-text",
+                        "label": "Confirm Password",
+                        "placeholder": "Confirm Password",
+                        "options": []
+                    },
+                    {
+                        "name": "Email",
+                        "type": "email-text",
+                        "label": "Email Address",
+                        "placeholder": "Email Address",
+                        "options": []
+                    },
+                    {
+                        "name": "Sign Up",
+                        "type": "button",
+                        "label": "Sign Up!",
+                        "placeholder": "",
+                        "options": []
+                    }
+                ]
+            }
+        ]
     },
     "entities": [],
     "pages": [

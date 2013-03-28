@@ -4,7 +4,10 @@ var FieldTypes = {
   "single-line-text" : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">',
   "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
   "dropdown"         : '<select class="drowdown"><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
-  "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>'
+  "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>',
+  "password-text"    : '<input type="password" placeholder="<%= field.get(\'placeholder\') %>">',
+  "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" placeholder="<%= field.get(\'placeholder\') %>"></div>',
+  "button"           : '<div class="btn"><%= field.get(\'placeholder\') %></div>'
 };
 
 
@@ -15,6 +18,15 @@ FormEditorTemplates.field = [
   '<% } %>',
   '<% if(field.get(\'type\') == "paragraph-text") { %>',
     FieldTypes['paragraph-text'],
+  '<% } %>',
+  '<% if(field.get(\'type\') == "password-text") { %>',
+    FieldTypes['password-text'],
+  '<% } %>',
+  '<% if(field.get(\'type\') == "email-text") { %>',
+    FieldTypes['email-text'],
+  '<% } %>',
+    '<% if(field.get(\'type\') == "button") { %>',
+    FieldTypes['button'],
   '<% } %>',
 '</label></li>'
 ].join('\n');

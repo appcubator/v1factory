@@ -10,6 +10,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
   var FormEditorView = BackboneUI.ModalView.extend({
     tagName: 'div',
     width: 900,
+    height: 500,
     padding: 0,
     className: 'form-editor',
 
@@ -96,6 +97,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     renderField: function() {
       var field = this.selected;
+      console.log(field.get('type'));
       this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('type')], {field: field}) + '</label>');
     },
 

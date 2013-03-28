@@ -110,6 +110,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
     },
 
     formFormSubmitted: function(e) {
+      console.log(e.target);
       e.preventDefault();
       var name = $('.form-name-input', this.el).val();
 
@@ -139,6 +140,8 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
     appendForm: function(formModel) {
       var self = this;
       var template = _.template(Templates.Form, { form: formModel});
+      console.log(self.el);
+      console.log(self.$el);
       self.$el.find('.form-list').append(template);
     },
 

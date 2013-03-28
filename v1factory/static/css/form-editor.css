@@ -1,5 +1,5 @@
 .panel {
-  height: 400px;
+  height: 600px;
   display: inline-block;
   padding: 20px;
   vertical-align: top;
@@ -61,4 +61,8 @@ h4 {
 .field-types li input[type="radio"] {
   margin-top: -1px;
   margin-right: 4px;
+}
+
+.add-on {
+  min-height: 32px;
 }
