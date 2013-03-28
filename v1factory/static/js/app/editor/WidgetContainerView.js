@@ -5,7 +5,8 @@ define([
   'editor/SubWidgetView',
   'backbone',
   'editor/editor-templates'
-],function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) {
+],
+function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,

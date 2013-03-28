@@ -7,11 +7,12 @@ define([
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'keyup input'                 : 'inputChanged',
-      'keyup textarea'              : 'inputChanged',
+      'keydown input'                 : 'inputChanged',
+      'keydown textarea'              : 'inputChanged',
       'click #toggle-bold'          : 'toggleBold',
       'change .font-picker'         : 'changeFont',
-      'change .statics'             : 'changeSrc'
+      'change .statics'             : 'changeSrc',
+      'change .select-href'         : 'changeHref'
     },
 
     initialize: function(widgetModel){
@@ -20,7 +21,8 @@ define([
                       'inputChanged',
                       'toggleBold',
                       'changeFont',
-                      'changeSrc');
+                      'changeSrc',
+                      'changeHref');
 
       this.model = widgetModel;
       this.render();
@@ -110,6 +112,7 @@ define([
     },
 
     inputChanged: function(e) {
+      e.stopPropagation();
       var hash = e.target.id.replace('prop-', '');
       var info = hash.split('-');
 
@@ -119,7 +122,6 @@ define([
       else if(info.length == 1) {
         this.model.set(info[0], e.target.value);
       }
-      e.stopPropagation();
     },
 
     changeFont: function(e) {
@@ -157,8 +159,13 @@ define([
         iui.openFilePick(self.staticsAdded, self, appId);
       }
       else {
-        this.get('content_attribs').set('src', e.target.value);
+        this.model.get('content_attribs').set('src', e.target.value);
       }
+    },
+
+    changeHref: function(e) {
+      var self = this;
+      this.model.get('content_attribs').set('href', e.target.value);
     },
 
     clear: function() {

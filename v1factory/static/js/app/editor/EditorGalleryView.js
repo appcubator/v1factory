@@ -282,8 +282,8 @@ function(ElementCollection, UserEntityModel, Backbone) {
       var left, top;
 
       if(e.type != 'click') {
-        left = Math.round((e.pageX - $('.page')[0].offsetLeft - 120)/GRID_WIDTH);
-        top  = Math.round((e.pageY - $('.page')[0].offsetTop - 80)/GRID_HEIGHT);
+        left = Math.round((e.pageX - $('.page')[0].offsetLeft - 150)/GRID_WIDTH);
+        top  = Math.round((e.pageY - $('.page')[0].offsetTop - 180)/GRID_HEIGHT);
       }
       else {
         left = 0;

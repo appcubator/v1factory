@@ -130,6 +130,12 @@ define(['backbone', 'jquery-ui'], function() {
         self.closeModal();
       });
 
+      $(window).on('keydown', function(e) {
+        if(e.keyCode == 27) {
+          self.closeModal();
+        }
+      });
+
       return div;
     },
 

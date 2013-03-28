@@ -102,15 +102,24 @@ define([
 
     save : function() {
 
+      $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
       var curAppState = this.amendAppState();
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(curAppState),
-        complete: function() { iui.dontAskBeforeLeave();},
-        success: function() { alert('save successful'); },
+        complete: function() {
+          iui.dontAskBeforeLeave();
+        },
+        success: function() {
+          $('#save').html("<span>Saved</span>").fadeIn();
+          setTimeout(function(){
+            $('#save').html("<span>Save</span>").fadeIn();
+          },3000);
+        },
         error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
       });
+
 
       return false;
     },
