@@ -41,11 +41,15 @@ class DjangoTemplate(Renderable):
         for n in uie.nodes:
           if 'href' in n.attribs:
             if isinstance(n.attribs['href'], Page):
-              n.attribs['href'] = n.attribs['href'].route.static_url()
+              route_static_url = n.attribs['href'].route.static_url()
+              n.attribs['href'] = route_static_url
+              n.uie['content_attribs']['href'] = route_static_url
       else:
         if 'href' in uie.attribs:
           if isinstance(uie.attribs['href'], Page):
-            uie.attribs['href'] = uie.attribs['href'].route.static_url()
+            route_static_url = uie.attribs['href'].route.static_url()
+            uie.attribs['href'] = route_static_url
+            uie.uie['content_attribs']['href'] = route_static_url
 
     return self
 
@@ -105,7 +109,6 @@ class DjangoTemplate(Renderable):
       return cols
 
     sorted_uiels = sorted(uiels, key=lambda u: u.uie['layout']['left'])
-    #pdb.set_trace()
 
     # leftmost uiel must be in the row
     current_col = Column()
