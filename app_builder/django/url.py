@@ -30,7 +30,7 @@ class DjangoUrl(object):
     id_regex = r'(\d+)'
     def repl_model_with_id_regex(s):
       if isinstance(s, str) or isinstance(s, unicode):
-        return s
+        return s.strip()
       else:
         from model import DjangoModel
         assert(isinstance(s, DjangoModel))

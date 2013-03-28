@@ -1,2 +1,3 @@
-{% if v.query.belongs_to_user %} {{ v.model.objects.values(v.query.field_names).filter(user_id=request.user).order_by('?') }} {% else %} {{ v.model.objects.values(v.query.field_names).order_by('?') }}
+{{ query.model.identifier() }}.objects.all()\
+  {% if query.belongs_to_user %}.filter({{ query.model.get_user_related_field().identifier() }}=request.user)\{{ endif }}
 {% endif %}

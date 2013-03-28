@@ -45,6 +45,12 @@ class DjangoModel(object):
   def import_line(self):
     return "from webapp.models import " + self.identifier()
 
+  def get_user_related_field(self):
+    """linear search fields where type is foreignkey and related_model is named User or UserProfile"""
+    for f in self.fields.each():
+      if f.is_relational and f.related_model.name in ['User', 'UserProfile']:
+        return f
+
   def render(self):
     from jinja2 import Environment, PackageLoader
     env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
@@ -110,7 +116,7 @@ class DjangoField(object):
   def args(self):
     if self.is_relational:
       related_name = self.related_model.name if self is not self.related_model else '"self"'
-      return [self.related_model.name]
+      return [related_name]
     else:
       return []
 

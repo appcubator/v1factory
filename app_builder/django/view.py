@@ -27,3 +27,9 @@ class DjangoView(object):
 
   def template_repr(self):
     return repr("webapp/"+self.template.filename)
+
+  def render(self):
+    from jinja2 import Environment, PackageLoader
+    env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
+    template = env.get_template('view.py')
+    return template.render(v = self)

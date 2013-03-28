@@ -191,8 +191,10 @@ class Container(UIElement):
   def create(cls, uie, page):
     if uie['container_info']['action'] in ['login', 'signup', 'create', 'edit',]:
       u = Form.create(uie, page)
-    elif uie['container_info']['action'] == 'table-gal':
+    elif uie['container_info']['action'] == 'show':
       u = QuerysetWrapper(uie, page)
+    elif uie['container_info']['action'] == 'table-gal':
+      u = TableQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
       #assert(False) # this is where I do something to indicate that the app has linked in and facebook login...
       pass
@@ -299,13 +301,17 @@ class QuerysetWrapper(Container):
     self.page = page
     query = uie['container_info']['query']
     self.fields = query['fieldsToDisplay']
-    self.user_filter = query['fieldsToDisplay']
-    self.model = utils.extract_from_brace(query['belongsTo'])
+    self.user_filter = query['belongsToUser']
+    #self.model = utils.extract_from_brace(query['belongsTo'])
     self.sort_on = query['sortAccordingTo']
     self.nrows = query['numberOfRows']
-    
+
   def resolve_entity(self, analyzed_app):
     self.entity = analyzed_app.models.get_by_name(self.entity_name)
+
+class TableQuerysetWrapper(QuerysetWrapper):
+  def __init__(self, uie, page):
+    super(TableQuerysetWrapper, self).__init__(uie, page)
 
 """ ANALYZED APP """
 
