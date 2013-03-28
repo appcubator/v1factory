@@ -1,8 +1,10 @@
 <!-- container_form -->
 <form method="POST" {% if context.__class__.__name__ == "LoginForm" %}action="{{ '{%' }} url django.contrib.auth.views.login {{ '%}' }}"{% else %}action="{{ '{%' }} url {{ context.form_receiver.view_path() }} {{ '%}' }}"{% endif %}>
-  {{ "{% csrf_token %}" }}
-  {% for context in context.nodes %}
-    {{ context.render(env) }}
-  {% endfor %}
+  <fieldset>
+    {{ "{% csrf_token %}" }}
+    {% for context in context.nodes %}
+      {{ context.render(env) }}
+    {% endfor %}
+  </fieldset>
 </form>
 <!-- /container_form -->

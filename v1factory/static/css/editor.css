@@ -15,7 +15,7 @@
 
 
 /* Reset */
-.container > * {
+.page > * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -38,7 +38,6 @@
   margin-bottom: 4px;
   border-radius: 4px;
   color: #fff;
-  overflow: hidden;
   border: 1px solid #1b2535;
   box-shadow: 0 0 8px 2px rgba(60, 60, 60, 0.6);
 }
@@ -48,7 +47,6 @@
   padding: 0;
   margin: 0;
   border-top: 1px solid #1b2535;
-  overflow: hidden;
 }
 
 .section ul.sub-list {
@@ -208,7 +206,7 @@
   height: 100%;
   background-color: #2b3545;
   border-left: 1px solid #1b2535;
-  overflow-y: scroll;
+  overflow: visible;
 }
 
 .page-container {
@@ -362,7 +360,7 @@
 .elements-list {
   width: 100%;
   display: block;
-  overflow:hidden;
+  overflow:visible;
 }
 
 .section-select {
@@ -375,7 +373,7 @@
   z-index: 1000;
   background-color: #2b3545;
   border-bottom: 1px solid #1b2535;
-  overflow: hidden;
+  overflow: visible;
   z-index: 1100;
 }
 
@@ -483,7 +481,7 @@
   padding: 0;
   margin: 0;
   overflow: visible;
-  overflow-x: scroll;
+  overflow-y: scroll;
   z-index: 999;
   border-radius: 0;
   border: none;
@@ -521,8 +519,8 @@
 
 .item-gallery ul {
   list-style: none;
+  overflow: visible;
   overflow-y: scroll;
-  overflow-x: hidden;
   padding: 0;
   height: 100px;
   padding-bottom: 100px;
@@ -547,9 +545,8 @@
 
 .interface-elements {
   width: 100%;
-  overflow-x:scroll;
+  overflow:visible;
   overflow-y:visible;
-  overflow: visible;
   height: 100%;
   display: block;
   float: right;
@@ -557,7 +554,8 @@
 
 .interface-elements ul {
   display: block;
-  overflow: scroll;
+  overflow: visible;
+  overflow-y: scroll;
   float: left;
   height: 100%;
 }
@@ -646,19 +644,6 @@
   font: normal 16px/20px "proxima-nova", Arial, sans-serif; 
 }
 
-.accordion {
-  max-height: 40px;
-  overflow: hidden;
-  transition: max-height 1s;
-  -moz-transition: max-height 1s; /* Firefox 4 */
-  -webkit-transition: max-height 1s; /* Safari and Chrome */
-  -o-transition: max-height 1s; /* Opera */
-
-}
-
-.accordion:hover {
-  max-height: 1000px;
-}
 
 body {
   background-color: #fff;
@@ -779,6 +764,7 @@ body {
   width: 60px;
   height: 30px;
   margin-bottom: 0;
+  overflow: visible;
   overflow-y:scroll;
 }
 
@@ -833,6 +819,7 @@ body {
   width: 240px;
   height: 100%;
   padding-bottom: 170px;
+  overflow: visible;
   overflow-y:scroll;
 }
 
@@ -1104,6 +1091,15 @@ li.model span.title {
 
 .save {
   background-image: url('../img/save.png');
+  text-align: left;
+  transition: width 2s;
+-moz-transition: width 2s; /* Firefox 4 */
+-webkit-transition: width 2s; /* Safari and Chrome */
+-o-transition: width 2s; /* Opera */
+}
+
+.run {
+  background-image: url('../img/run.png');
 }
 
 .help {
@@ -1172,14 +1168,6 @@ ul.list {
   background-image: url(../img/full-width-icon.png);
 }
 
-.class-name-item {
-  display: block;
-  height: 80px;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(90, 90, 90, 0.6);
-  border-top: 1px solid rgba(90, 90, 90, 0.4);
-}
-
 .node { 
   display: inline-block;
   height: 74px;
@@ -1197,6 +1185,7 @@ ul.list {
 
 .info-section ul {
   height: 198px;
+  overflow: visible;
   overflow-y: scroll;
 }
 

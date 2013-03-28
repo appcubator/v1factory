@@ -5,7 +5,8 @@ define([
   'editor/SubWidgetView',
   'backbone',
   'editor/editor-templates'
-],function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) {
+],
+function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -21,7 +22,7 @@ define([
 
     initialize: function(widgetModel) {
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
-      _.bindAll(this, 'placeWidget', 'renderElements', 'showDetails');
+      _.bindAll(this, 'placeWidget', 'placeFormElement', 'renderElements', 'showDetails');
 
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
@@ -65,11 +66,23 @@ define([
       this.el.appendChild(widgetView.el);
     },
 
+    placeFormElement: function(fieldModel) {
+      console.log(fieldModel);
+      var fieldHtml = _.template(Templates.fieldNode, { field: fieldModel });
+      $(this.el).append(fieldHtml);
+    },
+
     renderElements : function() {
       var self  =this;
       _(this.model.get('container_info').get('uielements').models).each(function(widgetModel) {
         self.placeWidget(widgetModel);
       });
+
+      if(this.model.get('container_info').has('form')) {
+        _(this.model.get('container_info').get('form').get('fields').models).each(function(field) {
+          self.placeFormElement(field);
+        });
+      }
     },
 
     showDetails: function() {

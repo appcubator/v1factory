@@ -36,11 +36,10 @@ define([
 
       },
       toJSON: function () {
-        alert('yolo');
         var json = {};
         json = _.clone(this.attributes);
         json.fields = this.get('fields').toJSON();
-        //json.forms = this.get('forms').toJSON();
+        json.forms = this.get('forms').toJSON();
         return json;
       }
   });

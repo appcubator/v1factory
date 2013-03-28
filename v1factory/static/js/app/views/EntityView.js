@@ -2,9 +2,10 @@ define([
   'backbone',
   'app/models/FieldModel',
   'app/models/FormModel',
-  'app/views/FormEditorView'
+  'app/views/FormEditorView',
+  'app/views/UploadExcelView'
 ],
-function(Backbone, FieldModel, FormModel, FormEditorView) {
+function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
 
   var EntityView = Backbone.View.extend({
     el         : null,
@@ -171,6 +172,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView) {
     },
 
     clickedFormRemove: function(e) {
+      e.preventDefault();
       var cid = String(e.target.id||e.target.parentNode.id).replace('remove-', '');
       this.model.get('forms').remove(cid);
       $('#form-'+cid).remove();
