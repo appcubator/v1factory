@@ -27,7 +27,7 @@
 }
 
 .action-panel {
-  width: 120px;
+  width: 200px;
   border-left: 1px solid #aaa;
 }
 
@@ -38,6 +38,7 @@
   padding: 8px 20px;
   background-color: transparent;
   -webkit-transition: background-color 50ms linear;
+  cursor: n-resize;
 }
 
 .field-li-item.selected {
@@ -46,4 +47,18 @@
 
 .field-li-item:hover {
   background-color: rgba(25, 142, 58, 0.3);
+}
+
+h4 {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.field-types li {
+  margin-bottom: 6px;
+}
+
+.field-types li input[type="radio"] {
+  margin-top: -1px;
+  margin-right: 4px;
 }

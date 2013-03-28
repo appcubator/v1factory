@@ -73,14 +73,6 @@ function(ElementCollection, UserEntityModel, Backbone) {
         $(this.allList).append(tempLogin);
       }
 
-      if(appState.users.local) {
-        var tempLogin = '<li id="entity-user" class="signup entity">'+
-                        '<span class="name">User Signup Form</span></li>';
-
-        //$(this.userList).append(tempLogin);
-        $(this.allList).append(tempLogin);
-      }
-
       if(appState.users.facebook) {
         var tempFb = '<li id="entity-user" class="facebook entity">'+
                      '<span class="name">Facebook Login Button</span></li>';
@@ -156,20 +148,25 @@ function(ElementCollection, UserEntityModel, Backbone) {
 
       var tempLi   = '<li id="entity-<%= cid %>" class="show entity">'+
                      '<span class="name">List of <%= name %></span></li>';
-       $(this.allList).append(_.template(tempLi, context));
-
-      var tempForm = '<li id="entity-<%= cid %>" class="create entity">'+
-                     '<span class="name">Add <%= name %> Form</span></li>';
-      $(this.allList).append(_.template(tempForm, context));
-
-      var tempBtn  = '<li id="entity-<%= cid %>" class="addbutton entity">'+
-                     '<span class="name">Add <%= name %> Button</span></li>';
-      $(this.allList).append(_.template(tempBtn, context));
+      $(this.allList).append(_.template(tempLi, context));
 
       var tempTable  = '<li id="entity-<%= cid %>" class="table-gal entity">'+
                      '<span class="name"><%= name %> Table</span></li>';
       $(this.allList).append(_.template(tempTable, context));
 
+
+      if(entityModel.has('forms')) {
+        console.log(entityModel);
+        _(entityModel.get('forms').models).each(function(form) {
+          //if(form.get('type') == "create") {
+            var html = _.template(Templates.createFormButton, {entity: entityModel,
+                                                               form: form});
+
+            console.log(html);
+            $(self.allList).append(html);
+          //}
+        });
+      }
 
       $('.entity').draggable({
         cursor: "move",
@@ -285,8 +282,8 @@ function(ElementCollection, UserEntityModel, Backbone) {
       var left, top;
 
       if(e.type != 'click') {
-        left = Math.round((e.pageX - $('.page')[0].offsetLeft - 120)/GRID_WIDTH);
-        top  = Math.round((e.pageY - $('.page')[0].offsetTop - 80)/GRID_HEIGHT);
+        left = Math.round((e.pageX - $('.page')[0].offsetLeft - 150)/GRID_WIDTH);
+        top  = Math.round((e.pageY - $('.page')[0].offsetTop - 180)/GRID_HEIGHT);
       }
       else {
         left = 0;
@@ -298,34 +295,34 @@ function(ElementCollection, UserEntityModel, Backbone) {
       var widget = {};
       widget.layout = {
         top   : top,
-        left  : left,
-        width : 4,
-        height: 8
+        left  : left
       };
 
       var className = e.target.className;
       var id = e.target.id;
 
       if(/(entity)/.exec(className)) {
-        var cid = String(id).replace('entity-','');
+        var hash = String(id).split('-');
+        var entityCid = hash[1];
+        var formCid = hash[2];
+        var action = className.split(' ')[0];
 
-        var entity;
+        var entity, form;
 
-        if(cid === 'user'){
+        if(entityCid === 'user'){
           entity = new UserEntityModel(appState.users);
         }
         else {
-          console.log(this.entitiesCollection);
-          entity = this.entitiesCollection.get(cid);
-          console.log(entity);
+          entity = this.entitiesCollection.get(entityCid);
+          form = entity.get('forms').get(formCid);
         }
 
-        var action = className.split(' ')[0];
-
-        widget.container_info = {
-           entity : entity,
-           action : action
-        };
+        widget.container_info = {};
+        widget.container_info.entity = entity;
+        widget.container_info.action = action;
+        if(form) {
+          widget.container_info.form = form;
+        }
 
         this.containersCollection.push(widget);
       }

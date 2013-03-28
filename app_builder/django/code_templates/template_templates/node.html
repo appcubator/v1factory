@@ -1,21 +1,5 @@
-{# Left over from uiel.html in the htmlgen.py script
-<{{element.uie.tagName}} {% if element.uie.tagType %}type ="{{element.uie.tagType}}" {% endif %}class="{{ element.uie.class_name }} span{{element.uie.layout.width}} hi{{element.uie.layout.height}}" {% for attrib in element.uie.content_attribs %}{{ attrib }}="{{ element.uie.content_attribs[attrib] }}" {% endfor %}>
-  {% if not element.uie.isSingle %}{{element.uie.content}}
-</{{element.uie.tagName}}>{% endif %}
-#}
-
-{% if context.is_normal_tag() %}
-<!-- node is_normal_tag -->
-<div class="{% for c in context.classes %}{{ c }} {% endfor %}">
-  <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %}>
-    {{ context.content() }}
-  </{{ context.tagname }}>
-</div>
-<!-- /node is_normal_tag -->
-{% else %}
-<!-- node !is_normal_tag -->
-<div class="{% for c in context.classes %}{{ c }} {% endfor %}">
-  <{{ context.tagname }} id="{{ context.html_id }}" {% for k,v in context.attribs.items() %}{{ k }}="{{ v }}" {% endfor %} />
-</div>
-<!-- /node !is_normal_tag -->
-{% endif %}
+<!-- node -->
+<{{context.uie.tagName}}{% for attrib in context.uie.cons_attribs %} {{ attrib }}="{{ context.uie.cons_attribs[attrib] }}"{% endfor %} class="{{ context.uie.class_name }} span{{context.uie.layout.width}} hi{{context.uie.layout.height}}" {% for attrib in context.uie.content_attribs %}{{ attrib }}="{{ context.uie.content_attribs[attrib] }}" {% endfor %}>
+  {% if not context.uie.isSingle %}{{context.uie.content}}
+</{{context.uie.tagName}}>{% endif %}
+<!-- /node -->

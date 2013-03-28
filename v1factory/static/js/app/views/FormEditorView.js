@@ -12,13 +12,14 @@ function(Backbone, BackboneUI, FormFieldModel) {
     width: 900,
     padding: 0,
     className: 'form-editor',
-    
+
     events: {
       'change .field-name-box' : 'fieldBoxChanged',
       'click .field-li-item'   : 'clickedField',
       'change .field-type'     : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
-      'keydown .field-label-input' : 'changedLabel'
+      'keydown .field-label-input' : 'changedLabel',
+      'keydown .options-input' : 'changedOptions'
     },
 
     initialize: function(formModel, entityModel) {
@@ -41,9 +42,12 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
       this.render();
 
-      this.selectedNew(_.last(this.model.get('fields').models));
+      if(this.model.get('fields').models.length > 0) {
+        this.selectedNew(_.last(this.model.get('fields').models));
+      }
+
     },
-    
+
     render : function(text) {
       var self = this;
       var html = _.template(FormEditorTemplates.template, { form: self.model, entity: self.entity});
@@ -74,6 +78,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
+      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
@@ -92,13 +97,22 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     renderField: function() {
       var field = this.selected;
+      console.log(FieldTypes[field.get('type')]);
       this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('type')], {field: field}) + '</label>');
     },
 
     changedFieldType: function(e) {
       e.preventDefault();
       if(e.target.checked) {
-        this.selected.set('type', e.target.value);
+        var newType = e.target.value;
+        this.selected.set('type', newType);
+
+        var curOptions = (this.$el.find('options-input').val() || '');
+        this.$el.find('.options-input').remove();
+        if(newType == "option-boxes" || newType == "dropdown") {
+          this.selected.set('options', curOptions.split(','));
+          this.$el.find('.field-types').append('Options<br><input class="options-input" type="text" value="' + curOptions + '">');
+        }
       }
     },
 
@@ -108,6 +122,12 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     changedLabel: function(e) {
       this.selected.set('label', e.target.value);
+    },
+
+    changedOptions: function(e) {
+      var options = String(this.$el.find('.options-input').val()).split(',');
+      console.log(options);
+      this.selected.set('options', options);
     }
   });
 

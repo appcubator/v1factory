@@ -116,3 +116,64 @@ ul.property-list li:hover .cross.small, ul.property-l li:hover .cross.small {
 input[type="checkbox"] {
   margin-right: 6px;
 }
+
+
+.tbl {
+  height: 137px;
+}
+
+.tbl-wrapper {
+  height: 137px;
+  overflow: hidden;
+  overflow-x: scroll;
+  background-color: #fff;
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+}
+
+.tbl-wrapper .remove {
+  font-size: 10px;
+  background-color: #c95446;
+  border: none;
+  color:#fff;
+  border-radius: 10px;
+  line-height: 10px;
+  height: 20px;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.tbl {
+  display: inline-block;
+  background-color: #fff;
+/*  border-top: 2px solid #AAA;
+  border: 2px solid #333;*/
+  border-radius: 6px;
+  overflow: hidden;
+  width: 2000px;
+}
+
+.tbl .hdr {
+  font-weight: bold;
+  border-bottom: 2px solid #AAA;
+  height: 30px;
+  padding: 4px;
+  text-align: left;
+}
+
+.entity-pane {
+  padding:0 !important;
+}
+
+.form-pane {
+  border:1px solid #eee;
+  box-shadow: 0 0 3px rgba(0,0,0,0.33) inset;
+  border-radius: 3px;
+  background-color: #eee;
+  padding: 10px;
+}
+
+.form-pane .hdr {
+  font-weight: bold;
+}
