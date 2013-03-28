@@ -3,7 +3,7 @@
 import re
 from app_builder.manager import Manager
 
-from model import DjangoModel
+from model import DjangoModel, DjangoField
 from view import DjangoView
 from query import DjangoQuery
 from template import DjangoTemplate
@@ -28,7 +28,7 @@ def analyzed_app_to_app_components(analyzed_app):
   for am1 in analyzed_app.models.each():
     for f in am1.fields:
       if f.content_type == 'list of blah':
-        am2 = am1.related_model
+        am2 = f.related_model
         dm1 = models.get_by_name(am1.name)
         dm2 = models.get_by_name(am2.name)
         assert None not in [am1, am2, dm1, dm2]
@@ -39,14 +39,14 @@ def analyzed_app_to_app_components(analyzed_app):
         for f2 in am2.fields:
           if f2.content_type == 'list of blah' and f2.related_model == am1:
             m2m = True
-            df = DjangoField.create_relational(f1.name, f2.name, dm1, dm2, m2m=True)
+            df = DjangoField.create_relational(f.name, f2.name, dm1, dm2, m2m=True)
             dm1.fields.add(df)
             break
         if not m2m:
           # if user has a list of blogs, then blog has a foreign key user
           # parent_user973947234 is a foreign key on Blog, relating to User with related name "Blogs"
-          df = DjangoField.create_relational('parent_%s%s' % (dm1.name, id(f)), f1.name, dm1, dm2)
-          dm1.fields.add(df)
+          df = DjangoField.create_relational('parent_%s%s' % (dm1.name, id(f)), f.name, dm2, dm1)
+          dm2.fields.add(df)
 
   for p in analyzed_app.pages.each():
     t = DjangoTemplate.create(p)

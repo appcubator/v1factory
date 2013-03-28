@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from app_builder.app_utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
 import requests
+from django.conf import settings
 
 def add_statics_to_context(context, app):
   context['statics'] = simplejson.dumps(list(StaticFile.objects.filter(app=app).values()))
@@ -119,7 +120,7 @@ def app_save_uie_state(request, app):
 @require_POST
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id)
-  m = app.deploy() # returns a dir if production = false, other messages if true
+  m = app.deploy(remote=settings.PRODUCTION) # returns a dir if production = false, other messages if true
   return HttpResponse(m)
 
 def app_urls(request, app_id):
@@ -383,8 +384,11 @@ def deploy_panel(request):
     # this will post the data to v1factory.com
     subdomain = request.POST['subdomain']
     app_json = request.POST['app_json']
-    post_data = {"subdomain": subdomain, "app_json": app_json}
-    r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+    d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
+    r = d.write_to_tmpdir()
+    return HttpResponse(r)
+    #post_data = {"subdomain": subdomain, "app_json": app_json}
+    #r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
     return HttpResponse(r.content)
 
 

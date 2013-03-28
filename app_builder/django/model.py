@@ -66,9 +66,10 @@ class DjangoField(object):
 
   def __init__(self, name=None, field_type=None, required=None, model=None, related_name=None, related_model=None):
     self.name = name
-    self.field_type = content_type
+    self.field_type = field_type
     self.required = required
     self.model = model
+    self.related_name = related_name
     self.related_model = related_model
 
   @classmethod
@@ -83,14 +84,15 @@ class DjangoField(object):
       raise Exception("This field type is not yet implemented: %s" % self.field_type)
     return self
 
-  def create_relational(cls, name, related_name, m2m=False, parent_model, related_model):
+  @classmethod
+  def create_relational(cls, name, related_name, parent_model, related_model, m2m=False):
     """Constructor for foreign key and many to many fields"""
     self = cls(name=name,
                field_type="m2m" if m2m else "fk",
                required=True, # relational fields are always required for now
                model=parent_model,
-               related_name = related_name,
-               related_model=related_model if parent_model is not related_model else 'self') # models related to self
+               related_name=related_name,
+               related_model=related_model) # models related to self
     return self
 
   def identifier(self):
@@ -106,7 +108,8 @@ class DjangoField(object):
 
   def args(self):
     if self.is_relational:
-      return [self.name]
+      related_name = self.related_model.name if self is not self.related_model else '"self"'
+      return [self.related_model.name]
     else:
       return []
 
@@ -119,8 +122,7 @@ class DjangoField(object):
     if not self.required:
       kwargs['blank'] = repr(True)
     if self.is_relational:
-      if field_type == 'm2m'
-      kwargs['related_name'] = self.related_name
+      kwargs['related_name'] = repr(self.related_name)
     return kwargs
 
   def render(self):
