@@ -24,7 +24,6 @@ class DjangoQuery:
       self.fields.append(f)
     # bind actual field here if it exists, otherwise set it to None
     self.sort_on_field = self.model.fields.get_by_name(self.sort_on)
-    print self.sort_on_field.identifer
 
   def render(self):
     from jinja2 import Environment, PackageLoader
