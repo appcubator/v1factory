@@ -23,6 +23,7 @@ class DjangoModel(object):
     self = cls(name=name, fields=fields)
 
     for f in abs_model.fields:
+      # only create non-relational fields here.
       if f.content_type != "list of blah":
         df = DjangoField.create(f, self)
         self.fields.add(df)

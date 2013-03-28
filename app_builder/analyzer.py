@@ -297,7 +297,13 @@ class QuerysetWrapper(Container):
     self.entity_name = uie['container_info']['entity']
     self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
-
+    query = uie['container_info']['query']
+    self.fields = query['fieldsToDisplay']
+    self.user_filter = query['fieldsToDisplay']
+    self.model = utils.extract_from_brace(query['belongsTo'])
+    self.sort_on = query['sortAccordingTo']
+    self.nrows = query['numberOfRows']
+    
   def resolve_entity(self, analyzed_app):
     self.entity = analyzed_app.models.get_by_name(self.entity_name)
 
