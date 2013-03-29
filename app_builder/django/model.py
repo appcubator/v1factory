@@ -20,7 +20,10 @@ class DjangoModel(object):
     """Create a django model from analyzed app stuff"""
     name = abs_model.name
     fields = Manager(DjangoField)
-    self = cls(name=name, fields=fields)
+    if name == "User":
+      self = UserProfileModel(name=name, fields=fields)
+    else:
+      self = cls(name=name, fields=fields)
 
     for f in abs_model.fields:
       # only create non-relational fields here.
@@ -36,11 +39,7 @@ class DjangoModel(object):
     return self.name.lower()+"_id"
 
   def identifier(self):
-    # FIXME need to do users better... wtf is this
-    if self.name == "User":
-      return "UserProfile"
-    else:
-      return self.name.replace(' ', '_')
+    return self.name.replace(' ', '_')
 
   def import_line(self):
     return "from webapp.models import " + self.identifier()
@@ -57,6 +56,14 @@ class DjangoModel(object):
     template = env.get_template('model.py')
     return template.render(model = self)
 
+class UserProfileModel(DjangoModel):  
+  def __init__(self, name=None, fields=None):
+    super(UserProfileModel, self).__init__(name=name, fields=fields)
+    self.fields.add(UserProfileUserField())
+  
+  def identifier(self):
+    return "UserProfile"
+
 class DjangoField(object):
   """
   Represents a model's field. Has a name, a type, maybe some relationship things, etc.
@@ -70,7 +77,9 @@ class DjangoField(object):
             'email' : 'EmailField',
             'fk' : 'ForeignKey',
             'm2m' : 'ManyToManyField',
-            'image' : 'TextField'}
+            'image' : 'TextField',
+            'onetoone': 'OneToOneField',
+  }
 
   def __init__(self, name=None, field_type=None, required=None, model=None, related_name=None, related_model=None):
     self.name = name
@@ -112,7 +121,7 @@ class DjangoField(object):
 
   @property
   def is_relational(self):
-    return self.field_type in [ "fk", "m2m" ]
+    return self.field_type in [ "fk", "m2m", "onetoone" ]
 
   def args(self):
     if self.is_relational:
@@ -138,3 +147,13 @@ class DjangoField(object):
     env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
     template = env.get_template('model_fields.py')
     return template.render(f = self)
+
+class UserProfileUserField(DjangoField):
+    def __init__(self, name="User", field_type='onetoone', required=None, model=None, related_name=None, related_model=None):
+      super(UserProfileUserField, self).__init__(name=name, field_type=field_type, required=required, model=model, related_name=related_name, related_model=related_model)
+    
+    def args(self):
+      return ["User"]
+    
+    def kwargs(self):
+      return {}

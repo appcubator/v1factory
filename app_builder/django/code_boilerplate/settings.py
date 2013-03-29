@@ -175,6 +175,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "social_auth.context_processors.social_auth_backends",
 )
 
+AUTH_PROFILE_MODULE = "webapp.UserProfile"
+
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
