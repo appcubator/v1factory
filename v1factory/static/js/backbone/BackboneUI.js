@@ -124,6 +124,7 @@ define(['backbone', 'jquery-ui'], function() {
       div.style.left = '0';
       div.style.backgroundColor = '#222';
       div.style.opacity = '0.6';
+      div.style.zIndex = 3000;
       document.body.appendChild(div);
 
       $(div).on('click', function() {
@@ -152,6 +153,7 @@ define(['backbone', 'jquery-ui'], function() {
       div.style.marginLeft= '-'+ (this.width/2) +'px';
       div.style.marginTop = '-300px';
       div.style.padding = this.padding + 'px';
+      div.style.zIndex = 3001;
 
       var span = document.createElement('span');
       span.className = 'modal-cross';

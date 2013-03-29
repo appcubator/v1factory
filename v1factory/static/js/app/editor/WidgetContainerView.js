@@ -3,10 +3,16 @@ define([
   'editor/TableQueryView',
   'editor/WidgetView',
   'editor/SubWidgetView',
+  'app/views/FormEditorView',
   'backbone',
   'editor/editor-templates'
 ],
-function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) {
+function(WidgetCollection,
+        TableQueryView,
+        WidgetView,
+        SubWidgetView,
+        FormEditorView,
+        Backbone) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -67,7 +73,6 @@ function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) 
     },
 
     placeFormElement: function(fieldModel) {
-      console.log(fieldModel);
       var fieldHtml = _.template(Templates.fieldNode, { field: fieldModel });
       $(this.el).append(fieldHtml);
     },
@@ -86,9 +91,13 @@ function(WidgetCollection, TableQueryView, WidgetView, SubWidgetView, Backbone) 
     },
 
     showDetails: function() {
-      console.log(this.model);
       if(this.model.get('container_info').get('action') === "table-gal") {
         new TableQueryView(this.model, this.model.get('container_info').get('query'));
+      }
+      if(this.model.get('container_info').has('form')) {
+        console.log(this.model.get('container_info').get('form'));
+        new FormEditorView(this.model.get('container_info').get('form'),
+                           this.model.get('container_info').get('entity'));
       }
     }
   });

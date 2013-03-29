@@ -169,7 +169,6 @@ function(ElementCollection, UserEntityModel, Backbone) {
 
 
       if(entityModel.has('forms')) {
-        console.log(entityModel);
         _(entityModel.get('forms').models).each(function(form) {
           //if(form.get('type') == "create") {
             var html = _.template(Templates.createFormButton, {entity: entityModel,
@@ -325,7 +324,6 @@ function(ElementCollection, UserEntityModel, Backbone) {
         if(entityCid === 'user'){
           entity = this.userModel;
           form = entity.get('forms').get(formCid);
-          console.log(form);
         }
         else {
           entity = this.entitiesCollection.get(entityCid);

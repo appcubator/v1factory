@@ -16,10 +16,8 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
     initialize: function(bone) {
 
-      console.log(typeof bone);
       if(typeof bone === "string") {
         bone = appState.users;
-        console.log(bone);
       }
 
       var fieldCollection = new FieldsCollection();
