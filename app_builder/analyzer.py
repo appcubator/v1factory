@@ -379,7 +379,7 @@ class AnalyzedApp:
     self.fill_in_hrefs()
     # will eventually do forms.
     self.init_forms(app_state)
-    self.init_queries()
+    self.init_queries(app_state)
 
   # link routes and models
   def link_models_to_routes(self):
@@ -418,10 +418,10 @@ class AnalyzedApp:
             uie.resolve_entity(self, app_state)
           self.forms.add(uie)
 
-  def init_queries(self):
+  def init_queries(self, app_state):
     for p in self.pages.each():
       p.queries = Manager(QuerysetWrapper)
       for uie in p.uielements:
         if isinstance(uie, QuerysetWrapper):
-          uie.resolve_entity(self, app_state)
+          uie.resolve_entity(self)
           p.queries.add(uie)

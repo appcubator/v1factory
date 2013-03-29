@@ -364,6 +364,7 @@ def theme_delete(request, theme):
 
 @login_required
 @require_POST
+@csrf_exempt
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
   m = app.deploy()
@@ -371,6 +372,7 @@ def app_deploy(request, app_id):
 
 @login_required
 @require_POST
+@csrf_exempt
 def app_deploy_local(request, app_id):
   assert not settings.PRODUCTION, "You should only deploy local if this is a dev machine"
   app = get_object_or_404(App, id=app_id, owner=request.user)

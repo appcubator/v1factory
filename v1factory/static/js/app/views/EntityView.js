@@ -3,9 +3,10 @@ define([
   'app/models/FieldModel',
   'app/models/FormModel',
   'app/views/FormEditorView',
-  'app/views/UploadExcelView'
+  'app/views/UploadExcelView',
+  'app/views/ShowDataView'
 ],
-function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
+function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
   var EntityView = Backbone.View.extend({
     el         : null,
@@ -198,7 +199,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView) {
         data: {
           model_name : this.model.get('name')
         },
-        success: function(data) { console.log(data.responseText); },
+        success: function(data) { new ShowDataView(data); },
         dataType: "JSON"
       });
     }
