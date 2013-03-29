@@ -530,7 +530,7 @@
   overflow-y: scroll;
   padding: 0;
   height: 100px;
-  padding-bottom: 100px;
+  padding-bottom: 300px;
 }
 
 .item-gallery ul li {

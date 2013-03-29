@@ -58,9 +58,24 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     fieldBoxChanged: function(e) {
+      var self = this;
       if(e.target.checked) {
-        var fieldModel = new FormFieldModel({name: e.target.value, type: "single-line-text"});
-        this.model.get('fields').add(fieldModel);
+        var cid = e.target.id.replace('field-', '');
+        var fieldModel = self.entity.get('fields').get(cid);
+        var formFieldModel = new FormFieldModel({name: e.target.value, displayType: "single-line-text", type: fieldModel.get('type')});
+
+        if(fieldModel.get('type') == "email") {
+          formFieldModel.set('displayType', "email-text");
+        }
+        if(fieldModel.get('type') == "image") {
+          formFieldModel.set('displayType', "image-uploader");
+        }
+        if(fieldModel.get('type') == "date") {
+          formFieldModel.set('displayType', "date-picker");
+        }
+
+
+        this.model.get('fields').add(formFieldModel);
       }
       else {
         var removedField = this.model.get('fields').where({ name : e.target.value});
@@ -79,6 +94,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
+      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
@@ -98,14 +114,14 @@ function(Backbone, BackboneUI, FormFieldModel) {
     renderField: function() {
       var field = this.selected;
       console.log(field.get('type'));
-      this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('type')], {field: field}) + '</label>');
+      this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field}) + '</label>');
     },
 
     changedFieldType: function(e) {
       e.preventDefault();
       if(e.target.checked) {
         var newType = e.target.value;
-        this.selected.set('type', newType);
+        this.selected.set('displayType', newType);
 
         var curOptions = (this.$el.find('.options-input').val() || '');
         this.$el.find('.options-input-area').remove();

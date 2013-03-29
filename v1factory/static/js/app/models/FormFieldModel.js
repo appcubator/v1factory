@@ -8,11 +8,14 @@ function() {
 
       this.set('name', bone.name);
 
-      if(bone.type) {
-        this.set('type', bone.type);
+      if(bone.displayType) {
+        this.set('displayType', bone.displayType);
       }
       else { alert('form field should have type'); }
 
+      if(bone.type) {
+        this.set('type', bone.type);
+      }
 
       this.set('label', (bone.label||bone.name));
       this.set('placeholder', (bone.placeholder||bone.name));
