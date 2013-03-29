@@ -94,9 +94,6 @@ class App(models.Model):
     summary += "Pages:\t\t\t{};".format(", ".join(['("{}", {})'.format(u['page_name'], u['urlparts']) for u in self.state['urls']]))
     return summary
 
-  def init_deploy(self):
-    pass
-
   def write_to_tmpdir(self):
     from app_builder.analyzer import AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
@@ -114,25 +111,16 @@ class App(models.Model):
       subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
     return subdomain
 
-  def deploy(self, remote=True):
-    if remote:
-      # this will post the data to v1factory.com
-      subdomain = self.subdomain()
-      post_data = {"subdomain": subdomain, "app_json": self.state_json}
-      r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+  def deploy(self):
+    # this will post the data to v1factory.com
+    subdomain = self.subdomain()
+    post_data = {"subdomain": subdomain, "app_json": self.state_json}
+    r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
-      if r.status_code == 200:
-        return "http://%s.v1factory.com" % subdomain
-      else:
-        raise Exception(r.content)
-
-    else: # just output the files to a temp dir
-      from app_builder.analyzer import AnalyzedApp
-      from app_builder.django.coordinator import analyzed_app_to_app_components
-      from app_builder.django.writer import DjangoAppWriter
-
-      tmp_project_dir = self.write_to_tmpdir()
-      return tmp_project_dir
+    if r.status_code == 200:
+      return "http://%s.v1factory.com" % subdomain
+    else:
+      raise Exception(r.content)
 
   def deploy_test(self):
     return "do the funky chicken"
@@ -164,6 +152,18 @@ class App(models.Model):
     print_test("views.py", django_writer.views_py_as_string)
     print_test("form_receivers.py", django_writer.form_receivers_py_as_string)
     print_test("templates", lambda: "\n\nNEXT:\n".join([t[1] for t in django_writer.templates_as_strings()]))
+
+  def delete(self, *args, **kwargs):
+    try:
+      post_data = {"subdomain": self.subdomain()}
+      r = requests.post("http://v1factory.com/deployment/delete/", post_data)
+    except Exception:
+      print "Warning: could not reach v1factory server."
+    else:
+      if r.status_code != 200:
+        print "Error: v1factory could not delete the deployment. Plz do it manually."
+    finally:
+      super(App, self).delete(*args, **kwargs)
 
 class UIElement(models.Model):
   """Describes the UIElement. If app is none, this belongs to the Library."""

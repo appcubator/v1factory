@@ -40,13 +40,13 @@ class Field(object):
                model = model)
 
     # if it's not a normal field, it must be a list of models field, or it's unrecognized.
-    if self.content_type not in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email']:
+    if self.content_type not in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email', 'image']:
       list_of_model_name = utils.extract_from_brace(field_dict['type']) # "{{Blog}}" => "Blog"
       assert list_of_model_name is not None, "Field type not recognized: %s" % self.content_type
       self.content_type = 'list of blah'
       # this field only exists if content_type = list of blah. in an instance attribute
       self.related_model_name = list_of_model_name
-    assert self.content_type in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email', 'list of blah']
+    assert self.content_type in ['text', 'number', 'date', '_CREATED', '_MODIFIED', 'email', 'image', 'list of blah']
     return self
 
   def resolve_model_if_list_of_blah(self, analyzed_app):
@@ -272,18 +272,36 @@ class CreateForm(Form):
   """Create a model instance form."""
   def __init__(self, uie, page):
     super(CreateForm, self).__init__(uie=uie)
-    self.name = "Form{}".format(id(uie))
+    self.name = utils.extract_from_brace(uie['container_info']['form'])
     self.uie = uie
     self.page = page
-    self.form_schema = uie['container_info']['form']['forms']
+    self.nodes = []
     self.entity_name = uie['container_info']['entity']
 
-  def resolve_entity(self, analyzed_app):
+  def resolve_entity(self, analyzed_app, app_state):
     self.entity = analyzed_app.models.get_by_name(self.entity_name)
+    self.form_schema = app_state['users']['forms']
     self.included_fields = []
-    for f in self.entity.fields:
-      if f.name in self.included_field_names:
-        self.included_fields.append(f)
+    # I guess you could use a Manager here.
+    for fform in self.form_schema:
+      if fform['name'] == self.name:
+        self.form_schema = fform
+        field_names = []
+        # Build Names list
+        for f in fform['fields']:
+          field_names.append(f['name'])
+        # Use manager here for name lookup
+        f_manager = Manager(Field)
+        for f in self.entity.fields:
+          f_manager.add(f)
+        for fn in field_names:
+          f_check = f_manager.get_by_name(fn)
+          if f_check is not None:
+            self.included_fields.append(f_check)
+        break # Assumes only 1-1 for form-entity
+      
+    # To avoid any syntax errors
+    self.name = self.name.replace(" ", "_")
 
 class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.
@@ -360,7 +378,7 @@ class AnalyzedApp:
     self.link_routes_and_pages()
     self.fill_in_hrefs()
     # will eventually do forms.
-    self.init_forms()
+    self.init_forms(app_state)
     self.init_queries()
 
   # link routes and models
@@ -391,19 +409,19 @@ class AnalyzedApp:
         for f in m.fields:
           f.resolve_model_if_list_of_blah(self)
 
-  def init_forms(self):
+  def init_forms(self, app_state):
     self.forms = Manager(Form)
     for p in self.pages.each():
       for uie in p.uielements:
         if isinstance(uie, Form):
-          self.forms.add(uie)
           if isinstance(uie, CreateForm):
-            uie.resolve_entity(self)
+            uie.resolve_entity(self, app_state)
+          self.forms.add(uie)
 
   def init_queries(self):
     for p in self.pages.each():
       p.queries = Manager(QuerysetWrapper)
       for uie in p.uielements:
         if isinstance(uie, QuerysetWrapper):
-          uie.resolve_entity(self)
+          uie.resolve_entity(self, app_state)
           p.queries.add(uie)

@@ -36,8 +36,11 @@ urlpatterns += patterns('v1factory.views',
 
     # getting/setting uie state
     url(r'^app/(\d+)/uiestate/$', 'uie_state'),
-    # deploy this ship!
+
+    # deploy
     url(r'^app/(\d+)/deploy/$', 'app_deploy'),
+    url(r'^app/(\d+)/deploy/local/$', 'app_deploy_local'),
+
     # the rest
     url(r'^app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^app/(\d+)/design/$', 'app_design'),
@@ -60,15 +63,19 @@ urlpatterns += patterns('v1factory.views',
     url(r'^theme/(\d)/delete/$', 'theme_delete'),
 
 
-    url(r'^deploythisship/$', 'deploy_panel'), # list the deployments and their statuses
+    url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments
+    url(r'^deploy/local/$', 'deploy_local'), # tries to deploy locally
+    url(r'^deploy/hosted/$', 'deploy_hosted'), # issues a command to the server to host a deployment
 )
 
+# production (hosted) deployments
 if settings.PRODUCTION:
   urlpatterns += patterns('app_builder.deployment.views',
       url(r'^deployment/$', 'list_deployments'), # list the deployments and their statuses
       url(r'^deployment/available_check/$', 'available_check'), # check if the domain is available
       url(r'^deployment/init/$', 'init_subdomain'), # set up directories and apache
       url(r'^deployment/push/$', 'deploy_code'), # push the new code into the directory
+      url(r'^deployment/delete/$', 'delete_deployment'), # push the new code into the directory
   )
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
