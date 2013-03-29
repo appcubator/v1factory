@@ -1,1 +1,37 @@
-{% extends "container_form.html" %}
+<!-- container_form -->
+<form method="POST" action="{{ '{%' }} url {{ context.form_receiver.view_path() }} {{ '%}' }}">
+  <fieldset>
+    <legend>{{ context.form_schema['name'] }}</legend>
+    {{ "{% csrf_token %}" }}
+    {% for field in context.form_schema['fields'] %}
+      <label for="id-{{ field.name }}">{{ field.label }}</label>
+      {% if field.type == "single-line-text" %}
+        <input type="text" name="{{ field.name }}" id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+      {% elif field.type == "paragraph-text" %}
+        <textarea name="{{ field.name }}" id="id-{{ field.name }}" placeholder="{{ field.placeholder }}"></textarea>
+      {% elif field.type == "password-text" %}
+        <input type="password" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+      {% elif field.type == "email-text" %}
+        <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}"></div>
+      {% elif field.type == "button" %}
+        <div class="btn">{{ field.placeholder }}</div>
+      {% elif field.type == "dropdown" %}
+        <select class="dropdown">
+          {% for option in field.options %}
+            <option>{{ option }}</option>
+          {% endfor %}
+        </select>
+      {% elif field.type == "option-boxes" %}
+        <span class="option-boxes">
+          {% for option in field.options %}
+            <label for="opt-{{ loop.index }}"></label>
+            <input id="opt-{{ loop.index }}" class="field-type" type="radio" name="types" value="single-line-text">{{ option }}
+          {% endfor %}
+        </span>
+      {% else field.type == "paragraph-text" %}
+        <!-- Non-standard tag specified -->
+      {% endif %}
+    {% endfor %}
+  </fieldset>
+</form>
+<!-- /container_form -->
