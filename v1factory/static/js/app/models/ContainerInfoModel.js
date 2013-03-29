@@ -47,7 +47,7 @@ function(WidgetCollection, QueryModel, EntityModel, UserEntityModel, FormModel) 
       }
 
       if(json.form) {
-        json.form = this.get('form').toJSON();
+        json.form = '{{' + this.get('form').get('name') + '}}';
       }
 
       if (this.has('entity')) {

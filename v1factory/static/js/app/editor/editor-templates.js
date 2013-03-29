@@ -64,10 +64,10 @@ var FieldTypes = {
 
 Templates.fieldNode = [
 '<label><%= field.get(\'label\') %><br>',
-  '<% if(field.get(\'type\') == "single-line-text") { %>',
+  '<% if(field.get(\'displayType\') == "single-line-text") { %>',
     FieldTypes['single-line-text'],
   '<% } %>',
-  '<% if(field.get(\'type\') == "paragraph-text") { %>',
+  '<% if(field.get(\'displayType\') == "paragraph-text") { %>',
     FieldTypes['paragraph-text'],
   '<% } %>',
 '</label>'

@@ -38,6 +38,7 @@ function(ElementCollection, UserEntityModel, Backbone) {
       this.widgetsCollection   = widgetsCollection;
       this.containersCollection = containersCollection;
 
+      this.userModel = new UserEntityModel(_.clone(appState.users));
 
       this.entitiesCollection.bind('add', this.appendEntity, this);
       this.contextCollection.bind('add',  this.appendContextEntity, this);
@@ -63,6 +64,7 @@ function(ElementCollection, UserEntityModel, Backbone) {
       // Logout
       // Update User
       // Attribs
+      // Custom Forms
       var self = this;
 
       if(appState.users.local) {
@@ -94,6 +96,17 @@ function(ElementCollection, UserEntityModel, Backbone) {
 
         //$(this.userList).append(tempLi);
         $(this.allList).append(tempLi);
+      }
+
+      if(this.userModel.has('forms')) {
+        _(this.userModel.get('forms').models).each(function(form) {
+          //if(form.get('type') == "create") {
+            var html = _.template(Templates.createFormButton, {entity: {cid: "user"},
+                                                               form: form});
+
+            $(self.allList).append(html);
+          //}
+        });
       }
 
 
@@ -310,7 +323,9 @@ function(ElementCollection, UserEntityModel, Backbone) {
         var entity, form;
 
         if(entityCid === 'user'){
-          entity = new UserEntityModel(appState.users);
+          entity = this.userModel;
+          form = entity.get('forms').get(formCid);
+          console.log(form);
         }
         else {
           entity = this.entitiesCollection.get(entityCid);
