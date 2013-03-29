@@ -56,7 +56,6 @@ define([
 
     placeContainer: function(containerWidgetModel) {
       var curWidget= new WidgetContainerView(containerWidgetModel);
-
       if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
       else iui.get('full-container').appendChild(curWidget.el);
       curWidget.resizableAndDraggable();

@@ -94,7 +94,6 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
-      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
@@ -113,7 +112,6 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     renderField: function() {
       var field = this.selected;
-      console.log(field.get('type'));
       this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field}) + '</label>');
     },
 

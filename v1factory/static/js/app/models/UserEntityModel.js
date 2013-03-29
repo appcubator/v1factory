@@ -5,8 +5,8 @@ define([
   'app/collections/FieldsCollection',
   'backbone'
 ],
-function(EntityModel, FieldModel,FormCollection, FieldsCollection, Backbone) {
-  console.log(EntityModel);
+function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
+
   var UserEntityModel = EntityModel.extend({
     defaults : {
       facebook : false,
@@ -15,12 +15,16 @@ function(EntityModel, FieldModel,FormCollection, FieldsCollection, Backbone) {
     },
 
     initialize: function(bone) {
+
+      if(typeof bone === "string") {
+        bone = appState.users;
+      }
+
       var fieldCollection = new FieldsCollection();
       if(bone) fieldCollection.add(bone.fields);
-      //this.bind('change', function(){iui.askBeforeLeave});
       this.set('fields', fieldCollection);
-
       this.set('forms', new FormCollection());
+
       if(bone.forms) {
         this.get('forms').add(bone.forms);
       }

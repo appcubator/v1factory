@@ -46,6 +46,7 @@ define([
       _.bindAll(this, 'render',
                       'renderUrlBar',
                       'save',
+                      'deployLocal',
                       'amendAppState',
                       'deploy',
                       'style',
@@ -89,6 +90,7 @@ define([
       window.addEventListener('keydown', this.keydown);
 
       key('⌘+s, ctrl+s', this.save);
+      key('⌘+shift+r, ctrl+shift+r', this.deployLocal);
     },
 
     render: function() {
@@ -149,6 +151,20 @@ define([
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/',
+        complete: function(data) {
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+        },
+        dataType: "JSON"
+      });
+
+    },
+
+    deployLocal: function() {
+      this.save();
+
+      $.ajax({
+        type: "POST",
+        url: '/app/'+appId+'/deploy/local/',
         complete: function(data) {
           new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
         },
