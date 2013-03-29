@@ -273,11 +273,9 @@ class CreateForm(Form):
   def __init__(self, uie, page):
     super(CreateForm, self).__init__(uie=uie)
     self.name = "Form{}".format(id(uie))
-    # put the info here
     self.uie = uie
-    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
     self.page = page
-    self.included_field_names = [ n.attribs['name'] for n in self.nodes if 'name' in n.attribs ]
+    self.form_schema = uie['container_info']['form']['forms']
     self.entity_name = uie['container_info']['entity']
 
   def resolve_entity(self, analyzed_app):
@@ -286,7 +284,6 @@ class CreateForm(Form):
     for f in self.entity.fields:
       if f.name in self.included_field_names:
         self.included_fields.append(f)
-
 
 class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.
