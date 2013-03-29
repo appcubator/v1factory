@@ -95,6 +95,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.csrf",
+    "v1factory.context_processors.list_of_users_apps.list_of_users_apps",
 )
 
 INSTALLED_APPS = (
