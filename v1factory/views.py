@@ -5,7 +5,7 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from v1factory.models import App, UIElement, StaticFile, UITheme
 from django.views.decorators.csrf import csrf_exempt
-from app_builder.app_utils import get_xl_data, add_xl_data, get_model_data
+from app_builder.utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
 import requests
 from django.conf import settings
