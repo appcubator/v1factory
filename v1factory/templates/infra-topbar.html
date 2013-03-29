@@ -18,6 +18,7 @@
               <li><a href="{% url v1factory.views.app_page a.id %}">{{ a.name }}</a></li>
               {% endfor %}
               <li class="divider"></li>
+              <li><a href="{% url v1factory.views.app_new %}">New app</a></li>
               <li><a href="#">Account settings</a></li>
               <li><a href="/logout">Logout</a></li>
             </ul>
