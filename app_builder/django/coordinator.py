@@ -1,7 +1,9 @@
 "A class for every file in the webapp, which knows how to create and write itself."
 
 import re
+
 from app_builder.manager import Manager
+from app_builder.analyzer import SignupForm, LoginForm
 
 from model import DjangoModel, DjangoField
 from view import DjangoView
@@ -66,7 +68,6 @@ def analyzed_app_to_app_components(analyzed_app):
     t.properly_name_vars_in_q_container(models)
 
   for f in analyzed_app.forms.each():
-    from app_builder.analyzer import SignupForm, LoginForm
     if isinstance(f, SignupForm):
       rec = DjangoFormReceiver.create_signup(f, analyzed_app)
       form_receivers.add(rec)
