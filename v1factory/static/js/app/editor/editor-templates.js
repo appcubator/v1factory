@@ -108,7 +108,7 @@ Templates.queryView = [
 
   '<% _.each(entity.get("fields").models, function(field) { %>',
     '<% var checked = \'\'; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) checked = \'checked\'; %>',
-    '<input class="fields-to-display" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %><br>',
+    '<input class="fields-to-display" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %><br>',
   '<% }) %>',
   '<hr>',
     '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
@@ -134,4 +134,10 @@ Templates.queryView = [
     '<hr>',
     '<p>All <%= String(entity.get(\'name\')).toLowerCase() %>s</p>',
     '<hr>'
+].join('\n');
+
+Templates.listEditorView = [
+  '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
+  '<div class="editor-window">',
+  '</div>'
 ].join('\n');

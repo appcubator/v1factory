@@ -1,12 +1,14 @@
 define([
   'backboneui',
   'backbone',
+  'app/collections/WidgetCollection',
+  'editor/WidgetView',
   'iui'
-],function(BackboneUI) {
+],function(BackboneUI, Backbone, WidgetCollection, WidgetView, iui) {
 
   var ListQueryView = BackboneUI.ModalView.extend({
     className : 'query-modal',
-    width: 800,
+    width: 900,
     events: {
       'change .fields-to-display'   : 'fieldsToDisplayChanged',
       'click .belongs-to-user'      : 'belongsToUserChanged',
@@ -14,86 +16,75 @@ define([
       'keydown #first-nmr, #last-nmr': 'nmrRowsNumberChanged',
       'change .sort-by'             : 'sortByChanged'
     },
-    initialize: function(widgetModel, queryModel) {
+    initialize: function(widgetModel, queryModel, rowModel) {
       _.bindAll(this, 'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
-                      'nmrRowsNumberChanged');
+                      'nmrRowsNumberChanged',
+                      'addedWidget',
+                      'removedWidget',
+                      'placeWidget');
 
       console.log(widgetModel);
       console.log(queryModel);
 
       this.widgetModel = widgetModel;
-      this.model = queryModel;
-      console.log(queryModel);
+      this.queryModel  = queryModel;
+      this.rowModel    = rowModel;
+
       this.entity = widgetModel.get('container_info').get('entity');
+
+      this.widgetsCollection = this.rowModel.get('')
+
+      this.widgetsCollection.bind('add', this.placeWidget);
       this.render();
     },
 
     render: function() {
       var self = this;
-      var contentHTML = '';
-      contentHTML += '<h1 class="title">'+ this.entity.get('name') +' Table</h1>';
-      // contentHTML += '<p>Please define the data you want to display</p>';
-      contentHTML += '<hr>';
-      contentHTML += '<p>What fields would you like to display?</p>';
 
-      _.each(this.entity.get('fields').models, function(field) {
-        var checked = '';
-        if(_.contains(self.model.get('fieldsToDisplay'), field.get('name'))) checked = 'checked';
-        contentHTML += '<input class="fields-to-display" type="checkbox" value="'+ field.get('name') +'" '+ checked +'>'+ field.get('name') +'<br>';
-      });
+      var div = document.createElement('div');
+      div.style.width = 320 + 'px';
+      div.style.display = 'inline-block';
 
-      contentHTML += '<hr>';
+      var checks = {};
+      var rFirstNmr=5, rLastNmr=5, rAllNmr = 0;
+      var rFirst = '', rLast ='', rAll ='';
 
-      var checked = (this.model.get('belongsToUser') === false)? "checked" : '';
-      console.log(checked);
-
-      contentHTML += '<p>Do you want to show the rows that just belong to the logged in user?</p>';
-      contentHTML += '<input type="radio" class="belongs-to-user" name="belongsTo" value="true" checked> Yes<br>' +
-                     '<input type="radio" class="belongs-to-user" name="belongsTo" value="false"'+ checked +'> No<br>';
-
-      contentHTML += '<hr>';
-      contentHTML += '<p>How do you want to sort the rows?</p>';
-      contentHTML += '<select class="sort-by">';
-
-      contentHTML += '<option id="by-date">According to the date created</option>';
-
-       _.each(this.entity.get('fields').models, function(field) {
-        var selected = (('by-' + field.get('name') == self.model.get('sortAccordingTo'))? 'selected' : '');
-        contentHTML += '<option value="by-'+ field.get('name') +'"'+ selected +'>Alphabetically according to '+ field.get('name') + '</option>';
-      });
-
-      contentHTML += '</select>';
-
-      contentHTML += '<hr>';
-      contentHTML += '<p>How many rows would you like to show?</p>';
-
-      var rAll='', rFirst='', rLast='', rFirstNmr, rLastNmr;
-      console.log(this.model);
       if(String(this.model.get('numberOfRows')).indexOf('First') != -1) {
         rFirst = 'checked';
-        rFirstNmr = this.model.get('numberOfRows').replace('First-','');
+        rFirstNmr = (this.model.get('numberOfRows').replace('First-',''));
+        if(rFirstNmr === "") rFirstNmr = 5;
       }
       else if (String(this.model.get('numberOfRows')).indexOf('Last') != -1) {
         rLast = 'checked';
-        rLastNmr = this.model.get('numberOfRows').replace('Last-','');
+        rLastNmr = (this.model.get('numberOfRows').replace('Last-',''));
+        if(rLastNmr === "") rLastNmr = 5;
       }
       else {
         rAll = 'checked';
       }
 
-      contentHTML += '<input type="radio" class="nmr-rows" id="all-rows" name="nmrRows" value="All" '+ rAll+'> All<br>' +
-                     '<input type="radio" class="nmr-rows" id="first-rows" name="nmrRows" value="First" '+ rFirst+'> First <input type="text" id="first-nmr" value="'+ (rFirstNmr||5)+'"> rows<br>'+
-                     '<input type="radio" class="nmr-rows" id="last-rows" name="nmrRows" value="Last" '+ rLast + '> Last <input type="text" id="last-nmr" value="'+ (rLastNmr||5) +'"> rows<br>';
+      checks = {
+        rFirstNmr : rFirstNmr,
+        rFirst    : rFirst,
+        rLastNmr  : rLastNmr,
+        rLast     : rLast,
+        rAll      : rAll,
+        rAllNmr   : rAllNmr
+      };
 
-
-      contentHTML += '<hr>';
-      contentHTML += '<p>All '+ String(this.entity.get('name')).toLowerCase() +'s</p>';
-      contentHTML += '<hr>';
+      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks});
       contentHTML += '<input type="submit" value="Done">';
+      div.innerHTML = contentHTML;
 
-      this.el.innerHTML = contentHTML;
+      var editorDiv = document.createElement('div');
+      editorDiv.className = 'list-editor-container';
+      var listEditorHTML = _.template(Templates.listEditorView, {entity: self.entity, query: self.model, c: checks});
+      editorDiv.innerHTML = listEditorHTML;
+
+      this.el.appendChild(div);
+      this.el.appendChild(editorDiv);
       return this;
     },
 
@@ -103,13 +94,47 @@ define([
 
       if(e.target.checked) {
         fieldsArray.push(e.target.value);
+        this.addedWidget(e.target.id);
         fieldsArray = _.uniq(fieldsArray);
       }
       else {
+        this.removedWidget(e.target.id);
         fieldsArray = _.difference(fieldsArray, e.target.value);
       }
 
       this.model.set('fieldsToDisplay', fieldsArray);
+    },
+
+    addedWidget: function(fieldId) {
+      var cid = String(fieldId).replace('field-', '');
+      var fieldModel = this.entity.get('fields').get(cid);
+      
+
+      var widget = {};
+      widget.layout = {
+        top   : 0,
+        left  : 0
+      };
+
+      widget.field = fieldModel.cid;
+
+      var uieType = "text";
+      if(fieldModel.get('type') == "image") {
+        uieType = "image";
+      }
+
+      widget = _.extend(widget, uieState[uieType][0]);
+      widget.content =  '{{'+this.entity.get('name')+'_'+fieldModel.get('name')+'}}';
+      this.widgetsCollection.push(widget);
+    },
+
+    removedWidget: function(fieldId) {
+      var self = this;
+      var cid = String(fieldId).replace('field-', '');
+      console.log(this.widgetsCollection);
+      var widget = this.widgetsCollection.where({field: cid})[0];      
+      this.widgetsCollection.remove(widget);
+      widget.remove();
     },
 
     belongsToUserChanged: function(e) {
@@ -150,6 +175,14 @@ define([
 
     sortByChanged: function(e) {
       this.model.set('sortAccordingTo', e.target.value);
+    },
+
+    placeWidget: function(widgetModel) {
+      var curWidget = new WidgetView(widgetModel);
+
+      if(!widgetModel.isFullWidth()) this.$el.find('.editor-window').append(curWidget.el);
+      // else iui.get('full-container').appendChild(curWidget.el);
+      curWidget.resizableAndDraggable();
     }
 
   });
