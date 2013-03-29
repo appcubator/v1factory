@@ -38,29 +38,30 @@ def get_xl_data(xl_file):
     return xl_dict
 
 def get_model_data(model_name, db_path, limit=100):
-    model_name = model_name.lower()
-    con = sql.connect(db_path)
-    cr = con.cursor()
-    li = []
-    for row in cr.execute("select * from webapp_" + model_name + " limit " + str(limit)):
-        row_str = str(row)
-        # replace raw escaped characters in the sql output
-        row_str = row_str.replace('\"','')
-        li.append(row_str)
-    ans = dict()
-    cr.execute("SELECT sql FROM sqlite_master WHERE type='table' and name='webapp_" + model_name + "'")
-    schema_out =  cr.fetchall()
-    # Hack to extract fields out of SQL output
-    schema_fields = schema_out[0][0].split('"')[3:]
-    schema_li = []
-    for i in range(len(schema_fields)):
-        if i%2 == 0:
-            # Get rid of m_ prefixes for fields
-            schema_li.append(schema_fields[i][2:])
-    con.close()
-    ans['schema'] = schema_li
-    ans['data'] = li
-    return simplejson.dumps(ans)
+  model_name = model_name.lower()
+  con = sql.connect(db_path)
+  cr = con.cursor()
+  li = []
+  for row in cr.execute("select * from webapp_" + model_name + " limit " + str(limit)):
+    row_li = list(row)
+    # replace raw escaped characters in the sql output
+    for e in row_li:
+      e = str(e).replace('\"','')
+    li.append(row_li)
+  ans = dict()
+  cr.execute("SELECT sql FROM sqlite_master WHERE type='table' and name='webapp_" + model_name + "'")
+  schema_out =  cr.fetchall()
+  # Hack to extract fields out of SQL output
+  schema_fields = schema_out[0][0].split('"')[3:]
+  schema_li = []
+  for i in range(len(schema_fields)):
+    if i%2 == 0:
+      # Get rid of m_ prefixes for fields
+      schema_li.append(schema_fields[i][2:])
+  con.close()
+  ans['schema'] = schema_li
+  ans['data'] = li
+  return simplejson.dumps(ans)
 
 def add_xl_data(xl_data, db_path):
     con = sql.connect(db_path)
@@ -105,4 +106,3 @@ class AppMessager:
         out, err = p.communicate()
         # Gets the output of the django shell. Runs a command then we get another >>>. So we split and return the second last >>>.
         return out.split("\n>>> ")[-2]
-    
