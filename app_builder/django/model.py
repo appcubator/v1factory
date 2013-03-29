@@ -69,7 +69,8 @@ class DjangoField(object):
             '_MODIFIED' : 'DateTimeField',
             'email' : 'EmailField',
             'fk' : 'ForeignKey',
-            'm2m' : 'ManyToManyField'}
+            'm2m' : 'ManyToManyField',
+            'image' : 'TextField'}
 
   def __init__(self, name=None, field_type=None, required=None, model=None, related_name=None, related_model=None):
     self.name = name
