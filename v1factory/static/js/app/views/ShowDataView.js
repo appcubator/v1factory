@@ -33,7 +33,7 @@ function(Backbone, BackboneUI) {
 	  }
 	  html += "</tr>";
       }
-      this.el.innerHTML = '<table>' + html + '</table>'
+      this.el.innerHTML = '<div class="table-wrapper"><table>' + html + '</table></div>'
       return this;
     }
   });

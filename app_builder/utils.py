@@ -56,8 +56,11 @@ def get_model_data(model_name, db_path, limit=100):
   schema_li = []
   for i in range(len(schema_fields)):
     if i%2 == 0:
-      # Get rid of m_ prefixes for fields
-      schema_li.append(schema_fields[i][2:])
+      # Get rid of m_ prefixes for fields and replace _ with spaces
+      if i == 0:
+        schema_li.append(model_name + "_id")
+      else:
+        schema_li.append(schema_fields[i][2:].replace('_', ' '))
   con.close()
   ans['schema'] = schema_li
   ans['data'] = li
@@ -106,3 +109,5 @@ class AppMessager:
         out, err = p.communicate()
         # Gets the output of the django shell. Runs a command then we get another >>>. So we split and return the second last >>>.
         return out.split("\n>>> ")[-2]
+
+
