@@ -56,10 +56,16 @@ function(WidgetCollection,
 
       this.el.className += ' widget-wrapper span'+width;
 
-      if(this.model.get('container_info').has('query')) {
+      if(this.model.get('container_info').get('action') == "table-gal") {
         var tableDiv = document.createElement('div');
         tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
         this.el.appendChild(tableDiv);
+      }
+
+      if(this.model.get('container_info').get('action') == "show") {
+        var listDiv = document.createElement('div');
+        // tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
+        // this.el.appendChild(tableDiv);
       }
 
       //this.resizableAndDraggable();

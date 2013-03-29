@@ -4,13 +4,14 @@ define([
   'app/models/LayoutModel',
   'app/models/ContainerInfoModel',
   'editor/TableQueryView',
+  'editor/ListQueryView',
   'app/models/QueryModel',
   'app/collections/WidgetCollection',
   'backboneui',
   'backbone',
   'dicts/constant-containers'
 ],
-function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryView, QueryModel, WidgetCollection, BackboneUI, Backbone) {
+function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryView, ListQueryView, QueryModel, WidgetCollection, BackboneUI, Backbone) {
 
 
   var ContainerWidgetModel = WidgetModel.extend({
@@ -74,30 +75,14 @@ function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryV
 
     containerHandler: {
       'show' : function() {
-        console.log(this);
         var self = this;
-        self.get('container_info').set('uielements', new WidgetCollection());
+        var isNew = false;
 
-        _(this.get('container_info').get('entity').get('fields').models).each(function(model, ind){
-
-          var coordinates = iui.unite({x: 1,
-                                       y: 1 + (ind * 4)},
-                                      {x: self.get('layout').get('width') + 1,
-                                       y: 1 + ((ind+1) * 4)});
-          var type = "text";
-          var widgetProps = uieState['text'][0];
-          widgetProps.type = 'text';
-          widgetProps.layout = {
-              top   : coordinates.topLeft.y,
-              left  : coordinates.topLeft.x,
-              width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-              height: 4
-          };
-          widgetProps.content = '{{'+self.get('container_info').get('entity').get('name')+'_'+model.get('name')+'}}';
-
-          var widget = new WidgetModel(widgetProps);
-          self.get('container_info').get('uielements').push(widget);
-        });
+        if(!self.get('container_info').has('query')) {
+          var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
+          self.get('container_info').set('query', queryModel);
+          new ListQueryView(self, queryModel);
+        }
       },
       'login' : function() {
         var self = this;
@@ -205,15 +190,12 @@ function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryV
         var self = this;
         var isNew = false;
 
-        //console.log(self.get('container_info').get('entity'));
 
         if(!self.get('container_info').has('query')) {
           var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
           self.get('container_info').set('query', queryModel);
-          console.log(queryModel);
           new TableQueryView(self, queryModel);
         }
-        //this.get('container_info').set('query', queryModel);
 
       }
     }

@@ -59,7 +59,14 @@ Templates.createFormButton = [
 
 var FieldTypes = {
   "single-line-text" : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">',
-  "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>"></textarea>'
+  "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
+  "dropdown"         : '<select class="drowdown"><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
+  "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>',
+  "password-text"    : '<input type="password" placeholder="<%= field.get(\'placeholder\') %>">',
+  "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" placeholder="<%= field.get(\'placeholder\') %>"></div>',
+  "button"           : '<div class="btn"><%= field.get(\'placeholder\') %></div>',
+  "image-uploader"   : '<input type="file" placeholder="<%= field.get(\'placeholder\') %>">',
+  "date-picker"      : 'date picker will be here.<input type="text" placeholder="<%= field.get(\'placeholder\') %>">'
 };
 
 Templates.fieldNode = [
@@ -70,6 +77,61 @@ Templates.fieldNode = [
   '<% if(field.get(\'displayType\') == "paragraph-text") { %>',
     FieldTypes['paragraph-text'],
   '<% } %>',
+  '<% if(field.get(\'displayType\') == "dropdown") { %>',
+    FieldTypes['dropdown'],
+  '<% } %>',
+  '<% if(field.get(\'displayType\') == "option-boxes") { %>',
+    FieldTypes['option-boxes'],
+  '<% } %>',
+  '<% if(field.get(\'displayType\') == "password-text") { %>',
+    FieldTypes['password-text'],
+  '<% } %>',
+  '<% if(field.get(\'displayType\') == "email-text") { %>',
+    FieldTypes['email-text'],
+  '<% } %>',
+  '<% if(field.get(\'displayType\') == "button") { %>',
+    FieldTypes['button'],
+  '<% } %>',
+  '<% if(field.get(\'displayType\') == "image-uploader") { %>',
+    FieldTypes['image-uploader'],
+  '<% } %>',
+  '<% if(field.get(\'displayType\') == "date-picker") { %>',
+    FieldTypes['date-picker'],
+  '<% } %>',
 '</label>'
 ].join('\n');
 
+Templates.queryView = [
+  '<h1 class="title"><%= entity.get(\'name\') %> Table</h1>',
+  '<hr>',
+  '<p>What fields would you like to display?</p>',
+
+  '<% _.each(entity.get("fields").models, function(field) { %>',
+    '<% var checked = \'\'; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) checked = \'checked\'; %>',
+    '<input class="fields-to-display" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %><br>',
+  '<% }) %>',
+  '<hr>',
+    '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
+    '<p>Do you want to show the rows that just belong to the logged in user?</p>',
+    '<input type="radio" class="belongs-to-user" name="belongsTo" value="true" checked> Yes<br>',
+      '<input type="radio" class="belongs-to-user" name="belongsTo" value="false"<%= checked %>> No<br>',
+    '<hr>',
+    '<p>How do you want to sort the rows?</p>',
+    '<select class="sort-by">',
+    '<option id="by-date">According to the date created</option>',
+    '<% _.each(entity.get("fields").models, function(field) { %>',
+      '<% var selected = "";  if("by-" + field.get("name") == query.get("sortAccordingTo")) selected = "selected" %>',
+      '<option value="by-<%=field.get("name")%>" <%= selected %>>Alphabetically according to <%= field.get("name") %></option>',
+    '<% }); %>',
+    '</select>',
+    '<hr>',
+    '<p>How many rows would you like to show?</p>',
+
+    '<input type="radio" class="nmr-rows" id="all-rows" name="nmrRows" value="All" <%= c.rAll %>> All<br>',
+    '<input type="radio" class="nmr-rows" id="first-rows" name="nmrRows" value="First" <%= c.rFirst %>> First <input type="text" id="first-nmr" value="<%= c.rFirstNmr %>"> rows<br>',
+    '<input type="radio" class="nmr-rows" id="last-rows" name="nmrRows" value="Last" <%= c.rLast %>> Last <input type="text" id="last-nmr" value="<%= c.rLastNmr %>"> rows<br>',
+
+    '<hr>',
+    '<p>All <%= String(entity.get(\'name\')).toLowerCase() %>s</p>',
+    '<hr>'
+].join('\n');

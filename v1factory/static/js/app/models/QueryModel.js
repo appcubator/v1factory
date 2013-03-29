@@ -3,6 +3,7 @@ define(['backbone'], function() {
   var QueryModel = Backbone.Model.extend({
 
     initialize: function(bone, entityModel) {
+
       this.entity = entityModel;
       this.set('fieldsToDisplay', bone.fieldsToDisplay||[]);
       this.set('belongsToUser', bone.belongsToUser||false);
