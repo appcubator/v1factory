@@ -36,7 +36,7 @@ class Deployment(models.Model):
     self = cls(subdomain=subdomain)
     self.app_dir = "/var/www/apps/" + subdomain
     self.config_file_path = "/var/www/configs/" + subdomain
-    if app_state is not None: 
+    if app_state is not None:
       self.app_state_json = simplejson.dumps(app_state)
     return self
 
@@ -55,7 +55,7 @@ class Deployment(models.Model):
     a_conf.close()
 
     # should probably restart apache2
-  
+
   def is_initialized(self):
     """checks if this app has already been initialized"""
     return os.path.isdir(self.app_dir) and os.path.isfile(self.config_file_path)
@@ -121,11 +121,14 @@ class Deployment(models.Model):
 
     return "\n".join(debug_info)
 
-  def delete(delete_files=True, *args, **kwargs):
-    if delete_files:
-      # TODO actually delete all the files.
-      pass
-    super(Deployment, self).delete(*args, **kwargs)
+  def delete(self, delete_files=True, *args, **kwargs):
+    try:
+      if delete_files:
+        os.remove(self.config_file_path)
+        shutil.rmtree(self.app_dir)
+      super(Deployment, self).delete(*args, **kwargs)
+    except Exception, e:
+      raise
 
 
 
