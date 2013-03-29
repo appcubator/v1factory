@@ -72,13 +72,19 @@ def init_subdomain(request):
 def deploy_code(request):
   s = request.POST['subdomain']
   app_json = request.POST['app_json']
-  d = get_object_or_404(Deployment, subdomain=s)
+  try:
+    d = Deployment.objects.get(subdomain=s)
+  except Deployment.DoesNotExist:
+    d = Deployment.create(s)
+    d.initialize()
   d.update_app_state(simplejson.loads(app_json))
+  d.full_clean()
   d.save()
   msgs = d.deploy()
   return HttpResponse(msgs)
 
 @require_POST
+@csrf_exempt
 #@login_required
 def delete_deployment(request):
   s = request.POST['subdomain']

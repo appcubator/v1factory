@@ -57,7 +57,7 @@ def app_delete(request, app_id):
 
 @login_required
 def app_state(request, app_id):
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   if request.method == 'GET':
     state = app_get_state(request, app)
     return JSONResponse(state)
@@ -90,7 +90,7 @@ def app_save_state(request, app):
 
 @login_required
 def uie_state(request, app_id):
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   if request.method == 'GET':
     state = app_get_uie_state(request, app)
     return JSONResponse(state)
@@ -116,28 +116,21 @@ def app_save_uie_state(request, app):
   app.save()
   return (200, 'ok')
 
-@login_required
-@require_POST
-def app_deploy(request, app_id):
-  app = get_object_or_404(App, id=app_id)
-  m = app.deploy(remote=settings.PRODUCTION) # returns a dir if production = false, other messages if true
-  return HttpResponse(m)
-
 def app_urls(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app, 'title' : 'URLs', 'app_id': app_id }
   return render(request, 'app-urls.html', page_context)
 
 def app_design(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app, 'title' : 'Design' }
   return render(request, 'app-design.html', page_context)
 
 def app_gallery(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   els = UIElement.get_library()
 
   page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els, 'app_id': app_id  }
@@ -146,7 +139,7 @@ def app_gallery(request, app_id):
 
 def app_pages(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   els = UIElement.get_library()
 
   page_context = { 'app': app, 'title' : 'Pages', 'elements' : els, 'app_id': app_id }
@@ -154,25 +147,25 @@ def app_pages(request, app_id):
 
 def app_analytics(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app , 'title' : 'Analytics' }
   return render(request, 'app-analytics.html', page_context)
 
 def app_data(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app , 'title' : 'Data' }
   return render(request, 'app-data.html', page_context)
 
 def app_finances(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app , 'title' : 'Finances' }
   return render(request, 'app-finances.html', page_context)
 
 def account(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app, 'title' : 'Account Info' }
   return render(request, 'app-account.html', page_context)
 
@@ -180,7 +173,7 @@ def account(request, app_id):
 @login_required
 def entities(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   page_context = { 'app': app, 'title' : 'Entities', 'app_id': app_id  }
   return render(request, 'app-entities.html', page_context)
 
@@ -190,7 +183,7 @@ def entities(request, app_id):
 def process_excel(request, app_id):
   app_id = long(app_id)
   file_name = request.FILES['file_name']
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   try:
     d = Deployment.objects.get(subdomain=app.subdomain())
   except Deployment.DoesNotExist:
@@ -209,7 +202,7 @@ def process_excel(request, app_id):
 def fetch_data(request, app_id):
   app_id = long(app_id)
   model_name = request.POST['model_name']
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   try:
     d = Deployment.objects.get(subdomain=app.subdomain())
   except Deployment.DoesNotExist:
@@ -240,7 +233,7 @@ def staticfiles(request, app_id):
     return HttpResponse("Method not allowed", status=405)
   else:
     app_id = long(app_id)
-    app = get_object_or_404(App, id=app_id)
+    app = get_object_or_404(App, id=app_id, owner=request.user)
     if request.method == 'GET':
       sf = StaticFile.objects.filter(app=app).values('name','url','type')
       return JSONResponse(list(sf))
@@ -256,7 +249,7 @@ def staticfiles(request, app_id):
 @login_required
 def app_editor(request, app_id, page_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   els = UIElement.get_library().values()
   my_els = els.filter(app=app)
   page_context = { 'app': app,
@@ -273,7 +266,7 @@ def app_editor(request, app_id, page_id):
 @login_required
 def app_info(request, app_id):
   app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
   els = UIElement.get_library()
   page_context = { 'app': app, 'title' : 'Info', 'elements' : els, 'app_id': app_id  }
   return render(request, 'app-info.html', page_context)
@@ -370,7 +363,25 @@ def theme_delete(request, theme):
   return HttpResponse("ok")
 
 @login_required
-@csrf_exempt
+@require_POST
+def app_deploy(request, app_id):
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  m = app.deploy()
+  return HttpResponse(m)
+
+@login_required
+@require_POST
+def app_deploy_local(request, app_id):
+  assert not settings.PRODUCTION, "You should only deploy local if this is a dev machine"
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  m = app.write_to_tmpdir()
+  return HttpResponse(m)
+
+
+#FOR THE DEPLOYMENT PANEL
+
+@login_required
+@require_GET
 def deploy_panel(request):
   if request.method == "GET":
     r = requests.get('http://v1factory.com/deployment/')
@@ -380,15 +391,24 @@ def deploy_panel(request):
       return render(request, 'deploy-panel.html', page_context)
     else:
       return HttpResponse("v1factory.com returned status of %s" % r.status_code)
-  elif request.method == "POST":
-    # this will post the data to v1factory.com
-    subdomain = request.POST['subdomain']
-    app_json = request.POST['app_json']
-    d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
-    r = d.write_to_tmpdir()
-    return HttpResponse(r)
-    #post_data = {"subdomain": subdomain, "app_json": app_json}
-    #r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
-    return HttpResponse(r.content)
 
+@require_POST
+@csrf_exempt
+@login_required
+def deploy_local(request):
+  subdomain = request.POST['subdomain']
+  app_json = request.POST['app_json']
+  d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
+  r = d.write_to_tmpdir()
+  return HttpResponse(r)
 
+@require_POST
+@csrf_exempt
+@login_required
+def deploy_hosted(request):
+  subdomain = request.POST['subdomain']
+  app_json = request.POST['app_json']
+  #this will post the data to v1factory.com
+  post_data = {"subdomain": subdomain, "app_json": app_json}
+  r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+  return HttpResponse(r.content)
