@@ -11,7 +11,7 @@ define([
     selectedEl: null,
 
     events : {
-      
+
     },
 
     initialize: function(widgetsCollection, containersCollection, contextEntities, page) {

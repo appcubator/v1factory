@@ -1,5 +1,9 @@
 {
     "name": "EasyApp",
+    "info": {
+             "description":"",
+             "keywords":""
+            },
     "users": {
         "facebook": false,
         "linkedin": false,
@@ -29,35 +33,40 @@
                 "fields": [
                      {
                         "name": "Username",
-                        "type": "single-line-text",
+                        "type" : "text",
+                        "displayType": "single-line-text",
                         "label": "Username",
                         "placeholder": "Username",
                         "options": []
                     },
                     {
                         "name": "Password",
-                        "type": "password-text",
+                        "type" : "password",
+                        "displayType": "password-text",
                         "label": "Password",
                         "placeholder": "Password",
                         "options": []
                     },
                     {
                         "name": "Confirm Password",
-                        "type": "password-text",
+                        "type" : "password",
+                        "displayType": "password-text",
                         "label": "Confirm Password",
                         "placeholder": "Confirm Password",
                         "options": []
                     },
                     {
                         "name": "Email",
-                        "type": "email-text",
+                        "type" : "email",
+                        "displayType": "email-text",
                         "label": "Email Address",
                         "placeholder": "Email Address",
                         "options": []
                     },
                     {
                         "name": "Sign Up",
-                        "type": "button",
+                        "type" : "button",
+                        "displayType": "button",
                         "label": "Sign Up!",
                         "placeholder": "",
                         "options": []

@@ -11,7 +11,7 @@ function() {
       if(bone.displayType) {
         this.set('displayType', bone.displayType);
       }
-      else { alert('form field should have type'); }
+      else { alert('form field should have displayType'); }
 
       if(bone.type) {
         this.set('type', bone.type);
