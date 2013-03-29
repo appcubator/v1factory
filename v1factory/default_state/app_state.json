@@ -1,5 +1,9 @@
 {
     "name": "EasyApp",
+    "info": {
+             "description":"",
+             "keywords":""
+            },
     "users": {
         "facebook": false,
         "linkedin": false,
