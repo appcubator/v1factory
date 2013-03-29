@@ -80,8 +80,12 @@ function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryV
 
         if(!self.get('container_info').has('query')) {
           var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
+          var rowModel   = new RowModel();
+
           self.get('container_info').set('query', queryModel);
-          new ListQueryView(self, queryModel);
+          self.get('container_info').set('row', rowModel);
+
+          new ListQueryView(self, queryModel, rowModel);
         }
       },
       'login' : function() {

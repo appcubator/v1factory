@@ -5,9 +5,10 @@ define([
   'app/views/EntityView',
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
+  'app/views/ShowDataView',
   'app/collections/EntityCollection'
 ], 
-function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, EntityCollection) {
+  function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
 
     var UserEntityView = EntityView.extend({
       el : document.getElementById('user-entity'),

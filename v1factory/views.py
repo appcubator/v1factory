@@ -33,10 +33,14 @@ def app_new(request):
     if 'name' in request.POST:
       app_name = request.POST['name']
     a = App(name=app_name, owner=request.user)
+    # set the name in the app state
+    s = a.state
+    s['name'] = a.name
+    a.state = s
     try:
       a.full_clean()
     except Exception, e:
-      return (400, str(e))
+      return render(request,  'apps-new.html', {'old_name': app_name, 'errors':e}, status=400)
     a.save()
     return redirect(app_page, a.id)
 
@@ -76,6 +80,7 @@ def app_get_state(request, app):
 @login_required
 def app_save_state(request, app):
   app._state_json = request.body
+  app.name = app.state['name']
   try:
     app.full_clean()
   except Exception, e:
@@ -364,6 +369,7 @@ def theme_delete(request, theme):
 
 @login_required
 @require_POST
+@csrf_exempt
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
   m = app.deploy()
@@ -371,6 +377,7 @@ def app_deploy(request, app_id):
 
 @login_required
 @require_POST
+@csrf_exempt
 def app_deploy_local(request, app_id):
   assert not settings.PRODUCTION, "You should only deploy local if this is a dev machine"
   app = get_object_or_404(App, id=app_id, owner=request.user)

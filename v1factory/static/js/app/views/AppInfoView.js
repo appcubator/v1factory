@@ -1,10 +1,10 @@
-define(['backbone', 'iui'],
-function() {
-
+define(['./SimpleModalView', 'backbone', 'iui'],
+function(SimpleModalView) {
   var AppInfoView = Backbone.View.extend({
     el : document.body,
     events : {
       'click #save' : 'saveInfo',
+      'click .low-save-btn' : 'saveInfo',
       'click #delete' : 'deleteApp'
     },
 
@@ -76,9 +76,10 @@ function() {
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         success: function() {
+          //new SimpleModalView({text:"Good Job!!! <br> ^(^_^)^ ^(^_^)> (>^_^)>"});
           iui.dontAskBeforeLeave();
-        },
-        dataType: "JSON"
+          location.reload(true);
+        }
       });
     }
   });

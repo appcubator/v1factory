@@ -1,10 +1,6 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
-      api_key: t0q97cjtk5kf
-      scope: r_basicprofile r_emailaddress
-    </script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app-page.css">
@@ -31,24 +27,20 @@
   <div class="row hoff1">
     <h2>{{ app.name }}</h2>
     <div class="span64 hoff2">
-      <a class="pane hi12 span14" href="{% url v1factory.views.app_info app.id %}">
-        <img src="{{ STATIC_URL }}img/editor.png">
-        <div class="hoff2 offset1">
-        <h2>App Info</h2>
-        </div>
-      </a>
       <a class="pane hi12 span14 entities offset1" href="{% url v1factory.views.entities app.id %}">
         <img src="{{ STATIC_URL }}img/entities.png">
         <div class="hoff2 offset1">
         <h2>Models</h2>
         </div>
-      </a> 
+      </a>
+      <!--
       <a class="pane hi12 span14 offset1" href="{% url v1factory.views.app_gallery app.id %}">
         <img src="{{ STATIC_URL }}img/design.png">
         <div class="hoff2 offset1">
         <h2>Gallery</h2>
         </div>
       </a>
+      -->
       <a class="pane hi12 span14 offset1" href="{% url v1factory.views.app_pages app.id %}">
         <img src="{{ STATIC_URL }}img/editor.png">
         <div class="hoff2 offset1">
