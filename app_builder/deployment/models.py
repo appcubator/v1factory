@@ -54,7 +54,8 @@ class Deployment(models.Model):
     a_conf.write(self.apache_config())
     a_conf.close()
 
-    # should probably restart apache2
+    ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
+    assert(ret_code == 0)
 
   def is_initialized(self):
     """checks if this app has already been initialized"""
@@ -126,9 +127,12 @@ class Deployment(models.Model):
       if delete_files:
         os.remove(self.config_file_path)
         shutil.rmtree(self.app_dir)
-      super(Deployment, self).delete(*args, **kwargs)
+      ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
+      assert(ret_code == 0)
     except Exception, e:
-      raise
+      print e
+    finally:
+      super(Deployment, self).delete(*args, **kwargs)
 
 
 
