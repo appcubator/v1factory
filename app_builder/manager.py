@@ -12,8 +12,16 @@ class Manager:
     Given the name of the object, returns the object. Assumes uniqueness on name.
     """
     for o in self._objects:
-      if o.name == name:
-        return o
+      try:
+        if o.name == name:
+          return o
+      except Exception:
+        pass
+      try:
+        if o['name'] == name:
+          return o
+      except Exception:
+        pass
 
     return None
 

@@ -56,11 +56,11 @@ class DjangoModel(object):
     template = env.get_template('model.py')
     return template.render(model = self)
 
-class UserProfileModel(DjangoModel):  
+class UserProfileModel(DjangoModel):
   def __init__(self, name=None, fields=None):
     super(UserProfileModel, self).__init__(name=name, fields=fields)
     self.fields.add(UserProfileUserField())
-  
+
   def identifier(self):
     return "UserProfile"
 
@@ -151,9 +151,9 @@ class DjangoField(object):
 class UserProfileUserField(DjangoField):
     def __init__(self, name="User", field_type='onetoone', required=None, model=None, related_name=None, related_model=None):
       super(UserProfileUserField, self).__init__(name=name, field_type=field_type, required=required, model=model, related_name=related_name, related_model=related_model)
-    
+
     def args(self):
       return ["User"]
-    
+
     def kwargs(self):
       return {}

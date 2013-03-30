@@ -98,6 +98,7 @@ class Renderable(object):
   environment. """
   def render(self, env):
     template_name = "{}.html".format(type(self).__name__.lower())
+    env.globals.update(zip=zip)
     return env.get_template(template_name).render(context=self, env=env)
 
 class UIElement(Renderable):
@@ -214,6 +215,7 @@ class Form(Container):
 
   @classmethod
   def create(cls, uie, page):
+    assert 'form' in uie['container_info'], "Form must have form field in the container info"
     # do common form things, like success url, post url, etc.
     if uie['container_info']['action'] == 'login':
       u = LoginForm(uie, page)
@@ -241,14 +243,25 @@ class LoginForm(Form):
 
 class SignupForm(Form):
   """A standard signup form."""
+
   def __init__(self, uie, page):
     super(SignupForm, self).__init__(uie=uie)
-    self.name = "Form{}".format(id(uie))
+    self.name = uie['container_info']['form']
     self.uie = uie
     self.page = page
     self.nodes = []
-    self.entity_name = 'UserProfile'
-    self.form_schema = uie['container_info']['form']
+    self.entity_name = 'User'
+
+  def resolve_fields(self, user_model):
+    user_fields = Manager(Model)
+    user_fields._objects = user_model.fields
+    for f in self.included_fields:
+      f_check = user_fields.get_by_name(f['name'])
+      if f_check is not None:
+        f['real_field'] = f_check
+      else:
+        raise Exception("What kind of field is %s" % f)
+
 
 class EditForm(Form):
   """Edit a model instance form."""
@@ -269,30 +282,22 @@ class CreateForm(Form):
     self.nodes = []
     self.entity_name = uie['container_info']['entity']
 
-  def resolve_entity(self, analyzed_app, app_state):
+  def resolve_entity(self, analyzed_app):
     self.entity = analyzed_app.models.get_by_name(self.entity_name)
-    self.form_schema = app_state['users']['forms']
+    assert self.entity is not None, "Model not found: %s" % self.entity_name
+
     self.included_fields = []
-    # I guess you could use a Manager here.
-    for fform in self.form_schema:
-      if fform['name'] == self.name:
-        self.form_schema = fform
-        field_names = []
-        # Build Names list
-        for f in fform['fields']:
-          field_names.append(f['name'])
-        # Use manager here for name lookup
-        f_manager = Manager(Field)
-        for f in self.entity.fields:
-          f_manager.add(f)
-        for fn in field_names:
-          f_check = f_manager.get_by_name(fn)
-          if f_check is not None:
-            self.included_fields.append(f_check)
-        break # Assumes only 1-1 for form-entity
-      
-    # To avoid any syntax errors
-    self.name = self.name.replace(" ", "_")
+    # this is the one that has the display info and all for the form fields
+    expanded_form_dict = analyzed_app.backend_forms.get_by_name(self.name)
+    assert expanded_form_dict is not None, "ruh roh, couldn't find the form called %s" % self.name
+
+    self.included_fields = expanded_form_dict['fields']
+    f_manager = Manager(Field)
+    f_manager._objects = self.entity.fields
+    for f in self.included_fields:
+      f_check = f_manager.get_by_name(f['name'])
+      assert f_check is not None, "ruh roh, field called %s is not an actual field in the model" % f['name']
+      f['real_field'] = f_check
 
 class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.
@@ -347,6 +352,14 @@ class AnalyzedApp:
     self.pages = Manager(Page)
     self.routes = Manager(Route)
 
+    self.backend_forms = Manager(object)
+    for e in app_state['entities']:
+      for f in e['forms']:
+        self.backend_forms.add(f)
+    self.backend_forms._objects.extend(app_state['users']['forms'])
+
+    import pdb; pdb.set_trace()
+
     # given user settings, create some models
     base_user = { "name": "User" }
     if app_state['users']['local']:
@@ -378,7 +391,7 @@ class AnalyzedApp:
     self.link_routes_and_pages()
     self.fill_in_hrefs()
     # will eventually do forms.
-    self.init_forms(app_state)
+    self.init_forms()
     self.init_queries(app_state)
 
   # link routes and models
@@ -409,13 +422,16 @@ class AnalyzedApp:
         for f in m.fields:
           f.resolve_model_if_list_of_blah(self)
 
-  def init_forms(self, app_state):
+  def init_forms(self):
     self.forms = Manager(Form)
     for p in self.pages.each():
       for uie in p.uielements:
         if isinstance(uie, Form):
           if isinstance(uie, CreateForm):
-            uie.resolve_entity(self, app_state)
+            uie.resolve_entity(self)
+          if isinstance(uie, SignupForm):
+            pass
+            #uie.resolve_fields(self)
           self.forms.add(uie)
 
   def init_queries(self, app_state):

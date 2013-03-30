@@ -70,6 +70,7 @@ def analyzed_app_to_app_components(analyzed_app):
   for f in analyzed_app.forms.each():
     if isinstance(f, SignupForm):
       rec = DjangoFormReceiver.create_signup(f, analyzed_app)
+      rec.find_model(models)
       form_receivers.add(rec)
       u = DjangoUrl.create_post(rec, analyzed_app)
       urls.add(u)
