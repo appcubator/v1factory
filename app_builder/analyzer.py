@@ -213,10 +213,17 @@ class Container(UIElement):
 class Form(Container):
   """Either a login, signup, create model instance, or edit instance form"""
 
+  def __init__(self, uie=None):
+    super(Form, self).__init__(uie=uie)
+    # do common form things, like success url, post url, etc.
+    # also store the information about how the form should look
+    self.name = utils.extract_from_brace(uie['container_info']['form'])
+    self.fields = uie['container_info']['fields']
+
   @classmethod
   def create(cls, uie, page):
     assert 'form' in uie['container_info'], "Form must have form field in the container info"
-    # do common form things, like success url, post url, etc.
+
     if uie['container_info']['action'] == 'login':
       u = LoginForm(uie, page)
     elif uie['container_info']['action'] == 'signup':
@@ -227,9 +234,6 @@ class Form(Container):
       u = CreateForm(uie, page)
 
     return u
-
-  def __init__(self, uie=None):
-    super(Form, self).__init__(uie=uie)
 
 class LoginForm(Form):
   """A standard login form."""
@@ -276,7 +280,6 @@ class CreateForm(Form):
   """Create a model instance form."""
   def __init__(self, uie, page):
     super(CreateForm, self).__init__(uie=uie)
-    self.name = utils.extract_from_brace(uie['container_info']['form'])
     self.uie = uie
     self.page = page
     self.nodes = []
