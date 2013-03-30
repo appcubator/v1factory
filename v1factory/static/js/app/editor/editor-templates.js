@@ -56,6 +56,10 @@ Templates.createFormButton = [
   '<span class="name"><%= form.get(\'name\') %> Form</span></li>'
 ].join('\n');
 
+Templates.formButton = [
+  '<li id="entity-<%= entity.cid %>-<%= form.cid %>" class="<%= form.get(\'action\') %> entity">',
+  '<span class="name"><%= form.get(\'name\') %> Form</span></li>'
+].join('\n');
 
 var FieldTypes = {
   "single-line-text" : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">',

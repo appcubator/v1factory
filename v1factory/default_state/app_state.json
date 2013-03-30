@@ -30,6 +30,7 @@
         "forms": [
             {
                 "name": "Sign Up",
+                "action" : "signup",
                 "fields": [
                      {
                         "name": "Username",

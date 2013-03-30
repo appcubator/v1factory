@@ -1,6 +1,7 @@
 define([
   'app/collections/WidgetCollection',
   'editor/TableQueryView',
+  'editor/ListQueryView',
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
@@ -9,6 +10,7 @@ define([
 ],
 function(WidgetCollection,
         TableQueryView,
+        ListQueryView,
         WidgetView,
         SubWidgetView,
         FormEditorView,
@@ -104,6 +106,13 @@ function(WidgetCollection,
         console.log(this.model.get('container_info').get('form'));
         new FormEditorView(this.model.get('container_info').get('form'),
                            this.model.get('container_info').get('entity'));
+      }
+
+      if(this.model.get('container_info').has('row')) {
+        console.log(this.model.get('container_info').get('row'));
+        new ListQueryView(this.model,
+                          this.model.get('container_info').get('query'),
+                          this.model.get('container_info').get('row'));
       }
     }
   });

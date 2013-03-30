@@ -4,7 +4,7 @@ define([
   'app/collections/WidgetCollection',
   'editor/WidgetView',
   'iui'
-],function(BackboneUI, Backbone, WidgetCollection, WidgetView, iui) {
+],function(BackboneUI, Backbone, WidgetCollection, WidgetView) {
 
   var ListQueryView = BackboneUI.ModalView.extend({
     className : 'query-modal',
@@ -17,16 +17,21 @@ define([
       'change .sort-by'             : 'sortByChanged'
     },
     initialize: function(widgetModel, queryModel, rowModel) {
-      _.bindAll(this, 'fieldsToDisplayChanged',
+      var self = this;
+
+      _.bindAll(this, 'render',
+                      'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
                       'nmrRowsNumberChanged',
                       'addedWidget',
                       'removedWidget',
-                      'placeWidget');
+                      'placeWidget',
+                      'resized',
+                      'moved');
 
       console.log(widgetModel);
-      console.log(queryModel);
+      console.log(rowModel);
 
       this.widgetModel = widgetModel;
       this.queryModel  = queryModel;
@@ -34,10 +39,17 @@ define([
 
       this.entity = widgetModel.get('container_info').get('entity');
 
-      this.widgetsCollection = this.rowModel.get('')
+      this.widgetsCollection = this.rowModel.get('uielements');
 
       this.widgetsCollection.bind('add', this.placeWidget);
+      
       this.render();
+
+      _(self.widgetsCollection.models).each(function(widgetModel) {
+        console.log(widgetModel);
+        self.placeWidget(widgetModel);
+      });
+
     },
 
     render: function() {
@@ -51,14 +63,14 @@ define([
       var rFirstNmr=5, rLastNmr=5, rAllNmr = 0;
       var rFirst = '', rLast ='', rAll ='';
 
-      if(String(this.model.get('numberOfRows')).indexOf('First') != -1) {
+      if(String(this.queryModel.get('numberOfRows')).indexOf('First') != -1) {
         rFirst = 'checked';
-        rFirstNmr = (this.model.get('numberOfRows').replace('First-',''));
+        rFirstNmr = (this.queryModel.get('numberOfRows').replace('First-',''));
         if(rFirstNmr === "") rFirstNmr = 5;
       }
-      else if (String(this.model.get('numberOfRows')).indexOf('Last') != -1) {
+      else if (String(this.queryModel.get('numberOfRows')).indexOf('Last') != -1) {
         rLast = 'checked';
-        rLastNmr = (this.model.get('numberOfRows').replace('Last-',''));
+        rLastNmr = (this.queryModel.get('numberOfRows').replace('Last-',''));
         if(rLastNmr === "") rLastNmr = 5;
       }
       else {
@@ -74,14 +86,25 @@ define([
         rAllNmr   : rAllNmr
       };
 
-      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks});
+      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.queryModel, c: checks});
       contentHTML += '<input type="submit" value="Done">';
       div.innerHTML = contentHTML;
 
       var editorDiv = document.createElement('div');
       editorDiv.className = 'list-editor-container';
-      var listEditorHTML = _.template(Templates.listEditorView, {entity: self.entity, query: self.model, c: checks});
-      editorDiv.innerHTML = listEditorHTML;
+      //var listEditorHTML = _.template(Templates.listEditorView, {entity: self.entity, query: self.queryModel, c: checks});
+      //editorDiv.innerHTML = listEditorHTML;
+
+      var rowWidget = document.createElement('div');
+      this.rowWidget = rowWidget;
+      rowWidget.className = 'editor-window container-wrapper';
+      rowWidget.className += (' span' + this.rowModel.get('layout').get('width'));
+      rowWidget.className += (' hi' + this.rowModel.get('layout').get('height'));
+      editorDiv.appendChild(rowWidget);
+
+      console.log(iui);
+
+      iui.resizable(rowWidget, self);
 
       this.el.appendChild(div);
       this.el.appendChild(editorDiv);
@@ -89,8 +112,7 @@ define([
     },
 
     fieldsToDisplayChanged: function(e) {
-      console.log(this.model);
-      var fieldsArray = _.clone(this.model.get('fieldsToDisplay'));
+      var fieldsArray = _.clone(this.queryModel.get('fieldsToDisplay'));
 
       if(e.target.checked) {
         fieldsArray.push(e.target.value);
@@ -102,7 +124,7 @@ define([
         fieldsArray = _.difference(fieldsArray, e.target.value);
       }
 
-      this.model.set('fieldsToDisplay', fieldsArray);
+      this.queryModel.set('fieldsToDisplay', fieldsArray);
     },
 
     addedWidget: function(fieldId) {
@@ -140,7 +162,7 @@ define([
     belongsToUserChanged: function(e) {
       if(e.target.checked) {
         var bool = (e.target.value == "true"? true : false);
-        this.model.set('belongsToUser', bool);
+        this.queryModel.set('belongsToUser', bool);
       }
     },
 
@@ -154,7 +176,7 @@ define([
           val += '-' + iui.get('last-nmr').value;
         }
 
-        this.model.set('numberOfRows', val);
+        this.queryModel.set('numberOfRows', val);
       }
     },
 
@@ -169,22 +191,29 @@ define([
         val = 'Last-' + e.target.value;
       }
 
-      this.model.set('numberOfRows', val);
+      this.queryModel.set('numberOfRows', val);
       e.stopPropagation();
     },
 
     sortByChanged: function(e) {
-      this.model.set('sortAccordingTo', e.target.value);
+      this.queryModel.set('sortAccordingTo', e.target.value);
     },
 
     placeWidget: function(widgetModel) {
       var curWidget = new WidgetView(widgetModel);
 
-      if(!widgetModel.isFullWidth()) this.$el.find('.editor-window').append(curWidget.el);
+      if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);
       // else iui.get('full-container').appendChild(curWidget.el);
       curWidget.resizableAndDraggable();
-    }
+    },
 
+    resized: function() {
+
+    },
+
+    moved: function() {
+
+    }
   });
 
   return ListQueryView;
