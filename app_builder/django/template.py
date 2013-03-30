@@ -2,7 +2,7 @@ import re
 
 from jinja2 import Environment, PackageLoader
 
-from app_builder.analyzer import Container, Node, Page, QuerysetWrapper, Renderable
+from app_builder.analyzer import Container, Node, Page, ListQuerysetWrapper, QuerysetWrapper, Renderable
 
 class Column(Renderable):
   def __init__(self):
@@ -79,7 +79,8 @@ class DjangoTemplate(Renderable):
 
     for uie in query_containers:
       for n in uie.nodes:
-        n.set_content(fix_the_string(n.content(), single=False))
+        fix_attempt = fix_the_string(n.content(), single=False)
+        n.set_content(fix_attempt)
     for n in plain_old_nodes:
       n.set_content(fix_the_string(n.content(), single=True))
 
