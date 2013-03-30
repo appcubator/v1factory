@@ -1,3 +1,10 @@
+def get_name(instance):
+  """Either a dict or object, get name"""
+  try:
+    return instance.name
+  except Exception:
+    return instance['name']
+
 class Manager:
   """
   Manages a collection of objects
@@ -12,16 +19,8 @@ class Manager:
     Given the name of the object, returns the object. Assumes uniqueness on name.
     """
     for o in self._objects:
-      try:
-        if o.name == name:
-          return o
-      except Exception:
-        pass
-      try:
-        if o['name'] == name:
-          return o
-      except Exception:
-        pass
+      if get_name(o) == name:
+        return o
 
     return None
 
@@ -34,7 +33,7 @@ class Manager:
     """
     if not isinstance(instance, self._parent_class):
       raise Exception("Object and manager types do not agree")
-    elif self.get_by_name(instance.name) is not None:
+    elif self.get_by_name(get_name(instance)) is not None:
       raise Exception("Object with this name already exists in the manager")
     else:
       self._add_unchecked(instance)
