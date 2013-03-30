@@ -85,7 +85,8 @@ define(['jquery-ui'], function() {
     resizable: function(el, self) {
       $(el).resizable({
         handles: "n, e, s, w, se",
-        resize: self.resized,
+        stop: self.resized,
+        resize: self.resizing,
         containment: "parent"
       });
 

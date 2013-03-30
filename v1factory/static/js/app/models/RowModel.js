@@ -8,7 +8,7 @@ define([
 
     initialize: function(bone) {
       this.set('isListOrGrid', "list");
-      this.set('layout', new LayoutModel({height:10, width: 4}));
+      this.set('layout', new LayoutModel((bone.layout||{height:10, width: 4})));
       this.set('uielements', new WidgetCollection());
 
       if(bone.uielements) {

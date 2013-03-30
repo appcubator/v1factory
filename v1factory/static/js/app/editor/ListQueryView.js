@@ -28,7 +28,7 @@ define([
                       'removedWidget',
                       'placeWidget',
                       'resized',
-                      'moved');
+                      'resizing');
 
       console.log(widgetModel);
       console.log(rowModel);
@@ -49,6 +49,12 @@ define([
         console.log(widgetModel);
         self.placeWidget(widgetModel);
       });
+
+      for(var ii=0; ii <2; ii++) {
+        var html = _.template(Templates.rowNode, { layout: self.rowModel.get('layout'), 
+                                          uielements: self.rowModel.get('uielements').models });
+        $('.list-editor-container').append(html);
+      }
 
     },
 
@@ -94,6 +100,8 @@ define([
       editorDiv.className = 'list-editor-container';
       //var listEditorHTML = _.template(Templates.listEditorView, {entity: self.entity, query: self.queryModel, c: checks});
       //editorDiv.innerHTML = listEditorHTML;
+
+      console.log(this.rowModel.get('layout').get('width'));
 
       var rowWidget = document.createElement('div');
       this.rowWidget = rowWidget;
@@ -208,11 +216,28 @@ define([
     },
 
     resized: function() {
+      // this.rowWidget.style.width ='';
+      // this.rowWidget.style.height = '';
+      console.log("ressss");
+      this.rowWidget.style.width = '';
+      this.rowWidget.style.height ='';
+      this.rowWidget.className = 'editor-window container-wrapper ';
+      this.rowWidget.className += 'span' + this.rowModel.get('layout').get('width');
+      this.rowWidget.style.height = (this.rowModel.get('layout').get('height') * GRID_HEIGHT) + 'px';
 
     },
 
-    moved: function() {
+    resizing: function(e, ui) {
+      var dHeight = (ui.size.height + 2) / GRID_HEIGHT;
+      var dWidth = (ui.size.width + 2) / GRID_WIDTH;
 
+      var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
+      var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
+
+      console.log(this.rowModel);
+      this.rowModel.get('layout').set('width', deltaWidth);
+      this.rowModel.get('layout').set('height', deltaHeight);
+      console.log("ressss");
     }
   });
 

@@ -66,6 +66,10 @@ function(WidgetCollection,
 
       if(this.model.get('container_info').get('action') == "show") {
         var listDiv = document.createElement('div');
+        var row = this.model.get('container_info').get('row');
+        console.log(Templates.listNode);
+        listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'), uielements: row.get('uielements').models});
+        this.el.appendChild(listDiv);
         // tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
         // this.el.appendChild(tableDiv);
       }

@@ -91,7 +91,7 @@ function(WidgetModel,
 
         if(!self.get('container_info').has('query')) {
           var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
-          var rowModel   = new RowModel();
+          var rowModel   = new RowModel({});
 
           self.get('container_info').set('query', queryModel);
           self.get('container_info').set('row', rowModel);

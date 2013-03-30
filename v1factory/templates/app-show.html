@@ -15,32 +15,29 @@
 
 {% block page %}
 <div class="container hoff8">
-<!--   <div class="span9 offsetr1">
-      <ul class="left-menu">
-        {% for a in apps %}
-        <li class="{% if a.id == app.id %} selected {% endif %}"><a href="{{ a.get_absolute_url }}">{{ a.name }}</a></li>
-        {% endfor %}
-        <li><a href="{% url v1factory.views.app_new %}">+ Create New</a></li>
-      </ul>
-  </div> -->
-  
+ 
+ 
   <div class="row hoff1">
     <h2>{{ app.name }}</h2>
     <div class="span64 hoff2">
+      <a class="pane hi12 span14 entities" href="{% url v1factory.views.app_info app.id %}">
+        <img src="{{ STATIC_URL }}img/entities.png">
+        <div class="hoff2 offset1">
+        <h2>App Info & SEO</h2>
+        </div>
+      </a>
       <a class="pane hi12 span14 entities offset1" href="{% url v1factory.views.entities app.id %}">
         <img src="{{ STATIC_URL }}img/entities.png">
         <div class="hoff2 offset1">
-        <h2>Models</h2>
+        <h2>Forms & Data</h2>
         </div>
       </a>
-      <!--
       <a class="pane hi12 span14 offset1" href="{% url v1factory.views.app_gallery app.id %}">
         <img src="{{ STATIC_URL }}img/design.png">
         <div class="hoff2 offset1">
-        <h2>Gallery</h2>
+        <h2>Design & Themes</h2>
         </div>
       </a>
-      -->
       <a class="pane hi12 span14 offset1" href="{% url v1factory.views.app_pages app.id %}">
         <img src="{{ STATIC_URL }}img/editor.png">
         <div class="hoff2 offset1">

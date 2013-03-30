@@ -14,9 +14,9 @@ define([
     shadowElem : null,
 
     events: {
-      'click' : 'select',
+      'click'         : 'select',
       'click .delete' : 'remove',
-      'keyDown'  : 'keyHandler'
+      'keyDown'       : 'keyHandler'
     },
 
     initialize: function(widgetModel){
