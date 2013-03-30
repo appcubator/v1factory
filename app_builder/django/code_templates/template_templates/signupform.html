@@ -1,1 +1,42 @@
-{% extends "container_form.html" %}
+<!-- container_form -->
+<form method="POST" action="{{ '{%' }} url {{ context.form_receiver.view_path() }} {{ '%}' }}">
+  <fieldset>
+    <legend>{{ context.name|replace("_", " ") }}</legend>
+    {{ "{% csrf_token %}" }}
+    {% for field in context.form_schema.fields %}
+      <label for="id-{{ field.name }}">{{ field.label }}</label>
+      {% if field.displayType == "single-line-text" %}
+        <input type="text" name="{{ field.name }}" id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+      {% elif field.displayType == "paragraph-text" %}
+        <textarea name="{{ field.name }}" id="id-{{ field.name }}" placeholder="{{ field.placeholder }}"></textarea>
+      {% elif field.displayType == "password-text" %}
+        <input type="password" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+      {% elif field.displayType == "email-text" %}
+        <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}"></div>
+      {% elif field.displayType == "button" %}
+        <div class="btn">{{ field.placeholder }}</div>
+      {% elif field.displayType == "dropdown" %}
+        <select class="dropdown">
+          {% for option in field.options %}
+            <option>{{ option }}</option>
+          {% endfor %}
+        </select>
+      {% elif field.displayType == "option-boxes" %}
+        <span class="option-boxes">
+          {% for option in field.options %}
+            <label for="opt-{{ loop.index }}"></label>
+            <input id="opt-{{ loop.index }}" class="field-type" type="radio" name="types" value="single-line-text">{{ option }}
+          {% endfor %}
+        </span>
+      {% elif field.displayType == "image-uploader" %}
+        <input type="file" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+      {% elif field.displayType == "date-picker" %}
+        date picker will be here<input type="text" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+      {% else %}
+        <!-- Non-standard tag specified -->
+      {% endif %}
+    {% endfor %}
+  </fieldset>
+  <input type="submit" value="Submit" class="btn"/>
+</form>
+<!-- /container_form -->
