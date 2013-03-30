@@ -358,8 +358,6 @@ class AnalyzedApp:
         self.backend_forms.add(f)
     self.backend_forms._objects.extend(app_state['users']['forms'])
 
-    import pdb; pdb.set_trace()
-
     # given user settings, create some models
     base_user = { "name": "User" }
     if app_state['users']['local']:
