@@ -76,8 +76,9 @@ function(SimpleModalView) {
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         success: function() {
-          new SimpleModalView({text:"Good Job!!! <br> ^(^_^)^ ^(^_^)> (>^_^)>"});
+          //new SimpleModalView({text:"Good Job!!! <br> ^(^_^)^ ^(^_^)> (>^_^)>"});
           iui.dontAskBeforeLeave();
+          location.reload(true);
         }
       });
     }

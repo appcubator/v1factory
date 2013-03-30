@@ -101,8 +101,8 @@ function(ElementCollection, UserEntityModel, Backbone) {
       if(this.userModel.has('forms')) {
         _(this.userModel.get('forms').models).each(function(form) {
           //if(form.get('type') == "create") {
-            var html = _.template(Templates.createFormButton, {entity: {cid: "user"},
-                                                               form: form});
+            var html = _.template(Templates.formButton, {entity: {cid: "user"},
+                                                                  form: form});
 
             $(self.allList).append(html);
           //}

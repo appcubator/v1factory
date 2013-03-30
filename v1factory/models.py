@@ -26,7 +26,7 @@ def get_default_app_state():
 
 
 class App(models.Model):
-  name = models.CharField(max_length=100)
+  name = models.CharField(max_length=100, unique=True)
   owner = models.ForeignKey(User, related_name='apps')
   _state_json = models.TextField(blank=True, default=get_default_app_state)
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)

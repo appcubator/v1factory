@@ -112,7 +112,7 @@
         {
             "tagName": "a",
             "content_attribs": {
-                "href": "{{homepage}}"
+                "href": "{{Homepage}}"
             },
             "content": "Default Link...",
             "isSingle": false,
@@ -122,7 +122,7 @@
         {
             "tagName": "a",
             "content_attribs": {
-                "href": "{{homepage}}"
+                "href": "{{Homepage}}"
             },
             "content": "Default Link...",
             "isSingle": false,

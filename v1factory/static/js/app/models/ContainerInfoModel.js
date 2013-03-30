@@ -3,9 +3,15 @@ define([
   'app/models/QueryModel',
   'app/models/EntityModel',
   'app/models/UserEntityModel',
-  'app/models/FormModel'
+  'app/models/FormModel',
+  'app/models/RowModel'
 ],
-function(WidgetCollection, QueryModel, EntityModel, UserEntityModel, FormModel) {
+function(WidgetCollection,
+         QueryModel,
+         EntityModel,
+         UserEntityModel,
+         FormModel,
+         RowModel) {
 
   var ContainerInfoModel = Backbone.Model.extend({
     initialize: function(bone) {
@@ -23,6 +29,10 @@ function(WidgetCollection, QueryModel, EntityModel, UserEntityModel, FormModel) 
         else {
           this.set('entity', bone.entity);
         }
+      }
+
+      if(bone.row) {
+        this.set('row', new RowModel(bone.row));
       }
 
       if(bone.query) {

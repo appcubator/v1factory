@@ -73,8 +73,7 @@ class Page(object):
         if d['type'] == 'background-image':
           d['value'] = 'url({})'.format(d['value'])
     for uie in page['uielements']:
-      if uie['container_info'] is None or uie['container_info']['action'] not in ['facebook', 'linkedin']:
-        self.uielements.append(UIElement.create(uie, self))
+      self.uielements.append(UIElement.create(uie, self))
 
 class Route(object):
   """A Route is exactly what you think, except it can sometimes have dynamic inputs,

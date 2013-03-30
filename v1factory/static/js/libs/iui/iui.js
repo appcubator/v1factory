@@ -61,17 +61,17 @@ define(['jquery-ui'], function() {
     resizableAndDraggable: function(el, self) {
       $(el).resizable({
         handles: "n, e, s, w, se",
-        // grid: 15,
-        resize: self.resized
+        resize: self.resized,
+        containment: "parent"
       });
 
       $(el).draggable({
-        grid: [ 15,15 ],
-        drag: self.moved
+        drag: self.moved,
+        containment: "parent"
       });
 
-      this.el.style.position = 'relative';
-      console.log('yolo');
+      //this.el.style.position = 'relative';
+      //console.log('yolo');
       return el;
     },
 
@@ -80,6 +80,16 @@ define(['jquery-ui'], function() {
         grid: [ 30,30 ],
         drag: self.moved
       });
+    },
+
+    resizable: function(el, self) {
+      $(el).resizable({
+        handles: "n, e, s, w, se",
+        resize: self.resized,
+        containment: "parent"
+      });
+
+      return el;
     },
 
     setCursor: function(node,pos){
