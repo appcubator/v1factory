@@ -19,6 +19,8 @@
   display: inline-block;
   vertical-align: top;
   float: none;
+  text-align: center;
+  font-size: 28px;
 }
 
 .add-entity .pane {
