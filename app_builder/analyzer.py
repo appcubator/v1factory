@@ -246,11 +246,11 @@ class SignupForm(Form):
 
   def __init__(self, uie, page):
     super(SignupForm, self).__init__(uie=uie)
-    self.name = uie['container_info']['form']
+    self.name = uie['container_info']['form']['name']
     self.uie = uie
     self.page = page
     self.nodes = []
-    self.entity_name = 'User'
+    self.entity_name = 'UserProfile'
 
   def resolve_fields(self, user_model):
     user_fields = Manager(Model)
