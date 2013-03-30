@@ -1459,7 +1459,8 @@ h3.edit-url {
   display: inline-block;
   vertical-align: top;
   width: 500px;
-  text-align: center;
+  height: 600px;
+  position: relative;
 }
 
 .type-pick {
@@ -1474,8 +1475,42 @@ h3.edit-url {
 .editor-window {
   margin-top: 20px;
   background-color: #eee;
-  border-radius: 8px;
-  width: 100%;
-  min-height: 500px;
   position: relative;
 }
+
+
+
+.container-wrapper {
+  z-index: 1001;
+  position: absolute;
+  cursor: move;
+  border-radius: 3px;
+  line-height: 1em;
+  overflow: visible;
+  background-color: rgba(25, 142, 58, 0.0);
+  -webkit-transition: background-color 50ms linear;
+}
+
+
+.container-wrapper.selected {
+  border: 2px solid #71c5ef;
+  background-color: rgba(25, 142, 58, 0.12);
+}
+
+
+.container-wrapper {
+  display: inline-block;
+  border:2px solid transparent;
+  position: absolute;
+  -webkit-transition: border-color 200ms linear;
+}
+
+.container-wrapper:hover {
+  border-color: rgba(25, 142, 58, 0.6);
+  background-color: rgba(25, 142, 58, 0.3);
+}
+
+
+/*.container-wrapper:hover .ui-resizable-handle {
+  opacity: 1;
+}*/

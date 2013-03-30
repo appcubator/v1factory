@@ -6,12 +6,23 @@ define([
   'editor/TableQueryView',
   'editor/ListQueryView',
   'app/models/QueryModel',
+  'app/models/RowModel',
   'app/collections/WidgetCollection',
   'backboneui',
   'backbone',
   'dicts/constant-containers'
 ],
-function(WidgetModel, ContentModel, LayoutModel, ContainerInfoModel, TableQueryView, ListQueryView, QueryModel, WidgetCollection, BackboneUI, Backbone) {
+function(WidgetModel,
+         ContentModel,
+         LayoutModel,
+         ContainerInfoModel,
+         TableQueryView,
+         ListQueryView,
+         QueryModel,
+         RowModel,
+         WidgetCollection,
+         BackboneUI,
+         Backbone) {
 
 
   var ContainerWidgetModel = WidgetModel.extend({
