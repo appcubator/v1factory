@@ -21,7 +21,6 @@ Templates.tempNode = [
   '<% }; %>'
 ].join('\n');
 
-
 Templates.tempHrefSelect = [
   '<select class="select-href" id="prop-<%= hash %>">',
   "<% _(appState.pages).each(function(page){ var b = ''; if(('{{'+page.name+'}}') == val){ b = 'selected';}%>",
@@ -145,3 +144,54 @@ Templates.listEditorView = [
   '<div class="editor-window">',
   '</div>'
 ].join('\n');
+
+
+Templates.tempUIElement = [
+  '<<%= element.get(\'tagName\') %>',
+  'class = "<%= element.get(\'class_name\') %>"',
+  '<% if(element.get(\'cons_attribs\')) { %>',
+  '<% _(element.get(\'cons_attribs\').attributes).each(function(val, key) { %>',
+  '<%=key%> = "<%=val%>"<% }); %>',
+  '<% } %>',
+  '<% _(element.get(\'content_attribs\').attributes).each(function(val, key) { %>',
+  '<%=key%> = "<%=val%>"<% }); %>>',
+  '<% if(!element.get(\'isSingle\')) { %>',
+  '<%= element.get(\'content\') %>',
+  '</<%= element.get(\'tagName\') %>>',
+  '<% }; %>'
+].join('\n');
+
+
+Templates.tempUIElementSized = [
+  '<<%= element.get(\'tagName\') %>',
+  'class = "span<%=element.get(\'layout\').get(\'width\')%> hi<%=element.get(\'layout\').get(\'height\')%> <%= element.get(\'class_name\') %>"',
+  '<% if(element.get(\'cons_attribs\')) { %>',
+  '<% _(element.get(\'cons_attribs\').attributes).each(function(val, key) { %>',
+  '<%=key%> = "<%=val%>"<% }); %>',
+  '<% } %>',
+  '<% _(element.get(\'content_attribs\').attributes).each(function(val, key) { %>',
+  '<%=key%> = "<%=val%>"<% }); %> style="position:absolute; top:<%=element.get(\'layout\').get(\'top\') * 15%>px; left:<%=element.get(\'layout\').get(\'left\')*80%>px;">',
+  '<% if(!element.get(\'isSingle\')) { %>',
+  '<%= element.get(\'content\') %>',
+  '</<%= element.get(\'tagName\') %>>',
+  '<% }; %>'
+].join('\n');
+
+Templates.rowNode = [
+  '<div class="span<%= layout.get(\'width\') %> hi<%= layout.get(\'height\') %>" style="position:relative;">',
+    '<% _(uielements).each(function(element){ console.log(element); %>',
+      '<% console.log(element); console.log("sdf"); %>',
+      Templates.tempUIElementSized,
+    '<% }); %>',
+  '</div>'
+].join('\n');
+
+Templates.listNode = [
+  '<div>',
+    Templates.rowNode,
+    Templates.rowNode,
+    Templates.rowNode,
+    Templates.rowNode,
+  '</div>'
+].join('\n');
+
