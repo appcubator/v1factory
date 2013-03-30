@@ -4,15 +4,15 @@
     <legend>{{ context.name|replace("_", " ") }}</legend>
     {{ "{% csrf_token %}" }}
     {% for field in context.form_schema.fields %}
-      <label for="id-{{ field.name }}">{{ field.label }}</label>
+      <label for="id-{{ field.identifier() }}">{{ field.label }}</label>
       {% if field.displayType == "single-line-text" %}
-        <input type="text" name="{{ field.name }}" id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+        <input type="text" name="{{ field.identifier() }}" id="id-{{ field.identifier() }}" placeholder="{{ field.placeholder }}">
       {% elif field.displayType == "paragraph-text" %}
-        <textarea name="{{ field.name }}" id="id-{{ field.name }}" placeholder="{{ field.placeholder }}"></textarea>
+        <textarea name="{{ field.identifier() }}" id="id-{{ field.identifier() }}" placeholder="{{ field.placeholder }}"></textarea>
       {% elif field.displayType == "password-text" %}
-        <input type="password" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+        <input type="password" name="{{ field.identifier() }}"  id="id-{{ field.identifier() }}" placeholder="{{ field.placeholder }}">
       {% elif field.displayType == "email-text" %}
-        <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}"></div>
+        <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.identifier() }}"  id="id-{{ field.identifier() }}" placeholder="{{ field.placeholder }}"></div>
       {% elif field.displayType == "button" %}
         <div class="btn">{{ field.placeholder }}</div>
       {% elif field.displayType == "dropdown" %}
@@ -29,9 +29,9 @@
           {% endfor %}
         </span>
       {% elif field.displayType == "image-uploader" %}
-        <input type="file" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+        <input type="file" name="{{ field.identifier() }}"  id="id-{{ field.identifier() }}" placeholder="{{ field.placeholder }}">
       {% elif field.displayType == "date-picker" %}
-        date picker will be here<input type="text" name="{{ field.name }}"  id="id-{{ field.name }}" placeholder="{{ field.placeholder }}">
+        date picker will be here<input type="text" name="{{ field.identifier() }}"  id="id-{{ field.identifier() }}" placeholder="{{ field.placeholder }}">
       {% else %}
         <!-- Non-standard tag specified -->
       {% endif %}

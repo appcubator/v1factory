@@ -191,7 +191,7 @@ class Container(UIElement):
     if uie['container_info']['action'] in ['login', 'signup', 'create', 'edit',]:
       u = Form.create(uie, page)
     elif uie['container_info']['action'] == 'show':
-      u = QuerysetWrapper(uie, page)
+      u = ListQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] == 'table-gal':
       u = TableQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
@@ -317,6 +317,15 @@ class QuerysetWrapper(Container):
 class TableQuerysetWrapper(QuerysetWrapper):
   def __init__(self, uie, page):
     super(TableQuerysetWrapper, self).__init__(uie, page)
+
+class ListQuerysetWrapper(QuerysetWrapper):
+  def __init__(self, uie, page):
+    super(ListQuerysetWrapper, self).__init__(uie, page)
+    self.row_left = uie['container_info']['row']['layout']['left']
+    self.row_top = uie['container_info']['row']['layout']['top']
+    self.row_width = uie['container_info']['row']['layout']['width']
+    self.row_height = uie['container_info']['row']['layout']['height']
+    self.nodes = [ Node(n, page) for n in uie['container_info']['row']['uielements'] ]
 
 class ThirdPartyLogin(Container):
   """ A container that wraps a third party login action """

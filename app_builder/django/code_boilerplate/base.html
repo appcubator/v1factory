@@ -5,6 +5,15 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap.css" />
     <title>{% block title %}{% endblock %}</title>
     <style>
+      .list-container {
+        overflow-y: scroll;
+      }
+      .list-entry {
+        position: relative;
+      }
+      .list-container .list-entry .node {
+        position: absolute;
+      }
       {% block css %}{% endblock %}
     </style>
 </head>
