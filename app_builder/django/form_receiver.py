@@ -58,7 +58,9 @@ class DjangoFormReceiver(object):
     self.included_fields = new_included_fields
 
   def identifier(self):
-    return "receive_{}".format(self.form.name)
+    def sanitize_name(s):
+      return s.replace(" ", "_")
+    return "receive_{}".format(sanitize_name(self.form.name))
 
   def view_path(self):
     return "webapp.form_receivers."+self.identifier()
@@ -81,6 +83,9 @@ class SignupFormReceiver(DjangoFormReceiver):
     return [ f for f in self.included_fields if f.name != 'username' ]
 
 class LoginFormReceiver(DjangoFormReceiver):
+
+  def view_path(self):
+    return "django.contrib.auth.views.login"
 
   def render(self):
     return ""
