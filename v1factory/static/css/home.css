@@ -229,7 +229,6 @@ background-repeat: no-repeat;
 }
 
 .video-pane { 
-  background-color: #236277;
   border-radius: 6px;
   box-shadow: inset 0px 0px 10px 0px rgba(30,30,30,0.5);
   overflow: hidden;
