@@ -22,6 +22,7 @@ class DjangoModel(object):
     fields = Manager(DjangoField)
     if name == "User":
       self = UserProfileModel(name=name, fields=fields)
+
     else:
       self = cls(name=name, fields=fields)
 
@@ -149,11 +150,11 @@ class DjangoField(object):
     return template.render(f = self)
 
 class UserProfileUserField(DjangoField):
-    def __init__(self, name="User", field_type='onetoone', required=None, model=None, related_name=None, related_model=None):
-      super(UserProfileUserField, self).__init__(name=name, field_type=field_type, required=required, model=model, related_name=related_name, related_model=related_model)
+  def __init__(self, name="User", field_type='onetoone', required=None, model=None, related_name=None, related_model=None):
+    super(UserProfileUserField, self).__init__(name=name, field_type=field_type, required=required, model=model, related_name=related_name, related_model=related_model)
 
-    def args(self):
-      return ["User"]
+  def args(self):
+    return ["User"]
 
-    def kwargs(self):
-      return {}
+  def kwargs(self):
+    return { "blank": repr(True) }

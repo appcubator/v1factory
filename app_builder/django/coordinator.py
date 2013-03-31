@@ -3,14 +3,14 @@
 import re
 
 from app_builder.manager import Manager
-from app_builder.analyzer import SignupForm, LoginForm
+from app_builder.analyzer import CreateForm, EditForm, SignupForm, LoginForm
 
 from model import DjangoModel, DjangoField
 from view import DjangoView
 from query import DjangoQuery
 from template import DjangoTemplate
 from url import DjangoUrl
-from form_receiver import DjangoFormReceiver
+from form_receiver import LoginFormReceiver, SignupFormReceiver, DjangoFormReceiver
 
 from app import DjangoApp
 
@@ -50,38 +50,43 @@ def analyzed_app_to_app_components(analyzed_app):
           df = DjangoField.create_relational('parent_%s%s' % (dm1.name, id(f)), f.name, dm2, dm1)
           dm2.fields.add(df)
 
+  # create django templates
   for p in analyzed_app.pages.each():
-    t = DjangoTemplate.create(p)
+    t = DjangoTemplate.create(p) # resolves links, creates row/column structure of html
     templates.add(t)
+    # create the view function to get the data and serve the page
     v = DjangoView.create(p, analyzed_app, t)
     views.add(v)
-    urls.add( DjangoUrl.create_get(p, v, analyzed_app, models) )
+    urls.add( DjangoUrl.create_get(p, v, analyzed_app, models) ) # add the urls entry for it
     v.queries = Manager(DjangoQuery)
-    # create the djangoquery and find it's django model.
+    # create the query
     for q in p.queries.each():
       dq = DjangoQuery(q, analyzed_app)
       dq.find_model(models)
-      v.queries.add(dq)
+      v.queries.add(dq) # add the query to the view function
 
-  # now that we know all the queries, replace template handlebars.
+  # now that we know all the queries, properly name the variables in the templates
   for t in templates.each():
     t.properly_name_vars_in_q_container(models)
 
+  # form POST receiver creation
   for f in analyzed_app.forms.each():
     if isinstance(f, SignupForm):
-      rec = DjangoFormReceiver.create_signup(f, analyzed_app)
-      rec.find_model(models)
-      form_receivers.add(rec)
-      u = DjangoUrl.create_post(rec, analyzed_app)
-      urls.add(u)
+      rec = SignupFormReceiver.create_signup(f, analyzed_app)
     elif isinstance(f, LoginForm):
-      pass
-    else:
+      rec = LoginFormReceiver.create_signup(f, analyzed_app)
+    elif isinstance(f, EditForm):
+      raise Exception("You found an edit form!")
+    elif isinstance(f, SignupForm):
       rec = DjangoFormReceiver.create(f, analyzed_app)
-      rec.find_model(models)
-      form_receivers.add(rec)
-      u = DjangoUrl.create_post(rec, analyzed_app)
-      urls.add(u)
+    else:
+      raise Exception("What is this form?: %s" % type(f))
+
+    rec.find_model(models)
+    form_receivers.add(rec)
+    # create the url for the POST
+    u = DjangoUrl.create_post(rec, analyzed_app)
+    urls.add(u)
 
   dw = DjangoApp(models, views, urls, templates, form_receivers)
   return dw

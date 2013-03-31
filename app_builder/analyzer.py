@@ -24,6 +24,17 @@ class Model(object):
       self.fields.append(f)
     return self
 
+  @classmethod
+  def create_user(cls, entity):
+    self = cls.create(entity)
+    username_field = None
+    for f in self.fields:
+      if f.name == 'username':
+        assert f.content_type == "text"
+        return self
+    raise Exception("A user without a field called \"username\" is not allowed")
+
+
 class Field(object):
   """A Field belongs to a model and has a name and type"""
   def __init__(self, name=None, required=None, content_type=None, model=None):
@@ -124,7 +135,7 @@ class UIElement(Renderable):
       self.height = 5
       self.left = 5
       self.top = 5
-    self.position_css = "position: absolute; left: {}px; top: {}px;".format(self.left*15, self.top*15)
+    self.position_css = "left: {}px; top: {}px;".format(self.left*15, self.top*15)
 
 class Node(UIElement):
   """A Node can be thought of as a single element on the page.
@@ -190,7 +201,7 @@ class Container(UIElement):
   @classmethod
   def create(cls, uie, page):
     if uie['container_info']['action'] in ['login', 'signup', 'create', 'edit',]:
-      u = Form.create(uie, page)
+      u = Form.create_subform(uie, page)
     elif uie['container_info']['action'] == 'show':
       u = ListQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] == 'table-gal':
@@ -203,104 +214,120 @@ class Container(UIElement):
     return u
 
   def resolve_links(self, pages, *args, **kwargs):
-    for n in self.nodes:
-      n.resolve_links(pages, *args, **kwargs)
+    try:
+      for n in self.nodes:
+        n.resolve_links(pages, *args, **kwargs)
+    except AttributeError:
+      pass
 
   def __init__(self, uie=None):
     super(Container, self).__init__(uie=uie)
+
+class FormField(object):
+  """
+  Form receiver does something with these.
+  """
+
+  def __init__(self, name=None, field_type=None, display_type=None, kwargs=None, options=None, model_field=None):
+    self.name = name
+    self.field_type = field_type
+    self.display_type = display_type
+    self.kwargs = kwargs
+    self.options = options
+    self.model_field = model_field
+
+  def is_model_field(self):
+    return self.model_field is not None
+
+  @classmethod
+  def create(cls, field_dict):
+    kwargs = {}
+    kwargs['placeholder'] = field_dict['placeholder']
+    kwargs['label'] = field_dict['label']
+    self = cls(name = field_dict['name']
+             , field_type = field_dict['type']
+             , display_type = field_dict['displayType']
+             , kwargs = kwargs
+             , options = field_dict['options'])
+    return self
 
 # abstract
 class Form(Container):
   """Either a login, signup, create model instance, or edit instance form"""
 
-  def __init__(self, uie=None):
+  required_fields = []
+
+  def __init__(self, name=None, action=None, fields=None, entity_name=None, uie=None, page=None):
     super(Form, self).__init__(uie=uie)
-    # do common form things, like success url, post url, etc.
-    # also store the information about how the form should look
-    self.name = utils.extract_from_brace(uie['container_info']['form'])
-    self.fields = uie['container_info']['fields']
+    self.name = name
+    self.action = action
+    self.included_fields = fields
+    self.entity = entity_name
+    self.uie = uie
+    self.page = page
+    self.nodes = []
+    # self.entity is set in the resolve function
 
   @classmethod
   def create(cls, uie, page):
-    assert 'form' in uie['container_info'], "Form must have form field in the container info"
+    field_dicts = uie['container_info']['form']['fields']
+    fields = [ FormField.create(f) for f in field_dicts ]
 
-    if uie['container_info']['action'] == 'login':
-      u = LoginForm(uie, page)
-    elif uie['container_info']['action'] == 'signup':
-      u = SignupForm(uie, page)
-    elif uie['container_info']['action'] == 'edit':
-      u = EditForm(uie, page)
-    elif uie['container_info']['action'] == 'create':
-      u = CreateForm(uie, page)
+    self = cls(name=uie['container_info']['form']['name'],
+               action=uie['container_info']['form']['action'],
+               entity_name=uie['container_info']['form']['entity'],
+               uie=uie,
+               fields=fields,
+               page=page)
 
-    return u
+    return self
 
-class LoginForm(Form):
-  """A standard login form."""
-  def __init__(self, uie, page):
-    super(LoginForm, self).__init__(uie=uie)
-    # put the info here
-    self.name = "Form{}".format(id(uie))
-    self.uie = uie
-    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
-    self.page = page
+  def check_required_fields(self):
+    for f in self.__class__.required_fields:
+      assert f in [ x.name for x in self.included_fields ],\
+          "Required field \"%s\" not found in instance of \"%s\"" % (f, self.__class__.__name__)
 
-class SignupForm(Form):
-  """A standard signup form."""
+  @classmethod
+  def create_subform(cls, uie, page):
+    action_map = { "signup" : SignupForm,
+                   "login" : LoginForm,
+                   "create" : CreateForm,
+                   "edit": EditForm }
 
-  def __init__(self, uie, page):
-    super(SignupForm, self).__init__(uie=uie)
-    self.name = uie['container_info']['form']['name']
-    self.uie = uie
-    self.page = page
-    self.nodes = []
-    self.entity_name = 'UserProfile'
+    sub_cls = action_map[ uie['container_info']['action'] ]
+    self = sub_cls.create(uie, page)
 
-  def resolve_fields(self, user_model):
-    user_fields = Manager(Model)
-    user_fields._objects = user_model.fields
-    for f in self.included_fields:
-      f_check = user_fields.get_by_name(f['name'])
-      if f_check is not None:
-        f['real_field'] = f_check
-      else:
-        raise Exception("What kind of field is %s" % f)
-
-
-class EditForm(Form):
-  """Edit a model instance form."""
-  def __init__(self, uie, page):
-    self.name = "Form{}".format(id(uie))
-    # put the info here
-    self.uie = uie
-    self.nodes = [ Node(n, page) for n in uie['container_info']['uielements'] ]
-    self.page = page
-
-class CreateForm(Form):
-  """Create a model instance form."""
-  def __init__(self, uie, page):
-    super(CreateForm, self).__init__(uie=uie)
-    self.uie = uie
-    self.page = page
-    self.nodes = []
-    self.entity_name = uie['container_info']['entity']
+    return self
 
   def resolve_entity(self, analyzed_app):
-    self.entity = analyzed_app.models.get_by_name(self.entity_name)
-    assert self.entity is not None, "Model not found: %s" % self.entity_name
+    """Links the fields in the form dict to the actual model fields"""
 
-    self.included_fields = []
-    # this is the one that has the display info and all for the form fields
-    expanded_form_dict = analyzed_app.backend_forms.get_by_name(self.name)
-    assert expanded_form_dict is not None, "ruh roh, couldn't find the form called %s" % self.name
+    self.model = analyzed_app.models.get_by_name(self.entity)
+    assert self.model is not None, "Model not found: %s" % self.entity
 
-    self.included_fields = expanded_form_dict['fields']
+    # these are the fields from the form dict
+    self.action = self.action
     f_manager = Manager(Field)
-    f_manager._objects = self.entity.fields
+    # these are the fields from self.model
+    f_manager._objects = self.model.fields
     for f in self.included_fields:
-      f_check = f_manager.get_by_name(f['name'])
-      assert f_check is not None, "ruh roh, field called %s is not an actual field in the model" % f['name']
-      f['real_field'] = f_check
+      f_check = f_manager.get_by_name(f.name)
+      assert f_check is not None or f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
+      f.model_field = f_check
+
+class LoginForm(Form):
+  required_fields = ("username", "password")
+  pass
+
+class SignupForm(Form):
+  required_fields = ("username", "password1", "password2", "email")
+  pass
+
+class EditForm(Form):
+  pass
+
+class CreateForm(Form):
+  pass
 
 class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.
@@ -358,15 +385,26 @@ class AnalyzedApp:
     self.backend_forms = Manager(object)
     for e in app_state['entities']:
       for f in e['forms']:
+        f['entity'] = e['name']
         self.backend_forms.add(f)
-    self.backend_forms._objects.extend(app_state['users']['forms'])
+      for f in app_state['users']['forms']:
+        f['entity'] = 'User'
+        self.backend_forms.add(f)
+
+    # replace the form name with a reference to the actual form dictionary.
+    for page in app_state['pages']:
+      for uie in page['uielements']:
+        if uie['container_info'] is not None:
+          if 'form' in uie['container_info']:
+            uie['container_info']['form'] = self.backend_forms.get_by_name(\
+                                              utils.extract_from_brace(uie['container_info']['form']))
 
     # given user settings, create some models
     base_user = { "name": "User" }
     if app_state['users']['local']:
       self.local_login = True
       base_user['fields'] = app_state['users']['fields']
-      m = Model.create(base_user)
+      m = Model.create_user(base_user)
       self.models.add(m)
 
     if app_state['users']['facebook']:
@@ -428,11 +466,8 @@ class AnalyzedApp:
     for p in self.pages.each():
       for uie in p.uielements:
         if isinstance(uie, Form):
-          if isinstance(uie, CreateForm):
-            uie.resolve_entity(self)
-          if isinstance(uie, SignupForm):
-            pass
-            #uie.resolve_fields(self)
+          uie.resolve_entity(self)
+          uie.check_required_fields()
           self.forms.add(uie)
 
   def init_queries(self, app_state):
