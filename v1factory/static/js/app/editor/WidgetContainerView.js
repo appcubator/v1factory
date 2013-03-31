@@ -6,6 +6,7 @@ define([
   'editor/SubWidgetView',
   'app/views/FormEditorView',
   'backbone',
+  'backboneui',
   'editor/editor-templates'
 ],
 function(WidgetCollection,
@@ -14,6 +15,7 @@ function(WidgetCollection,
         WidgetView,
         SubWidgetView,
         FormEditorView,
+        BackboneUI,
         Backbone) {
 
   var WidgetContainerView = WidgetView.extend({
@@ -31,23 +33,24 @@ function(WidgetCollection,
     initialize: function(widgetModel) {
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
       var self = this;
-      _.bindAll(this, 'placeWidget', 'placeFormElement', 'renderElements', 'showDetails');
+      _.bindAll(this, 'render', 'reRender', 'placeWidget', 'placeFormElement', 'renderElements', 'showDetails');
 
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
 
       if(this.model.get('container_info').has('query')) {
-        this.model.get('container_info').get('query').bind('change', this.render);
+        this.model.get('container_info').get('query').bind('change', this.reRender);
       }
 
       if(this.model.get('container_info').has('row')) {
-        this.model.get('container_info').get('row').get('layout').bind('change', this.render);
+        this.model.get('container_info').get('row').get('layout').bind('change', this.reRender);
         //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
         //this.rowBindings();
       }
 
       this.render();
+      console.log(this.resizableAndDraggable);
       this.resizableAndDraggable();
       this.renderElements();
     },
@@ -55,7 +58,7 @@ function(WidgetCollection,
     rowBindings: function() {
       console.log("BIND");
       _(this.model.get('container_info').get('row').get('uielements').models).each(function(element) {
-        element.bind('change', self.render);
+        element.bind('change', self.reRender);
       });
     },
 
@@ -90,6 +93,16 @@ function(WidgetCollection,
       //this.resizableAndDraggable();
 
       return this;
+    },
+
+    reRender: function() {
+      $( this.el ).resizable( "destroy" );
+      $( this.el ).draggable( "destroy" );
+
+      this.render();
+      console.log(this.resizableAndDraggable);
+      this.resizableAndDraggable();
+      this.renderElements();
     },
 
     placeWidget: function(model, a) {

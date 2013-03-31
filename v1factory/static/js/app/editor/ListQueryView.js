@@ -88,7 +88,8 @@ define([
         rLastNmr  : rLastNmr,
         rLast     : rLast,
         rAll      : rAll,
-        rAllNmr   : rAllNmr
+        rAllNmr   : rAllNmr,
+        row       : true
       };
 
       var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.queryModel, row: self.rowModel, c: checks});

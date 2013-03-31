@@ -105,7 +105,7 @@ Templates.fieldNode = [
 ].join('\n');
 
 Templates.queryView = [
-  '<h1 class="title"><%= entity.get(\'name\') %> <% if(row) { print(\'List\'); } else { print(\'Table\'); } %></h1>',
+  '<h1 class="title"><%= entity.get(\'name\') %> <% if(c.row) { print(\'List\'); } else { print(\'Table\'); } %></h1>',
   '<hr>',
   '<p>What fields would you like to display?</p>',
 
