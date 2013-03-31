@@ -1,1 +1,4 @@
-{% extends "container_form.html" %}
+<form method="POST" {% if context.__class__.__name__ == "LoginForm" %}action="{{ '{%' }} url django.contrib.auth.views.login {{ '%}' }}"{% else %}action="{{ '{%' }} url {{ context.form_receiver.view_path() }} {{ '%}' }}"{% endif %}>
+{% include "formfields.html" %}
+<input type="submit" value="Login" class="btn"/>
+</form>
