@@ -1,8 +1,13 @@
 define([
+  'require',
   'app/collections/FieldsCollection',
   'app/collections/FormCollection',
   'backbone'
-], function(FieldsCollection, FormCollection) {
+], function(require) {
+  //FieldsCollection, FormCollection
+  var FieldsCollection = require('app/collections/FieldsCollection');
+  var FormCollection   = require('app/collections/FormCollection');
+  var Backbone         = require('backbone');
 
   var EntityModel = Backbone.Model.extend({
       initialize: function(bone) {

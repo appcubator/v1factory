@@ -1,6 +1,7 @@
 define([
-  '../models/UIElementModel'
-],function(UIElementModel) {
+  'app/models/UIElementModel'
+],
+function(UIElementModel) {
 
   var ElementCollection = Backbone.Collection.extend({
     model : UIElementModel

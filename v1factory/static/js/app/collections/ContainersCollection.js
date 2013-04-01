@@ -1,9 +1,12 @@
 define([
   'app/models/ContainerWidgetModel',
   'backbone'
-],function(ContainerWidgetModel, Backbone) {
+],
+function(ContainerWidgetModel,
+         Backbone) {
 
   var ContainersCollection = Backbone.Collection.extend({
+
     model : ContainerWidgetModel,
     selectedEl: null,
 
@@ -28,6 +31,7 @@ define([
     },
 
     selectedChanged : function(model) {
+      this.trigger('selectedChanged');
     },
 
     select : function(model) {

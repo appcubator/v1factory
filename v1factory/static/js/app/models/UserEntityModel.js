@@ -35,7 +35,7 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       json = _.clone(this.attributes);
       json.fields = this.get('fields').toJSON();
       json.fields = _.uniq(json.fields, function(val) { return val.name; });
-
+      json.forms = this.get('forms').toJSON();
       return json;
     }
   });
