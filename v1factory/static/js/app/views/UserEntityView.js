@@ -7,7 +7,7 @@ define([
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
   'app/collections/EntityCollection'
-], 
+],
   function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
 
     var UserEntityView = EntityView.extend({
@@ -20,7 +20,7 @@ define([
         'click .prop-cross'          : 'clickedPropDelete',
         'change .attribs'            : 'changedAttribs',
         'click .remove-form'         : 'clickedFormRemove',
-        'click .upload-excel'        : 'clickedUploadExcel',
+        'click .excel'               : 'clickedUploadExcel',
         'click .show-data'           : 'showData',
         'click .edit-form'           : 'clickedEditForm',
         'click .add-form-button'     : 'clickedAddForm',

@@ -24,7 +24,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
       'click #cross'               : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
       'click .remove-form'         : 'clickedFormRemove',
-      'click .upload-excel'        : 'clickedUploadExcel',
+      'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
       'click .edit-form'           : 'clickedEditForm'
     },
