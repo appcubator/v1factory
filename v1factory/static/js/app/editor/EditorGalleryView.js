@@ -270,7 +270,7 @@ function(ElementCollection,
         widget.container_info.entity = entity;
         widget.container_info.action = action;
         if(form) {
-          widget.container_info.form = form;
+          widget.container_info.form = '{{' + form.get('name') + '}}';
         }
 
         this.containersCollection.push(widget);

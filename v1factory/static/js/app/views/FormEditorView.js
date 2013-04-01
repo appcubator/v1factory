@@ -23,7 +23,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'keydown .options-input' : 'changedOptions'
     },
 
-    initialize: function(formModel, entityModel) {
+    initialize: function(formModel, entityModel, callback) {
       _.bindAll(this, 'render',
                       'fieldBoxChanged',
                       'fieldAdded',
@@ -47,6 +47,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
         this.selectedNew(_.last(this.model.get('fields').models));
       }
 
+      this.callback = callback;
     },
 
     render : function(text) {

@@ -38,6 +38,7 @@ function(WidgetModel,
 
       var self = this;
 
+      console.log(bone);
       this.set('container_info', new ContainerInfoModel(this.get('container_info')));
 
       if(this.get('container_info').get('uielements').length || this.get('container_info').has('query')) {
@@ -136,67 +137,6 @@ function(WidgetModel,
         };
 
         widgetProps.content_attribs.value = 'Add ' + self.get('container_info').entity;
-        var widget = new WidgetModel(widgetProps);
-        self.get('container_info').get('uielements').push(widget);
-      },
-      'signup' : function() {
-        var self = this;
-        self.get('container_info').set('uielements', new WidgetCollection());
-
-        var coordinates = iui.unite({x: 1,
-                                     y: 1 },
-                                    {x: self.get('layout').get('width') + 1,
-                                     y: 1 });
-        var type = "text-input";
-        var widgetProps = uieState[type][0];
-        widgetProps.type = type;
-        widgetProps.deletable = false;
-        widgetProps.content_attribs.placeholder = "Username...";
-        widgetProps.layout = {
-            top   : coordinates.topLeft.y,
-            left  : coordinates.topLeft.x,
-            width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-            height: 4
-        };
-
-        var widget = new WidgetModel(widgetProps);
-        self.get('container_info').get('uielements').push(widget);
-
-        var coordinates = iui.unite({x: 1,
-                                     y: 5 },
-                                    {x: self.get('layout').get('width') + 1,
-                                     y: 5 });
-        var type = "password";
-        var widgetProps = uieState['password'][0];
-        widgetProps.type = type;
-        widgetProps.deletable = false;
-        widgetProps.content_attribs.placeholder = "Password...";
-        widgetProps.layout = {
-            top   : coordinates.topLeft.y,
-            left  : coordinates.topLeft.x,
-            width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-            height: 4
-        };
-
-        var widget = new WidgetModel(widgetProps);
-        self.get('container_info').uielements.push(widget);
-
-        var coordinates = iui.unite({x: 1,
-                                     y: 9 },
-                                    {x: self.get('layout').get('width') + 1,
-                                     y: 9 });
-        var type = "button";
-        var widgetProps = uieState[type][0];
-        widgetProps.type = type;
-        widgetProps.deletable = false;
-        widgetProps.content_attribs.value = "Sign Up";
-        widgetProps.layout = {
-            top   : coordinates.topLeft.y,
-            left  : coordinates.topLeft.x,
-            width : coordinates.bottomRight.x - coordinates.topLeft.x -1,
-            height: 4
-        };
-
         var widget = new WidgetModel(widgetProps);
         self.get('container_info').get('uielements').push(widget);
       },

@@ -33,7 +33,13 @@ function(WidgetCollection,
     initialize: function(widgetModel) {
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
       var self = this;
-      _.bindAll(this, 'render', 'reRender', 'placeWidget', 'placeFormElement', 'renderElements', 'showDetails');
+      _.bindAll(this, 'render',
+                      'reRender',
+                      'placeWidget',
+                      'placeFormElement',
+                      'renderElements',
+                      'showDetails',
+                      'formEditorClosed');
 
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
@@ -49,14 +55,18 @@ function(WidgetCollection,
         //this.rowBindings();
       }
 
+      console.log(this.model.get('container_info'));
+      if(this.model.get('container_info').has('form')) {
+        var form = this.model.get('container_info').get('entity').getFormWithName(this.model.get('container_info').get('form'));
+        this.formModel = form;
+      }
+
       this.render();
-      console.log(this.resizableAndDraggable);
       this.resizableAndDraggable();
       this.renderElements();
     },
 
     rowBindings: function() {
-      console.log("BIND");
       _(this.model.get('container_info').get('row').get('uielements').models).each(function(element) {
         element.bind('change', self.reRender);
       });
@@ -122,7 +132,7 @@ function(WidgetCollection,
       });
 
       if(this.model.get('container_info').has('form')) {
-        _(this.model.get('container_info').get('form').get('fields').models).each(function(field) {
+        _(this.formModel.get('fields').models).each(function(field) {
           self.placeFormElement(field);
         });
       }
@@ -133,14 +143,37 @@ function(WidgetCollection,
         new TableQueryView(this.model, this.model.get('container_info').get('query'));
       }
       if(this.model.get('container_info').has('form')) {
-        new FormEditorView(this.model.get('container_info').get('form'),
-                           this.model.get('container_info').get('entity'));
+        console.log(this.model.get('container_info').get('entity'));
+        console.log(this.model.get('container_info').get('entity'));
+        new FormEditorView(this.formModel,
+                           this.model.get('container_info').get('entity'),
+                           this.formEditorClosed);
       }
 
       if(this.model.get('container_info').has('row')) {
         new ListQueryView(this.model,
                           this.model.get('container_info').get('query'),
                           this.model.get('container_info').get('row'));
+      }
+    },
+
+    formEditorClosed: function() {
+      var self = this, index, entityName;
+      entityName = this.model.get('container_info').get('entity').get('name');
+
+      // todo: hacky as hell
+      if(entityName == "User") {
+        var form = _.findWhere(appState.users.forms, {name: self.formModel.get('name')});
+        index    = _.indexOf(appState.users.forms, form);
+        form     = this.formModel.toJSON();
+        appState.users.forms[index] = form;
+      }
+      else {
+        var entityVal = _.findWhere(appState.entities, {name: entityName});
+        indexEnt      = _.indexOf(appState.entities, entityVal);
+        var formVal   = _.findWhere(appState.entities[indexEnt], entityVal);
+        index         = _.indexOf(appState.entities[indexEnt].forms, formVal);
+        appState.entities[indexEnt].forms[index] = this.formModel.toJSON();
       }
     }
   });

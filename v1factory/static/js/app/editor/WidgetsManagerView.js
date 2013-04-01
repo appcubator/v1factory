@@ -32,14 +32,16 @@ define([
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
 
-      _(page.uielements).each(function(element) {
-        if(element.container_info) {
-          self.containersCollection.add(element, self.widgetsCollection);
-        }
-        else {
-          self.widgetsCollection.add(element);
-        }
-      });
+      if(page.uielements) {
+        _(page.uielements).each(function(element) {
+          if(element.container_info) {
+            self.containersCollection.add(element, self.widgetsCollection);
+          }
+          else {
+            self.widgetsCollection.add(element);
+          }
+        });
+      }
     },
 
     render: function() {
