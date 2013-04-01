@@ -1,13 +1,10 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-    <script type="text/javascript" src="//use.typekit.net/kqa1all.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
-    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css">
 {% endblock %}
 
 {% block topbar %}
@@ -15,83 +12,103 @@
 {% endblock %}
 
 {% block page %}
-<a class="btn span6 save-btn" id="save-entities"></a>
+<a class="span6 save-btn" id="save-entities"></a>
 <div class="container hoff6" id="entities-page">
   <div class="row hoff1">
     <ul class="span6 hoff1 sub-menu">
-      <li class="show-data hi4">Show User Data</li>
-      <li class="hi4">Upload Excel</li>
-      <li class="hi4">Delete</li>
+      <li class="show-data hi6 show-data">
+        Show User Data
+      </li>      
     </ul>
-    <div class="span58 entity-pane pane">
-      <div class="" id="user-entity">
-        <div class="hoff2 offset1">
-          <h2 class="">User</h2>
-        </div>
-        <h3 class="offset1 hoff1">Description</h3>
-        <span class="tbl-wrapper span58 hoff1">
-          <span class="tbl">
-            <div class="column span6">
-              <div class="hi3 hdr">Property</div>
-              <div class="hi3">Type</div>
-              <div class="hi2">Is Required?</div>
-            </div>
-            <div class="column span6">
-              <div class="hi3 hdr">First Name</div>
-              <div class="hi3">
-                  <select class="attribs" id="Name" disabled>
-                    <option value="text" selected="">Text</option>
-                  </select>
-              </div>
-              <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
-            </div>
-            <div class="column span6">
-              <div class="hi3 hdr">Last Name</div>
-              <div class="hi3">
-                  <select class="attribs" id="Name" disabled>
-                    <option value="text" selected="">Text</option>
-                  </select>
-              </div>
-              <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
-            </div>
-            <div class="column span6">
-              <div class="hi3 hdr">Email</div>
-              <div class="hi3">
-                  <select class="attribs" id="Name" disabled>
-                    <option value="email" selected="">Email</option>
-                  </select>
-              </div>
-              <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
-            </div>
-            <ul class="property-list"></ul><a class="column span8 right add-property-column">
-                <form class="add-property-form" style="display:none">
-                  <div class="hi2 hdr">
-                    <input type="text" class="property-name-input span7" placeholder="Property Name...">
-                  </div>
-                </form>
-                <span class="add-property-button"><span class="plus">+</span> Add Property</span>
-            </a>
+    <div class="span58 entity-pane pane" id="user-entity">
+
+        <div style="display:inline-block;">
+          <div class="hoff2 offset2 span42">
+            <h2 class="">User</h2>
+          </div>
+          <span class="span13 right right hoff2 right-panel">
+            <span class="span5 hi5 excel right-icon">
+              <span class="icon"></span>
+              <span>Upload Excel</span>
+            </span>
+            <span class="span5 hi5 delete right-icon offset1">
+              <span class="icon"></span>
+              <span>Delete</span>
+            </span>
           </span>
-        </span>
-        <div class="span58 hi15">
-          <h3 class="offset1 hoff2">Forms</h3>
-          <div class="hoff1 offset1 span8">
+        </div>
+        <br>
+        <hr style="display:block;">
+        <div class="description">
+          <h3 class="offset2 hoff1 span58">Description</h3>
+          <span class="tbl-wrapper span54 hoff1 offset2">
+            <span class="tbl">
+              <div class="column span6">
+                <div class="hi3 hdr">Property</div>
+                <div class="hi3 desc">Type</div>
+                <div class="hi2 desc">Is Required?</div>
+              </div>
+              <div class="column span6">
+                <div class="hi3 hdr">First Name</div>
+                <div class="hi3">
+                    <select class="attribs" id="Name" disabled>
+                      <option value="text" selected="">Text</option>
+                    </select>
+                </div>
+                <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
+              </div>
+              <div class="column span6">
+                <div class="hi3 hdr">Last Name</div>
+                <div class="hi3">
+                    <select class="attribs" id="Name" disabled>
+                      <option value="text" selected="">Text</option>
+                    </select>
+                </div>
+                <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
+              </div>
+              <div class="column span6">
+                <div class="hi3 hdr">Email</div>
+                <div class="hi3">
+                    <select class="attribs" id="Name" disabled>
+                      <option value="email" selected="">Email</option>
+                    </select>
+                </div>
+                <div class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin"></div>
+              </div>
+              <ul class="property-list"></ul><a class="column span8 add-property-column">
+                  <form class="add-property-form" style="display:none">
+                    <div class="hi2 hdr">
+                      <input type="text" class="property-name-input span7" placeholder="Property Name...">
+                    </div>
+                  </form>
+                  <span class="plus-icon"></span><span class="add-property-button">Add Property</span>
+              </a>
+            </span>
+          </span>
+        </div>
+        
+        <div class="span58 hi15" id="forms">
+          <hr style="display:block; width:100%;" class="hoff1">
+          <h3 class="offset hoff2 offset2">Forms</h3>
+          <div class="hoff1 offset2 span10">
             <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
             <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
             <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
           </div>
           <ul class="form-list offset1 hoff1">
           </ul>
-          <a class="span8 hi15" style="float:none;">
+          <a class="span10 hi9 form-pane" style="float:none;">
             <form class="add-form-form" style="display:none">
-              <div class="hi2 hdr">
+              <div class="hi8 hdr">
                 <input type="text" class="form-name-input span7" placeholder="Form Name...">
               </div>
             </form>
-            <span class="add-form-button offset1"><span class="plus">+</span> Add New Form</span>
+            <span class="add-form-button">
+              <span class="plus">+</span><br>
+            Add New Form</span>
           </a>
         </div>
-      </div>
+
     </div>
   </div>
 
@@ -100,14 +117,12 @@
   <div id="entities-container">
     <ul id="entities" class="entity-list">
     </ul><div id="add-entity-button" class="add-entity offset6 span58">
-      <span class="hi10 hoff1"><p class="hoff4"> + Add New Entity</p></span>
+      <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
     </div>
-    <form id="add-entity-form" class="offset3 span58 entity hoff1" style="display:none;">
-      <div class="pane">
-        <span class="sub-title">
+    <form id="add-entity-form" class="pane offset6 span58 hi10 entity hoff1" style="display:none;">
+        <span class="sub-title offset1 hoff2">
           <input type="text" id="entity-name-input" placeholder="Entity Name">
         </span>
-      </div>
     </form>
   </div>
 

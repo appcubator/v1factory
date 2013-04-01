@@ -56,8 +56,6 @@ function(WidgetCollection,
         json.query = this.get('query').toJSON();
       }
 
-      console.log(json.form);
-
       if(json.form) {
         json.form = '{{' + this.get('form').get('name') + '}}';
       }

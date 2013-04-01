@@ -6,6 +6,7 @@ define([
   'editor/SubWidgetView',
   'app/views/FormEditorView',
   'backbone',
+  'backboneui',
   'editor/editor-templates'
 ],
 function(WidgetCollection,
@@ -14,6 +15,7 @@ function(WidgetCollection,
         WidgetView,
         SubWidgetView,
         FormEditorView,
+        BackboneUI,
         Backbone) {
 
   var WidgetContainerView = WidgetView.extend({
@@ -30,19 +32,34 @@ function(WidgetCollection,
 
     initialize: function(widgetModel) {
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
-      _.bindAll(this, 'placeWidget', 'placeFormElement', 'renderElements', 'showDetails');
+      var self = this;
+      _.bindAll(this, 'render', 'reRender', 'placeWidget', 'placeFormElement', 'renderElements', 'showDetails');
 
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
 
       if(this.model.get('container_info').has('query')) {
-        this.model.get('container_info').get('query').bind('change', this.render);
+        this.model.get('container_info').get('query').bind('change', this.reRender);
+      }
+
+      if(this.model.get('container_info').has('row')) {
+        this.model.get('container_info').get('row').get('layout').bind('change', this.reRender);
+        //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
+        //this.rowBindings();
       }
 
       this.render();
+      console.log(this.resizableAndDraggable);
       this.resizableAndDraggable();
       this.renderElements();
+    },
+
+    rowBindings: function() {
+      console.log("BIND");
+      _(this.model.get('container_info').get('row').get('uielements').models).each(function(element) {
+        element.bind('change', self.reRender);
+      });
     },
 
     render: function() {
@@ -67,7 +84,6 @@ function(WidgetCollection,
       if(this.model.get('container_info').get('action') == "show") {
         var listDiv = document.createElement('div');
         var row = this.model.get('container_info').get('row');
-        console.log(Templates.listNode);
         listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'), uielements: row.get('uielements').models});
         this.el.appendChild(listDiv);
         // tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
@@ -77,6 +93,16 @@ function(WidgetCollection,
       //this.resizableAndDraggable();
 
       return this;
+    },
+
+    reRender: function() {
+      $( this.el ).resizable( "destroy" );
+      $( this.el ).draggable( "destroy" );
+
+      this.render();
+      console.log(this.resizableAndDraggable);
+      this.resizableAndDraggable();
+      this.renderElements();
     },
 
     placeWidget: function(model, a) {
@@ -107,13 +133,11 @@ function(WidgetCollection,
         new TableQueryView(this.model, this.model.get('container_info').get('query'));
       }
       if(this.model.get('container_info').has('form')) {
-        console.log(this.model.get('container_info').get('form'));
         new FormEditorView(this.model.get('container_info').get('form'),
                            this.model.get('container_info').get('entity'));
       }
 
       if(this.model.get('container_info').has('row')) {
-        console.log(this.model.get('container_info').get('row'));
         new ListQueryView(this.model,
                           this.model.get('container_info').get('query'),
                           this.model.get('container_info').get('row'));

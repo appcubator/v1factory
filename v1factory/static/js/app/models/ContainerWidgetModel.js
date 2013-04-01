@@ -45,7 +45,7 @@ function(WidgetModel,
       }
 
       if(this.get('container_info').has('form')) {
-        console.log(this.get('container_info').get('form'));
+        //console.log(this.get('container_info').get('form'));
       }
       else if(constantContainers[this.get('container_info').get('action')]) {
         this.get('container_info').set('uielements',  new WidgetCollection());
@@ -58,7 +58,6 @@ function(WidgetModel,
         });
       }
       else {
-        console.log(this.get('container_info').get('action'));
         this.containerHandler[this.get('container_info').get('action')].call(this);
         if(this.get('container_info').get('action') == 'table') { };
       }

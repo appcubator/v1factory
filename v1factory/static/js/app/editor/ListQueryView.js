@@ -20,6 +20,7 @@ define([
       var self = this;
 
       _.bindAll(this, 'render',
+                      'renderConstants',
                       'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
@@ -30,9 +31,6 @@ define([
                       'resized',
                       'resizing');
 
-      console.log(widgetModel);
-      console.log(rowModel);
-
       this.widgetModel = widgetModel;
       this.queryModel  = queryModel;
       this.rowModel    = rowModel;
@@ -42,20 +40,21 @@ define([
       this.widgetsCollection = this.rowModel.get('uielements');
 
       this.widgetsCollection.bind('add', this.placeWidget);
-      
+
+      console.log(this.rowModel);
+
+      this.rowModel.get('layout').bind('change', this.renderConstants);
+      this.queryModel.bind('change', this.renderConstants);
+      this.rowModel.bind('change', this.renderConstants);
+
       this.render();
 
       _(self.widgetsCollection.models).each(function(widgetModel) {
-        console.log(widgetModel);
+        widgetModel.bind('change', self.renderConstants);
         self.placeWidget(widgetModel);
       });
 
-      for(var ii=0; ii <2; ii++) {
-        var html = _.template(Templates.rowNode, { layout: self.rowModel.get('layout'), 
-                                          uielements: self.rowModel.get('uielements').models });
-        $('.list-editor-container').append(html);
-      }
-
+      this.renderConstants();
     },
 
     render: function() {
@@ -89,19 +88,16 @@ define([
         rLastNmr  : rLastNmr,
         rLast     : rLast,
         rAll      : rAll,
-        rAllNmr   : rAllNmr
+        rAllNmr   : rAllNmr,
+        row       : true
       };
 
-      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.queryModel, c: checks});
+      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.queryModel, row: self.rowModel, c: checks});
       contentHTML += '<input type="submit" value="Done">';
       div.innerHTML = contentHTML;
 
       var editorDiv = document.createElement('div');
       editorDiv.className = 'list-editor-container';
-      //var listEditorHTML = _.template(Templates.listEditorView, {entity: self.entity, query: self.queryModel, c: checks});
-      //editorDiv.innerHTML = listEditorHTML;
-
-      console.log(this.rowModel.get('layout').get('width'));
 
       var rowWidget = document.createElement('div');
       this.rowWidget = rowWidget;
@@ -110,13 +106,22 @@ define([
       rowWidget.className += (' hi' + this.rowModel.get('layout').get('height'));
       editorDiv.appendChild(rowWidget);
 
-      console.log(iui);
-
       iui.resizable(rowWidget, self);
 
       this.el.appendChild(div);
       this.el.appendChild(editorDiv);
       return this;
+    },
+
+    renderConstants: function() {
+      var self = this;
+      console.log(self.widgetsCollection);
+      $('.constant-elements').remove();
+      for(var ii=0; ii <2; ii++) {
+        var html = _.template(Templates.rowNode, { layout: self.rowModel.get('layout'),
+                                          uielements: self.widgetsCollection.models });
+        $('.list-editor-container').append('<div class="constant-elements">'+html+'</div>');
+      }
     },
 
     fieldsToDisplayChanged: function(e) {
@@ -128,6 +133,7 @@ define([
         fieldsArray = _.uniq(fieldsArray);
       }
       else {
+        console.log("UNCHECK!");
         this.removedWidget(e.target.id);
         fieldsArray = _.difference(fieldsArray, e.target.value);
       }
@@ -138,7 +144,6 @@ define([
     addedWidget: function(fieldId) {
       var cid = String(fieldId).replace('field-', '');
       var fieldModel = this.entity.get('fields').get(cid);
-      
 
       var widget = {};
       widget.layout = {
@@ -161,8 +166,19 @@ define([
     removedWidget: function(fieldId) {
       var self = this;
       var cid = String(fieldId).replace('field-', '');
+      console.log(cid);
       console.log(this.widgetsCollection);
-      var widget = this.widgetsCollection.where({field: cid})[0];      
+      var widget = this.widgetsCollection.where({field: cid})[0];
+
+      if(!widget) {
+        //this.queryModel.get('fieldsToDisplay').get('')
+        var model = this.entity.get('fields').get(cid);
+        console.log(this.widgetsCollection);
+        //console.log()
+        widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '_' + model.get('name') + '}}'})[0];
+      }
+
+      console.log(widget);
       this.widgetsCollection.remove(widget);
       widget.remove();
     },
@@ -208,6 +224,14 @@ define([
     },
 
     placeWidget: function(widgetModel) {
+      console.log('widget model:');
+      console.log(widgetModel);
+
+
+      //var content = String(widgetModel.get('content')).split('_')[1].replace('}}','');
+      //this.queryModel.get('fieldsToDisplay')
+      //widgetModel.field = ;
+
       var curWidget = new WidgetView(widgetModel);
 
       if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);
@@ -218,13 +242,12 @@ define([
     resized: function() {
       // this.rowWidget.style.width ='';
       // this.rowWidget.style.height = '';
-      console.log("ressss");
       this.rowWidget.style.width = '';
       this.rowWidget.style.height ='';
       this.rowWidget.className = 'editor-window container-wrapper ';
       this.rowWidget.className += 'span' + this.rowModel.get('layout').get('width');
       this.rowWidget.style.height = (this.rowModel.get('layout').get('height') * GRID_HEIGHT) + 'px';
-
+      this.rowWidget.style.position = "relative";
     },
 
     resizing: function(e, ui) {
@@ -234,10 +257,8 @@ define([
       var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
 
-      console.log(this.rowModel);
       this.rowModel.get('layout').set('width', deltaWidth);
       this.rowModel.get('layout').set('height', deltaHeight);
-      console.log("ressss");
     }
   });
 
