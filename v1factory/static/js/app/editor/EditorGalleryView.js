@@ -1,7 +1,8 @@
 define([
   'app/collections/ElementCollection',
   'app/models/UserEntityModel',
-  'backbone'
+  'backbone',
+  'iui'
 ],
 function(ElementCollection,
          UserEntityModel,
