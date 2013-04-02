@@ -225,8 +225,8 @@ body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  line-height: 20px;
-  color: #333333;
+/*  line-height: 1.1em;
+*/  color: #333333;
   background-color: #ffffff;
 }
 
@@ -816,8 +816,8 @@ h6 {
   margin: 0 0;
   font-family: inherit;
   font-weight: bold;
-  line-height: 20px;
-  color: inherit;
+/*  line-height: 20px;
+*/  color: inherit;
   text-rendering: optimizelegibility;
 }
 
@@ -835,8 +835,8 @@ h6 small {
 h1,
 h2,
 h3 {
-  line-height: 40px;
-}
+/*  line-height: 40px;
+*/}
 
 h1 {
   font-size: 38.5px;
@@ -898,8 +898,8 @@ ol ul {
 }
 
 li {
-  line-height: 20px;
-}
+/*  line-height: 20px;
+*/}
 
 ul.unstyled,
 ol.unstyled {
@@ -1172,8 +1172,8 @@ input[type="color"],
   padding: 4px 6px;
   margin-bottom: 10px;
   font-size: 14px;
-  line-height: 20px;
-  color: #555555;
+/*  line-height: 20px;
+*/  color: #555555;
   vertical-align: middle;
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
@@ -1268,8 +1268,8 @@ input[type="file"] {
   *margin-top: 4px;
   /* For IE7, add top margin to align select with labels */
 
-  line-height: 30px;
-}
+/*  line-height: 30px;
+*/}
 
 select {
   width: 220px;
