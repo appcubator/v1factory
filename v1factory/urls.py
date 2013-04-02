@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page":"/"}),
     url(r'^connect_with/$', 'v1factory.base_views.get_linkedin'),
     url(r'^signup/$', 'v1factory.base_views.signup'),
+    url(r'^highland/$', 'v1factory.base_views.highland_view'),
 )
 
 urlpatterns += patterns('v1factory.views',

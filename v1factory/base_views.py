@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpRequest
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect,render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import forms, authenticate, login
@@ -28,6 +29,7 @@ def send_login_notification_message(message):
 
 # Handle requests
 @require_POST
+@csrf_exempt
 def get_linkedin(request):
   r = send_login_notification_message(format_full_details(request.POST))
   return HttpResponse("ok")
@@ -68,3 +70,7 @@ def signup(request):
       return redirect('/')
     else:
       return HttpResponse(simplejson.dumps({ k : v for k,v in form.errors.items() }), mimetype="application/json")
+
+
+def highland_view(request):
+  return redirect('/')
