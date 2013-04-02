@@ -72,9 +72,9 @@ class DjangoTemplate(Renderable):
         f = m.fields.get_by_name(match.group(2))
         if m.name == 'User':
           if f.name == 'username':
-            return '{{User.username}}'
+            return '{{user.username}}'
           else:
-            return '{{User.get_profile.'+f.identifier()+'}}'
+            return '{{user.get_profile.'+f.identifier()+'}}'
         if single:
           return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
         else:
