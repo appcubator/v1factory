@@ -17,7 +17,7 @@ class DjangoView(object):
     return self
 
   def identifier(self):
-    return "view_"+self.name.replace(" ", "_")
+    return "view_"+self.name.replace(" ", "_").replace("-", "_")
 
   def view_path(self):
     return "webapp.views."+self.identifier()

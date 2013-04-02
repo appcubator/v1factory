@@ -403,9 +403,9 @@ class AnalyzedApp:
       for f in e['forms']:
         f['entity'] = e['name']
         self.backend_forms.add(f)
-      for f in app_state['users']['forms']:
-        f['entity'] = 'User'
-        self.backend_forms.add(f)
+    for f in app_state['users']['forms']:
+      f['entity'] = 'User'
+      self.backend_forms.add(f)
 
     # replace the form name with a reference to the actual form dictionary.
     for page in app_state['pages']:
