@@ -16,7 +16,7 @@ def {{ form_receiver.identifier() }}(request):
   if uform.is_valid() and pform.is_valid():
     user = uform.save()
     profile = pform.save(commit=False)
-    profile.user_field = user
+    profile.user = user
     profile.save()
 
     new_user = authenticate(username=request.POST['username'],

@@ -40,7 +40,7 @@ class DjangoModel(object):
     return self.name.lower()+"_id"
 
   def identifier(self):
-    return self.name.replace(' ', '_')
+    return self.name.replace('-', '_').replace(' ', '_')
 
   def import_line(self):
     return "from webapp.models import " + self.identifier()
@@ -64,6 +64,11 @@ class UserProfileModel(DjangoModel):
 
   def identifier(self):
     return "UserProfile"
+
+  def get_user_related_field(self):
+    for f in self.fields.each():
+      if isinstance(f, UserProfileUserField):
+        return f
 
 class DjangoField(object):
   """
@@ -115,7 +120,7 @@ class DjangoField(object):
 
   def identifier(self):
     """What will this field be referred to as a variable?"""
-    return self.name.replace(" ", "_").lower() + "_field"
+    return self.name.replace("-", "_").replace(" ", "_").lower() + "_field"
 
   def django_type(self):
     return DjangoField._type_map[self.field_type]
@@ -158,3 +163,6 @@ class UserProfileUserField(DjangoField):
 
   def kwargs(self):
     return { "blank": repr(True) }
+
+  def identifier(self):
+    return "user"

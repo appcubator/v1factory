@@ -59,7 +59,7 @@ class DjangoTemplate(Renderable):
     plain_old_nodes = filter(lambda x: isinstance(x, Node), self.page.uielements)
 
     def fix_the_string(s, single=False):
-      handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', s)
+      handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)_([ \w]+) ?\}\}', s)
       # check validity
       for mname, fname in handlebars_search:
         m = models.get_by_name(mname)
@@ -70,12 +70,17 @@ class DjangoTemplate(Renderable):
       def repl_handlebars(match):
         m = models.get_by_name(match.group(1))
         f = m.fields.get_by_name(match.group(2))
+        if m.name == 'User':
+          if f.name == 'username':
+            return '{{User.username}}'
+          else:
+            return '{{User.get_profile.'+f.identifier()+'}}'
         if single:
           return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
         else:
           return "{{ item."+f.identifier()+" }}"
       # replace the content.
-      return re.sub(r'\{\{ ?([A-Za-z0-9]+)_(\w+) ?\}\}', repl_handlebars, s)
+      return re.sub(r'\{\{ ?([A-Za-z0-9]+)_([ \w]+) ?\}\}', repl_handlebars, s)
 
     for uie in query_containers:
       for n in uie.nodes:
