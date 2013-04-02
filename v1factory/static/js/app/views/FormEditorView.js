@@ -35,7 +35,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
                       'renderField',
                       'clickedField',
                       'changedPlaceholder',
-                      'changedLabel');
+                      'changedLabel',
+                      'changedOrder');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -56,7 +57,10 @@ function(Backbone, BackboneUI, FormFieldModel) {
       var self = this;
       var html = _.template(FormEditorTemplates.template, { form: self.model, entity: self.entity});
       this.el.innerHTML = html;
-      $('.form-fields-list').sortable();
+
+      $('.form-fields-list').sortable({
+        stop: this.changedOrder
+      });
       return this;
     },
 
@@ -147,6 +151,16 @@ function(Backbone, BackboneUI, FormFieldModel) {
       var options = String(this.$el.find('.options-input').val()).split(',');
       this.selected.set('options', options);
       e.stopPropagation();
+    },
+
+    changedOrder:function(e, ui) {
+      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
+      for(var ii = 0; ii < sortedIDs.length; ii++) {
+        var cid = sortedIDs[ii].replace('field-','');
+        var elem = this.model.get('fields').get(cid);
+        this.model.get('fields').remove(elem);
+        this.model.get('fields').push(elem);
+      }
     }
   });
 
