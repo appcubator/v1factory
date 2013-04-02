@@ -6,6 +6,13 @@ import shlex
 import simplejson
 import re
 
+"""
+  A class that stores various utilities used across the v1factory stack.
+  This currently cotains the following utilities:
+  1) Brace Extraction, {{ Str }} => Str
+  2) Excel document related docs
+"""
+
 def extract_from_brace(s):
   "Takes a string out of the brace wrappers"
   m = re.match(r'\{\{(.+)\}\}', s)
@@ -13,10 +20,11 @@ def extract_from_brace(s):
   else:
     return m.groups()[0].strip()
 
+# Takes in an excel file object and returns a dictionary
+# with the schema, model name and data of the excel sheet.
 def get_xl_data(xl_file):
   xl_dict = dict()
-#  xf = xls.open_workbook(file_contents=xl_file.read())
-  xf = xls.open_workbook(xl_file)
+  xf = xls.open_workbook(file_contents=xl_file.read())
   for sheet_name in xf.sheet_names():
     curr_sheet = xf.sheet_by_name(sheet_name)
     schema = ['id']
@@ -37,6 +45,11 @@ def get_xl_data(xl_file):
       xl_dict[sheet_name]['data'] = data
   return xl_dict
 
+# Gets at most limit records from the model_name table at the 
+# database referenced by db_path. This returns a json representation
+# with two key value pairs - schema and data.
+# 
+# Makes raw SQL queries to the databases to fetch the data.
 def get_model_data(model_name, db_path, limit=100):
   model_name = model_name.lower()
   con = sql.connect(db_path)
@@ -60,12 +73,18 @@ def get_model_data(model_name, db_path, limit=100):
       if i == 0:
         schema_li.append(model_name + "_id")
       else:
+        # fix possible space issues
         schema_li.append(schema_fields[i][2:].replace('_', ' '))
   con.close()
   ans['schema'] = schema_li
   ans['data'] = li
   return simplejson.dumps(ans)
 
+# Populates the model_name table at the database at db_path with 
+# the records in the xl_data dictionary object. This object is returned
+# from the get_xl_data() call.
+# 
+# Makes raw SQL queries to the databases to add the data in.
 def add_xl_data(xl_data, db_path):
   con = sql.connect(db_path)
   cr = con.cursor()
@@ -98,7 +117,8 @@ class AppMessager:
       # Hack to make syncdb work.
       env["PATH"] = "/var/www/v1factory/venv/bin:" + env["PATH"]
     self.env = env
-  
+
+  # Ignores the return value of the command in message_string
   def run_void_cmd(self, message_string):
     echo_cmd = r"echo '%s'" % message_string
     cmd = r"python %s/manage.py shell" % self.app_dir
@@ -107,6 +127,7 @@ class AppMessager:
     p = subprocess.Popen(shlex.split(cmd), env=self.env, stdin=ps.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
 
+  # Returns the result of the command in message_string
   def run_cmd(self, message_string):
     echo_cmd = r"echo '%s'" % message_string
     cmd = r"python %s/manage.py shell" % self.app_dir

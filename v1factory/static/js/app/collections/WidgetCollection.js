@@ -1,9 +1,12 @@
 define([
   'app/models/WidgetModel',
   'backbone'
-],function(WidgetModel, Backbone) {
+],
+function(WidgetModel,
+         Backbone) {
 
   var WidgetCollection = Backbone.Collection.extend({
+
     model : WidgetModel,
     selectedEl: null,
 

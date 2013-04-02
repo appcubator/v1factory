@@ -178,6 +178,7 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     closeModal: function() {
+      if(this.callback) this.callback();
       if(this.onClose) this.onClose();
       this.$el.remove();
       $(this.backgroundDiv).remove();

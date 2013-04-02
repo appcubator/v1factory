@@ -31,14 +31,14 @@ Templates.Entity = [
         '<br><h3 class="offset2 hoff1 span14">Description</h3>',
         '<span class="tbl-wrapper span58 hoff1">',
           '<span class="tbl">',
-            '<div class="column span6">',
+            '<div class="column">',
               '<div class="hi3 hdr">Property</div>',
               '<div class="hi3 desc">Type</div>',
               '<div class="hi2 desc">Is Required?</div>',
             '</div>',
             '<ul class="property-list">',
             '<% _(attribs).each(function(attrib, ind){ console.log(attrib); %>',
-              '<div class="column span6" id="column-<%= attrib.cid %>">',
+              '<div class="column" id="column-<%= attrib.cid %>">',
                   '<div class="hi3 hdr"><%- attrib.get(\'name\') %></div>',
                   '<div class="hi3">',
                       '<select class="attribs" id="type-<%= attrib.cid %>">',
@@ -87,7 +87,7 @@ Templates.Entity = [
 
 
 Templates.Property = [
-'<div class="column span6" id="column-<%- cid %>">',
+'<div class="column" id="column-<%- cid %>">',
   '<div class="hi3 hdr"><%- name %></div>',
   '<div class="hi3">',
     '<select class="attribs" id="type-<%- cid %>">',

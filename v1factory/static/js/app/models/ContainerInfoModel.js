@@ -19,8 +19,9 @@ function(WidgetCollection,
 
       if(bone.entity) {
         if(!bone.entity.attributes) {
+
           if(bone.entity == "User") {
-            this.set('entity', new UserEntityModel(bone.entity));
+            this.set('entity', new UserEntityModel(""));
           }
           else {
             this.set('entity', new EntityModel(bone.entity));
@@ -39,14 +40,14 @@ function(WidgetCollection,
         this.set('query', new QueryModel(bone.query, this.get('entity')));
       }
 
-      if(bone.form) {
-        if(!bone.form.attributes) {
-          this.set('form', new FormModel(bone.form, this.get('entity')));
-        }
-        else {
-          this.set('form', bone.form);
-        }
-      }
+      // if(bone.form) {
+      //   if(!bone.form.attributes) {
+      //     this.set('form', new FormModel(bone.form, this.get('entity')));
+      //   }
+      //   else {
+      //     this.set('form', bone.form);
+      //   }
+      // }
     },
     toJSON: function() {
       var json = _.clone(this.attributes);
@@ -54,10 +55,6 @@ function(WidgetCollection,
 
       if(json.query) {
         json.query = this.get('query').toJSON();
-      }
-
-      if(json.form) {
-        json.form = '{{' + this.get('form').get('name') + '}}';
       }
 
       if (this.has('entity')) {

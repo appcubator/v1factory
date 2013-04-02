@@ -21,12 +21,13 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
       'submit .add-property-form'  : 'formSubmitted',
       'submit .add-form-form'      : 'formFormSubmitted',
       'change .attribs'            : 'changedAttribs',
-      'click #cross'               : 'clickedDelete',
+      'click  .delete'               : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
       'click .remove-form'         : 'clickedFormRemove',
-      'click .upload-excel'        : 'clickedUploadExcel',
+      'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
-      'click .edit-form'           : 'clickedEditForm'
+      'click .edit-form'           : 'clickedEditForm',
+      'blur  .property-name-input' : 'formSubmitted'
     },
 
 
@@ -96,14 +97,17 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
       e.preventDefault();
       var name = $('.property-name-input', this.el).val();
 
-      var curFields = this.model.get('fields') || [];
+      if(name.length !== 0) {
 
-      curFields.add(new FieldModel({
-        name: name,
-        type: 'text',
-        required: true
-      }));
+        var curFields = this.model.get('fields') || [];
 
+        curFields.add(new FieldModel({
+          name: name,
+          type: 'text',
+          required: true
+        }));
+
+      }
       $('.property-name-input', this.el).val('');
       $('.add-property-form', this.el).hide();
       $('.add-property-button', this.el).fadeIn();

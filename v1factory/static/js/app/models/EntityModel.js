@@ -1,8 +1,13 @@
 define([
+  'require',
   'app/collections/FieldsCollection',
   'app/collections/FormCollection',
   'backbone'
-], function(FieldsCollection, FormCollection) {
+], function(require) {
+  //FieldsCollection, FormCollection
+  var FieldsCollection = require('app/collections/FieldsCollection');
+  var FormCollection   = require('app/collections/FormCollection');
+  var Backbone         = require('backbone');
 
   var EntityModel = Backbone.Model.extend({
       initialize: function(bone) {
@@ -41,6 +46,12 @@ define([
         json.fields = this.get('fields').toJSON();
         json.forms = this.get('forms').toJSON();
         return json;
+      },
+
+      getFormWithName: function(str) {
+        var formName = /\{\{([^\}]+)\}\}/g.exec(str)[1];
+        var formModel = this.get('forms').where({name : formName})[0];
+        return formModel;
       }
   });
 

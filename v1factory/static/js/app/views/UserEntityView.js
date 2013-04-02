@@ -7,7 +7,7 @@ define([
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
   'app/collections/EntityCollection'
-], 
+],
   function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
 
     var UserEntityView = EntityView.extend({
@@ -20,11 +20,12 @@ define([
         'click .prop-cross'          : 'clickedPropDelete',
         'change .attribs'            : 'changedAttribs',
         'click .remove-form'         : 'clickedFormRemove',
-        'click .upload-excel'        : 'clickedUploadExcel',
+        'click .excel'               : 'clickedUploadExcel',
         'click .show-data'           : 'showData',
         'click .edit-form'           : 'clickedEditForm',
         'click .add-form-button'     : 'clickedAddForm',
-        'submit .add-form-form'      : 'formFormSubmitted'
+        'submit .add-form-form'      : 'formFormSubmitted',
+        'blur  .property-name-input' : 'formSubmitted'
       },
 
       initialize: function(userEntityModel, entitiesColl) {
@@ -107,11 +108,13 @@ define([
         e.preventDefault();
         var name = $('.property-name-input', this.el).val();
 
-        this.model.get('fields').add(new FieldModel({
-          name: name,
-          type: 'text',
-          required: true
-        }));
+        if(name.length !== 0) {
+          this.model.get('fields').add(new FieldModel({
+            name: name,
+            type: 'text',
+            required: true
+          }));
+        }
 
         $('.property-name-input', this.el).val('');
         $('.add-property-form', this.el).hide();

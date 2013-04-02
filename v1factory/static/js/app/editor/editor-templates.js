@@ -21,6 +21,27 @@ Templates.tempNode = [
   '<% }; %>'
 ].join('\n');
 
+
+Templates.tempLi = [
+  '<li id="entity-user-<%= attr %>" class="large single-data">',
+  '<span class="name">Show <%= name %> <%= attr %></span></li>'
+].join('\n');
+
+Templates.tempLiSingleData = [
+  '<li id="entity-<%= cid %>-<%= attr %>" class="large single-data">',
+  '<span class="name">Show <%= name %> <%= attr %></span></li>'
+].join('\n');
+
+Templates.tempLiEntity = [
+  '<li id="entity-<%= cid %>" class="show entity">',
+  '<span class="name">List of <%= name %></span></li>'
+].join('\n');
+
+Templates.tempLiTable = [
+  '<li id="entity-<%= cid %>" class="table-gal entity">',
+  '<span class="name"><%= name %> Table</span></li>'
+].join('\n');
+
 Templates.tempHrefSelect = [
   '<select class="select-href" id="prop-<%= hash %>">',
   "<% _(appState.pages).each(function(page){ var b = ''; if(('{{'+page.name+'}}') == val){ b = 'selected';}%>",
