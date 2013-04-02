@@ -461,7 +461,7 @@ hr {
   margin-left: 4px;
 }
 
-.edit {
+/*.edit {
   background-image: url(../img/edit.png);
   background-position: center center;
   background-size: auto 100%;
@@ -473,7 +473,7 @@ hr {
   background-position: center center;
   background-size: auto 100%;
   background-repeat: no-repeat;
-}
+}*/
 
 .navbar .nav .dropdown{
   font-family: 'verb_mediumregular';
