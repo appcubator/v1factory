@@ -196,6 +196,8 @@ def process_excel(request, app_id):
   state = app.get_state()
   xl_data = get_xl_data(file_name)
   entity_names_in_the_app_state = [e['name'] for e in state['entities'] ]
+  entity_names_in_the_app_state.append("User")
+  print xl_data
   for sheet in xl_data:
     if sheet not in entity_names_in_the_app_state:
       raise Exception("None of the sheet names matched a model name")
