@@ -138,6 +138,7 @@ class DjangoAppWriter:
 
     # static
     f_transporter('jslibs', 'static/jslibs', shutil.copytree)
+    f_transporter('img', 'static/img', shutil.copytree)
     copy_file('ajaxify.js', 'static/ajaxify.js')
     copy_file('css/bootstrap.css', 'static/bootstrap.css')
     write_string(self.render_css(), 'static/style.css')

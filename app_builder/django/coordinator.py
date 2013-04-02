@@ -74,7 +74,7 @@ def analyzed_app_to_app_components(analyzed_app):
     if isinstance(f, SignupForm):
       rec = SignupFormReceiver.create_signup(f, analyzed_app)
     elif isinstance(f, LoginForm):
-      rec = LoginFormReceiver.create_signup(f, analyzed_app)
+      rec = LoginFormReceiver.create_login(f, analyzed_app)
     elif isinstance(f, EditForm):
       raise Exception("You found an edit form!")
     elif isinstance(f, SignupForm):

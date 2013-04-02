@@ -1,14 +1,14 @@
 {{ "{% csrf_token %}" }}
-{% for field, djangofield in zip(context.included_fields, context.form_receiver.included_fields) %}
-  <label for="id-{{ djangofield.identifier() }}">{{ field.label }}</label>
+{% for field in context.included_fields %}
+  <label for="id-{{ field.post_name }}">{{ field.label }}</label>
   {% if field.display_type == "single-line-text" %}
-  <input type="text" name="{{ djangofield.identifier() }}" id="id-{{ djangofield.identifier() }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+  <input type="text" name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "paragraph-text" %}
-  <textarea name="{{ djangofield.identifier() }}" id="id-{{ djangofield.identifier() }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></textarea>
+  <textarea name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></textarea>
   {% elif field.display_type == "password-text" %}
-  <input type="password" name="{{ djangofield.identifier() }}"  id="id-{{ djangofield.identifier() }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+  <input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "email-text" %}
-  <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ djangofield.identifier() }}"  id="id-{{ djangofield.identifier() }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
+  <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
   {% elif field.display_type == "button" %}
   <div class="btn">{{ field.placeholder }}</div>
   {% elif field.display_type == "dropdown" %}
@@ -25,9 +25,9 @@
   {% endfor %}
   </span>
   {% elif field.display_type == "image-uploader" %}
-  <input type="file" name="{{ djangofield.identifier() }}"  id="id-{{ djangofield.identifier() }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+  <input type="file" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "date-picker" %}
-  date picker will be here<input type="text" name="{{ djangofield.identifier() }}"  id="id-{{ djangofield.identifier() }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+  date picker will be here<input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% else %}
   <!-- Non-standard tag specified -->
   {% endif %}

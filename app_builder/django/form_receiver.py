@@ -38,7 +38,6 @@ class DjangoFormReceiver(object):
   @classmethod
   def create_login(cls, form, analyzed_app):
     name = form.name
-    included_fields = ['username', 'password', 'email']
     self = cls(name=name, included_fields=form.included_fields, model=analyzed_app.models.get_by_name('User'))
 
     self.form = form
@@ -51,16 +50,19 @@ class DjangoFormReceiver(object):
     """Gets the Django Model"""
     """maps to model fields"""
     self.model = models.get_by_name(self.model.name)
-    new_included_fields = []
     for f in self.included_fields:
-      if f.is_model_field():
-        new_included_fields.append(self.model.fields.get_by_name(f.model_field.name))
-    self.included_fields = new_included_fields
+      if f.is_model_field() and f.name != 'username':
+        f._django_field = self.model.fields.get_by_name(f.model_field.name)
+        f.post_name = f._django_field.identifier()
+      else:
+        assert f.name in ['username', 'password', 'password1', 'password2'] # these are the only non model fields we support
+        f._django_field = None
+        f.post_name = f.name
 
   def identifier(self):
     def sanitize_name(s):
       return s.replace(" ", "_")
-    return "receive_{}".format(sanitize_name(self.form.name))
+    return "receive_{}".format(sanitize_name(self.form.name)).lower()
 
   def view_path(self):
     return "webapp.form_receivers."+self.identifier()
@@ -80,7 +82,8 @@ class SignupFormReceiver(DjangoFormReceiver):
 
   @property
   def userprofile_fields(self):
-    return [ f for f in self.included_fields if f.name != 'username' ]
+    up_fields = [ f._django_field for f in self.included_fields if f._django_field is not None and f._django_field.name != 'username' ]
+    return up_fields
 
 class LoginFormReceiver(DjangoFormReceiver):
 

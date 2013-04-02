@@ -152,6 +152,7 @@ class Node(UIElement):
     if 'tagName' in self.uie:
       self.tagname = self.uie['tagName']
     else:
+      assert False
       self.tagname = "LOL" # this is the old system..
 
     self.html_id = ""
@@ -323,7 +324,8 @@ class Form(Container):
     f_manager._objects = self.model.fields
     for f in self.included_fields:
       f_check = f_manager.get_by_name(f.name)
-      assert f_check is not None or f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
+      if f_check is None:
+        assert f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
       f.model_field = f_check
 
 class LoginForm(Form):

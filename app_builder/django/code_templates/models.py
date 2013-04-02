@@ -11,9 +11,9 @@ from social_auth.backends.facebook import FacebookBackend
 
 def facebook_extra_values(sender, user, response, details, **kwargs):
   profile = user.get_profile()
-  profile.m_Email = response.get('email')
-  profile.m_First_Name = response.get('first_name')
-  profile.m_Last_Name = response.get('last_name')
+  profile.email_field = response.get('email')
+  profile.first_name_field = response.get('first_name')
+  profile.last_name_field = response.get('last_name')
   profile.save()
 
 pre_update.connect(facebook_extra_values, sender=FacebookBackend)

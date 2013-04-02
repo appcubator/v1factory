@@ -28,7 +28,7 @@ class DjangoModel(object):
 
     for f in abs_model.fields:
       # only create non-relational fields here.
-      if f.content_type != "list of blah":
+      if f.content_type != "list of blah" and f.name != "username":
         df = DjangoField.create(f, self)
         self.fields.add(df)
 
@@ -115,7 +115,7 @@ class DjangoField(object):
 
   def identifier(self):
     """What will this field be referred to as a variable?"""
-    return "m_" + self.name.replace(" ", "_")
+    return self.name.replace(" ", "_").lower() + "_field"
 
   def django_type(self):
     return DjangoField._type_map[self.field_type]
