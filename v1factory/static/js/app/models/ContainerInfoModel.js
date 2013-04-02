@@ -19,8 +19,9 @@ function(WidgetCollection,
 
       if(bone.entity) {
         if(!bone.entity.attributes) {
+
           if(bone.entity == "User") {
-            this.set('entity', new UserEntityModel(bone.entity));
+            this.set('entity', new UserEntityModel(""));
           }
           else {
             this.set('entity', new EntityModel(bone.entity));

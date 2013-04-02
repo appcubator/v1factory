@@ -55,7 +55,6 @@ function(WidgetCollection,
         //this.rowBindings();
       }
 
-      console.log(this.model.get('container_info'));
       if(this.model.get('container_info').has('form')) {
         var form = this.model.get('container_info').get('entity').getFormWithName(this.model.get('container_info').get('form'));
         this.formModel = form;
@@ -110,7 +109,6 @@ function(WidgetCollection,
       $( this.el ).draggable( "destroy" );
 
       this.render();
-      console.log(this.resizableAndDraggable);
       this.resizableAndDraggable();
       this.renderElements();
     },
@@ -143,8 +141,6 @@ function(WidgetCollection,
         new TableQueryView(this.model, this.model.get('container_info').get('query'));
       }
       if(this.model.get('container_info').has('form')) {
-        console.log(this.model.get('container_info').get('entity'));
-        console.log(this.model.get('container_info').get('entity'));
         new FormEditorView(this.formModel,
                            this.model.get('container_info').get('entity'),
                            this.formEditorClosed);

@@ -71,6 +71,12 @@ function(ElementCollection,
       }
 
 
+      var context = {
+        name : "User",
+        cid : "user"
+      };
+      $(this.allList).append(_.template(Templates.tempLiTable, context));
+
       $('.entity').draggable({
         cursor: "move",
         cursorAt: { top: 0, left: 0 },

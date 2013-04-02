@@ -24,6 +24,7 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       if(bone) fieldCollection.add(bone.fields);
       this.set('fields', fieldCollection);
       this.set('forms', new FormCollection());
+      this.set('name', 'User');
 
       if(bone.forms) {
         this.get('forms').add(bone.forms);
@@ -37,6 +38,12 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       json.fields = _.uniq(json.fields, function(val) { return val.name; });
       json.forms = this.get('forms').toJSON();
       return json;
+    },
+
+    getFormWithName: function(str) {
+      var formName = /\{\{([^\}]+)\}\}/g.exec(str)[1];
+      var formModel = this.get('forms').where({name : formName})[0];
+      return formModel;
     }
   });
 

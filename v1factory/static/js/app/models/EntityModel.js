@@ -51,7 +51,6 @@ define([
       getFormWithName: function(str) {
         var formName = /\{\{([^\}]+)\}\}/g.exec(str)[1];
         var formModel = this.get('forms').where({name : formName})[0];
-        console.log(formModel);
         return formModel;
       }
   });
