@@ -420,6 +420,8 @@ class AnalyzedApp:
     if app_state['users']['local']:
       self.local_login = True
       base_user['fields'] = app_state['users']['fields']
+      assert len([ f for f in base_user['fields'] if f['name'] in ['username', 'Username']]) == 0, "Plz get rid of username field from user fields."
+      base_user['fields'].append(simplejson.loads(r"""{"name": "username","required": true,"type": "text"}""")) # adds username
       m = Model.create_user(base_user)
       self.models.add(m)
 
