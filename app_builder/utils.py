@@ -24,7 +24,6 @@ def extract_from_brace(s):
 # with the schema, model name and data of the excel sheet.
 def get_xl_data(xl_file):
   xl_dict = dict()
-  print type(xl_file)
   xf = xls.open_workbook(file_contents=xl_file.read())
   for sheet_name in xf.sheet_names():
     curr_sheet = xf.sheet_by_name(sheet_name)
