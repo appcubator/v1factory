@@ -53,6 +53,12 @@ def homepage(request):
   page_context["title"] = "Homepage"
   return render(request, 'website-home.html', page_context)
 
+@require_GET
+def account(request):
+  page_context = {}
+  page_context["title"] = "Account"
+  return render(request, 'registration/account.html', page_context)
+
 @require_http_methods(["GET", "POST"])
 def signup(request):
   if request.method == "GET":
