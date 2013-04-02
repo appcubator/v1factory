@@ -14,7 +14,7 @@ class DjangoFormReceiver(object):
   @classmethod
   def create(cls, form, analyzed_app):
     name = form.name
-    model = analyzed_app.models.get_by_name(form.entity.name)
+    model = analyzed_app.models.get_by_name(form.model.name)
     included_fields = form.included_fields
     self = cls(name=name, included_fields=included_fields, model=model)
 
