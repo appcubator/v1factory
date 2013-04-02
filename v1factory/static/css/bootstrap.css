@@ -374,8 +374,8 @@ a:hover {
 .offset21 { margin-left: 630px; }
 .offset20 { margin-left: 600px; }
 .offset19 { margin-left: 570px; }
-.offset18 { margin-left: 540px; }
-.offset17 { margin-left: 510px; }
+.offset18 { margin-left: 270px; }
+.offset17 { margin-left: 255px; }
 .offset16 { margin-left: 240px; }
 .offset15 { margin-left: 225px; }
 .offset14 { margin-left: 210px; }
@@ -6142,4 +6142,8 @@ a.badge:hover {
 
 .affix {
   position: fixed;
+}
+
+.centered {
+  text-align: center;
 }

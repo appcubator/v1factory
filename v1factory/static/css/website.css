@@ -626,3 +626,24 @@ hr {
 }
 
 
+.login {
+  display: inline-block;
+}
+.login .line {
+  display: inline-block;
+  height: 42px;
+}
+.login input[type="password"], .login input[type="text"] {
+  width: 120px;
+  float: right;
+}
+
+input[type="password"], input[type="text"] {
+  height: 32px;
+}
+
+
+.login-page input[type="password"],.login-page input[type="text"] {
+
+}
+
