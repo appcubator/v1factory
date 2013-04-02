@@ -20,8 +20,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
       'keydown input.field-label-input'  : 'changedLabel',
-      'keyup .field-placeholder-input' : 'changedPlaceholder',
-      'keyup input.field-label-input'  : 'changedLabel',
+      'keyup .field-placeholder-input'   : 'changedPlaceholder',
+      'keyup input.field-label-input'    : 'changedLabel',
       'change   .options-input'          : 'changedOptions'
     },
 
