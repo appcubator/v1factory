@@ -9,7 +9,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
   var FormEditorView = BackboneUI.ModalView.extend({
     tagName: 'div',
-    width: 900,
+    width: 882,
     height: 500,
     padding: 0,
     className: 'form-editor',
@@ -20,9 +20,9 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
       'keydown input.field-label-input'  : 'changedLabel',
-      'keyup .field-placeholder-input'   : 'changedPlaceholder',
-      'keyup input.field-label-input'    : 'changedLabel',
-      'change   .options-input'          : 'changedOptions'
+      'keyup   .field-placeholder-input'   : 'changedPlaceholder',
+      'keyup   input.field-label-input'    : 'changedLabel',
+      'keyup  .options-input'          : 'changedOptions'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -132,7 +132,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
         this.$el.find('.options-input-area').remove();
         if(newType == "option-boxes" || newType == "dropdown") {
           this.selected.set('options', curOptions.split(','));
-          this.$el.find('.field-types').append('<span class="options-input-area">Options<br><input class="options-input" type="text" value="' + curOptions + '"></span>');
+          this.$el.find('.field-types').append('<span class="options-input-area">Options<br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="' + curOptions + '"></span>');
         }
       }
     },

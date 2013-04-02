@@ -1,29 +1,70 @@
 .panel {
   height: 600px;
   display: inline-block;
-  padding: 20px;
+  padding: 0px;
   vertical-align: top;
-  padding-top: 50px;
 }
 
 .fields-panel {
   width: 180px;
   border-right:1px solid #ddd;
-  padding-top: 20px;
+}
+
+.panel h4 {
+  height: 40px;
+  padding-top: 10px;
+  padding-left: 10px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.05);
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  color: #666;
+}
+
+.panel label {
+  display: block;
+  padding: 8px;
+  padding-left: 10px;
+  width: 100%;
+  border-bottom: 1px solid #efefef;
 }
 
 .details-panel {
   width: 200px;
-  border-left: 1px solid #aaa;
+  border-left: 1px solid #ccc;
   border-right: 1px solid #ddd;
+}
+
+.details-panel .options-input-area {
+  padding: 10px;
+  width: 100%;
+}
+
+.details-panel b {
+  font-weight: bold;
 }
 
 .form-panel {
   width: 300px;
-  background-color: #eee;
-  box-shadow: inset 0 0 5px 0 rgba(30, 30, 30, 0.4);
   padding-left: 0;
   padding-right: 0;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ddd;
+}
+
+.form-panel small {
+ font-size: 10px;
+ font-style: italic;
+ padding: 10px;
+ margin-top: 1px solid #ccc;
+ display: inline-block;
+}
+
+.form-fields-list {
+}
+
+.form-fields-list label {
+  border: none;
 }
 
 .action-panel {
