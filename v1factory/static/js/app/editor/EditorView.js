@@ -75,8 +75,7 @@ define([
 
       this.designEditor     = new DesignEditorView(this.model, true);
 
-      var urlsCollection  = new UrlsCollection(appState.urls);
-      this.urlModel = urlsCollection.where({ page_name : this.model.get('name')})[0];
+      this.urlModel = this.model.get('url');
 
       this.entityCollection.add(appState.entities);
       this.getContextEntities();
