@@ -130,6 +130,9 @@ class UIElement(Renderable):
       self.height = uie['layout']['height']
       self.top = uie['layout']['top']
       self.left = uie['layout']['left']
+      self.alignment = "left";
+      if 'alignment' in uie['layout']:
+        self.alignment = uie['layout']['alignment']
     else:
       assert False
       self.width = 5
