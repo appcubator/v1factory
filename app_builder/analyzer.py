@@ -131,11 +131,11 @@ class UIElement(Renderable):
       self.top = uie['layout']['top']
       self.left = uie['layout']['left']
     else:
+      assert False
       self.width = 5
       self.height = 5
       self.left = 5
       self.top = 5
-    self.position_css = "left: {}px; top: {}px;".format(self.left*15, self.top*15)
 
 class Node(UIElement):
   """A Node can be thought of as a single element on the page.
@@ -164,6 +164,17 @@ class Node(UIElement):
       self.attribs.update(uie['cons_attribs'])
     self._content = uie['content']
 
+  @classmethod
+  def create_list_entry(cls, uie, page):
+    self = cls(uie, page)
+    style_string = ''
+    if 'style' in self.attribs:
+      style_string = self.attribs['style']
+
+    style_string = "left: %spx; top: %spx; " % (80 * self.left, 15 * self.top) + style_string
+    self.attribs['style'] = style_string
+
+    return self
 
   @property
   def classes(self):
@@ -360,7 +371,7 @@ class ListQuerysetWrapper(QuerysetWrapper):
     self.row_top = uie['container_info']['row']['layout']['top']
     self.row_width = uie['container_info']['row']['layout']['width']
     self.row_height = uie['container_info']['row']['layout']['height']
-    self.nodes = [ Node(n, page) for n in uie['container_info']['row']['uielements'] ]
+    self.nodes = [ Node.create_list_entry(n, page) for n in uie['container_info']['row']['uielements'] ]
 
 class ThirdPartyLogin(Container):
   """ A container that wraps a third party login action """
