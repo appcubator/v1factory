@@ -14,8 +14,7 @@
 {% endblock %}
 
 {% block page %}
-<a class="btn span6 save-btn" id="save-entities">Save</a>
-
+<a class="btn span6 save-btn" id="save-entities"></a>
 <div class="container hoff8" id="pages-view">
   <div class="span64">
     <h3>Navigation Bars</h3>
@@ -59,31 +58,6 @@
 <script>
 var appState = {{ app.state_json|safe }};
 var appId = {{ app_id|safe }};
-</script>
-
-<script type="text/html" id="temp-page">
-  <div class="span20">
-    <h3 class="offset1  hoff2"><%= page_name %></h3>
-    <div class="offset1 span8 hoff1 offsetr1 row">
-      <a class="edit span16 btn hoff1" href="editor/<%= ind %>">Edit Page</a>
-      <a class="delete span16 btn hoff1">Delete Page</a>
-    </div>
-  </div>
-  <div class="span20">
-   <div class="btn edit-url offset1 span16 hoff1">Edit URL</div>
-  </div>
-</script>
-
-<script type="text/html" id="temp-menu">
-<span class="span24 hi6">
-<h3 class="hi2 span18 hoff1 offset1">Access Level</h3>
-<div class="offset1">
-  <select class="span16" id="access_level">
-    <option <% if(access_level == 'all') { %> selected <% } %> value="all">Everyone</option>
-    <option <% if(access_level == 'users') { %> selected <% } %> value="users">Only Users</option>
-  </select>
-</div>
-</div>
 </script>
 {% endblock %}
 

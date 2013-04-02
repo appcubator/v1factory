@@ -313,6 +313,7 @@ input[type="submit"] {
 
 
 .column {
+  overflow: hidden;
   border-left: 1px solid #ccc;
   height: 100%;
 }
@@ -461,7 +462,7 @@ hr {
   margin-left: 4px;
 }
 
-.edit {
+/*.edit {
   background-image: url(../img/edit.png);
   background-position: center center;
   background-size: auto 100%;
@@ -473,7 +474,7 @@ hr {
   background-position: center center;
   background-size: auto 100%;
   background-repeat: no-repeat;
-}
+}*/
 
 .navbar .nav .dropdown{
   font-family: 'verb_mediumregular';
@@ -625,4 +626,25 @@ hr {
   line-height: 12px;
 }
 
+
+.login {
+  display: inline-block;
+}
+.login .line {
+  display: inline-block;
+  height: 42px;
+}
+.login input[type="password"], .login input[type="text"] {
+  width: 120px;
+  float: right;
+}
+
+input[type="password"], input[type="text"] {
+  height: 32px;
+}
+
+
+.login-page input[type="password"],.login-page input[type="text"] {
+
+}
 

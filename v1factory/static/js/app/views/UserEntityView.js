@@ -24,7 +24,8 @@ define([
         'click .show-data'           : 'showData',
         'click .edit-form'           : 'clickedEditForm',
         'click .add-form-button'     : 'clickedAddForm',
-        'submit .add-form-form'      : 'formFormSubmitted'
+        'submit .add-form-form'      : 'formFormSubmitted',
+        'blur  .property-name-input' : 'formSubmitted'
       },
 
       initialize: function(userEntityModel, entitiesColl) {
@@ -107,11 +108,13 @@ define([
         e.preventDefault();
         var name = $('.property-name-input', this.el).val();
 
-        this.model.get('fields').add(new FieldModel({
-          name: name,
-          type: 'text',
-          required: true
-        }));
+        if(name.length !== 0) {
+          this.model.get('fields').add(new FieldModel({
+            name: name,
+            type: 'text',
+            required: true
+          }));
+        }
 
         $('.property-name-input', this.el).val('');
         $('.add-property-form', this.el).hide();

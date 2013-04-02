@@ -15,12 +15,14 @@ function(Backbone, BackboneUI, FormFieldModel) {
     className: 'form-editor',
 
     events: {
-      'change .field-name-box' : 'fieldBoxChanged',
-      'click .field-li-item'   : 'clickedField',
-      'change .field-type'     : 'changedFieldType',
+      'change  .field-name-box'          : 'fieldBoxChanged',
+      'click   .field-li-item'           : 'clickedField',
+      'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
-      'keydown .field-label-input' : 'changedLabel',
-      'keydown .options-input' : 'changedOptions'
+      'keydown input.field-label-input'  : 'changedLabel',
+      'keyup .field-placeholder-input'   : 'changedPlaceholder',
+      'keyup input.field-label-input'    : 'changedLabel',
+      'change   .options-input'          : 'changedOptions'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -133,15 +135,18 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     changedPlaceholder: function(e) {
       this.selected.set('placeholder', e.target.value);
+      e.stopPropagation();
     },
 
     changedLabel: function(e) {
       this.selected.set('label', e.target.value);
+      e.stopPropagation();
     },
 
     changedOptions: function(e) {
       var options = String(this.$el.find('.options-input').val()).split(',');
       this.selected.set('options', options);
+      e.stopPropagation();
     }
   });
 
