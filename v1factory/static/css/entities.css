@@ -11,6 +11,7 @@
 .property-list {
   list-style: circle;
   list-style: none;
+  float: left;
 }
 
 .add-entity {
@@ -19,6 +20,8 @@
   display: inline-block;
   vertical-align: top;
   float: none;
+  text-align: center;
+  font-size: 28px;
 }
 
 .add-entity .pane {
@@ -32,6 +35,10 @@
 input[type="text"].property-name-input {
   height: 34px;
   padding-left: 10px;
+  width: 126px;
+  margin-left: -5px;
+  margin-top: -2px;
+  border-radius: 0;
 }
 
 input[type="text"] {
@@ -72,13 +79,17 @@ select {
 .plus {
   display: inline-block;
   text-align: center;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   font-size: 18px;
   line-height: 24px;
   font-weight: bold;
   border-radius: 10px;
   margin-right: 4px;
+  background-color: #eee;
+  box-shadow: inset 0 1px 20px 0px rgba(120, 120, 120, 0.3);
+  border-radius: 20px;
+
 }
 
 .add-property-button {
@@ -162,6 +173,12 @@ input[type="checkbox"] {
   text-align: left;
 }
 
+.tbl .desc {
+  text-align: left;
+  font-size: 12px;
+  font-weight: bold;
+}
+
 .entity-pane {
   padding:0 !important;
 }
@@ -172,6 +189,8 @@ input[type="checkbox"] {
   border-radius: 3px;
   background-color: #eee;
   padding: 10px;
+  cursor: pointer;
+  text-align: center;
 }
 
 .form-pane .hdr {
@@ -279,4 +298,75 @@ table tr:hover td {
       background: #f2f2f2;
       background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
       background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);  
+}
+
+
+.add-property-column .plus-icon {
+  background-image: url(../img/add.png);
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  margin-top: 30px;
+  margin-bottom: 8px;
+  background-position: center;
+  width: 100%;
+  height: 30px;
+}
+
+.add-form-button {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.add-form-button .plus {
+  font-size: 24px;
+  padding-top: 6px;
+  font-weight: bold;
+  margin-top: 16px;
+  color: #aaa;
+}
+
+.icon {
+  background-repeat: no-repeat;
+  background-size: auto 120%;
+  background-position: center;
+  height: 40px;
+  width: 50px;
+}
+
+ .excel .icon {
+  width: 100%;
+  background-image: url(../img/excel-icon-gray.png);
+}
+
+ .delete .icon {
+  width: 100%;
+  background-image: url(../img/delete-icon.png);
+  background-size: auto 90%;
+}
+
+.right-panel .delete {
+  background-image: none;
+}
+
+.right-icon {
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.show-data {
+  width: 100%;
+  background-repeat: no-repeat;
+  background-image: url(../img/table_icon.png);
+  background-size: auto 40%;
+  background-position: center 8px;
+  text-align: center;
+  padding-top: 54px !important;
+  font-weight: bold;
+  line-height: 14px;
+  cursor: pointer;
 }

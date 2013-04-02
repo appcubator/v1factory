@@ -376,22 +376,22 @@ a:hover {
 .offset19 { margin-left: 570px; }
 .offset18 { margin-left: 540px; }
 .offset17 { margin-left: 510px; }
-.offset16 { margin-left: 480px; }
-.offset15 { margin-left: 450px; }
-.offset14 { margin-left: 420px; }
-.offset13 { margin-left: 390px; }
-.offset12 { margin-left: 360px; }
-.offset11 { margin-left: 330px; }
-.offset10 { margin-left: 300px; }
-.offset9  { margin-left: 270px; }
-.offset8  { margin-left: 240px; }
-.offset7  { margin-left: 210px; }
-.offset6  { margin-left: 180px; }
-.offset5  { margin-left: 150px; }
-.offset4  { margin-left: 120px; }
-.offset3  { margin-left: 90px;  }
-.offset2  { margin-left: 60px;  }
-.offset1  { margin-left: 30px;  }
+.offset16 { margin-left: 240px; }
+.offset15 { margin-left: 225px; }
+.offset14 { margin-left: 210px; }
+.offset13 { margin-left: 195px; }
+.offset12 { margin-left: 180px; }
+.offset11 { margin-left: 165px; }
+.offset10 { margin-left: 150px; }
+.offset9  { margin-left: 135px; }
+.offset8  { margin-left: 120px; }
+.offset7  { margin-left: 105px; }
+.offset6  { margin-left: 90px; }
+.offset5  { margin-left: 75px; }
+.offset4  { margin-left: 60px; }
+.offset3  { margin-left: 45px;  }
+.offset2  { margin-left: 30px;  }
+.offset1  { margin-left: 15px;  }
 
 .offsetr6 { margin-right: 90px; }
 .offsetr5 { margin-right: 75px; }
@@ -980,8 +980,8 @@ dd {
 hr {
   margin: 20px 0;
   border: 0;
-  border-top: 1px solid #eeeeee;
-  border-bottom: 1px solid #ffffff;
+  border-top: 1px solid #bbbbbb;
+  border-bottom: 1px solid #cccccc;
 }
 
 abbr[title],
@@ -1244,14 +1244,14 @@ input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
 .uneditable-input:focus {
-  border-color: rgba(82, 168, 236, 0.8);
+  border-color: rgba(75, 105, 124, 0.8);
   outline: 0;
   outline: thin dotted \9;
   /* IE6-9 */
 
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(15, 45, 64, 0.6);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(15, 45, 64, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(15, 45, 64, 0.6);
 }
 
 input[type="radio"],
@@ -3007,7 +3007,7 @@ table th[class*="span"],
 
 .dropdown-menu .divider {
   *width: 100%;
-  height: 1px;
+  height: 2px;
   margin: 9px 1px;
   *margin: -5px 0 5px;
   overflow: hidden;

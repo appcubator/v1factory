@@ -105,12 +105,12 @@ Templates.fieldNode = [
 ].join('\n');
 
 Templates.queryView = [
-  '<h1 class="title"><%= entity.get(\'name\') %> Table</h1>',
+  '<h1 class="title"><%= entity.get(\'name\') %> <% if(c.row) { print(\'List\'); } else { print(\'Table\'); } %></h1>',
   '<hr>',
   '<p>What fields would you like to display?</p>',
 
   '<% _.each(entity.get("fields").models, function(field) { %>',
-    '<% var checked = \'\'; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) checked = \'checked\'; %>',
+    '<% var checked = \'\'; var u_id = field.cid; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) { checked = \'checked\'; } %>',
     '<input class="fields-to-display" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %><br>',
   '<% }) %>',
   '<hr>',
@@ -179,8 +179,7 @@ Templates.tempUIElementSized = [
 
 Templates.rowNode = [
   '<div class="span<%= layout.get(\'width\') %> hi<%= layout.get(\'height\') %>" style="position:relative;">',
-    '<% _(uielements).each(function(element){ console.log(element); %>',
-      '<% console.log(element); console.log("sdf"); %>',
+    '<% _(uielements).each(function(element){ %>',
       Templates.tempUIElementSized,
     '<% }); %>',
   '</div>'

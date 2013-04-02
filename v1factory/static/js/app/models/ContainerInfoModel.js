@@ -57,7 +57,7 @@ function(WidgetCollection,
       }
 
       if(json.form) {
-        json.form.name = '{{' + this.get('form').get('name') + '}}';
+        json.form = '{{' + this.get('form').get('name') + '}}';
       }
 
       if (this.has('entity')) {
