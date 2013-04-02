@@ -1,5 +1,10 @@
-define(['../models/PageModel', '../collections/UrlsCollection', './UrlView', './PageView'],
-  function(PageModel, UrlsCollection, UrlView, PageView) {
+define([
+  'app/models/PageModel',
+  'app/collections/UrlsCollection',
+  'app/views/UrlView',
+  'app/views/PageView'
+],
+function(PageModel, UrlsCollection, UrlView, PageView) {
 
   var PagesCollection = Backbone.Collection.extend({
     model : PageModel
@@ -23,9 +28,7 @@ define(['../models/PageModel', '../collections/UrlsCollection', './UrlView', './
       this.collection = new PagesCollection();
       this.collection.bind('add', this.appendPage, this);
 
-      this.urlsCollection = new UrlsCollection();
       var initUrls = appState.urls || [];
-      this.urlsCollection.add(initUrls);
 
       this.collection.add(appState.pages);
 
@@ -49,7 +52,7 @@ define(['../models/PageModel', '../collections/UrlsCollection', './UrlView', './
         this.$el.find('.page-name').val('');
         this.$el.find('.create-form').hide();
         this.$el.find('.create-page').fadeIn();
-        this.urlsCollection.add({ urlparts: [], page_name: name});
+        //this.urlsCollection.add({ urlparts: [], page_name: name});
         this.collection.add({ name: name});
       }
       this.savePages();
@@ -57,14 +60,12 @@ define(['../models/PageModel', '../collections/UrlsCollection', './UrlView', './
 
     appendPage: function(model) {
       var ind = _.indexOf(this.collection.models, model);
-      var urlModel = this.urlsCollection.where({ page_name : model.get('name')})[0];
-      var pageView = new PageView(model, ind, urlModel);
+      var pageView = new PageView(model, ind);
       this.listView.appendChild(pageView.el);
     },
 
     savePages: function(e) {
       appState.pages = this.collection.toJSON();
-      appState.urls  = this.urlsCollection.toJSON();
 
       $.ajax({
         type: "POST",

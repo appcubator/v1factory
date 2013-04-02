@@ -18,7 +18,7 @@ function(UrlView, SimpleModalView) {
       'click .edit-url' : 'renderUrl'
     },
 
-    initialize: function(pageModel, ind, urlModel) {
+    initialize: function(pageModel, ind) {
       _.bindAll(this, 'render',
                       'renderMenu',
                       'renderUrl',
@@ -28,7 +28,7 @@ function(UrlView, SimpleModalView) {
       this.model = pageModel;
       this.ind = ind;
 
-      this.urlModel = urlModel;
+      this.urlModel = pageModel.get('url');
       this.render();
       this.renderMenu();
     },

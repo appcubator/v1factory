@@ -1,8 +1,7 @@
 define(['backbone'], function(Backbone) {
   var UrlModel = Backbone.Model.extend({
     defaults : {
-      urlparts : [],
-      page_name : "defaults"
+      urlparts : []
     },
 
     getUrlString: function(appSubdomain) {

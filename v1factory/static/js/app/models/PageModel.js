@@ -1,5 +1,9 @@
-define(['backbone'], function(Backbone) {
-  
+define([
+  'app/models/UrlModel',
+  'backbone'
+],
+function(UrlModel, Backbone) {
+
   var PageModel = Backbone.Model.extend({
     defaults : {
       "name"             : "default-page",
@@ -39,6 +43,16 @@ define(['backbone'], function(Backbone) {
       ],
       "access_level" : "all",
       "uielements" : []
+    },
+    initialize: function(bone) {
+      bone = bone||{};
+      this.set('url', new UrlModel(bone.url||{}));
+    },
+
+    toJSON: function() {
+      var json = _.clone(this.attributes);
+      json.url = this.get('url').toJSON();
+      return json;
     }
   });
 
