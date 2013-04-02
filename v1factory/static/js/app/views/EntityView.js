@@ -21,7 +21,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
       'submit .add-property-form'  : 'formSubmitted',
       'submit .add-form-form'      : 'formFormSubmitted',
       'change .attribs'            : 'changedAttribs',
-      'click #cross'               : 'clickedDelete',
+      'click  .delete'               : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
       'click .remove-form'         : 'clickedFormRemove',
       'click .excel'               : 'clickedUploadExcel',
