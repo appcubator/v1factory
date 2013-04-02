@@ -41,19 +41,21 @@ FormEditorTemplates.field = [
 
 
 FormEditorTemplates.template = [
+  '<h3 class="hi2 full title"><%= form.get("name") %> Form</h3>',
   '<div class="fields-panel panel">',
-    '<h3 class="hi2"><%= form.get("name") %></h3>',
-    '<h4>Fields</h4>',
+    '<h4>Form Fields</h4>',
     '<% _(entity.get("fields").models).each(function(field) { %>',
       '<label><input type="checkbox" id="field-<%= field.cid %>" class="field-name-box" value="<%= field.get(\'name\') %>" <%  if(form.get(\'fields\').filter(function(d){ return d.get(\'name\') == field.get(\'name\')}).length > 0) { %> checked <% }; %>><%= field.get(\'name\') %></label>',
     '<% }); %>',
   '</div><div class="details-panel panel">',
   '</div><div class="form-panel panel">',
+    '<h4>How It Looks</h4>',
     '<ul class="form-fields-list">',
       '<% _(form.get(\'fields\').models).each(function(field) { %>',
         FormEditorTemplates.field,
       '<% }); %>',
     '</ul>',
+    '<small>You can click on field to see the details and drag them to arrange the display order</small>',
   '</div><div class="action-panel panel">',
     '<h4>Form Actions</h4>',
     '<span>Go to</span>',
@@ -133,13 +135,13 @@ var fieldTypesArr = {
 };
 
 FormEditorTemplates.details = [
-  '<h4>Field Details</h4>',
-  '<label>Label<br>',
+  '<h4>Details of the Field</h4>',
+  '<label><b>Label</b><br>',
   '<input class="field-label-input" id="field-label-<%= field.cid %>" type="text" placeholder="Field Label..." value="<%= field.get(\'label\') %>">',
-  '</label><br>',
-  '<label>Placeholder<br>',
+  '</label>',
+  '<label><b>Placeholder</b><br>',
   '<input class="field-placeholder-input" type="text" id="field-placeholder-<%= field.cid %>" placeholder="Fild Placeholder..." value="<%= field.get(\'placeholder\') %>">',
-  '</label><br>',
+  '</label>',
   '<ul class="field-types">',
     '<% _(fieldTypesArr[field.get("type")]).each(function(fieldType) { %>',
       '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { %>checked<% } %>><%= fieldType.text %></label></li>',

@@ -116,7 +116,7 @@ define(['backbone', 'jquery-ui'], function() {
     setupModal: function() {
       var self = this;
       var div = document.createElement('div');
-      div.className = "modal-bg";
+      div.className = "modal-bg fadeIn";
       div.style.position = 'fixed';
       div.style.width = '100%';
       div.style.height = '100%';
@@ -145,7 +145,7 @@ define(['backbone', 'jquery-ui'], function() {
 
       var div = document.createElement('div');
       div.style.position = 'fixed';
-      div.className = 'modal';
+      div.className = 'modal fadeIn';
       div.style.width = this.width + 'px';
       div.style.minHeight = '300px';
       div.style.top = '50%';
@@ -178,13 +178,19 @@ define(['backbone', 'jquery-ui'], function() {
     },
 
     closeModal: function() {
+      var self = this;
       if(this.callback) this.callback();
       if(this.onClose) this.onClose();
-      this.$el.remove();
-      $(this.backgroundDiv).remove();
-      $(this.modalWindow).remove();
+      // fadeOut(function() { $(this).remove(); });
+      $(self.modalWindow).fadeOut();
+      $(self.backgroundDiv).fadeOut();
+
+      setTimeout(function(){
+        self.$el.remove();
+        self.remove();
+      }, 550);
+
       this.stopListening();
-      this.remove();
     },
 
     handleKey: function(e) {

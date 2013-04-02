@@ -9,7 +9,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
   var FormEditorView = BackboneUI.ModalView.extend({
     tagName: 'div',
-    width: 900,
+    width: 882,
     height: 500,
     padding: 0,
     className: 'form-editor',
@@ -20,9 +20,9 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
       'keydown input.field-label-input'  : 'changedLabel',
-      'keyup .field-placeholder-input'   : 'changedPlaceholder',
-      'keyup input.field-label-input'    : 'changedLabel',
-      'change   .options-input'          : 'changedOptions'
+      'keyup   .field-placeholder-input'   : 'changedPlaceholder',
+      'keyup   input.field-label-input'    : 'changedLabel',
+      'keyup  .options-input'          : 'changedOptions'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -35,7 +35,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
                       'renderField',
                       'clickedField',
                       'changedPlaceholder',
-                      'changedLabel');
+                      'changedLabel',
+                      'changedOrder');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -56,7 +57,10 @@ function(Backbone, BackboneUI, FormFieldModel) {
       var self = this;
       var html = _.template(FormEditorTemplates.template, { form: self.model, entity: self.entity});
       this.el.innerHTML = html;
-      $('.form-fields-list').sortable();
+
+      $('.form-fields-list').sortable({
+        stop: this.changedOrder
+      });
       return this;
     },
 
@@ -128,7 +132,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
         this.$el.find('.options-input-area').remove();
         if(newType == "option-boxes" || newType == "dropdown") {
           this.selected.set('options', curOptions.split(','));
-          this.$el.find('.field-types').append('<span class="options-input-area">Options<br><input class="options-input" type="text" value="' + curOptions + '"></span>');
+          this.$el.find('.field-types').append('<span class="options-input-area">Options<br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="' + curOptions + '"></span>');
         }
       }
     },
@@ -147,6 +151,16 @@ function(Backbone, BackboneUI, FormFieldModel) {
       var options = String(this.$el.find('.options-input').val()).split(',');
       this.selected.set('options', options);
       e.stopPropagation();
+    },
+
+    changedOrder:function(e, ui) {
+      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
+      for(var ii = 0; ii < sortedIDs.length; ii++) {
+        var cid = sortedIDs[ii].replace('field-','');
+        var elem = this.model.get('fields').get(cid);
+        this.model.get('fields').remove(elem);
+        this.model.get('fields').push(elem);
+      }
     }
   });
 

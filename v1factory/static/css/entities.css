@@ -376,4 +376,12 @@ table tr:hover td {
 
 .column {
   min-width: 90px;
+  float: left;
+}
+
+.full.title {
+  height: 50px;
+  padding-top: 16px;
+  padding-left: 20px;
+  border-bottom:1px solid #ccc;
 }
