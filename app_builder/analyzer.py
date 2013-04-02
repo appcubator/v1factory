@@ -4,6 +4,7 @@
 
 import re
 from manager import Manager
+import simplejson
 from app_builder import utils
 
 """ MODELS """
