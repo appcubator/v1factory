@@ -77,7 +77,7 @@ def analyzed_app_to_app_components(analyzed_app):
       rec = LoginFormReceiver.create_login(f, analyzed_app)
     elif isinstance(f, EditForm):
       raise Exception("You found an edit form!")
-    elif isinstance(f, SignupForm):
+    elif isinstance(f, CreateForm):
       rec = DjangoFormReceiver.create(f, analyzed_app)
     else:
       raise Exception("What is this form?: %s" % type(f))
