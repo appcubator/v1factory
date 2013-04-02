@@ -1,5 +1,5 @@
 import re
-
+import simplejson
 from jinja2 import Environment, PackageLoader
 
 from app_builder.analyzer import Container, Node, Page, ListQuerysetWrapper, QuerysetWrapper, Renderable
