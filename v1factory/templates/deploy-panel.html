@@ -91,7 +91,7 @@ body {
         $('#container-' + appId).removeClass('error');
         $.ajax({
           type: "POST",
-          url: '/deploythisship/',
+          url: '/deploy/hosted/',
           data: { subdomain: subdomain, app_json: JSON.stringify(appStateJSON)},
           complete: function(r) {
             console.log(r.responseText);
