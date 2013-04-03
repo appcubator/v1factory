@@ -71,7 +71,7 @@ function(WidgetCollection,
 
     rowBindings: function() {
       var self = this;
-      _(this.model.get('container_info').get('row').get('uielements').models).each(function(element) {
+      _(self.model.get('container_info').get('row').get('uielements').models).each(function(element) {
         element.off();
         element.get('layout').off("change", self.reRender);
         element.bind('change', self.reRender);
@@ -116,7 +116,9 @@ function(WidgetCollection,
       $( this.el ).resizable( "destroy" );
       $( this.el ).draggable( "destroy" );
 
-      this.rowBindings();
+      if(this.model.get('container_info').has('row')) {
+        this.rowBindings();
+      }
       this.render();
       this.resizableAndDraggable();
       this.renderElements();
