@@ -32,7 +32,6 @@ function(ElementCollection,
                        'dropped',
                        'setupSearch');
 
-
       this.entitiesCollection   = entitiesColl;
       this.contextCollection    = contextColl;
       this.elementsCollection   = new ElementCollection();
@@ -48,6 +47,7 @@ function(ElementCollection,
       this.render();
 
       this.elementsCollection.add(defaultElements);
+
     },
 
     render: function() {
@@ -123,7 +123,7 @@ function(ElementCollection,
       // Displaying just the create forms
       if(entityModel.has('forms')) {
         _(entityModel.get('forms').models).each(function(form) {
-          if(form.get('type') == "create") {
+          if(form.get('action') == "create") {
             var html = _.template(Templates.createFormButton, {entity: entityModel,
                                                                form: form});
 
