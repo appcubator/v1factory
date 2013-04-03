@@ -90,8 +90,9 @@ class Page(object):
 class Route(object):
   """A Route is exactly what you think, except it can sometimes have dynamic inputs,
       which link to model fields. Ie /user/:user_id/"""
-  def __init__(self, url):
-    self.name = url['page_name']
+  def __init__(self, url, page):
+    self.name = page.name
+    self.page = page
     self.urlparts = url['urlparts']
 
   def static_url(self):
@@ -443,7 +444,7 @@ class AnalyzedApp:
       page = Page(p)
       self.pages.add(page)
       u = p['url']
-      r = Route(u)
+      r = Route(u, page)
       self.routes.add(r)
 
     self.link_models_to_routes()
