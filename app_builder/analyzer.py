@@ -288,7 +288,7 @@ class Form(Container):
   @classmethod
   def create(cls, uie, page):
     field_dicts = uie['container_info']['form']['fields']
-    fields = [ FormField.create(f) for f in field_dicts ]
+    fields = [ FormField.create(f) for f in field_dicts if f['type'] != 'button' ] # will eventually support buttons, but not now
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
