@@ -85,12 +85,16 @@ def get_model_data(model_name, db_path, limit=100):
 # from the get_xl_data() call.
 # 
 # Makes raw SQL queries to the databases to add the data in.
-def add_xl_data(xl_data, db_path):
+def add_xl_data(xl_data, fe_data, app_state_entities, db_path):
   con = sql.connect(db_path)
   cr = con.cursor()
   for sheet in xl_data:
     model_name = "webapp_" + xl_data[sheet]['model_name'].lower()
     model_schema = ', '.join(xl_data[sheet]['schema'])
+    if sheet not in app_state_entities:
+      create_new_xl_table(xl_data[sheet], sheet, fe_data, db_path)
+    elif not has_same_schema(model_name, db_path):
+      create_new_xl_table(xl_data[sheet], sheet, fe_data, db_path, update=True)
     qn_list = []
     for i in range(len(xl_data[sheet]['schema'])-1):
       qn_list.append('?')
@@ -102,10 +106,47 @@ def add_xl_data(xl_data, db_path):
       for r in xl_data[sheet]['data']:
         cr.execute("insert or replace into " + model_name + "(" + model_schema + ") values ((SELECT 1 + coalesce((SELECT max(id) FROM " + model_name + "), 0))," + qn_str + ")", tuple(r))
     except sql.OperationalError:
-      # Silently fail
-      pass
+      print "Failed to add xl data at %s" % db_path
   con.commit()
   con.close()
+
+def has_same_schema(xl_sheet, db_path):
+  model_name = "webapp_" + xl_sheet['model_name'].lower()
+  model_schema = xl_sheet['schema']
+  schema_obj = simplejson.loads(get_model_data(model_name, db_path, limit=1))
+  schema = schema_obj['schema']
+  if len(schema) != len(model_schema):
+    return False
+  for i in range(len(schema)):
+    ms = model_schema[i].replace(' ','_')
+    if schema[i] != ms:
+      print "Schema is not the same: %s %s" %(schema[i], ms)
+      return False
+  return True
+
+def create_new_xl_table(xl_sheet, sheet, fe_data, db_path, update=False):
+  con = sql.connect(db_path)
+  cr = con.cursor()
+  model_name = "webapp_" + xl_sheet['model_name'].lower()
+  schema = xl_sheet['schema']
+  schema_li = []
+  for s in schema:
+    if s == "id":
+      schema_li.append("id int")
+    else:
+      #schema_li.append(s + " " + fe_data['type'][s])      
+      schema_li.append(s)
+  query = "create table " + model_name + "(\n"
+  for s in schema_li:
+    query += "   " + s + ",\n"
+  query = query.replace(",", "")[:-1]
+  query += ")"
+  try:
+    if update:
+      cr.execute("drop table " + model_name)
+    cr.execute(query);
+  except:
+    print "Failed to create new table %s" % model_name
 
 # REPL for django shell of generated app
 class AppMessager:
