@@ -7,8 +7,10 @@ define([
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'keydown input'                 : 'inputChanged',
-      'keydown textarea'              : 'inputChanged',
+      'keyup input'                 : 'inputChanged',
+      'keyup textarea'              : 'inputChanged',
+      'keydown input'               : 'inputChanged',
+      'keydown textarea'            : 'inputChanged',
       'click #toggle-bold'          : 'toggleBold',
       'change .font-picker'         : 'changeFont',
       'change .statics'             : 'changeSrc',

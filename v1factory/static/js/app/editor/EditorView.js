@@ -101,7 +101,7 @@ define([
       this.$el.find('.url-bar').html(this.urlModel.getUrlString());
     },
 
-    save : function() {
+    save : function(callback) {
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
       var curAppState = this.amendAppState();
@@ -116,6 +116,7 @@ define([
           $('#save').html("<span>Saved</span>").fadeIn();
           setTimeout(function(){
             $('#save').html("<span>Save</span>").fadeIn();
+            callback();
           },3000);
         },
         error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
@@ -145,17 +146,20 @@ define([
     },
 
     deploy: function() {
-      this.save();
 
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/deploy/',
-        complete: function(data) {
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
-        },
-        dataType: "JSON"
-      });
+      var deployFn = function() {
 
+        $.ajax({
+          type: "POST",
+          url: '/app/'+appId+'/deploy/',
+          complete: function(data) {
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+          },
+          dataType: "JSON"
+        });
+      };
+
+      this.save(deployFn);
     },
 
     deployLocal: function() {
