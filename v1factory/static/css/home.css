@@ -13,7 +13,7 @@
 }
 
 h2 {
-  font-size: 42px;
+  font-size: 32px;
   line-height: 50px;
 }
 
@@ -205,7 +205,7 @@ background-repeat: no-repeat;
 
 .motto {
   font-family: 'verb_lightitalic';
-  font-size: 30px;
+  font-size: 26px;
   line-height: 42px;
   width: 105%;
 }
@@ -228,4 +228,9 @@ p {
 
 .card {
   padding: 5px 15px;
+}
+
+
+h3 {
+  font-size: 22px;
 }
