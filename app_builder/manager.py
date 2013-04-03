@@ -5,6 +5,7 @@ def get_name(instance):
   except Exception:
     return instance['name']
 
+
 class Manager:
   """
   Manages a collection of objects

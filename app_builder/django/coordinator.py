@@ -46,8 +46,8 @@ def analyzed_app_to_app_components(analyzed_app):
             break
         if not m2m:
           # if user has a list of blogs, then blog has a foreign key user
-          # parent_user973947234 is a foreign key on Blog, relating to User with related name "Blogs"
-          df = DjangoField.create_relational('parent_%s%s' % (dm1.name, id(f)), f.name, dm2, dm1)
+          # parent_user is a foreign key on Blog, relating to User with related name "Blogs"
+          df = DjangoField.create_relational('parent_%s' % (dm1.name,), f.name, dm2, dm1)
           dm2.fields.add(df)
 
   # create django templates

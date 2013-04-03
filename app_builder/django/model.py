@@ -60,7 +60,9 @@ class DjangoModel(object):
 class UserProfileModel(DjangoModel):
   def __init__(self, name=None, fields=None):
     super(UserProfileModel, self).__init__(name=name, fields=fields)
-    self.fields.add(UserProfileUserField())
+    self.fields.add(UserProfileUserField(model=self))
+    uf = UsernameField(model=self)
+    self.fields.add(uf)
 
   def identifier(self):
     return "UserProfile"
@@ -153,6 +155,18 @@ class DjangoField(object):
     env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
     template = env.get_template('model_fields.py')
     return template.render(f = self)
+
+class UsernameField(DjangoField):
+
+  def __init__(self, *args, **kwargs):
+    super(UsernameField, self).__init__(*args, **kwargs)
+    self.name = "username"
+
+  def identifier(self):
+    return 'username'
+
+  def render(self):
+    return ""
 
 class UserProfileUserField(DjangoField):
   def __init__(self, name="User", field_type='onetoone', required=None, model=None, related_name=None, related_model=None):
