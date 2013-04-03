@@ -208,6 +208,9 @@ def entities(request, app_id):
 def process_excel(request, app_id):
   app_id = long(app_id)
   file_name = request.FILES['file_name']
+  entity_name = request.POST['entity_name']
+  fields = request.POST['fields']
+  fe_data = {'model_name' : entity_name, 'fields' : fields}
   app = get_object_or_404(App, id=app_id, owner=request.user)
   try:
     d = Deployment.objects.get(subdomain=app.subdomain())
@@ -215,13 +218,9 @@ def process_excel(request, app_id):
     raise Exception("App has not been deployed yet")
   state = app.get_state()
   xl_data = get_xl_data(file_name)
-  entity_names_in_the_app_state = [e['name'] for e in state['entities'] ]
-  entity_names_in_the_app_state.append("User")
-  print xl_data
+  app_state_entities = [e['name'] for e in state['entities'] ]
   for sheet in xl_data:
-    if sheet not in entity_names_in_the_app_state:
-      raise Exception("None of the sheet names matched a model name")
-  add_xl_data(xl_data, d.app_dir + "/db")
+    add_xl_data(xl_data, fe_data, app_state_entities, d.app_dir + "/db")
   return HttpResponse("ok")
 
 @login_required

@@ -184,7 +184,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
     },
 
     clickedUploadExcel: function(e) {
-      new UploadExcelView();
+      new UploadExcelView(this.model);
     },
 
     clickedEditForm: function(e) {
