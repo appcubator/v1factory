@@ -136,7 +136,7 @@ def create_new_xl_table(xl_sheet, sheet, fe_data, db_path, update=False):
     if s == "id":
       schema_li.append("id int")
     else:
-      # TODO(nkhadke,icanberk): Once front end data comes i
+      # TODO(nkhadke,icanberk): Once front end data comes in
       # replace the database creation with strong types.
       # schema_li.append(s + " " + fe_data['type'][s])      
       schema_li.append('"' + s + '"')
