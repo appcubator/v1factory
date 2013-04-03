@@ -8,7 +8,7 @@
   {% elif field.display_type == "password-text" %}
   <input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "email-text" %}
-  <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
+  <div class="input-prepend"><span class="add-on">@</span><input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
   {% elif field.display_type == "button" %}
   <div class="btn">{{ field.placeholder }}</div>
   {% elif field.display_type == "dropdown" %}
