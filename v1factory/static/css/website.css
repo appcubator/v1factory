@@ -60,7 +60,6 @@ body {
   line-height: 20px;
   font-weight: lighter;
   background-color: #fff;
-  padding-bottom: 60px;
   color: #0f2d40;
   background-color: #e3e3e3;
 }
@@ -99,6 +98,11 @@ a.pane:hover {
 
 .green-3 {
   background-color: #0c5070;
+}
+
+.page {
+  position: relative;
+  min-height: 100%;
 }
 
 .navbar-inner {
@@ -653,7 +657,8 @@ input[type="password"], input[type="text"] {
 }
 
 .footer {
-  position: relative;
+  position: absolute;
+  display: block;
   bottom: 0;
   width: 100%;
   left: 0;

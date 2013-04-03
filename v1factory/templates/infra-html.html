@@ -33,15 +33,12 @@
     {% block topbar %}
     {% endblock %}
     </div>
-    {% block navbar %}
-    {% endblock %}
     {% block page %}
-    {% endblock %}  
+    {% endblock %} 
+    <div class="footer"><hr></div> 
   </div>
-  
-  <div class="footer"><hr></div>
-  <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
-  {% block js %}
-  {% endblock %}
 </body>
+<script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
+{% block js %}
+{% endblock %}
 </html>
