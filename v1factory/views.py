@@ -3,12 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
-from v1factory.models import App, UIElement, StaticFile, UITheme
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from v1factory.models import App, UIElement, StaticFile, UITheme
+from app_builder.analyzer import AnalyzedApp
 from app_builder.utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
+from app_builder.validator import validate_app_state
 import requests
-from django.conf import settings
+import traceback
 
 def add_statics_to_context(context, app):
   context['statics'] = simplejson.dumps(list(StaticFile.objects.filter(app=app).values()))
@@ -79,19 +82,36 @@ def app_get_state(request, app):
 @require_POST
 @login_required
 def app_save_state(request, app):
+  old_state = app.state
   app._state_json = request.body
   app.name = app.state['name']
   try:
     app.full_clean()
   except Exception, e:
     return (400, str(e))
-  app.save()
-  m = "ok"
-  from app_builder.validator import validate_app_state
-  state_errs = validate_app_state(app.state)
+  #app.save()
+  state_err = validate_state(app.state)
+  if state_err is not None:
+    return (400, state_err)
+  else:
+    app.save()
+    return (200, "ok")
+
+def validate_state(app_state):
+
+  # type check
+  state_errs = validate_app_state(app_state)
   if len(state_errs) > 0:
-    m = "\n\n".join(state_errs)
-  return (200, m)
+    return "\n\n".join(state_errs)
+
+  # other checks
+  try:
+    a = AnalyzedApp(app_state)
+  except Exception, e:
+    return traceback.format_exc(100)
+
+  # winning
+  return None
 
 @login_required
 def uie_state(request, app_id):

@@ -20,7 +20,19 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                              "required": { "_type": False },
                                              "type": { "_type" : "" }
                                             }}
-                                  }
+                                  },
+                        "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
+                                  "name": { "_type" : "" },
+                                  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
+                                             "name": { "_type" : "" },
+                                             "placeholder": { "_type" : "" },
+                                             "label": { "_type" : "" },
+                                             "displayType": { "_type" : "" },
+                                             "type": { "_type" : "" },
+                                             "options": { "_type" : [], "_each": { "_type" : "" }}
+                                            }}},
+                                  "action": { "_type":"" }
+                                 }}}
                         }
            },
   "entities": { "_type": [], "_each": {
@@ -34,7 +46,19 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                                  "required": { "_type": False },
                                                  "type": { "_type" : "" }
                                                 }}
-                                      }
+                                      },
+                            "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
+                                      "name": { "_type" : "" },
+                                      "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
+                                                 "name": { "_type" : "" },
+                                                 "placeholder": { "_type" : "" },
+                                                 "label": { "_type" : "" },
+                                                 "displayType": { "_type" : "" },
+                                                 "type": { "_type" : "" },
+                                                 "options": { "_type" : [], "_each": { "_type" : "" }}
+                                                }}},
+                                      "action": { "_type":"" }
+                                     }}}
                            }
                }},
   "pages": { "_type": [], "_each": {
