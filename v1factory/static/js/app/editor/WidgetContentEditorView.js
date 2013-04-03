@@ -134,7 +134,7 @@ define([
     },
 
     toggleBold: function(e) {
-      var curStyle = this.model.get('content_attribs').get('style');
+      var curStyle = (this.model.get('content_attribs').get('style')||'');
       if(curStyle.indexOf('font-weight:bold;') < 0) {
         curStyle += 'font-weight:bold;';
         this.model.get('content_attribs').set('style', curStyle);

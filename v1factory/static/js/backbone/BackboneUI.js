@@ -179,6 +179,7 @@ define(['backbone', 'jquery-ui'], function() {
 
     closeModal: function() {
       var self = this;
+      this.undelegateEvents();
       if(this.callback) this.callback();
       if(this.onClose) this.onClose();
       // fadeOut(function() { $(this).remove(); });
