@@ -208,7 +208,8 @@ def entities(request, app_id):
 def process_excel(request, app_id):
   app_id = long(app_id)
   file_name = request.FILES['file_name']
-#  fe_data = request.POST['fe_data']
+  # TODO(nkhadke, icanberk): Uncomment once fe_data is sent
+  #  fe_data = request.POST['fe_data']
   app = get_object_or_404(App, id=app_id, owner=request.user)
   try:
     d = Deployment.objects.get(subdomain=app.subdomain())

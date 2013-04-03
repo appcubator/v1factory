@@ -29,9 +29,10 @@ def get_xl_data(xl_file):
     curr_sheet = xf.sheet_by_name(sheet_name)
     schema = ['id']
     for colnum in range(curr_sheet.ncols):
-      schema.append('m_' + curr_sheet.cell(0, colnum).value.replace(" ", "_"))
+      # Replace spaces and dashes
+      schema.append('m_' + curr_sheet.cell(0, colnum).value.replace(" ", "_").replace("-",""))
     # ensure no empty sheets are added unnecessarily
-    if len(schema) > 0:
+    if len(schema) > 1:
       xl_dict[sheet_name] = dict()
       xl_dict[sheet_name]['schema'] = schema
       xl_dict[sheet_name]['model_name'] = sheet_name
@@ -105,8 +106,9 @@ def add_xl_data(xl_data, fe_data, app_state_entities, db_path):
         cr.execute("delete from " + model_name);
       for r in xl_data[sheet]['data']:
         cr.execute("insert or replace into " + model_name + "(" + model_schema + ") values ((SELECT 1 + coalesce((SELECT max(id) FROM " + model_name + "), 0))," + qn_str + ")", tuple(r))
-    except sql.OperationalError:
+    except sql.OperationalError, e:
       print "Failed to add xl data at %s" % db_path
+      print str(e)
   con.commit()
   con.close()
 
@@ -134,12 +136,14 @@ def create_new_xl_table(xl_sheet, sheet, fe_data, db_path, update=False):
     if s == "id":
       schema_li.append("id int")
     else:
-      #schema_li.append(s + " " + fe_data['type'][s])      
-      schema_li.append(s)
+      # TODO(nkhadke,icanberk): Once front end data comes i
+      # replace the database creation with strong types.
+      # schema_li.append(s + " " + fe_data['type'][s])      
+      schema_li.append('"' + s + '"')
   query = "create table " + model_name + "(\n"
   for s in schema_li:
-    query += "   " + s + ",\n"
-  query = query.replace(",", "")[:-1]
+    query += '   ' + s + ",\n"
+  query = query[:-2]
   query += ")"
   try:
     if update:
