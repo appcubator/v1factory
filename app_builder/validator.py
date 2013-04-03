@@ -65,12 +65,12 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
             "_type": {},
             "_mapping": {
                          "name": { "_type" : "" },
-                         "url": { "_type": [], "_each": { "_type": {}, "_mapping": {
+                         "url": { "_type": {}, "_mapping": {
                                  "urlparts": {
                                               "_type": [],
                                               "_each": { "_type" : "" }
                                              }
-                                }}},
+                                }},
                          "design_props": {
                                           "_type": [],
                                           "_each": { "_type": {}, "_mapping": {
