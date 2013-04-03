@@ -22,7 +22,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'keydown input.field-label-input'  : 'changedLabel',
       'keyup   .field-placeholder-input'   : 'changedPlaceholder',
       'keyup   input.field-label-input'    : 'changedLabel',
-      'keyup  .options-input'          : 'changedOptions'
+      'keyup  .options-input'            : 'changedOptions',
+      'change .goto'                     : 'changedGoto'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -30,6 +31,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
                       'fieldBoxChanged',
                       'fieldAdded',
                       'fieldRemoved',
+                      'changedGoto',
                       'selectedNew',
                       'changedFieldType',
                       'renderField',
@@ -55,7 +57,13 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     render : function(text) {
       var self = this;
-      var html = _.template(FormEditorTemplates.template, { form: self.model, entity: self.entity});
+
+      var temp_context = {};
+      temp_context.form = self.model;
+      temp_context.entity = self.entity;
+      temp_context.pages = appState.pages;
+
+      var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
 
       $('.form-fields-list').sortable({
@@ -161,6 +169,11 @@ function(Backbone, BackboneUI, FormFieldModel) {
         this.model.get('fields').remove(elem);
         this.model.get('fields').push(elem);
       }
+    },
+
+    changedGoto: function(e) {
+      var page_val = '{{' + $(e.target).val() + '}}';
+      this.model.set('goto', page_val);
     }
   });
 

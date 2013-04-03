@@ -9,23 +9,7 @@
         "linkedin": false,
         "twitter": false,
         "local": true,
-        "fields": [
-            {
-                "name": "First Name",
-                "required": true,
-                "type": "text"
-            },
-            {
-                "name": "Last Name",
-                "required": true,
-                "type": "text"
-            },
-            {
-                "name": "Email",
-                "required": true,
-                "type": "text"
-            }
-        ],
+        "fields": [ ],
         "name": "User",
         "forms": [
             {
@@ -33,7 +17,7 @@
                 "action" : "signup",
                 "fields": [
                      {
-                        "name": "Username",
+                        "name": "username",
                         "type" : "text",
                         "displayType": "single-line-text",
                         "label": "Username",
@@ -41,7 +25,7 @@
                         "options": []
                     },
                     {
-                        "name": "Password",
+                        "name": "password1",
                         "type" : "password",
                         "displayType": "password-text",
                         "label": "Password",
@@ -49,7 +33,7 @@
                         "options": []
                     },
                     {
-                        "name": "Confirm Password",
+                        "name": "password2",
                         "type" : "password",
                         "displayType": "password-text",
                         "label": "Confirm Password",
@@ -57,7 +41,7 @@
                         "options": []
                     },
                     {
-                        "name": "Email",
+                        "name": "email",
                         "type" : "email",
                         "displayType": "email-text",
                         "label": "Email Address",
@@ -78,7 +62,7 @@
                 "name": "Local Login",
                 "fields": [
                     {
-                        "name": "Username",
+                        "name": "username",
                         "displayType": "single-line-text",
                         "type": "text",
                         "label": "Username",
@@ -86,7 +70,7 @@
                         "options": []
                     },
                     {
-                        "name": "Password",
+                        "name": "password",
                         "displayType": "password-text",
                         "type": "password",
                         "label": "Password",
