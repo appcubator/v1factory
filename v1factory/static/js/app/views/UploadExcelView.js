@@ -21,7 +21,7 @@ function(Backbone, BackboneUI) {
                                   '<input type="file" name="file_name" value="Upload"/>',
                                   '<input type="hidden" name="entity_name" value="'+ self.name+'">',
                                   '<input type="hidden" name="fields" value=\''+ JSON.stringify(self.fields) +'\'>',
-                                  '<input type="submit" value="Upload">',
+                                  '<input type="submit" class="btn" value="Upload">',
                            '</form>'].join('\n');
       return this;
     }
