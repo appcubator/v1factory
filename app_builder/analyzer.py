@@ -442,9 +442,7 @@ class AnalyzedApp:
     for p in app_state['pages']:
       page = Page(p)
       self.pages.add(page)
-
-    # create urls from app_state urls
-    for u in app_state['urls']:
+      u = p['url']
       r = Route(u)
       self.routes.add(r)
 
