@@ -52,12 +52,16 @@ function(WidgetCollection,
       if(this.model.get('container_info').has('row')) {
         this.model.get('container_info').get('row').get('layout').bind('change', this.reRender);
         //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
-        //this.rowBindings();
+        this.rowBindings();
       }
 
       if(this.model.get('container_info').has('form')) {
         var form = this.model.get('container_info').get('entity').getFormWithName(this.model.get('container_info').get('form'));
         this.formModel = form;
+        this.formModel.bind('change', this.reRender);
+        this.formModel.get('fields').bind('remove', this.reRender);
+        this.formModel.get('fields').bind('add', this.reRender);
+        _(this.formModel.get('fields').models).each(function(model){ model.bind('change', self.reRender); });
       }
 
       this.render();
@@ -66,8 +70,12 @@ function(WidgetCollection,
     },
 
     rowBindings: function() {
+      var self = this;
       _(this.model.get('container_info').get('row').get('uielements').models).each(function(element) {
+        element.off();
+        element.get('layout').off("change", self.reRender);
         element.bind('change', self.reRender);
+        element.get('layout').bind('change', self.reRender);
       });
     },
 
@@ -108,6 +116,7 @@ function(WidgetCollection,
       $( this.el ).resizable( "destroy" );
       $( this.el ).draggable( "destroy" );
 
+      this.rowBindings();
       this.render();
       this.resizableAndDraggable();
       this.renderElements();
@@ -116,6 +125,7 @@ function(WidgetCollection,
     placeWidget: function(model, a) {
       var widgetView = new SubWidgetView(model);
       this.el.appendChild(widgetView.el);
+      model.get('layout').bind('change', this.reRender);
     },
 
     placeFormElement: function(fieldModel) {

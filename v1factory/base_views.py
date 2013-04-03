@@ -79,4 +79,6 @@ def signup(request):
 
 
 def highland_view(request):
-  return redirect('/')
+  page_context = {}
+  page_context["title"] = "Homepage"
+  return render(request, 'website-home2.html', page_context)

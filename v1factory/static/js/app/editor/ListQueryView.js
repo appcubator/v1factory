@@ -38,10 +38,7 @@ define([
       this.entity = widgetModel.get('container_info').get('entity');
 
       this.widgetsCollection = this.rowModel.get('uielements');
-
       this.widgetsCollection.bind('add', this.placeWidget);
-
-      console.log(this.rowModel);
 
       this.rowModel.get('layout').bind('change', this.renderConstants);
       this.queryModel.bind('change', this.renderConstants);
@@ -115,7 +112,7 @@ define([
 
     renderConstants: function() {
       var self = this;
-      console.log(self.widgetsCollection);
+
       $('.constant-elements').remove();
       for(var ii=0; ii <2; ii++) {
         var html = _.template(Templates.rowNode, { layout: self.rowModel.get('layout'),
@@ -133,7 +130,6 @@ define([
         fieldsArray = _.uniq(fieldsArray);
       }
       else {
-        console.log("UNCHECK!");
         this.removedWidget(e.target.id);
         fieldsArray = _.difference(fieldsArray, e.target.value);
       }
@@ -166,20 +162,15 @@ define([
     removedWidget: function(fieldId) {
       var self = this;
       var cid = String(fieldId).replace('field-', '');
-      console.log(cid);
-      console.log(this.widgetsCollection);
       var widget = this.widgetsCollection.where({field: cid})[0];
 
       if(!widget) {
-        //this.queryModel.get('fieldsToDisplay').get('')
         var model = this.entity.get('fields').get(cid);
-        console.log(this.widgetsCollection);
-        //console.log()
         widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '_' + model.get('name') + '}}'})[0];
       }
 
-      console.log(widget);
       this.widgetsCollection.remove(widget);
+      $('#widget-wrapper-' + widget.cid).remove();
       widget.remove();
     },
 
@@ -224,24 +215,15 @@ define([
     },
 
     placeWidget: function(widgetModel) {
-      console.log('widget model:');
-      console.log(widgetModel);
 
-
-      //var content = String(widgetModel.get('content')).split('_')[1].replace('}}','');
-      //this.queryModel.get('fieldsToDisplay')
-      //widgetModel.field = ;
-
+      widgetModel.get('layout').bind('change', this.renderConstants);
       var curWidget = new WidgetView(widgetModel);
 
       if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);
-      // else iui.get('full-container').appendChild(curWidget.el);
       curWidget.resizableAndDraggable();
     },
 
     resized: function() {
-      // this.rowWidget.style.width ='';
-      // this.rowWidget.style.height = '';
       this.rowWidget.style.width = '';
       this.rowWidget.style.height ='';
       this.rowWidget.className = 'editor-window container-wrapper ';

@@ -651,3 +651,24 @@ input[type="password"], input[type="text"] {
 .full {
   width: 100%;
 }
+
+.footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+}
+
+.footer h2 {
+  font-size: 28px;
+  margin-top: 20px;
+}
+
+.footer hr {
+  display: block;
+  vertical-align: bottom;
+  height: 10px;
+  background-color: #0f2d40;
+  margin:0;
+  border: none;
+}
