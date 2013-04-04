@@ -21,7 +21,7 @@
       <div class="hi28">
         <div class="span33 hoff4" style="color:#0f2d40;">
           <h2 class="hoff2">Easiest way to build web and mobile applications.</h2>
-          <p class="motto">You can turn your idea into a working site or app at a <strong>low cost</strong> and <strong>quick turnaround</strong>.</p>
+          <p class="motto">You can turn your idea into a working application at a <strong>low cost</strong> and <strong>quick turnaround</strong>.</p>
           <div class="btn btn-green hoff1" id="request">Request a Beta Invite</div>
           <script type="in/Login"></script>
         </div>
@@ -35,17 +35,19 @@
   </div>
 </div>
 <div class="steps">
-  <div class="row hi16">
+  <div class="row hi16 desc-cont" id="cont-1">
     <div class="container hoff4">
       <div class="description span48">
         <h3>Define Your Users</h3>
-        <span class="small">Use our visual editor to build your app or hire a developer. Facebook, Twitter and LinkedIn integration is built in.</span>
+        <span class="small">
+          With one click, tell the way you want users to login. 
+        </span>
       </div>
       <div class="image span16">
       </div>
     </div>
   </div>
-  <div class="row hi16 hoff12">
+  <div class="row hi16 hoff12 desc-cont" id="cont-2">
     <div class="container hoff4">
       <div class="image span16">
       </div>
@@ -55,7 +57,7 @@
       </div>
     </div>
   </div>
-  <div class="row hi16 hoff12">
+  <div class="row hi16 hoff12 desc-cont" id="cont-3">
     <div class="container hoff4">
       <div class="description span48">
         <h3>Upload Your Data</h3>
@@ -65,7 +67,7 @@
       </div>
     </div>
   </div>
-  <div class="row hi16 hoff12">
+  <div class="row hi16 hoff12 desc-cont" id="cont-4">
     <div class="container hoff4">
       <div class="image span16">
       </div>
@@ -75,7 +77,7 @@
       </div>
     </div>
   </div>
-  <div class="row hi16 hoff12">
+  <div class="row hi16 hoff12 desc-cont" id="cont-5">
     <div class="container hoff4">
       <div class="description span48">
         <h3>Make Your Pages</h3>
@@ -85,7 +87,7 @@
       </div>
     </div>
   </div>
-  <div class="row hi16 hoff12">
+  <div class="row hi16 hoff12 desc-cont" id="cont-6">
     <div class="container hoff4">
       <div class="image span16">
       </div>
@@ -96,7 +98,7 @@
     </div>
   </div>
 
-  <div class="footer hoff12">
+  <div class="footer hoff12" style="position:static;">
     <div class="container">
       <h2 class="span34 offset8">Have more questions? Ask us!</h2>
       <img src="{{ STATIC_URL}}img/mascot.png" width="180">
@@ -109,4 +111,43 @@
 {% endblock %}
 
 {% block js %}
+<script src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
+<script type="text/javascript">
+// var cur = 1;
+// $(window).on('scroll', function(e) {
+//   var docViewTop    = $(window).scrollTop();
+//   var docViewBottom = docViewTop + $(window).height();
+
+//   // console.log($('#cont-2').offset().top - docViewTop);
+//   if($('#cont-1').offset().top - docViewTop < 120 & cur != 1) {
+//     $('.bg-cover').hide().css("background-image", "url({{ STATIC_URL }}img/bg-1.png)");
+//     cur = 1;
+//   }
+
+//   if($('#cont-2').offset().top - docViewTop < 120 & cur != 2) {
+//     cur = 2;
+//     $('.bg-cover').hide().css("background-image", "url({{ STATIC_URL }}img/bg-2.png)").fadeIn(50);
+//   }
+
+//   if($('#cont-3').offset().top - docViewTop < 120 & cur != 3) {
+//     $('.bg-cover').css("background-image", "url({{ STATIC_URL }}img/bg-3.png)");
+//     cur = 3;
+//   }
+
+//   if($('#cont-4').offset().top - docViewTop < 120 & cur != 4) {
+//     $('.bg-cover').css("background-image", "url({{ STATIC_URL }}img/bg-4.png)");
+//     cur = 4; 
+//   }
+
+//   if($('#cont-5').offset().top - docViewTop < 120 & cur != 5) {
+//     $('.bg-cover').css("background-image", "url({{ STATIC_URL }}img/bg-5.png)");
+//     cur = 5;
+//   }
+
+//   if($('#cont-6').offset().top - docViewTop < 120 & cur != 6) {
+//     $('.bg-cover').css("background-image", "url({{ STATIC_URL }}img/bg-6.png)");
+//     cur = 6;
+//   }
+// })
+</script>
 {% endblock %}

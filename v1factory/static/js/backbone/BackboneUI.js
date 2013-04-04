@@ -1,4 +1,9 @@
-define(['backbone', 'jquery-ui'], function() {
+define([
+  'backbone',
+  'jquery-ui'
+],
+
+function() {
 
   var BackboneUI = {};
 
@@ -145,7 +150,7 @@ define(['backbone', 'jquery-ui'], function() {
 
       var div = document.createElement('div');
       div.style.position = 'fixed';
-      div.className = 'modal fadeIn';
+      div.className = 'modal';
       div.style.width = this.width + 'px';
       div.style.minHeight = '300px';
       div.style.top = '50%';
