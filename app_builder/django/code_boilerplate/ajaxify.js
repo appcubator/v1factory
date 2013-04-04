@@ -12,13 +12,18 @@ $(document).ready(function() {
           if (typeof(data.redirect_to) !== 'undefined') {
             location.href = data.redirect_to;
           } else {
-            //form error
-            alert(data);
-            console.log(data);
+            _.each(data, function(val, key, ind) {
+              if(key==='__all__') {
+                $(self).find('.form-error.field-all').html(val.join('<br />'));
+              } else {
+                $(self).find('.form-error.field-name-'+key).html(val.join('<br />'));
+              }
+            });
           }
         }
       };
       $.ajax(ajax_info);
+      $(self).find('.form-error').html("");
 
       return false;
 
