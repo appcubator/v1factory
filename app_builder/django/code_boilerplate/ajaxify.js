@@ -3,17 +3,24 @@ $(document).ready(function() {
   $('form').each(function(ind, node) {
 
     $(node).submit(function(e) {
-
+      var self = this;
       var ajax_info = {
         type : $(node).attr('method'),
         url  : $(node).attr('action'),
         data : $(node).serialize(),
-        error : function(error) {
-          console.log(error);
-          e.preventDefault();
+        success : function(data, statusStr, xhr) {
+          if (typeof(data.redirect_to) !== 'undefined') {
+            location.href = data.redirect_to;
+          } else {
+            //form error
+            alert(data);
+            console.log(data);
+          }
         }
       };
       $.ajax(ajax_info);
+
+      return false;
 
     });
   });

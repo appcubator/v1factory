@@ -13,10 +13,10 @@ def {{ form_receiver.identifier() }}(request):
   if form.is_valid():
     # Make sure the redirect is kosher
     if not is_safe_url(url=redirect_to, host=request.get_host()):
-      return redirect('/')
+      return ajax_redirect(request, '/')
 
     auth_login(request, form.get_user())
-    return HttpResponseRedirect(redirect_to)
+    return ajax_redirect(request, redirect_to)
 
   else:
     return HttpResponse(simplejson.dumps(form.errors), mimetype="application/json")
