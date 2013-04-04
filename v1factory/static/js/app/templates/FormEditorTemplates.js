@@ -59,7 +59,11 @@ FormEditorTemplates.template = [
   '</div><div class="action-panel panel">',
     '<h4>Form Actions</h4>',
     '<span>Go to</span>',
-    '<select><option>Page 1</option><option>Page 2</option></select>',
+    '<select class="goto">',
+      '<% _(pages).each(function(page) { %>',
+        '<option <% if(form.get("goto") == "{{"+page.name+"}}"){ %> selected<% }; %>><%= page.name %></option>',
+      '<% });%>',
+    '</select>',
     '<br><span>Email</span>',
     '<select><option>Email 1</option><option>Email 2</option></select>',
   '</div>'

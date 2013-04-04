@@ -1,17 +1,21 @@
 define([
+  'app/editor/WidgetClassPickerView',
   'backbone'
-],function() {
+],
+function(WidgetClassPickerView) {
 
   var WidgetLayoutEditorView = Backbone.View.extend({
     el     : document.getElementById('layout-editor'),
     className : 'layout-editor',
     events : {
       'click .a-pick'            : 'changeAlignment',
-      'click .padding'           : 'changePadding'
+      'click .padding'           : 'changePadding',
+      'click #pick-style'        : 'openStylePicker'
     },
 
     initialize: function(widgetModel){
       _.bindAll(this, 'render',
+                      'renderStyleEditing',
                       'clear',
                       'changeAlignment',
                       'changePadding');
@@ -61,6 +65,13 @@ define([
 
       this.el.appendChild(this.renderPaddingInfo());
       this.el.appendChild(this.renderLayoutInfo());
+      this.el.appendChild(this.renderStyleEditing());
+    },
+
+    renderStyleEditing: function(e) {
+      var li       = document.createElement('ul');
+      li.innerHTML += '<span id="pick-style" class="option-button" style="width:220px; margin-left:6px;"><strong>Pick Style</strong></span>';
+      return li;
     },
 
     renderLayoutInfo: function() {
@@ -75,6 +86,10 @@ define([
       ul.className = "padding-picker right";
       ul.innerHTML += '<li class="padding tb" id="padding-tb"></li><li class="padding lr" id="padding-lr"></li>';
       return ul;
+    },
+
+    openStylePicker: function(e) {
+      new WidgetClassPickerView(this.model);
     },
 
     clear: function() {

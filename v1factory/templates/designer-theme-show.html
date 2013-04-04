@@ -1,7 +1,8 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css"> 
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes.css">
 {% endblock %}
 
 {% block topbar %}
@@ -9,65 +10,63 @@
 {% endblock %}
 
 {% block page %}
-<div class="well green-2">
-  <div class="container hoff4">
-    <div class="span58">
-      <div class="hi5">
-        <div class="hi5">
-          Lorem ipsum.
-        </div>
-      </div>
-    </div>
-    <div class="span6">
-      <a class="btn span6" id="save">Save</a>
-      <a class="btn span6 btn-reset">Reset</a>
-    </div>
-
-  </div>
-</div>
-<div class="container">
-    <span class="span62">
+<a class="span6 save-btn" id="save"></a>
+<div class="container hoff6 ">
+  <h2>Base CSS</h2>
+  <textarea class="base-css span32 hi20" id="base-css">
+  </textarea>
+  <h2>Elements</h2>
+    <span class="">
       <ul class="hoff2 uie-gallery">
-        <li class="" id="button">
-          <h3>Button</h3>
+        <li class="expandible" id="button">
+          <h3>Buttons</h3>
         </li>
-        <li class="" id="image">
-          <h3>Image</h3>
+        <li class="expandible" id="image">
+          <h3>Images</h3>
         </li>
-        <li class="" id="header-text">
-          <h3>Header</h3>
+        <li class="expandible" id="header-text">
+          <h3>Headers</h3>
         </li>
-        <li class="" id="text">
-          <h3>Text</h3>
+        <li class="expandible" id="text">
+          <h3>Texts</h3>
         </li>
-        <li class="" id="link">
-          <h3>Link</h3>
+        <li class="expandible" id="link">
+          <h3>Links</h3>
         </li>
-        <li class="" id="text-input">
-          <h3>Input</h3>
+        <li class="expandible" id="text-input">
+          <h3>Inputs</h3>
         </li>
-        <li class="" id="password">
-          <h3>Password Field</h3>
+        <li class="expandible" id="password">
+          <h3>Password Fields</h3>
         </li>
-        <li class="" id="text-area">
-          <h3>Text Area</h3>
+        <li class="expandible" id="text-area">
+          <h3>Text Areas</h3>
         </li>
-        <li class="" id="line">
-          <h3>Line</h3>
+        <li class="expandible" id="line">
+          <h3>Lines</h3>
         </li>
-        <li class="" id="dropdown">
-          <h3>Dropdown</h3>
+        <li class="expandible" id="dropdown">
+          <h3>Dropdowns</h3>
         </li>
-        <li class="" id="box">
-          <h3>Box</h3>
+        <li class="expandible" id="box">
+          <h3>Boxes</h3>
         </li>
       </ul>
     </span>
+  <h2>Pages</h2>
+  <ul id="pages">
+  </ul>
+  <div class="span16 hi12 pane border" id="create-page">
+    + Create Sample Page
+  </div>
+  <form class="create-page-form" style="display:none">
+    <input class="create-page-name" type="text" placeholder="placename">
+  </form>
 </div>
 {% endblock %}
 {% block js %}
 <script>
-var uieState = {{ theme|safe }}
+var themeState = {{ theme|safe }}
 var themeId = {{ themeId|safe }}
 </script>
 <script data-main="{{ STATIC_URL }}js/app/designer-app/theme-show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>

@@ -36,7 +36,7 @@
 
   <!-- Top Menu -->
   <div class="section-select">
-    <a href="{% url v1factory.views.app_page app.id %}" class="menu-button home">
+    <a href="{% url v1factory.views.theme_show theme.id %}" class="menu-button home">
     </a><div class="menu-button save" id="save">
       <span>Save</span>
     </div><div class="menu-button setting" id="settings"><span>Design Settings</span>
@@ -89,13 +89,10 @@
 
 </body>
   <script type="text/javascript">
-    var appState = {{ app.state_json|safe }};
-    var appId = {{ app_id|safe }};
-    var statics = {{ statics|safe }};
-    var myUIElements = {{ myuielements|safe }};
-    var library = {{ elements|safe }};
-    var pageId = {{ page_id }};
-    var uieState = {{ app.uie_state_json|safe }};
+    var themeState = {{ theme_state|safe }};
+    var pageId = {{ page_id|safe }};
+    var themeId = {{ theme_id|safe }};
+    var statics = [];
     var GRID_WIDTH = 80;
     var GRID_HEIGHT = 15;
   </script>
@@ -111,6 +108,6 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/default-uielements.js"></script>
 
-  <script data-main="{{ STATIC_URL }}js/app/editor/main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+  <script data-main="{{ STATIC_URL }}js/app/designer-app/editor-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 
 </html>

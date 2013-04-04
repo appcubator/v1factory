@@ -1,6 +1,6 @@
 {{ "{% csrf_token %}" }}
 {% for field in context.included_fields %}
-  <label for="id-{{ field.post_name }}">{{ field.label }}</label>
+{% if field.label != None %} <label for="id-{{ field.post_name }}">{{ field.label }}</label>{% endif %}
   {% if field.display_type == "single-line-text" %}
   <input type="text" name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "paragraph-text" %}
@@ -8,7 +8,7 @@
   {% elif field.display_type == "password-text" %}
   <input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "email-text" %}
-  <div class="input-prepend"><span class="add-on">@</span><input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
+  <div class="input-prepend"><span class="add-on">@</span><input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
   {% elif field.display_type == "button" %}
   <div class="btn">{{ field.placeholder }}</div>
   {% elif field.display_type == "dropdown" %}
@@ -31,4 +31,6 @@
   {% else %}
   <!-- Non-standard tag specified -->
   {% endif %}
+  <div class="form-error field-name-{{ field.post_name }}"></div>
 {% endfor %}
+<div class="form-error field-all"></div>

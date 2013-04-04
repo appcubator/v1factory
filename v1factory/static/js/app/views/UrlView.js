@@ -73,9 +73,6 @@ function(BackboneUI, Backbone, UrlsCollection) {
       this.remove();
     },
 
-    remove: function() {
-      $(this.el).remove();
-    },
 
     lastEntityChanged: function(e) {
       $(e.target).removeClass('last');

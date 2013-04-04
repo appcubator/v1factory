@@ -71,13 +71,6 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                               "_each": { "_type" : "" }
                                              }
                                 }},
-                         "design_props": {
-                                          "_type": [],
-                                          "_each": { "_type": {}, "_mapping": {
-                                                    "type": { "_type": "" },
-                                                    "value": { "_type": "" }
-                                                   }}
-                                         },
                          "uielements": {
                                         "_type": [],
                                         "_each": { "_type": {}, "_mapping": {
@@ -197,4 +190,6 @@ def validate(thing, schema):
   return errors
 
 def validate_app_state(app_state):
+  assert 'Homepage' in [ p['name'] for p in app_state['pages'] ]
+  assert 'Registration Page' in [ p['name'] for p in app_state['pages'] ]
   return validate(app_state, APP_SCHEMA)

@@ -1,25 +1,24 @@
 define([
-  'backbone'
-],function() {
+  'backboneui'
+],
+function(BackboneUI) {
 
-  var WidgetClassPickerView = Backbone.View.extend({
+  var WidgetClassPickerView = BackboneUI.ModalView.extend({
     el     : document.getElementById('class-picker'),
+    width  : 800,
     events : {
       'click .class-name-item'   : 'classChanged'
     },
 
-    initialize: function(widgetsCollection){
+    initialize: function(widgetModel){
       _.bindAll(this, 'render',
                       'clear',
                       'selectChanged',
                       'classChanged');
 
-      this.widgetsCollection = widgetsCollection;
-      this.model = widgetsCollection.selectedEl;
-      this.widgetsCollection.bind('change', this.selectChanged, this);
-      if(this.widgetsCollection.selectedEl) {
-        this.render();
-      }
+      console.log(widgetModel);
+      this.model = widgetModel;
+      this.render();
     },
 
     classChanged: function(e) {
@@ -56,7 +55,7 @@ define([
 
         li.id = uie.class_name;
 
-        if(type == 'image') {
+        if(type == 'yolo') {
          li.innerHTML = (uie.name||uie.class_name);
         }
         else {

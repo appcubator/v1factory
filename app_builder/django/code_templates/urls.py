@@ -6,7 +6,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^webapp_login_receiver/$', 'django.contrib.auth.views.login'),
 
     {% for v in urls %}
     url({{ v.url_repr() }}, {{ v.view_path_repr() }}),

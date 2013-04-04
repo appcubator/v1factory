@@ -1,0 +1,21 @@
+label {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.expandible {
+  cursor: pointer;
+  height: 60px;
+  overflow: hidden;
+}
+
+.expandible.expanded {
+  height: auto;
+}
+
+.element-create-form {
+  padding: 20px;
+  background-color: #eee;
+  border-top: 1px solid #aaa;
+  margin-bottom: 0;
+}

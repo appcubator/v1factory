@@ -1,14 +1,17 @@
 define([
   'backbone'
-], function() {
+],
+function(WidgetClassPickerView) {
 
   var WidgetContentEditorView = Backbone.View.extend({
     el     : document.getElementById('content-editor'),
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'keydown input'                 : 'inputChanged',
-      'keydown textarea'              : 'inputChanged',
+      'keyup input'                 : 'inputChanged',
+      'keyup textarea'              : 'inputChanged',
+      'keydown input'               : 'inputChanged',
+      'keydown textarea'            : 'inputChanged',
       'click #toggle-bold'          : 'toggleBold',
       'change .font-picker'         : 'changeFont',
       'change .statics'             : 'changeSrc',
@@ -22,7 +25,9 @@ define([
                       'toggleBold',
                       'changeFont',
                       'changeSrc',
-                      'changeHref');
+                      'changeHref',
+                      'renderFontPicker',
+                      'renderTextEditing');
 
       this.model = widgetModel;
       this.render();
@@ -134,7 +139,7 @@ define([
     },
 
     toggleBold: function(e) {
-      var curStyle = this.model.get('content_attribs').get('style');
+      var curStyle = (this.model.get('content_attribs').get('style')||'');
       if(curStyle.indexOf('font-weight:bold;') < 0) {
         curStyle += 'font-weight:bold;';
         this.model.get('content_attribs').set('style', curStyle);

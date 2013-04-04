@@ -29,7 +29,12 @@ require.config({
 
 });
 
-require(["../views/GalleryView", '../models/ThemeModel', "bootstrap"], function(GalleryView, ThemeModel) {
-  var themeModel = new ThemeModel(uieState);
-  var galleryView = new GalleryView(themeModel);
+require([
+  "app/designer-app/ThemeEditView",
+  'app/models/ThemeModel',
+  "bootstrap"
+],
+function(ThemeEditView, ThemeModel) {
+  var themeModel = new ThemeModel(themeState);
+  var galleryView = new ThemeEditView(themeModel);
 });

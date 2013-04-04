@@ -77,10 +77,17 @@ def deploy_code(request):
   except Deployment.DoesNotExist:
     d = Deployment.create(s)
     d.initialize()
+  #push_github(s, d.app_dir, no_github=True)
   d.update_app_state(simplejson.loads(app_json))
   d.full_clean()
   d.save()
-  msgs = d.deploy()
+  try:
+    msgs = d.deploy()
+  except Exception, e:
+    import traceback
+    traceback.print_exc()
+    errs = traceback.format_exc()
+    return HttpResponse(errs)
   return HttpResponse(msgs)
 
 @require_POST

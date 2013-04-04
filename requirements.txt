@@ -16,3 +16,4 @@ jinja2==2.6
 xlrd==0.9.0
 pyflakes==0.6.1
 gitpython
+django-social-auth==0.7.22

@@ -1,10 +1,10 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
 {% endblock %}
 
 {% block topbar %}
@@ -22,106 +22,106 @@
     </ul>
     <div class="span58 entity-pane pane" id="user-entity">
 
-        <div style="display:inline-block;">
-          <div class="hoff2 offset2 span42">
-            <h2 class="">User</h2>
-          </div>
-          <span class="span13 right right hoff2 right-panel">
-            <span class="span5 hi5 excel right-icon">
-              <span class="icon"></span>
-              <span>Upload Excel</span>
-            </span>
-          </span>
+      <div style="display:inline-block;">
+        <div class="hoff2 offset2 span42">
+          <h2 class="">User</h2>
         </div>
-        <br>
-        <hr style="display:block;">
-        <div class="description">
-          <h3 class="offset2 hoff1 span58">Description</h3>
-          <span class="tbl-wrapper span54 hoff1 offset2">
-            <span class="tbl">
-              <div class="column span6">
-                <div class="hi3 hdr">Property</div>
-                <div class="hi3 desc">Type</div>
-                <div class="hi2 desc">Is Required?</div>
-              </div>
-              <div class="column span6">
-                <div class="hi3 hdr">Username</div>
-                <div class="hi3">
-                    <select class="attribs" id="Name" disabled>
-                      <option value="text" selected="">Text</option>
-                    </select>
-                </div>
-                <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
-              </div>
-              <div class="column span6">
-                <div class="hi3 hdr">Password</div>
-                <div class="hi3">
-                    <select class="attribs" id="Name" disabled>
-                      <option value="text" selected="">Text</option>
-                    </select>
-                </div>
-                <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
-              </div>
-              <div class="column span6">
-                <div class="hi3 hdr">First Name</div>
-                <div class="hi3">
-                    <select class="attribs" id="Name" disabled>
-                      <option value="text" selected="">Text</option>
-                    </select>
-                </div>
-                <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
-              </div>
-              <div class="column span6">
-                <div class="hi3 hdr">Last Name</div>
-                <div class="hi3">
-                    <select class="attribs" id="Name" disabled>
-                      <option value="text" selected="">Text</option>
-                    </select>
-                </div>
-                <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
-              </div>
-              <div class="column span6">
-                <div class="hi3 hdr">Email</div>
-                <div class="hi3">
-                    <select class="attribs" id="Name" disabled>
-                      <option value="email" selected="">Email</option>
-                    </select>
-                </div>
-                <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
-              </div>
-              <ul class="property-list"></ul><a class="column span8 add-property-column">
-                  <form class="add-property-form" style="display:none">
-                    <div class="hi2 hdr">
-                      <input type="text" class="property-name-input span7" placeholder="Property Name...">
-                    </div>
-                  </form>
-                  <span class="plus-icon"></span><span class="add-property-button">Add Property</span>
-              </a>
-            </span>
+        <span class="span13 right right hoff2 right-panel">
+          <span class="span5 hi5 excel right-icon">
+            <span class="icon"></span>
+            <span>Upload Excel</span>
           </span>
-        </div>
-        
-        <div class="span58 hi15" id="forms">
-          <hr style="display:block; width:100%;" class="hoff1">
-          <h3 class="offset hoff2 offset2">Forms</h3>
-          <div class="hoff1 offset2 span10">
-            <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
-            <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
-            <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
-          </div>
-          <ul class="form-list offset1 hoff1">
-          </ul>
-          <a class="span10 hi9 form-pane" style="float:none;">
-            <form class="add-form-form" style="display:none">
-              <div class="hi8 hdr">
-                <input type="text" class="form-name-input span7" placeholder="Form Name...">
+        </span>
+      </div>
+      <br>
+      <hr style="display:block;">
+      <div class="description">
+        <h3 class="offset2 hoff1 span58">Description</h3>
+        <span class="tbl-wrapper span54 hoff1 offset2">
+          <span class="tbl">
+            <div class="column span6">
+              <div class="hi3 hdr">Property</div>
+              <div class="hi3 desc">Type</div>
+              <div class="hi2 desc">Is Required?</div>
+            </div>
+            <div class="column span6">
+              <div class="hi3 hdr">Username</div>
+              <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+              </div>
+              <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
+            </div>
+            <div class="column span6">
+              <div class="hi3 hdr">Password</div>
+              <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+              </div>
+              <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
+            </div>
+            <div class="column span6">
+              <div class="hi3 hdr">First Name</div>
+              <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+              </div>
+              <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
+            </div>
+            <div class="column span6">
+              <div class="hi3 hdr">Last Name</div>
+              <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="text" selected="">Text</option>
+                </select>
+              </div>
+              <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
+            </div>
+            <div class="column span6">
+              <div class="hi3 hdr">Email</div>
+              <div class="hi3">
+                <select class="attribs" id="Name" disabled>
+                  <option value="email" selected="">Email</option>
+                </select>
+              </div>
+              <div class="hi2"><input class="cb-login" type="checkbox" checked disabled></div>
+            </div>
+            <ul class="property-list"></ul><a class="column span8 add-property-column">
+            <form class="add-property-form" style="display:none">
+              <div class="hi2 hdr">
+                <input type="text" class="property-name-input span7" placeholder="Property Name...">
               </div>
             </form>
-            <span class="add-form-button">
-              <span class="plus">+</span><br>
-            Add New Form</span>
+            <span class="plus-icon"></span><span class="add-property-button">Add Property</span>
           </a>
-        </div>
+        </span>
+      </span>
+    </div>
+
+    <div class="span58 hi15" id="forms">
+      <hr style="display:block; width:100%;" class="hoff1">
+      <h3 class="offset hoff2 offset2">Forms</h3>
+      <div class="hoff1 offset2 span10">
+        <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
+        <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
+        <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
+      </div>
+      <ul class="form-list offset1 hoff1">
+      </ul>
+      <a class="span10 hi9 form-pane" style="float:none;">
+        <form class="add-form-form" style="display:none">
+          <div class="hi8 hdr">
+            <input type="text" class="form-name-input span7" placeholder="Form Name...">
+          </div>
+        </form>
+        <span class="add-form-button">
+          <span class="plus">+</span><br>
+          Add New Form</span>
+        </a>
+      </div>
 
     </div>
   </div>
@@ -131,26 +131,22 @@
   <div id="entities-container">
     <ul id="entities" class="entity-list">
     </ul><div id="add-entity-button" class="add-entity offset6 span58">
-      <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
-    </div>
-    <form id="add-entity-form" class="pane offset6 span58 hi10 entity hoff1" style="display:none;">
-        <span class="sub-title offset1 hoff2">
-          <input type="text" id="entity-name-input" placeholder="Entity Name">
-        </span>
-    </form>
+    <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
   </div>
+  <form id="add-entity-form" class="pane offset6 span58 hi10 entity hoff1" style="display:none;">
+    <span class="sub-title offset1 hoff2">
+      <input type="text" id="entity-name-input" placeholder="Entity Name">
+    </span>
+  </form>
+</div>
 
 </div>
- 
-</div>
-
-<script>
-  var appState = {{ app.state_json|safe }};
-  var appId = {{ app_id|safe }};
-</script>
-
 {% endblock %}
 
 {% block js %}
+<script>
+var appState = {{ app.state_json|safe }};
+var appId = {{ app_id|safe }};
+</script>
 <script data-main="{{ STATIC_URL }}js/app/entities-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

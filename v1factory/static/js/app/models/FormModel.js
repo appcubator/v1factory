@@ -18,6 +18,7 @@ define([
       this.set('name', bone.name);
       this.set('fields', new FormFieldCollection());
       this.set('action', bone.action||"create");
+      this.set('goto', bone.goto||"{{Homepage}}");
 
       if(bone.fields) {
         this.get('fields').add(bone.fields);
