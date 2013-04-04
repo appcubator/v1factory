@@ -34,7 +34,7 @@ define([
     className : 'sample',
 
     events    : {
-      'click #save'          : 'save',
+      'click #save'          : function() { this.save() },
       'click #settings'      : 'showSettings',
       'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
@@ -114,9 +114,10 @@ define([
         },
         success: function() {
           $('#save').html("<span>Saved</span>").fadeIn();
+          if(typeof(callback) !== 'undefined')
+            callback();
           setTimeout(function(){
             $('#save').html("<span>Save</span>").fadeIn();
-            callback();
           },3000);
         },
         error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
