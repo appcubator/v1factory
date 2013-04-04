@@ -197,4 +197,6 @@ def validate(thing, schema):
   return errors
 
 def validate_app_state(app_state):
+  assert 'Homepage' in [ p['name'] for p in app_state['pages'] ]
+  assert 'Registration Page' in [ p['name'] for p in app_state['pages'] ]
   return validate(app_state, APP_SCHEMA)

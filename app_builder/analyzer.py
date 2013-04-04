@@ -245,13 +245,14 @@ class FormField(object):
   Form receiver does something with these.
   """
 
-  def __init__(self, name=None, field_type=None, display_type=None, kwargs=None, options=None, model_field=None):
+  def __init__(self, name=None, field_type=None, display_type=None, kwargs=None, options=None, model_field=None, label=None):
     self.name = name
     self.field_type = field_type
     self.display_type = display_type
     self.kwargs = kwargs
     self.options = options
     self.model_field = model_field
+    self.label = label
 
   def is_model_field(self):
     return self.model_field is not None
@@ -260,10 +261,10 @@ class FormField(object):
   def create(cls, field_dict):
     kwargs = {}
     kwargs['placeholder'] = field_dict['placeholder']
-    kwargs['label'] = field_dict['label']
     self = cls(name = field_dict['name']
              , field_type = field_dict['type']
              , display_type = field_dict['displayType']
+             , label = field_dict['label']
              , kwargs = kwargs
              , options = field_dict['options'])
     return self

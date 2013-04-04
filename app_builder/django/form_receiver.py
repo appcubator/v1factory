@@ -87,8 +87,12 @@ class SignupFormReceiver(DjangoFormReceiver):
 
 class LoginFormReceiver(DjangoFormReceiver):
 
-  def view_path(self):
-    return "django.contrib.auth.views.login"
+  def __init__(self, *args, **kwargs):
+    super(LoginFormReceiver, self).__init__(*args, **kwargs)
+    self.name = "receive_login"
 
   def render(self):
-    return ""
+    from jinja2 import Environment, PackageLoader
+    env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
+    template = env.get_template('login_form_receiver.py')
+    return template.render(form_receiver=self)
