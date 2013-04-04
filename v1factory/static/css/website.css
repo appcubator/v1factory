@@ -269,6 +269,7 @@ input[type="submit"] {
   background-color: #fff;
   padding: 30px;
   color:  #000;
+  overflow: hidden;
 }
 .modal .title, .modal h2, .modal h1 {
   color: #000;
@@ -487,6 +488,7 @@ hr {
 
 .dropdown-toggle {
   padding-top: 20px !important;
+  padding-bottom: 20px !important;
   height: 100%;
   color: #0f2d40 !important;
 }

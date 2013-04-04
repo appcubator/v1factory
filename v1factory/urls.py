@@ -59,9 +59,11 @@ urlpatterns += patterns('v1factory.views',
     url(r'^hipsterdesignersonly/$', 'designer_page'),
     url(r'^theme/new/$', 'theme_new'),
     url(r'^theme/(\d+)/$', 'theme_show'),
+    url(r'^theme/(\d)/info/$', 'theme_info'),
     url(r'^theme/(\d)/edit/$', 'theme_edit'),
     url(r'^theme/(\d)/clone/$', 'theme_clone'),
     url(r'^theme/(\d)/delete/$', 'theme_delete'),
+    url(r'^theme/(\d)/editor/(\d+)$', 'theme_page_editor'),
 
 
     url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments

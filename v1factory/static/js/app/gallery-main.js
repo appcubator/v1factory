@@ -6,7 +6,10 @@ require.config({
     "backbone" : "../libs/backbone-amd/backbone",
     "backboneui" : "../backbone/BackboneUI",
     "iui" : "../libs/iui/iui",
-    "bootstrap" : "../libs/bootstrap/bootstrap"
+    "bootstrap" : "../libs/bootstrap/bootstrap",
+    "app" : "./",
+    "editor" : "../editor",
+    "dicts" : "../dicts"
   },
 
   shim: {
@@ -28,6 +31,10 @@ require.config({
 
 });
 
-require(["./views/GalleryView", "bootstrap"], function(GalleryView) {
-  var galleryView = new GalleryView();
+require([
+  "app/views/ThemesGalleryView",
+  "bootstrap"
+],
+function(ThemesGalleryView) {
+  var galleryView = new ThemesGalleryView();
 });

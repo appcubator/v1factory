@@ -7,9 +7,10 @@ require.config({
     "backboneui" : "../../backbone/BackboneUI",
     "key" : "../../libs/keymaster/keymaster",
     "iui" : "../../libs/iui/iui",
+    "app" : "../",
+    "editor" : "../editor",
     "dicts" : "../../dicts",
-    "collections" : "../collections",
-    "editor" : "../editor"
+    "libs"  : "../../libs"
   },
 
   shim: {
@@ -28,6 +29,9 @@ require.config({
 
 });
 
-require(["ThemesView", '../../libs/keymaster/keymaster'], function(ThemesView) {
-  var editorView = new ThemesView();
+require(["./EditorLiteView", '../../libs/keymaster/keymaster'], function(EditorLiteView) {
+  window.onerror = function(error) {
+    alert('Segfault: '+ error);
+  };
+  var editorView = new EditorLiteView();
 });

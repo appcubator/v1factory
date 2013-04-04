@@ -17,22 +17,13 @@
     <span class="span64">
       <h2>Theme Gallery</h2>
       <ul class="theme-gallery">
-        <li class="span15">
-          <img src="{{ STATIC_URL }}img/theme1.png">
-          <span class="theme">Theme 1</span>
-        </li>
-        <li class="span15">
-          <img src="{{ STATIC_URL }}img/theme2.png">
-          <span class="theme">Theme 2</span>
-        </li>
-        <li class="span15">
-          <img src="{{ STATIC_URL }}img/theme3.png">
-          <span class="theme">Theme 3</span>
-        </li>
-        <li class="span15">
+        {% for theme in themes %}
+        <li class="span15 theme" id="theme-{{theme.id}}">
           <img src="{{ STATIC_URL }}img/theme4.png">
-          <span class="theme">Theme 4</span>
+          <span class="theme">{{ theme.name }}</span>
+          <span class="theme">Designed by {{ theme.designer.username }}</span>
         </li>
+        {% endfor %}
       </ul>
     </span>
   </div>

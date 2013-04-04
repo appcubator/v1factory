@@ -1,12 +1,20 @@
 define([
   'backbone',
-  'app/collections/UIElementCollection'
+  'app/collections/UIElementCollection',
+  'app/models/PageDesignModel'
 ],
-function(Backbone, UIElementCollection) {
+function(Backbone, UIElementCollection, PageDesignModel) {
+
+  var PageDesignCollection = Backbone.Collection.extend({
+    model : PageDesignModel
+  });
 
   var ThemeModel = Backbone.Model.extend({
 
     initialize: function(themeState) {
+      this.set('basecss', themeState.body||"font-size:14px;");
+      this.set('pages', new PageDesignCollection(themeState.pages));
+
       this.set('buttons', new UIElementCollection(themeState.button, "button"));
       this.set('images', new UIElementCollection(themeState.image, "image"));
       this.set('headerTexts', new UIElementCollection(themeState["header-text"], "header-text"));

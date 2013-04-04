@@ -157,8 +157,13 @@ def app_gallery(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id, owner=request.user)
   els = UIElement.get_library()
-
-  page_context = { 'app': app, 'title' : 'Gallery', 'elements' : els, 'app_id': app_id  }
+  themes = UITheme.objects.all();
+  themes = [t.to_dict() for t in themes]
+  page_context = { 'app': app,
+                   'title' : 'Gallery',
+                   'elements' : els,
+                   'themes' : themes,
+                   'app_id': app_id  }
   add_statics_to_context(page_context, app)
   return render(request, 'app-gallery.html', page_context)
 
@@ -298,7 +303,6 @@ def app_info(request, app_id):
   return render(request, 'app-info.html', page_context)
 
 def generate_create_container(container_content):
-  print container_content
   form_html = '<form action="/app/create/' + container_content['entity'] + '">'
   for element in container_content['elements']:
     form_html += '<input name="yolo" type="text">'
@@ -357,6 +361,26 @@ def theme_show(request, theme):
   #theme = get_object_or_404(UITheme, pk = theme_id)
   page_context = { 'title' : theme.name , 'themeId': theme.pk, 'theme' : theme._uie_state_json }
   return render(request, 'designer-theme-show.html', page_context)
+
+@require_POST
+@login_required
+def theme_info(request, theme_id):
+  theme = get_object_or_404(UITheme, pk = theme_id)
+  page_context = { 'title' : theme.name , 'themeId':  theme.pk, 'theme' : theme._uie_state_json }
+  print page_context
+  return HttpResponse(simplejson.dumps(page_context), mimetype="application/json")
+
+@login_required
+def theme_page_editor(request, theme_id, page_id):
+  theme_id = long(theme_id)
+  theme = get_object_or_404(UITheme, pk = theme_id)
+  page_context = { 'theme': theme,
+                   'title' : 'Design Editor',
+                   'theme_state' : theme._uie_state_json,
+                   'page_id': page_id,
+                   'theme_id': theme_id }
+  #add_statics_to_context(page_context, app)
+  return render(request, 'designer-editor-main.html', page_context)
 
 @require_POST
 @login_required

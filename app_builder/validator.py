@@ -71,13 +71,6 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
                                               "_each": { "_type" : "" }
                                              }
                                 }},
-                         "design_props": {
-                                          "_type": [],
-                                          "_each": { "_type": {}, "_mapping": {
-                                                    "type": { "_type": "" },
-                                                    "value": { "_type": "" }
-                                                   }}
-                                         },
                          "uielements": {
                                         "_type": [],
                                         "_each": { "_type": {}, "_mapping": {

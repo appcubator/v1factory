@@ -1,6 +1,7 @@
 define([
   'backbone'
-], function() {
+],
+function(WidgetClassPickerView) {
 
   var WidgetContentEditorView = Backbone.View.extend({
     el     : document.getElementById('content-editor'),
@@ -24,7 +25,9 @@ define([
                       'toggleBold',
                       'changeFont',
                       'changeSrc',
-                      'changeHref');
+                      'changeHref',
+                      'renderFontPicker',
+                      'renderTextEditing');
 
       this.model = widgetModel;
       this.render();

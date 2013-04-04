@@ -9,7 +9,8 @@ require.config({
     "iui" : "../../libs/iui/iui",
     "app" : "../",
     "editor" : "./",
-    "dicts" : "../../dicts"
+    "dicts" : "../../dicts",
+    "libs"  : "../../libs"
   },
 
   shim: {

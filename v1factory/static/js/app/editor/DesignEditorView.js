@@ -1,7 +1,7 @@
 define([
   'backbone',
   'iui',
-  '../../../libs/jscolor/jscolor'
+  'libs/jscolor/jscolor'
 ],
 function(Backbone, iui) {
 
@@ -209,7 +209,8 @@ function(Backbone, iui) {
       this.collection.bind('add', this.newProperty, this);
       this.model.set('shouldStyle', shouldStyle);
       this.render();
-      this.collection.add(pageModel.get('design_props'));
+      // todo: themes connection
+      // this.collection.add(pageModel.get('design_props'));
     },
 
     render: function() {

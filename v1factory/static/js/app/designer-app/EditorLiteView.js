@@ -10,8 +10,7 @@ define([
   'editor/WidgetClassPickerView',
   'editor/WidgetEditorView',
   'editor/DesignEditorView',
-  'editor/EditorGalleryView',
-  'editor/PageStylePicker',
+  'app/designer-app/EditorLiteGalleryView',
   'backbone',
   'backboneui',
   '../../libs/keymaster/keymaster.min'
@@ -26,17 +25,16 @@ define([
            WidgetClassPickerView,
            WidgetEditorView,
            DesignEditorView,
-           EditorGalleryView,
-           PageStylePicker,
+           EditorLiteGalleryView,
            Backbone,
            BackboneUI) {
 
-  var EditorView = Backbone.View.extend({
+  var EditorLiteView = Backbone.View.extend({
     el        : document.body,
     className : 'sample',
 
     events    : {
-      'click #save'          : function() { this.save() },
+      'click #save'          : 'save',
       'click #settings'      : 'showSettings',
       'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
@@ -61,8 +59,7 @@ define([
                       'keydown',
                       'clickedUrl');
 
-      var page = appState.pages[pageId];
-
+      var page = themeState.pages[pageId];
 
       this.model                = new PageModel(page);
       this.entityCollection     = new EntityCollection();
@@ -70,8 +67,8 @@ define([
       this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = new WidgetCollection();
 
-      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
-      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
+      this.galleryEditor    = new EditorLiteGalleryView(this.widgetsCollection, this.containersCollection);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, null, page);
 
       //this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
       this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
@@ -80,15 +77,8 @@ define([
 
       this.urlModel = this.model.get('url');
 
-      this.entityCollection.add(appState.entities);
-      this.getContextEntities();
-
       this.containersCollection.on('selected', this.containerSelected);
       this.widgetsCollection.on('selected', this.widgetSelected);
-
-      if(!page.uielements.length) {
-        new PageStylePicker(this.widgetsCollection);
-      }
 
       this.style();
       this.render();
@@ -108,21 +98,24 @@ define([
       this.$el.find('.url-bar').html(this.urlModel.getUrlString());
     },
 
-    save : function(callback) {
+    save : function(e, callback) {
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
-      var curAppState = this.amendAppState();
+      var curThemeState = this.amendAppState();
+
       $.ajax({
         type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(curAppState),
+        url: '/theme/'+themeId+'/edit/',
+        data: {
+          uie_state : JSON.stringify(curThemeState)
+        },
         complete: function() {
           iui.dontAskBeforeLeave();
         },
         success: function() {
           $('#save').html("<span>Saved</span>").fadeIn();
-          if(typeof(callback) !== 'undefined')
-            callback();
+          if(typeof callback == '[object Function]') callback();
+
           setTimeout(function(){
             $('#save').html("<span>Save</span>").fadeIn();
           },3000);
@@ -135,7 +128,7 @@ define([
     },
 
     amendAppState : function() {
-      var curAppState = _.clone(appState);
+      var curThemeState = _.clone(themeState);
 
       var newCollection = _.clone(this.widgetsCollection);
 
@@ -147,10 +140,10 @@ define([
       var containers = (this.containersCollection.toJSON() || []);
       var elems = _.union(widgets, containers);
 
-      curAppState.pages[pageId]['uielements'] = elems;
-      curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
+      curThemeState.pages[pageId]['uielements'] = elems;
+      curThemeState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
 
-      return curAppState;
+      return curThemeState;
     },
 
     deploy: function() {
@@ -167,7 +160,7 @@ define([
         });
       };
 
-      this.save(deployFn);
+      this.save(null, deployFn);
     },
 
     deployLocal: function() {
@@ -192,7 +185,7 @@ define([
     },
 
     style: function() {
-      _(uieState).each(function(type) {
+      _(themeState).each(function(type) {
         _(type).each(function(elem) {
           var styleTag = document.createElement('style');
           var styleContent = elem.tagName + '.' + elem.class_name + '{';
@@ -318,6 +311,6 @@ define([
 
   });
 
-  return EditorView;
+  return EditorLiteView;
 });
 

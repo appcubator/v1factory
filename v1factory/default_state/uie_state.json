@@ -19,7 +19,7 @@
                 "value": "Button1"
             },
             "cons_attribs" : {
-                "tagType": "submit"
+                "type": "submit"
             },
             "content": null,
             "isSingle": true,
@@ -32,7 +32,7 @@
                 "value": "Button1"
             },
             "cons_attribs" : {
-                "tagType": "submit"
+                "type": "submit"
             },
             "content": null,
             "isSingle": true,
@@ -137,7 +137,7 @@
                 "placeholder": "Default placeholder..."
             },
             "cons_attribs": {
-                "tagType": "text"
+                "type": "text"
             },
             "content": null,
             "isSingle": true,
@@ -150,7 +150,7 @@
                 "placeholder": "Default placeholder..."
             },
             "cons_attribs": {
-                "tagType": "text"
+                "type": "text"
             },
             "content": null,
             "isSingle": true,
@@ -165,7 +165,7 @@
                 "placeholder": "Default placeholder..."
             },
             "cons_attribs" : {
-                "tagType": "password"
+                "type": "password"
             },
             "content": null,
             "isSingle": true,

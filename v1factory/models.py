@@ -239,7 +239,7 @@ class UITheme(models.Model):
   def to_dict(self):
     return { 'id' : self.id,
              'name' : self.name,
-             #'designer' : User.objects.values().get(pk=self.designer_id),
+             'designer' : User.objects.values().get(pk=self.designer_id),
              'uie_state' : self.uie_state }
 
   def clone(self, user=None):
