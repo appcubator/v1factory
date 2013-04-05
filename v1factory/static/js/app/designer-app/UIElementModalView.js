@@ -14,14 +14,17 @@ function(BackboneUI){
       'keyup .style'        : 'styleChanged',
       'keyup .hover-style'  : 'hoverStyleChanged',
       'keyup .active-style' : 'activeStyleChanged',
-      'click .done'         : 'closeModal'
+      'click .done'         : 'closeModal',
+      'keyup .class_name'   : 'classNameChaged',
+      'click .delete-elem'  : 'deleteElement'
     },
     initialize: function(uieModel) {
       _.bindAll(this, 'reRenderElement',
                       'renderStyleTags',
                       'styleChanged',
                       'hoverStyleChanged',
-                      'activeStyleChanged');
+                      'activeStyleChanged',
+                      'classNameChaged');
 
       this.model = uieModel;
 
@@ -49,6 +52,12 @@ function(BackboneUI){
       return this;
     },
 
+    deleteElement: function() {
+      var self = this;
+      this.model.collection.remove(self.model.cid);
+      this.closeModal();
+    },
+
     styleChanged: function(e) {
       this.model.set('style', e.target.value);
     },
@@ -66,11 +75,16 @@ function(BackboneUI){
       console.log('rendier');
       var styleTag = document.getElementById(this.model.cid + '-' + 'style');
       console.log(styleTag);
-      styleTag.innerHTML = '.' +this.model.get('class_name') + '{' + this.model.get('style')  + '}';;
+      styleTag.innerHTML = '.' +this.model.get('class_name') + '{' + this.model.get('style')  + '}';
       var hoverTag = document.getElementById(this.model.cid + '-' + 'hover-style');
-      hoverTag.innerHTML = '.' +this.model.get('class_name') + ':hover {' + this.model.get('hoverStyle')  + '}';;
+      hoverTag.innerHTML = '.' +this.model.get('class_name') + ':hover {' + this.model.get('hoverStyle')  + '}';
       var activeTag = document.getElementById(this.model.cid + '-' + 'active-style');
-      activeTag.innerHTML = '.' +this.model.get('class_name') + ':active {' + this.model.get('activeStyle')  + '}';;
+      activeTag.innerHTML = '.' +this.model.get('class_name') + ':active {' + this.model.get('activeStyle')  + '}';
+    },
+
+    classNameChaged: function(e) {
+      console.log(e.target);
+      this.model.set('class_name', e.target.value);
     }
 
   });

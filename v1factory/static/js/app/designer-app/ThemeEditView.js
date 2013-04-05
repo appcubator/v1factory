@@ -19,7 +19,8 @@ define([
       'click .expandible'  : 'expandSection',
       'keyup #base-css'    : 'baseChanged',
       'click #create-page' : 'pageCreateClicked',
-      'submit .create-page-form' : 'pageCreateSubmitted'
+      'submit .create-page-form' : 'pageCreateSubmitted',
+      'click #upload-static' : 'uploadStatic'
     },
 
     initialize: function(themeModel) {
@@ -27,34 +28,35 @@ define([
                      'render',
                      'expandSection',
                      'baseChanged',
-                     'pageCreateSubmitted');
+                     'pageCreateSubmitted',
+                     'uploadStatic');
 
       var self = this;
       this.model = themeModel;
       this.render();
 
       var buttonView     = new UIElementListView(this.model.get('buttons'), 'button');
-      iui.get('button').appendChild(buttonView.el);
+      iui.get('button-cont').appendChild(buttonView.el);
       var imageView      = new UIElementListView(this.model.get('images'), 'image');
-      iui.get('image').appendChild(imageView.el);
+      iui.get('image-cont').appendChild(imageView.el);
       var headerTextView = new UIElementListView(this.model.get('headerTexts'), 'header-text');
-      iui.get('header-text').appendChild(headerTextView.el);
+      iui.get('header-text-cont').appendChild(headerTextView.el);
       var textView       = new UIElementListView(this.model.get('texts'), 'text');
-      iui.get('text').appendChild(textView.el);
+      iui.get('text-cont').appendChild(textView.el);
       var linkView       = new UIElementListView(this.model.get('links'), 'link');
-      iui.get('link').appendChild(linkView.el);
+      iui.get('link-cont').appendChild(linkView.el);
       var textInputView  = new UIElementListView(this.model.get('textInputs'), 'text-input');
-      iui.get('text-input').appendChild(textInputView.el);
+      iui.get('text-input-cont').appendChild(textInputView.el);
       var passwordView   = new UIElementListView(this.model.get('passwords'), 'password');
-      iui.get('password').appendChild(passwordView.el);
+      iui.get('password-cont').appendChild(passwordView.el);
       var textAreaView   = new UIElementListView(this.model.get('textAreas'), 'text-area');
-      iui.get('text-area').appendChild(textAreaView.el);
+      iui.get('text-area-cont').appendChild(textAreaView.el);
       var lineView       = new UIElementListView(this.model.get('lines'), 'line');
-      iui.get('line').appendChild(lineView.el);
+      iui.get('line-cont').appendChild(lineView.el);
       var dropdownView   = new UIElementListView(this.model.get('dropdowns'), 'dropdown');
-      iui.get('dropdown').appendChild(dropdownView.el);
+      iui.get('dropdown-cont').appendChild(dropdownView.el);
       var boxView        = new UIElementListView(this.model.get('boxes'), 'box');
-      iui.get('box').appendChild(boxView.el);
+      iui.get('box-cont').appendChild(boxView.el);
 
       this.model.get('pages').bind('add', this.renderPage);
     },
@@ -66,6 +68,11 @@ define([
         console.log(ind);
         self.renderPage(page, ind);
       });
+
+      _(statics).each(function(file) {
+        iui.get('statics-cont').innerHTML += '<img width="100" src="'+ file.url +'">' + file.name;
+      })
+      console.log(statics);
     },
 
     baseChanged: function(e) {
@@ -73,6 +80,8 @@ define([
     },
 
     renderPage: function(page, ind) {
+      var pages = iui.get('pages-list');
+      console.log(pages);
       var cInd = ind;
       if(ind === null) {
         cInd = (this.model.get('pages').models.length);
@@ -85,7 +94,8 @@ define([
     },
 
     expandSection: function(e) {
-      $(e.target.parentNode).toggleClass('expanded');
+      $('.expanded').removeClass('expanded');
+      $('#' + e.target.parentNode.id + "-cont").addClass('expanded');
     },
 
     pageCreateClicked: function(e) {
@@ -104,8 +114,23 @@ define([
       $('#create-page').fadeIn();
     },
 
+    uploadStatic: function() {
+      var self = this;
+      iui.openThemeFilePick(self.staticsAdded, self, themeId);
+    },
+
+    staticsAdded: function(files, self) {
+      console.log(files);
+      // _(files).each(function(file){
+      //   file.name = file.filename;
+      //   statics.push(file);
+      // });
+      // self.model.get('content_attribs').set('src', _.last(files).url);
+    },
+
     save: function() {
-      var json = _.clone(this.attributes);
+      var json = _.clone(this.model.attributes);
+      console.log(json);
       json["button"]     = this.model.get('buttons').toJSON()||{};
       json["image"]      = this.model.get('images').toJSON()||{};
       json["header-text"]= this.model.get('headerTexts').toJSON()||{};

@@ -32,6 +32,7 @@ define([
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
 
+      console.trace();
       if(page.uielements) {
         _(page.uielements).each(function(element) {
           if(element.container_info) {

@@ -8,8 +8,8 @@ function(UIElementModalView) {
     el: null,
     className: 'widgetWrapper',
     events : {
-      'click'           : 'openModal',
-      'click .remove'   : 'removeUIE'
+      'click'             : 'openModal',
+      'click .remove'     : 'removeUIE'
     },
 
     initialize: function(uieModel) {
@@ -30,12 +30,13 @@ function(UIElementModalView) {
     render: function() {
       this.el.innerHTML ='';
       var div = document.createElement('div');
-      div.className = 'pane-inline offsetr1 border minhi hi9 span12 hoff1 elem-' + this.model.cid;
+      div.className = 'pane-inline offsetr1 border minhi hi12 span14 hoff1 elem-' + this.model.cid;
 
       div.innerHTML = _.template(ThemeTemplates.tempNode, {info: this.model.attributes});
       div.innerHTML += '<span class="remove">×</span>';
       this.el.appendChild(div);
       this.el.style.display = 'inline-block';
+      this.el.id = this.model.cid;
       return this;
     },
 

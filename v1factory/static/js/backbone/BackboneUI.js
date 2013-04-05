@@ -188,12 +188,14 @@ function() {
       if(this.callback) this.callback();
       if(this.onClose) this.onClose();
       // fadeOut(function() { $(this).remove(); });
-      $(self.modalWindow).fadeOut();
-      $(self.backgroundDiv).fadeOut();
+      $(self.modalWindow).fadeOut(200);
+      $(self.backgroundDiv).fadeOut(160);
 
       setTimeout(function(){
         self.$el.remove();
         self.remove();
+        $(self.modalWindow).remove();
+        $(self.backgroundDiv).remove();
       }, 550);
 
       this.stopListening();

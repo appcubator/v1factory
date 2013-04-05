@@ -80,7 +80,7 @@ define([
       this.containersCollection.on('selected', this.containerSelected);
       this.widgetsCollection.on('selected', this.widgetSelected);
 
-      this.style();
+      this.style(page);
       this.render();
       $('#loading-gif').fadeOut().remove();
       window.addEventListener('keydown', this.keydown);
@@ -184,9 +184,21 @@ define([
       return false;
     },
 
-    style: function() {
+    style: function(page) {
+      console.log(themeState);
+      var basecss = themeState.basecss;
+      basecss = basecss.replace('body {', '.page {');
+      basecss = basecss.replace('body{', '.page {');
+      var styleTag = document.createElement('style');
+      styleTag.id = "basecss";
+      styleTag.innerHTML = basecss;
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
+
       _(themeState).each(function(type) {
         _(type).each(function(elem) {
+          console.log(elem);
+          if(elem.attribs) return;
+
           var styleTag = document.createElement('style');
           var styleContent = elem.tagName + '.' + elem.class_name + '{';
           styleContent += elem.style;

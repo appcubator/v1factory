@@ -16,11 +16,16 @@ function(UIElementView, UIElementModel, BackboneUI) {
     },
 
     initialize: function(UIElementColl, type) {
-      _.bindAll(this,'render', 'showForm', 'submitForm', 'appendUIE');
+      _.bindAll(this,'render',
+                     'showForm',
+                     'submitForm',
+                     'appendUIE',
+                     'removeUIE');
 
       this.type = type;
       this.collection = UIElementColl;
       this.collection.bind('add', this.appendUIE);
+      this.collection.bind('remove', this.removeUIE);
       this.render();
     },
 
@@ -57,6 +62,10 @@ function(UIElementView, UIElementModel, BackboneUI) {
     appendUIE: function(uieModel) {
       var newView = new UIElementView(uieModel);
       this.elems.appendChild(newView.el);
+    },
+
+    removeUIE: function(uieModel) {
+      $('#' + uieModel.cid).remove();
     }
   });
 

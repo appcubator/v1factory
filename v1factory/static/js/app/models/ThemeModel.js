@@ -12,7 +12,7 @@ function(Backbone, UIElementCollection, PageDesignModel) {
   var ThemeModel = Backbone.Model.extend({
 
     initialize: function(themeState) {
-      this.set('basecss', themeState.body||"font-size:14px;");
+      this.set('basecss', themeState.basecss||"font-size:14px;");
       this.set('pages', new PageDesignCollection(themeState.pages));
 
       this.set('buttons', new UIElementCollection(themeState.button, "button"));

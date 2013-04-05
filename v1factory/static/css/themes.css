@@ -5,12 +5,13 @@ label {
 
 .expandible {
   cursor: pointer;
-  height: 60px;
-  overflow: hidden;
 }
 
+.content-editor li.expanded {
+  display: inline-block;
+}
 .expandible.expanded {
-  height: auto;
+  display: inline-block;
 }
 
 .element-create-form {
@@ -18,4 +19,28 @@ label {
   background-color: #eee;
   border-top: 1px solid #aaa;
   margin-bottom: 0;
+}
+
+.content-editor li {
+  display: none;
+}
+
+.left-bar {
+  border-right: 1px solid #ccc;
+}
+
+.uie-gallery li {
+  padding: 0;
+}
+
+.pages-list {
+  display: inline-block;
+}
+
+.pages-list li {
+  display: block;
+}
+
+.pane-inline {
+  background-color: #fff !important;
 }

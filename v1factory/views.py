@@ -267,6 +267,12 @@ class ThemeStaticFileForm(ModelForm):
     self.instance.theme = self.theme
     return super(ThemeStaticFileForm, self).save(*args, **kwargs)
 
+def single_theme(f):
+  def ret_f(request, theme_id, *args, **kwargs):
+    # permissions plz...
+    theme = get_object_or_404(UITheme, pk=theme_id)
+    return f(request, theme, *args, **kwargs)
+  return ret_f
 
 def JSONResponse(serializable_obj):
   """Just a convenience function, in the middle of horrible code"""
@@ -377,19 +383,11 @@ def theme_new(request):
     theme.save()
     return HttpResponse(simplejson.dumps(theme.to_dict()), mimetype="application/json")
 
-
-def single_theme(f):
-  def ret_f(request, theme_id, *args, **kwargs):
-    # permissions plz...
-    theme = get_object_or_404(UITheme, pk=theme_id)
-    return f(request, theme, *args, **kwargs)
-  return ret_f
-
 @login_required
 @single_theme
 def theme_show(request, theme):
   #theme = get_object_or_404(UITheme, pk = theme_id)
-  page_context = { 'title' : theme.name , 'themeId': theme.pk, 'theme' : theme._uie_state_json }
+  page_context = { 'title' : theme.name , 'themeId': theme.pk, 'theme' : theme._uie_state_json, 'statics' : simplejson.dumps(list(theme.statics.values()))}
   return render(request, 'designer-theme-show.html', page_context)
 
 @require_POST

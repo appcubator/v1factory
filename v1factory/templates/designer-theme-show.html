@@ -12,12 +12,11 @@
 {% block page %}
 <a class="span6 save-btn" id="save"></a>
 <div class="container hoff6 ">
-  <h2>Base CSS</h2>
-  <textarea class="base-css span32 hi20" id="base-css">
-  </textarea>
+  <div class="span16 left-bar">
+  <div class="expandible" id="basecss"><h2>Base CSS</h2></div>
   <h2>Elements</h2>
     <span class="">
-      <ul class="hoff2 uie-gallery">
+      <ul class="uie-gallery">
         <li class="expandible" id="button">
           <h3>Buttons</h3>
         </li>
@@ -53,21 +52,70 @@
         </li>
       </ul>
     </span>
-  <h2>Pages</h2>
-  <ul id="pages">
-  </ul>
-  <div class="span16 hi12 pane border" id="create-page">
-    + Create Sample Page
+    <div class="expandible" id="pages"><h2>Pages</h2></div>
+    <div class="expandible" id="statics"><h2>Statics</h2></div>
   </div>
-  <form class="create-page-form" style="display:none">
-    <input class="create-page-name" type="text" placeholder="placename">
-  </form>
+  <div class="right-bar offset2 span46">
+    <ul class="content-editor">
+      <li id="basecss-cont">
+        <textarea class="base-css span32 hi20" id="base-css">
+        </textarea>
+      </li>
+      <li id="pages-cont">
+        <ul id="pages-list" class="pages-list">
+        </ul>
+        <div class="span16 hi12 pane border" id="create-page">
+          + Create Sample Page
+        </div>
+        <form class="create-page-form" style="display:none">
+          <input class="create-page-name" type="text" placeholder="placename">
+        </form>
+      </li>
+      <li class="" id="button-cont">
+        <h3>Buttons</h3>
+      </li>
+      <li class="" id="image-cont">
+        <h3>Images</h3>
+      </li>
+      <li class="" id="header-text-cont">
+        <h3>Headers</h3>
+      </li>
+      <li class="" id="text-cont">
+        <h3>Texts</h3>
+      </li>
+      <li class="" id="link-cont">
+        <h3>Links</h3>
+      </li>
+      <li class="" id="text-input-cont">
+        <h3>Inputs</h3>
+      </li>
+      <li class="" id="password-cont">
+        <h3>Password Fields</h3>
+      </li>
+      <li class="" id="text-area-cont">
+        <h3>Text Areas</h3>
+      </li>
+      <li class="" id="line-cont">
+        <h3>Lines</h3>
+      </li>
+      <li class="" id="dropdown-cont">
+        <h3>Dropdowns</h3>
+      </li>
+      <li class="" id="box-cont">
+        <h3>Boxes</h3>
+      </li>
+      <li id="statics-cont">
+        <div class="btn-primary btn" id="upload-static">Upload New</div>
+      </li>
+    </ul>
+  </div>
 </div>
 {% endblock %}
 {% block js %}
 <script>
-var themeState = {{ theme|safe }}
-var themeId = {{ themeId|safe }}
+var themeState = {{ theme|safe }};
+var themeId = {{ themeId }};
+var statics = {{ statics|safe }};
 </script>
 <script data-main="{{ STATIC_URL }}js/app/designer-app/theme-show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}
