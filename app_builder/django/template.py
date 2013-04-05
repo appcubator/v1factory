@@ -11,6 +11,7 @@ class Column(Renderable):
     self.margin_left = 0
     self.width = 0
     self.tree = None # uninitialized state
+    self.has_overlapping_nodes = False
 
 class Row(Renderable):
   def __init__(self):
@@ -111,6 +112,7 @@ class DjangoTemplate(Renderable):
               uie.left_offset = uie.left - left_offset
               uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
 
+            c.has_overlapping_nodes = True
             c.tree = None
           else:
             c.tree = self.create_tree(c.uiels, top_offset=top_offset, left_offset=left_offset)
