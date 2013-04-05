@@ -244,7 +244,7 @@ from django.forms import ModelForm
 class StaticFileForm(ModelForm):
   class Meta:
     model = StaticFile
-    exclude = ('app',)
+    exclude = ('app', 'theme')
 
   def __init__(self, app, *args, **kwargs):
     self.app = app
@@ -254,8 +254,22 @@ class StaticFileForm(ModelForm):
     self.instance.app = self.app
     return super(StaticFileForm, self).save(*args, **kwargs)
 
+class ThemeStaticFileForm(ModelForm):
+  class Meta:
+    model = StaticFile
+    exclude = ('app', 'theme')
+
+  def __init__(self, theme, *args, **kwargs):
+    self.theme = theme
+    super(StaticFileForm, self).__init__(*args, **kwargs)
+
+  def save(self, *args, **kwargs):
+    self.instance.theme = self.theme
+    return super(StaticFileForm, self).save(*args, **kwargs)
+
 
 def JSONResponse(serializable_obj):
+  """Just a convenience function, in the middle of horrible code"""
   return HttpResponse(simplejson.dumps(serializable_obj), mimetype="application/json")
 
 @login_required
@@ -275,6 +289,21 @@ def staticfiles(request, app_id):
         return JSONResponse({})
       else:
         return JSONResponse({ "error": "One of the fields was not valid." })
+
+@login_required
+def themestaticfiles(request, theme):
+  if request.method != 'GET' and request.method != 'POST':
+    return HttpResponse("Method not allowed", status=405)
+  if request.method == 'GET':
+    sf = StaticFile.objects.filter(theme=theme).values('name','url','type')
+    return JSONResponse(list(sf))
+  if request.method == 'POST':
+    sf_form = ThemeStaticFileForm(theme, request.POST)
+    if sf_form.is_valid():
+      sf_form.save()
+      return JSONResponse({})
+    else:
+      return JSONResponse({ "error": "One of the fields was not valid." })
 
 @require_GET
 @login_required

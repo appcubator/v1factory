@@ -77,6 +77,7 @@ def deploy_code(request):
   except Deployment.DoesNotExist:
     d = Deployment.create(s)
     d.initialize()
+  #push_github(s, d.app_dir, no_github=True)
   d.update_app_state(simplejson.loads(app_json))
   d.full_clean()
   d.save()

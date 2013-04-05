@@ -174,15 +174,6 @@ class UIElement(models.Model):
   css = models.TextField()
   tagname = models.CharField(max_length=100)
 
-  _login_form_templ = """<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  <h2>Login</h2>
-  {}{}{}
-  <p><input type="text" name="username" placeholder="Username" /></p>
-  <p><input type="password" name="password" placeholder="Password" /></p>
-  <button class="primaryAction" type="submit">Sign In</button>
-</form>"""
-
   @staticmethod
   def get_login_form(twitter="", linkedin="", facebook=""):
     """Create login, the strings passed in represent the auth url"""
@@ -210,11 +201,13 @@ class UIElement(models.Model):
     context_names = re.findall(context_regex, self.lib_el.html)
     return context_names
 
+
 class StaticFile(models.Model):
   name = models.CharField(max_length=255)
   url = models.TextField()
   type = models.CharField(max_length=100)
-  app = models.ForeignKey(App)
+  app = models.ForeignKey(App, blank=True, null=True, related_name="statics")
+  theme = models.ForeignKey(UITheme, blank=True, null=True, related_name="statics")
 
 
 class UITheme(models.Model):
@@ -240,6 +233,7 @@ class UITheme(models.Model):
     return { 'id' : self.id,
              'name' : self.name,
              'designer' : User.objects.values().get(pk=self.designer_id),
+             'statics' : self.objects.statics.values(),
              'uie_state' : self.uie_state }
 
   def clone(self, user=None):
