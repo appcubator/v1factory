@@ -14,8 +14,9 @@ class DjangoAppWriter:
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 
-  def __init__(self, django_app):
+  def __init__(self, django_app, uie_state):
     self.django_app = django_app
+    self.uie_state = uie_state
 
   """ Main app content """
 
@@ -40,7 +41,8 @@ class DjangoAppWriter:
       yield (t.filename, t.render(self.template_env),)
 
   def render_css(self):
-    return ""
+    template = DjangoAppWriter.env.get_template('style.css')
+    return template.render(uiestate= self.uie_state)
 
   """ Directory Structure """
 

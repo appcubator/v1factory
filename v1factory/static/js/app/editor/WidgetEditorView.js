@@ -12,18 +12,22 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
     className : 'editor-page fadeIn',
     tagName : 'div',
 
-    initialize: function(widgetsCollection){
+    initialize: function(widgetsCollection, containersCollection){
       _.bindAll(this, 'render',
                       'clear',
                       'setLocation',
                       'bindLocation',
                       'selectChanged');
 
-      this.widgetsCollection = widgetsCollection;
+      this.widgetsCollection    = widgetsCollection;
+      this.containersCollection = containersCollection;
+
       this.model = widgetsCollection.selectedEl;
       this.widgetsCollection.bind('change', this.selectChanged, this);
+      this.containersCollection.bind('selected', this.clear);
 
       if(this.model) {
+        this.model.bind('change:selected', this.selectChanged);
         this.contentEditor = new WidgetContentEditor(this.model);
         this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.render();
@@ -55,6 +59,7 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
       else if(this.widgetsCollection.selectedEl != this.model) {
         this.clear();
         this.model = this.widgetsCollection.selectedEl;
+        this.model.bind('change:selected', this.selectChanged);
         this.contentEditor = new WidgetContentEditor(this.model);
         this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.render();

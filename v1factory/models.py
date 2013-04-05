@@ -101,7 +101,7 @@ class App(models.Model):
 
     a = AnalyzedApp(self.state)
     dw = analyzed_app_to_app_components(a)
-    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+    tmp_project_dir = DjangoAppWriter(dw, simplejson.loads(self.uie_state_json)).write_to_fs()
 
     return tmp_project_dir
 
@@ -114,7 +114,7 @@ class App(models.Model):
   def deploy(self):
     # this will post the data to v1factory.com
     subdomain = self.subdomain()
-    post_data = {"subdomain": subdomain, "app_json": self.state_json}
+    post_data = {"subdomain": subdomain, "app_json": self.state_json, "uie_json" : self.uie_state_json}
     r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:

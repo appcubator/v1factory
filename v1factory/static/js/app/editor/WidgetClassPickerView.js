@@ -16,7 +16,6 @@ function(BackboneUI) {
                       'selectChanged',
                       'classChanged');
 
-      console.log(widgetModel);
       this.model = widgetModel;
       this.render();
     },

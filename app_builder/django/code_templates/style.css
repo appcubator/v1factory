@@ -1,0 +1,139 @@
+/* * * * * * * * * * *
+   Base CSS
+* * * * * * * * * * */
+{{ uiestate.basecss }}
+
+
+
+/* * * * * * * * * * *
+   Buttons
+* * * * * * * * * * */
+
+{% for b in uiestate.buttons %}
+
+{{b.tagName}}.{{b.class_name}} { 
+{{b.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Images
+* * * * * * * * * * */
+
+{% for i in uiestate.images %}
+
+{{i.tagName}}.{{i.class_name}} { 
+{{i.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Headers
+* * * * * * * * * * */
+
+{% for ht in uiestate.headerTexts %}
+
+{{ht.tagName}}.{{ht.class_name}} { 
+{{ht.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Text
+* * * * * * * * * * */
+
+{% for t in uiestate.texts %}
+
+{{t.tagName}}.{{t.class_name}} { 
+{{t.style}}
+}
+
+{% endfor %}
+
+
+/* * * * * * * * * * *
+   Links
+* * * * * * * * * * */
+
+{% for l in uiestate.links %}
+
+{{l.tagName}}.{{l.class_name}} { 
+{{l.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Text Input
+* * * * * * * * * * */
+
+{% for ti in uiestate.textInputs %}
+
+{{ti.tagName}}.{{ti.class_name}} { 
+{{ti.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Passwords
+* * * * * * * * * * */
+
+{% for p in uiestate.passwords %}
+
+{{p.tagName}}.{{p.class_name}} { 
+{{p.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Text Areas
+* * * * * * * * * * */
+
+{% for ta in uiestate.textAreas %}
+
+{{ta.tagName}}.{{ta.class_name}} { 
+{{ta.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Lines
+* * * * * * * * * * */
+
+{% for l in uiestate.lines %}
+
+{{l.tagName}}.{{l.class_name}} { 
+{{l.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Dropdowns
+* * * * * * * * * * */
+
+{% for d in uiestate.dropdowns %}
+
+{{d.tagName}}.{{d.class_name}} { 
+{{d.style}}
+}
+
+{% endfor %}
+
+/* * * * * * * * * * *
+   Boxes
+* * * * * * * * * * */
+
+{% for b in uiestate.boxes %}
+
+{{b.tagName}}.{{b.class_name}} { 
+{{b.style}}
+}
+
+{% endfor %}

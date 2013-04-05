@@ -1,51 +1,4 @@
 {
-    "text-input": [
-        {
-            "style": "  font-size: 14px;\n  font-weight: normal;\n  line-height: 20px;\n  height:32px;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  background-color: #ffffff;\n  border: 1px solid #cccccc !important;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;\n     -moz-transition: border linear 0.2s, box-shadow linear 0.2s;\n       -o-transition: border linear 0.2s, box-shadow linear 0.2s;\n          transition: border linear 0.2s, box-shadow linear 0.2s;",
-            "isSingle": true,
-            "content_attribs": {
-                "placeholder": "Default placeholder..."
-            },
-            "hoverStyle": "",
-            "class_name": "inpt-1",
-            "content": null,
-            "tagName": "input",
-            "activeStyle": "",
-            "cons_attribs": {
-                "tagType": "text"
-            }
-        },
-        {
-            "style": "-webkit-appearance: none;\n-webkit-background-clip: border-box;\n-webkit-background-origin: padding-box;\n-webkit-background-size: auto;\n-webkit-border-image: none;\n-webkit-box-shadow: none;\n-webkit-rtl-ordering: logical;\n-webkit-transition-delay: 0s, 0s;\n-webkit-transition-duration: 0.2s, 0.2s;\n-webkit-transition-property: border, box-shadow;\n-webkit-transition-timing-function: linear, linear;\n-webkit-user-select: text;\n-webkit-writing-mode: horizontal-tb;\nbackground-attachment: scroll;\nbackground-clip: border-box;\nbackground-color: rgb(209, 209, 209);\nbackground-image: none;\nbackground-origin: padding-box;\nbackground-size: auto;\nborder-bottom-color: rgb(209, 209, 209);\nborder-bottom-left-radius: 3px;\nborder-bottom-right-radius: 3px;\nborder-bottom-style: solid;\nborder-bottom-width: 1px;\nborder-left-color: rgb(209, 209, 209);\nborder-left-style: solid;\nborder-left-width: 1px;\nborder-right-color: rgb(209, 209, 209);\nborder-right-style: solid;\nborder-right-width: 1px;\nborder-top-color: rgb(209, 209, 209);\nborder-top-left-radius: 3px;\nborder-top-right-radius: 3px;\nborder-top-style: solid;\nborder-top-width: 1px;\nborder-width: 1px !important;\nbox-shadow: none;\ncolor: rgb(49, 49, 49);\ncursor: auto;\ndisplay: inline-block;\nfloat: none;\nfont-family: Arial;\nfont-size: 12px;\nfont-style: italic;\nfont-weight: normal;\nheight: 20px;\nletter-spacing: normal;\nline-height: 20px;\nmargin-bottom: 5px;\nmargin-left: 0px;\nmargin-right: 0px;\nmargin-top: 0px;\nmin-height: 1px;\noutline-color: rgb(49, 49, 49);\noutline-style: none;\noutline-width: 0px;\npadding-bottom: 3px;\npadding-left: 6px;\npadding-right: 6px;\npadding-top: 3px;\ntext-align: start;\ntext-indent: 0px;\ntext-shadow: none;\ntext-transform: none;\ntransition-delay: 0s, 0s;\ntransition-duration: 0.2s, 0.2s;\ntransition-property: border, box-shadow;\ntransition-timing-function: linear, linear;\nvertical-align: middle;\nwidth: 256px;\nheight: 32px;\nword-spacing: 0px;\nwriting-mode: lr-tb;\nborder-color: #3a87ad !important;\n",
-            "isSingle": true,
-            "content_attribs": {
-                "placeholder": "Default placeholder..."
-            },
-            "hoverStyle": "",
-            "class_name": "inpt-blue",
-            "content": null,
-            "tagName": "input",
-            "activeStyle": "",
-            "cons_attribs": {
-                "tagType": "text"
-            }
-        },
-        {
-            "style": "  font-size: 14px;\n  font-weight: normal;\n  line-height: 20px;\n  height:32px;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  background-color: #ffffff;\n  border: 1px solid #cccccc !important;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;\n     -moz-transition: border linear 0.2s, box-shadow linear 0.2s;\n       -o-transition: border linear 0.2s, box-shadow linear 0.2s;\n          transition: border linear 0.2s, box-shadow linear 0.2s;\nborder-color: #468847 !important;",
-            "isSingle": true,
-            "cons_attribs": {
-                "type": "text"
-            },
-            "hoverStyle": "",
-            "class_name": "input-green",
-            "content": null,
-            "activeStyle": "",
-            "content_attribs": {
-                "placeholder": "Default placeholder..."
-            },
-            "tagName": "input"
-        }
-    ],
     "links": [
         {
             "style": "",
@@ -69,54 +22,6 @@
             "class_name": "blue-link",
             "content": "Default Link...",
             "tagName": "a",
-            "activeStyle": ""
-        }
-    ],
-    "text": [
-        {
-            "style": "",
-            "isSingle": false,
-            "content_attribs": null,
-            "hoverStyle": "",
-            "class_name": "txt",
-            "content": "Default text!",
-            "tagName": "span",
-            "activeStyle": ""
-        },
-        {
-            "style": "font-size:10px;",
-            "isSingle": false,
-            "content_attribs": null,
-            "hoverStyle": "",
-            "class_name": "small-txt",
-            "content": "Default text!",
-            "tagName": "span",
-            "activeStyle": ""
-        }
-    ],
-    "image": [
-        {
-            "style": "border-radius: 6px;\nwidth: 180px;",
-            "isSingle": true,
-            "content_attribs": {
-                "src": "/static/img/placeholder.png"
-            },
-            "hoverStyle": "",
-            "class_name": "img-width-fixed",
-            "content": null,
-            "tagName": "img",
-            "activeStyle": ""
-        },
-        {
-            "style": "border-radius: 6px;\nheight: 280px;",
-            "isSingle": true,
-            "content_attribs": {
-                "src": "/static/img/placeholder.png"
-            },
-            "hoverStyle": "",
-            "class_name": "img-height-fixed",
-            "content": null,
-            "tagName": "img",
             "activeStyle": ""
         }
     ],
@@ -264,49 +169,6 @@
             }
         }
     ],
-    "dropdown": [
-        {
-            "attribs": null,
-            "style": "",
-            "isSingle": false,
-            "hoverStyle": "",
-            "class_name": "default-dropdown",
-            "content": "<option>Option 1</option>",
-            "tagName": "select",
-            "activeStyle": ""
-        }
-    ],
-    "header-text": [
-        {
-            "style": "font-size: 32px;\nfont-weight: bold;",
-            "isSingle": false,
-            "content_attribs": null,
-            "hoverStyle": "",
-            "class_name": "header-1",
-            "content": "Default header!",
-            "tagName": "h1",
-            "activeStyle": ""
-        },
-        {
-            "style": "font-size: 26px;\nfont-weight: bold;",
-            "isSingle": false,
-            "content_attribs": null,
-            "hoverStyle": "",
-            "class_name": "header-2",
-            "content": "Default header!",
-            "tagName": "h1",
-            "activeStyle": ""
-        },
-        {
-            "style": "line-height: 28px;\ntext-transform: uppercase;\ncolor: #313131;\nfont-family: 'Open Sans', sans-serif;\nfont-weight: 800;",
-            "isSingle": false,
-            "tagName": "h1",
-            "hoverStyle": "",
-            "content": "Default header!",
-            "content_attribs": null,
-            "activeStyle": ""
-        }
-    ],
     "textAreas": [
         {
             "style": "",
@@ -345,32 +207,6 @@
             "activeStyle": ""
         }
     ],
-    "link": [
-        {
-            "style": "",
-            "isSingle": false,
-            "content_attribs": {
-                "href": "{{homepage}}"
-            },
-            "hoverStyle": "",
-            "class_name": "link-1",
-            "content": "Default Link...",
-            "tagName": "a",
-            "activeStyle": ""
-        },
-        {
-            "style": "color:#49afcd;",
-            "isSingle": false,
-            "content_attribs": {
-                "href": "{{homepage}}"
-            },
-            "hoverStyle": "",
-            "class_name": "blue-link",
-            "content": "Default Link...",
-            "tagName": "a",
-            "activeStyle": ""
-        }
-    ],
     "dropdowns": [
         {
             "attribs": null,
@@ -381,61 +217,6 @@
             "content": "<option>Option 1</option>",
             "tagName": "select",
             "activeStyle": ""
-        }
-    ],
-    "line": [
-        {
-            "style": "border-color:#49afcd;",
-            "isSingle": true,
-            "cons_attribs": {
-                "class": "span12"
-            },
-            "hoverStyle": "",
-            "class_name": "line-1",
-            "content": null,
-            "tagName": "hr",
-            "activeStyle": ""
-        },
-        {
-            "style": "border-color:#ccc;",
-            "isSingle": true,
-            "cons_attribs": {
-                "class": "span12"
-            },
-            "hoverStyle": "",
-            "class_name": "",
-            "content": null,
-            "tagName": "hr",
-            "activeStyle": ""
-        },
-        {
-            "style": "",
-            "isSingle": true,
-            "cons_attribs": {
-                "class": "span12"
-            },
-            "hoverStyle": "",
-            "class_name": "",
-            "content": null,
-            "tagName": "hr",
-            "activeStyle": ""
-        }
-    ],
-    "password": [
-        {
-            "style": "border-width: 1px;",
-            "isSingle": true,
-            "content_attribs": {
-                "placeholder": "Default placeholder..."
-            },
-            "hoverStyle": "",
-            "class_name": "password-1",
-            "content": null,
-            "tagName": "input",
-            "activeStyle": "",
-            "cons_attribs": {
-                "tagType": "password"
-            }
         }
     ],
     "pages": [

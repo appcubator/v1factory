@@ -24,6 +24,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
 class Deployment(models.Model):
   subdomain = models.CharField(max_length=255, unique=True)
   app_state_json = models.TextField(blank=True)
+  uie_state_json = models.TextField(blank=True)
   app_dir = models.TextField()
   config_file_path = models.TextField()
 
@@ -70,12 +71,16 @@ class Deployment(models.Model):
 
     a = AnalyzedApp(simplejson.loads(self.app_state_json))
     dw = analyzed_app_to_app_components(a)
-    tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
+    tmp_project_dir = DjangoAppWriter(dw, simplejson.loads(self.uie_state_json)).write_to_fs()
 
     return tmp_project_dir
 
   def update_app_state(self, app_dict):
     self.app_state_json = simplejson.dumps(app_dict)
+    return self
+
+  def update_uie_state(self, uie_dict):
+    self.uie_state_json = simplejson.dumps(uie_dict)
     return self
 
   def deploy(self):

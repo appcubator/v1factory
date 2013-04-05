@@ -22,10 +22,24 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
       var fieldCollection = new FieldsCollection();
       if(bone) fieldCollection.add(bone.fields);
+
+      fieldCollection.push({
+                        name: "First Name",
+                        required: true,
+                        type: "text"
+                    });
+
+      fieldCollection.push({
+                        name: "Last Name",
+                        required: true,
+                        type: "text"
+                    });
+
       this.set('fields', fieldCollection);
       this.set('forms', new FormCollection());
       this.set('name', 'User');
 
+      console.log(this);
       if(bone.forms) {
         this.get('forms').add(bone.forms);
       }
@@ -33,10 +47,12 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
     toJSON: function () {
       var json = {};
-      json = _.clone(this.attributes);
+      json        = _.clone(this.attributes);
       json.fields = this.get('fields').toJSON();
       json.fields = _.uniq(json.fields, function(val) { return val.name; });
-      json.forms = this.get('forms').toJSON();
+      json.fields = _.filter(json.fields, function(val){ return (val.name != "First Name")&&(val.name != "Last Name");});
+
+      json.forms  = this.get('forms').toJSON();
       return json;
     },
 

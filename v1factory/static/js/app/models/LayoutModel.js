@@ -3,8 +3,8 @@ define(['backbone'], function(Backbone) {
     defaults: {
       'top'    : 0,
       'left'   : 0,
-      'height' : 8,
-      'width'  : 2
+      'height' : 16,
+      'width'  : 4
     },
     toJSON: function() {
       var json = _.clone(this.attributes);

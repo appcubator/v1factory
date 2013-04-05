@@ -23,6 +23,18 @@ define([
       if(bone.fields) {
         this.get('fields').add(bone.fields);
       }
+      else {
+        var field = {
+                        "name": "Submit",
+                        "type" : "button",
+                        "label" : " ",
+                        "displayType": "button",
+                        "placeholder": "Submit",
+                        "options": []
+                    };
+
+        this.get('fields').push(field);
+      }
 
       // should not be an attribute
       this.entity = entity;

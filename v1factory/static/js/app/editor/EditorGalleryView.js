@@ -61,6 +61,7 @@ function(ElementCollection,
       var self = this;
       this.entitiesCollection.push(appState.users, {silent : true});
 
+
       if(this.userModel.has('forms')) {
         _(this.userModel.get('forms').models).each(function(form) {
 
@@ -69,6 +70,31 @@ function(ElementCollection,
             $(self.allList).append(html);
         });
       }
+
+      if(appState.users.facebook) {
+        var tempFb = '<li id="entity-user" class="facebook entity">'+
+                     '<span class="name">Facebook Login Button</span></li>';
+
+        //$(this.userList).append(tempFb);
+        $(self.allList).append(tempFb);
+      }
+      if(appState.users.twitter) {
+        var tempTw = '<li id="entity-user" class="twitter entity">'+
+                     '<span class="name"> Twitter Button</span></li>';
+
+        //$(this.userList).append(tempTw);
+        $(self.allList).append(tempTw);
+      }
+
+      if(appState.users.linkedin) {
+        var tempLi = '<li id="entity-user" class="linkedin entity">'+
+                     '<span class="name">LinkedIn Login Button</span></li>';
+
+        //$(this.userList).append(tempLi);
+        $(self.allList).append(tempLi);
+      }
+
+      this.appendContextEntity(this.userModel);
 
 
       var context = {
@@ -285,7 +311,7 @@ function(ElementCollection,
         id = String(id).replace('entity-','');
         var cid = id.split('-')[0];
 
-        if(cid === 'user') {
+        if(cid === this.userModel.cid) {
           entity = new UserEntityModel(appState.users);
         }
         else {
