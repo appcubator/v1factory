@@ -72,6 +72,7 @@ def init_subdomain(request):
 def deploy_code(request):
   s = request.POST['subdomain']
   app_json = request.POST['app_json']
+  uie_json = request.POST['uie_json']
   try:
     d = Deployment.objects.get(subdomain=s)
   except Deployment.DoesNotExist:
@@ -79,6 +80,7 @@ def deploy_code(request):
     d.initialize()
   #push_github(s, d.app_dir, no_github=True)
   d.update_app_state(simplejson.loads(app_json))
+  d.update_uie_state(simplejson.loads(uie_json))
   d.full_clean()
   d.save()
   try:
