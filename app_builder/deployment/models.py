@@ -45,6 +45,8 @@ class Deployment(models.Model):
 
   def initialize(self):
     """Setup apache config and write a blank app to the app path"""
+
+    # make app directory
     try:
       os.makedirs(self.app_dir)
     except OSError:
@@ -70,7 +72,6 @@ class Deployment(models.Model):
     dw = analyzed_app_to_app_components(a)
     tmp_project_dir = DjangoAppWriter(dw).write_to_fs()
 
-    print "Project written to " + tmp_project_dir
     return tmp_project_dir
 
   def update_app_state(self, app_dict):
@@ -114,7 +115,6 @@ class Deployment(models.Model):
     debug_info = []
     for c in commands:
       print "Running `{}`".format(c)
-      #subprocess.call(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=sys.stdout, stderr=sys.stderr)
       p = subprocess.Popen(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       out, err = p.communicate()
       log_msg = "Out: {}\nErr: {}".format(out,err)
