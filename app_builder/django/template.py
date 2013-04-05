@@ -100,12 +100,20 @@ class DjangoTemplate(Renderable):
         if len(c.uiels) == 1:
           c.tree = None # termination of recursion
         else:
+          top_offset=r.uiels[0].uie['layout']['top']
+          left_offset=c.uiels[0].uie['layout']['left']
           if len(tree.rows) == 1 and len(r.cols) == 1:
             # in this case, recursion will not terminate since input is not subdivided into smaller components
             # create a relative container and absolute position the contents.
+
+            for uie in c.uiels:
+              uie.top_offset = uie.top - top_offset
+              uie.left_offset = uie.left - left_offset
+              uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
+
             c.tree = None
           else:
-            c.tree = self.create_tree(c.uiels, top_offset=r.uiels[0].uie['layout']['top'], left_offset=c.uiels[0].uie['layout']['left'])
+            c.tree = self.create_tree(c.uiels, top_offset=top_offset, left_offset=left_offset)
     return tree
 
   def split_to_cols(self, uiels, left_offset=0):
