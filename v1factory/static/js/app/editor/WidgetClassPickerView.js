@@ -24,6 +24,7 @@ function(BackboneUI) {
     classChanged: function(e) {
       var newClass = (e.target.id||e.target.parentNode.id);
       this.model.set('class_name', newClass);
+      this.closeModal();
     },
 
     selectChanged : function(chg, ch2) {
