@@ -33,6 +33,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/urls/$', 'app_urls'),
     # statix
     url(r'^app/(\d+)/static/$', 'staticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
+    url(r'^theme/(\d+)/static/$', 'themestaticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
 
