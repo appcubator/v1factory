@@ -140,6 +140,7 @@ class DjangoAppWriter:
     f_transporter('img', 'static/img', shutil.copytree)
     copy_file('ajaxify.js', 'static/ajaxify.js')
     copy_file('css/bootstrap.css', 'static/bootstrap.css')
+    copy_file('css/reset.css', 'static/reset.css')
     write_string(self.render_css(), 'static/style.css')
     # TODO copy the other css files here too later.
 
