@@ -99,7 +99,7 @@ class Deployment(models.Model):
     # COPY THE CODE TO THE RIGHT DIRECTORY
     print "Removing existing app code"
     for f in os.listdir(self.app_dir):
-      if f in ["db"]:
+      if f in ["db", ".git"]:
         continue
       f_path = os.path.join(self.app_dir, f)
       if os.path.isfile(f_path):

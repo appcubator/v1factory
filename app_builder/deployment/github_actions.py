@@ -44,5 +44,5 @@ def create(name, cwd, add_ksikka=False):
   if add_ksikka:
     add_me_as_collaborator(name)
 
-  ret_code = subprocess.call(['git', 'remote', 'add', repo_info['ssh_url']], env=child_env, cwd=cwd)
+  ret_code = subprocess.call(['git', 'remote', 'add', 'origin', repo_info['ssh_url']], env=child_env, cwd=cwd)
   assert ret_code == 0, "Failed to add remote"
