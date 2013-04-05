@@ -33,6 +33,9 @@ function(WidgetView, WidgetContainerView) {
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
 
+      this.widgetsCollection.bind('selected', this.containersCollection.unselectAll);
+      this.containersCollection.bind('selected', this.widgetsCollection.unselectAll);
+
       console.trace();
       if(page.uielements) {
         _(page.uielements).each(function(element) {

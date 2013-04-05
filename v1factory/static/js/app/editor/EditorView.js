@@ -74,7 +74,7 @@ define([
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
 
       //this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
 
       this.designEditor     = new DesignEditorView(this.model, true);
 
@@ -121,8 +121,8 @@ define([
         },
         success: function() {
           $('#save').html("<span>Saved</span>").fadeIn();
-          if(typeof(callback) !== 'undefined')
-            callback();
+          if(typeof(callback) !== 'undefined'&&typeof(callback) == 'function')
+            { callback(); }
           setTimeout(function(){
             $('#save').html("<span>Save</span>").fadeIn();
           },3000);
@@ -252,7 +252,7 @@ define([
           if(this.containersCollection.selectedEl) {
             this.containersCollection.selectedEl.moveLeft();
           }
-          else {
+          else if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveLeft();
           }
           e.preventDefault();
@@ -261,7 +261,7 @@ define([
           if(this.containersCollection.selectedEl) {
             this.containersCollection.selectedEl.moveUp();
           }
-          else {
+          else if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveUp();
           }
           e.preventDefault();
@@ -270,7 +270,7 @@ define([
           if(this.containersCollection.selectedEl) {
             this.containersCollection.selectedEl.moveRight();
           }
-          else {
+          else if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveRight();
           }
           e.preventDefault();
@@ -279,7 +279,7 @@ define([
           if(this.containersCollection.selectedEl) {
             this.containersCollection.selectedEl.moveDown();
           }
-          else {
+          else if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveDown();
           }
           e.preventDefault();
@@ -324,6 +324,7 @@ define([
     },
 
     containerSelected: function(e) {
+      console.log(this.widgetsCollection);
       this.widgetsCollection.unselectAll();
     },
 
