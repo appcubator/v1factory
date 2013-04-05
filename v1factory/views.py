@@ -291,6 +291,7 @@ def staticfiles(request, app_id):
         return JSONResponse({ "error": "One of the fields was not valid." })
 
 @login_required
+@single_theme
 def themestaticfiles(request, theme):
   if request.method != 'GET' and request.method != 'POST':
     return HttpResponse("Method not allowed", status=405)
