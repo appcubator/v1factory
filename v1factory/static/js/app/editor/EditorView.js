@@ -202,11 +202,9 @@ define([
       document.getElementsByTagName('head')[0].appendChild(styleTag);
 
       _(uieState).each(function(type, key) {
-        console.log(key);
         if(key == "basecss") return;
 
         _(type).each(function(elem) {
-          console.log(elem);
           if(elem.attribs) return;
 
           var styleTag = document.createElement('style');
