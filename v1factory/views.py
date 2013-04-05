@@ -261,11 +261,11 @@ class ThemeStaticFileForm(ModelForm):
 
   def __init__(self, theme, *args, **kwargs):
     self.theme = theme
-    super(StaticFileForm, self).__init__(*args, **kwargs)
+    super(ThemeStaticFileForm, self).__init__(*args, **kwargs)
 
   def save(self, *args, **kwargs):
     self.instance.theme = self.theme
-    return super(StaticFileForm, self).save(*args, **kwargs)
+    return super(ThemeStaticFileForm, self).save(*args, **kwargs)
 
 
 def JSONResponse(serializable_obj):
