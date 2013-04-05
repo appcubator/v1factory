@@ -14,6 +14,7 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from app_builder.deployment.models import Deployment
 from django.views.decorators.csrf import csrf_exempt
+import github_actions
 
 # user facing actions
 #1. initialize(subdomain) - setup a blank app at the requested subdomain, get a deploy token back.
@@ -78,13 +79,18 @@ def deploy_code(request):
   except Deployment.DoesNotExist:
     d = Deployment.create(s)
     d.initialize()
-  #push_github(s, d.app_dir, no_github=True)
+    try:
+      github_actions.create(s, d.app_dir)
+    except Exception, e:
+      import traceback
+      traceback.print_exc()
   d.update_app_state(simplejson.loads(app_json))
   d.update_uie_state(simplejson.loads(uie_json))
   d.full_clean()
   d.save()
   try:
     msgs = d.deploy()
+    github_actions.push(s, d.app_dir)
   except Exception, e:
     import traceback
     traceback.print_exc()
