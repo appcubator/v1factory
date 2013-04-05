@@ -1,101 +1,13 @@
 {
-    "name": "EasyApp",
     "info": {
-             "description":"",
-             "keywords":""
-            },
-    "users": {
-        "facebook": false,
-        "linkedin": false,
-        "twitter": false,
-        "local": true,
-        "fields": [ ],
-        "name": "User",
-        "forms": [
-            {
-                "name": "Sign Up",
-                "action" : "signup",
-                "fields": [
-                     {
-                        "name": "username",
-                        "type" : "text",
-                        "displayType": "single-line-text",
-                        "label": "Username",
-                        "placeholder": "Username",
-                        "options": []
-                    },
-                    {
-                        "name": "password1",
-                        "type" : "password",
-                        "displayType": "password-text",
-                        "label": "Password",
-                        "placeholder": "Password",
-                        "options": []
-                    },
-                    {
-                        "name": "password2",
-                        "type" : "password",
-                        "displayType": "password-text",
-                        "label": "Confirm Password",
-                        "placeholder": "Confirm Password",
-                        "options": []
-                    },
-                    {
-                        "name": "email",
-                        "type" : "email",
-                        "displayType": "email-text",
-                        "label": "Email Address",
-                        "placeholder": "Email Address",
-                        "options": []
-                    },
-                    {
-                        "name": "Sign Up",
-                        "type" : "button",
-                        "displayType": "button",
-                        "label": "Sign Up!",
-                        "placeholder": "",
-                        "options": []
-                    }
-                ]
-            },
-            {
-                "name": "Local Login",
-                "fields": [
-                    {
-                        "name": "username",
-                        "displayType": "single-line-text",
-                        "type": "text",
-                        "label": "Username",
-                        "placeholder": "Username",
-                        "options": []
-                    },
-                    {
-                        "name": "password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "label": "Password",
-                        "placeholder": "Password",
-                        "options": []
-                    },
-                    {
-                        "name": "Submit",
-                        "displayType": "button",
-                        "type": "button",
-                        "label": "Login",
-                        "placeholder": "Login",
-                        "options": []
-                    }
-                ],
-                "action": "login"
-            }
-        ]
+        "keywords": "",
+        "description": ""
     },
     "entities": [],
     "pages": [
         {
-            "name": "Homepage",
-            "url" : {
-                "urlparts" : []
+            "url": {
+                "urlparts": []
             },
             "design_props": [
                 {
@@ -133,40 +45,82 @@
             ],
             "uielements": [
                 {
-                    "container_info": null,
-                    "content_attribs": {},
-                    "tagName": "h1",
-                    "content": "Homepage",
                     "layout": {
-                        "width": 4,
-                        "height": 1,
-                        "top": 1,
-                        "left": 5
-                    }
+                        "top": 0,
+                        "left": 0,
+                        "height": 6,
+                        "width": 12,
+                        "alignment": "center",
+                        "t-padding": 15,
+                        "b-padding": 15
+                    },
+                    "style": "font-size: 32px;\nfont-weight: bold;",
+                    "isSingle": false,
+                    "content_attribs": {},
+                    "hoverStyle": "",
+                    "class_name": "header-1",
+                    "content": "Welcome to your v1Factory app!",
+                    "tagName": "h1",
+                    "activeStyle": "",
+                    "type": "headerTexts",
+                    "container_info": null
                 },
                 {
-                    "type": "link",
-                    "tagName": "a",
-                    "content_attribs": {
-                        "href": "{{Registration Page}}"
-                    },
-                    "content": "Registration",
-                    "isSingle": false,
                     "layout": {
-                        "top": 2,
-                        "left": 5,
-                        "width": 4,
-                        "height": 1
+                        "top": 6,
+                        "left": 0,
+                        "height": 6,
+                        "width": 12,
+                        "t-padding": 15,
+                        "b-padding": 15,
+                        "r-padding": 15,
+                        "l-padding": 15
                     },
+                    "style": "",
+                    "isSingle": false,
+                    "content_attribs": {
+                        "style": "font-size:24px;"
+                    },
+                    "hoverStyle": "",
+                    "class_name": "txt",
+                    "content": "It's all up and running now. All you need to do is to create your forms and edit your pages.\n\nFeel free to ask questions at help@v1factory.com",
+                    "tagName": "span",
+                    "activeStyle": "",
+                    "type": "texts",
+                    "container_info": null
+                },
+                {
+                    "layout": {
+                        "top": 14,
+                        "left": 2,
+                        "height": 22,
+                        "width": 8,
+                        "alignment": "center",
+                        "t-padding": 15,
+                        "b-padding": 15
+                    },
+                    "style": "border-radius: 6px;\nwidth: 180px;",
+                    "isSingle": true,
+                    "content_attribs": {
+                        "src": "https://www.filepicker.io/api/file/FuHnh0wR7WlGHM1yDhKA"
+                    },
+                    "hoverStyle": "",
+                    "class_name": "img-height-fixed",
+                    "content": "",
+                    "tagName": "img",
+                    "activeStyle": "",
+                    "type": "images",
                     "container_info": null
                 }
             ],
+            "name": "Homepage",
             "access_level": "all"
         },
         {
-            "name": "Registration Page",
-            "url" : {
-                "urlparts" : ["registration"]
+            "url": {
+                "urlparts": [
+                    "registration"
+                ]
             },
             "design_props": [
                 {
@@ -204,19 +158,107 @@
             ],
             "uielements": [
                 {
-                    "type": "header-text",
-                    "tagName": "h1",
                     "content": "Sign Up",
-                    "container_info": null,
                     "layout": {
                         "width": 3,
-                        "height": 1,
                         "top": 1,
-                        "left": 4
-                    }
+                        "left": 4,
+                        "height": 1
+                    },
+                    "container_info": null,
+                    "type": "header-text",
+                    "tagName": "h1"
                 }
             ],
+            "name": "Registration Page",
             "access_level": "all"
         }
-    ]
+    ],
+    "name": "Raaaaacccccccon",
+    "users": {
+        "name": "User",
+        "fields": [],
+        "twitter": false,
+        "linkedin": false,
+        "forms": [
+            {
+                "action": "signup",
+                "fields": [
+                    {
+                        "name": "username",
+                        "placeholder": "Username",
+                        "label": "Username",
+                        "displayType": "single-line-text",
+                        "type": "text",
+                        "options": []
+                    },
+                    {
+                        "name": "password1",
+                        "placeholder": "Password",
+                        "label": "Password",
+                        "displayType": "password-text",
+                        "type": "password",
+                        "options": []
+                    },
+                    {
+                        "name": "password2",
+                        "placeholder": "Confirm Password",
+                        "label": "Confirm Password",
+                        "displayType": "password-text",
+                        "type": "password",
+                        "options": []
+                    },
+                    {
+                        "name": "email",
+                        "placeholder": "Email Address",
+                        "label": "Email Address",
+                        "displayType": "email-text",
+                        "type": "email",
+                        "options": []
+                    },
+                    {
+                        "name": "Sign Up",
+                        "placeholder": "",
+                        "label": "Sign Up!",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
+                    }
+                ],
+                "name": "Sign Up"
+            },
+            {
+                "action": "login",
+                "fields": [
+                    {
+                        "name": "username",
+                        "placeholder": "Username",
+                        "label": "Username",
+                        "displayType": "single-line-text",
+                        "type": "text",
+                        "options": []
+                    },
+                    {
+                        "name": "password",
+                        "placeholder": "Password",
+                        "label": "Password",
+                        "displayType": "password-text",
+                        "type": "password",
+                        "options": []
+                    },
+                    {
+                        "name": "Submit",
+                        "placeholder": "Login",
+                        "label": "Login",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
+                    }
+                ],
+                "name": "Local Login"
+            }
+        ],
+        "facebook": false,
+        "local": true
+    }
 }

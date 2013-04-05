@@ -1060,33 +1060,33 @@ li.model span.title {
 
 
 /* Top Icons */
-.button {
+.buttons {
   background-image: url('../img/button_icon_b.png');
 }
-.image {
+.images {
   background-image: url('../img/image_b.png');
 }
-.header-text {
+.headerTexts {
   background-image: url('../img/header_b.png');
 }
-.text {
+.texts {
   background-image: url('../img/text.png');
 }
-.link{
+.links {
   background-image: url('../img/link.png');
 }
-.text-input {
+.textInputs {
   background-image: url('../img/text_input.png');
 }
-.text-area {
+.textAreas {
   background-image: url('../img/text_area.png');
 }
-.line {
+.lines {
   background-image: url('../img/line.png');
   background-size: auto 4px !important;
   background-position: center 30px !important;
 }
-.dropdown {
+.dropdowns {
   background-image: url('../img/dropdown_icon_b.png');
 }
 .home {

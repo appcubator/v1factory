@@ -1,55 +1,55 @@
 var defaultElements = [
   {
     text: "Button",
-    className : "button",
+    className : "buttons",
     el : "<div class='btn'>Default Button</div>"
   },
 
   {
     text: "Image",
-    className : "image",
+    className : "images",
     el : "<img class='span16' src='/static/img/placeholder.png'>"
   },
 
   {
     text: "Header",
-    className : "header-text",
+    className : "headerTexts",
     el : "<h1>Default Header</h1>"
   },
 
   {
     text: "Text",
-    className : "text",
+    className : "texts",
     el : "<p>Default text!</p>"
   },
 
   {
     text: "Link",
-    className : "link",
+    className : "links",
     el : "<a href='#'>Default Link</div>"
   },
 
   {
     text: "Text Input",
-    className : "text-input",
+    className : "textInputs",
     el : "<input type='text' placeholder='Default input...'>"
   },
 
   {
     text: "Text Area",
-    className : "text-area",
+    className : "textAreas",
     el : "<textarea></textarea>"
   },
 
   {
     text: "Line",
-    className : "line",
+    className : "lines",
     el : "<hr class='span20'>"
   },
 
   {
     text: "Dropdown",
-    className : "dropdown",
+    className : "dropdowns",
     el : "<select><option>Option 1</option></select>"
   },
 
