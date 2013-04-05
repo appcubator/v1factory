@@ -202,14 +202,6 @@ class UIElement(models.Model):
     return context_names
 
 
-class StaticFile(models.Model):
-  name = models.CharField(max_length=255)
-  url = models.TextField()
-  type = models.CharField(max_length=100)
-  app = models.ForeignKey(App, blank=True, null=True, related_name="statics")
-  theme = models.ForeignKey(UITheme, blank=True, null=True, related_name="statics")
-
-
 class UITheme(models.Model):
   name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
@@ -242,3 +234,11 @@ class UITheme(models.Model):
                        parent_theme=self,
                        designer=user)
     return new_self
+
+
+class StaticFile(models.Model):
+  name = models.CharField(max_length=255)
+  url = models.TextField()
+  type = models.CharField(max_length=100)
+  app = models.ForeignKey(App, blank=True, null=True, related_name="statics")
+  theme = models.ForeignKey(UITheme, blank=True, null=True, related_name="statics")
