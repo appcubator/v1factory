@@ -225,7 +225,7 @@ class UITheme(models.Model):
     return { 'id' : self.id,
              'name' : self.name,
              'designer' : User.objects.values().get(pk=self.designer_id),
-             'statics' : self.objects.statics.values(),
+             'statics' : self.statics.values(),
              'uie_state' : self.uie_state }
 
   def clone(self, user=None):

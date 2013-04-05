@@ -185,7 +185,6 @@ define([
     },
 
     style: function(page) {
-      console.log(themeState);
       var basecss = themeState.basecss;
       basecss = basecss.replace('body {', '.page {');
       basecss = basecss.replace('body{', '.page {');

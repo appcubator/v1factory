@@ -2,7 +2,8 @@ define([
   'editor/WidgetView',
   'editor/WidgetContainerView',
   'backbone'
-],function(WidgetView, WidgetContainerView) {
+],
+function(WidgetView, WidgetContainerView) {
 
   var WidgetEditorView = Backbone.View.extend({
     el : $('.page'),

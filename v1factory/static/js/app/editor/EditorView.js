@@ -36,7 +36,7 @@ define([
     className : 'sample',
 
     events    : {
-      'click #save'          : function() { this.save() },
+      'click #save'          : 'save',
       'click #settings'      : 'showSettings',
       'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
@@ -192,8 +192,23 @@ define([
     },
 
     style: function() {
-      _(uieState).each(function(type) {
+
+      var basecss = uieState.basecss;
+      basecss = basecss.replace('body {', '.page {');
+      basecss = basecss.replace('body{', '.page {');
+      var styleTag = document.createElement('style');
+      styleTag.id = "basecss";
+      styleTag.innerHTML = basecss;
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
+
+      _(uieState).each(function(type, key) {
+        console.log(key);
+        if(key == "basecss") return;
+
         _(type).each(function(elem) {
+          console.log(elem);
+          if(elem.attribs) return;
+
           var styleTag = document.createElement('style');
           var styleContent = elem.tagName + '.' + elem.class_name + '{';
           styleContent += elem.style;
