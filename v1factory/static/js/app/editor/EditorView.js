@@ -215,7 +215,7 @@ define([
           if(elem.attribs) return;
 
           var styleTag = document.createElement('style');
-          var styleContent = elem.tagName + '.' + elem.class_name + '{';
+          var styleContent = '.page '+elem.tagName + '.' + elem.class_name + '{';
           styleContent += elem.style;
           styleContent += '}';
 
