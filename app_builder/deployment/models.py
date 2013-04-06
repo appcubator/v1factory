@@ -120,12 +120,15 @@ class Deployment(models.Model):
     debug_info = []
     for c in commands:
       print "Running `{}`".format(c)
-      p = subprocess.Popen(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      out, err = p.communicate()
-      log_msg = "Out: {}\nErr: {}".format(out,err)
-      debug_info.append(log_msg)
+      ret_code = subprocess.call(shlex.split(c), env=child_env, cwd=self.app_dir)
+      print "Return code of syncdb", ret_code
+      #p = subprocess.Popen(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      #out, err = p.communicate()
+      #log_msg = "Out: {}\nErr: {}".format(out,err)
+      #debug_info.append(log_msg)
 
     return "\n".join(debug_info)
+    return "debugging"
 
   def delete(self, delete_files=True, *args, **kwargs):
     try:

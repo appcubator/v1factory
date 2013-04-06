@@ -27,7 +27,8 @@ def push(name, cwd, changes=True):
 
   if changes:
     child_env = os.environ.copy()
-    ret_code = subprocess.call(['/var/www/v1factory/app_builder/deployment/gitscripts/git_update.sh'], env=child_env, cwd=cwd)
+    ret_code = subprocess.call(['/var/www/v1factory/app_builder/deployment/gitscripts/git_update.sh'], env=child_env, cwd=cwd, shell=True)
+    print "Update return:", ret_code
     assert ret_code == 0, "Failed to call git_update"
 
 def create(name, cwd, add_ksikka=False):
