@@ -90,6 +90,24 @@ define([
       // padding-top: 0px;
       // position: relative;
       // width: 1125px;
+
+      var currentCSS = e.target.value;
+
+      var bodyRegExp = /body \{([^\}]+)\}/g;
+      var marginRegExp = /margin:([^\}]+);/g;
+
+      // var content = bodyRegExp.exec(currentCSS)[1].replace(marginRegExp,"heyyo");
+      // console.log(content);
+      // currentCSS = currentCSS.replace(bodyRegExp, content);
+
+      // console.log(currentCSS);
+
+      //
+      //var bodyStyles = [];
+      // while((curArr = bodyRegExp.exec(currentCSS))!== null) {
+      //   bodyStyles.push(curArr);
+      // }
+      // bodyStyles[0][1] = '';
       //console.log(bodyStyles);
 
       this.model.set('basecss', currentCSS);
