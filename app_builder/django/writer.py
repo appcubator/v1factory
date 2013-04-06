@@ -9,8 +9,10 @@ from jinja2 import Environment, PackageLoader
 
 class DjangoAppWriter:
   """Write django apps. Nuff said"""
-  env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
-  template_env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates'))
+  env = Environment(loader=PackageLoader('app_builder.django', 'code_templates')\
+                            , trim_blocks=True)
+  template_env = Environment(loader=PackageLoader('app_builder.django', 'code_templates/template_templates')\
+                            , trim_blocks=True)
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 
@@ -22,19 +24,19 @@ class DjangoAppWriter:
 
   def render_models_py(self):
     template = DjangoAppWriter.env.get_template('models.py')
-    return template.render(models=list(self.django_app.models.each()))
+    return template.render(models=list(self.django_app.models.each()), env=DjangoAppWriter.env)
 
   def render_urls_py(self):
     template = DjangoAppWriter.env.get_template('urls.py')
-    return template.render(urls=list(self.django_app.urls.each()), form_receivers=[])
+    return template.render(urls=list(self.django_app.urls.each()), form_receivers=[], env=DjangoAppWriter.env)
 
   def render_views_py(self):
     template = DjangoAppWriter.env.get_template('views.py')
-    return template.render(views=self.django_app.views.each(), models=self.django_app.models.each())
+    return template.render(views=self.django_app.views.each(), models=self.django_app.models.each(), env=DjangoAppWriter.env)
 
   def render_form_receivers_py(self):
     template = DjangoAppWriter.env.get_template('form_receivers.py')
-    return template.render(form_receivers=self.django_app.form_receivers.each(), models=self.django_app.models.each())
+    return template.render(form_receivers=self.django_app.form_receivers.each(), models=self.django_app.models.each(), env=DjangoAppWriter.env)
 
   def render_templates(self):
     for t in self.django_app.templates.each():

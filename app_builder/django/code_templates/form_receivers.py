@@ -11,9 +11,11 @@ def ajax_redirect(request, *args, **kwargs):
   else:
     return r
 
-{% for m in models %}{{ m.import_line() }}
+{% for m in models %}
+{{ m.import_line() }}
 {% endfor %}
 
 {% for v in form_receivers %}
-{{ v.render() }}
+{{ v.render(env) }}
+
 {% endfor %}

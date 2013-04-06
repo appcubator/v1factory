@@ -1,5 +1,5 @@
 <!-- domtree -->
 {% for row in context.rows %}
-  {{ row.render(env) }}
+  {{ row.render(env)|indent(2) }}
 {% endfor %}
 <!-- /domtree -->

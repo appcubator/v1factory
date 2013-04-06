@@ -40,5 +40,6 @@ from django.conf import settings
 #    current_app=current_app)
 
 {% for v in views %}
-{{ v.render() }}
+{{ v.render(env) }}
+
 {% endfor %}

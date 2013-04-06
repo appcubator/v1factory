@@ -67,9 +67,7 @@ class DjangoFormReceiver(object):
   def view_path(self):
     return "webapp.form_receivers."+self.identifier()
 
-  def render(self):
-    from jinja2 import Environment, PackageLoader
-    env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
+  def render(self, env):
     if self.model.name != 'User':
       template = env.get_template('form_receiver.py')
       return template.render(form_receiver=self)
@@ -91,8 +89,6 @@ class LoginFormReceiver(DjangoFormReceiver):
     super(LoginFormReceiver, self).__init__(*args, **kwargs)
     self.name = "receive_login"
 
-  def render(self):
-    from jinja2 import Environment, PackageLoader
-    env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
+  def render(self, env):
     template = env.get_template('login_form_receiver.py')
     return template.render(form_receiver=self)

@@ -51,9 +51,8 @@ class DjangoModel(object):
       if f.is_relational and f.related_model.name in ['User', 'UserProfile']:
         return f
 
-  def render(self):
+  def render(self, env):
     from jinja2 import Environment, PackageLoader
-    env = Environment(loader=PackageLoader('app_builder.django', 'code_templates'))
     template = env.get_template('model.py')
     return template.render(model = self)
 
