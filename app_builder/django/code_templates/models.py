@@ -6,7 +6,8 @@ from social_auth.signals import pre_update
 from social_auth.backends.facebook import FacebookBackend
 
 {% for m in models %}
-{{ m.render() }}
+{{ m.render(env) }}
+
 {% endfor %}
 
 def facebook_extra_values(sender, user, response, details, **kwargs):

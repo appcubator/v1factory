@@ -3,7 +3,7 @@
   <fieldset>
     {{ "{% csrf_token %}" }}
     {% for context in context.nodes %}
-      {{ context.render(env) }}
+      {{ context.render(env)|indent(2) }}
     {% endfor %}
   </fieldset>
 </form>
