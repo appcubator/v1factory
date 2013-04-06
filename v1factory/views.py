@@ -51,9 +51,10 @@ def app_new(request):
 @login_required
 def app_page(request, app_id):
   app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
-  return render(request, 'app-show.html', {'app': app,
-                                           'title': 'The Garage',
-                                           'apps': request.user.apps.all()})
+  return render(request, 'app-show.html', {'app'    : app,
+                                           'app_id' : long(app_id),
+                                           'title'  : 'The Garage',
+                                           'apps'   : request.user.apps.all()})
 
 @require_POST
 @login_required
