@@ -755,6 +755,17 @@ input[type="password"], input[type="text"] {
 
 }
 
+.nav li a {
+}
+
+.nav li.dropd {
+  padding: 0 !important;
+}
+
+.nav li.dropd a {
+  padding: 20px;
+}
+
 .nav li:hover {
   box-shadow: inset 0px 0px 4px 0 rgba(90, 90, 90, 0.4);
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(255, 255, 255, 0.9)), to(rgba(241, 241, 241, 0.5)));
@@ -762,4 +773,25 @@ input[type="password"], input[type="text"] {
 
 .nav li.pull-right {
   float: right;
+}
+
+.dropdown-menu li {
+  padding: 0;
+  padding-left: 6px;
+}
+.nav li.dropd .dropdown-menu li {
+  padding: 0;
+  height: 30px;
+}
+
+.nav li.dropd .dropdown-menu li.divider {
+  height: 2px;
+}
+
+.nav li.dropd .dropdown-menu li a {
+  padding: 4px;
+}
+
+.nav li.dropd .caret {
+  margin-left: 6px;
 }
