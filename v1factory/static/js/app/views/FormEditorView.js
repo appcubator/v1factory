@@ -120,7 +120,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     clickedField: function(e) {
       e.preventDefault();
-      var cid = String(e.target.id||e.target.parentNode.id).replace('field-','');
+      var cid = String(e.target.id||e.target.parentNode.id||e.target.parentNode.parentNode.id).replace('field-','');
       var fieldModel = this.model.get('fields').get(cid);
       this.selectedNew(fieldModel);
     },
