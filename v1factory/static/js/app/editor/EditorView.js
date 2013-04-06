@@ -90,6 +90,7 @@ define([
         new PageStylePicker(this.widgetsCollection);
       }
 
+
       this.style();
       this.render();
       $('#loading-gif').fadeOut().remove();
@@ -101,6 +102,12 @@ define([
 
     render: function() {
       this.el.appendChild(this.designEditor.el);
+      iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
+      _(appState.pages).each(function(page, ind) {
+        if(pageId == ind) return;
+        iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +'/pages/editor/'+ ind +'">'+page.name+'</a></li>';
+      });
+
       this.renderUrlBar();
     },
 
