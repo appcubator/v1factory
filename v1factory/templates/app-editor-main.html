@@ -37,11 +37,12 @@
   <!-- Top Menu -->
   <div class="section-select">
     <a href="{% url v1factory.views.app_page app.id %}" class="menu-button home">
-    </a><div class="menu-button save" id="save">
+    </a><div class="menu-button pages"><ul id="page-list"></ul>
+    </div><div class="menu-button save" id="save">
       <span>Save</span>
-    </div><div class="menu-button setting" id="settings"><span>Design Settings</span>
     </div><div class="menu-button run" id="deploy"><span>Test Run</span>
     </div><div class="menu-button help"></div>
+    <!-- </div><div class="menu-button setting" id="settings"><span>Design Settings</span></div> -->
   </div>
 
   <!-- Page Settings -->

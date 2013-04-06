@@ -76,7 +76,23 @@ define([
     },
 
     baseChanged: function(e) {
-      this.model.set('basecss', e.target.value);
+
+      // height: 3901px;
+      // line-height: 18px;
+      // margin-bottom: 0px;
+      // margin-left: 0px;
+      // margin-right: 0px;
+      // margin-top: 0px;
+      // overflow-x: hidden;
+      // padding-bottom: 0px;
+      // padding-left: 0px;
+      // padding-right: 0px;
+      // padding-top: 0px;
+      // position: relative;
+      // width: 1125px;
+      //console.log(bodyStyles);
+
+      this.model.set('basecss', currentCSS);
     },
 
     renderPage: function(page, ind) {
