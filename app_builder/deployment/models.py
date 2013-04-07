@@ -10,6 +10,7 @@ import string
 import time
 import shutil
 from django.db import models
+import requests
 
 def copytree(src, dst, symlinks=False, ignore=None):
   """shutil.copytree wrapper which works even when the dest dir exists"""
