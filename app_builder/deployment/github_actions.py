@@ -3,6 +3,7 @@ import simplejson
 import subprocess
 import os
 import os.path
+import sys
 
 def create_github_repo(name):
   post_data = {}
@@ -27,9 +28,9 @@ def push(name, cwd, changes=True):
 
   if changes:
     child_env = os.environ.copy()
-    ret_code = subprocess.call(['/var/www/v1factory/app_builder/deployment/gitscripts/git_update.sh'], env=child_env, cwd=cwd, shell=True)
-    print "Update return:", ret_code
-    assert ret_code == 0, "Failed to call git_update"
+    ret_code = subprocess.call(['git', 'add', '.'], env=child_env, cwd=cwd)
+    ret_code = subprocess.call(['git', 'commit', '-a', '-m', '"changes"'], env=child_env, cwd=cwd)
+    ret_code = subprocess.call(['git', 'push', '-u', 'origin', 'master'], env=child_env, cwd=cwd)
 
 def create(name, cwd, add_ksikka=False):
   child_env = os.environ.copy()
