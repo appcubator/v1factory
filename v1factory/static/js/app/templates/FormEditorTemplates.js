@@ -1,9 +1,9 @@
 var FormEditorTemplates = { };
 
 var FieldTypes = {
-  "single-line-text" : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">',
-  "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
-  "dropdown"         : '<select class="drowdown"><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
+  "single-line-text" : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>" value="<%= value %>" disabled>',
+  "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>" disabled><%= value %></textarea>',
+  "dropdown"         : '<select class="drowdown"><option><%= value %></option><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
   "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>',
   "password-text"    : '<input type="password" placeholder="<%= field.get(\'placeholder\') %>">',
   "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" placeholder="<%= field.get(\'placeholder\') %>"></div>',
@@ -14,6 +14,7 @@ var FieldTypes = {
 
 
 FormEditorTemplates.field = [
+'<% var value =""; if(form.get(\'action\') == "edit"){ value = "{{" + entity.get(\'name\') + "_" + field.get(\'name\') +"}}"; }%>',
 '<li id="field-<%= field.cid %>" class="field-li-item"><label><%= field.get(\'label\') %><br>',
   '<% if(field.get(\'displayType\') == "single-line-text") { %>',
     FieldTypes['single-line-text'],
@@ -43,6 +44,12 @@ FormEditorTemplates.field = [
 FormEditorTemplates.template = [
   '<h3 class="hi2 full title"><%= form.get("name") %> Form</h3>',
   '<div class="fields-panel panel">',
+    '<h4>Form Type</h4>',
+    '<select class="form-type-select">',
+      '<option value="create">Create Form</option>',
+      '<option <% if(form.get(\'action\') == "edit") print("selected") %> value="edit">Edit Form</option>',
+    '</select>',
+    '<small>Create form is used for creating new records on the storage. Edit form can only be used to edit an existing record.</small>',
     '<h4>Form Fields</h4>',
     '<% _(entity.get("fields").models).each(function(field) { %>',
       '<label><input type="checkbox" id="field-<%= field.cid %>" class="field-name-box" value="<%= field.get(\'name\') %>" <%  if(form.get(\'fields\').filter(function(d){ return d.get(\'name\') == field.get(\'name\')}).length > 0) { %> checked <% }; %>><%= field.get(\'name\') %></label>',
@@ -58,13 +65,13 @@ FormEditorTemplates.template = [
     '<small>You can click on field to see the details and drag them to arrange the display order</small>',
   '</div><div class="action-panel panel">',
     '<h4>Form Actions</h4>',
-    '<span>Go to</span>',
+    '<b>Go to</b>',
     '<select class="goto">',
       '<% _(pages).each(function(page) { %>',
         '<option <% if(form.get("goto") == "{{"+page.name+"}}"){ %> selected<% }; %>><%= page.name %></option>',
       '<% });%>',
     '</select>',
-    '<br><span>Email</span>',
+    '<br><b>Email</b>',
     '<select><option>Email 1</option><option>Email 2</option></select>',
   '</div>'
 ].join('\n');

@@ -23,7 +23,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'keyup   .field-placeholder-input'   : 'changedPlaceholder',
       'keyup   input.field-label-input'    : 'changedLabel',
       'keyup  .options-input'            : 'changedOptions',
-      'change .goto'                     : 'changedGoto'
+      'change .goto'                     : 'changedGoto',
+      'change .form-type-select'         : 'changedFormAction'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -35,16 +36,19 @@ function(Backbone, BackboneUI, FormFieldModel) {
                       'selectedNew',
                       'changedFieldType',
                       'renderField',
+                      'reRenderFields',
                       'clickedField',
                       'changedPlaceholder',
                       'changedLabel',
-                      'changedOrder');
+                      'changedOrder',
+                      'changedFormAction');
 
       this.model = formModel;
       this.entity = entityModel;
 
       this.model.get('fields').bind('add', this.fieldAdded);
       this.model.get('fields').bind('remove', this.fieldRemoved);
+      this.model.bind('change:action', this.reRenderFields);
 
       this.render();
 
@@ -70,6 +74,15 @@ function(Backbone, BackboneUI, FormFieldModel) {
         stop: this.changedOrder
       });
       return this;
+    },
+
+    reRenderFields: function() {
+      var self = this;
+      _(self.model.get('fields').models).each(function(field) {
+        var value = "";
+        if(self.model.get('action') == "edit"){ value = "{{" + self.entity.get('name') + "_" + field.get('name') +"}}"; }
+        self.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field, value: value}) + '</label>');
+      });
     },
 
     fieldBoxChanged: function(e) {
@@ -99,7 +112,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     fieldAdded: function(fieldModel) {
-      var html = _.template(FormEditorTemplates.field, { field: fieldModel});
+      var self = this;
+      var html = _.template(FormEditorTemplates.field, { field: fieldModel, form: self.model, entity: self.entity});
       this.$el.find('.form-fields-list').append(html);
       this.selectedNew(fieldModel);
     },
@@ -126,8 +140,13 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     renderField: function() {
+      var self = this;
       var field = this.selected;
-      this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field}) + '</label>');
+
+      var value = "";
+      if(self.model.get('action') == "edit"){ value = "{{" + self.entity.get('name') + "_" + field.get('name') +"}}"; }
+
+      this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field, value: value}) + '</label>');
     },
 
     changedFieldType: function(e) {
@@ -174,6 +193,10 @@ function(Backbone, BackboneUI, FormFieldModel) {
     changedGoto: function(e) {
       var page_val = '{{' + $(e.target).val() + '}}';
       this.model.set('goto', page_val);
+    },
+
+    changedFormAction: function(e) {
+      this.model.set('action', e.target.value);
     }
   });
 
