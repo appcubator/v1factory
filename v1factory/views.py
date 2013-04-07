@@ -449,7 +449,7 @@ def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
   d_user = {
     'user_name' : request.user.username,
-    'date_joined' : request.user.date_joined
+    'date_joined' : str(request.user.date_joined)
   }
   m = app.deploy(d_user)
   return HttpResponse(m)
@@ -462,7 +462,7 @@ def app_deploy_local(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
   d_user = {
     'user_name' : request.user.username,
-    'date_joined' : request.user.date_joined
+    'date_joined' : str(request.user.date_joined)
   }
   m = app.write_to_tmpdir(d_user)
   return HttpResponse(m)
@@ -491,7 +491,7 @@ def deploy_local(request):
   d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
   d_user = {
     'user_name' : request.user.username,
-    'date_joined' : request.user.date_joined
+    'date_joined' : str(request.user.date_joined)
   }
   r = d.write_to_tmpdir(d_user)
   return HttpResponse(r)
@@ -505,7 +505,7 @@ def deploy_hosted(request):
   #this will post the data to v1factory.com
   d_user = {
     'user_name' : request.user.username,
-    'date_joined' : request.user.date_joined
+    'date_joined' : str(request.user.date_joined)
   }
   post_data = {
     "subdomain": subdomain,
