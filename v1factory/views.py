@@ -6,7 +6,7 @@ from django.shortcuts import redirect,render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from v1factory.models import App, UIElement, StaticFile, UITheme
-from v1factory.email import send_email
+from v1factory.email.sendgrid_email import send_email
 from app_builder.analyzer import AnalyzedApp
 from app_builder.utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
@@ -447,7 +447,11 @@ def theme_delete(request, theme):
 @csrf_exempt
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
-  m = app.deploy(request.user.username)
+  d_user = {
+    'user_name' : request.user.username,
+    'date_joined' : request.user.date_joined
+  }
+  m = app.deploy(d_user)
   return HttpResponse(m)
 
 @login_required
@@ -456,7 +460,11 @@ def app_deploy(request, app_id):
 def app_deploy_local(request, app_id):
   assert not settings.PRODUCTION, "You should only deploy local if this is a dev machine"
   app = get_object_or_404(App, id=app_id, owner=request.user)
-  m = app.write_to_tmpdir(request.user.username)
+  d_user = {
+    'user_name' : request.user.username,
+    'date_joined' : request.user.date_joined
+  }
+  m = app.write_to_tmpdir(d_user)
   return HttpResponse(m)
 
 
@@ -481,7 +489,11 @@ def deploy_local(request):
   subdomain = request.POST['subdomain']
   app_json = request.POST['app_json']
   d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
-  r = d.write_to_tmpdir(request.user.username)
+  d_user = {
+    'user_name' : request.user.username,
+    'date_joined' : request.user.date_joined
+  }
+  r = d.write_to_tmpdir(d_user)
   return HttpResponse(r)
 
 @require_POST
@@ -491,7 +503,15 @@ def deploy_hosted(request):
   subdomain = request.POST['subdomain']
   app_json = request.POST['app_json']
   #this will post the data to v1factory.com
-  post_data = {"subdomain": subdomain, "app_json": app_json}
+  d_user = {
+    'user_name' : request.user.username,
+    'date_joined' : request.user.date_joined
+  }
+  post_data = {
+    "subdomain": subdomain,
+    "app_json": app_json,
+    "d_user" : d_user
+  }
   r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
   return HttpResponse(r.content)
 

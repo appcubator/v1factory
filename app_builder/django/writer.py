@@ -49,7 +49,7 @@ class DjangoAppWriter:
 
   def render_emailer_py(self):
     tempate = DjangoAppWriter.env.get_template('emailer.py')
-    return template.render(api_key=get_api_key(self.django_app.user_creator))
+    return template.render(api_key=get_api_key(self.django_app.d_user))
 
   """ Directory Structure """
 

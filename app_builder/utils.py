@@ -6,7 +6,6 @@ import shlex
 import simplejson
 import re
 import hashlib
-from django.contrib.auth.models import User
 
 """
   A class that stores various utilities used across the v1factory stack.
@@ -17,9 +16,10 @@ from django.contrib.auth.models import User
 """
 
 # Creates a secure hash API key using the user's attribute.
-def get_api_key(user_name):
-  user = User.objects.get(username=user_name)
-  hash_string = user_name + str(user.date_joined)
+def get_api_key(d_user):
+  user_name = d_user['user_name']
+  date_joined = d_user['date_joined']
+  hash_string = user_name + str(date_joined)
   return hashlib.sha224(hash_string).hexdigest()
 
 def extract_from_brace(s):
