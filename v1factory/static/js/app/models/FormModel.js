@@ -1,7 +1,8 @@
 define([
   'backbone',
   'app/collections/FormFieldCollection'
-], function(Backbone, FormFieldCollection) {
+],
+function(Backbone, FormFieldCollection) {
 
   var FormModel = Backbone.Model.extend({
     initialize: function(bone, entity) {

@@ -9,9 +9,7 @@
       <div class="nav-collapse collapse navbar-responsive-collapse">
         <ul class="nav">
           <h1 class="name hoff1" style="display:inline-block;"><a class="" href="/">v1 Factory</a> <span class="small-t">»</span> {{ title }}</a></h1>
-        </ul>
-        <ul class="nav pull-right hoff1">
-          <li class="dropdown">
+          <li class="pull-right dropd">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if app %}{{ app.name }}{% else %}{{ user.get_full_name }}{% endif %}<b class="caret"></b></a>
             <ul class="dropdown-menu">
               {% if app %}

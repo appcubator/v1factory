@@ -55,7 +55,7 @@ var defaultElements = [
 
   {
     text: "Box",
-    className : "box",
+    className : "boxes",
     el : "<div style='background-color:#ccc;height:120px' class='span20'></div>"
   }
 ];

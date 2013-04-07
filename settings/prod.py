@@ -21,5 +21,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': os.path.join(PROJECT_ROOT_PATH, 'tempdb'),
-    }
+    },
+   #'default': {
+   #    'ENGINE': 'django.db.backends.mysql',
+   #    'NAME': 'westdb',
+   #    'USER': 'master',
+   #    'PASSWORD': 'imadatabase',
+   #    'HOST': 'prodv1factory.cbdwcbfkvkrq.us-west-1.rds.amazonaws.com',
+   #    'PORT': 3306
+   #}
 }

@@ -107,12 +107,20 @@ class DjangoTemplate(Renderable):
             # in this case, recursion will not terminate since input is not subdivided into smaller components
             # create a relative container and absolute position the contents.
 
+            min_top = c.uiels[0].top
+            max_bottom = c.uiels[0].top + c.uiels[0].height
             for uie in c.uiels:
               uie.top_offset = uie.top - top_offset
               uie.left_offset = uie.left - left_offset
               uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
+              min_top = min(uie.top, min_top)
+              max_bottom = max(uie.top + uie.height, max_bottom)
+
 
             c.has_overlapping_nodes = True
+
+            c.container_height = max_bottom - min_top
+
             c.tree = None
           else:
             c.tree = self.create_tree(c.uiels, top_offset=top_offset, left_offset=left_offset)
