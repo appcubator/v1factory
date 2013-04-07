@@ -6,6 +6,7 @@ from django.shortcuts import redirect,render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from v1factory.models import App, UIElement, StaticFile, UITheme
+from v1factory.email import send_email
 from app_builder.analyzer import AnalyzedApp
 from app_builder.utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
@@ -493,3 +494,19 @@ def deploy_hosted(request):
   post_data = {"subdomain": subdomain, "app_json": app_json}
   r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
   return HttpResponse(r.content)
+
+@require_POST
+@csrf_exempt
+def send_hosted_email(request):
+  # Need to log IP addresses to ensure we do not get freeloaders
+  # that use this as a free service
+  # TODO(nkhadke): Check if IP address is in registered users and
+  # is within email limits
+  from_email = request.POST['from_email']
+  to_email = request.POST['to_email']
+  subject = request.POST['subject']
+  text = request.POST['text']
+  html = request.POST['html']
+  send_email(from_email, to_email, subject, text, html)
+  return HttpResponse("Email sent successfully")
+  
