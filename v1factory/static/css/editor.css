@@ -1503,6 +1503,12 @@ h3.edit-url {
   width: 500px;
   height: 600px;
   position: relative;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ddd;
+}
+
+.query-view-panel {
+  overflow-y: scroll;
 }
 
 .type-pick {

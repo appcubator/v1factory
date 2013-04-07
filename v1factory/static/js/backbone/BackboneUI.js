@@ -153,6 +153,7 @@ function() {
       div.className = 'modal ' + this.className;
       div.style.width = this.width + 'px';
       div.style.minHeight = '300px';
+      if(this.height) div.style.height = this.height;
       div.style.top = '50%';
       div.style.left = '50%';
       div.style.marginLeft= '-'+ (this.width/2) +'px';
