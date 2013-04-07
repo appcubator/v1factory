@@ -12,6 +12,7 @@ define([
   'editor/DesignEditorView',
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
+  'editor/NavbarEditorView',
   'backbone',
   'backboneui',
   '../../libs/keymaster/keymaster.min'
@@ -28,6 +29,7 @@ define([
            DesignEditorView,
            EditorGalleryView,
            PageStylePicker,
+           NavbarEditorView,
            Backbone,
            BackboneUI) {
 
@@ -96,6 +98,8 @@ define([
       $('#loading-gif').fadeOut().remove();
       window.addEventListener('keydown', this.keydown);
 
+      this.navbarEditor = new NavbarEditorView(this.model.get('navbar'));
+
       key('⌘+s, ctrl+s', this.save);
       key('⌘+shift+r, ctrl+shift+r', this.deployLocal);
     },
@@ -156,7 +160,7 @@ define([
 
       curAppState.pages[pageId]['uielements'] = elems;
       curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
-
+      curAppState.pages[pageId]['navbar'] = this.model.get('navbar').toJSON();
       return curAppState;
     },
 

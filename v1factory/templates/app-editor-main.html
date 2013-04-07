@@ -55,7 +55,24 @@
   <div class="page-container">
     <div class="page-wrapper" id="page-wrapper">
       <div class="url-bar">http://127.0.0.1:8000/app/1/pages/editor/0</div>
-      <div class="page">  <!-- Top Styling Menu -->
+      <div class="page container">  <!-- Top Styling Menu -->
+        <div class="navbar" id="navbar">
+          <div class="navbar-inner">
+            <a class="brand" href="#" id="brand-name">{{ app.name }}</a>
+            <form class="brand" id="brand-name-form" style="display:none"><input type="text" id="brand-name-input" placeholder="Brand Text"></form>  
+            <ul class="nav" id="items">              
+            </ul>
+            <form class="nav add-link-form" style="display:none;">
+              <li><select id="page-link-list"><option>Choose A Page</option></select></li>
+            </form>
+            <ul class="nav add-link">
+              <li><a href="#">+Add a Link</a></li>
+            </ul>
+          </div>
+          <div class="right hide-btn btn" id="hide-toggle">
+            Hide the Navbar
+          </div>
+        </div>
         <div class="editor-pane fadeIn" id="editor-page">
           <div id="layout-editor" class="layout-editor"></div>
           <!-- Top Content Menu -->

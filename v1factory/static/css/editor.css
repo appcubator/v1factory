@@ -715,9 +715,12 @@ body {
 *//*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
 */}
 
-.page {
-  line-height: 1em;
+.page .navbar {
+  line-height: 20px;
 }
+.page {
+/*  line-height: 1em;
+*/}
 
 .top-panel {
   position: absolute;
@@ -1581,6 +1584,34 @@ h3.edit-url {
   margin-top: 4px;
 }
 
+.navbar .hide-btn {
+  display: inline-block;
+  width: 120px;
+  font-size: 12px;
+  margin-top: -36px;
+  margin-right: 4px;
+}
+
+.navbar.hidden {
+  opacity: 0;
+}
+
+.navbar.hidden:hover {
+  opacity: 0.6;
+}
+
+.navbar .nav.add-link {
+  opacity: 0.2;
+}
+
+.navbar .nav.add-link {
+  opacity: 0.9;
+}
+
+.add-link-form select {
+  margin-top: 4px;
+  width: 180px;
+}
 /*.container-wrapper:hover .ui-resizable-handle {
   opacity: 1;
 }*/
