@@ -57,8 +57,6 @@ class Deployment(models.Model):
     a_conf.write(self.apache_config())
     a_conf.close()
 
-    ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
-    assert(ret_code == 0)
 
   def is_initialized(self):
     """checks if this app has already been initialized"""
@@ -120,21 +118,25 @@ class Deployment(models.Model):
     debug_info = []
     for c in commands:
       print "Running `{}`".format(c)
-      ret_code = subprocess.call(shlex.split(c), env=child_env, cwd=self.app_dir)
-      print "Return code of syncdb", ret_code
-      #p = subprocess.Popen(shlex.split(c), env=child_env, cwd=self.app_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      #out, err = p.communicate()
-      #log_msg = "Out: {}\nErr: {}".format(out,err)
-      #debug_info.append(log_msg)
+      log_msg = subprocess.check_output(shlex.split(c), env=child_env, cwd=self.app_dir)
+      print log_msg
+      debug_info.append(log_msg)
 
     return "\n".join(debug_info)
-    return "debugging"
 
   def delete(self, delete_files=True, *args, **kwargs):
     try:
+      # delete app files
       if delete_files:
         os.remove(self.config_file_path)
         shutil.rmtree(self.app_dir)
+
+      # try to delete github repo
+      repo_name = self.subdomain
+      assert repo_name != 'v1factory'
+      r = requests.delete("https://api.github.com/repos/v1factory/%s" % repo_name, auth=('v1factory', 'obscurepassword321'))
+
+      # try to restart server
       ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
       assert(ret_code == 0)
     except Exception, e:
