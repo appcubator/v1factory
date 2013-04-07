@@ -136,7 +136,8 @@ LOGGING = {
         },
     'console':{
             'level': 'DEBUG',
-            'filters': ['require_debug_false'],
+            #'filters': ['require_debug_false'],
+            'filters': [],
             'class': 'logging.StreamHandler',
         }
     },
@@ -153,3 +154,4 @@ djcelery.setup_loader()
 BROKER_URL = 'django:///'
 
 LOGOUT_URL="/"
+LOGIN_URL="/login/"

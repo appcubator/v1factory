@@ -31,7 +31,12 @@ require.config({
 
 });
 
-require(["backbone", 'backboneui', 'app/views/SimpleModalView', "bootstrap"], function(Backbone, BackboneUI, SimpleModalView) {
+require(["backbone",
+         'backboneui',
+         'app/views/SimpleModalView',
+         'app/views/LoginModalView',
+         "bootstrap"],
+function(Backbone, BackboneUI, SimpleModalView, LoginModalView) {
 
   IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
 
@@ -55,27 +60,7 @@ require(["backbone", 'backboneui', 'app/views/SimpleModalView', "bootstrap"], fu
     $('.IN-widget').children().first().children().first().trigger('click');
   });
 
-  var $elie = $('.engine1');
-  var $elie2 = $('.engine2');
-  var $elie3 = $('.engine3');
-  rotate(0, -1);
-  rotate2(0, 1);
-  rotate3(0, -1);
-
-  function rotate(degree, direction) {
-    $elie.css({ WebkitTransform: 'rotate(' + degree + 'deg)'});
-    $elie.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
-    setTimeout(function() { rotate(degree + direction, direction); },26);
-  }
-  function rotate2(degree, direction) {
-    $elie2.css({ WebkitTransform: 'rotate(' + degree + 'deg)'});
-    $elie2.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
-    setTimeout(function(){setTimeout(function() { rotate2(degree + direction, direction); },26); }, 1);
-  }
-
-  function rotate3(degree, direction) {
-    $elie3.css({ WebkitTransform: 'rotate(' + degree + 'deg)'});
-    $elie3.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
-    setTimeout(function(){setTimeout(function() { rotate3(degree + direction, direction); },26); }, 1);
-  }
+  $('#login-btn').on('click', function() {
+    new LoginModalView();
+  });
 });

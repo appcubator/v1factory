@@ -5,6 +5,11 @@
   vertical-align: top;
 }
 
+.panel select {
+  width: 160px;
+  margin-left: 10px;
+}
+
 .fields-panel {
   width: 180px;
   border-right:1px solid #ddd;
@@ -14,6 +19,7 @@
   height: 40px;
   padding-top: 10px;
   padding-left: 10px;
+  border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.05);
@@ -40,8 +46,14 @@
   width: 100%;
 }
 
-.details-panel b {
+.panel b {
   font-weight: bold;
+}
+
+.action-panel b {
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 12px;
 }
 
 .form-panel {
@@ -52,7 +64,11 @@
   border-right: 1px solid #ddd;
 }
 
-.form-panel small {
+.form-panel input[type="text"], .form-panel input[type="password"] {
+  border-width: 1px;
+}
+
+.panel small {
  font-size: 10px;
  font-style: italic;
  padding: 10px;
@@ -103,6 +119,8 @@ h4 {
   margin-top: -1px;
   margin-right: 4px;
 }
+
+.fie
 
 .add-on {
   min-height: 32px;

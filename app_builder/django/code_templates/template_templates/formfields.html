@@ -13,16 +13,16 @@
   <div class="btn">{{ field.placeholder }}</div>
   {% elif field.display_type == "dropdown" %}
   <select class="dropdown">
-      {% for option in field.options %}
+{% for option in field.options %}
     <option>{{ option }}</option>
-      {% endfor %}
+{% endfor %}
   </select>
   {% elif field.display_type == "option-boxes" %}
   <span class="option-boxes">
-  {% for option in field.options %}
+{% for option in field.options %}
     <label for="opt-{{ loop.index }}"></label>
     <input id="opt-{{ loop.index }}" class="field-type" type="radio" name="types" value="single-line-text">{{ option }}
-  {% endfor %}
+{% endfor %}
   </span>
   {% elif field.display_type == "image-uploader" %}
   <input type="file" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>

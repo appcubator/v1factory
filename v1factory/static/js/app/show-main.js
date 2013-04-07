@@ -6,7 +6,10 @@ require.config({
     "backbone" : "../libs/backbone-amd/backbone",
     "backboneui" : "../backbone/BackboneUI",
     "iui" : "../libs/iui/iui",
-    "bootstrap" : "../libs/bootstrap/bootstrap"
+    "bootstrap" : "../libs/bootstrap/bootstrap",
+    "app" : "./",
+    "editor" : "../editor",
+    "dicts" : "../dicts"
   },
 
   shim: {
@@ -28,4 +31,22 @@ require.config({
 
 });
 
-require(["bootstrap"], function(InfoView) { });
+require([
+  "app/views/SimpleModalView",
+  "bootstrap"
+],
+function(SimpleModalView) {
+
+  $('#deploy').on('click', function() {
+    $.ajax({
+          type: "POST",
+          url: '/app/'+appId+'/deploy/',
+          complete: function(data) {
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+          },
+          dataType: "JSON"
+    });
+  });
+
+
+});

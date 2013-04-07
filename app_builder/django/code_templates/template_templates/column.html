@@ -1,9 +1,9 @@
 <!-- column -->
 {% if context.tree == None %}
-<div class="span{{context.width}} offset{{context.margin_left}}" {% if context.has_overlapping_nodes %}style="position:relative;"{% endif %}>
-  {% for element in context.uiels %}
+<div class="span{{context.width}} offset{{context.margin_left}} {% if context.has_overlapping_nodes %}hi{{ context.container_height }}{% endif %}" {% if context.has_overlapping_nodes %}style="position:relative;"{% endif %}>
+{% for element in context.uiels %}
     {{ element.render(env)|indent(2) }}
-  {% endfor %}
+{% endfor %}
 </div>
 {% else %}
 <div class="span{{context.width}} offset{{context.margin_left}}">

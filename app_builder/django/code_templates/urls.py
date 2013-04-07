@@ -7,9 +7,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
-    {% for v in urls %}
+{% for v in urls %}
     url({{ v.url_repr() }}, {{ v.view_path_repr() }}),
-    {% endfor %}
+{% endfor %}
 
     url(r'', include('social_auth.urls')),
 )

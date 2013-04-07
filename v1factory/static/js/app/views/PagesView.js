@@ -53,7 +53,9 @@ function(PageModel, UrlsCollection, UrlView, PageView) {
         this.$el.find('.create-form').hide();
         this.$el.find('.create-page').fadeIn();
         //this.urlsCollection.add({ urlparts: [], page_name: name});
-        this.collection.add({ name: name});
+        var pageUrl = { urlparts : [] };
+        pageUrl.urlparts[0] = "page" + this.collection.models.length;
+        this.collection.add({ name: name, url: pageUrl});
       }
       this.savePages();
     },

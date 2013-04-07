@@ -79,6 +79,31 @@
     </div>
   </div>
 </div>
+<script type="html/template" id="login-form-template">
+<div class="login pad1 pull-right" style="height:45px; margin-top: 10px; opacity:1.0;">
+  <div class="span8  hi14">
+    <span class="pad1"><strong>User Login</strong><br><i class="micro"> (forgot password?)</i></span>
+  </div>
+  <div class="span20 hi14">
+          <span class="login span24 offset1">
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
+                {% csrf_token %}
+       
+                <input id="id_username" type="text" name="username" placeholder="Username..." maxlength="30">
+                <br>
+                <input type="password" name="password" placeholder="Password..." id="id_password">
+                <br>
+                <input class="btn" type="submit" value="Login"/>
+                <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
+            </form>
+          </span>
+  </div>
+</div>
+</script>
+
 {% endblock %}
 
 {% block js %}

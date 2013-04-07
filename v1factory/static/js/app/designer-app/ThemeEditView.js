@@ -65,14 +65,12 @@ define([
       var self = this;
       iui.get('base-css').value = this.model.get('basecss');
       _(this.model.get('pages').models).each(function(page, ind) {
-        console.log(ind);
         self.renderPage(page, ind);
       });
 
       _(statics).each(function(file) {
         iui.get('statics-cont').innerHTML += '<img width="100" src="'+ file.url +'">' + file.name;
-      })
-      console.log(statics);
+      });
     },
 
     baseChanged: function(e) {
@@ -90,14 +88,33 @@ define([
       // padding-top: 0px;
       // position: relative;
       // width: 1125px;
-      //console.log(bodyStyles);
+
+      var currentCSS = e.target.value;
+
+      var bodyRegExp = /body \{([^\}]+)\}/g;
+      var marginRegExp = /margin:([^;]+);/g;
+      var heightRegExp = /height:([^;]+);/g;
+      var positionRegExp = /position:([^;]+);/g;
+      var widthRegExp = /width:([^;]+);/g;
+      var overflowXRegExp = /overflow-x:([^;]+);/g;
+
+      var initBodyTag = bodyRegExp.exec(currentCSS)[0];
+
+      var newBodyTag;
+      newBodyTag = initBodyTag.replace(heightRegExp, '');
+      newBodyTag = newBodyTag.replace(marginRegExp, '');
+      newBodyTag = newBodyTag.replace(positionRegExp, '');
+      newBodyTag = newBodyTag.replace(widthRegExp, '');
+      newBodyTag = newBodyTag.replace(overflowXRegExp, '');
+
+
+      currentCSS = currentCSS.replace(initBodyTag, newBodyTag);
 
       this.model.set('basecss', currentCSS);
     },
 
     renderPage: function(page, ind) {
       var pages = iui.get('pages-list');
-      console.log(pages);
       var cInd = ind;
       if(ind === null) {
         cInd = (this.model.get('pages').models.length);
@@ -136,7 +153,6 @@ define([
     },
 
     staticsAdded: function(files, self) {
-      console.log(files);
       // _(files).each(function(file){
       //   file.name = file.filename;
       //   statics.push(file);
@@ -146,7 +162,7 @@ define([
 
     save: function() {
       var json = _.clone(this.model.attributes);
-      console.log(json);
+      console.log(json.basecss);
       json["button"]     = this.model.get('buttons').toJSON()||{};
       json["image"]      = this.model.get('images').toJSON()||{};
       json["header-text"]= this.model.get('headerTexts').toJSON()||{};

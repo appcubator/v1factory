@@ -5,7 +5,7 @@ define([
 ],function(BackboneUI) {
 
   var TableQueryView = BackboneUI.ModalView.extend({
-    className : 'query-modal',
+    className : 'query-modal modal',
     events: {
       'change .fields-to-display'   : 'fieldsToDisplayChanged',
       'click .belongs-to-user'      : 'belongsToUserChanged',
@@ -17,15 +17,20 @@ define([
       _.bindAll(this, 'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
-                      'nmrRowsNumberChanged');
+                      'nmrRowsNumberChanged',
+                      'getNLdescription',
+                      'changeDescription');
 
       this.widgetModel = widgetModel;
       this.model = queryModel;
       this.entity = widgetModel.get('container_info').get('entity');
       this.render();
+
+      this.model.bind('change', this.changeDescription, this);
     },
 
     render: function() {
+
       var self = this;
 
       var checks = {};
@@ -52,14 +57,21 @@ define([
         rLastNmr  : rLastNmr,
         rLast     : rLast,
         rAll      : rAll,
-        rAllNmr   : rAllNmr
+        rAllNmr   : rAllNmr,
+        nLang     : self.getNLdescription()
       };
 
+      console.log(checks);
+
       var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks});
-      contentHTML += '<input type="submit" value="Done">';
+      contentHTML += '<input type="submit" class="btn offsetr1 pull-right" value="Done"><div class="hoff1 span10"></div>';
 
       this.el.innerHTML = contentHTML;
       return this;
+    },
+
+    changeDescription: function() {
+      iui.get('query-description').innerHTML = this.getNLdescription();
     },
 
     fieldsToDisplayChanged: function(e) {
@@ -114,6 +126,46 @@ define([
 
     sortByChanged: function(e) {
       this.model.set('sortAccordingTo', e.target.value);
+    },
+
+    getNLdescription: function() {
+      var self = this;
+      var str = "This table shows ";
+      console.log(self);
+
+       if(self.model.get('fieldsToDisplay').length === 0) {
+        str += 'no data. Please choose the fields from below.';
+        return str;
+       }
+
+      _(self.model.get('fieldsToDisplay')).each(function(field, ind) {
+
+        if(self.model.get('fieldsToDisplay').length == 1) {
+          str += field + ' ';
+        }
+        else if(self.model.get('fieldsToDisplay').length > 1 && ind == self.model.get('fieldsToDisplay').length-1) {
+          str += 'and '+field;
+          return;
+        }
+        else {
+          str += field + ', ';
+        }
+      });
+
+      str += " of";
+      if(this.model.get('numberOfRows') === 0) {
+        str += " all " + self.model.entity.get('name')+"s";
+      }
+      else if(this.model.get('numberOfRows') == 1) {
+        str += " a " + self.model.entity.get('name');
+      }
+      else {
+        str += " "+ String(self.model.get('numberOfRows')).replace('-',' ').toLowerCase() + " " + self.model.entity.get('name')+"s";
+      }
+
+      str += " sorted "+ String(self.model.get('sortAccordingTo')).replace('-',' ').toLowerCase()+ ".";
+
+      return str;
     }
 
   });
