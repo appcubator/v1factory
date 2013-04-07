@@ -150,7 +150,7 @@ function() {
 
       var div = document.createElement('div');
       div.style.position = 'fixed';
-      div.className = 'modal';
+      div.className = 'modal ' + this.className;
       div.style.width = this.width + 'px';
       div.style.minHeight = '300px';
       div.style.top = '50%';
@@ -188,8 +188,8 @@ function() {
       if(this.callback) this.callback();
       if(this.onClose) this.onClose();
       // fadeOut(function() { $(this).remove(); });
-      $(self.modalWindow).fadeOut(200);
-      $(self.backgroundDiv).fadeOut(160);
+      $(self.modalWindow).fadeOut(100);
+      $(self.backgroundDiv).hide();
 
       setTimeout(function(){
         self.$el.remove();
