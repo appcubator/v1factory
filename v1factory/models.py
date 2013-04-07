@@ -111,10 +111,16 @@ class App(models.Model):
       subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
     return subdomain
 
-  def deploy(self):
+  def deploy(self, d_user):
     # this will post the data to v1factory.com
     subdomain = self.subdomain()
-    post_data = {"subdomain": subdomain, "app_json": self.state_json, "uie_json" : self.uie_state_json}
+    print d_user
+    post_data = {
+      "subdomain": subdomain,
+      "app_json": self.state_json,
+      "uie_json" : self.uie_state_json,
+      "d_user" : d_user
+    }
     r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:

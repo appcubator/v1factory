@@ -63,13 +63,13 @@ class Deployment(models.Model):
     """checks if this app has already been initialized"""
     return os.path.isdir(self.app_dir) and os.path.isfile(self.config_file_path)
 
-  def write_to_tmpdir(self):
+  def write_to_tmpdir(self, d_user):
     from app_builder.analyzer import AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
     a = AnalyzedApp(simplejson.loads(self.app_state_json))
-    dw = analyzed_app_to_app_components(a)
+    dw = analyzed_app_to_app_components(a, d_user)
     tmp_project_dir = DjangoAppWriter(dw, simplejson.loads(self.uie_state_json)).write_to_fs()
 
     return tmp_project_dir
@@ -82,13 +82,13 @@ class Deployment(models.Model):
     self.uie_state_json = simplejson.dumps(uie_dict)
     return self
 
-  def deploy(self):
+  def deploy(self, d_user):
     from app_builder.analyzer import AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
     # GENERATE CODE
-    tmp_project_dir = self.write_to_tmpdir()
+    tmp_project_dir = self.write_to_tmpdir(d_user)
     print "Project written to " + tmp_project_dir
 
     if not django.conf.settings.PRODUCTION:

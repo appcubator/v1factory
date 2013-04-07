@@ -3,6 +3,7 @@ import os.path
 import shutil
 import tempfile
 
+from app_builder.utils import get_api_key
 from os.path import join
 from jinja2 import Environment, PackageLoader
 
@@ -46,6 +47,10 @@ class DjangoAppWriter:
     template = DjangoAppWriter.env.get_template('style.css')
     return template.render(uiestate= self.uie_state)
 
+  def render_emailer_py(self):
+    tempate = DjangoAppWriter.env.get_template('emailer.py')
+    return template.render(api_key=get_api_key(self.django_app.d_user))
+
   """ Directory Structure """
 
   """
@@ -62,6 +67,7 @@ class DjangoAppWriter:
       __init__.py
       models.py
       views.py
+      emailer.py
 
     templates/
       base.html
@@ -131,6 +137,7 @@ class DjangoAppWriter:
     write_string(self.render_views_py(), 'webapp/views.py')
     write_string(self.render_form_receivers_py(), 'webapp/form_receivers.py')
     write_string(self.render_urls_py(), 'urls.py')
+    write_string(self.render_emailer_py(), 'emailer.py')
 
     # templates
     copy_file('base.html', 'templates/base.html')

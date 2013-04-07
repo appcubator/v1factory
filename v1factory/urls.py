@@ -65,6 +65,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^theme/(\d)/clone/$', 'theme_clone'),
     url(r'^theme/(\d)/delete/$', 'theme_delete'),
     url(r'^theme/(\d)/editor/(\d+)$', 'theme_page_editor'),
+    url(r'^sendhostedemail$', 'send_hosted_email'),
 
 
     url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments

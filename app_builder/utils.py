@@ -5,13 +5,22 @@ import os
 import shlex
 import simplejson
 import re
+import hashlib
 
 """
   A class that stores various utilities used across the v1factory stack.
   This currently cotains the following utilities:
   1) Brace Extraction, {{ Str }} => Str
   2) Excel document related docs
+  3) Hashing to create an API key
 """
+
+# Creates a secure hash API key using the user's attribute.
+def get_api_key(d_user):
+  user_name = d_user['user_name']
+  date_joined = d_user['date_joined']
+  hash_string = user_name + str(date_joined)
+  return hashlib.sha224(hash_string).hexdigest()
 
 def extract_from_brace(s):
   "Takes a string out of the brace wrappers"
