@@ -3,7 +3,8 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect,render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import forms, authenticate, login
+from django.contrib.auth import forms as auth_forms, authenticate, login
+from django import forms
 from django.utils import simplejson
 
 import requests
@@ -21,7 +22,7 @@ def send_login_notification_message(message):
       auth=("api", "key-8iina6flmh4rtfyeh8kj5ai1maiddha8"),
       data={
              "from": "v1Factory Bot <postmaster@v1factory.mailgun.org>",
-             "to": "founders@heapdocs.com",
+             "to": "team@v1factory.com",
              "subject": "Someone signed on!",
              "text": message,
            }
@@ -34,11 +35,19 @@ def get_linkedin(request):
   r = send_login_notification_message(format_full_details(request.POST))
   return HttpResponse("ok")
 
-class MyUserCreationForm(forms.UserCreationForm):
+class MyUserCreationForm(auth_forms.UserCreationForm):
   """Creates a user"""
+  betasecret = forms.CharField()
 
-  class Meta(forms.UserCreationForm.Meta):
+  class Meta(auth_forms.UserCreationForm.Meta):
     fields = ('username','first_name','last_name','email')
+
+  def clean_betasecret(self):
+    bs = self.cleaned_data['betasecret']
+
+    if bs not in ['v1key']:
+      raise forms.ValidationError("Incorrect beta secret")
+
 
   def __init__(self, *args, **kwargs):
     super(MyUserCreationForm, self).__init__(*args, **kwargs)
