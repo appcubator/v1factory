@@ -3,6 +3,7 @@ from settings.common import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PRODUCTION = False
+STAGING = False
 
 print "in dev.py"
 ADMINS = (
