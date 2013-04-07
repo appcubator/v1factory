@@ -136,7 +136,8 @@ LOGGING = {
         },
     'console':{
             'level': 'DEBUG',
-            'filters': ['require_debug_false'],
+            #'filters': ['require_debug_false'],
+            'filters': [],
             'class': 'logging.StreamHandler',
         }
     },
