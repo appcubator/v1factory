@@ -1,11 +1,13 @@
+# THESE ARE THE PRODUCTION SETTINGS FOR THE APP RUNNING IN EC2
+
+
 from settings.common import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-PRODUCTION = False
-STAGING = False
+PRODUCTION = True
+STAGING = True
 
-print "in dev.py"
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )

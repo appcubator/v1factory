@@ -109,13 +109,25 @@ class App(models.Model):
     subdomain = self.owner.username.lower() + "-" + self.name.lower()
     if not settings.PRODUCTION:
       subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
+    if settings.STAGING:
+      subdomain = subdomain + '.staging'
     return subdomain
 
   def deploy(self):
     # this will post the data to v1factory.com
     subdomain = self.subdomain()
-    post_data = {"subdomain": subdomain, "app_json": self.state_json, "uie_json" : self.uie_state_json}
-    r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+    post_data = {
+                 "subdomain": subdomain,
+                 "app_json": self.state_json,
+                 "uie_json": self.uie_state_json,
+                 "user_info": simplejson.dumps({ "username" : "placeholder" }),
+                 "deploy_secret": "v1factory rocks!"
+                }
+    # deploy to the staging server unless this is the production server.
+    if settings.PRODUCTION and not settings.STAGING:
+      r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+    else:
+      r = requests.post("http://staging.v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:
       return "http://%s.v1factory.com" % subdomain

@@ -154,3 +154,4 @@ djcelery.setup_loader()
 BROKER_URL = 'django:///'
 
 LOGOUT_URL="/"
+LOGIN_URL="/login/"

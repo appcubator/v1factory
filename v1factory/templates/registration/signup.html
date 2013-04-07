@@ -15,32 +15,108 @@
   <div class="container">
     <div class="offset12">
       <div class="hi91">
-        <h2 class="hoff5">Sign Up Form</h2>
+        <h2 class="hoff5">Sign Up</h2>
       </div>
     </div>
   </div>
 </div>
 <div class="container">
   <div class="row meta">
-    <form method="POST" class="span16 offset12" action="{% url v1factory.base_views.signup %}">
-      <h4>Username</h4>
-      <input class="span16" name="username" type="text"><br>
-      <h4>First Name</h4>
-      <input class="span16" name="first_name" type="text"><br>
-      <h4>Last Name</h4>
-      <input class="span16" name="last_name" type="text"><br>
-      <h4>Email Address</h4>
-      <input class="span16" name="email" type="text"><br>
-      <h4>Password</h4>
-      <input class="span16" name="password1" type="password"><br>
-      <h4>Confirm Password</h4>
-      <input class="span16" name="password2" type="password"><br>
+    <form method="POST" class="span46 offset12" action="{% url v1factory.base_views.signup %}">
+      <div class="row">
+        <div class="row hoff1">
+          <h4>Username</h4>
+          <input class="span10" name="username" type="text">
+          <div class="form-error field-name-username"></div>
+        </div>
+        <div class="row hoff1">
+          <div class="span13">
+            <h4>Password</h4>
+            <input class="span10" name="password1" type="password"><br>
+            <div class="form-error field-name-password1"></div>
+          </div>
+          <div class="span13">
+            <h4>Confirm Password</h4>
+            <input class="span10" name="password2" type="password"><br>
+            <div class="form-error field-name-password2"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row hoff1">
+        <div class="span13">
+          <h4>First Name</h4>
+          <input class="span10" name="first_name" type="text"><br>
+          <div class="form-error field-name-first_name"></div>
+        </div>
+        <div class="span13">
+          <h4>Last Name</h4>
+          <input class="span10" name="last_name" type="text"><br>
+          <div class="form-error field-name-last_name"></div>
+        </div>
+      </div>
+      <div class="row hoff1">
+        <h4>Email Address</h4>
+        <input class="span10" name="email" type="text"><br>
+        <div class="form-error field-name-email"></div>
+      </div>
+
+      <div class="row hoff1">
+        <h4>Beta Secret</h4>
+        <input class="span10" name="betasecret" type="password"><br>
+        <div class="form-error field-name-betasecret"></div>
+      </div>
       {% csrf_token %}
-      <input class="span16 hoff2 btn btn-blue" type="submit" value="Join the Private Beta">
+      <input class="span16 hoff1 btn btn-blue" type="submit" value="Join the Private Beta">
     </form>
   </div>
 </div>
 {% endblock %}
 
 {% block js %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://documentcloud.github.io/underscore/underscore-min.js"></script>
+<script>
+$(document).ready(function() {
+
+  $('form').each(function(ind, node) {
+
+    $(node).submit(function(e) {
+      var self = this;
+      var ajax_info = {
+        type : $(node).attr('method'),
+        url  : $(node).attr('action'),
+        data : $(node).serialize(),
+        success : function(data, statusStr, xhr) {
+          if (typeof(data.redirect_to) !== 'undefined') {
+            location.href = data.redirect_to;
+          } else {
+            _.each(data, function(val, key, ind) {
+              if(key==='__all__') {
+                $(self).find('.form-error.field-all').html(val.join('<br />'));
+              } else {
+                $(self).find('.form-error.field-name-'+key).html(val.join('<br />'));
+              }
+            });
+          }
+        }
+      };
+      $.ajax(ajax_info);
+      $(self).find('.form-error').html("");
+
+      return false;
+
+    });
+  });
+
+  $('.btn.upload').click(function(e) {
+    openFilepicker(function(file){
+      console.log(file);
+      var id = String(e.target.id).replace('button-', '');
+      $('#'+id).val(file.url);
+    });
+
+    e.preventDefault();
+  });
+});
+</script>
 {% endblock %}
