@@ -507,6 +507,7 @@ def send_hosted_email(request):
   subject = request.POST['subject']
   text = request.POST['text']
   html = request.POST['html']
+  api_key = request.POST['api_key']
   send_email(from_email, to_email, subject, text, html)
   return HttpResponse("Email sent successfully")
   
