@@ -116,14 +116,12 @@ class App(models.Model):
   def deploy(self, d_user):
     # this will post the data to v1factory.com
     subdomain = self.subdomain()
-    print d_user
 
-    r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
     post_data = {
                  "subdomain": subdomain,
                  "app_json": self.state_json,
                  "uie_json": self.uie_state_json,
-                 "d_user" : simplejson.dumps(d_user),
+                 "d_user" : d_user,
                  "deploy_secret": "v1factory rocks!"
                 }
     # deploy to the staging server unless this is the production server.
