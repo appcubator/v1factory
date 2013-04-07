@@ -88,5 +88,5 @@ def analyzed_app_to_app_components(analyzed_app):
     u = DjangoUrl.create_post(rec, analyzed_app)
     urls.add(u)
 
-  dw = DjangoApp(models, views, urls, templates, form_receivers)
+  dw = DjangoApp(models, views, urls, templates, form_receivers, 'ignore_for_now')
   return dw
