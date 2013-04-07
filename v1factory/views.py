@@ -447,7 +447,7 @@ def theme_delete(request, theme):
 @csrf_exempt
 def app_deploy(request, app_id):
   app = get_object_or_404(App, id=app_id, owner=request.user)
-  m = app.deploy()
+  m = app.deploy(request.user.username)
   return HttpResponse(m)
 
 @login_required
@@ -456,7 +456,7 @@ def app_deploy(request, app_id):
 def app_deploy_local(request, app_id):
   assert not settings.PRODUCTION, "You should only deploy local if this is a dev machine"
   app = get_object_or_404(App, id=app_id, owner=request.user)
-  m = app.write_to_tmpdir()
+  m = app.write_to_tmpdir(request.user.username)
   return HttpResponse(m)
 
 
@@ -481,7 +481,7 @@ def deploy_local(request):
   subdomain = request.POST['subdomain']
   app_json = request.POST['app_json']
   d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
-  r = d.write_to_tmpdir()
+  r = d.write_to_tmpdir(request.user.username)
   return HttpResponse(r)
 
 @require_POST

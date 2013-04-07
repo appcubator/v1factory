@@ -14,14 +14,14 @@ from form_receiver import LoginFormReceiver, SignupFormReceiver, DjangoFormRecei
 
 from app import DjangoApp
 
-def analyzed_app_to_app_components(analyzed_app):
+def analyzed_app_to_app_components(analyzed_app, user_name):
   models = Manager(DjangoModel)
   views = Manager(DjangoView)
   urls = Manager(DjangoUrl)
   templates = Manager(DjangoTemplate)
   form_receivers = Manager(DjangoFormReceiver)
   queries = []
-
+  user_creator = user_name
   # create and add django models
   for m in analyzed_app.models.each():
     models.add( DjangoModel.create(m) ) # this skips the relational fields
@@ -88,5 +88,5 @@ def analyzed_app_to_app_components(analyzed_app):
     u = DjangoUrl.create_post(rec, analyzed_app)
     urls.add(u)
 
-  dw = DjangoApp(models, views, urls, templates, form_receivers, 'ignore_for_now')
+  dw = DjangoApp(models, views, urls, templates, form_receivers, user_creator)
   return dw
