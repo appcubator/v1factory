@@ -79,7 +79,10 @@ class DjangoFormReceiver(object):
       related_field = self.model.fields.get_by_attr('related_name', f_name)
       assert related_field.related_model.name == m_name, "some weird foreign key naming going on..."
 
-      related_field._django_field = related_field
+      related_field._django_field = related_field # hack so that one of the templates works
+
+      # before we commit to this, we should make sure the field's model is actually in the url data
+      assert related_field.model in self.url.model_refs()
 
       self.foreign_key_fields.append(related_field)
       self.form.foreign_key_fields = self.foreign_key_fields
