@@ -350,7 +350,7 @@ class CreateForm(Form):
   @classmethod
   def create(cls, uie, page, *args, **kwargs):
     self = super(CreateForm, cls).create(uie, page, *args, **kwargs)
-    self.belongs_to = uie['container_info']['form']['belongsTo']
+    self.belongs_to = uie['container_info']['form']['belongsTo'] # Let this be a string
     return self
 
 class QuerysetWrapper(Container):

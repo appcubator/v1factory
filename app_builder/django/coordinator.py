@@ -88,5 +88,8 @@ def analyzed_app_to_app_components(analyzed_app):
     u = DjangoUrl.create_post(rec, analyzed_app, models)
     urls.add(u)
 
+    if isinstance(f, CreateForm):
+      rec.init_foreign_keys(models) # should automatically add foreign keys
+
   dw = DjangoApp(models, views, urls, templates, form_receivers)
   return dw

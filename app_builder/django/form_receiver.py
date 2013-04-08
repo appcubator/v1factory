@@ -1,8 +1,14 @@
+from app_builder.analyzer import CreateForm
+import re
+
 class DjangoFormReceiver(object):
   """For now it only handles create forms"""
   def __init__(self, name=None, included_fields=None, model=None):
     self.name = name
+
     self.included_fields = included_fields
+    self.foreign_key_fields = []
+
     self.model = model
     self.form_fields = []
 
@@ -18,6 +24,8 @@ class DjangoFormReceiver(object):
     included_fields = form.included_fields
     self = cls(name=name, included_fields=included_fields, model=model)
 
+    assert isinstance(form, CreateForm), "Only use this function for create forms"
+    self.belongs_to = form.belongs_to
     self.form = form
     self.form.form_receiver = self
     self.page = form.page
@@ -58,6 +66,21 @@ class DjangoFormReceiver(object):
         assert f.name in ['username', 'password', 'password1', 'password2'] # these are the only non model fields we support
         f._django_field = None
         f.post_name = f.name
+
+  def init_foreign_keys(self, django_models_manager):
+    assert isinstance(self.form, CreateForm), "Only use this function for create forms"
+
+    if self.belongs_to is not None:
+      match = re.match(r'\{\{ ?([A-Za-z0-9]+)_([ \w]+\w) ?\}\}', self.belongs_to)
+      m_name, f_name = match.group(1), match.group(2)
+
+      related_field = self.model.fields.get_by_attr('related_name', f_name)
+      assert related_field.related_model.name == m_name, "some weird foreign key naming going on..."
+
+      related_field._django_field = related_field
+
+      self.foreign_key_fields.append(related_field)
+      self.form.foreign_key_fields = self.foreign_key_fields
 
   def identifier(self):
     def sanitize_name(s):
