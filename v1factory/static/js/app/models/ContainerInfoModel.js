@@ -21,10 +21,10 @@ function(WidgetCollection,
         if(!bone.entity.attributes) {
 
           if(bone.entity == "User") {
-            this.set('entity', new UserEntityModel(""));
+            this.set('entity', g_userModel);
           }
           else {
-            this.set('entity', new EntityModel(bone.entity));
+            this.set('entity', g_entityCollection.getEntityWithName(bone.entity));
           }
         }
         else {
@@ -57,10 +57,14 @@ function(WidgetCollection,
         json.query = this.get('query').toJSON();
       }
 
-      if (this.has('entity')) {
+      if(this.has('entity')) {
         if(typeof json.entity !== "string") {
           json.entity = json.entity.get('name');
         }
+      }
+
+      if(this.has('row')) {
+        json.row = this.get('row').toJSON();
       }
 
       return json;

@@ -23,7 +23,7 @@ function(ElementCollection,
       'click .header' : 'sectionClicked'
     },
 
-    initialize   : function(widgetsCollection, containersCollection, contextColl, entitiesColl) {
+    initialize   : function(widgetsCollection, containersCollection) {
        _.bindAll(this, 'render',
                        'appendEntity',
                        'appendContextEntity',
@@ -32,25 +32,35 @@ function(ElementCollection,
                        'dropped',
                        'setupSearch');
 
-      this.entitiesCollection   = entitiesColl;
-      this.contextCollection    = contextColl;
-      this.elementsCollection   = new ElementCollection();
+      this.elementsCollection   = new ElementCollection(defaultElements);
       this.widgetsCollection    = widgetsCollection;
       this.containersCollection = containersCollection;
 
-      this.userModel = new UserEntityModel(_.clone(appState.users));
+      this.userModel = g_userModel;
 
-      this.entitiesCollection.bind('add', this.appendEntity, this);
-      this.contextCollection.bind('add',  this.appendContextEntity, this);
+      g_entityCollection.bind('add', this.appendEntity, this);
+      g_contextCollection.bind('add',  this.appendContextEntity, this);
       this.elementsCollection.bind('add',  this.appendElement, this);
 
       this.render();
-
-      this.elementsCollection.add(defaultElements);
     },
 
     render: function() {
+      var self = this;
       this.appendUserElements();
+
+      _(g_entityCollection.models).each(function(entity) {
+        self.appendEntity(entity);
+      });
+
+      _(g_contextCollection.models).each(function(entity) {
+        self.appendContextEntity(entity);
+      });
+
+      _(self.elementsCollection.models).each(function(element) {
+        self.appendElement(element);
+      });
+
       return this;
     },
 
@@ -58,7 +68,7 @@ function(ElementCollection,
       // Form, Data elements belonging to the user.
 
       var self = this;
-      this.entitiesCollection.push(appState.users, {silent : true});
+      //g_entityCollection.push(appState.users, {silent : true});
 
 
       if(this.userModel.has('forms')) {
@@ -169,7 +179,6 @@ function(ElementCollection,
     },
 
     appendContextEntity : function(entityModel) {
-      console.log(entityModel);
       // Form, Data elements belonging to the entity
       var self = this;
 

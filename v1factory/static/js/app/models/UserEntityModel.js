@@ -39,7 +39,6 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       this.set('forms', new FormCollection());
       this.set('name', 'User');
 
-      console.log(this);
       if(bone.forms) {
         this.get('forms').add(bone.forms);
       }
