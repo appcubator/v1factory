@@ -8,5 +8,8 @@ def {{ form_receiver.identifier() }}(request{% for m in form_receiver.url.model_
 {% for field in form_receiver.foreign_key_fields %}
   obj.{{ field._django_field.identifier() }} = long(request.POST['{{ field._django_field.identifier() }}'])
 {% endfor %}
+{% if form_receiver.model.get_user_related_field() != None %}
+  obj.{{ form_receiver.model.get_user_related_field().identifier() }} = request.user
+{% endif %}
   obj.save()
   return ajax_redirect(request, "{{ form_receiver.goto_view.view_path() }}")
