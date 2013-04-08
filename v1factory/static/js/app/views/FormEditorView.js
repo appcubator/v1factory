@@ -216,7 +216,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
         _(entity.fields).each(function(field) {
           console.log(self.entity.get('name'));
           if(field.type  == '{{' + self.entity.get('name') + '}}') {
-            var str = '{{'+entity.name+'_'+field.name+'}}';
+            var str = '{{'+entity.name+'.'+field.name+'}}';
             fields.push(str);
           }
         });

@@ -245,7 +245,8 @@ class FormField(object):
   Form receiver does something with these.
   """
 
-  def __init__(self, name=None, field_type=None, display_type=None, kwargs=None, options=None, model_field=None, label=None):
+  def __init__(self, name=None, field_type=None, display_type=None, kwargs=None, options=None,\
+                                                        model_field=None, label=None):
     self.name = name
     self.field_type = field_type
     self.display_type = display_type
@@ -275,7 +276,8 @@ class Form(Container):
 
   required_fields = []
 
-  def __init__(self, name=None, action=None, fields=None, entity_name=None, uie=None, page=None):
+  def __init__(self, name=None, action=None, fields=None, entity_name=None, uie=None, page=None,\
+                                                      redirect_page_name=None):
     super(Form, self).__init__(uie=uie)
     self.name = name
     self.action = action
@@ -284,6 +286,12 @@ class Form(Container):
     self.uie = uie
     self.page = page
     self.nodes = []
+
+    if redirect_page_name is None:
+      self.redirect_page_name = "{{ Homepage }}"
+    else:
+      self.redirect_page_name = redirect_page_name
+
     # self.entity is set in the resolve function
 
   @classmethod
@@ -296,7 +304,8 @@ class Form(Container):
                entity_name=uie['container_info']['form']['entity'],
                uie=uie,
                fields=fields,
-               page=page)
+               page=page,
+               redirect_page_name = uie['container_info']['form']['goto'])
 
     return self
 
@@ -334,6 +343,10 @@ class Form(Container):
         assert f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
       f.model_field = f_check
 
+  def resolve_goto_page(self, analyzed_app):
+    self.redirect_page = analyzed_app.pages.get_by_name(utils.extract_from_brace(self.redirect_page_name))
+    assert self.redirect_page is not None, "could not find redirect page: %s" % self.redirect_page_name
+
 class LoginForm(Form):
   required_fields = ("username", "password")
   pass
@@ -346,7 +359,12 @@ class EditForm(Form):
   pass
 
 class CreateForm(Form):
-  pass
+
+  @classmethod
+  def create(cls, uie, page, *args, **kwargs):
+    self = super(CreateForm, cls).create(uie, page, *args, **kwargs)
+    self.belongs_to = uie['container_info']['form']['belongsTo'] # Let this be a string
+    return self
 
 class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.
@@ -490,6 +508,7 @@ class AnalyzedApp:
         if isinstance(uie, Form):
           uie.resolve_entity(self)
           uie.check_required_fields()
+          uie.resolve_goto_page(self)
           self.forms.add(uie)
 
   def init_queries(self, app_state):

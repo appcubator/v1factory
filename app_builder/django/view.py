@@ -1,18 +1,16 @@
 class DjangoView(object):
 
-  def __init__(self, name=None, template=None, queries=None):
+  def __init__(self, name=None, template=None, queries=None, page=None):
     self.name = name
     self.template = template
     self.queries = queries
+    self.page = page
+    self.page._django_view = self # used for the goto/redirect of the form
 
   @classmethod
   def create(cls, page, analyzed_app, template):
     """Create a view from a page, analyzed app, and djangotemplate"""
-    def get_queries_out_of_page(page):
-      pass
-    #queries = get_queries_out_of_page(page)
-    queries = []
-    self = cls(name=page.name, template=template, queries=queries)
+    self = cls(name=page.name, template=template, queries=[], page=page)
 
     return self
 

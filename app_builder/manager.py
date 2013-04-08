@@ -25,6 +25,15 @@ class Manager:
 
     return None
 
+  def get_by_attr(self, attr_name, value):
+
+    for o in self._objects:
+      assert hasattr(o, attr_name), "Called get by field but field name not valid here"
+      if getattr(o, attr_name) == value:
+        return o
+
+    return None
+
   def _add_unchecked(self, instance):
     self._objects.append(instance)
 
