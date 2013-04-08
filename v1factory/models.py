@@ -109,7 +109,6 @@ class App(models.Model):
     subdomain = self.owner.username.lower() + "-" + self.name.lower()
     if not settings.PRODUCTION:
       subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
-    if settings.STAGING:
       subdomain = subdomain + '.staging'
     return subdomain
 
