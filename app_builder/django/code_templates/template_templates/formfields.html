@@ -33,4 +33,7 @@
   {% endif %}
   <div class="form-error field-name-{{ field.post_name }}"></div>
 {% endfor %}
+{% for field in context.foreign_key_fields %}
+<input type="hidden" style="display:none" name="{{ field.identifier() }}" value="{{ "{{" }} {{ field.model.identifier().lower() }}.id {{ "}}" }}">
+{% endfor %}
 <div class="form-error field-all"></div>
