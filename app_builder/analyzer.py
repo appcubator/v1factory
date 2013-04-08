@@ -346,7 +346,12 @@ class EditForm(Form):
   pass
 
 class CreateForm(Form):
-  pass
+
+  @classmethod
+  def create(cls, uie, page, *args, **kwargs):
+    self = super(CreateForm, cls).create(uie, page, *args, **kwargs)
+    self.belongs_to = uie['container_info']['form']['belongsTo']
+    return self
 
 class QuerysetWrapper(Container):
   """A container that wraps some nodes in a for loop, and fills them with data from a query.

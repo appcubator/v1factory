@@ -39,12 +39,16 @@ def create(name, cwd, add_ksikka=False):
 
   try:
     repo_info = create_github_repo(name)
-  except Exception:
-    print "COULD NOT CREATE GITHUB REPO"
+  except Exception, e:
+    print "COULD NOT CREATE GITHUB REPO: %s" % str(e)
     repo_info = {'ssh_url': 'git@github.com:v1factory/%s.git' % name}
+    print ""
+    print repo_info
+    print ""
 
   if add_ksikka:
     add_me_as_collaborator(name)
 
   ret_code = subprocess.call(['git', 'remote', 'add', 'origin', repo_info['ssh_url']], env=child_env, cwd=cwd)
-  assert ret_code == 0, "Failed to add remote"
+  print ret_code
+  assert ret_code in [0, 128], "Failed to add remote"
