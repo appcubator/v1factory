@@ -5,7 +5,7 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from v1factory.models import App, UIElement, StaticFile, UITheme
+from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts
 from v1factory.email.sendgrid_email import send_email
 from app_builder.analyzer import AnalyzedApp
 from app_builder.utils import get_xl_data, add_xl_data, get_model_data
@@ -13,6 +13,7 @@ from app_builder.deployment.models import Deployment
 from app_builder.validator import validate_app_state
 import requests
 import traceback
+import datetime
 
 def add_statics_to_context(context, app):
   context['statics'] = simplejson.dumps(list(StaticFile.objects.filter(app=app).values()))
@@ -520,14 +521,27 @@ def deploy_hosted(request):
 def send_hosted_email(request):
   # Need to log IP addresses to ensure we do not get freeloaders
   # that use this as a free service
-  # TODO(nkhadke): Check if IP address is in registered users and
-  # is within email limits
   from_email = request.POST['from_email']
   to_email = request.POST['to_email']
   subject = request.POST['subject']
   text = request.POST['text']
   html = request.POST['html']
   api_key = request.POST['api_key']
-  send_email(from_email, to_email, subject, text, html)
-  return HttpResponse("Email sent successfully")
+  api_key_count = None
+  try:
+    api_key_count = ApiKeyCounts.objects.get(api_key=api_key)
+  except ApiKeyCounts.DoesNotExist:
+    api_new_entry = ApiKeyCounts(api_key=api_key, api_count=0)
+    api_new_entry.save()
+  if api_key_count is None:
+    api_key_count = ApiKeyCounts.objects.get(api_key=api_key)
+  #TODO(nkhadke): Make this more sophisticated later on.
+  if api_key_count.api_count < 200:
+    api_key_count.api_count += 1
+    api_use = ApiKeyUses(api_key=api_key_count)
+    api_use.save()
+    send_email(from_email, to_email, subject, text, html)
+    return HttpResponse("Email sent successfully")
+  else:
+    return HttpResponse("API quota reached")
   

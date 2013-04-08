@@ -48,7 +48,7 @@ class DjangoAppWriter:
     return template.render(uiestate= self.uie_state)
 
   def render_emailer_py(self):
-    tempate = DjangoAppWriter.env.get_template('emailer.py')
+    template = DjangoAppWriter.env.get_template('emailer.py')
     return template.render(api_key=get_api_key(self.django_app.d_user))
 
   """ Directory Structure """
@@ -137,7 +137,7 @@ class DjangoAppWriter:
     write_string(self.render_views_py(), 'webapp/views.py')
     write_string(self.render_form_receivers_py(), 'webapp/form_receivers.py')
     write_string(self.render_urls_py(), 'urls.py')
-    write_string(self.render_emailer_py(), 'emailer.py')
+    write_string(self.render_emailer_py(), 'webapp/emailer.py')
 
     # templates
     copy_file('base.html', 'templates/base.html')

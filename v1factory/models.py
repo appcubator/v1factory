@@ -94,13 +94,13 @@ class App(models.Model):
     summary += "Pages:\t\t\t{};".format(", ".join(['("{}", {})'.format(u['page_name'], u['urlparts']) for u in self.state['urls']]))
     return summary
 
-  def write_to_tmpdir(self):
+  def write_to_tmpdir(self, d_user):
     from app_builder.analyzer import AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
     a = AnalyzedApp(self.state)
-    dw = analyzed_app_to_app_components(a)
+    dw = analyzed_app_to_app_components(a, d_user)
     tmp_project_dir = DjangoAppWriter(dw, simplejson.loads(self.uie_state_json)).write_to_fs()
 
     return tmp_project_dir
@@ -254,3 +254,16 @@ class StaticFile(models.Model):
   type = models.CharField(max_length=100)
   app = models.ForeignKey(App, blank=True, null=True, related_name="statics")
   theme = models.ForeignKey(UITheme, blank=True, null=True, related_name="statics")
+
+# Used to keep track of any of our APIs usage.
+# Count is incremented on each successful use.
+class ApiKeyCounts(models.Model):
+  api_key = models.CharField(max_length=255)
+  api_count = models.IntegerField(default=0)
+
+# Keeps track of individual usages, so we can do time based
+# control and analytics later on.
+class ApiKeyUses(models.Model):
+  api_key = models.ForeignKey(ApiKeyCounts, related_name="api_key_counts")
+  api_use = models.DateField(auto_now_add=True)
+  

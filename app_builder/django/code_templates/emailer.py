@@ -9,4 +9,5 @@ def send_email(from_email, to_email, subject, text, html):
     'html' : html,
     'api_key' : '{{ api_key }}'
   }
+
   requests.post("http://v1factory.com/sendhostedemail", data=email_info)
