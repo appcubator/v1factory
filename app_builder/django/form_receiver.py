@@ -3,7 +3,7 @@ import re
 
 class DjangoFormReceiver(object):
   """For now it only handles create forms"""
-  def __init__(self, name=None, included_fields=None, model=None):
+  def __init__(self, name=None, included_fields=None, model=None, goto_view=None):
     self.name = name
 
     self.included_fields = included_fields
@@ -11,6 +11,8 @@ class DjangoFormReceiver(object):
 
     self.model = model
     self.form_fields = []
+
+    self.goto_view = goto_view
 
   def init_fields(self):
     for f in self.included_fields:
@@ -22,7 +24,7 @@ class DjangoFormReceiver(object):
     name = form.name
     model = analyzed_app.models.get_by_name(form.model.name)
     included_fields = form.included_fields
-    self = cls(name=name, included_fields=included_fields, model=model)
+    self = cls(name=name, included_fields=included_fields, model=model, goto_view=form.redirect_page._django_view)
 
     assert isinstance(form, CreateForm), "Only use this function for create forms"
     self.belongs_to = form.belongs_to

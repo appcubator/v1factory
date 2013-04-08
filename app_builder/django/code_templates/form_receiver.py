@@ -9,4 +9,4 @@ def {{ form_receiver.identifier() }}(request{% for m in form_receiver.url.model_
   obj.{{ field._django_field.identifier() }} = long(request.POST['{{ field._django_field.identifier() }}'])
 {% endfor %}
   obj.save()
-  return ajax_redirect(request, '/')
+  return ajax_redirect(request, "{{ form_receiver.goto_view.view_path() }}")
