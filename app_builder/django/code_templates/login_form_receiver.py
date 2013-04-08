@@ -9,7 +9,7 @@ def {{ form_receiver.identifier() }}(request):
   """
   redirect_to = request.REQUEST.get('next', '')
 
-  form = AuthenticationForm(request, data=request.POST)
+  form = AuthenticationForm(None, data=request.POST)
   if form.is_valid():
     # Make sure the redirect is kosher
     if not is_safe_url(url=redirect_to, host=request.get_host()):
