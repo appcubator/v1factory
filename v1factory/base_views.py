@@ -82,7 +82,7 @@ def signup(request):
       new_user = authenticate(username=request.POST['username'],
                               password=request.POST['password1'])
       login(request, new_user)
-      return HttpResponse(simplejson.dumps({ 'redirect_to': '/' }))
+      return HttpResponse(simplejson.dumps({ 'redirect_to': '/' }), mimetype="application/json")
     else:
       return HttpResponse(simplejson.dumps({ k : v for k,v in form.errors.items() }), mimetype="application/json")
 
