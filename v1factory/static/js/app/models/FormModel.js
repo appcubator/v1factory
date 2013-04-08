@@ -20,6 +20,7 @@ function(Backbone, FormFieldCollection) {
       this.set('fields', new FormFieldCollection());
       this.set('action', bone.action||"create");
       this.set('goto', bone.goto||"{{Homepage}}");
+      this.set('belongsTo', bone.belongsTo||null);
 
       if(bone.fields) {
         this.get('fields').add(bone.fields);

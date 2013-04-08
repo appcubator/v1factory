@@ -240,17 +240,14 @@ define([
 
     getContextEntities: function() {
       var self = this;
-      var name = appState.pages[pageId].name;
-      var page = _.where(appState.urls, {page_name: name})[0];
-      if(!page) {
-        return [];
-      }
-
       var entityModels = [];
-      var contextEntites = _.filter(page.urlparts, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
+      var contextEntites = _.filter(self.model.get('url').get('urlparts'), function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
+      console.log(contextEntites);
+
       _(contextEntites).each(function(entityName) {
+        console.log(self.entityCollection.where({ name : entityName})[0]);
         self.contextCollection.add(self.entityCollection.where({ name : entityName})[0]);
       });
     },
