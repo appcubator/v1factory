@@ -137,7 +137,7 @@ Templates.queryView = [
 
   '<% _.each(entity.get("fields").models, function(field) { %>',
     '<% var checked = \'\'; var u_id = field.cid; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) { checked = \'checked\'; } %>',
-    '<label><input class="fields-to-display" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %></label>',
+    '<label><input class="fields-to-display btn" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %></label>',
   '<% }) %>',
   '</div>',
   '<hr>',

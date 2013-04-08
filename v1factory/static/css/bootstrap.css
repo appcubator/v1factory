@@ -4394,14 +4394,16 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar {
+  font-size: 13px;
   *position: relative;
   *z-index: 2;
   margin-bottom: 20px;
   overflow: visible;
+  line-height: 20px !important;
 }
 
 .navbar-inner {
-  min-height: 40px;
+  min-height: 42px;
   padding-right: 20px;
   padding-left: 20px;
   background-color: #fafafa;

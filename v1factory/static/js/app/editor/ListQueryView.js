@@ -8,7 +8,8 @@ define([
 
   var ListQueryView = BackboneUI.ModalView.extend({
     className : 'query-modal',
-    width: 900,
+    width: 920,
+    height: 600,
     events: {
       'change .fields-to-display'   : 'fieldsToDisplayChanged',
       'click .belongs-to-user'      : 'belongsToUserChanged',
@@ -58,7 +59,9 @@ define([
       var self = this;
 
       var div = document.createElement('div');
-      div.style.width = 320 + 'px';
+      div.className = "query-view-panel";
+      div.style.width = 260 + 'px';
+      div.style.height = (this.height-4) + 'px';
       div.style.display = 'inline-block';
 
       var checks = {};
@@ -90,7 +93,6 @@ define([
       };
 
       var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.queryModel, row: self.rowModel, c: checks});
-      contentHTML += '<input type="submit" value="Done">';
       div.innerHTML = contentHTML;
 
       var editorDiv = document.createElement('div');
@@ -99,11 +101,17 @@ define([
       var rowWidget = document.createElement('div');
       this.rowWidget = rowWidget;
       rowWidget.className = 'editor-window container-wrapper';
-      rowWidget.className += (' span' + this.rowModel.get('layout').get('width'));
       rowWidget.className += (' hi' + this.rowModel.get('layout').get('height'));
       editorDiv.appendChild(rowWidget);
 
-      iui.resizable(rowWidget, self);
+      if(this.rowModel.get('isListOrGrid') == "list") {
+        iui.resizableVertical(rowWidget, self);
+        rowWidget.style.width = '100%';
+      }
+      else {
+        iui.resizable(rowWidget, self);
+        rowWidget.className += (' span' + this.rowModel.get('layout').get('width'));
+      }
 
       this.el.appendChild(div);
       this.el.appendChild(editorDiv);
@@ -115,7 +123,10 @@ define([
 
       $('.constant-elements').remove();
       for(var ii=0; ii <2; ii++) {
-        var html = _.template(Templates.rowNode, { layout: self.rowModel.get('layout'),
+        var layout = _.clone(self.rowModel.get('layout'));
+        layout.attributes.width = 6;
+        console.log(layout);
+        var html = _.template(Templates.rowNode, { layout: layout,
                                           uielements: self.widgetsCollection.models });
         $('.list-editor-container').append('<div class="constant-elements">'+html+'</div>');
       }
@@ -144,14 +155,16 @@ define([
       var widget = {};
       widget.layout = {
         top   : 0,
-        left  : 0
+        left  : 0,
+        width : 2,
+        height: 4
       };
 
       widget.field = fieldModel.cid;
 
-      var uieType = "text";
+      var uieType = "texts";
       if(fieldModel.get('type') == "image") {
-        uieType = "image";
+        uieType = "images";
       }
 
       widget = _.extend(widget, uieState[uieType][0]);

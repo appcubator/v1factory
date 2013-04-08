@@ -30,8 +30,6 @@ function(WidgetView, WidgetContainerView) {
       this.containersCollection = containersCollection;
       this.containersCollection.bind('add', this.placeContainer);
 
-      this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
-      this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
 
       this.widgetsCollection.bind('selected', this.containersCollection.unselectAll);
       this.containersCollection.bind('selected', this.widgetsCollection.unselectAll);
@@ -46,6 +44,9 @@ function(WidgetView, WidgetContainerView) {
           }
         });
       }
+
+      this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
+      this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
     },
 
     render: function() {

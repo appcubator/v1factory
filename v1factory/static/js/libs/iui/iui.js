@@ -110,6 +110,17 @@ define(['jquery-ui'], function() {
       });
     },
 
+     resizableVertical: function(el, self) {
+      $(el).resizable({
+        handles: "s",
+        stop: self.resized,
+        resize: self.resizing,
+        containment: "parent"
+      });
+
+      return el;
+    },
+
     resizable: function(el, self) {
       $(el).resizable({
         handles: "n, e, s, w, se",

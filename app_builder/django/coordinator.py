@@ -84,7 +84,7 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
     rec.find_model(models)
     form_receivers.add(rec)
     # create the url for the POST
-    u = DjangoUrl.create_post(rec, analyzed_app)
+    u = DjangoUrl.create_post(rec, analyzed_app, models)
     urls.add(u)
 
   dw = DjangoApp(models, views, urls, templates, form_receivers, d_user)

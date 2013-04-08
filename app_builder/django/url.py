@@ -22,8 +22,8 @@ class DjangoUrl(object):
     return url_obj
 
   @classmethod
-  def create_post(cls, form_receiver, analyzed_app):
-    return cls(page=form_receiver.page, view=form_receiver, analyzed_app=analyzed_app)
+  def create_post(cls, form_receiver, analyzed_app, models):
+    return cls(page=form_receiver.page, view=form_receiver, analyzed_app=analyzed_app, models=models)
 
   def url_parts_to_regex(self):
     url_parts = self.urlparts

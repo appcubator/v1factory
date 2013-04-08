@@ -24,7 +24,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'keyup   input.field-label-input'    : 'changedLabel',
       'keyup  .options-input'            : 'changedOptions',
       'change .goto'                     : 'changedGoto',
-      'change .form-type-select'         : 'changedFormAction'
+      'change .form-type-select'         : 'changedFormAction',
+      'change .belongs-to'               : 'changedBelongsTo'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -41,7 +42,9 @@ function(Backbone, BackboneUI, FormFieldModel) {
                       'changedPlaceholder',
                       'changedLabel',
                       'changedOrder',
-                      'changedFormAction');
+                      'changedFormAction',
+                      'findPossibleOwners',
+                      'changedBelongsTo');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -49,6 +52,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
       this.model.get('fields').bind('add', this.fieldAdded);
       this.model.get('fields').bind('remove', this.fieldRemoved);
       this.model.bind('change:action', this.reRenderFields);
+
 
       this.render();
 
@@ -66,6 +70,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
       temp_context.form = self.model;
       temp_context.entity = self.entity;
       temp_context.pages = appState.pages;
+      temp_context.possibleEntities = this.findPossibleOwners();
 
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
@@ -197,6 +202,27 @@ function(Backbone, BackboneUI, FormFieldModel) {
 
     changedFormAction: function(e) {
       this.model.set('action', e.target.value);
+    },
+
+    changedBelongsTo: function(e) {
+      console.log(e.target.value);
+      this.model.set('belongsTo', e.target.value);
+    },
+
+    findPossibleOwners: function() {
+      var self = this;
+      var fields = [];
+      _(appState.entities).each(function(entity) {
+        _(entity.fields).each(function(field) {
+          console.log(self.entity.get('name'));
+          if(field.type  == '{{' + self.entity.get('name') + '}}') {
+            var str = '{{'+entity.name+'_'+field.name+'}}';
+            fields.push(str);
+          }
+        });
+      });
+
+      return fields;
     }
   });
 
