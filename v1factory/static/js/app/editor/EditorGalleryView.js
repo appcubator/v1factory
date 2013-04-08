@@ -47,7 +47,6 @@ function(ElementCollection,
       this.render();
 
       this.elementsCollection.add(defaultElements);
-
     },
 
     render: function() {
@@ -170,6 +169,7 @@ function(ElementCollection,
     },
 
     appendContextEntity : function(entityModel) {
+      console.log(entityModel);
       // Form, Data elements belonging to the entity
       var self = this;
 
@@ -320,7 +320,7 @@ function(ElementCollection,
 
         field          = id.split('-')[1];
 
-        widget         = _.extend(widget, uieState['text'][0]);
+        widget         = _.extend(widget, uieState['texts'][0]);
         widget.content =  '{{'+entity.get('name')+'_'+field+'}}';
         this.widgetsCollection.push(widget);
       }
