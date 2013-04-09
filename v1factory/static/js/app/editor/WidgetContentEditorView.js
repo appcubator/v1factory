@@ -37,7 +37,9 @@ function(WidgetClassPickerView) {
       var self = this;
 
       if(this.model.has('content') && this.model.get('content') !== null &&
-        !this.model.get('content_attribs').has('src')) {
+        !this.model.get('content_attribs').has('src') &&
+        this.model.get('type') != "images" &&
+        this.model.get('type') != "buttons") {
 
         this.el.appendChild(this.renderFontPicker());
         this.el.appendChild(this.renderTextEditing());

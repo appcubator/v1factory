@@ -1644,3 +1644,18 @@ h3.edit-url {
   font-weight: normal;
   margin-top: 10px;
 }
+
+.tool-tip-box {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+  padding:10px;
+  position: absolute;
+  left: 100%;
+  min-width: 70px;
+  margin-left: 6px;
+  top: 0;
+  border-radius: 2px;
+}

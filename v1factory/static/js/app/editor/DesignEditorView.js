@@ -18,6 +18,7 @@ function(Backbone, iui) {
 
     initialize: function(model, pageModel, ind, shouldStyle) {
       _.bindAll(this, 'render', 'renderTitle', 'style', 'select', 'amendAppState');
+
       this.model = model;
       this.model.bind('change', this.amendAppState);
       this.options = designOptions[this.model.get('type')];
