@@ -76,6 +76,7 @@ def deploy_code(request):
   s = request.POST['subdomain']
   app_json = request.POST['app_json']
   uie_json = request.POST['uie_json']
+  d_user = request.POST['d_user']
   try:
     d = Deployment.objects.get(subdomain=s)
   except Deployment.DoesNotExist:
@@ -86,7 +87,7 @@ def deploy_code(request):
   d.update_uie_state(simplejson.loads(uie_json))
   d.full_clean()
   sys.stdout.flush()
-  msgs = d.deploy()
+  msgs = d.deploy(d_user)
   github_actions.push(s, d.app_dir)
   d.save()
   ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
