@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^connect_with/$', 'v1factory.base_views.get_linkedin'),
     url(r'^signup/$', 'v1factory.base_views.signup'),
     url(r'^highland/$', 'v1factory.base_views.highland_view'),
+    url(r'^termsofservice/$', 'v1factory.base_views.terms_of_service'),
+    url(r'^faq/$', 'v1factory.base_views.faq'),
     url(r'^account/$', 'v1factory.base_views.account'),
 )
 

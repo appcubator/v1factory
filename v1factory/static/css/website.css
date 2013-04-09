@@ -825,3 +825,14 @@ input[type="password"], input[type="text"] {
 .deploy {
   cursor: pointer;
 }
+
+#ajax-loader {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background-image: url('../img/ajax-loader.gif');
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+  background-repeat: no-repeat;
+}

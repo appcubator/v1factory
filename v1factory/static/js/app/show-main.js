@@ -38,10 +38,12 @@ require([
 function(SimpleModalView) {
 
   $('#deploy').on('click', function() {
+    iui.startAjaxLoading();
     $.ajax({
           type: "POST",
           url: '/app/'+appId+'/deploy/',
           complete: function(data) {
+            iui.stopAjaxLoading();
             new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
           },
           dataType: "JSON"

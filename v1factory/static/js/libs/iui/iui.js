@@ -171,6 +171,21 @@ define(['jquery-ui'], function() {
 
     dontAskBeforeLeave: function() {
       window.onbeforeunload = null;
+    },
+
+    startAjaxLoading: function() {
+      if(!document.getElementById('ajax-loader')) {
+        var div = document.createElement('div');
+        div.id = 'ajax-loader';
+        document.body.appendChild(div);
+      }
+    },
+
+    stopAjaxLoading: function() {
+      if(document.getElementById('ajax-loader')) {
+        var child = document.getElementById('ajax-loader');
+        child.parentNode.removeChild(child);
+      }
     }
   };
 

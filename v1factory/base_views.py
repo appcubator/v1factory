@@ -91,3 +91,14 @@ def highland_view(request):
   page_context = {}
   page_context["title"] = "Homepage"
   return render(request, 'website-home2.html', page_context)
+
+def terms_of_service(request):
+  page_context = {}
+  page_context["title"] = "Homepage"
+  return render(request, 'website-tos.html', page_context)
+
+def faq(request):
+  page_context = {}
+  page_context["title"] = "Homepage"
+  return render(request, 'website-faq.html', page_context)
+
