@@ -452,7 +452,7 @@ def app_deploy(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  m = app.deploy(d_user)
+  m = app.deploy(simplejson.dumps(d_user))
   return HttpResponse(m)
 
 @login_required
@@ -465,7 +465,7 @@ def app_deploy_local(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  m = app.write_to_tmpdir(d_user)
+  m = app.write_to_tmpdir(simplejson.dumps(d_user))
   return HttpResponse(m)
 
 
@@ -494,7 +494,7 @@ def deploy_local(request):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  r = d.write_to_tmpdir(d_user)
+  r = d.write_to_tmpdir(simplejson.dumps(d_user))
   return HttpResponse(r)
 
 @require_POST
@@ -511,7 +511,7 @@ def deploy_hosted(request):
   post_data = {
     "subdomain": subdomain,
     "app_json": app_json,
-    "d_user" : d_user
+    "d_user" : simplejson.dumps(d_user)
   }
   r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
   return HttpResponse(r.content)

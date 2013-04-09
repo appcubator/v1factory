@@ -16,7 +16,8 @@ import hashlib
 """
 
 # Creates a secure hash API key using the user's attribute.
-def get_api_key(d_user):
+def get_api_key(d_user_json):
+  d_user = simplejson.loads(d_user_json)
   user_name = d_user['user_name']
   date_joined = d_user['date_joined']
   hash_string = user_name + str(date_joined)
