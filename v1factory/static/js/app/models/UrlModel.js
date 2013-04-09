@@ -4,6 +4,10 @@ define(['backbone'], function(Backbone) {
       urlparts : []
     },
 
+    getAppendixString: function() {
+      return this.get('urlparts').join('/');
+    },
+
     getUrlString: function(appSubdomain) {
       return 'http://' + (appSubdomain||'yourapp.com') + '/' +this.get('urlparts').join('/');
     }

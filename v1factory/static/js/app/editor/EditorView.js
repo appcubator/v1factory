@@ -170,14 +170,14 @@ define([
     },
 
     deploy: function() {
-
+      var self = this;
       var deployFn = function() {
 
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/deploy/',
           complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>'});
           },
           dataType: "JSON"
         });
