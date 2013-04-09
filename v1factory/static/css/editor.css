@@ -1507,6 +1507,15 @@ h3.edit-url {
   border-right: 1px solid #ddd;
 }
 
+.list-action-editor {
+  display: inline-block;
+  vertical-align: top;
+  width: 156px;
+  height: 600px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ddd;
+}
+
 .query-view-panel {
   overflow-y: scroll;
 }

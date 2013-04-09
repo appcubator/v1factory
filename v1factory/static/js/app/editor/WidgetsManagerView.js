@@ -15,7 +15,7 @@ function(WidgetView, WidgetContainerView) {
 
     },
 
-    initialize: function(widgetsCollection, containersCollection, contextEntities, page) {
+    initialize: function(widgetsCollection, containersCollection, page) {
       _.bindAll(this, 'render',
                       'placeWidget',
                       'placeContainer',

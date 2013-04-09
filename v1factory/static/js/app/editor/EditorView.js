@@ -1,5 +1,6 @@
 define([
   'app/models/PageModel',
+  'app/models/UserEntityModel',
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
@@ -17,6 +18,7 @@ define([
   'backboneui',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
+           UserEntityModel,
            EntityCollection,
            WidgetCollection,
            ContainersCollection,
@@ -63,17 +65,19 @@ define([
                       'keydown',
                       'clickedUrl');
 
+      /* Globals */
+      g_entityCollection     = new EntityCollection(appState.entities);
+      g_contextCollection    = new EntityCollection();
+      g_userModel            = new UserEntityModel(appState.users);
+
       var page = appState.pages[pageId];
+      this.model             = new PageModel(page);
 
-
-      this.model                = new PageModel(page);
-      this.entityCollection     = new EntityCollection();
-      this.contextCollection    = new EntityCollection();
       this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = new WidgetCollection();
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
-      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, this.contextCollection.models, page);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, page);
 
       //this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
       this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
@@ -82,7 +86,6 @@ define([
 
       this.urlModel = this.model.get('url');
 
-      this.entityCollection.add(appState.entities);
       this.getContextEntities();
 
       this.containersCollection.on('selected', this.containerSelected);
@@ -101,7 +104,7 @@ define([
       this.navbarEditor = new NavbarEditorView(this.model.get('navbar'));
 
       key('⌘+s, ctrl+s', this.save);
-      key('⌘+shift+r, ctrl+shift+r', this.deployLocal);
+      key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
     },
 
     render: function() {
@@ -161,18 +164,20 @@ define([
       curAppState.pages[pageId]['uielements'] = elems;
       curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
       curAppState.pages[pageId]['navbar'] = this.model.get('navbar').toJSON();
+      curAppState.entities = g_entityCollection.toJSON();
+      curAppState.users = g_userModel.toJSON();
       return curAppState;
     },
 
     deploy: function() {
-
+      var self = this;
       var deployFn = function() {
 
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/deploy/',
           complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>'});
           },
           dataType: "JSON"
         });
@@ -244,11 +249,8 @@ define([
       var contextEntites = _.filter(self.model.get('url').get('urlparts'), function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str)); });
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
-      console.log(contextEntites);
-
       _(contextEntites).each(function(entityName) {
-        console.log(self.entityCollection.where({ name : entityName})[0]);
-        self.contextCollection.add(self.entityCollection.where({ name : entityName})[0]);
+        g_contextCollection.add(g_entityCollection.getEntityWithName(entityName));
       });
     },
 
@@ -330,7 +332,6 @@ define([
     },
 
     containerSelected: function(e) {
-      console.log(this.widgetsCollection);
       this.widgetsCollection.unselectAll();
     },
 

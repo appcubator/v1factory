@@ -6,12 +6,13 @@ function(Backbone,
          EntityModel) {
 
   var EntityCollection = Backbone.Collection.extend({
-    model: EntityModel
+    model: EntityModel,
 
     // todo
-    // entitiyWithName: function(entityNameStr) {
-    //   return '';
-    // }
+    getEntityWithName: function(entityNameStr) {
+      var entity = this.where({name : entityNameStr })[0];
+      return entity;
+    }
   });
 
   return EntityCollection;

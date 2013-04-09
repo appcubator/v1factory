@@ -11,11 +11,12 @@ define([
     width: 920,
     height: 600,
     events: {
-      'change .fields-to-display'   : 'fieldsToDisplayChanged',
-      'click .belongs-to-user'      : 'belongsToUserChanged',
-      'click .nmr-rows'             : 'nmrRowsChanged',
+      'change .fields-to-display'    : 'fieldsToDisplayChanged',
+      'click .belongs-to-user'       : 'belongsToUserChanged',
+      'click .nmr-rows'              : 'nmrRowsChanged',
       'keydown #first-nmr, #last-nmr': 'nmrRowsNumberChanged',
-      'change .sort-by'             : 'sortByChanged'
+      'change .sort-by'              : 'sortByChanged',
+      'change .item-goes-to'         : 'itemLinkChanged'
     },
     initialize: function(widgetModel, queryModel, rowModel) {
       var self = this;
@@ -30,7 +31,8 @@ define([
                       'removedWidget',
                       'placeWidget',
                       'resized',
-                      'resizing');
+                      'resizing',
+                      'itemLinkChanged');
 
       this.widgetModel = widgetModel;
       this.queryModel  = queryModel;
@@ -113,8 +115,23 @@ define([
         rowWidget.className += (' span' + this.rowModel.get('layout').get('width'));
       }
 
+      var actionDiv = document.createElement('div');
+      actionDiv.className = 'list-action-editor';
+      actionDiv.innerHTML = "<h1 class='title'>List Action</h1>";
+      var linksToStr = "<label>Each item goes to <select class='item-goes-to'>";
+      linksToStr += ('<option>None</option>');
+      _(appState.pages).each(function(page) {
+        if(_.contains(page.url.urlparts, '{{'+ self.queryModel.entity.get('name')  +'}}')) {
+           linksToStr += ('<option>' + page.name + '</option>');
+        }
+      });
+
+      linksToStr += "</select></label>";
+      actionDiv.innerHTML += linksToStr;
+
       this.el.appendChild(div);
       this.el.appendChild(editorDiv);
+      this.el.appendChild(actionDiv);
       return this;
     },
 
@@ -254,6 +271,10 @@ define([
 
       this.rowModel.get('layout').set('width', deltaWidth);
       this.rowModel.get('layout').set('height', deltaHeight);
+    },
+
+    itemLinkChanged: function(e) {
+      this.rowModel.set('goesTo', '{{' + e.target.value + '}}');
     }
   });
 

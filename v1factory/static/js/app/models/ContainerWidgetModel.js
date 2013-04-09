@@ -38,7 +38,6 @@ function(WidgetModel,
 
       var self = this;
 
-      console.log(bone);
       this.set('container_info', new ContainerInfoModel(this.get('container_info')));
 
       if(this.get('container_info').get('uielements').length || this.get('container_info').has('query')) {

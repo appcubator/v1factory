@@ -18,7 +18,6 @@ function(UrlModel, NavbarModel) {
     },
 
     toJSON: function() {
-      console.log("YOO");
       var json = _.clone(this.attributes);
       json.url = this.get('url').toJSON();
       json.navbar = this.get('navbar').toJSON();
