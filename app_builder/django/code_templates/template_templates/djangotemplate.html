@@ -2,19 +2,22 @@
 
 
 {{ "{% block navbar %}" }}
-<div class="navbar" id="navbar">
+<div class="navbar navbar-fixed-top" id="navbar">
   <div class="navbar-inner">
+    <div class="container">
     <a class="brand" href="#" id="brand-name">{{ context.page.navbar_brandname }}</a>
     <ul class="nav" id="items">
 {% for p in context.page.navbar_pages %}
       <li><a href="{{ '{%' }} url {{ p._django_view.view_path() }} {{ '%}' }}">{{ p.name }}</a></li>
 {% endfor %}
     </ul>
+    <ul class="nav pull-right">
+    <li><a href="/logout">Logout</a></li>
+    </ul>
+    </div>
   </div>
 
-  <div class="right hide-btn btn" id="hide-toggle">
-    Logout
-  </div>
+  
 </div>
 {{ "{% endblock %}" }}
 

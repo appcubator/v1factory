@@ -1,0 +1,40 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css"> 
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes.css">
+{% endblock %}
+
+{% block topbar %}
+{% include "infra-topbar.html" %}
+{% endblock %}
+
+{% block page %}
+<a class="span6 save-btn" id="save-emails"></a>
+<div class="container hoff6 ">
+  <div class="span16 left-bar">
+  <div class="expandible" id="basecss"><h2>Emails</h2></div>
+    <span class="">
+      <ul id="email-list">
+        
+      </ul>
+      <span id="create-email">
+        + Create Email
+      </span>
+    </span>
+  </div>
+  <div class="right-bar offset2 span46">
+    <input type="text" class="email-name-input span26 hoff1">
+    <input type="text" class="email-subject-input span26 hoff1">
+    <textarea class="email-content-input span26 hi30 hoff1">
+    </textarea>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+var appState = {{ app.state_json|safe }};
+var appId = {{ app_id|safe }};
+</script>
+<script data-main="{{ STATIC_URL }}js/app/emails-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+{% endblock %}
