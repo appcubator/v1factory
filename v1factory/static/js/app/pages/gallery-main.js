@@ -1,15 +1,15 @@
 require.config({
   paths: {
-    "jquery" : "../libs/jquery/jquery",
-    "jquery-ui" : "../libs/jquery-ui/jquery-ui",
-    "underscore" : "../libs/underscore-amd/underscore",
-    "backbone" : "../libs/backbone-amd/backbone",
-    "backboneui" : "../backbone/BackboneUI",
-    "iui" : "../libs/iui/iui",
-    "bootstrap" : "../libs/bootstrap/bootstrap",
-    "app" : "./",
+    "jquery" : "../../libs/jquery/jquery",
+    "jquery-ui" : "../../libs/jquery-ui/jquery-ui",
+    "underscore" : "../../libs/underscore-amd/underscore",
+    "backbone" : "../../libs/backbone-amd/backbone",
+    "iui" : "../../libs/iui/iui",
+    "bootstrap" : "../../libs/bootstrap/bootstrap",
+    "app" : "../",
     "editor" : "../editor",
-    "dicts" : "../dicts"
+    "dicts" : "../../dicts",
+    "mixins" : "../../mixins"
   },
 
   shim: {

@@ -1,11 +1,10 @@
 define([
-  'backboneui',
-  'backbone',
+  'mixins/BackboneModal',
   '../templates/UrlTemplates'
 ],
-function(BackboneUI, Backbone) {
+function() {
 
-  var UrlView = BackboneUI.ModalView.extend({
+  var UrlView = Backbone.ModalView.extend({
     events: {
       'change .url-part'      : 'urlPartChanged',
       'change .page'          : 'pageChanged',

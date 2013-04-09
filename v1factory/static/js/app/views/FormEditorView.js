@@ -1,13 +1,13 @@
 define([
   'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   'app/models/FormFieldModel',
   'app/templates/FormEditorTemplates',
   'jquery-ui'
 ],
-function(Backbone, BackboneUI, FormFieldModel) {
+function(Backbone, FormFieldModel) {
 
-  var FormEditorView = BackboneUI.ModalView.extend({
+  var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
     width: 882,
     height: 500,
@@ -20,8 +20,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
       'keydown input.field-label-input'  : 'changedLabel',
-      'keyup   .field-placeholder-input'   : 'changedPlaceholder',
-      'keyup   input.field-label-input'    : 'changedLabel',
+      'keyup   .field-placeholder-input' : 'changedPlaceholder',
+      'keyup   input.field-label-input'  : 'changedLabel',
       'keyup  .options-input'            : 'changedOptions',
       'change .goto'                     : 'changedGoto',
       'change .form-type-select'         : 'changedFormAction',

@@ -1,20 +1,20 @@
 define([
   'backbone',
-  'backboneui'
+  'mixins/BackboneModal'
 ],
-function(Backbone, BackboneUI) {
-  
-  var ShowDataView = BackboneUI.ModalView.extend({
+function(Backbone) {
+
+  var ShowDataView = Backbone.ModalView.extend({
     tagName: 'div',
     className: 'show-data',
     width: 800,
-    
+
     initialize: function(data) {
       console.log(data);
       this.data = data;
       this.render();
     },
-    
+
     render : function(text) {
       var html = "";
       var textData = this.data;
@@ -22,17 +22,19 @@ function(Backbone, BackboneUI) {
       var rows = textData['data'];
       html += "<tr>";
       for (var i = 0; i < schema.length; i++) {
-	  html += "<th>" + schema[i] + "</th>";
+        html += "<th>" + schema[i] + "</th>";
       }
       html += "</tr>";
+
       for (var i = 0; i < rows.length; i++) {
-	  var row = rows[i];
-	  html += "<tr>";
-	  for (var j = 0; j < row.length; j++) {
-	      html += "<td>" + row[j] + "</td>";
-	  }
-	  html += "</tr>";
+    	  var row = rows[i];
+    	  html += "<tr>";
+    	  for (var j = 0; j < row.length; j++) {
+    	     html += "<td>" + row[j] + "</td>";
+    	  }
+	      html += "</tr>";
       }
+
       this.el.innerHTML = '<div class="table-wrapper"><table>' + html + '</table></div>'
       return this;
     }
