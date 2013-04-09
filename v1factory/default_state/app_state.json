@@ -113,10 +113,36 @@
                     "container_info": null
                 }
             ],
+            "navbar": {
+                "brandName": null,
+                "isHidden": false,
+                "isFixed": true,
+                "items": [
+                    {
+                        "name": "{{Homepage}}"
+                    },
+                    {
+                        "name": "{{Registration Page}}"
+                    }
+                ]
+            },
             "name": "Homepage",
             "access_level": "all"
         },
         {
+            "navbar": {
+                "brandName": null,
+                "isHidden": false,
+                "isFixed": true,
+                "items": [
+                    {
+                        "name": "{{Homepage}}"
+                    },
+                    {
+                        "name": "{{Registration Page}}"
+                    }
+                ]
+            },
             "url": {
                 "urlparts": [
                     "registration"
