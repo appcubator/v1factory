@@ -330,7 +330,7 @@ function(ElementCollection,
         field          = id.split('-')[1];
 
         widget         = _.extend(widget, uieState['texts'][0]);
-        widget.content =  '{{'+entity.get('name')+'_'+field+'}}';
+        widget.content =  '{{'+entity.get('name')+'.'+field+'}}';
         this.widgetsCollection.push(widget);
       }
       else {

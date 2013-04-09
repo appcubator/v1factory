@@ -185,7 +185,7 @@ define([
       }
 
       widget = _.extend(widget, uieState[uieType][0]);
-      widget.content =  '{{'+this.entity.get('name')+'_'+fieldModel.get('name')+'}}';
+      widget.content =  '{{'+this.entity.get('name')+'.'+fieldModel.get('name')+'}}';
       this.widgetsCollection.push(widget);
     },
 
@@ -196,7 +196,7 @@ define([
 
       if(!widget) {
         var model = this.entity.get('fields').get(cid);
-        widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '_' + model.get('name') + '}}'})[0];
+        widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '.' + model.get('name') + '}}'})[0];
       }
 
       this.widgetsCollection.remove(widget);
