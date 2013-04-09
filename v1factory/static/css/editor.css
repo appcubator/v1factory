@@ -1630,3 +1630,17 @@ h3.edit-url {
 /*.container-wrapper:hover .ui-resizable-handle {
   opacity: 1;
 }*/
+
+.modal img {
+  margin-bottom: 20px;
+}
+
+.modal h3 {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.modal a {
+  font-weight: normal;
+  margin-top: 10px;
+}

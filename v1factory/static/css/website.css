@@ -280,6 +280,15 @@ input[type="submit"] {
   color: #000;
 }
 
+.modal img {
+  margin-bottom: 20px;
+}
+
+.modal h3 {
+  font-weight: bold;
+  font-size: 20px;
+}
+
 .element-node {
   min-height: 200px;
   padding: 20px;
@@ -836,3 +845,5 @@ input[type="password"], input[type="text"] {
   display: inline-block;
   background-repeat: no-repeat;
 }
+
+

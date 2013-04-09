@@ -5,7 +5,7 @@ define(['backbone'], function(Backbone) {
     },
 
     getAppendixString: function() {
-      return this.get('urlparts').join('/');
+      return '/' + (this.get('urlparts').join('/'));
     },
 
     getUrlString: function(appSubdomain) {

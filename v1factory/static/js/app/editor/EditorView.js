@@ -177,7 +177,7 @@ define([
           type: "POST",
           url: '/app/'+appId+'/deploy/',
           complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>'});
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>', img:'happy_engineer.png'});
           },
           dataType: "JSON"
         });
