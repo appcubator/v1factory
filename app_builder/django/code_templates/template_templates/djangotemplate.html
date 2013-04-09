@@ -12,7 +12,9 @@
 {% endfor %}
     </ul>
     <ul class="nav pull-right">
-    <li><a href="/logout">Logout</a></li>
+      {{ '{% if user.is_authenticated %}' }}
+      <li><a href="/logout">Logout</a></li>
+      {{ '{% endif %}' }}
     </ul>
     </div>
   </div>

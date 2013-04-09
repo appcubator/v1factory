@@ -7,7 +7,8 @@ def {{ form_receiver.identifier() }}(request):
   """
   Handles the login action.
   """
-  redirect_to = request.REQUEST.get('next', '')
+  #redirect_to = request.REQUEST.get('next', '')
+  redirect_to = "{{ form_receiver.goto_view.view_path() }}"
 
   form = AuthenticationForm(None, data=request.POST)
   if form.is_valid():
