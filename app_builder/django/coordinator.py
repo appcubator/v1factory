@@ -14,14 +14,13 @@ from form_receiver import LoginFormReceiver, SignupFormReceiver, DjangoFormRecei
 
 from app import DjangoApp
 
-def analyzed_app_to_app_components(analyzed_app):
+def analyzed_app_to_app_components(analyzed_app, d_user):
   models = Manager(DjangoModel)
   views = Manager(DjangoView)
   urls = Manager(DjangoUrl)
   templates = Manager(DjangoTemplate)
   form_receivers = Manager(DjangoFormReceiver)
   queries = []
-
   # create and add django models
   for m in analyzed_app.models.each():
     models.add( DjangoModel.create(m) ) # this skips the relational fields
@@ -91,5 +90,5 @@ def analyzed_app_to_app_components(analyzed_app):
     if isinstance(f, CreateForm):
       rec.init_foreign_keys(models) # should automatically add foreign keys
 
-  dw = DjangoApp(models, views, urls, templates, form_receivers)
+  dw = DjangoApp(models, views, urls, templates, form_receivers, d_user)
   return dw

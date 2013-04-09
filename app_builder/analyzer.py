@@ -87,6 +87,24 @@ class Page(object):
     for uie in page['uielements']:
       self.uielements.append(UIElement.create(uie, self))
 
+    # navbar
+    try:
+      self.navbar = page['navbar']
+    except KeyError:
+      print "WTF IS THIS? dump: %s" % page
+    self.navbar_brandname = None
+    if page['navbar']['brandName'] is not None:
+      self.navbar_brandname = page['navbar']['brandName']
+    self.has_navbar = page['navbar']['isHidden']
+    self.navbar_page_names = [ i['name'] for i in page['navbar']['items'] ]
+
+  def resolve_navbar_pages(self, analyzed_app):
+    self.navbar_pages = []
+    for pname in self.navbar_page_names:
+      p = analyzed_app.pages.get_by_name(utils.extract_from_brace(pname))
+      assert p is not None
+      self.navbar_pages.append(p)
+
 class Route(object):
   """A Route is exactly what you think, except it can sometimes have dynamic inputs,
       which link to model fields. Ie /user/:user_id/"""
@@ -465,6 +483,13 @@ class AnalyzedApp:
       u = p['url']
       r = Route(u, page)
       self.routes.add(r)
+      # this shouldn't be here, but who cares
+      if page.navbar_brandname is None:
+        page.navbar_brandname = app_state['name']
+      # (ensures all navbar brandnames are strings)
+
+    for p in self.pages.each():
+      p.resolve_navbar_pages(self)
 
     self.link_models_to_routes()
     self.link_routes_and_pages()
