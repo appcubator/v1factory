@@ -4621,6 +4621,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar .nav > li {
+  line-height: 20px;
   float: left;
 }
 

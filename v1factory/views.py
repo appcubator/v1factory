@@ -178,6 +178,14 @@ def app_pages(request, app_id):
   page_context = { 'app': app, 'title' : 'Pages', 'elements' : els, 'app_id': app_id }
   return render(request, 'app-pages.html', page_context)
 
+
+def app_emails(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+
+  page_context = { 'app': app, 'title' : 'Emails', 'app_id': app_id }
+  return render(request, 'app-emails.html', page_context)
+
 def app_analytics(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id, owner=request.user)
