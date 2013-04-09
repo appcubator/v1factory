@@ -17,3 +17,4 @@ xlrd==0.9.0
 pyflakes==0.6.1
 gitpython
 django-social-auth==0.7.22
+sendgrid=0.1.3
