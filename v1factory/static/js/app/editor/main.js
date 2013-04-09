@@ -10,7 +10,8 @@ require.config({
     "app" : "../",
     "editor" : "./",
     "dicts" : "../../dicts",
-    "libs"  : "../../libs"
+    "libs"  : "../../libs",
+    "mixins" : "../../mixins"
   },
 
   shim: {

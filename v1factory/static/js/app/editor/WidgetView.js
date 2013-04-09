@@ -1,9 +1,9 @@
 define([
   'backbone',
-  'backboneui'
-],function(Backbone, BackboneUI) {
+  'mixins/BackboneUI'
+],function() {
 
-  var WidgetView = BackboneUI.UIView.extend({
+  var WidgetView = Backbone.UIView.extend({
     el: null,
     className: 'pseudo-outline widget-wrapper',
     tagName : 'div',

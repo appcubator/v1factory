@@ -1,9 +1,9 @@
 define([
-  'backboneui'
+  'mixins/BackboneModal'
 ],
-function(BackboneUI) {
+function() {
 
-  var PageStylePicker = BackboneUI.ModalView.extend({
+  var PageStylePicker = Backbone.ModalView.extend({
     el     : document.getElementById('page-style-picker'),
     width  : 800,
     events : {

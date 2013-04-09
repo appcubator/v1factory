@@ -1,13 +1,13 @@
 define([
-  'backbone',
-  'backboneui',
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
+  'backbone',
+  'mixins/BackboneUI',
   'iui'
 ],
-function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
+function(WidgetContentEditor, WidgetLayoutEditor) {
 
-  var WidgetEditorView = BackboneUI.UIView.extend({
+  var WidgetEditorView = Backbone.UIView.extend({
     el     : document.getElementById('editor-page'),
     className : 'editor-page fadeIn',
     tagName : 'div',

@@ -8,8 +8,6 @@ define([
   'app/models/QueryModel',
   'app/models/RowModel',
   'app/collections/WidgetCollection',
-  'backboneui',
-  'backbone',
   'dicts/constant-containers'
 ],
 function(WidgetModel,
@@ -20,9 +18,8 @@ function(WidgetModel,
          ListQueryView,
          QueryModel,
          RowModel,
-         WidgetCollection,
-         BackboneUI,
-         Backbone) {
+         WidgetCollection) 
+{
 
 
   var ContainerWidgetModel = WidgetModel.extend({

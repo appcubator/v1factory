@@ -14,8 +14,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
-  'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            UserEntityModel,
@@ -31,9 +30,7 @@ define([
            DesignEditorView,
            EditorGalleryView,
            PageStylePicker,
-           NavbarEditorView,
-           Backbone,
-           BackboneUI) {
+           NavbarEditorView) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -105,7 +102,6 @@ define([
     render: function() {
       this.style();
 
-      this.el.appendChild(this.designEditor.el);
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;

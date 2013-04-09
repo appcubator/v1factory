@@ -1,6 +1,6 @@
 define([
   'mixins/BackboneModal',
-  '../templates/UrlTemplates'
+  'app/templates/UrlTemplates'
 ],
 function() {
 
@@ -71,18 +71,21 @@ function() {
       this.remove();
     },
 
-
     lastEntityChanged: function(e) {
       $(e.target).removeClass('last');
       var temp = UrlTemplate.templateText;
-      var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
+      var html = _.template(temp, { 'urls': this.urlParts,
+                                    'entities': appState.entities,
+                                    'pages': appState.pages });
       $('.url', this.el).append(html);
     },
 
     lastTextChanged: function(e) {
       $(e.target).removeClass('last');
       var temp = UrlTemplate.templateEntity;
-      var html = _.template(temp, { 'urls': this.urlParts, 'entities': appState.entities, 'pages': appState.pages });
+      var html = _.template(temp, { 'urls': this.urlParts,
+                                    'entities': appState.entities,
+                                    'pages': appState.pages });
       $('.url', this.el).append(html);
     }
   });

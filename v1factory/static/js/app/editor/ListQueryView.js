@@ -1,12 +1,11 @@
 define([
-  'backboneui',
-  'backbone',
   'app/collections/WidgetCollection',
   'editor/WidgetView',
+  'mixins/BackboneModal',
   'iui'
-],function(BackboneUI, Backbone, WidgetCollection, WidgetView) {
+],function(WidgetCollection, WidgetView) {
 
-  var ListQueryView = BackboneUI.ModalView.extend({
+  var ListQueryView = Backbone.ModalView.extend({
     className : 'query-modal',
     width: 920,
     height: 600,
@@ -142,7 +141,6 @@ define([
       for(var ii=0; ii <2; ii++) {
         var layout = _.clone(self.rowModel.get('layout'));
         layout.attributes.width = 6;
-        console.log(layout);
         var html = _.template(Templates.rowNode, { layout: layout,
                                           uielements: self.widgetsCollection.models });
         $('.list-editor-container').append('<div class="constant-elements">'+html+'</div>');

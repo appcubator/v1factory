@@ -5,8 +5,6 @@ define([
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
-  'backbone',
-  'backboneui',
   'editor/editor-templates'
 ],
 function(WidgetCollection,
@@ -14,9 +12,7 @@ function(WidgetCollection,
         ListQueryView,
         WidgetView,
         SubWidgetView,
-        FormEditorView,
-        BackboneUI,
-        Backbone) {
+        FormEditorView) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
