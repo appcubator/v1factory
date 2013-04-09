@@ -299,11 +299,11 @@ function(ElementCollection,
 
 
         if(entityCid === 'user'){
-          entity = this.userModel;
+          entity = g_userModel;
           form = entity.get('forms').get(formCid);
         }
         else {
-          entity = this.entitiesCollection.get(entityCid);
+          entity = g_entityCollection.get(entityCid);
           form = entity.get('forms').get(formCid);
         }
 

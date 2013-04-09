@@ -1,10 +1,9 @@
 define([
   'backboneui',
   'backbone',
-  '../collections/UrlsCollection',
   '../templates/UrlTemplates'
 ],
-function(BackboneUI, Backbone, UrlsCollection) {
+function(BackboneUI, Backbone) {
 
   var UrlView = BackboneUI.ModalView.extend({
     events: {
