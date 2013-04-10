@@ -58,16 +58,18 @@
       <div class="page container">  <!-- Top Styling Menu -->
         <div class="navbar" id="navbar">
           <div class="navbar-inner">
-            <a class="brand" href="#" id="brand-name">{{ app.name }}</a>
-            <form class="brand" id="brand-name-form" style="display:none"><input type="text" id="brand-name-input" placeholder="Brand Text"></form>  
-            <ul class="nav" id="items">              
-            </ul>
-            <form class="nav add-link-form" style="display:none;">
-              <li><select id="page-link-list"><option>Choose A Page</option></select></li>
-            </form>
-            <ul class="nav add-link">
-              <li><a href="#">+Add a Link</a></li>
-            </ul>
+            <div class="container">
+              <a class="brand" href="#" id="brand-name">{{ app.name }}</a>
+              <form class="brand" id="brand-name-form" style="display:none"><input type="text" id="brand-name-input" placeholder="Brand Text"></form>  
+              <ul class="nav" id="items">              
+              </ul>
+              <form class="nav add-link-form" style="display:none;">
+                <li><select id="page-link-list"><option>Choose A Page</option></select></li>
+              </form>
+              <ul class="nav add-link">
+                <li><a href="#">+Add a Link</a></li>
+              </ul>
+            </div>
           </div>
           <div class="right hide-btn btn" id="hide-toggle">
             Hide the Navbar

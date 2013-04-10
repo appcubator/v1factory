@@ -1,14 +1,21 @@
 define([
   'app/collections/WidgetCollection',
   'editor/WidgetView',
+  'editor/RowEditorView',
+  'editor/RowGalleryView',
   'mixins/BackboneModal',
   'iui'
-],function(WidgetCollection, WidgetView) {
+],
+function( WidgetCollection,
+          WidgetView,
+          RowEditorView,
+          RowGalleryView ) {
 
   var ListQueryView = Backbone.ModalView.extend({
-    className : 'query-modal',
+    className : 'list-editor-modal',
     width: 920,
     height: 600,
+    padding: 0,
     events: {
       'change .fields-to-display'    : 'fieldsToDisplayChanged',
       'click .belongs-to-user'       : 'belongsToUserChanged',
@@ -27,8 +34,6 @@ define([
                       'nmrRowsChanged',
                       'nmrRowsNumberChanged',
                       'addedWidget',
-                      'removedWidget',
-                      'placeWidget',
                       'resized',
                       'resizing',
                       'itemLinkChanged');
@@ -36,34 +41,19 @@ define([
       this.widgetModel = widgetModel;
       this.queryModel  = queryModel;
       this.rowModel    = rowModel;
+      this.widgetsCollection = rowModel.get('uielements');
 
       this.entity = widgetModel.get('container_info').get('entity');
 
-      this.widgetsCollection = this.rowModel.get('uielements');
-      this.widgetsCollection.bind('add', this.placeWidget);
-
-      this.rowModel.get('layout').bind('change', this.renderConstants);
-      this.queryModel.bind('change', this.renderConstants);
-      this.rowModel.bind('change', this.renderConstants);
 
       this.render();
-
-      _(self.widgetsCollection.models).each(function(widgetModel) {
-        widgetModel.bind('change', self.renderConstants);
-        self.placeWidget(widgetModel);
-      });
-
-      this.renderConstants();
     },
 
     render: function() {
       var self = this;
 
-      var div = document.createElement('div');
-      div.className = "query-view-panel";
-      div.style.width = 260 + 'px';
-      div.style.height = (this.height-4) + 'px';
-      div.style.display = 'inline-block';
+      var queryDiv = document.createElement('div');
+      queryDiv.className = "list-query-view";
 
       var checks = {};
       var rFirstNmr=5, rLastNmr=5, rAllNmr = 0;
@@ -93,44 +83,28 @@ define([
         row       : true
       };
 
-      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.queryModel, row: self.rowModel, c: checks});
-      div.innerHTML = contentHTML;
+      var contentHTML = _.template(Templates.queryView, {entity: self.entity,
+                                                         query: self.queryModel,
+                                                         row: self.rowModel,
+                                                         c: checks });
+      queryDiv.innerHTML += contentHTML;
 
       var editorDiv = document.createElement('div');
       editorDiv.className = 'list-editor-container';
+      var rowView = new RowEditorView(this.rowModel, this.entity);
+      this.rowEditorView = rowView;
+      editorDiv.appendChild(rowView.el);
 
-      var rowWidget = document.createElement('div');
-      this.rowWidget = rowWidget;
-      rowWidget.className = 'editor-window container-wrapper';
-      rowWidget.className += (' hi' + this.rowModel.get('layout').get('height'));
-      editorDiv.appendChild(rowWidget);
+      var rowDiv = document.createElement('div');
+      rowDiv.className = 'list-gallery-container';
+      var rowGalleryView = new RowGalleryView(this.rowModel);
+      rowDiv.appendChild(rowGalleryView.el);
 
-      if(this.rowModel.get('isListOrGrid') == "list") {
-        iui.resizableVertical(rowWidget, self);
-        rowWidget.style.width = '100%';
-      }
-      else {
-        iui.resizable(rowWidget, self);
-        rowWidget.className += (' span' + this.rowModel.get('layout').get('width'));
-      }
 
-      var actionDiv = document.createElement('div');
-      actionDiv.className = 'list-action-editor';
-      actionDiv.innerHTML = "<h1 class='title'>List Action</h1>";
-      var linksToStr = "<label>Each item goes to <select class='item-goes-to'>";
-      linksToStr += ('<option>None</option>');
-      _(appState.pages).each(function(page) {
-        if(_.contains(page.url.urlparts, '{{'+ self.queryModel.entity.get('name')  +'}}')) {
-           linksToStr += ('<option>' + page.name + '</option>');
-        }
-      });
-
-      linksToStr += "</select></label>";
-      actionDiv.innerHTML += linksToStr;
-
-      this.el.appendChild(div);
       this.el.appendChild(editorDiv);
-      this.el.appendChild(actionDiv);
+      this.el.appendChild(queryDiv);
+      this.el.appendChild(rowDiv);
+
       return this;
     },
 
@@ -156,7 +130,7 @@ define([
         fieldsArray = _.uniq(fieldsArray);
       }
       else {
-        this.removedWidget(e.target.id);
+        this.rowEditorView.removedWidget(e.target.id);
         fieldsArray = _.difference(fieldsArray, e.target.value);
       }
 
@@ -185,21 +159,6 @@ define([
       widget = _.extend(widget, uieState[uieType][0]);
       widget.content =  '{{'+this.entity.get('name')+'.'+fieldModel.get('name')+'}}';
       this.widgetsCollection.push(widget);
-    },
-
-    removedWidget: function(fieldId) {
-      var self = this;
-      var cid = String(fieldId).replace('field-', '');
-      var widget = this.widgetsCollection.where({field: cid})[0];
-
-      if(!widget) {
-        var model = this.entity.get('fields').get(cid);
-        widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '.' + model.get('name') + '}}'})[0];
-      }
-
-      this.widgetsCollection.remove(widget);
-      $('#widget-wrapper-' + widget.cid).remove();
-      widget.remove();
     },
 
     belongsToUserChanged: function(e) {
@@ -240,15 +199,6 @@ define([
 
     sortByChanged: function(e) {
       this.queryModel.set('sortAccordingTo', e.target.value);
-    },
-
-    placeWidget: function(widgetModel) {
-
-      widgetModel.get('layout').bind('change', this.renderConstants);
-      var curWidget = new WidgetView(widgetModel);
-
-      if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);
-      curWidget.resizableAndDraggable();
     },
 
     resized: function() {

@@ -1631,6 +1631,10 @@ h3.edit-url {
   opacity: 1;
 }*/
 
+.modal {
+  overflow: hidden;
+}
+
 .modal img {
   margin-bottom: 20px;
 }
@@ -1659,3 +1663,90 @@ h3.edit-url {
   top: 0;
   border-radius: 2px;
 }
+
+
+.modal .list-editor-container {
+  vertical-align: top;
+  position: relative;
+  top: 0;
+  height: 260px;
+  width: 100%;
+  border-bottom: 1px solid #999;
+  background-image: url(../img/editor_bg.png);
+}
+
+.modal .list-editor-container h3 {
+  display: block;
+  text-align: center;
+  color: #666;
+  padding: 12px;
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  background-color: rgb(238, 238, 238);
+  border-bottom: 1px solid #999;
+  height: 44px;
+}
+
+.modal .list-editor-container .list-type {
+  display: inline-block;
+  border: 1px solid #AAA;
+  width: 100px;
+  padding: 8px;
+  font-size: 14px;
+  line-height: 14px;
+  vertical-align: top;
+  float: right;
+  margin-top: -6px;
+}
+
+.modal .list-query-view {
+  vertical-align: top;
+  display: inline-block;
+  width: 580px;
+  height: 340px;
+  overflow-y: scroll;
+}
+
+.modal .list-query-view h1 {
+  width: 100%;
+  text-align: center;
+  color: #666;
+  padding: 12px;
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  background-color: rgb(238, 238, 238);
+  border-bottom: 1px solid #999;
+  margin: 0;
+}
+
+.modal .list-query-view .sect {
+  padding: 14px;
+}
+
+.modal .list-query-view .sect:empty {
+  padding: 0;
+}
+
+.modal .list-query-view hr {
+  margin: 2px 0;
+}
+
+.modal .list-gallery-container {
+  vertical-align: top;
+  display: inline-block;
+  width: 338px;
+  height: 340px;
+  border-left: 1px solid #999;
+}
+
+.modal .list-gallery-container h3 {
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  background-color: rgb(238, 238, 238);
+  border-bottom: 1px solid #999;
+  font-size: 14px;
+  height: 41px;
+  text-align: center;
+}
+
+
+
+
+

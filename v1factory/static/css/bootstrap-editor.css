@@ -4434,7 +4434,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar .container {
-  width: auto;
+  width: 960px;
 }
 
 .nav-collapse.collapse {
