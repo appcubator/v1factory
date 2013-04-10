@@ -1,117 +1,92 @@
 """ Really cool JSON schema validator """
 
+USER_SETTINGS_SCHEMA = { "_type": {}, "_mapping": {
+  "facebook": { "_type": True },
+  "linkedin": { "_type": True },
+  "twitter": { "_type": True },
+  "local": { "_type": True },
+  "fields": {
+    "_type": [],
+    "_each": { "_type": {}, "_mapping": {
+      "name": { "_type" : "" },
+      "required": { "_type": False },
+      "type": { "_type" : "" }
+    }}
+  },
+  "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
+    "name": { "_type" : "" },
+    "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
+      "name": { "_type" : "" },
+      "placeholder": { "_type" : "" },
+      "label": { "_type" : "" },
+      "displayType": { "_type" : "" },
+      "type": { "_type" : "" },
+      "options": { "_type" : [], "_each": { "_type" : "" }}
+    }}},
+    "action": { "_type":"" }
+  }}}
+}}
+
+ENTITY_FIELD_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
+  "name": { "_type" : "" },
+  "required": { "_type": False },
+  "type": { "_type" : "" }
+}}}
+
+FORM_SCHEMA = { "_type": [], "_each": { "_type" : {}, "_mapping": {
+  "name": { "_type" : "" },
+  "action": { "_type":"" },
+  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
+    "name": { "_type" : "" },
+    "placeholder": { "_type" : "" },
+    "label": { "_type" : "" },
+    "displayType": { "_type" : "" },
+    "type": { "_type" : "" },
+    "options": { "_type" : [], "_each": { "_type" : "" }}
+  }}},
+}}}
+
+ENTITY_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
+  "name": { "_type" : "" },
+  "fields": ENTITY_FIELD_SCHEMA,
+  "forms": FORM_SCHEMA
+}}}
+
+UIELEMENT_SCHEMA = { "_type": [],"_each": { "_type": {}, "_mapping": {
+  "layout": { "_type": {}, "_mapping": {
+    "width": { "_type": 0, "_min": 1, "_max": 64 },
+    "height": { "_type": 0, "_min": 1 },
+    "top": { "_type": 0, "_min": 0 },
+    "left": { "_type": 0, "_min": 0, "_max": 64 }
+  }},
+  "content": { "_type": "" },
+  "container_info": { "_null": True, "_type": {}, "_mapping": {
+    "entity": { "_type": "" },
+    "action": { "_type": "" },
+    "uielements": None
+  }}
+}}}
+
+UIELEMENT_SCHEMA['_each']['_mapping']['container_info']['_mapping']['uielements'] = UIELEMENT_SCHEMA
+
 APP_SCHEMA = { "_type": {}, "_mapping": {
-  "name":{
-          "_type" : "",
-          "_minlength": 2,
-          "_maxlength": 255,
-         },
-  "users": {
-            "_type": {},
-            "_mapping": {
-                        "facebook": { "_type": True },
-                        "linkedin": { "_type": True },
-                        "twitter": { "_type": True },
-                        "local": { "_type": True },
-                        "fields": {
-                                   "_type": [],
-                                   "_each": { "_type": {}, "_mapping": {
-                                             "name": { "_type" : "" },
-                                             "required": { "_type": False },
-                                             "type": { "_type" : "" }
-                                            }}
-                                  },
-                        "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
-                                  "name": { "_type" : "" },
-                                  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-                                             "name": { "_type" : "" },
-                                             "placeholder": { "_type" : "" },
-                                             "label": { "_type" : "" },
-                                             "displayType": { "_type" : "" },
-                                             "type": { "_type" : "" },
-                                             "options": { "_type" : [], "_each": { "_type" : "" }}
-                                            }}},
-                                  "action": { "_type":"" }
-                                 }}}
-                        }
-           },
-  "entities": { "_type": [], "_each": {
-               "_type": {},
-               "_mapping": {
-                            "name": { "_type" : "" },
-                            "fields": {
-                                       "_type": [],
-                                       "_each": { "_type": {}, "_mapping": {
-                                                 "name": { "_type" : "" },
-                                                 "required": { "_type": False },
-                                                 "type": { "_type" : "" }
-                                                }}
-                                      },
-                            "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
-                                      "name": { "_type" : "" },
-                                      "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-                                                 "name": { "_type" : "" },
-                                                 "placeholder": { "_type" : "" },
-                                                 "label": { "_type" : "" },
-                                                 "displayType": { "_type" : "" },
-                                                 "type": { "_type" : "" },
-                                                 "options": { "_type" : [], "_each": { "_type" : "" }}
-                                                }}},
-                                      "action": { "_type":"" }
-                                     }}}
-                           }
-               }},
-  "pages": { "_type": [], "_each": {
-            "_type": {},
-            "_mapping": {
-                         "name": { "_type" : "" },
-                         "url": { "_type": {}, "_mapping": {
-                                 "urlparts": {
-                                              "_type": [],
-                                              "_each": { "_type" : "" }
-                                             }
-                                }},
-                         "uielements": {
-                                        "_type": [],
-                                        "_each": { "_type": {}, "_mapping": {
-                                                  "layout": {
-                                                             "_type": {},
-                                                             "_mapping": {
-                                                                          "width": { "_type": 0, "_min": 1, "_max": 64 },
-                                                                          "height": { "_type": 0, "_min": 1 },
-                                                                          "top": { "_type": 0, "_min": 0 },
-                                                                          "left": { "_type": 0, "_min": 0, "_max": 64 }
-                                                                         }
-                                                            },
-                                                  "content": { "_type": "" },
-                                                  "container_info": {
-                                                                     "_null": True,
-                                                                     "_type": {},
-                                                                     "_mapping": {
-                                                                                  "entity": { "_type": "" },
-                                                                                  "action": { "_type": "" },
-                                                                                  "uielements": {
-                                                                                                 "_type": [],
-                                                                                                 "_each": { "_type": {}, "_mapping": {
-                                                                                                           "layout": {
-                                                                                                                      "_type": {},
-                                                                                                                      "_mapping": {
-                                                                                                                                   "width": { "_type": 0, "_min": 1, "_max": 64 },
-                                                                                                                                   "height": { "_type": 0, "_min": 1 },
-                                                                                                                                   "top": { "_type": 0, "_min": 0 },
-                                                                                                                                   "left": { "_type": 0, "_min": 0, "_max": 64 }
-                                                                                                                                  }
-                                                                                                                     },
-                                                                                                           "content": { "_type": "" },
-                                                                                                           }}
-                                                                                                 },
-                                                                                 }
-                                                                    },
-                                                 }},
-                                       },
-                         "access_level": { "_type" : "" }
-                        }
-           }}
+  "name": {
+    "_type" : "",
+    "_minlength": 2,
+    "_maxlength": 255,
+  },
+  "users": USER_SETTINGS_SCHEMA,
+  "entities": ENTITY_SCHEMA,
+  "pages": { "_type": [], "_each": { "_type": {}, "_mapping": {
+    "name": { "_type" : "" },
+    "url": { "_type": {}, "_mapping": {
+      "urlparts": { "_type": [],
+        "_each": { "_type" : "" }
+      }
+    }},
+    "uielements": UIELEMENT_SCHEMA,
+    "access_level": { "_type" : "" }
+  }}}
 }}
 
 class Xception(Exception):
