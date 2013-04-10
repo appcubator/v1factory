@@ -20,7 +20,7 @@
   <div class="row hoff1">
     <h2 class="span24 hoff1">{{ app.name }}</h2>
     <div class="pane span24 hi3 right offsetr2">
-      <div class="hi4 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div><hr class="vert"><div class="hi4 span13"><h4 class="hoff1 offset1 red">Not running</h4></div>
+      <div class="hi4 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div><hr class="vert"><div class="hi4 span13"><h4 class="hoff1 offset1 green">Running</h4></div>
     </div>
     <hr class="span62 hoff2">
     <div class="span64 hoff1">
@@ -58,5 +58,5 @@
 <script type="text/javascript">
   var appId = {{ app_id }};
 </script>
-<script data-main="{{ STATIC_URL }}js/app/show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/pages/show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

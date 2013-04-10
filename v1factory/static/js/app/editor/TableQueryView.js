@@ -1,10 +1,9 @@
 define([
-  'backboneui',
-  'backbone',
+  'mixins/BackboneModal',
   'iui'
-],function(BackboneUI) {
+],function() {
 
-  var TableQueryView = BackboneUI.ModalView.extend({
+  var TableQueryView = Backbone.ModalView.extend({
     className : 'query-modal modal',
     events: {
       'change .fields-to-display'   : 'fieldsToDisplayChanged',

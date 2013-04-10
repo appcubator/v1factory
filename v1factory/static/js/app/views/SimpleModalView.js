@@ -1,20 +1,26 @@
 define([
   'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   'iui'
 ],
-function(Backbone, BackboneUI) {
-  
-  var SimpleModalView = BackboneUI.ModalView.extend({
+function(Backbone) {
+
+  var SimpleModalView = Backbone.ModalView.extend({
     tagName: 'div',
     className: 'deployed',
-    
-    initialize: function(text) {
-      this.render(text.text);
+
+    initialize: function(data) {
+      this.render(data.img, data.text);
     },
-    
-    render : function(text) {
-      this.el.innerHTML = text;
+
+    render : function(img, text) {
+      if(img) {
+        this.el.innerHTML += '<img src="/static/img/'+img+'">';
+      }
+
+      if(text) {
+        this.el.innerHTML += '<h3>'+text+'</h3>';
+      }
       return this;
     }
   });

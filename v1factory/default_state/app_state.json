@@ -286,5 +286,12 @@
         ],
         "facebook": false,
         "local": true
-    }
+    },
+    "emails": [
+        {
+            "name": "Welcome Email",
+            "subject": "Thanks for Signing up!",
+            "content": "Dear {{User.First_Name}},\n\nThanks for signing up!\n\n- {{AppName}} Team"
+        }
+    ]
 }

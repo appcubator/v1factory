@@ -1,10 +1,10 @@
 define([
-  'backboneui',
+  'mixins/BackboneModal',
   'iui'
 ],
-function(BackboneUI) {
+function() {
 
-  var ThemeDisplayView = BackboneUI.ModalView.extend({
+  var ThemeDisplayView = Backbone.ModalView.extend({
     el: null,
     events: {
       'click #load-btn' : 'loadTheme'

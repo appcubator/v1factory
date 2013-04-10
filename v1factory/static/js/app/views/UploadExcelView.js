@@ -1,10 +1,10 @@
 define([
   'backbone',
-  'backboneui'
+  'mixins/BackboneModal'
 ],
-function(Backbone, BackboneUI) {
+function(Backbone) {
 
-  var UploadExcelView = BackboneUI.ModalView.extend({
+  var UploadExcelView = Backbone.ModalView.extend({
     tagName: 'div',
     className: 'upload-excel',
 

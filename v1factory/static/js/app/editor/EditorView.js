@@ -14,8 +14,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
-  'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            UserEntityModel,
@@ -31,9 +30,7 @@ define([
            DesignEditorView,
            EditorGalleryView,
            PageStylePicker,
-           NavbarEditorView,
-           Backbone,
-           BackboneUI) {
+           NavbarEditorView) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -65,54 +62,52 @@ define([
                       'keydown',
                       'clickedUrl');
 
+      var page = appState.pages[pageId];
+
       /* Globals */
       g_entityCollection     = new EntityCollection(appState.entities);
       g_contextCollection    = new EntityCollection();
       g_userModel            = new UserEntityModel(appState.users);
 
-      var page = appState.pages[pageId];
-      this.model             = new PageModel(page);
-
+      this.model                = new PageModel(page);
       this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = new WidgetCollection();
 
-      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
+      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, page);
-
-      //this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
       this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
 
-      this.designEditor     = new DesignEditorView(this.model, true);
-
-      this.urlModel = this.model.get('url');
-
-      this.getContextEntities();
+      this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
+      this.urlModel      = this.model.get('url');
 
       this.containersCollection.on('selected', this.containerSelected);
       this.widgetsCollection.on('selected', this.widgetSelected);
+
+      /* Calls */
+      this.getContextEntities();
+      this.render();
 
       if(!page.uielements.length) {
         new PageStylePicker(this.widgetsCollection);
       }
 
-
-      this.style();
-      this.render();
-      $('#loading-gif').fadeOut().remove();
+      /* Bindings */
       window.addEventListener('keydown', this.keydown);
-
-      this.navbarEditor = new NavbarEditorView(this.model.get('navbar'));
-
       key('⌘+s, ctrl+s', this.save);
       key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
+
+      $('#loading-gif').fadeOut().remove();
     },
 
     render: function() {
-      this.el.appendChild(this.designEditor.el);
+      this.style();
+
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
-        iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +'/pages/editor/'+ ind +'">'+page.name+'</a></li>';
+        iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
+                                          '/pages/editor/'+ ind +'">' + page.name +
+                                          '</a></li>';
       });
 
       this.renderUrlBar();
@@ -149,23 +144,22 @@ define([
     },
 
     amendAppState : function() {
-      var curAppState = _.clone(appState);
-
+      var curAppState   = _.clone(appState);
       var newCollection = _.clone(this.widgetsCollection);
 
       _(this.containersCollection.models).each(function(container) {
         newCollection.remove(container.get('container_info').get('uielements').models);
       });
 
-      var widgets = (newCollection.toJSON() || []);
+      var widgets    = (newCollection.toJSON() || []);
       var containers = (this.containersCollection.toJSON() || []);
-      var elems = _.union(widgets, containers);
+      var elems      = _.union(widgets, containers);
 
       curAppState.pages[pageId]['uielements'] = elems;
-      curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
-      curAppState.pages[pageId]['navbar'] = this.model.get('navbar').toJSON();
-      curAppState.entities = g_entityCollection.toJSON();
-      curAppState.users = g_userModel.toJSON();
+      curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
+      curAppState.entities                    = g_entityCollection.toJSON();
+      curAppState.users                       = g_userModel.toJSON();
+
       return curAppState;
     },
 
@@ -177,7 +171,7 @@ define([
           type: "POST",
           url: '/app/'+appId+'/deploy/',
           complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>'});
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>', img:'happy_engineer.png'});
           },
           dataType: "JSON"
         });

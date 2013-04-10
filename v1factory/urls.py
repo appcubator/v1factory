@@ -53,6 +53,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/data/$', 'app_data'),
     url(r'^app/(\d+)/finances/$', 'app_finances'),
     url(r'^app/(\d+)/info/$', 'app_info'),
+    url(r'^app/(\d+)/emails/$', 'app_emails'),
     url(r'^app/(\d+)/pages/$', 'app_pages'),
     url(r'^app/(\d+)/pages/editor/(\d+)$', 'app_editor'),
 

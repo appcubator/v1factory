@@ -1,12 +1,11 @@
 define([
-  'backboneui',
-  'backbone',
   'app/collections/WidgetCollection',
   'editor/WidgetView',
+  'mixins/BackboneModal',
   'iui'
-],function(BackboneUI, Backbone, WidgetCollection, WidgetView) {
+],function(WidgetCollection, WidgetView) {
 
-  var ListQueryView = BackboneUI.ModalView.extend({
+  var ListQueryView = Backbone.ModalView.extend({
     className : 'query-modal',
     width: 920,
     height: 600,
@@ -142,7 +141,6 @@ define([
       for(var ii=0; ii <2; ii++) {
         var layout = _.clone(self.rowModel.get('layout'));
         layout.attributes.width = 6;
-        console.log(layout);
         var html = _.template(Templates.rowNode, { layout: layout,
                                           uielements: self.widgetsCollection.models });
         $('.list-editor-container').append('<div class="constant-elements">'+html+'</div>');
@@ -185,7 +183,7 @@ define([
       }
 
       widget = _.extend(widget, uieState[uieType][0]);
-      widget.content =  '{{'+this.entity.get('name')+'_'+fieldModel.get('name')+'}}';
+      widget.content =  '{{'+this.entity.get('name')+'.'+fieldModel.get('name')+'}}';
       this.widgetsCollection.push(widget);
     },
 
@@ -196,7 +194,7 @@ define([
 
       if(!widget) {
         var model = this.entity.get('fields').get(cid);
-        widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '_' + model.get('name') + '}}'})[0];
+        widget = this.widgetsCollection.where({content: "{{" + self.entity.get('name') + '.' + model.get('name') + '}}'})[0];
       }
 
       this.widgetsCollection.remove(widget);

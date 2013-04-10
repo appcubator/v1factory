@@ -37,7 +37,7 @@ class DjangoFormReceiver(object):
   @classmethod
   def create_signup(cls, form, analyzed_app):
     name = form.name
-    self = cls(name=name, included_fields=form.included_fields, model=analyzed_app.models.get_by_name('User'))
+    self = cls(name=name, included_fields=form.included_fields, model=analyzed_app.models.get_by_name('User'), goto_view=form.redirect_page._django_view)
 
     self.form = form
     self.form.form_receiver = self
@@ -48,7 +48,7 @@ class DjangoFormReceiver(object):
   @classmethod
   def create_login(cls, form, analyzed_app):
     name = form.name
-    self = cls(name=name, included_fields=form.included_fields, model=analyzed_app.models.get_by_name('User'))
+    self = cls(name=name, included_fields=form.included_fields, model=analyzed_app.models.get_by_name('User'), goto_view=form.redirect_page._django_view)
 
     self.form = form
     self.form.form_receiver = self

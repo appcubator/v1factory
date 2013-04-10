@@ -1,10 +1,10 @@
 define(
- ['./ContentModel',
-  './LayoutModel',
-  'backboneui',
-  'dicts/constant-containers',
-  'backbone'],
-  function(ContentModel, LayoutModel, QueryModel, BackboneUI) {
+[
+  'app/models/ContentModel',
+  'app/models/LayoutModel',
+  'dicts/constant-containers'
+],
+function(ContentModel, LayoutModel, QueryModel) {
 
   var WidgetModel = Backbone.Model.extend({
     selected: false,

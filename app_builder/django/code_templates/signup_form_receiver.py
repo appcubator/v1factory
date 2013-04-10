@@ -22,7 +22,7 @@ def {{ form_receiver.identifier() }}(request):
     new_user = authenticate(username=request.POST['username'],
                             password=request.POST['password1'])
     login(request, new_user)
-    return ajax_redirect(request, '/')
+    return ajax_redirect(request, "{{ form_receiver.goto_view.view_path() }}")
   else:
     errors = {}
     errors.update(uform.errors)

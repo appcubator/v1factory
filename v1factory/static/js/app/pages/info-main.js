@@ -4,13 +4,11 @@ require.config({
     "jquery-ui" : "../../libs/jquery-ui/jquery-ui",
     "underscore" : "../../libs/underscore-amd/underscore",
     "backbone" : "../../libs/backbone-amd/backbone",
-    "backboneui" : "../../backbone/BackboneUI",
-    "key" : "../../libs/keymaster/keymaster",
     "iui" : "../../libs/iui/iui",
+    "bootstrap" : "../../libs/bootstrap/bootstrap",
     "app" : "../",
-    "editor" : "./",
+    "editor" : "../editor",
     "dicts" : "../../dicts",
-    "libs"  : "../../libs",
     "mixins" : "../../mixins"
   },
 
@@ -25,14 +23,14 @@ require.config({
     "backbone": {
       exports: "Backbone",
       deps: ["underscore", "jquery"]
+    },
+    "bootstrap" : {
+      deps: ["jquery"]
     }
   }
 
 });
 
-require(["EditorView", '../../libs/keymaster/keymaster'], function(EditorView) {
-  window.onerror = function(error) {
-    alert('Segfault: '+ error);
-  };
-  var editorView = new EditorView();
+require(["app/views/AppInfoView", "bootstrap"], function(InfoView) {
+  var infoView = new InfoView();
 });
