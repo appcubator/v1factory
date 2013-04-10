@@ -1,0 +1,5 @@
+1. JSON types must be validated
+validator.py
+2. Convert each dict to it's object form, in a neat way.
+3. Ref language must be resolved. contains_refs tag?
+4. Link language must be resolved. only href.
