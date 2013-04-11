@@ -1,6 +1,7 @@
 # The high-level
 
-# TODO don't forget to say update on the dicts
+from copy import deepcopy
+
 
 USER_SETTINGS_SCHEMA = {}
 ENTITY_SCHEMA = {}
@@ -80,30 +81,34 @@ LAYOUT_SCHEMA = { "_type": {}, "_mapping": {
   "left": { "_type": 0, "_min": 0, "_max": 64 }
 }}
 
+
+
+# this is going to get a container_info key later on
 UIELEMENT_SCHEMA = { "_type": [],"_each": { "_type": {}, "_mapping": {
   "layout": LAYOUT_SCHEMA,
-  "container_info": {},
   "content": { "_type": "" },
 }}}
-
-FORM_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
-  "entity": { "_type": "" },
-  "action": { "_type": "" },
-  "uielements": UIELEMENT_SCHEMA
-}}
-
-ITERATOR_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
-  "entity": { "_type": "" },
-  "action": { "_type": "" },
-  "uielements": UIELEMENT_SCHEMA # gets filled in by a self reference
-}}
 
 NODE_SCHEMA = { "_type": [],"_each": { "_type": {}, "_mapping": {
   "layout": LAYOUT_SCHEMA,
   "content": { "_type": "" },
 }}}
 
+FORM_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
+  "entity": { "_type": "" },
+  "action": { "_type": "" },
+  "uielements": NODE_SCHEMA
+}}
+
+ITERATOR_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
+  "entity": { "_type": "" },
+  "action": { "_type": "" },
+  "uielements": NODE_SCHEMA # gets filled in by a self reference
+}}
+
 UIELEMENT_SCHEMA['container_info'] = { "_one_of": [FORM_INFO_SCHEMA, ITERATOR_INFO_SCHEMA, { "_null": True }] }
+
+
 
 PAGE_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
   "name": { "_type" : "" },
@@ -119,3 +124,4 @@ PAGE_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
 APP_SCHEMA['users'] = USER_SETTINGS_SCHEMA
 APP_SCHEMA['entities'] = ENTITY_SCHEMA
 APP_SCHEMA['pages'] = PAGE_SCHEMA
+
