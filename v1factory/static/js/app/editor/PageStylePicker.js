@@ -28,7 +28,7 @@ function() {
       var self = this;
       this.el.innerHTML = "<h2>Choose a template to start with?</h2>";
       this.el.innerHTML += "<ul>";
-      console.log(uieState);
+
       _(uieState.pages).each(function(page, ind) {
         self.el.innerHTML += '<li class="page-template" id="page-'+ ind +'">'+ page.name +'</li>';
       });

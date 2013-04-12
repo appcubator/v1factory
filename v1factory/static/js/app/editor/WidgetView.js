@@ -106,11 +106,8 @@ define([
     },
 
     outlineSelected: function() {
-      console.log(this.model);
-      console.log(this.model.get('selected'));
-      if(this.model.get('selected')) {
-              console.log("OUTLINE");
 
+      if(this.model.get('selected')) {
         $(this.el).addClass('selected');
         this.el.style.zIndex = 2000;
         this.selected = true;

@@ -31,23 +31,7 @@ function(ElementCollection) {
         self.appendElement(element);
       });
 
-      //this.el.innerHTML += "<h3><div class='list-view list-type'>List View</div><div class='grid-view list-type'>Grid View</div></h3>";
-
-      // var rowWidget = document.createElement('div');
-      // this.rowWidget = rowWidget;
-      // rowWidget.className = 'editor-window container-wrapper';
-      // rowWidget.className += (' hi' + this.rowModel.get('layout').get('height'));
-      // editorDiv.appendChild(rowWidget);
-
-      // if(this.rowModel.get('isListOrGrid') == "list") {
-      //   iui.resizableVertical(rowWidget, self);
-      //   rowWidget.style.width = '100%';
-      // }
-      // else {
-      //   iui.resizable(rowWidget, self);
-      //   rowWidget.className += (' span' + this.rowModel.get('layout').get('width'));
-      // }
-
+      //this.el.innerHTML += "<h3><div class='list-view list-type'>List View</div><div class='grid-view list-type'>Grid View</div></h3>"
       this.$el.find('.entity').draggable({
         cursor: "move",
         cursorAt: { top: 0, left: 0 },
@@ -150,11 +134,11 @@ function(ElementCollection) {
         id = String(id).replace('entity-','');
         var cid = id.split('-')[0];
 
-        if(cid === this.userModel.cid) {
+        if(cid === g_userModel.cid) {
           entity = new UserEntityModel(appState.users);
         }
         else {
-          entity = this.entitiesCollection.get(cid);
+          entity = g_entityCollection.get(cid);
         }
 
         field          = id.split('-')[1];

@@ -48,8 +48,6 @@ function(EmailCollection, EmailModel) {
 
     clickedEmail: function(e) {
       var cid = (e.target.id||e.target.parentNode.id).replace('email-','');
-      console.log(e.target);
-      console.log(cid);
       var emailModel = this.collection.get(cid);
       this.displayEmail(emailModel);
     },
@@ -83,7 +81,6 @@ function(EmailCollection, EmailModel) {
 
     emailContentChanged: function(e) {
       var cid = e.target.id.replace('email-inp-', '');
-      console.log(cid);
       this.collection.get(cid).set('content', e.target.value);
     },
 

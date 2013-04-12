@@ -162,7 +162,7 @@ define([
 
     save: function() {
       var json = _.clone(this.model.attributes);
-      console.log(json.basecss);
+
       json["button"]     = this.model.get('buttons').toJSON()||{};
       json["image"]      = this.model.get('images').toJSON()||{};
       json["header-text"]= this.model.get('headerTexts').toJSON()||{};

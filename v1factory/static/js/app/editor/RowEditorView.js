@@ -1,8 +1,9 @@
 define([
   'editor/WidgetView',
+  'editor/WidgetEditorView',
   'mixins/BackboneModal'
 ],
-function(WidgetView) {
+function(WidgetView, WidgetEditorView) {
 
   var RowEditorView = Backbone.View.extend({
     el     : null,
@@ -30,6 +31,8 @@ function(WidgetView) {
       _(self.widgetsCollection.models).each(function(widgetModel) {
         self.placeWidget(widgetModel);
       });
+
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, null);
     },
 
     render: function() {
@@ -67,8 +70,6 @@ function(WidgetView) {
     removedWidget: function(fieldId) {
       var self = this;
       var cid = String(fieldId).replace('field-', '');
-      console.log(cid);
-      console.log(this.widgetsCollection);
       var widget = this.widgetsCollection.where({field: cid})[0];
 
       if(!widget) {
@@ -82,7 +83,6 @@ function(WidgetView) {
     },
 
     resizing: function(e, ui) {
-      console.log("YOLO");
       var dHeight = (ui.size.height + 2) / GRID_HEIGHT;
       var dWidth = (ui.size.width + 2) / GRID_WIDTH;
 
@@ -94,8 +94,6 @@ function(WidgetView) {
     },
 
     keydown: function(e) {
-      console.log("row editor");
-      console.log(e);
     }
 
   });

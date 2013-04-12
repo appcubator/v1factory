@@ -195,7 +195,6 @@ define([
 
       _(themeState).each(function(type) {
         _(type).each(function(elem) {
-          console.log(elem);
           if(elem.attribs) return;
 
           var styleTag = document.createElement('style');
