@@ -13,12 +13,11 @@ define([
     entity: null,
     type: null,
     events: {
-      'click'         : 'select'
+      'click' : 'select'
     },
 
     initialize: function(widgetModel) {
       SubWidgetView.__super__.initialize.call(this, widgetModel);
-      
     },
 
     select: function() { }

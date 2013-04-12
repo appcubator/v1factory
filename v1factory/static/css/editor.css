@@ -1701,7 +1701,7 @@ h3.edit-url {
 .modal .list-query-view {
   vertical-align: top;
   display: inline-block;
-  width: 580px;
+  width: 700px;
   height: 340px;
   overflow-y: scroll;
 }
@@ -1732,9 +1732,14 @@ h3.edit-url {
 .modal .list-gallery-container {
   vertical-align: top;
   display: inline-block;
-  width: 338px;
+  width: 210px;
   height: 340px;
   border-left: 1px solid #999;
+  overflow-y: scroll;
+}
+
+.modal .list-gallery-container li {
+  display: inline-block;
 }
 
 .modal .list-gallery-container h3 {

@@ -1,7 +1,7 @@
 define([
   'app/collections/WidgetCollection',
   'editor/TableQueryView',
-  'editor/ListQueryView',
+  'editor/ListEditorView',
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
@@ -9,7 +9,7 @@ define([
 ],
 function(WidgetCollection,
         TableQueryView,
-        ListQueryView,
+        ListEditorView,
         WidgetView,
         SubWidgetView,
         FormEditorView) {
@@ -158,7 +158,7 @@ function(WidgetCollection,
       }
 
       if(this.model.get('container_info').has('row')) {
-        new ListQueryView(this.model,
+        new ListEditorView(this.model,
                           this.model.get('container_info').get('query'),
                           this.model.get('container_info').get('row'));
       }

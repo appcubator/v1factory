@@ -38,9 +38,9 @@ function(ElementCollection,
 
       this.userModel = g_userModel;
 
-      g_entityCollection.bind('add', this.appendEntity, this);
-      g_contextCollection.bind('add',  this.appendContextEntity, this);
-      this.elementsCollection.bind('add',  this.appendElement, this);
+      g_entityCollection.bind('add',     this.appendEntity, this);
+      g_contextCollection.bind('add',    this.appendContextEntity, this);
+      this.elementsCollection.bind('add',this.appendElement, this);
 
       this.render();
     },

@@ -24,6 +24,8 @@ function(ContentModel, LayoutModel, QueryModel) {
     },
 
     select: function() {
+      console.log(this);
+      console.log("SELECTED");
       this.collection.select(this);
       this.set('selected', true);
     },

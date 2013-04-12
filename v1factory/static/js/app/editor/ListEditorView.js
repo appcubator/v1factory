@@ -11,7 +11,7 @@ function( WidgetCollection,
           RowEditorView,
           RowGalleryView ) {
 
-  var ListQueryView = Backbone.ModalView.extend({
+  var ListEditorView = Backbone.ModalView.extend({
     className : 'list-editor-modal',
     width: 920,
     height: 600,
@@ -83,10 +83,10 @@ function( WidgetCollection,
         row       : true
       };
 
-      var contentHTML = _.template(Templates.queryView, {entity: self.entity,
-                                                         query: self.queryModel,
-                                                         row: self.rowModel,
-                                                         c: checks });
+      var contentHTML = _.template(Templates.listQueryView, {entity: self.entity,
+                                                             query: self.queryModel,
+                                                             row: self.rowModel,
+                                                             c: checks });
       queryDiv.innerHTML += contentHTML;
 
       var editorDiv = document.createElement('div');
@@ -97,7 +97,7 @@ function( WidgetCollection,
 
       var rowDiv = document.createElement('div');
       rowDiv.className = 'list-gallery-container';
-      var rowGalleryView = new RowGalleryView(this.rowModel);
+      var rowGalleryView = new RowGalleryView(this.rowModel, this.entity);
       rowDiv.appendChild(rowGalleryView.el);
 
 
@@ -226,5 +226,5 @@ function( WidgetCollection,
     }
   });
 
-  return ListQueryView;
+  return ListEditorView;
 });

@@ -168,8 +168,42 @@ Templates.queryView = [
     '<hr>'
 ].join('\n');
 
+Templates.listQueryView = [
+  '<h1 class="title"><%= entity.get(\'name\') %> List Editor</h1>',
+  '<hr>',
+  '<div class="sect">',
+  '<p id="query-description"><%= c.nLang %></p>',
+  '</div>',
+  '<hr>',
+    '<div class="sect">',
+    '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
+    '<p>Do you want to show the rows that just belong to the logged in user?</p>',
+    '<label><input type="radio" class="belongs-to-user" name="belongsTo" value="true" checked> Yes</label>',
+    '<label><input type="radio" class="belongs-to-user" name="belongsTo" value="false"<%= checked %>> No</label>',
+    '</div>',
+    '<hr>',
+    '<div class="sect">',
+    '<p>How do you want to sort the rows?</p>',
+    '<select class="sort-by">',
+    '<option id="by-date">According to the date created</option>',
+    '<% _.each(entity.get("fields").models, function(field) { %>',
+      '<% var selected = "";  if("by-" + field.get("name") == query.get("sortAccordingTo")) selected = "selected" %>',
+      '<option value="by-<%=field.get("name")%>" <%= selected %>>Alphabetically according to <%= field.get("name") %></option>',
+    '<% }); %>',
+    '</select>',
+    '</div>',
+    '<hr>',
+    '<div class="sect">',
+    '<p>How many rows would you like to show?</p>',
+    '<label><input type="radio" class="nmr-rows" id="all-rows" name="nmrRows" value="All" <%= c.rAll %>> All</label>',
+    '<label><input type="radio" class="nmr-rows" id="first-rows" name="nmrRows" value="First" <%= c.rFirst %>> First <input type="text" id="first-nmr" value="<%= c.rFirstNmr %>"> rows</label>',
+    '<label><input type="radio" class="nmr-rows" id="last-rows" name="nmrRows" value="Last" <%= c.rLast %>> Last <input type="text" id="last-nmr" value="<%= c.rLastNmr %>"> rows</label>',
+    '</div>',
+    '<hr>'
+].join('\n');
+
 Templates.listEditorView = [
-  '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
+  // '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
   '<div class="editor-window">',
   '</div>'
 ].join('\n');
