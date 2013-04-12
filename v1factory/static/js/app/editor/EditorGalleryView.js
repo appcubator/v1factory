@@ -322,15 +322,17 @@ function(ElementCollection,
 
         if(cid === this.userModel.cid) {
           entity = new UserEntityModel(appState.users);
+          content =  '{{CurrentUser.'+field+'}}';
         }
         else {
           entity = this.entitiesCollection.get(cid);
+          content =  '{{page.'+entity.get('name')+'.'+field+'}}';
         }
 
         field          = id.split('-')[1];
 
         widget         = _.extend(widget, uieState['texts'][0]);
-        widget.content =  '{{'+entity.get('name')+'.'+field+'}}';
+        widget.content =  content;
         this.widgetsCollection.push(widget);
       }
       else {

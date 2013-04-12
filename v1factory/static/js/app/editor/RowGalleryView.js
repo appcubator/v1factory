@@ -144,7 +144,7 @@ function(ElementCollection) {
         field          = id.split('-')[1];
 
         widget         = _.extend(widget, uieState['texts'][0]);
-        widget.content =  '{{'+entity.get('name')+'.'+field+'}}';
+        widget.content =  '{{loop.'+entity.get('name')+'.'+field+'}}';
         this.row.get('uielements').push(widget);
       }
       else {
