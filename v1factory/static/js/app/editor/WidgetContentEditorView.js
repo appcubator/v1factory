@@ -172,7 +172,11 @@ function(WidgetClassPickerView) {
 
     changeHref: function(e) {
       var self = this;
-      this.model.get('content_attribs').set('href', e.target.value);
+      var target = e.target.value;
+      if(this.model.get('context')) {
+        target += ('/' + context);
+      }
+      this.model.get('content_attribs').set('href', target);
     },
 
     clear: function() {

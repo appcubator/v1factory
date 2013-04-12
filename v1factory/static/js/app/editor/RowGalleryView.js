@@ -130,6 +130,7 @@ function(ElementCollection) {
       var hash, entityCid, formCid, action;
       var entity, form, field;
 
+      widget.context = this.entity.get('name');
       if (/(single-data)/.exec(className)) {
         id = String(id).replace('entity-','');
         var cid = id.split('-')[0];
