@@ -37,7 +37,7 @@ Templates.Entity = [
               '<div class="hi2 desc">Is Required?</div>',
             '</div>',
             '<ul class="property-list">',
-            '<% _(attribs).each(function(attrib, ind){ console.log(attrib); %>',
+            '<% _(attribs).each(function(attrib, ind){ %>',
               '<div class="column" id="column-<%= attrib.cid %>">',
                   '<div class="hi3 hdr"><%- attrib.get(\'name\') %></div>',
                   '<div class="hi3">',
