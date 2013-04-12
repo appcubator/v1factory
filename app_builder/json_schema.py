@@ -3,10 +3,6 @@
 from copy import deepcopy
 
 
-USER_SETTINGS_SCHEMA = {}
-ENTITY_SCHEMA = {}
-PAGE_SCHEMA = {}
-
 APP_SCHEMA = { "_type": {}, "_mapping": {
   "name": { "_type" : "", "_minlength": 2, "_maxlength": 255 },
   "users": {}, #USER_SETTINGS_SCHEMA,
@@ -17,6 +13,19 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
 # The details
 
 # User settingss
+
+FORM_SCHEMA = { "_type": [], "_each": { "_type" : {}, "_mapping": {
+  "name": { "_type" : "" },
+  "action": { "_type":"" },
+  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
+    "name": { "_type" : "" },
+    "placeholder": { "_type" : "" },
+    "label": { "_type" : "" },
+    "displayType": { "_type" : "" },
+    "type": { "_type" : "" },
+    "options": { "_type" : [], "_each": { "_type" : "" }}
+  }}},
+}}}
 
 USER_SETTINGS_SCHEMA = { "_type": {}, "_mapping": {
   "facebook": { "_type": True },
@@ -31,18 +40,7 @@ USER_SETTINGS_SCHEMA = { "_type": {}, "_mapping": {
       "type": { "_type" : "" }
     }}
   },
-  "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
-    "name": { "_type" : "" },
-    "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-      "name": { "_type" : "" },
-      "placeholder": { "_type" : "" },
-      "label": { "_type" : "" },
-      "displayType": { "_type" : "" },
-      "type": { "_type" : "" },
-      "options": { "_type" : [], "_each": { "_type" : "" }}
-    }}},
-    "action": { "_type":"" }
-  }}}
+  "forms": FORM_SCHEMA
 }}
 
 # Entities
@@ -51,19 +49,6 @@ ENTITY_FIELD_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
   "name": { "_type" : "" },
   "required": { "_type": False },
   "type": { "_type" : "" }
-}}}
-
-FORM_SCHEMA = { "_type": [], "_each": { "_type" : {}, "_mapping": {
-  "name": { "_type" : "" },
-  "action": { "_type":"" },
-  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-    "name": { "_type" : "" },
-    "placeholder": { "_type" : "" },
-    "label": { "_type" : "" },
-    "displayType": { "_type" : "" },
-    "type": { "_type" : "" },
-    "options": { "_type" : [], "_each": { "_type" : "" }}
-  }}},
 }}}
 
 ENTITY_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
@@ -106,7 +91,7 @@ ITERATOR_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
   "uielements": NODE_SCHEMA # gets filled in by a self reference
 }}
 
-UIELEMENT_SCHEMA['container_info'] = { "_one_of": [FORM_INFO_SCHEMA, ITERATOR_INFO_SCHEMA, { "_null": True }] }
+UIELEMENT_SCHEMA['container_info'] = { "_one_of": [FORM_INFO_SCHEMA, ITERATOR_INFO_SCHEMA, { "_null": True, "_type": None}] }
 
 
 
@@ -121,7 +106,6 @@ PAGE_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
   "access_level": { "_type" : "" }
 }}}
 
-APP_SCHEMA['users'] = USER_SETTINGS_SCHEMA
-APP_SCHEMA['entities'] = ENTITY_SCHEMA
-APP_SCHEMA['pages'] = PAGE_SCHEMA
-
+APP_SCHEMA['_mapping']['users'] = USER_SETTINGS_SCHEMA
+APP_SCHEMA['_mapping']['entities'] = ENTITY_SCHEMA
+APP_SCHEMA['_mapping']['pages'] = PAGE_SCHEMA

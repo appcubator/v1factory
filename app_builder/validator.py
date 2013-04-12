@@ -10,10 +10,24 @@ def validate(thing, schema):
     except Exception: raise Exception("thing was null but wasn't supposed to be.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
     else: return errors
 
+  if '_one_of' in schema:
+    for validation_schema in schema['_one_of']:
+      # try all the schemas until one works. if none work, throw an error and quit.
+      print "i'm in one_of"
+      new_errs = validate(thing, validation_schema)
+      if len(new_errors) == 0:
+        return errors # no point in extending new_errors since it's blank
+    # if you get to this point, none of the "one of" things were valid.
+    errors.append("None of the _one_of things matched.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
+    return errors
+  assert '_one_of' not in schema
+
   # make sure the type of the thing matches with the schema
   try:
     assert('_type' in schema)
   except Exception:
+    from pdb import set_trace
+    set_trace()
     raise Exception('schema structure doesn\'t begin with _type')
 
   if type(thing) == type(u""):
@@ -41,6 +55,8 @@ def validate(thing, schema):
       except Exception:
         errors.append('found a key in the schema which is not part of thing. "{}", {}'.format(key, thing))
       else:
+        if type(schema['_mapping'][key]) == type({}) and len(schema['_mapping'][key].keys()) == 0:
+          import pdb; pdb.set_trace()
         errors.extend(validate(thing[key], schema['_mapping'][key]))
 
   elif type(thing) == type("") or type(thing) == type(u""):
