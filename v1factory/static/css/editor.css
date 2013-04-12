@@ -700,7 +700,7 @@ body {
   box-shadow: 0 0 4px 0 rgba(60, 60, 60, 0.4);
 }
 
-.page {
+.page.full {
   position: relative;
   display: block;
   width: 1160px;

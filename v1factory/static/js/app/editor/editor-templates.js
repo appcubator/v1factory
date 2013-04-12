@@ -226,8 +226,9 @@ Templates.tempUIElement = [
 
 
 Templates.tempUIElementSized = [
+  '<div class="span<%=element.get(\'layout\').get(\'width\')%> hi<%=element.get(\'layout\').get(\'height\')%> ">',
   '<<%= element.get(\'tagName\') %>',
-  'class = "span<%=element.get(\'layout\').get(\'width\')%> hi<%=element.get(\'layout\').get(\'height\')%> <%= element.get(\'class_name\') %>"',
+  'class = "<%= element.get(\'class_name\') %>"',
   '<% if(element.get(\'cons_attribs\')) { %>',
   '<% _(element.get(\'cons_attribs\').attributes).each(function(val, key) { %>',
   '<%=key%> = "<%=val%>"<% }); %>',
@@ -237,7 +238,8 @@ Templates.tempUIElementSized = [
   '<% if(!element.get(\'isSingle\')) { %>',
   '<%= element.get(\'content\') %>',
   '</<%= element.get(\'tagName\') %>>',
-  '<% }; %>'
+  '<% }; %>',
+  '</div>'
 ].join('\n');
 
 Templates.rowNode = [

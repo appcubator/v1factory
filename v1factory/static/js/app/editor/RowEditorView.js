@@ -7,7 +7,7 @@ function(WidgetView, WidgetEditorView) {
 
   var RowEditorView = Backbone.View.extend({
     el     : null,
-    className : 'row-editor-view',
+    className : 'row-editor-view page',
     events : {
       'keydown' : 'keydown'
     },
