@@ -13,17 +13,17 @@
 
 <div class="row hoff4">
   <div class="container">
-    <div class="offset12">
+    <div class="offset18">
       <div class="hi91">
-        <h2 class="hoff5">Sign Up</h2>
+        <h2 class="hoff2">Sign Up</h2>
       </div>
     </div>
   </div>
 </div>
 <div class="container">
-  <div class="row meta">
-    <form method="POST" class="span46 offset12" action="{% url v1factory.base_views.signup %}">
-      <div class="row">
+  <div class="row sign-up-container">
+    <img class="span12" src="{{ STATIC_URL}}img/mascot.png" width="180">
+    <form method="POST" class="span46 offset6" action="{% url v1factory.base_views.signup %}">
         <div class="row hoff1">
           <h4>Username</h4>
           <input class="span10" name="username" type="text">
@@ -35,19 +35,23 @@
             <input class="span10" name="password1" type="password"><br>
             <div class="form-error field-name-password1"></div>
           </div>
+        </div>
+      <div class="row hoff1">
           <div class="span13">
             <h4>Confirm Password</h4>
             <input class="span10" name="password2" type="password"><br>
             <div class="form-error field-name-password2"></div>
           </div>
-        </div>
       </div>
+      
       <div class="row hoff1">
         <div class="span13">
           <h4>First Name</h4>
           <input class="span10" name="first_name" type="text"><br>
           <div class="form-error field-name-first_name"></div>
         </div>
+      </div>
+      <div class="row hoff1">
         <div class="span13">
           <h4>Last Name</h4>
           <input class="span10" name="last_name" type="text"><br>
@@ -66,6 +70,7 @@
         <div class="form-error field-name-betasecret"></div>
       </div>
       {% csrf_token %}
+      <input type="checkbox" name="tos" id="tos"><label for="tos">I have read the <a href="/termsofservice/">Terms of Service</a> and agree.</label>
       <input class="span16 hoff1 btn btn-blue" type="submit" value="Join the Private Beta">
     </form>
   </div>

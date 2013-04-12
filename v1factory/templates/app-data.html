@@ -1,0 +1,21 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
+{% endblock %}
+
+{% block topbar %}
+<div class="row">
+  <div class="offset2 toppanel hi2">
+  <h1 class="name"><a href="{% url v1factory.views.app_list %}">Heap Engine</a> | {{ title }}</h1>
+  </div>
+</div>
+{% endblock %}
+
+{% block page %}
+<div class="container" id="entities-page">
+  
+{% endblock %}
+
+{% block js %}
+{% endblock %}
