@@ -6606,11 +6606,23 @@ hr.vert {
 
   .footer hr {
     display: block;
-    vertical-align: bottom;
     height: 10px;
     background-color: #0f2d40;
     margin:0;
     border: none;
+  }
+
+  .footer .links {
+    background-color: #0f2d40;  
+  }
+
+  .footer .links a {
+    color:#fff;
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 8px;
+    padding-top: 8px;
+    cursor: pointer;
   }
 
   .modal {
@@ -6753,7 +6765,7 @@ hr.vert {
   }
 
   .green {
-    color: #00bb00;
+    color: #00aa00;
   }
 
   .deploy {
@@ -6892,4 +6904,9 @@ hr.vert {
 }
 .sign-up-container h4 { 
   margin:0;
+}
+
+#habla_window_div #habla_topbar_div {
+  overflow: hidden;
+  background-color: #0f2d40 !important;
 }
