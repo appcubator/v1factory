@@ -1,11 +1,10 @@
 define([
-  'backbone',
-  'mixins/BackboneModal',
   'app/models/FormFieldModel',
   'app/templates/FormEditorTemplates',
+  'mixins/BackboneModal',
   'jquery-ui'
 ],
-function(Backbone, FormFieldModel) {
+function(FormFieldModel) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',

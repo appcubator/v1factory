@@ -41,6 +41,7 @@ urlpatterns += patterns('v1factory.views',
 
     # getting/setting uie state
     url(r'^app/(\d+)/uiestate/$', 'uie_state'),
+    url(r'^app/(\d+)/uiestate.less$', 'less_sheet'),
 
     # deploy
     url(r'^app/(\d+)/deploy/$', 'app_deploy'),

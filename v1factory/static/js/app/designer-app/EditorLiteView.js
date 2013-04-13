@@ -11,8 +11,7 @@ define([
   'editor/WidgetEditorView',
   'editor/DesignEditorView',
   'app/designer-app/EditorLiteGalleryView',
-  'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            EntityCollection,
@@ -25,9 +24,7 @@ define([
            WidgetClassPickerView,
            WidgetEditorView,
            DesignEditorView,
-           EditorLiteGalleryView,
-           Backbone,
-           BackboneUI) {
+           EditorLiteGalleryView) {
 
   var EditorLiteView = Backbone.View.extend({
     el        : document.body,

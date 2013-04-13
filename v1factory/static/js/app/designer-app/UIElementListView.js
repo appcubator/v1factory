@@ -1,12 +1,11 @@
 define([
   'app/designer-app/UIElementView',
   'app/models/UIElementModel',
-  'backboneui',
   'iui',
   'app/designer-app/base-tags',
   '../templates/ThemeTemplates'
 ],
-function(UIElementView, UIElementModel, BackboneUI) {
+function(UIElementView, UIElementModel) {
 
   var UIElementListView = Backbone.View.extend({
     className: 'list',

@@ -42,6 +42,10 @@
   box-shadow: 0 0 8px 2px rgba(60, 60, 60, 0.6);
 }
 
+.right-panel {
+  font-family: "proxima-nova", Arial, sans-serif !important;
+}
+
 .section ul {
   width: 100%;
   padding: 0;
@@ -179,7 +183,7 @@
 
 #full-container {
   position: absolute;
-  top: 60px;
+  top: 0;
   width: 100%;
   height: 100%;
   left: 0;
@@ -187,7 +191,7 @@
 
 #body-container {
   position: absolute;
-  top: 60px;
+  top: 0;
   left: 50%;
   margin-left: -470px;
   z-index: -2;
@@ -195,10 +199,11 @@
 
 #elements-container {
   position: relative;
-  top: 60px;
+  top: 0;
   min-height: 900px;
   width: 960px;
   margin-left: 100px;
+  height: 2000px;
 }
 
 .right-panel {
@@ -711,6 +716,8 @@ body {
   border-top: 1px solid #666;
   border-bottom: 1px solid #666;
   border-color: rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.45);
+  overflow-y: scroll;
+  overflow-x: visible;
 /*  border: 1px solid #aaa;
 *//*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
 */}
@@ -1116,7 +1123,9 @@ li.model span.title {
 }
 
 .help {
-  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
   background-image: url('../img/help_b.png');
 }
 
@@ -1136,6 +1145,7 @@ li.model span.title {
   background-repeat: no-repeat;
   background-size: 16px auto;
   background-position: 10px 12px;
+  margin: 0;
 }
 
 .pages ul li {
@@ -1257,7 +1267,12 @@ ul.list {
 .top-panel-title {
   height: 40px;
   border-bottom: 1px solid #1b2535;
-  border-top: 1px solid #3b4555; 
+  border-top: 1px solid #3b4555;
+  vertical-align: top;
+}
+
+.top-panel-title span.hide-gallery {
+  padding: 10px;
 }
 
 .top-panel-title .right-arrow {
@@ -1278,6 +1293,8 @@ ul.list {
   padding-top: 8px;
   padding-left: 8px;
   border-left: 1px solid #3b4555;
+  color: #fff;
+  margin: 0;
 }
 
 .down-arrow {
@@ -1751,6 +1768,13 @@ h3.edit-url {
   text-align: center;
 }
 
+.editor-pane .alignment-picker {
+  margin: 0;
+}
+
+.editor-pane ul {
+  margin: 0;
+}
 
 
 

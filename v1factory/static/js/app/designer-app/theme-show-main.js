@@ -4,10 +4,12 @@ require.config({
     "jquery-ui" : "../../libs/jquery-ui/jquery-ui",
     "underscore" : "../../libs/underscore-amd/underscore",
     "backbone" : "../../libs/backbone-amd/backbone",
-    "backboneui" : "../../backbone/BackboneUI",
     "iui" : "../../libs/iui/iui",
     "bootstrap" : "../../libs/bootstrap/bootstrap",
-    "app" : "../"
+    "app" : "../",
+    "editor" : "../editor",
+    "dicts" : "../../dicts",
+    "mixins" : "../../mixins"
   },
 
   shim: {

@@ -338,6 +338,8 @@ function(ElementCollection,
       else {
         var type;
         type        = className.replace(' ui-draggable','');
+        console.log(type);
+        console.log(uieState);
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
         this.widgetsCollection.push(widget);

@@ -32,7 +32,7 @@ function() {
         url: '/app/'+appId+'/uiestate/',
         data: JSON.stringify(uieState),
         success: function(data) {
-          alert('Matrix re-loaded');
+          $(self.el).append('Loaded.');
         }
       });
     }

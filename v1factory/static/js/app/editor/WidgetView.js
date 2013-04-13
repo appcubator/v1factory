@@ -81,7 +81,7 @@ define([
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
       this.el.innerHTML = this.renderElement();
-      this.el.firstChild.style.lineHeight = '1em';
+      //this.el.firstChild.style.lineHeight = '1em';
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
       if(this.model.isFullWidth()) this.switchOnFullWidth();
