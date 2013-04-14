@@ -1,0 +1,1 @@
+define(["app/views/SimpleModalView","bootstrap"],function(e){var t=function(){console.log("SHOW MAIN"),$("#deploy").on("click",function(){iui.startAjaxLoading(),$.ajax({type:"POST",url:"/app/"+appId+"/deploy/",complete:function(t){iui.stopAjaxLoading(),new e({text:'Your app is available at <a href="'+t.responseText+'">'+t.responseText+"</a>"})},dataType:"JSON"})})};return t});

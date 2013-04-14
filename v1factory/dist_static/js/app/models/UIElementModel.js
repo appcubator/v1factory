@@ -1,0 +1,1 @@
+define(["backbone"],function(){var e=Backbone.Model.extend({initialize:function(e){this.set("style",e.style||""),this.set("hoverStyle",e.hoverStyle||""),this.set("activeStyle",e.activeStyle||"")}});return e});

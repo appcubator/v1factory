@@ -142,5 +142,6 @@
 var appState = {{ app.state_json|safe }};
 var appId = {{ app_id|safe }};
 </script>
-<script data-main="{{ STATIC_URL }}js/app/pages/entities-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/entities-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
+
 {% endblock %}

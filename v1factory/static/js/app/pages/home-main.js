@@ -1,42 +1,11 @@
-require.config({
-  paths: {
-    "jquery" : "../../libs/jquery/jquery",
-    "jquery-ui" : "../../libs/jquery-ui/jquery-ui",
-    "underscore" : "../../libs/underscore-amd/underscore",
-    "backbone" : "../../libs/backbone-amd/backbone",
-    "iui" : "../../libs/iui/iui",
-    "bootstrap" : "../../libs/bootstrap/bootstrap",
-    "app" : "../",
-    "editor" : "../editor",
-    "dicts" : "../../dicts",
-    "mixins" : "../../mixins"
-  },
-
-  shim: {
-    "jquery-ui": {
-      exports: "$",
-      deps: ['jquery']
-    },
-    "underscore": {
-      exports: "_"
-    },
-    "backbone": {
-      exports: "Backbone",
-      deps: ["underscore", "jquery"]
-    },
-    "bootstrap" : {
-      deps: ["jquery"]
-    }
-  }
-
-});
-
-require(['app/views/SimpleModalView',
-         'app/views/LoginModalView',
-         "bootstrap"],
+define([
+  'app/views/SimpleModalView',
+  'app/views/LoginModalView'
+],
 function(SimpleModalView, LoginModalView) {
 
-  IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
+  var HomeMain = function() {
+    IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
 
     function onLinkedInLogin() {
       IN.API.Profile("me")
@@ -53,12 +22,15 @@ function(SimpleModalView, LoginModalView) {
         });
     }
 
-  $('.IN-widget').hide();
-  $('#request').on('click', function() {
-    $('.IN-widget').children().first().children().first().trigger('click');
-  });
+    $('.IN-widget').hide();
+    $('#request').on('click', function() {
+      $('.IN-widget').children().first().children().first().trigger('click');
+    });
 
-  $('#login-btn').on('click', function() {
-    new LoginModalView();
-  });
+    $('#login-btn').on('click', function() {
+      new LoginModalView();
+    });
+  };
+
+  return HomeMain;
 });

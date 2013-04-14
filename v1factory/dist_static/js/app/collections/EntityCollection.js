@@ -1,0 +1,1 @@
+define(["backbone","app/models/EntityModel"],function(e,t){var n=e.Collection.extend({model:t,getEntityWithName:function(e){var t=this.where({name:e})[0];return t}});return n});
