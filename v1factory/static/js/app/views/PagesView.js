@@ -2,7 +2,8 @@ define([
   'app/models/PageModel',
   'app/collections/UrlsCollection',
   'app/views/UrlView',
-  'app/views/PageView'
+  'app/views/PageView',
+  'mixins/BackboneNameBox'
 ],
 function(PageModel, UrlsCollection, UrlView, PageView) {
 
@@ -12,15 +13,10 @@ function(PageModel, UrlsCollection, UrlView, PageView) {
 
   var PagesView = Backbone.View.extend({
     el: document.body,
-    events: {
-      'click .create-page' : 'createPage',
-      'submit .create-form' : 'createFormSubmitted'
-    },
 
     initialize: function() {
       _.bindAll(this, 'render',
                       'createPage',
-                      'createFormSubmitted',
                       'appendPage',
                       'savePages');
 
@@ -37,27 +33,15 @@ function(PageModel, UrlsCollection, UrlView, PageView) {
 
     render: function() {
       this.listView = document.getElementById('list-pages');
+      var createBox = new Backbone.NameBox({el: document.getElementById('create-page-box')});
+      createBox.on('submit', this.createPage);
     },
 
-    createPage: function (e) {
-      this.$el.find('.create-page').hide();
-      this.$el.find('.create-form').fadeIn();
-      this.$el.find('.page-name').focus();
-    },
-
-    createFormSubmitted: function(e) {
-      e.preventDefault();
-      var name = this.$el.find('.page-name').val();
-      if(name.length > 0) {
-        this.$el.find('.page-name').val('');
-        this.$el.find('.create-form').hide();
-        this.$el.find('.create-page').fadeIn();
-        //this.urlsCollection.add({ urlparts: [], page_name: name});
+    createPage: function(name, b) {
         var pageUrl = { urlparts : [] };
         pageUrl.urlparts[0] = "page" + this.collection.models.length;
         this.collection.add({ name: name, url: pageUrl});
-      }
-      this.savePages();
+        this.savePages();
     },
 
     appendPage: function(model) {

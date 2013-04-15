@@ -19,6 +19,7 @@ function(ContentModel, LayoutModel, QueryModel) {
 
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
+      this.set('selected', false);
 
       _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
     },

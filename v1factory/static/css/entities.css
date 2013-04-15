@@ -385,3 +385,7 @@ table tr:hover td {
   padding-left: 20px;
   border-bottom:1px solid #ccc;
 }
+
+.description {
+  display: inline-block;
+}

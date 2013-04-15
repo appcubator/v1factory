@@ -1,7 +1,6 @@
 define([
   'backbone',
-  'iui',
-  'libs/jscolor/jscolor'
+  'iui'
 ],
 function(Backbone, iui) {
 

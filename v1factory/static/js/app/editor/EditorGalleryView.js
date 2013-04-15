@@ -38,9 +38,9 @@ function(ElementCollection,
 
       this.userModel = g_userModel;
 
-      g_entityCollection.bind('add', this.appendEntity, this);
-      g_contextCollection.bind('add',  this.appendContextEntity, this);
-      this.elementsCollection.bind('add',  this.appendElement, this);
+      g_entityCollection.bind('add',     this.appendEntity, this);
+      g_contextCollection.bind('add',    this.appendContextEntity, this);
+      this.elementsCollection.bind('add',this.appendElement, this);
 
       this.render();
     },
@@ -322,20 +322,24 @@ function(ElementCollection,
 
         if(cid === this.userModel.cid) {
           entity = new UserEntityModel(appState.users);
+          content =  '{{CurrentUser.'+field+'}}';
         }
         else {
           entity = this.entitiesCollection.get(cid);
+          content =  '{{page.'+entity.get('name')+'.'+field+'}}';
         }
 
         field          = id.split('-')[1];
 
         widget         = _.extend(widget, uieState['texts'][0]);
-        widget.content =  '{{'+entity.get('name')+'.'+field+'}}';
+        widget.content =  content;
         this.widgetsCollection.push(widget);
       }
       else {
         var type;
         type        = className.replace(' ui-draggable','');
+        console.log(type);
+        console.log(uieState);
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
         this.widgetsCollection.push(widget);

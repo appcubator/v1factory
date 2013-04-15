@@ -27,6 +27,18 @@ label {
 
 .left-bar {
   border-right: 1px solid #ccc;
+  height: 100%;
+}
+
+.right-bar, .content-editor, .base-css {
+  height: 800px;
+}
+
+.ace_gutter, .ace_scroller {
+  padding-top: 10px;
+}
+
+.base-css {
 }
 
 .uie-gallery li {

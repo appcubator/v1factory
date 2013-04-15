@@ -1,0 +1,1 @@
+define(["app/collections/WidgetCollection","editor/TableQueryView","editor/WidgetView","backbone","editor/editor-templates"],function(e,t,n){var r=n.extend({el:null,className:"container-create",tagName:"div",entity:null,type:null,events:{click:"select"},initialize:function(e){r.__super__.initialize.call(this,e)},select:function(){}});return r});

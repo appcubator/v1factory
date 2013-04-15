@@ -1,0 +1,1 @@
+define(["app/models/UrlModel","backbone"],function(e,t){var n=t.Collection.extend({model:e});return n});

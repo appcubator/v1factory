@@ -1,7 +1,7 @@
 define([
   'app/collections/WidgetCollection',
   'editor/TableQueryView',
-  'editor/ListQueryView',
+  'editor/ListEditorView',
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
@@ -9,7 +9,7 @@ define([
 ],
 function(WidgetCollection,
         TableQueryView,
-        ListQueryView,
+        ListEditorView,
         WidgetView,
         SubWidgetView,
         FormEditorView) {
@@ -97,7 +97,9 @@ function(WidgetCollection,
       if(this.model.get('container_info').get('action') == "show") {
         var listDiv = document.createElement('div');
         var row = this.model.get('container_info').get('row');
-        listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'), uielements: row.get('uielements').models});
+        listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'),
+                                                            uielements: row.get('uielements').models,
+                                                            isListOrGrid: row.get('isListOrGrid')});
         this.el.appendChild(listDiv);
         // tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
         // this.el.appendChild(tableDiv);
@@ -156,7 +158,7 @@ function(WidgetCollection,
       }
 
       if(this.model.get('container_info').has('row')) {
-        new ListQueryView(this.model,
+        new ListEditorView(this.model,
                           this.model.get('container_info').get('query'),
                           this.model.get('container_info').get('row'));
       }

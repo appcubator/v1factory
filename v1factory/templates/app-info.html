@@ -1,8 +1,6 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
 {% endblock %}
 
 {% block topbar %}
@@ -43,5 +41,6 @@
 var appId = {{ app_id }};
 var appState = {{ app.state_json|safe }};
 </script>
-<script data-main="{{ STATIC_URL }}js/app/pages/info-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/info-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
+
 {% endblock %}

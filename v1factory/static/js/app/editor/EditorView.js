@@ -47,6 +47,8 @@ define([
 
     initialize: function() {
       _.bindAll(this, 'render',
+                      'copy',
+                      'paste',
                       'renderUrlBar',
                       'save',
                       'deployLocal',
@@ -94,6 +96,8 @@ define([
       /* Bindings */
       window.addEventListener('keydown', this.keydown);
       key('⌘+s, ctrl+s', this.save);
+      key('⌘+c, ctrl+c', this.copy);
+      key('⌘+v, ctrl+v', this.paste);
       key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
 
       $('#loading-gif').fadeOut().remove();
@@ -141,6 +145,16 @@ define([
 
 
       return false;
+    },
+
+    copy: function(e) {
+      if(this.widgetsManager.copy()) { }
+    },
+
+    paste: function(e) {
+      if(this.widgetsManager.paste()){
+        e.stopPropagation();
+      }
     },
 
     amendAppState : function() {
@@ -203,31 +217,31 @@ define([
 
     style: function() {
 
-      var basecss = uieState.basecss;
-      basecss = basecss.replace('body {', '.page {');
-      basecss = basecss.replace('body{', '.page {');
-      var styleTag = document.createElement('style');
-      styleTag.id = "basecss";
-      styleTag.innerHTML = basecss;
-      document.getElementsByTagName('head')[0].appendChild(styleTag);
+      // var basecss = uieState.basecss;
+      // basecss = basecss.replace('body {', '.page {');
+      // basecss = basecss.replace('body{', '.page {');
+      // var styleTag = document.createElement('style');
+      // styleTag.id = "basecss";
+      // styleTag.innerHTML = basecss;
+      // document.getElementsByTagName('head')[0].appendChild(styleTag);
 
-      _(uieState).each(function(type, key) {
-        if(key == "basecss") return;
+      // _(uieState).each(function(type, key) {
+      //   if(key == "basecss") return;
 
-        _(type).each(function(elem) {
-          if(elem.attribs) return;
+      //   _(type).each(function(elem) {
+      //     if(elem.attribs) return;
 
-          var styleTag = document.createElement('style');
-          var styleContent = '.page '+elem.tagName + '.' + elem.class_name + '{';
-          styleContent += elem.style;
-          styleContent += '}';
+      //     var styleTag = document.createElement('style');
+      //     var styleContent = '.page '+elem.tagName + '.' + elem.class_name + '{';
+      //     styleContent += elem.style;
+      //     styleContent += '}';
 
-          styleTag.innerHTML = styleContent;
-          this.styleTag = styleTag;
+      //     styleTag.innerHTML = styleContent;
+      //     this.styleTag = styleTag;
 
-          document.getElementsByTagName('head')[0].appendChild(styleTag);
-        });
-      });
+      //     document.getElementsByTagName('head')[0].appendChild(styleTag);
+      //   });
+      // });
     },
 
     hideSettings: function() {
