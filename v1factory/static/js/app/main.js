@@ -1,5 +1,3 @@
-console.log("NO YOLO");
-
 require.config({
   paths: {
     "jquery" : "../libs/jquery/jquery",
@@ -37,7 +35,8 @@ require.config({
 //libs
 require([
   "backbone",     //require plugins
-  "bootstrap"
+  "bootstrap",
+  "iui"
 ],
 function () {
   var $ = require("jquery"),
@@ -47,7 +46,6 @@ function () {
 
     if (startModuleName) {
       require([startModuleName], function (startModule) {
-        console.log(startModule);
         $(function(){
           var fn = $.isFunction(startModule) ? startModule : startModule.init;
           if (fn) { fn(); }

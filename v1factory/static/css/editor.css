@@ -1415,9 +1415,10 @@ ul.list {
   margin-left: 3%;
 }
 
-.content-editor textarea, .content-editor select {
+.content-editor textarea, .content-editor select, .content-editor textarea#prop-content {
   width: 94%;
   margin-left: 3%;
+  font-size: 14px;
 }
 
 .content-editor li {
@@ -1770,12 +1771,23 @@ h3.edit-url {
 
 .editor-pane .alignment-picker {
   margin: 0;
+  padding: 0;
+}
+
+.editor-pane select.font-picker {
+  padding: 0;
+  height: 32px;
+  margin-left: 8px;
 }
 
 .editor-pane ul {
-  margin: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
+#editor-page > * {
+ font-size: 14px;
+}
 
 
 

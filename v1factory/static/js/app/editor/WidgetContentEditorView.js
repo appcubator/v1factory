@@ -90,7 +90,7 @@ function(WidgetClassPickerView) {
       sizeDiv.className = 'size-picker';
       var hash     = 'content_attribs' + '-' + 'style';
       html         = '<select id="'+ hash +'" class="font-picker">' +
-                        '<option value="font-size:'+ currentFont +';">'+ currentFont +'</option>'+
+                        '<option value="font-size:default;">'+ 'Default' +'</option>'+
                         '<option value="font-size:10px;">'+ '10px' +'</option>'+
                         '<option value="font-size:12px;">'+ '12px' +'</option>'+
                         '<option value="font-size:14px;">'+ '14px' +'</option>'+
@@ -115,6 +115,7 @@ function(WidgetClassPickerView) {
       li.appendChild(sizeDiv);
       li.appendChild(optionsDiv);
 
+      $(sizeDiv).find('option[value="font-size:'+currentFont+';"]').prop('selected', true);
       return li;
     },
 

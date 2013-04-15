@@ -125,3 +125,7 @@ h4 {
 .add-on {
   min-height: 32px;
 }
+
+.form-editor .full.title {
+  padding-top: 6px;
+}
