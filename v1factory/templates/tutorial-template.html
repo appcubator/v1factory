@@ -1,0 +1,116 @@
+{% extends "infra-html.html" %}
+
+{% block css %}
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+      api_key: t0q97cjtk5kf
+      scope: r_basicprofile r_emailaddress
+    </script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/home.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
+<!--     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+ -->
+<!--  <link rel="stylesheet" href="https://raw.github.com/woothemes/FlexSlider/master/flexslider.css" type="text/css">
+ -->
+    <style>
+      .flexslider {
+        display: block;
+        position: absolute;
+        margin-top: 0px;
+        width: 100%;
+        height: 100%;
+      }
+
+      .flexslider .slides {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        padding-bottom: 120px;
+        padding-top: 70px;
+      }
+
+      .flexslider .slides img {
+        height: 90%;
+      }
+
+      .flex-control-nav.flex-control-paging {
+        position: fixed;
+        bottom: 0;
+        height: 120px;
+        width: 100%;
+        background-image: -webkit-linear-gradient(#f3f3f3,#efefef);
+        box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.3);
+        text-align: center;
+        padding-top: 40px;
+      }
+
+      .flex-control-nav.flex-control-paging li {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        background-color: #333;
+        margin-left: 6px;
+        margin-right: 6px;
+        cursor: pointer;
+      }
+
+      .footer {
+        position: fixed;
+      }
+    </style>
+{% endblock %}
+{% block topbar %}
+{% include "infra-topbar-out.html" %}
+{% endblock %}
+{% block page %}
+<div class="">
+
+  <div class="flexslider">
+    <ul class="slides">
+      <li>
+        <img src="{{STATIC_URL}}img/theme1.png" />
+      </li>
+      <li>
+        <img src="{{STATIC_URL}}img/theme2.png" />
+      </li>
+      <li>
+        <img src="{{STATIC_URL}}img/theme3.png" />
+      </li>
+    </ul>
+  </div>
+
+</div>
+<script type="html/template" id="login-form-template">
+<div class="login pad1">
+  <div>
+    <span class="pad1"><strong>User Login</strong></span>
+  </div>
+  <div class="span20">
+    <span class="login span24">
+      {% if form.errors %}
+      <p>Your username and password didn't match. Please try again.</p>
+      {% endif %}
+      <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
+        {% csrf_token %}
+        <input id="id_username" type="text" class="username" name="username" placeholder="Username..." maxlength="30">
+        <input type="password" name="password" placeholder="Password..." id="id_password"><br>
+        <input class="btn" type="submit" value="Login"/><i class="small"> (forgot password?)</i>
+        <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
+      </form>
+    </span>
+  </div>
+</div>
+</script>
+{% endblock %}
+
+{% block js %}
+<script src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
+<script src="https://raw.github.com/woothemes/FlexSlider/master/jquery.flexslider-min.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(window).load(function() {
+    $('.flexslider').flexslider();
+  });
+</script>
+{% endblock %}
