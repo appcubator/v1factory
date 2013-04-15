@@ -29,7 +29,7 @@
       }
 
       .flexslider .slides img {
-        height: 90%;
+        height: 100%;
       }
 
       .flex-control-nav.flex-control-paging {
@@ -46,14 +46,44 @@
 
       .flex-control-nav.flex-control-paging li {
         display: inline-block;
+        color: transparent;
+      }
+      .flex-control-nav.flex-control-paging a {
+        display: inline-block;
         width: 10px;
         height: 10px;
         border-radius: 5px;
         overflow: hidden;
-        background-color: #333;
+        background-color: #ccc;
         margin-left: 6px;
         margin-right: 6px;
         cursor: pointer;
+      }
+
+      .flex-control-nav.flex-control-paging a.flex-active {
+        background-color: #0f2d40;
+      }
+
+      .flex-direction-nav {
+        position: fixed;
+        top: 46%;
+        width: 100%;
+      }
+
+      .flex-direction-nav li { 
+        display: inline-block;
+        background-image: url("{{ STATIC_URL }}/img/flexi-nav.png");
+        height: 27px;
+        width: 27px;
+        background-size: auto 100%;
+        color: transparent;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
+
+      .flex-direction-nav li:last-child {
+        background-position: right center;
+        float: right;
       }
 
       .footer {
@@ -70,13 +100,13 @@
   <div class="flexslider">
     <ul class="slides">
       <li>
-        <img src="{{STATIC_URL}}img/theme1.png" />
+        <img src="{{STATIC_URL}}img/tutorial/tut1.png" />
       </li>
       <li>
-        <img src="{{STATIC_URL}}img/theme2.png" />
+        <img src="{{STATIC_URL}}img/tutorial/tut2.png" />
       </li>
       <li>
-        <img src="{{STATIC_URL}}img/theme3.png" />
+        <img src="{{STATIC_URL}}img/tutorial/tut3.png" />
       </li>
     </ul>
   </div>
