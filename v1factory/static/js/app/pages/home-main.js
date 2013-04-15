@@ -1,44 +1,11 @@
-require.config({
-  paths: {
-    "jquery" : "../libs/jquery/jquery",
-    "jquery-ui" : "../libs/jquery-ui/jquery-ui",
-    "underscore" : "../libs/underscore-amd/underscore",
-    "backbone" : "../libs/backbone-amd/backbone",
-    "backboneui" : "../backbone/BackboneUI",
-    "iui" : "../libs/iui/iui",
-    "bootstrap" : "../libs/bootstrap/bootstrap",
-    "app" : "./",
-    "editor" : "../editor",
-    "dicts" : "../dicts"
-  },
+define([
+  'app/views/SimpleModalView',
+  'app/views/LoginModalView'
+],
+function(SimpleModalView, LoginModalView) {
 
-  shim: {
-    "jquery-ui": {
-      exports: "$",
-      deps: ['jquery']
-    },
-    "underscore": {
-      exports: "_"
-    },
-    "backbone": {
-      exports: "Backbone",
-      deps: ["underscore", "jquery"]
-    },
-    "bootstrap" : {
-      deps: ["jquery"]
-    }
-  }
-
-});
-
-require(["backbone",
-         'backboneui',
-         'app/views/SimpleModalView',
-         'app/views/LoginModalView',
-         "bootstrap"],
-function(Backbone, BackboneUI, SimpleModalView, LoginModalView) {
-
-  IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
+  var HomeMain = function() {
+    IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
 
     function onLinkedInLogin() {
       IN.API.Profile("me")
@@ -55,12 +22,15 @@ function(Backbone, BackboneUI, SimpleModalView, LoginModalView) {
         });
     }
 
-  $('.IN-widget').hide();
-  $('#request').on('click', function() {
-    $('.IN-widget').children().first().children().first().trigger('click');
-  });
+    $('.IN-widget').hide();
+    $('#request').on('click', function() {
+      $('.IN-widget').children().first().children().first().trigger('click');
+    });
 
-  $('#login-btn').on('click', function() {
-    new LoginModalView();
-  });
+    $('#login-btn').on('click', function() {
+      new LoginModalView();
+    });
+  };
+
+  return HomeMain;
 });

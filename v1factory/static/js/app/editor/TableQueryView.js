@@ -60,8 +60,6 @@ define([
         nLang     : self.getNLdescription()
       };
 
-      console.log(checks);
-
       var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks});
       contentHTML += '<input type="submit" class="btn offsetr1 pull-right" value="Done"><div class="hoff1 span10"></div>';
 
@@ -130,12 +128,11 @@ define([
     getNLdescription: function() {
       var self = this;
       var str = "This table shows ";
-      console.log(self);
 
-       if(self.model.get('fieldsToDisplay').length === 0) {
+      if(self.model.get('fieldsToDisplay').length === 0) {
         str += 'no data. Please choose the fields from below.';
         return str;
-       }
+      }
 
       _(self.model.get('fieldsToDisplay')).each(function(field, ind) {
 

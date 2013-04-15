@@ -33,7 +33,10 @@ function(WidgetClassPickerView) {
     changeAlignment: function(e) {
       $('.selected', '.alignment-picker').removeClass('selected');
       var direction = (e.target.className).replace(' a-pick', '');
+      direction = direction.replace(' tt', '');
       direction = direction.replace('a-','');
+
+      console.log(direction);
       this.model.get('layout').set('alignment', direction);
       e.target.className += ' selected';
     },

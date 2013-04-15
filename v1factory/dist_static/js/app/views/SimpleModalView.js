@@ -1,0 +1,1 @@
+define(["backbone","mixins/BackboneModal","iui"],function(e){var t=e.ModalView.extend({tagName:"div",className:"deployed",initialize:function(e){this.render(e.img,e.text)},render:function(e,t){return e&&(this.el.innerHTML+='<img src="/static/img/'+e+'">'),t&&(this.el.innerHTML+="<h3>"+t+"</h3>"),this}});return t});

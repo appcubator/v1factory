@@ -15,7 +15,8 @@ function(WidgetModel,
                       'select',
                       'unselectAll');
 
-      this.model.bind('change:selected', this.selectedChanged);
+      //this.set('selected', null);
+      this.bind('change:selected', this.selectedChanged);
     },
 
     unselectAll: function() {
@@ -36,6 +37,7 @@ function(WidgetModel,
     select : function(model) {
       this.unselectAll();
       this.selectedEl = model;
+      model.set('selected', true);
       this.trigger('selected');
     },
 

@@ -1,7 +1,6 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css"> 
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes.css">
 {% endblock %}
 
@@ -11,7 +10,7 @@
 
 {% block page %}
 <a class="span6 save-btn" id="save"></a>
-<div class="container hoff6 ">
+<div class="container hoff4">
   <div class="span16 left-bar">
   <div class="expandible" id="basecss"><h2>Base CSS</h2></div>
   <h2>Elements</h2>
@@ -55,11 +54,12 @@
     <div class="expandible" id="pages"><h2>Pages</h2></div>
     <div class="expandible" id="statics"><h2>Statics</h2></div>
   </div>
-  <div class="right-bar offset2 span46">
+  <div class="right-bar span46">
     <ul class="content-editor">
       <li id="basecss-cont" class="expanded">
-        <textarea class="base-css span32 hi30" id="base-css">
-        </textarea>
+        <div class="base-css span48" id="base-css">
+
+        </div>
       </li>
       <li id="pages-cont">
         <ul id="pages-list" class="pages-list">
@@ -112,6 +112,9 @@
 </div>
 {% endblock %}
 {% block js %}
+<script src="http://rawgithub.com/ajaxorg/ace-builds/master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+</script>
 <script>
 var themeState = {{ theme|safe }};
 var themeId = {{ themeId }};

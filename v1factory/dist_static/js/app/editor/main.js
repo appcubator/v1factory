@@ -1,0 +1,1 @@
+define(["editor/EditorView"],function(e){var t=function(){window.onerror=function(e){alert("Segfault: "+e)};var t=new e};return t});

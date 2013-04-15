@@ -1,25 +1,29 @@
 define([
   'editor/WidgetView',
   'editor/WidgetContainerView',
+  'app/models/WidgetModel',
   'backbone'
 ],
-function(WidgetView, WidgetContainerView) {
+function(WidgetView, WidgetContainerView, WidgetModel) {
 
   var WidgetEditorView = Backbone.View.extend({
     el : $('.page'),
     widgetsContainer : document.getElementById('elements-container'),
     widgets : [],
     selectedEl: null,
-
+    copiedEl: null,
     events : {
 
     },
 
     initialize: function(widgetsCollection, containersCollection, page) {
       _.bindAll(this, 'render',
+                      'changed',
                       'placeWidget',
                       'placeContainer',
-                      'style');
+                      'style',
+                      'copy',
+                      'paste');
 
       var self = this;
 
@@ -30,7 +34,7 @@ function(WidgetView, WidgetContainerView) {
       this.containersCollection = containersCollection;
       this.containersCollection.bind('add', this.placeContainer);
 
-
+      this.widgetsCollection.bind('change', this.changed);
       this.widgetsCollection.bind('selected', this.containersCollection.unselectAll);
       this.containersCollection.bind('selected', this.widgetsCollection.unselectAll);
 
@@ -88,6 +92,27 @@ function(WidgetView, WidgetContainerView) {
 
         document.getElementsByTagName('head')[0].appendChild(styleTag);
       });
+    },
+
+    changed: function(el) {
+      this.selectedEl = el;
+    },
+
+    copy: function() {
+      if(this.selectedEl) {
+        this.copiedEl = this.selectedEl.toJSON();
+        return true;
+      }
+
+      return false;
+    },
+
+    paste: function() {
+      if(this.copiedEl) {
+        this.copiedEl.layout.left += this.copiedEl.layout.width;
+        var widgetModel = new WidgetModel(this.copiedEl);
+        this.widgetsCollection.push(widgetModel);
+      }
     }
   });
 

@@ -198,14 +198,11 @@ function(ElementCollection,
       var hash, entityCid, formCid, action;
       var entity, form, field;
 
-      console.log(this.widgetsCollection);
-      
-        var type;
-        type        = className.replace(' ui-draggable','');
-        widget      = _.extend(widget, themeState[type][0]);
-        widget.type = type;
-        this.widgetsCollection.push(widget);
-  
+      var type;
+      type        = className.replace(' ui-draggable','');
+      widget      = _.extend(widget, themeState[type][0]);
+      widget.type = type;
+      this.widgetsCollection.push(widget);
     },
 
     determineType: function(className, id, widget) {

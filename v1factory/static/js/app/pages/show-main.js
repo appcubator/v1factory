@@ -1,54 +1,24 @@
-require.config({
-  paths: {
-    "jquery" : "../../libs/jquery/jquery",
-    "jquery-ui" : "../../libs/jquery-ui/jquery-ui",
-    "underscore" : "../../libs/underscore-amd/underscore",
-    "backbone" : "../../libs/backbone-amd/backbone",
-    "iui" : "../../libs/iui/iui",
-    "bootstrap" : "../../libs/bootstrap/bootstrap",
-    "app" : "../",
-    "editor" : "../editor",
-    "dicts" : "../../dicts",
-    "mixins" : "../../mixins"
-  },
-
-  shim: {
-    "jquery-ui": {
-      exports: "$",
-      deps: ['jquery']
-    },
-    "underscore": {
-      exports: "_"
-    },
-    "backbone": {
-      exports: "Backbone",
-      deps: ["underscore", "jquery"]
-    },
-    "bootstrap" : {
-      deps: ["jquery"]
-    }
-  }
-
-});
-
-require([
+define([
   "app/views/SimpleModalView",
   "bootstrap"
 ],
 function(SimpleModalView) {
 
-  $('#deploy').on('click', function() {
-    iui.startAjaxLoading();
-    $.ajax({
-          type: "POST",
-          url: '/app/'+appId+'/deploy/',
-          complete: function(data) {
-            iui.stopAjaxLoading();
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
-          },
-          dataType: "JSON"
+  var ShowPageMain = function() {
+    console.log("SHOW MAIN");
+    $('#deploy').on('click', function() {
+      iui.startAjaxLoading();
+      $.ajax({
+            type: "POST",
+            url: '/app/'+appId+'/deploy/',
+            complete: function(data) {
+              iui.stopAjaxLoading();
+              new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+            },
+            dataType: "JSON"
+      });
     });
-  });
+  };
 
-
+  return ShowPageMain;
 });

@@ -1,11 +1,10 @@
 define([
-  'backbone',
-  'mixins/BackboneModal',
   'app/models/FormFieldModel',
   'app/templates/FormEditorTemplates',
+  'mixins/BackboneModal',
   'jquery-ui'
 ],
-function(Backbone, FormFieldModel) {
+function(FormFieldModel) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
@@ -205,7 +204,6 @@ function(Backbone, FormFieldModel) {
     },
 
     changedBelongsTo: function(e) {
-      console.log(e.target.value);
       this.model.set('belongsTo', e.target.value);
     },
 
@@ -214,7 +212,6 @@ function(Backbone, FormFieldModel) {
       var fields = [];
       _(appState.entities).each(function(entity) {
         _(entity.fields).each(function(field) {
-          console.log(self.entity.get('name'));
           if(field.type  == '{{' + self.entity.get('name') + '}}') {
             var str = '{{'+entity.name+'.'+field.name+'}}';
             fields.push(str);
