@@ -260,14 +260,16 @@ function(ElementCollection,
     dropped : function(e, ui) {
       var self = this;
       var widget = {};
-      var left, top, offsetLeft;
+      var left, top, offsetLeft, offsetTop;
 
       this.dragActive = false;
 
       if(e.type != 'click') {
-        offsetLeft = document.getElementById('page-wrapper').offsetLeft + 100;
+        offsetLeft = document.getElementById('elements-container').offsetLeft;
+        offsetScrolledTop = $('#elements-container').offset().top;
+
         left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
-        top  = Math.round((e.pageY - $('.page')[0].offsetTop - 180)/GRID_HEIGHT);
+        top  = Math.round((e.pageY - offsetScrolledTop)/GRID_HEIGHT);
 
         if(top < 0) top = 0;
         if(left < 0) left = 0;

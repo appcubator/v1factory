@@ -16,6 +16,7 @@ define([
       'click #save'        : 'save',
       'click .expandible'  : 'expandSection',
       'keyup #base-css'    : 'baseChanged',
+      'keyup #fonts-editor'       : 'fontsChaged',
       'click #create-page' : 'pageCreateClicked',
       'submit .create-page-form' : 'pageCreateSubmitted',
       'click #upload-static' : 'uploadStatic'
@@ -26,6 +27,7 @@ define([
                      'render',
                      'expandSection',
                      'baseChanged',
+                     'fontsChaged',
                      'pageCreateSubmitted',
                      'uploadStatic');
 
@@ -66,6 +68,7 @@ define([
       this.editor.getSession().setMode("ace/mode/css");
       this.editor.setValue(this.model.get('basecss'));
 
+      $('#fonts-editor').val(this.model.get('fonts'));
       _(this.model.get('pages').models).each(function(page, ind) {
         self.renderPage(page, ind);
       });
@@ -100,7 +103,12 @@ define([
       var widthRegExp = /width:([^;]+);/g;
       var overflowXRegExp = /overflow-x:([^;]+);/g;
 
-      var initBodyTag = bodyRegExp.exec(currentCSS)[0];
+      if(bodyRegExp.exec(currentCSS).length > 0) {
+        var initBodyTag = bodyRegExp.exec(currentCSS)[0];
+      }
+      else {
+        var initBodyTag = "";
+      }
 
       var newBodyTag;
       newBodyTag = initBodyTag.replace(heightRegExp, '');
@@ -113,6 +121,10 @@ define([
       currentCSS = currentCSS.replace(initBodyTag, newBodyTag);
 
       this.model.set('basecss', currentCSS);
+    },
+
+    fontsChaged: function(e) {
+      this.model.set('fonts', e.target.value);
     },
 
     renderPage: function(page, ind) {
