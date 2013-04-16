@@ -608,7 +608,6 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 10px 0;
   font-family: inherit;
   line-height: 20px;
   color: inherit;
@@ -6870,7 +6869,8 @@ hr.vert {
   padding: 40px;
 }
 
-.login-modal input[type="text"], input[type="password"] {
+.login-modal input[type="text"], 
+.login-modal input[type="password"] {
   width: 200px;
   margin-top: 8px;
 }
@@ -6884,10 +6884,12 @@ hr.vert {
 
 }
 
-.sign-up-container input[type="text"], input[type="password"] {
+.sign-up-container input[type="text"],
+.sign-up-container input[type="password"] {
   width: 200px;
   margin-top: 4px;
 }
+
 .sign-up-container label {
   display: inline-block;
   margin-left: 4px;

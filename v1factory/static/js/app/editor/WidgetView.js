@@ -80,6 +80,24 @@ define([
       this.setHeight(height * GRID_HEIGHT);
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
+      //this.el.style.paddingTop = 
+
+      if(this.model.get('layout').has('l-padding')) {
+        this.el.style.paddingLeft = this.model.get('layout').get('l-padding');
+      }
+
+      if(this.model.get('layout').has('r-padding')) {
+        this.el.style.paddingRight = this.model.get('layout').get('r-padding');
+      }
+
+      if(this.model.get('layout').has('t-padding')) {
+        this.el.style.paddingTop = this.model.get('layout').get('t-padding');
+      }
+
+      if(this.model.get('layout').has('b-padding')) {
+        this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
+      }
+
       this.el.innerHTML = this.renderElement();
       //this.el.firstChild.style.lineHeight = '1em';
       this.el.id = 'widget-wrapper-' + this.model.cid;
@@ -94,6 +112,7 @@ define([
     renderElement: function() {
       var temp = Templates.tempNode;
       var node_context = _.clone(this.model.attributes);
+      node_context.content = node_context.content.replace(/\n\r?/g, '<br />');
       node_context.content_attribs = this.model.get('content_attribs').attributes;
       var el = _.template(temp, { element: node_context});
       return el;
@@ -173,7 +192,9 @@ define([
     },
 
     changedText: function(a) {
-      this.el.firstChild.innerHTML = this.model.get('content');
+      console.log(this.model.get('content'));
+      var content = this.model.get('content').replace(/\n\r?/g, '<br />');
+      this.el.firstChild.innerHTML = content;
     },
 
     changedValue: function(a) {

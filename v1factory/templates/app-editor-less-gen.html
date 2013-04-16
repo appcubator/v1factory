@@ -1,3 +1,9 @@
+{% load less %}
+
+{{  app.uie_state.fonts|safe }}
+
+{% inlineless %}
+
 .fdededfcbcbcd {
   
   /* * * * * * * * * * *
@@ -139,6 +145,6 @@
   }
 
   {% endfor %}
-
-
 }
+
+{% endinlineless %}

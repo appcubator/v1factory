@@ -11,7 +11,19 @@
  -->
 <!--  <link rel="stylesheet" href="https://raw.github.com/woothemes/FlexSlider/master/flexslider.css" type="text/css">
  -->
+ <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700' rel='stylesheet' type='text/css'>
+
     <style>
+      .step {
+        font-family: 'Merriweather', serif;
+        color: #444444;
+        font-weight: 400;
+      }
+
+      h3 { 
+        font-family: 'Merriweather', serif;
+        font-weight: 700;
+      }
       .flexslider {
         display: block;
         position: absolute;
@@ -24,7 +36,7 @@
         width: 100%;
         height: 100%;
         text-align: center;
-        padding-bottom: 120px;
+        padding-bottom: 200px;
         padding-top: 70px;
       }
 
@@ -35,13 +47,13 @@
       .flex-control-nav.flex-control-paging {
         position: fixed;
         bottom: 0;
-        height: 120px;
+        height: 200px;
         width: 100%;
         background-image: -webkit-linear-gradient(#f3f3f3,#efefef);
         box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
         border-top: 1px solid rgba(0, 0, 0, 0.3);
         text-align: center;
-        padding-top: 40px;
+        padding-top: 14px;
       }
 
       .flex-control-nav.flex-control-paging li {
@@ -89,6 +101,16 @@
       .footer {
         position: fixed;
       }
+
+      .step {
+        position: fixed;
+        width: 100%;
+        bottom: 20px;
+        height: 130px;
+        z-index: 1;
+        text-align: left;
+        padding-left: 140px;
+      }
     </style>
 {% endblock %}
 {% block topbar %}
@@ -101,12 +123,45 @@
     <ul class="slides">
       <li>
         <img src="{{STATIC_URL}}img/tutorial/tut1.png" />
+        <div class="step">
+          <h3>Go to Data & Forms Page</h3>
+          <p>This page contains information about the data you want to store, and forms you would like to display to your users.</p>
+        </div>
       </li>
       <li>
         <img src="{{STATIC_URL}}img/tutorial/tut2.png" />
+        <div class="step">
+          <h3>Choose how you want to authenticate users</h3>
+          <p>When you check the boxes, corresponding authentication buttons will be available on the editor. </p>
+        </div>
       </li>
       <li>
         <img src="{{STATIC_URL}}img/tutorial/tut3.png" />
+        <div class="step">
+          <h3>Create a Tweet Entity</h3>
+          <p>You need to identify the type of data you would like to store on your database, and create `entities` accordingly.</p>
+        </div>
+      </li>
+      <li>
+        <img src="{{STATIC_URL}}img/tutorial/tut3.png" />
+        <div class="step">
+          <h3>Add `Content` field</h3>
+          <p>You need to add the fields belonging to this entity. Fields can have different types such as text, number, image and date. Since tweets just consist of text, we will pick "Text" as the type and make it required.</p>
+        </div>
+      </li>
+      <li>
+        <img src="{{STATIC_URL}}img/tutorial/tut3.png" />
+        <div class="step">
+          <h3>Create a "Create Tweet" form</h3>
+          <p>This will also show up on your UI editor.</p>
+        </div>
+      </li>
+      <li>
+        <img src="{{STATIC_URL}}img/tutorial/tut3.png" />
+        <div class="step">
+          <h3>Go to Themes Page and Choose One from the Gallery</h3>
+          <p>We will be adding many more of these soon. We also would like to help you if you already have designs by translating them into private themes.</p>
+        </div>
       </li>
     </ul>
   </div>

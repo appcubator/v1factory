@@ -12,12 +12,18 @@ h3 {
   background-image: url('../img/run-blue.png');
   background-repeat: no-repeat;
   background-size: 26px 26px;
-  background-position: 10px 10px;
+  background-position: 10px center;
   cursor: pointer;
+
+  transition: background-size 200ms ease;
+  -moz-transition: background-size 200ms ease;
+  -ms-transition: background-size 200ms ease;
+  -o-transition: background-size 200ms ease;
+  -webkit-transition: background-size 200ms ease;
+
 }
 
 .deploy:hover {
-  background-position: 6px 6px;
   background-size: 34px 34px;
 }
 

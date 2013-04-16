@@ -97,25 +97,27 @@
 <div class="bg-cover">
 </div>
 </div>
-
 <script type="html/template" id="login-form-template">
-<div class="login pad1">
-  <div>
-    <span class="pad1"><strong>User Login</strong></span>
+<div class="login pad1 pull-right" style="height:45px; margin-top: 10px; opacity:1.0;">
+  <div class="span8  hi14">
+    <span class="pad1"><strong>User Login</strong><br><i class="micro"> (forgot password?)</i></span>
   </div>
-  <div class="span20">
-    <span class="login span24">
-      {% if form.errors %}
-      <p>Your username and password didn't match. Please try again.</p>
-      {% endif %}
-      <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
-        {% csrf_token %}
-        <input id="id_username" type="text" class="username" name="username" placeholder="Username..." maxlength="30">
-        <input type="password" name="password" placeholder="Password..." id="id_password"><br>
-        <input class="btn" type="submit" value="Login"/><i class="small"> (forgot password?)</i>
-        <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
-      </form>
-    </span>
+  <div class="span18 hi14">
+          <span class="login span24 offset1">
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
+                {% csrf_token %}
+       
+                <input id="id_username" type="text" name="username" placeholder="Username..." maxlength="30">
+                <br>
+                <input type="password" name="password" placeholder="Password..." id="id_password">
+                <br>
+                <input class="btn" type="submit" value="Login"/>
+                <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
+            </form>
+          </span>
   </div>
 </div>
 </script>
@@ -123,5 +125,5 @@
 
 {% block js %}
 <script src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
-<script data-main="{{ STATIC_URL }}js/app/pages/home-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/home-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

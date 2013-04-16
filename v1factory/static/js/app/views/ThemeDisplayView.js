@@ -35,6 +35,26 @@ function() {
           $(self.el).append('Loaded.');
         }
       });
+
+      /* Load Statics */
+      console.log(self.id);
+
+      $.ajax({
+        type: "GET",
+        url: '/theme/'+self.id+'/static/',
+        success: function(data) {
+          _(data).each(function(static_file) {
+            $.ajax({
+              type: "POST",
+              url: '/app/'+appId+'/static/',
+              data: JSON.stringify(static_file),
+              success: function(data) {
+                console.log(data);
+              }
+            });
+          });
+        }
+      });
     }
   });
 

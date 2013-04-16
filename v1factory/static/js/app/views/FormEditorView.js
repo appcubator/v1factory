@@ -42,7 +42,6 @@ function(FormFieldModel) {
                       'changedLabel',
                       'changedOrder',
                       'changedFormAction',
-                      'findPossibleOwners',
                       'changedBelongsTo');
 
       this.model = formModel;
@@ -69,7 +68,8 @@ function(FormFieldModel) {
       temp_context.form = self.model;
       temp_context.entity = self.entity;
       temp_context.pages = appState.pages;
-      temp_context.possibleEntities = this.findPossibleOwners();
+      temp_context.possibleEntities = ["User"];
+      //this.entity.getBelongsTo();
 
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
@@ -205,21 +205,6 @@ function(FormFieldModel) {
 
     changedBelongsTo: function(e) {
       this.model.set('belongsTo', e.target.value);
-    },
-
-    findPossibleOwners: function() {
-      var self = this;
-      var fields = [];
-      _(appState.entities).each(function(entity) {
-        _(entity.fields).each(function(field) {
-          if(field.type  == '{{' + self.entity.get('name') + '}}') {
-            var str = '{{'+entity.name+'.'+field.name+'}}';
-            fields.push(str);
-          }
-        });
-      });
-
-      return fields;
     }
   });
 
