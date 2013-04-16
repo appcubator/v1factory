@@ -1,5 +1,6 @@
 """ Really cool JSON schema validator """
 
+
 def validate(thing, schema):
   """Return a list of error messages. if there are no errors, the thing successfully validated, no problemo."""
   errors = []
@@ -83,6 +84,7 @@ def validate(thing, schema):
 
   return errors
 
+from dsl.json_schema import APP_SCHEMA
 def validate_app_state(app_state):
   assert 'Homepage' in [ p['name'] for p in app_state['pages'] ]
   assert 'Registration Page' in [ p['name'] for p in app_state['pages'] ]
