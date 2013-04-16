@@ -103,7 +103,7 @@ define([
       var widthRegExp = /width:([^;]+);/g;
       var overflowXRegExp = /overflow-x:([^;]+);/g;
 
-      if(bodyRegExp.exec(currentCSS).length > 0) {
+      if(bodyRegExp.exec(currentCSS) && bodyRegExp.exec(currentCSS).length > 0) {
         var initBodyTag = bodyRegExp.exec(currentCSS)[0];
       }
       else {
