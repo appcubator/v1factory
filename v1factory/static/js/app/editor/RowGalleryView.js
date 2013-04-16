@@ -121,7 +121,8 @@ function(ElementCollection) {
 
       widget.layout = {
         top   : top,
-        left  : left
+        left  : left,
+        height: 6
       };
 
       var className = e.target.className;

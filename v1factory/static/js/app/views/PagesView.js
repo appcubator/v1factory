@@ -1,15 +1,11 @@
 define([
   'app/models/PageModel',
-  'app/collections/UrlsCollection',
+  'app/collections/PageCollection',
   'app/views/UrlView',
   'app/views/PageView',
   'mixins/BackboneNameBox'
 ],
-function(PageModel, UrlsCollection, UrlView, PageView) {
-
-  var PagesCollection = Backbone.Collection.extend({
-    model : PageModel
-  });
+function(PageModel, PageCollection, UrlView, PageView) {
 
   var PagesView = Backbone.View.extend({
     el: document.body,
@@ -21,7 +17,7 @@ function(PageModel, UrlsCollection, UrlView, PageView) {
                       'savePages');
 
       this.render();
-      this.collection = new PagesCollection();
+      this.collection = new PageCollection();
       this.collection.bind('add', this.appendPage, this);
 
       var initUrls = appState.urls || [];

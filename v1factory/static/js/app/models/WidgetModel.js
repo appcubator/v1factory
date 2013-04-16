@@ -2,9 +2,10 @@ define(
 [
   'app/models/ContentModel',
   'app/models/LayoutModel',
+  'app/collections/PageCollection',
   'dicts/constant-containers'
 ],
-function(ContentModel, LayoutModel, QueryModel) {
+function(ContentModel, LayoutModel, PageCollection) {
 
   var WidgetModel = Backbone.Model.extend({
     selected: false,
@@ -20,6 +21,7 @@ function(ContentModel, LayoutModel, QueryModel) {
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
       this.set('selected', false);
+      this.set('context', bone.context);
 
       _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
     },
@@ -84,6 +86,12 @@ function(ContentModel, LayoutModel, QueryModel) {
       this.get('layout').set('left', coordinates.topLeft.x + 1);
       this.get('layout').set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
       this.get('layout').set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
+    },
+
+    getListOfPages: function() {
+      var pagesCollection = new PageCollection(appState.pages);
+      var listOfLinks = pagesCollection.getPagesWithEntityName(this.get('context'));
+      return listOfLinks;
     }
 
   });

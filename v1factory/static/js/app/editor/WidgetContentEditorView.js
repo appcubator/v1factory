@@ -59,7 +59,11 @@ function(WidgetClassPickerView) {
       var li       = document.createElement('li');
       var hash     = 'content_attribs' + '-' + 'href';
       temp         = Templates.tempHrefSelect;
-      html         = _.template(temp, {val : this.model.get('content_attribs').get('href'), hash: hash});
+      listOfPages  = this.model.getListOfPages();
+      console.log(listOfPages);
+      html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
+                                        hash: hash,
+                                        listOfPages: listOfPages});
       li.innerHTML = '<span class="key" style="display:block;">Target</span>' + html;
       return li;
     },

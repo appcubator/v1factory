@@ -1813,3 +1813,7 @@ h3.edit-url {
   background-position: 4px 4px;
   background-repeat: no-repeat;
 }
+
+.single-data, .entity {
+  background-color: #2b3545;
+}
