@@ -112,6 +112,7 @@ define([
     renderElement: function() {
       var temp = Templates.tempNode;
       var node_context = _.clone(this.model.attributes);
+      node_context.content = node_context.content.replace(/\n\r?/g, '<br />');
       node_context.content_attribs = this.model.get('content_attribs').attributes;
       var el = _.template(temp, { element: node_context});
       return el;
@@ -191,7 +192,9 @@ define([
     },
 
     changedText: function(a) {
-      this.el.firstChild.innerHTML = this.model.get('content');
+      console.log(this.model.get('content'));
+      var content = this.model.get('content').replace(/\n\r?/g, '<br />');
+      this.el.firstChild.innerHTML = content;
     },
 
     changedValue: function(a) {

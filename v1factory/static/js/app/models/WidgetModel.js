@@ -31,6 +31,9 @@ function(ContentModel, LayoutModel, QueryModel) {
 
     remove :function() {
       if(this.get('deletable') === false) return;
+      if(this.collection) {
+        this.collection.remove(this);
+      }
     },
 
     toJSON : function() {

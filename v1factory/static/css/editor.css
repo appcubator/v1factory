@@ -1227,15 +1227,6 @@ ul.list {
   background-image: url(../img/full-width-icon.png);
 }
 
-.node { 
-  display: inline-block;
-  height: 74px;
-  width: 100%;
-  margin-top: 3px;
-  overflow: hidden;
-  text-align: center;
-}
-
 .info-section {
   vertical-align: top;
   border-bottom: 1px solid #1b2535;
@@ -1387,6 +1378,7 @@ ul.list {
   background-color: #2b3545;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
+  font: normal 16px/20px "proxima-nova", Arial, sans-serif;
 }
 
 .content-editor {
@@ -1486,6 +1478,7 @@ select.font-picker {
   font-size: 14px;
   padding: 9px;
   margin-top: 6px;
+  vertical-align: top;
 }
 
 .option-button:hover {
@@ -1790,5 +1783,33 @@ h3.edit-url {
  font-size: 14px;
 }
 
+.modal.class-picker {
+  overflow-y: scroll;
+}
+
+.modal.class-picker li {
+  cursor: pointer;
+}
+
+.modal.class-picker li:hover {
+  background-color: #eee;
+}
 
 
+.modal.class-picker .node { 
+  display: inline-block;
+  min-height: 74px;
+  max-height: 200px;
+  width: 100%;
+  margin-top: 3px;
+  overflow: hidden;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.delete-button {
+  background-image: url('../img/delete-icon-white.png');
+  background-size: 80% 80%;
+  background-position: 4px 4px;
+  background-repeat: no-repeat;
+}

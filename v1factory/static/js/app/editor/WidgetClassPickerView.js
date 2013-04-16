@@ -5,7 +5,9 @@ function() {
 
   var WidgetClassPickerView = Backbone.ModalView.extend({
     el     : document.getElementById('class-picker'),
+    className : 'modal class-picker fdededfcbcbcd',
     width  : 800,
+    height: 800,
     events : {
       'click .class-name-item'   : 'classChanged'
     },

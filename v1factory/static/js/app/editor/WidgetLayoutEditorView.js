@@ -12,6 +12,7 @@ function(WidgetClassPickerView) {
       'click .a-pick'            : 'changeAlignment',
       'click .padding'           : 'changePadding',
       'click #pick-style'        : 'openStylePicker',
+      'click #delete-widget'     : 'deleteWidget',
       'mouseover .tt'            : 'showToolTip',
       'mouseout .tt'           : 'hideToolTip'
     },
@@ -23,7 +24,8 @@ function(WidgetClassPickerView) {
                       'changeAlignment',
                       'changePadding',
                       'showToolTip',
-                      'hideToolTip');
+                      'hideToolTip',
+                      'deleteWidget');
 
       this.model = widgetModel;
       this.render();
@@ -78,7 +80,7 @@ function(WidgetClassPickerView) {
 
     renderStyleEditing: function(e) {
       var li       = document.createElement('ul');
-      li.innerHTML += '<span id="pick-style" class="option-button tt" style="width:220px; margin-left:6px;"><strong>Pick Style</strong></span>';
+      li.innerHTML += '<span id="pick-style" class="option-button tt" style="width:180px; margin-left:6px; display: inline-block;"><strong>Pick Style</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:36px; margin-left:6px; display: inline-block;"></span>';
       return li;
     },
 
@@ -120,6 +122,10 @@ function(WidgetClassPickerView) {
       if(this.toolTip) {
         $(this.toolTip).remove();
       }
+    },
+
+    deleteWidget: function() {
+      this.model.remove();
     },
 
     clear: function() {
