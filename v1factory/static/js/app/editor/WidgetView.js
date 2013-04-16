@@ -80,6 +80,24 @@ define([
       this.setHeight(height * GRID_HEIGHT);
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
+      //this.el.style.paddingTop = 
+
+      if(this.model.get('layout').has('l-padding')) {
+        this.el.style.paddingLeft = this.model.get('layout').get('l-padding');
+      }
+
+      if(this.model.get('layout').has('r-padding')) {
+        this.el.style.paddingRight = this.model.get('layout').get('r-padding');
+      }
+
+      if(this.model.get('layout').has('t-padding')) {
+        this.el.style.paddingTop = this.model.get('layout').get('t-padding');
+      }
+
+      if(this.model.get('layout').has('b-padding')) {
+        this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
+      }
+
       this.el.innerHTML = this.renderElement();
       //this.el.firstChild.style.lineHeight = '1em';
       this.el.id = 'widget-wrapper-' + this.model.cid;
