@@ -64,7 +64,9 @@ function(WidgetClassPickerView) {
       html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
                                         hash: hash,
                                         listOfPages: listOfPages});
-      li.innerHTML = '<span class="key" style="display:block;">Target</span>' + html;
+
+      li.appendChild(comp.div('Target').classN('key').el);
+      li.innerHTML += html;
       return li;
     },
 
@@ -73,15 +75,15 @@ function(WidgetClassPickerView) {
       var hash     = 'content_attribs' + '-' + 'src';
       temp         = Templates.tempSourceSelect;
       html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
-      li.innerHTML = '<span class="key" style="display:block;">Image Source</span>' + html;
+      li.appendChild(comp.div('Image Source').classN('key').el);
+      li.innerHTML += html;
       return li;
     },
 
     renderTextEditing: function() {
       var li       = document.createElement('li');
-      var hash     = 'content';
-      html         = '<textarea id="prop-content">'+ this.model.get('content')+'</textarea>';
-      li.innerHTML = '<span class="key" style="display:block;">Text</span>' + html;
+      li.appendChild(comp.div('Text').classN('key').el);
+      li.appendChild(comp.textarea(this.model.get('content')).id('prop-content').el);
       return li;
     },
 
@@ -100,25 +102,31 @@ function(WidgetClassPickerView) {
       var sizeDiv = document.createElement('div');
       sizeDiv.className = 'size-picker';
       var hash     = 'content_attribs' + '-' + 'style';
-      html         = '<select id="'+ hash +'" class="font-picker">' +
-                        '<option value="font-size:default;">'+ 'Default' +'</option>'+
-                        '<option value="font-size:10px;">'+ '10px' +'</option>'+
-                        '<option value="font-size:12px;">'+ '12px' +'</option>'+
-                        '<option value="font-size:14px;">'+ '14px' +'</option>'+
-                        '<option value="font-size:16px;">'+ '16px' +'</option>'+
-                        '<option value="font-size:16px;">'+ '18px' +'</option>'+
-                        '<option value="font-size:20px;">'+ '20px' +'</option>'+
-                        '<option value="font-size:24px;">'+ '24px' +'</option>'+
-                        '<option value="font-size:32px;">'+ '32px' +'</option>'+
-                        '<option value="font-size:40px;">'+ '40px' +'</option>'+
-                        '<option value="font-size:48px;">'+ '48px' +'</option>'+
-                        '<option value="font-size:52px;">'+ '52px' +'</option>'+
-                        '<option value="font-size:64px;">'+ '64px' +'</option>'+
-                        '<option value="font-size:72px;">'+ '72px' +'</option>'+
-                        '<option value="font-size:90px;">'+ '90px' +'</option>'+
-                      '</select>';
-      sizeDiv.innerHTML = '<span class="key">Font Size</span>' + html;
+      var sizeSelect = comp.select('').id(hash).classN('font-picker');
+      console.log(sizeSelect);
+      _(['default', '10px', '14px', '16px', '18px', '20px']).each(function(val) {
+        sizeSelect.option(val).valProp('font-size:' + val + ';');
+      });
 
+      // html         = '<select id="'+ hash +'" class="font-picker">' +
+      //                   '<option value="font-size:default;">'+ 'Default' +'</option>'+
+      //                   '<option value="font-size:10px;">'+ '10px' +'</option>'+
+      //                   '<option value="font-size:12px;">'+ '12px' +'</option>'+
+      //                   '<option value="font-size:14px;">'+ '14px' +'</option>'+
+      //                   '<option value="font-size:16px;">'+ '16px' +'</option>'+
+      //                   '<option value="font-size:18px;">'+ '18px' +'</option>'+
+      //                   '<option value="font-size:20px;">'+ '20px' +'</option>'+
+      //                   '<option value="font-size:24px;">'+ '24px' +'</option>'+
+      //                   '<option value="font-size:32px;">'+ '32px' +'</option>'+
+      //                   '<option value="font-size:40px;">'+ '40px' +'</option>'+
+      //                   '<option value="font-size:48px;">'+ '48px' +'</option>'+
+      //                   '<option value="font-size:52px;">'+ '52px' +'</option>'+
+      //                   '<option value="font-size:64px;">'+ '64px' +'</option>'+
+      //                   '<option value="font-size:72px;">'+ '72px' +'</option>'+
+      //                   '<option value="font-size:90px;">'+ '90px' +'</option>'+
+      //                 '</select>';
+      // sizeDiv.innerHTML = '<span class="key">Font Size</span>' + html;
+      sizeDiv.appendChild(sizeSelect.el);
       var optionsDiv = document.createElement('div');
       optionsDiv.className = 'font-options';
       optionsDiv.innerHTML = '<span id="toggle-bold" class="option-button"><strong>B</strong></span>';

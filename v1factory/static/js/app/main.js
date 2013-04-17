@@ -5,6 +5,7 @@ require.config({
     "underscore" : "../libs/underscore-amd/underscore",
     "backbone" : "../libs/backbone-amd/backbone",
     "iui" : "../libs/iui/iui",
+    "comp": "../libs/iui/comp",
     "bootstrap" : "../libs/bootstrap/bootstrap",
     "app" : "./",
     "editor" : "./editor",
@@ -36,7 +37,8 @@ require.config({
 require([
   "backbone",     //require plugins
   "bootstrap",
-  "iui"
+  "iui",
+  "comp"
 ],
 function () {
   var $ = require("jquery"),

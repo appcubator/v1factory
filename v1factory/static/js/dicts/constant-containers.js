@@ -2,6 +2,7 @@ var constantContainers = {
   'facebook' : [
     {
       'type' : 'button',
+      'class_name' : 'facebook-btn',
       'cons_attribs' : {
         type : 'submit'
       },
@@ -19,6 +20,7 @@ var constantContainers = {
   'twitter' : [
     {
       'type' : 'button',
+      'class_name' : 'twitter-btn',
       'cons_attribs' : {
         type : 'submit'
       },
@@ -36,6 +38,7 @@ var constantContainers = {
   'linkedin' : [
     {
       'type' : 'button',
+      'class_name' : 'linkedin-btn',
       'cons_attribs' : {
         type : 'submit'
       },
