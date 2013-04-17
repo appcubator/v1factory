@@ -131,7 +131,6 @@ class App(models.Model):
                  "d_user" : d_user,
                  "deploy_secret": "v1factory rocks!"
                 }
-    import pdb; pdb.set_trace()
     # deploy to the staging server unless this is the production server.
     if settings.PRODUCTION and not settings.STAGING:
       r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
