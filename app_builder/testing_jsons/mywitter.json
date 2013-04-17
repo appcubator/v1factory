@@ -402,8 +402,7 @@
             "name": "Tweets",
             "url": {
                 "urlparts": [
-                    "tweets",
-                    "{{Tweet}}"
+                    "tweets"
                 ]
             },
             "access_level": "users",
