@@ -334,19 +334,19 @@ a:hover {
 .offset9  { margin-left: 270px; }
 .offset8  { margin-left: 240px; }
 .offset7  { margin-left: 210px; }
-.offset6  { margin-left: 180px; }
-.offset5  { margin-left: 150px; }
-.offset4  { margin-left: 120px; }
-.offset3  { margin-left: 90px;  }
-.offset2  { margin-left: 60px;  }
-.offset1  { margin-left: 30px;  }
+.offset6  { margin-left: 480px; }
+.offset5  { margin-left: 400px; }
+.offset4  { margin-left: 320px; }
+.offset3  { margin-left: 240px;  }
+.offset2  { margin-left: 160px;  }
+.offset1  { margin-left: 80px;  }
 
-.offsetr6 { margin-right: 180px; }
-.offsetr5 { margin-right: 150px; }
-.offsetr4 { margin-right: 120px; }
-.offsetr3 { margin-right: 90px;  }
-.offsetr2 { margin-right: 60px;  }
-.offsetr1 { margin-right: 30px;  }
+.offsetr6 { margin-right: 460px; }
+.offsetr5 { margin-right: 380px; }
+.offsetr4 { margin-right: 320px; }
+.offsetr3 { margin-right: 240px;  }
+.offsetr2 { margin-right: 160px;  }
+.offsetr1 { margin-right: 80px;  }
 
 
 * [class*="hi"] {
