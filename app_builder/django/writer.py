@@ -17,9 +17,9 @@ class DjangoAppWriter:
 
   bpsrc = os.path.join(os.path.dirname(__file__), os.path.normpath("code_boilerplate"))
 
-  def __init__(self, django_app, uie_state):
+  def __init__(self, django_app, css):
     self.django_app = django_app
-    self.uie_state = uie_state
+    self.css = css
 
   """ Main app content """
 
@@ -42,10 +42,6 @@ class DjangoAppWriter:
   def render_templates(self):
     for t in self.django_app.templates.each():
       yield (t.filename, t.render(self.template_env),)
-
-  def render_css(self):
-    template = DjangoAppWriter.env.get_template('style.css')
-    return template.render(uiestate= self.uie_state)
 
   def render_emailer_py(self):
     template = DjangoAppWriter.env.get_template('emailer.py')
@@ -150,7 +146,7 @@ class DjangoAppWriter:
     copy_file('ajaxify.js', 'static/ajaxify.js')
     copy_file('css/bootstrap.css', 'static/bootstrap.css')
     copy_file('css/reset.css', 'static/reset.css')
-    write_string(self.render_css(), 'static/style.css')
+    write_string(self.css, 'static/style.css')
     # TODO copy the other css files here too later.
 
     return dest

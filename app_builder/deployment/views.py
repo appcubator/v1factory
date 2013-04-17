@@ -75,7 +75,7 @@ def init_subdomain(request):
 def deploy_code(request):
   s = request.POST['subdomain']
   app_json = request.POST['app_json']
-  uie_json = request.POST['uie_json']
+  css = request.POST['css']
   d_user = request.POST['d_user']
   try:
     d = Deployment.objects.get(subdomain=s)
@@ -84,7 +84,7 @@ def deploy_code(request):
     d.initialize()
     github_actions.create(s, d.app_dir)
   d.update_app_state(simplejson.loads(app_json))
-  d.update_uie_state(simplejson.loads(uie_json))
+  d.update_css(css)
   d.full_clean()
   sys.stdout.flush()
   msgs = d.deploy(d_user)
