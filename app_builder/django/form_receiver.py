@@ -73,6 +73,7 @@ class DjangoFormReceiver(object):
     assert isinstance(self.form, CreateForm), "Only use this function for create forms"
 
     if self.belongs_to is not None:
+      print "belongs to" , self.belongs_to
       match = re.match(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', self.belongs_to)
       m_name, f_name = match.group(1), match.group(2)
 
