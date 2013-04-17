@@ -8,7 +8,6 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
   "users": {}, #USER_SETTINGS_SCHEMA,
   "entities": {}, # ENTITY_SCHEMA,
   "pages": {}, # PAGE_SCHEMA
-  "code_modules": {} # MODULE_SCHEMA
 }}
 
 # Page logic (can do queries).
