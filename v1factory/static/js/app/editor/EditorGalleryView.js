@@ -285,6 +285,7 @@ function(ElementCollection,
         top   : top,
         left  : left
       };
+      widget.context = "";
 
       var className = e.target.className;
       var id = e.target.id;

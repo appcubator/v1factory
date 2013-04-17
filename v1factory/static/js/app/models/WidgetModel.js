@@ -90,6 +90,11 @@ function(ContentModel, LayoutModel, PageCollection) {
 
     getListOfPages: function() {
       var pagesCollection = new PageCollection(appState.pages);
+
+      if(this.get('context') === "") {
+        return pagesCollection.getContextFreePages();
+      }
+
       var listOfLinks = pagesCollection.getPagesWithEntityName(this.get('context'));
       return listOfLinks;
     }

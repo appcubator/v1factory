@@ -44,8 +44,8 @@ Templates.tempLiTable = [
 
 Templates.tempHrefSelect = [
   '<select class="select-href" id="prop-<%= hash %>">',
-  "<% _(listOfPages).each(function(page){ var b = ''; if(('internal://{{'+page+'}}') == val){ b = 'selected';}%>",
-  '<option value="internal://{{<%= page %>}}" <%= b %>><%= page %></option>',
+  "<% _(listOfPages).each(function(page){ var b = ''; if(('internal://'+page) == val){ b = 'selected';}%>",
+  '<option value="internal://<%= page %>" <%= b %>><%= page %></option>',
   '<%  }) %>',
   '</select>'
 ].join('\n');
