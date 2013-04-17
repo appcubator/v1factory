@@ -266,4 +266,3 @@ class ApiKeyCounts(models.Model):
 class ApiKeyUses(models.Model):
   api_key = models.ForeignKey(ApiKeyCounts, related_name="api_key_counts")
   api_use = models.DateField(auto_now_add=True)
-  

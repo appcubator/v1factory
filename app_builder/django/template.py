@@ -60,28 +60,48 @@ class DjangoTemplate(Renderable):
     plain_old_nodes = filter(lambda x: isinstance(x, Node), self.page.uielements)
 
     def fix_the_string(s, single=False):
-      handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', s)
+      """handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', s)
       # check validity
       for mname, fname in handlebars_search:
         m = models.get_by_name(mname)
-        assert(m is not None) # if err, then mname is not a model
+        assert m is not None or mname == 'CurrentUser', "which model you talkin bout? %s" % mname # if err, then mname is not a model
         f = m.fields.get_by_name(fname)
         assert f is not None, "what is this? %s" % f # if err, then fname is not a field of the model
+        """
       # function to do the replacing
       def repl_handlebars(match):
-        m = models.get_by_name(match.group(1))
-        f = m.fields.get_by_name(match.group(2))
-        if m.name == 'User':
+        unprocessed = match.group(1)
+        print unprocessed
+        tokens = unprocessed.split('.')
+        context, access_tokens = tokens[0], tokens[1:]
+
+        # model
+        if context == 'CurrentUser':
+          m = models.get_by_name('User')
+        else:
+          m = models.get_by_name(access_tokens[0])
+          assert m is not None, access_tokens[0]
+
+        # field
+        if context == 'CurrentUser':
+          f = m.fields.get_by_name(access_tokens[0])
+          assert f is not None, access_tokens[0]
+        else:
+          f = m.fields.get_by_name(access_tokens[1])
+          assert f is not None, access_tokens[1]
+
+        # output line
+        if context == 'CurrentUser':
           if f.name == 'username':
             return '{{user.username}}'
           else:
             return '{{user.get_profile.'+f.identifier()+'}}'
-        if single:
-          return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
-        else:
+        elif context == 'loop':
           return "{{ item."+f.identifier()+" }}"
-      # replace the content.
-      return re.sub(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', repl_handlebars, s)
+        elif context == 'page':
+          return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
+
+      return re.sub(r'\{\{ ?(.*) ?\}\}', repl_handlebars, s)
 
     for uie in query_containers:
       for n in uie.nodes:
