@@ -87,8 +87,15 @@ function(WidgetClassPickerView) {
 
     renderFontPicker: function() {
       var li       = document.createElement('li');
-      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:12px;');
-      var currentFont = /font-size:([^]+);/g.exec(curStyle)[1];
+      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:default;');
+
+      var currentFont;
+      if(/font-size:([^]+);/g.exec(curStyle)) {
+        currentFont = /font-size:([^]+);/g.exec(curStyle)[1];
+      }
+      else {
+        currentFont = "font-size:default;";
+      }
 
       var sizeDiv = document.createElement('div');
       sizeDiv.className = 'size-picker';
@@ -137,11 +144,21 @@ function(WidgetClassPickerView) {
     },
 
     changeFont: function(e) {
+      console.log(e.target);
       if(!this.model.get('content_attribs').has('style')) {
         this.model.get('content_attribs').set('style', 'font-size:12px;');
       }
       var curStyle = this.model.get('content_attribs').get('style');
-      curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+
+      if(/font-size:([^]+);/g.exec(curStyle)) {
+        curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+      }
+      else {
+        curStyle = curStyle + ' ' + e.target.value;
+      }
+
+      console.log(curStyle);
+
       this.model.get('content_attribs').set('style', curStyle);
     },
 
@@ -179,7 +196,7 @@ function(WidgetClassPickerView) {
       var self = this;
       var target = e.target.value;
       if(this.model.get('context')) {
-        target += ('/' + context);
+        target += ('/' + this.model.get('context'));
       }
       this.model.get('content_attribs').set('href', target);
     },
