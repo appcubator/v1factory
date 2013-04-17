@@ -27,8 +27,6 @@ def validate(thing, schema):
   try:
     assert('_type' in schema)
   except Exception:
-    from pdb import set_trace
-    set_trace()
     raise Exception('schema structure doesn\'t begin with _type')
 
   if type(thing) == type(u""):
@@ -56,8 +54,6 @@ def validate(thing, schema):
       except Exception:
         errors.append('found a key in the schema which is not part of thing. "{}", {}'.format(key, thing))
       else:
-        if type(schema['_mapping'][key]) == type({}) and len(schema['_mapping'][key].keys()) == 0:
-          import pdb; pdb.set_trace()
         errors.extend(validate(thing[key], schema['_mapping'][key]))
 
   elif type(thing) == type("") or type(thing) == type(u""):

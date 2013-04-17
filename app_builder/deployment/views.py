@@ -73,6 +73,7 @@ def init_subdomain(request):
 @csrf_exempt
 #@login_required
 def deploy_code(request):
+  print 'whats up'
   s = request.POST['subdomain']
   app_json = request.POST['app_json']
   css = request.POST['css']
