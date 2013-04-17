@@ -205,11 +205,9 @@ class Node(UIElement):
   def create_list_entry(cls, uie, page):
     self = cls(uie, page)
     style_string = ''
-    if 'style' in self.attribs:
-      style_string = self.attribs['style']
 
-    style_string = "left: %spx; top: %spx; " % (80 * self.left, 15 * self.top) + style_string
-    self.attribs['style'] = style_string
+    # this is positioning elements inside a list-entry
+    self.wrapper_position_string = "left: %spx; top: %spx; " % (80 * self.left, 15 * self.top)
 
     return self
 
