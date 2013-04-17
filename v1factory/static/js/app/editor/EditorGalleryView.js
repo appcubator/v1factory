@@ -322,6 +322,7 @@ function(ElementCollection,
       else if (/(single-data)/.exec(className)) {
         id = String(id).replace('entity-','');
         var cid = id.split('-')[0];
+        field   = id.split('-')[1];
 
         if(cid === this.userModel.cid) {
           entity = new UserEntityModel(appState.users);
@@ -331,8 +332,6 @@ function(ElementCollection,
           entity = this.entitiesCollection.get(cid);
           content =  '{{page.'+entity.get('name')+'.'+field+'}}';
         }
-
-        field          = id.split('-')[1];
 
         widget         = _.extend(widget, uieState['texts'][0]);
         widget.content =  content;
