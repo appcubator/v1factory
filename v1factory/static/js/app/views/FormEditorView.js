@@ -68,7 +68,7 @@ function(FormFieldModel) {
       temp_context.form = self.model;
       temp_context.entity = self.entity;
       temp_context.pages = appState.pages;
-      temp_context.possibleEntities = ["User"];
+      temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
       //this.entity.getBelongsTo();
 
       var html = _.template(FormEditorTemplates.template, temp_context);
@@ -195,7 +195,7 @@ function(FormFieldModel) {
     },
 
     changedGoto: function(e) {
-      var page_val = '{{' + $(e.target).val() + '}}';
+      var page_val = 'internal://' + $(e.target).val();
       this.model.set('goto', page_val);
     },
 
@@ -204,7 +204,9 @@ function(FormFieldModel) {
     },
 
     changedBelongsTo: function(e) {
-      this.model.set('belongsTo', e.target.value);
+
+      console.log(e.target.value);
+      this.model.set('belongsTo', null);
     }
   });
 

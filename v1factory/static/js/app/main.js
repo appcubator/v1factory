@@ -37,8 +37,7 @@ require.config({
 require([
   "backbone",     //require plugins
   "bootstrap",
-  "iui",
-  "comp"
+  "iui"
 ],
 function () {
   var $ = require("jquery"),
