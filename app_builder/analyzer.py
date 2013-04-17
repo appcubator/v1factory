@@ -16,7 +16,7 @@ def process_link_lang(s):
     target_page_name = tokens[0]
     return target_page_name
   else:
-    raise Exception('this is not even a proper language bro: %s' % unprocessed)
+    raise Exception('this is not even a proper language bro: %s' % s)
 
 
 
