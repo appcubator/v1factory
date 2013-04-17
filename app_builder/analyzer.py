@@ -7,6 +7,19 @@ from manager import Manager
 import simplejson
 from app_builder import utils
 
+
+def process_link_lang(s):
+  m = re.match(r"internal://(.+)$", s)
+  if m:
+    unprocessed = m.group(1)
+    tokens = unprocessed.split('/')
+    target_page_name = tokens[0]
+    return target_page_name
+  else:
+    raise Exception('this is not even a proper language bro')
+
+
+
 """ MODELS """
 
 class Model(object):
@@ -220,13 +233,11 @@ class Node(UIElement):
 
   def resolve_links(self, pages):
     if 'href' in self.attribs:
-      m = re.match(r"\{\{(.+)\}\}$", self.attribs['href'])
-      if m:
-        link_ref = m.group(1)
-        p = pages.get_by_name(link_ref)
-        if p is None:
-          raise Exception("Bad link reference: {}".format(p))
-        self.attribs['href'] = p
+      target_page_name = process_link_lang(self.attribs['href'])
+      p = pages.get_by_name(target_page_name)
+      if p is None:
+        raise Exception("Bad link reference: {}".format(target_page_name))
+      self.attribs['href'] = p
 
 # abstract
 class Container(UIElement):
@@ -306,7 +317,7 @@ class Form(Container):
     self.nodes = []
 
     if redirect_page_name is None:
-      self.redirect_page_name = "{{ Homepage }}"
+      self.redirect_page_name = "internal://Homepage"
     else:
       self.redirect_page_name = redirect_page_name
 
@@ -362,7 +373,7 @@ class Form(Container):
       f.model_field = f_check
 
   def resolve_goto_page(self, analyzed_app):
-    self.redirect_page = analyzed_app.pages.get_by_name(utils.extract_from_brace(self.redirect_page_name))
+    self.redirect_page = analyzed_app.pages.get_by_name(process_link_lang(self.redirect_page_name))
     assert self.redirect_page is not None, "could not find redirect page: %s" % self.redirect_page_name
 
 class LoginForm(Form):

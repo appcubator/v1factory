@@ -62,15 +62,22 @@ class DjangoTemplate(Renderable):
     def fix_the_string(s, single=False):
       handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', s)
       # check validity
-      for mname, fname in handlebars_search:
+      """for mname, fname in handlebars_search:
         m = models.get_by_name(mname)
-        assert(m is not None) # if err, then mname is not a model
+        assert m is not None or mname == 'CurrentUser', "which model you talkin bout? %s" % mname # if err, then mname is not a model
         f = m.fields.get_by_name(fname)
         assert f is not None, "what is this? %s" % f # if err, then fname is not a field of the model
+        """
       # function to do the replacing
       def repl_handlebars(match):
-        m = models.get_by_name(match.group(1))
+        if match.group(1) == 'CurrentUser':
+          m = models.get_by_name('User')
+        else:
+          m = models.get_by_name(match.group(1))
+          assert m is not None, match.group(1)
         f = m.fields.get_by_name(match.group(2))
+        if f is None:
+          import pdb; pdb.set_trace()
         if m.name == 'User':
           if f.name == 'username':
             return '{{user.username}}'
