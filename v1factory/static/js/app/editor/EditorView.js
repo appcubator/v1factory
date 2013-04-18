@@ -14,6 +14,7 @@ define([
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
   'mixins/BackboneModal',
+  'mixins/BackboneNameBox',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            UserEntityModel,
@@ -60,7 +61,8 @@ define([
                       'containerSelected',
                       'widgetSelected',
                       'keydown',
-                      'clickedUrl');
+                      'clickedUrl',
+                      'createPage');
 
       var page = appState.pages[pageId];
 
@@ -111,6 +113,11 @@ define([
                                           '/pages/editor/'+ ind +'">' + page.name +
                                           '</a></li>';
       });
+
+      var createBox = new Backbone.NameBox({tagName: 'li', className:'new-page', txt:'New Page'});
+      createBox.on('submit', this.createPage);
+
+      iui.get('page-list').appendChild(createBox.el);
 
       this.renderUrlBar();
     },
@@ -182,8 +189,9 @@ define([
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/deploy/',
-          complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>', img:'happy_engineer.png'});
+          success: function(data) {
+            console.log(data);
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
           },
           dataType: "JSON"
         });
@@ -343,6 +351,21 @@ define([
 
     widgetSelected: function(a, b) {
       this.containersCollection.unselectAll();
+    },
+
+    createPage: function(name) {
+      var pageUrl = { urlparts : [] };
+      pageUrl.urlparts[0] = "page" + appState.pages.length;
+      var pageModel = new PageModel({ name: name, url: pageUrl});
+      appState.pages.push(pageModel.toJSON());
+
+      $.ajax({
+        type: "POST",
+        url: '/app/'+appId+'/state/',
+        data: JSON.stringify(appState),
+        success: function() {},
+        dataType: "JSON"
+      });
     }
 
   });

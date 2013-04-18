@@ -1127,9 +1127,6 @@ input,
 button,
 select,
 textarea {
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 20px;
 }
 
 button, .btn { 
@@ -1145,7 +1142,6 @@ textarea {
 
 label {
   display: block;
-  margin-bottom: 5px;
 }
 
 select,
@@ -1167,11 +1163,6 @@ input[type="color"],
 .uneditable-input {
   display: inline-block;
   height: 28px;
-  padding: 4px 6px;
-  margin-bottom: 10px;
-  font-size: 14px;
-/*  line-height: 20px;
-*/  color: #555555;
   vertical-align: middle;
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
