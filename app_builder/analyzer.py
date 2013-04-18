@@ -126,10 +126,16 @@ class Route(object):
     self.page = page
     self.urlparts = url['urlparts']
 
-  def static_url(self):
-    # if the url is static, just display it. else, return "DYNAMIC URL"
+  def is_static_url(self):
     for u in self.urlparts:
       if not(isinstance(u, str) or isinstance(u, unicode)):
+        return True
+    return False
+
+  def static_url(self):
+    # if the url is static, just display it. else, return "DYNAMIC URL"
+    if not self.is_static_url():
+        assert False
         return "/DYNAMIC_URL"
     return "/" + "/".join(self.urlparts)
 

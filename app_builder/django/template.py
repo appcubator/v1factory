@@ -2,7 +2,7 @@ import re
 import simplejson
 from jinja2 import Environment, PackageLoader
 
-from app_builder.analyzer import Container, Node, Page, ListQuerysetWrapper, QuerysetWrapper, Renderable
+from app_builder.analyzer import Container, Node, Page, ListQuerysetWrapper, QuerysetWrapper, Renderable, process_link_lang
 
 class Column(Renderable):
   def __init__(self):
@@ -36,23 +36,31 @@ class DjangoTemplate(Renderable):
 
     self.dom_tree = self.create_tree(page.uielements)
 
-    # resolve links, doesn't yet support dynamic links.
+    return self
+
+  def resolve_links(self, pages):
+
+    # iterate through the elements, within containers as well
     for uie in self.page.uielements:
       if isinstance(uie, Container):
         for n in uie.nodes:
           if 'href' in n.attribs:
             if isinstance(n.attribs['href'], Page):
-              route_static_url = n.attribs['href'].route.static_url()
-              n.attribs['href'] = route_static_url
-              n.uie['content_attribs']['href'] = route_static_url
+              dest_view = n.attribs['href']._django_view
+              if isinstance(uie, QuerysetWrapper):
+                model_refs = dest_view.url.model_refs()
+                # internal://Tweet_page/Tweet     =>     {% url webapp.views.Tweet_page item.id %}
+                if len(model_refs) > 0:
+                  assert len(model_refs) == 1, "more than one model ref on dest page, but only one in the for loop"
+                  n.attribs['href'] = "{% url "+dest_view.view_path()+" item.id %}"
+                  continue
+              n.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
+
       else:
         if 'href' in uie.attribs:
+          dest_view = uie.attribs['href']._django_view
           if isinstance(uie.attribs['href'], Page):
-            route_static_url = uie.attribs['href'].route.static_url()
-            uie.attribs['href'] = route_static_url
-            uie.uie['content_attribs']['href'] = route_static_url
-
-    return self
+            uie.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
 
   def properly_name_vars_in_q_container(self, models):
     """Replaces the model handlebars with the template text require to render the for loop properly"""

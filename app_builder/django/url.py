@@ -49,5 +49,4 @@ class DjangoUrl(object):
 
   def model_refs(self):
     from model import DjangoModel
-    print self.urlparts
     return [ u for u in self.urlparts if isinstance(u, DjangoModel) ]

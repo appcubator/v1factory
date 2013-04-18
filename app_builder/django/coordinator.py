@@ -73,6 +73,7 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
 
   # now that we know all the queries, properly name the variables in the templates
   for t in templates.each():
+    t.resolve_links(analyzed_app.pages)
     t.properly_name_vars_in_q_container(models)
 
   # form POST receiver creation
