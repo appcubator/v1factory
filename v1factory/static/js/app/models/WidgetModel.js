@@ -1,10 +1,11 @@
 define(
- ['./ContentModel',
-  './LayoutModel',
-  'backboneui',
-  'dicts/constant-containers',
-  'backbone'],
-  function(ContentModel, LayoutModel, QueryModel, BackboneUI) {
+[
+  'app/models/ContentModel',
+  'app/models/LayoutModel',
+  'app/collections/PageCollection',
+  'dicts/constant-containers'
+],
+function(ContentModel, LayoutModel, PageCollection) {
 
   var WidgetModel = Backbone.Model.extend({
     selected: false,
@@ -19,6 +20,8 @@ define(
 
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
+      this.set('selected', false);
+      this.set('context', bone.context);
 
       _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
     },
@@ -30,6 +33,9 @@ define(
 
     remove :function() {
       if(this.get('deletable') === false) return;
+      if(this.collection) {
+        this.collection.remove(this);
+      }
     },
 
     toJSON : function() {
@@ -80,6 +86,17 @@ define(
       this.get('layout').set('left', coordinates.topLeft.x + 1);
       this.get('layout').set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
       this.get('layout').set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
+    },
+
+    getListOfPages: function() {
+      var pagesCollection = new PageCollection(appState.pages);
+
+      if(this.get('context') === "") {
+        return pagesCollection.getContextFreePages();
+      }
+
+      var listOfLinks = pagesCollection.getPagesWithEntityName(this.get('context'));
+      return listOfLinks;
     }
 
   });

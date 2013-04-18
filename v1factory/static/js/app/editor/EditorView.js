@@ -4,7 +4,6 @@ define([
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
-  'app/collections/UrlsCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
   'editor/WidgetsManagerView',
@@ -14,15 +13,14 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
-  'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
+  'mixins/BackboneNameBox',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            UserEntityModel,
            EntityCollection,
            WidgetCollection,
            ContainersCollection,
-           UrlsCollection,
            UrlView,
            SimpleModalView,
            WidgetsManagerView,
@@ -31,9 +29,7 @@ define([
            DesignEditorView,
            EditorGalleryView,
            PageStylePicker,
-           NavbarEditorView,
-           Backbone,
-           BackboneUI) {
+           NavbarEditorView) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -50,6 +46,8 @@ define([
 
     initialize: function() {
       _.bindAll(this, 'render',
+                      'copy',
+                      'paste',
                       'renderUrlBar',
                       'save',
                       'deployLocal',
@@ -63,57 +61,63 @@ define([
                       'containerSelected',
                       'widgetSelected',
                       'keydown',
-                      'clickedUrl');
+                      'clickedUrl',
+                      'createPage');
+
+      var page = appState.pages[pageId];
 
       /* Globals */
       g_entityCollection     = new EntityCollection(appState.entities);
       g_contextCollection    = new EntityCollection();
       g_userModel            = new UserEntityModel(appState.users);
 
-      var page = appState.pages[pageId];
-      this.model             = new PageModel(page);
-
+      this.model                = new PageModel(page);
       this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = new WidgetCollection();
 
-      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection, this.contextCollection, this.entityCollection);
+      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, page);
-
-      //this.typePicker       = new WidgetClassPickerView(this.widgetsCollection);
       this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
 
-      this.designEditor     = new DesignEditorView(this.model, true);
-
-      this.urlModel = this.model.get('url');
-
-      this.getContextEntities();
+      this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
+      this.urlModel      = this.model.get('url');
 
       this.containersCollection.on('selected', this.containerSelected);
       this.widgetsCollection.on('selected', this.widgetSelected);
+
+      /* Calls */
+      this.getContextEntities();
+      this.render();
 
       if(!page.uielements.length) {
         new PageStylePicker(this.widgetsCollection);
       }
 
-
-      this.style();
-      this.render();
-      $('#loading-gif').fadeOut().remove();
+      /* Bindings */
       window.addEventListener('keydown', this.keydown);
-
-      this.navbarEditor = new NavbarEditorView(this.model.get('navbar'));
-
       key('⌘+s, ctrl+s', this.save);
+      key('⌘+c, ctrl+c', this.copy);
+      key('⌘+v, ctrl+v', this.paste);
       key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
+
+      $('#loading-gif').fadeOut().remove();
     },
 
     render: function() {
-      this.el.appendChild(this.designEditor.el);
+      this.style();
+
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
-        iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +'/pages/editor/'+ ind +'">'+page.name+'</a></li>';
+        iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
+                                          '/pages/editor/'+ ind +'">' + page.name +
+                                          '</a></li>';
       });
+
+      var createBox = new Backbone.NameBox({tagName: 'li', className:'new-page', txt:'New Page'});
+      createBox.on('submit', this.createPage);
+
+      iui.get('page-list').appendChild(createBox.el);
 
       this.renderUrlBar();
     },
@@ -148,24 +152,33 @@ define([
       return false;
     },
 
-    amendAppState : function() {
-      var curAppState = _.clone(appState);
+    copy: function(e) {
+      if(this.widgetsManager.copy()) { }
+    },
 
+    paste: function(e) {
+      if(this.widgetsManager.paste()){
+        e.stopPropagation();
+      }
+    },
+
+    amendAppState : function() {
+      var curAppState   = _.clone(appState);
       var newCollection = _.clone(this.widgetsCollection);
 
       _(this.containersCollection.models).each(function(container) {
         newCollection.remove(container.get('container_info').get('uielements').models);
       });
 
-      var widgets = (newCollection.toJSON() || []);
+      var widgets    = (newCollection.toJSON() || []);
       var containers = (this.containersCollection.toJSON() || []);
-      var elems = _.union(widgets, containers);
+      var elems      = _.union(widgets, containers);
 
       curAppState.pages[pageId]['uielements'] = elems;
-      curAppState.pages[pageId]['design_props'] = (this.designEditor.model.toJSON()['design_props']||[]);
-      curAppState.pages[pageId]['navbar'] = this.model.get('navbar').toJSON();
-      curAppState.entities = g_entityCollection.toJSON();
-      curAppState.users = g_userModel.toJSON();
+      curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
+      curAppState.entities                    = g_entityCollection.toJSON();
+      curAppState.users                       = g_userModel.toJSON();
+
       return curAppState;
     },
 
@@ -176,8 +189,9 @@ define([
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/deploy/',
-          complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>', img:'happy_engineer.png'});
+          success: function(data) {
+            console.log(data);
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
           },
           dataType: "JSON"
         });
@@ -208,32 +222,6 @@ define([
     },
 
     style: function() {
-
-      var basecss = uieState.basecss;
-      basecss = basecss.replace('body {', '.page {');
-      basecss = basecss.replace('body{', '.page {');
-      var styleTag = document.createElement('style');
-      styleTag.id = "basecss";
-      styleTag.innerHTML = basecss;
-      document.getElementsByTagName('head')[0].appendChild(styleTag);
-
-      _(uieState).each(function(type, key) {
-        if(key == "basecss") return;
-
-        _(type).each(function(elem) {
-          if(elem.attribs) return;
-
-          var styleTag = document.createElement('style');
-          var styleContent = '.page '+elem.tagName + '.' + elem.class_name + '{';
-          styleContent += elem.style;
-          styleContent += '}';
-
-          styleTag.innerHTML = styleContent;
-          this.styleTag = styleTag;
-
-          document.getElementsByTagName('head')[0].appendChild(styleTag);
-        });
-      });
     },
 
     hideSettings: function() {
@@ -337,6 +325,25 @@ define([
 
     widgetSelected: function(a, b) {
       this.containersCollection.unselectAll();
+    },
+
+    createPage: function(name) {
+      var pageUrl = { urlparts : [] };
+      pageUrl.urlparts[0] = "page" + appState.pages.length;
+      pageInd = appState.pages.length;
+      var pageModel = new PageModel({ name: name, url: pageUrl});
+      appState.pages.push(pageModel.toJSON());
+
+      $.ajax({
+        type: "POST",
+        url: '/app/'+appId+'/state/',
+        data: JSON.stringify(appState),
+        complete: function() {
+          console.log('<li><a herf="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>');
+          $('<li><a href="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
+        },
+        dataType: "JSON"
+      });
     }
 
   });

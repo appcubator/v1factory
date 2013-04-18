@@ -1,13 +1,13 @@
 define([
-  'backbone',
-  'backboneui',
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
+  'backbone',
+  'mixins/BackboneUI',
   'iui'
 ],
-function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
+function(WidgetContentEditor, WidgetLayoutEditor) {
 
-  var WidgetEditorView = BackboneUI.UIView.extend({
+  var WidgetEditorView = Backbone.UIView.extend({
     el     : document.getElementById('editor-page'),
     className : 'editor-page fadeIn',
     tagName : 'div',
@@ -23,8 +23,10 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
       this.containersCollection = containersCollection;
 
       this.model = widgetsCollection.selectedEl;
-      this.widgetsCollection.bind('change', this.selectChanged, this);
-      this.containersCollection.bind('selected', this.clear);
+      this.widgetsCollection.bind('selected', this.selectChanged, this);
+      if(this.containersCollection){ // WidgetEditor can belong to just one collection
+        this.containersCollection.bind('selected', this.clear);
+      }
 
       if(this.model) {
         this.model.bind('change:selected', this.selectChanged);
@@ -38,6 +40,9 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
     render: function() {
       var self = this;
       // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
+
+      if(!iui.get('widget-wrapper-' + this.model.cid)) return;
+
       iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
       this.el.appendChild(this.layoutEditor.el);
       this.el.appendChild(this.contentEditor.el);
@@ -51,7 +56,6 @@ function(Backbone, BackboneUI, WidgetContentEditor, WidgetLayoutEditor) {
     bindLocation: function() {    },
 
     selectChanged : function(chg, ch2) {
-
       if(this.widgetsCollection.selectedEl === null) {
         this.model = null;
         this.clear();

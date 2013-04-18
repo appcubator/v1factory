@@ -1,10 +1,10 @@
 define([
-  'backboneui',
+  'mixins/BackboneModal',
   'iui'
 ],
-function(BackboneUI) {
+function() {
 
-  var ThemeDisplayView = BackboneUI.ModalView.extend({
+  var ThemeDisplayView = Backbone.ModalView.extend({
     el: null,
     events: {
       'click #load-btn' : 'loadTheme'
@@ -32,7 +32,27 @@ function(BackboneUI) {
         url: '/app/'+appId+'/uiestate/',
         data: JSON.stringify(uieState),
         success: function(data) {
-          alert('Matrix re-loaded');
+          $(self.el).append('Loaded.');
+        }
+      });
+
+      /* Load Statics */
+      console.log(self.id);
+
+      $.ajax({
+        type: "GET",
+        url: '/theme/'+self.id+'/static/',
+        success: function(data) {
+          _(data).each(function(static_file) {
+            $.ajax({
+              type: "POST",
+              url: '/app/'+appId+'/static/',
+              data: JSON.stringify(static_file),
+              success: function(data) {
+                console.log(data);
+              }
+            });
+          });
         }
       });
     }

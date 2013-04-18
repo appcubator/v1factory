@@ -4,12 +4,10 @@ define([
   'app/models/LayoutModel',
   'app/models/ContainerInfoModel',
   'editor/TableQueryView',
-  'editor/ListQueryView',
+  'editor/ListEditorView',
   'app/models/QueryModel',
   'app/models/RowModel',
   'app/collections/WidgetCollection',
-  'backboneui',
-  'backbone',
   'dicts/constant-containers'
 ],
 function(WidgetModel,
@@ -17,12 +15,11 @@ function(WidgetModel,
          LayoutModel,
          ContainerInfoModel,
          TableQueryView,
-         ListQueryView,
+         ListEditorView,
          QueryModel,
          RowModel,
-         WidgetCollection,
-         BackboneUI,
-         Backbone) {
+         WidgetCollection) 
+{
 
 
   var ContainerWidgetModel = WidgetModel.extend({
@@ -95,7 +92,7 @@ function(WidgetModel,
           self.get('container_info').set('query', queryModel);
           self.get('container_info').set('row', rowModel);
 
-          new ListQueryView(self, queryModel, rowModel);
+          new ListEditorView(self, queryModel, rowModel);
         }
       },
       'login' : function() {

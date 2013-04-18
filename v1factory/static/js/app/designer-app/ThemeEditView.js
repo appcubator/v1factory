@@ -1,11 +1,9 @@
 define([
-  'backboneui',
   'app/designer-app/UIElementListView',
   'app/models/PageDesignModel',
   'iui',
   '../templates/ThemeTemplates'
-],function(BackboneUI,
-           UIElementListView,
+],function(UIElementListView,
            PageDesignModel) {
 
   var UIElementAttributesModel = Backbone.Model.extend({ });
@@ -18,6 +16,7 @@ define([
       'click #save'        : 'save',
       'click .expandible'  : 'expandSection',
       'keyup #base-css'    : 'baseChanged',
+      'keyup #fonts-editor'       : 'fontsChaged',
       'click #create-page' : 'pageCreateClicked',
       'submit .create-page-form' : 'pageCreateSubmitted',
       'click #upload-static' : 'uploadStatic'
@@ -28,6 +27,7 @@ define([
                      'render',
                      'expandSection',
                      'baseChanged',
+                     'fontsChaged',
                      'pageCreateSubmitted',
                      'uploadStatic');
 
@@ -63,7 +63,12 @@ define([
 
     render: function() {
       var self = this;
-      iui.get('base-css').value = this.model.get('basecss');
+
+      this.editor = ace.edit("base-css");
+      this.editor.getSession().setMode("ace/mode/css");
+      this.editor.setValue(this.model.get('basecss'));
+
+      $('#fonts-editor').val(this.model.get('fonts'));
       _(this.model.get('pages').models).each(function(page, ind) {
         self.renderPage(page, ind);
       });
@@ -89,7 +94,7 @@ define([
       // position: relative;
       // width: 1125px;
 
-      var currentCSS = e.target.value;
+      var currentCSS = this.editor.getValue();
 
       var bodyRegExp = /body \{([^\}]+)\}/g;
       var marginRegExp = /margin:([^;]+);/g;
@@ -98,7 +103,12 @@ define([
       var widthRegExp = /width:([^;]+);/g;
       var overflowXRegExp = /overflow-x:([^;]+);/g;
 
-      var initBodyTag = bodyRegExp.exec(currentCSS)[0];
+      if(bodyRegExp.exec(currentCSS) && bodyRegExp.exec(currentCSS).length > 0) {
+        var initBodyTag = bodyRegExp.exec(currentCSS)[0];
+      }
+      else {
+        var initBodyTag = "";
+      }
 
       var newBodyTag;
       newBodyTag = initBodyTag.replace(heightRegExp, '');
@@ -111,6 +121,10 @@ define([
       currentCSS = currentCSS.replace(initBodyTag, newBodyTag);
 
       this.model.set('basecss', currentCSS);
+    },
+
+    fontsChaged: function(e) {
+      this.model.set('fonts', e.target.value);
     },
 
     renderPage: function(page, ind) {
@@ -162,19 +176,22 @@ define([
 
     save: function() {
       var json = _.clone(this.model.attributes);
-      console.log(json.basecss);
-      json["button"]     = this.model.get('buttons').toJSON()||{};
-      json["image"]      = this.model.get('images').toJSON()||{};
-      json["header-text"]= this.model.get('headerTexts').toJSON()||{};
-      json["text"]       = this.model.get('texts').toJSON()||{};
-      json["link"]       = this.model.get('links').toJSON()||{};
-      json["text-input"] = this.model.get('textInputs').toJSON()||{};
-      json["password"]   = this.model.get('passwords').toJSON()||{};
-      json["text-area"]  = this.model.get('textAreas').toJSON()||{};
-      json["line"]       = this.model.get('lines').toJSON()||{};
-      json["dropdown"]   = this.model.get('dropdowns').toJSON()||{};
-      json["box"]        = this.model.get('boxes').toJSON()||{};
 
+      console.log(this.model.get('links').toJSON());
+
+      json["buttons"]     = this.model.get('buttons').toJSON();
+      json["images"]      = this.model.get('images').toJSON();
+      json["headerTexts"]= this.model.get('headerTexts').toJSON();
+      json["texts"]       = this.model.get('texts').toJSON();
+      json["links"]       = this.model.get('links').toJSON();
+      json["textInputs"] = this.model.get('textInputs').toJSON();
+      json["passwords"]   = this.model.get('passwords').toJSON();
+      json["textAreas"]  = this.model.get('textAreas').toJSON();
+      json["lines"]       = this.model.get('lines').toJSON();
+      json["dropdowns"]   = this.model.get('dropdowns').toJSON();
+      json["boxes"]      = this.model.get('boxes').toJSON();
+
+      console.log(json);
       $.ajax({
         type: "POST",
         url: '/theme/'+themeId+'/edit/',

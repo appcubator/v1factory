@@ -101,7 +101,7 @@ class App(models.Model):
 
     a = AnalyzedApp(self.state)
     dw = analyzed_app_to_app_components(a, d_user)
-    tmp_project_dir = DjangoAppWriter(dw, simplejson.loads(self.uie_state_json)).write_to_fs()
+    tmp_project_dir = DjangoAppWriter(dw, self.css()).write_to_fs()
 
     return tmp_project_dir
 
@@ -112,6 +112,17 @@ class App(models.Model):
       subdomain = subdomain + '.staging'
     return subdomain
 
+  def github_url(self):
+    return "https://github.com/v1factory/" + self.subdomain()
+
+  def css(self, deploy=True):
+    """Use uiestate, less, and django templates to generate a string of the CSS"""
+    from django.template import Context, loader
+    t = loader.get_template('app-editor-less-gen.html')
+    context = Context({"app":self, "deploy":deploy})
+    css_string = t.render(context)
+    return css_string
+
   def deploy(self, d_user):
     # this will post the data to v1factory.com
     subdomain = self.subdomain()
@@ -119,7 +130,7 @@ class App(models.Model):
     post_data = {
                  "subdomain": subdomain,
                  "app_json": self.state_json,
-                 "uie_json": self.uie_state_json,
+                 "css": self.css(),
                  "d_user" : d_user,
                  "deploy_secret": "v1factory rocks!"
                 }

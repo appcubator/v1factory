@@ -1,11 +1,11 @@
 define([
   'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   'iui'
 ],
-function(Backbone, BackboneUI) {
+function(Backbone) {
 
-  var SimpleModalView = BackboneUI.ModalView.extend({
+  var SimpleModalView = Backbone.ModalView.extend({
     tagName: 'div',
     className: 'deployed',
 

@@ -15,7 +15,7 @@ function(EntityModel,
          UserEntityModel,
          FieldModel,
          UploadExcelView,
-	 ShowDataView,
+         ShowDataView,
          EntityView,
          UserEntityView,
          EntityCollection) {

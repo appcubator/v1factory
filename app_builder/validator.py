@@ -1,126 +1,5 @@
 """ Really cool JSON schema validator """
 
-APP_SCHEMA = { "_type": {}, "_mapping": {
-  "name":{
-          "_type" : "",
-          "_minlength": 2,
-          "_maxlength": 255,
-         },
-  "users": {
-            "_type": {},
-            "_mapping": {
-                        "facebook": { "_type": True },
-                        "linkedin": { "_type": True },
-                        "twitter": { "_type": True },
-                        "local": { "_type": True },
-                        "fields": {
-                                   "_type": [],
-                                   "_each": { "_type": {}, "_mapping": {
-                                             "name": { "_type" : "" },
-                                             "required": { "_type": False },
-                                             "type": { "_type" : "" }
-                                            }}
-                                  },
-                        "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
-                                  "name": { "_type" : "" },
-                                  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-                                             "name": { "_type" : "" },
-                                             "placeholder": { "_type" : "" },
-                                             "label": { "_type" : "" },
-                                             "displayType": { "_type" : "" },
-                                             "type": { "_type" : "" },
-                                             "options": { "_type" : [], "_each": { "_type" : "" }}
-                                            }}},
-                                  "action": { "_type":"" }
-                                 }}}
-                        }
-           },
-  "entities": { "_type": [], "_each": {
-               "_type": {},
-               "_mapping": {
-                            "name": { "_type" : "" },
-                            "fields": {
-                                       "_type": [],
-                                       "_each": { "_type": {}, "_mapping": {
-                                                 "name": { "_type" : "" },
-                                                 "required": { "_type": False },
-                                                 "type": { "_type" : "" }
-                                                }}
-                                      },
-                            "forms": { "_type": [], "_each": { "_type" : {}, "_mapping": {
-                                      "name": { "_type" : "" },
-                                      "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-                                                 "name": { "_type" : "" },
-                                                 "placeholder": { "_type" : "" },
-                                                 "label": { "_type" : "" },
-                                                 "displayType": { "_type" : "" },
-                                                 "type": { "_type" : "" },
-                                                 "options": { "_type" : [], "_each": { "_type" : "" }}
-                                                }}},
-                                      "action": { "_type":"" }
-                                     }}}
-                           }
-               }},
-  "pages": { "_type": [], "_each": {
-            "_type": {},
-            "_mapping": {
-                         "name": { "_type" : "" },
-                         "url": { "_type": {}, "_mapping": {
-                                 "urlparts": {
-                                              "_type": [],
-                                              "_each": { "_type" : "" }
-                                             }
-                                }},
-                         "uielements": {
-                                        "_type": [],
-                                        "_each": { "_type": {}, "_mapping": {
-                                                  "layout": {
-                                                             "_type": {},
-                                                             "_mapping": {
-                                                                          "width": { "_type": 0, "_min": 1, "_max": 64 },
-                                                                          "height": { "_type": 0, "_min": 1 },
-                                                                          "top": { "_type": 0, "_min": 0 },
-                                                                          "left": { "_type": 0, "_min": 0, "_max": 64 }
-                                                                         }
-                                                            },
-                                                  "content": { "_type": "" },
-                                                  "container_info": {
-                                                                     "_null": True,
-                                                                     "_type": {},
-                                                                     "_mapping": {
-                                                                                  "entity": { "_type": "" },
-                                                                                  "action": { "_type": "" },
-                                                                                  "uielements": {
-                                                                                                 "_type": [],
-                                                                                                 "_each": { "_type": {}, "_mapping": {
-                                                                                                           "layout": {
-                                                                                                                      "_type": {},
-                                                                                                                      "_mapping": {
-                                                                                                                                   "width": { "_type": 0, "_min": 1, "_max": 64 },
-                                                                                                                                   "height": { "_type": 0, "_min": 1 },
-                                                                                                                                   "top": { "_type": 0, "_min": 0 },
-                                                                                                                                   "left": { "_type": 0, "_min": 0, "_max": 64 }
-                                                                                                                                  }
-                                                                                                                     },
-                                                                                                           "content": { "_type": "" },
-                                                                                                           }}
-                                                                                                 },
-                                                                                 }
-                                                                    },
-                                                 }},
-                                       },
-                         "access_level": { "_type" : "" }
-                        }
-           }}
-}}
-
-class Xception(Exception):
-
-  def __init__(self, value):
-    self.message = value
-
-  def __str__(self):
-    return str(self.message)
 
 def validate(thing, schema):
   """Return a list of error messages. if there are no errors, the thing successfully validated, no problemo."""
@@ -129,14 +8,26 @@ def validate(thing, schema):
   #  if the thing is null, see if it's allowed to be null, and if it is, let it pass
   if thing is None:
     try: assert('_null' in schema and schema['_null'])
-    except Exception: raise Xception("thing was null but wasn't supposed to be.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
+    except Exception: raise Exception("thing was null but wasn't supposed to be.\n\n\nschema:{}".format(repr(thing), schema))
     else: return errors
+
+  if '_one_of' in schema:
+    for validation_schema in schema['_one_of']:
+      # try all the schemas until one works. if none work, throw an error and quit.
+      print "i'm in one_of"
+      new_errs = validate(thing, validation_schema)
+      if len(new_errors) == 0:
+        return errors # no point in extending new_errors since it's blank
+    # if you get to this point, none of the "one of" things were valid.
+    errors.append("None of the _one_of things matched.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
+    return errors
+  assert '_one_of' not in schema
 
   # make sure the type of the thing matches with the schema
   try:
     assert('_type' in schema)
   except Exception:
-    raise Xception('schema structure doesn\'t begin with _type')
+    raise Exception('schema structure doesn\'t begin with _type')
 
   if type(thing) == type(u""):
     thing = str(thing)
@@ -149,14 +40,14 @@ def validate(thing, schema):
 
   if type(thing) == type([]):
     try: assert('_each' in schema)
-    except Exception: raise Xception('found [] with no _each')
+    except Exception: raise Exception('found [] with no _each')
     for minithing in thing:
       errors.extend(validate(minithing, schema['_each']))
 
   elif type(thing) == type({}):
 
     try: assert('_mapping' in schema)
-    except Exception: raise Xception('found {} with no _mapping')
+    except Exception: raise Exception('found {} with no _mapping')
 
     for key in schema['_mapping']:
       try: assert(key in thing)
@@ -185,10 +76,11 @@ def validate(thing, schema):
     pass
 
   else:
-    raise Xception("type not recognized: {}".format(thing))
+    raise Exception("type not recognized: {}".format(thing))
 
   return errors
 
+from dsl.json_schema import APP_SCHEMA
 def validate_app_state(app_state):
   assert 'Homepage' in [ p['name'] for p in app_state['pages'] ]
   assert 'Registration Page' in [ p['name'] for p in app_state['pages'] ]

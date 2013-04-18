@@ -1,0 +1,1 @@
+define(["app/models/LayoutModel","app/collections/WidgetCollection","backbone"],function(e,t,n){var r=n.Model.extend({initialize:function(n){this.set("isListOrGrid","list"),this.set("layout",new e(n.layout||{height:10,width:4})),this.set("uielements",new t),this.set("goesTo",n.goesTo||null),n.uielements&&this.get("uielements").add(n.uielements)}});return r});

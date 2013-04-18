@@ -72,6 +72,7 @@ define([
         });
 
         document.getElementById('facebook').checked = this.model.get('facebook');
+        document.getElementById('twitter').checked = this.model.get('linkedin');
         document.getElementById('linkedin').checked = this.model.get('linkedin');
         document.getElementById('local').checked = this.model.get('local');
 

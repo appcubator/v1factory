@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^faq/$', 'v1factory.base_views.faq'),
     url(r'^account/$', 'v1factory.base_views.account'),
     url(r'^startx/video/$', 'v1factory.base_views.startx_video')
+    url(r'^tutorial/$', 'v1factory.base_views.tutorial'),
 )
 
 urlpatterns += patterns('v1factory.views',
@@ -43,6 +44,7 @@ urlpatterns += patterns('v1factory.views',
 
     # getting/setting uie state
     url(r'^app/(\d+)/uiestate/$', 'uie_state'),
+    url(r'^app/(\d+)/uiestate.less$', 'less_sheet'),
 
     # deploy
     url(r'^app/(\d+)/deploy/$', 'app_deploy'),

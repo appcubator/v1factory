@@ -2,7 +2,7 @@ import re
 import simplejson
 from jinja2 import Environment, PackageLoader
 
-from app_builder.analyzer import Container, Node, Page, ListQuerysetWrapper, QuerysetWrapper, Renderable
+from app_builder.analyzer import Container, Node, Page, ListQuerysetWrapper, QuerysetWrapper, Renderable, process_link_lang
 
 class Column(Renderable):
   def __init__(self):
@@ -36,23 +36,31 @@ class DjangoTemplate(Renderable):
 
     self.dom_tree = self.create_tree(page.uielements)
 
-    # resolve links, doesn't yet support dynamic links.
+    return self
+
+  def resolve_links(self, pages):
+
+    # iterate through the elements, within containers as well
     for uie in self.page.uielements:
       if isinstance(uie, Container):
         for n in uie.nodes:
           if 'href' in n.attribs:
             if isinstance(n.attribs['href'], Page):
-              route_static_url = n.attribs['href'].route.static_url()
-              n.attribs['href'] = route_static_url
-              n.uie['content_attribs']['href'] = route_static_url
+              dest_view = n.attribs['href']._django_view
+              if isinstance(uie, QuerysetWrapper):
+                model_refs = dest_view.url.model_refs()
+                # internal://Tweet_page/Tweet     =>     {% url webapp.views.Tweet_page item.id %}
+                if len(model_refs) > 0:
+                  assert len(model_refs) == 1, "more than one model ref on dest page, but only one in the for loop"
+                  n.attribs['href'] = "{% url "+dest_view.view_path()+" item.id %}"
+                  continue
+              n.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
+
       else:
         if 'href' in uie.attribs:
+          dest_view = uie.attribs['href']._django_view
           if isinstance(uie.attribs['href'], Page):
-            route_static_url = uie.attribs['href'].route.static_url()
-            uie.attribs['href'] = route_static_url
-            uie.uie['content_attribs']['href'] = route_static_url
-
-    return self
+            uie.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
 
   def properly_name_vars_in_q_container(self, models):
     """Replaces the model handlebars with the template text require to render the for loop properly"""
@@ -60,28 +68,40 @@ class DjangoTemplate(Renderable):
     plain_old_nodes = filter(lambda x: isinstance(x, Node), self.page.uielements)
 
     def fix_the_string(s, single=False):
-      handlebars_search = re.findall(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', s)
-      # check validity
-      for mname, fname in handlebars_search:
-        m = models.get_by_name(mname)
-        assert(m is not None) # if err, then mname is not a model
-        f = m.fields.get_by_name(fname)
-        assert f is not None, "what is this? %s" % f # if err, then fname is not a field of the model
       # function to do the replacing
       def repl_handlebars(match):
-        m = models.get_by_name(match.group(1))
-        f = m.fields.get_by_name(match.group(2))
-        if m.name == 'User':
+        unprocessed = match.group(1)
+        print unprocessed
+        tokens = unprocessed.split('.')
+        context, access_tokens = tokens[0], tokens[1:]
+
+        # model
+        if context == 'CurrentUser':
+          m = models.get_by_name('User')
+        else:
+          m = models.get_by_name(access_tokens[0])
+          assert m is not None, access_tokens[0]
+
+        # field
+        if context == 'CurrentUser':
+          f = m.fields.get_by_name(access_tokens[0])
+          assert f is not None, access_tokens[0]
+        else:
+          f = m.fields.get_by_name(access_tokens[1])
+          assert f is not None, access_tokens[1]
+
+        # output line
+        if context == 'CurrentUser':
           if f.name == 'username':
             return '{{user.username}}'
           else:
             return '{{user.get_profile.'+f.identifier()+'}}'
-        if single:
-          return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
-        else:
+        elif context == 'loop':
           return "{{ item."+f.identifier()+" }}"
-      # replace the content.
-      return re.sub(r'\{\{ ?([A-Za-z0-9]+)\.([ \w]+\w) ?\}\}', repl_handlebars, s)
+        elif context == 'page':
+          return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
+
+      return re.sub(r'\{\{ ?(.*) ?\}\}', repl_handlebars, s)
 
     for uie in query_containers:
       for n in uie.nodes:

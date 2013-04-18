@@ -21,8 +21,6 @@ def add_statics_to_context(context, app):
 
 @login_required
 def app_list(request):
-  if request.user.username in ['ican', 'icanberk']:
-    return redirect(designer_page)
   if request.user.apps.count() == 0:
     return redirect(app_new)
   else:
@@ -127,6 +125,24 @@ def uie_state(request, app_id):
     return HttpResponse(message, status=status)
   else:
     return HttpResponse("GET or POST only", status=405)
+
+
+@csrf_exempt
+def less_sheet(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  els = UIElement.get_library().values()
+  my_els = els.filter(app=app)
+  page_context = { 'app': app,
+                   'title' : 'Editor',
+                   'gallery_elements' : els,
+                   'elements' : simplejson.dumps(list(els)),
+                   'myuielements' : simplejson.dumps(list(my_els)),
+                   'app_id': app_id }
+  add_statics_to_context(page_context, app)
+  return render(request, 'app-editor-less-gen.html', page_context)
+
+
 
 @require_GET
 @login_required
@@ -460,8 +476,9 @@ def app_deploy(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  m = app.deploy(simplejson.dumps(d_user))
-  return HttpResponse(m)
+  site_url = app.deploy(simplejson.dumps(d_user))
+  github_url = app.github_url()
+  return HttpResponse(simplejson.dumps({"site_url":site_url, "github_url":github_url}), mimetype="application/json")
 
 @login_required
 @require_POST

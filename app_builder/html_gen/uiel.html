@@ -1,3 +1,0 @@
-<{{element.tagName}} {% if element.tagType %}type ="{{element.tagType}}" {% endif %}class="{{ element.class_name }} span{{element.layout.width}} hi{{element.layout.height}}" {% for attrib in element.content_attribs %}{{ attrib }}="{{ element.content_attribs[attrib] }}" {% endfor %}>
-  {% if not element.isSingle %}{{element.content}}
-</{{element.tagName}}>{% endif %}

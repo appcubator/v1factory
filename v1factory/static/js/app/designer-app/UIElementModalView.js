@@ -1,10 +1,9 @@
 define([
-  'backboneui',
-  'backbone'
+  'mixins/BackboneModal'
 ],
-function(BackboneUI){
+function(){
 
-  var UIElementModalView = BackboneUI.ModalView.extend({
+  var UIElementModalView = Backbone.ModalView.extend({
     tagName : 'div',
     className : 'element-view',
     width: 660,

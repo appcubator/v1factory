@@ -1,8 +1,6 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/gallery.css">
 
 {% endblock %}
@@ -36,5 +34,6 @@ var appId = {{ app_id|safe }};
 var statics = {{ statics|safe }};
 var uieState = {{ app.uie_state_json|safe }};
 </script>
-<script data-main="{{ STATIC_URL }}js/app/gallery-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/gallery-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
+
 {% endblock %}

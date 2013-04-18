@@ -1,13 +1,12 @@
 define([
-  'backbone',
-  'backboneui',
   'app/models/FormFieldModel',
   'app/templates/FormEditorTemplates',
+  'mixins/BackboneModal',
   'jquery-ui'
 ],
-function(Backbone, BackboneUI, FormFieldModel) {
+function(FormFieldModel) {
 
-  var FormEditorView = BackboneUI.ModalView.extend({
+  var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
     width: 882,
     height: 500,
@@ -20,8 +19,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
       'keydown input.field-label-input'  : 'changedLabel',
-      'keyup   .field-placeholder-input'   : 'changedPlaceholder',
-      'keyup   input.field-label-input'    : 'changedLabel',
+      'keyup   .field-placeholder-input' : 'changedPlaceholder',
+      'keyup   input.field-label-input'  : 'changedLabel',
       'keyup  .options-input'            : 'changedOptions',
       'change .goto'                     : 'changedGoto',
       'change .form-type-select'         : 'changedFormAction',
@@ -43,7 +42,6 @@ function(Backbone, BackboneUI, FormFieldModel) {
                       'changedLabel',
                       'changedOrder',
                       'changedFormAction',
-                      'findPossibleOwners',
                       'changedBelongsTo');
 
       this.model = formModel;
@@ -70,7 +68,8 @@ function(Backbone, BackboneUI, FormFieldModel) {
       temp_context.form = self.model;
       temp_context.entity = self.entity;
       temp_context.pages = appState.pages;
-      temp_context.possibleEntities = this.findPossibleOwners();
+      temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
+      //this.entity.getBelongsTo();
 
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
@@ -196,7 +195,7 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     changedGoto: function(e) {
-      var page_val = '{{' + $(e.target).val() + '}}';
+      var page_val = 'internal://' + $(e.target).val();
       this.model.set('goto', page_val);
     },
 
@@ -205,24 +204,9 @@ function(Backbone, BackboneUI, FormFieldModel) {
     },
 
     changedBelongsTo: function(e) {
+
       console.log(e.target.value);
-      this.model.set('belongsTo', e.target.value);
-    },
-
-    findPossibleOwners: function() {
-      var self = this;
-      var fields = [];
-      _(appState.entities).each(function(entity) {
-        _(entity.fields).each(function(field) {
-          console.log(self.entity.get('name'));
-          if(field.type  == '{{' + self.entity.get('name') + '}}') {
-            var str = '{{'+entity.name+'.'+field.name+'}}';
-            fields.push(str);
-          }
-        });
-      });
-
-      return fields;
+      this.model.set('belongsTo', null);
     }
   });
 

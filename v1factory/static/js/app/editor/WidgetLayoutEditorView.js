@@ -1,6 +1,7 @@
 define([
   'app/editor/WidgetClassPickerView',
-  'backbone'
+  'backbone',
+  'editor/tool-tip-hints'
 ],
 function(WidgetClassPickerView) {
 
@@ -10,7 +11,10 @@ function(WidgetClassPickerView) {
     events : {
       'click .a-pick'            : 'changeAlignment',
       'click .padding'           : 'changePadding',
-      'click #pick-style'        : 'openStylePicker'
+      'click #pick-style'        : 'openStylePicker',
+      'click #delete-widget'     : 'deleteWidget',
+      'mouseover .tt'            : 'showToolTip',
+      'mouseout .tt'           : 'hideToolTip'
     },
 
     initialize: function(widgetModel){
@@ -18,7 +22,10 @@ function(WidgetClassPickerView) {
                       'renderStyleEditing',
                       'clear',
                       'changeAlignment',
-                      'changePadding');
+                      'changePadding',
+                      'showToolTip',
+                      'hideToolTip',
+                      'deleteWidget');
 
       this.model = widgetModel;
       this.render();
@@ -28,7 +35,10 @@ function(WidgetClassPickerView) {
     changeAlignment: function(e) {
       $('.selected', '.alignment-picker').removeClass('selected');
       var direction = (e.target.className).replace(' a-pick', '');
+      direction = direction.replace(' tt', '');
       direction = direction.replace('a-','');
+
+      console.log(direction);
       this.model.get('layout').set('alignment', direction);
       e.target.className += ' selected';
     },
@@ -70,26 +80,52 @@ function(WidgetClassPickerView) {
 
     renderStyleEditing: function(e) {
       var li       = document.createElement('ul');
-      li.innerHTML += '<span id="pick-style" class="option-button" style="width:220px; margin-left:6px;"><strong>Pick Style</strong></span>';
+      li.innerHTML += '<span id="pick-style" class="option-button tt" style="width:180px; margin-left:6px; display: inline-block;"><strong>Pick Style</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:36px; margin-left:6px; display: inline-block;"></span>';
       return li;
     },
 
     renderLayoutInfo: function() {
       var ul = document.createElement('ul');
       ul.className = "alignment-picker";
-      ul.innerHTML += '<li class="a-left a-pick"></li><li class="a-center a-pick"></li><li class="a-right a-pick"></li>';
+      ul.innerHTML += '<li class="a-left a-pick tt" id="a-left"></li><li class="a-center a-pick tt" id="a-center"></li><li class="a-right a-pick tt" id="a-right"></li>';
       return ul;
     },
 
     renderPaddingInfo: function() {
       var ul = document.createElement('ul');
       ul.className = "padding-picker right";
-      ul.innerHTML += '<li class="padding tb" id="padding-tb"></li><li class="padding lr" id="padding-lr"></li>';
+      ul.innerHTML += '<li class="padding tb tt" id="padding-tb"></li><li class="padding lr tt" id="padding-lr"></li>';
       return ul;
     },
 
     openStylePicker: function(e) {
       new WidgetClassPickerView(this.model);
+    },
+
+    showToolTip: function(e) {
+      if(this.toolTip) {
+        $(this.toolTip).remove();
+      }
+
+      var div = document.createElement('div');
+      div.className = "tool-tip-box fadeIn";
+      var text = ToopTipHints[e.target.id];
+      if(text) {
+        div.innerHTML = text;
+        this.toolTip = div;
+        this.el.appendChild(div);
+      }
+
+    },
+
+    hideToolTip: function(e) {
+      if(this.toolTip) {
+        $(this.toolTip).remove();
+      }
+    },
+
+    deleteWidget: function() {
+      this.model.remove();
     },
 
     clear: function() {

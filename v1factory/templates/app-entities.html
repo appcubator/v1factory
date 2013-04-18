@@ -1,8 +1,6 @@
 {% extends "infra-html.html" %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
 {% endblock %}
@@ -16,7 +14,7 @@
 <div class="container hoff6" id="entities-page">
   <div class="row hoff1">
     <ul class="span6 hoff1 sub-menu">
-      <li class="show-data hi6 show-data">
+      <li class="show-data show-data">
         Show User Data
       </li>      
     </ul>
@@ -101,19 +99,20 @@
       </span>
     </div>
 
-    <div class="span58 hi15" id="forms">
+    <div class="span58 hi17" id="forms">
       <hr style="display:block; width:100%;" class="hoff1">
       <h3 class="offset hoff2 offset2">Forms</h3>
       <div class="hoff1 offset2 span10">
         <label class="hi2"><input class="cb-login" id="local" type="checkbox" value="local">Local Login</label>
         <label class="hi2"><input class="cb-login" id="facebook" type="checkbox" value="facebook">Facebook Login</label>
+        <label class="hi2"><input class="cb-login" id="twitter" type="checkbox" value="twitter">Twitter Login</label>
         <label class="hi2"><input class="cb-login" id="linkedin" type="checkbox" value="linkedin">LinkedIn Login</label>
       </div>
       <ul class="form-list offset1 hoff1">
       </ul>
       <a class="span10 hi9 form-pane" style="float:none;">
         <form class="add-form-form" style="display:none">
-          <div class="hi8 hdr">
+          <div class="hi9 hdr">
             <input type="text" class="form-name-input span7" placeholder="Form Name...">
           </div>
         </form>
@@ -122,12 +121,8 @@
           Add New Form</span>
         </a>
       </div>
-
     </div>
   </div>
-
-
-
   <div id="entities-container">
     <ul id="entities" class="entity-list">
     </ul><div id="add-entity-button" class="add-entity offset6 span58">
@@ -148,5 +143,6 @@
 var appState = {{ app.state_json|safe }};
 var appId = {{ app_id|safe }};
 </script>
-<script data-main="{{ STATIC_URL }}js/app/entities-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/entities-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
+
 {% endblock %}

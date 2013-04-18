@@ -3,7 +3,6 @@ define([
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
-  'app/collections/UrlsCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
   'editor/WidgetsManagerView',
@@ -11,23 +10,19 @@ define([
   'editor/WidgetEditorView',
   'editor/DesignEditorView',
   'app/designer-app/EditorLiteGalleryView',
-  'backbone',
-  'backboneui',
+  'mixins/BackboneModal',
   '../../libs/keymaster/keymaster.min'
 ],function(PageModel,
            EntityCollection,
            WidgetCollection,
            ContainersCollection,
-           UrlsCollection,
            UrlView,
            SimpleModalView,
            WidgetsManagerView,
            WidgetClassPickerView,
            WidgetEditorView,
            DesignEditorView,
-           EditorLiteGalleryView,
-           Backbone,
-           BackboneUI) {
+           EditorLiteGalleryView) {
 
   var EditorLiteView = Backbone.View.extend({
     el        : document.body,
@@ -195,7 +190,6 @@ define([
 
       _(themeState).each(function(type) {
         _(type).each(function(elem) {
-          console.log(elem);
           if(elem.attribs) return;
 
           var styleTag = document.createElement('style');

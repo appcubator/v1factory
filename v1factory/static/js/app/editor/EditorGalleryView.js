@@ -38,9 +38,9 @@ function(ElementCollection,
 
       this.userModel = g_userModel;
 
-      g_entityCollection.bind('add', this.appendEntity, this);
-      g_contextCollection.bind('add',  this.appendContextEntity, this);
-      this.elementsCollection.bind('add',  this.appendElement, this);
+      g_entityCollection.bind('add',     this.appendEntity, this);
+      g_contextCollection.bind('add',    this.appendContextEntity, this);
+      this.elementsCollection.bind('add',this.appendElement, this);
 
       this.render();
     },
@@ -260,14 +260,16 @@ function(ElementCollection,
     dropped : function(e, ui) {
       var self = this;
       var widget = {};
-      var left, top, offsetLeft;
+      var left, top, offsetLeft, offsetTop;
 
       this.dragActive = false;
 
       if(e.type != 'click') {
-        offsetLeft = document.getElementById('page-wrapper').offsetLeft + 100;
+        offsetLeft = document.getElementById('elements-container').offsetLeft;
+        offsetScrolledTop = $('#elements-container').offset().top;
+
         left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
-        top  = Math.round((e.pageY - $('.page')[0].offsetTop - 180)/GRID_HEIGHT);
+        top  = Math.round((e.pageY - offsetScrolledTop)/GRID_HEIGHT);
 
         if(top < 0) top = 0;
         if(left < 0) left = 0;
@@ -283,6 +285,7 @@ function(ElementCollection,
         top   : top,
         left  : left
       };
+      widget.context = "";
 
       var className = e.target.className;
       var id = e.target.id;
@@ -319,23 +322,26 @@ function(ElementCollection,
       else if (/(single-data)/.exec(className)) {
         id = String(id).replace('entity-','');
         var cid = id.split('-')[0];
+        field   = id.split('-')[1];
 
         if(cid === this.userModel.cid) {
           entity = new UserEntityModel(appState.users);
+          content =  '{{CurrentUser.'+field+'}}';
         }
         else {
           entity = this.entitiesCollection.get(cid);
+          content =  '{{page.'+entity.get('name')+'.'+field+'}}';
         }
 
-        field          = id.split('-')[1];
-
         widget         = _.extend(widget, uieState['texts'][0]);
-        widget.content =  '{{'+entity.get('name')+'.'+field+'}}';
+        widget.content =  content;
         this.widgetsCollection.push(widget);
       }
       else {
         var type;
         type        = className.replace(' ui-draggable','');
+        console.log(type);
+        console.log(uieState);
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
         this.widgetsCollection.push(widget);

@@ -1,22 +1,18 @@
 define([
   'app/collections/WidgetCollection',
   'editor/TableQueryView',
-  'editor/ListQueryView',
+  'editor/ListEditorView',
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
-  'backbone',
-  'backboneui',
   'editor/editor-templates'
 ],
 function(WidgetCollection,
         TableQueryView,
-        ListQueryView,
+        ListEditorView,
         WidgetView,
         SubWidgetView,
-        FormEditorView,
-        BackboneUI,
-        Backbone) {
+        FormEditorView) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -44,6 +40,11 @@ function(WidgetCollection,
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
+
+      if(this.model.get('container_info').has('form')) {
+        console.log('hey');
+        self.el =document.createElement('form');
+      }
 
       if(this.model.get('container_info').has('query')) {
         this.model.get('container_info').get('query').bind('change', this.reRender);
@@ -81,6 +82,8 @@ function(WidgetCollection,
 
     render: function() {
       var self = this;
+      var form;
+
       this.el.innerHTML = '';
 
       var width = this.model.get('layout').get('width');
@@ -101,7 +104,9 @@ function(WidgetCollection,
       if(this.model.get('container_info').get('action') == "show") {
         var listDiv = document.createElement('div');
         var row = this.model.get('container_info').get('row');
-        listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'), uielements: row.get('uielements').models});
+        listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'),
+                                                            uielements: row.get('uielements').models,
+                                                            isListOrGrid: row.get('isListOrGrid')});
         this.el.appendChild(listDiv);
         // tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
         // this.el.appendChild(tableDiv);
@@ -160,7 +165,7 @@ function(WidgetCollection,
       }
 
       if(this.model.get('container_info').has('row')) {
-        new ListQueryView(this.model,
+        new ListEditorView(this.model,
                           this.model.get('container_info').get('query'),
                           this.model.get('container_info').get('row'));
       }

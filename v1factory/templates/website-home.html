@@ -5,7 +5,6 @@
       api_key: t0q97cjtk5kf
       scope: r_basicprofile r_emailaddress
     </script>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/home.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
 <!--     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
@@ -84,7 +83,7 @@
   <div class="span8  hi14">
     <span class="pad1"><strong>User Login</strong><br><i class="micro"> (forgot password?)</i></span>
   </div>
-  <div class="span20 hi14">
+  <div class="span18 hi14">
           <span class="login span24 offset1">
             {% if form.errors %}
             <p>Your username and password didn't match. Please try again.</p>
@@ -107,5 +106,5 @@
 {% endblock %}
 
 {% block js %}
-<script data-main="{{ STATIC_URL }}js/app/home-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/home-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

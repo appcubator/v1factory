@@ -69,7 +69,7 @@ FormEditorTemplates.template = [
     '<select class="belongs-to">',
       '<option>Choose an Option</option>',
       '<% _(possibleEntities).each(function(entity) { %>',
-        '<option><%= entity %></option>',
+        '<option value="{{<%= entity %>}}" <% if(form.get("belongsTo") == entity){ %> selected<% }; %>><%= entity %></option>',
       '<% });%>',
     '</select>',
     '<h4 class="hoff2">Form Actions</h4>',

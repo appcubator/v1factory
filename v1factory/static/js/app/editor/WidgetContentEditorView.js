@@ -37,7 +37,9 @@ function(WidgetClassPickerView) {
       var self = this;
 
       if(this.model.has('content') && this.model.get('content') !== null &&
-        !this.model.get('content_attribs').has('src')) {
+        !this.model.get('content_attribs').has('src') &&
+        this.model.get('type') != "images" &&
+        this.model.get('type') != "buttons") {
 
         this.el.appendChild(this.renderFontPicker());
         this.el.appendChild(this.renderTextEditing());
@@ -57,8 +59,14 @@ function(WidgetClassPickerView) {
       var li       = document.createElement('li');
       var hash     = 'content_attribs' + '-' + 'href';
       temp         = Templates.tempHrefSelect;
-      html         = _.template(temp, {val : this.model.get('content_attribs').get('href'), hash: hash});
-      li.innerHTML = '<span class="key" style="display:block;">Target</span>' + html;
+      listOfPages  = this.model.getListOfPages();
+      console.log(listOfPages);
+      html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
+                                        hash: hash,
+                                        listOfPages: listOfPages});
+
+      li.appendChild(new comp().div('Target').classN('key').el);
+      li.innerHTML += html;
       return li;
     },
 
@@ -67,45 +75,43 @@ function(WidgetClassPickerView) {
       var hash     = 'content_attribs' + '-' + 'src';
       temp         = Templates.tempSourceSelect;
       html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
-      li.innerHTML = '<span class="key" style="display:block;">Image Source</span>' + html;
+      li.appendChild(comp.div('Image Source').classN('key').el);
+      li.innerHTML += html;
       return li;
     },
 
     renderTextEditing: function() {
       var li       = document.createElement('li');
-      var hash     = 'content';
-      html         = '<textarea id="prop-content">'+ this.model.get('content')+'</textarea>';
-      li.innerHTML = '<span class="key" style="display:block;">Text</span>' + html;
+      li.appendChild(new comp().div('Text').classN('key').el);
+      li.appendChild(new comp().textarea(this.model.get('content')).id('prop-content').el);
       return li;
     },
 
     renderFontPicker: function() {
       var li       = document.createElement('li');
-      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:12px;');
-      var currentFont = /font-size:([^]+);/g.exec(curStyle)[1];
+      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:default;');
+
+      var currentFont;
+      if(/font-size:([^]+);/g.exec(curStyle)) {
+        currentFont = /font-size:([^]+);/g.exec(curStyle)[1];
+      }
+      else {
+        currentFont = "font-size:default;";
+      }
 
       var sizeDiv = document.createElement('div');
       sizeDiv.className = 'size-picker';
       var hash     = 'content_attribs' + '-' + 'style';
-      html         = '<select id="'+ hash +'" class="font-picker">' +
-                        '<option value="font-size:'+ currentFont +';">'+ currentFont +'</option>'+
-                        '<option value="font-size:10px;">'+ '10px' +'</option>'+
-                        '<option value="font-size:12px;">'+ '12px' +'</option>'+
-                        '<option value="font-size:14px;">'+ '14px' +'</option>'+
-                        '<option value="font-size:16px;">'+ '16px' +'</option>'+
-                        '<option value="font-size:16px;">'+ '18px' +'</option>'+
-                        '<option value="font-size:20px;">'+ '20px' +'</option>'+
-                        '<option value="font-size:24px;">'+ '24px' +'</option>'+
-                        '<option value="font-size:32px;">'+ '32px' +'</option>'+
-                        '<option value="font-size:40px;">'+ '40px' +'</option>'+
-                        '<option value="font-size:48px;">'+ '48px' +'</option>'+
-                        '<option value="font-size:52px;">'+ '52px' +'</option>'+
-                        '<option value="font-size:64px;">'+ '64px' +'</option>'+
-                        '<option value="font-size:72px;">'+ '72px' +'</option>'+
-                        '<option value="font-size:90px;">'+ '90px' +'</option>'+
-                      '</select>';
-      sizeDiv.innerHTML = '<span class="key">Font Size</span>' + html;
+      var sizeSelect = new comp().select('').id(hash).classN('font-picker');
 
+      _(['default', '10px', '14px', '16px', '18px', '20px']).each(function(val) {
+        console.log(val);
+        sizeSelect.option(val).valProp('font-size:' + val + ';');
+        console.log(sizeSelect);
+      });
+
+      sizeDiv.innerHTML = '<span class="key">Font Size</span>';
+      sizeDiv.appendChild(sizeSelect.el);
       var optionsDiv = document.createElement('div');
       optionsDiv.className = 'font-options';
       optionsDiv.innerHTML = '<span id="toggle-bold" class="option-button"><strong>B</strong></span>';
@@ -113,6 +119,7 @@ function(WidgetClassPickerView) {
       li.appendChild(sizeDiv);
       li.appendChild(optionsDiv);
 
+      $(sizeDiv).find('option[value="font-size:'+currentFont+';"]').prop('selected', true);
       return li;
     },
 
@@ -130,11 +137,21 @@ function(WidgetClassPickerView) {
     },
 
     changeFont: function(e) {
+      console.log(e.target);
       if(!this.model.get('content_attribs').has('style')) {
         this.model.get('content_attribs').set('style', 'font-size:12px;');
       }
       var curStyle = this.model.get('content_attribs').get('style');
-      curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+
+      if(/font-size:([^]+);/g.exec(curStyle)) {
+        curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+      }
+      else {
+        curStyle = curStyle + ' ' + e.target.value;
+      }
+
+      console.log(curStyle);
+
       this.model.get('content_attribs').set('style', curStyle);
     },
 
@@ -170,7 +187,11 @@ function(WidgetClassPickerView) {
 
     changeHref: function(e) {
       var self = this;
-      this.model.get('content_attribs').set('href', e.target.value);
+      var target = e.target.value;
+      if(this.model.get('context')) {
+        target += ('/' + this.model.get('context'));
+      }
+      this.model.get('content_attribs').set('href', target);
     },
 
     clear: function() {

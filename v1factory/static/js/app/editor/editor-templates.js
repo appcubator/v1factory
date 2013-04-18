@@ -44,8 +44,8 @@ Templates.tempLiTable = [
 
 Templates.tempHrefSelect = [
   '<select class="select-href" id="prop-<%= hash %>">',
-  "<% _(appState.pages).each(function(page){ var b = ''; if(('{{'+page.name+'}}') == val){ b = 'selected';}%>",
-  '<option value="{{<%= page.name %>}}" <%= b %>><%= page.name %></option>',
+  "<% _(listOfPages).each(function(page){ var b = ''; if(('internal://'+page) == val){ b = 'selected';}%>",
+  '<option value="internal://<%= page %>" <%= b %>><%= page %></option>',
   '<%  }) %>',
   '</select>'
 ].join('\n');
@@ -83,7 +83,7 @@ Templates.formButton = [
 
 var FieldTypes = {
   "single-line-text" : '<input type="text" class="'+ uieState.textInputs[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>">',
-  "paragraph-text"   : '<textarea placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
+  "paragraph-text"   : '<textarea class="'+ uieState.textAreas[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
   "dropdown"         : '<select class="drowdown"><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
   "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>',
   "password-text"    : '<input type="password" class="'+ uieState.passwords[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>">',
@@ -94,7 +94,7 @@ var FieldTypes = {
 };
 
 Templates.fieldNode = [
-'<label><%= field.get(\'label\') %><br>',
+'<label><%= field.get(\'label\') %></label>',
   '<% if(field.get(\'displayType\') == "single-line-text") { %>',
     FieldTypes['single-line-text'],
   '<% } %>',
@@ -121,8 +121,7 @@ Templates.fieldNode = [
   '<% } %>',
   '<% if(field.get(\'displayType\') == "date-picker") { %>',
     FieldTypes['date-picker'],
-  '<% } %>',
-'</label>'
+  '<% } %>'
 ].join('\n');
 
 Templates.queryView = [
@@ -168,8 +167,42 @@ Templates.queryView = [
     '<hr>'
 ].join('\n');
 
+Templates.listQueryView = [
+  '<h1 class="title"><%= entity.get(\'name\') %> List Editor</h1>',
+  '<hr>',
+  '<div class="sect">',
+  '<p id="query-description"><%= c.nLang %></p>',
+  '</div>',
+  '<hr>',
+    '<div class="sect">',
+    '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
+    '<p>Do you want to show the rows that just belong to the logged in user?</p>',
+    '<label><input type="radio" class="belongs-to-user" name="belongsTo" value="true" checked> Yes</label>',
+    '<label><input type="radio" class="belongs-to-user" name="belongsTo" value="false"<%= checked %>> No</label>',
+    '</div>',
+    '<hr>',
+    '<div class="sect">',
+    '<p>How do you want to sort the rows?</p>',
+    '<select class="sort-by">',
+    '<option id="by-date">According to the date created</option>',
+    '<% _.each(entity.get("fields").models, function(field) { %>',
+      '<% var selected = "";  if("by-" + field.get("name") == query.get("sortAccordingTo")) selected = "selected" %>',
+      '<option value="by-<%=field.get("name")%>" <%= selected %>>Alphabetically according to <%= field.get("name") %></option>',
+    '<% }); %>',
+    '</select>',
+    '</div>',
+    '<hr>',
+    '<div class="sect">',
+    '<p>How many rows would you like to show?</p>',
+    '<label><input type="radio" class="nmr-rows" id="all-rows" name="nmrRows" value="All" <%= c.rAll %>> All</label>',
+    '<label><input type="radio" class="nmr-rows" id="first-rows" name="nmrRows" value="First" <%= c.rFirst %>> First <input type="text" id="first-nmr" value="<%= c.rFirstNmr %>"> rows</label>',
+    '<label><input type="radio" class="nmr-rows" id="last-rows" name="nmrRows" value="Last" <%= c.rLast %>> Last <input type="text" id="last-nmr" value="<%= c.rLastNmr %>"> rows</label>',
+    '</div>',
+    '<hr>'
+].join('\n');
+
 Templates.listEditorView = [
-  '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
+  // '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
   '<div class="editor-window">',
   '</div>'
 ].join('\n');
@@ -192,8 +225,9 @@ Templates.tempUIElement = [
 
 
 Templates.tempUIElementSized = [
+  '<div style="position:absolute; left: <% print(element.get(\'layout\').get(\'left\')*GRID_WIDTH) %>px; top:<% print(element.get(\'layout\').get(\'top\')*GRID_HEIGHT) %>px;" class="span<%=element.get(\'layout\').get(\'width\')%> hi<%=element.get(\'layout\').get(\'height\')%>">',
   '<<%= element.get(\'tagName\') %>',
-  'class = "span<%=element.get(\'layout\').get(\'width\')%> hi<%=element.get(\'layout\').get(\'height\')%> <%= element.get(\'class_name\') %>"',
+  'class = "<%= element.get(\'class_name\') %>"',
   '<% if(element.get(\'cons_attribs\')) { %>',
   '<% _(element.get(\'cons_attribs\').attributes).each(function(val, key) { %>',
   '<%=key%> = "<%=val%>"<% }); %>',
@@ -203,11 +237,12 @@ Templates.tempUIElementSized = [
   '<% if(!element.get(\'isSingle\')) { %>',
   '<%= element.get(\'content\') %>',
   '</<%= element.get(\'tagName\') %>>',
-  '<% }; %>'
+  '<% }; %>',
+  '</div>'
 ].join('\n');
 
 Templates.rowNode = [
-  '<div class="span<%= layout.get(\'width\') %> hi<%= layout.get(\'height\') %>" style="position:relative;">',
+  '<div <% if(isListOrGrid == "list") { %> class="hi<%= layout.get(\'height\')%> block" <% } else { %> class="span<%= layout.get(\'width\') %> hi<%= layout.get(\'height\') %>" <% } %> style="position:relative;">',
     '<% _(uielements).each(function(element){ %>',
       Templates.tempUIElementSized,
     '<% }); %>',

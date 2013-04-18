@@ -1,9 +1,9 @@
 define([
-  'backboneui'
+  'mixins/BackboneModal'
 ],
-function(BackboneUI) {
+function() {
 
-  var PageStylePicker = BackboneUI.ModalView.extend({
+  var PageStylePicker = Backbone.ModalView.extend({
     el     : document.getElementById('page-style-picker'),
     width  : 800,
     events : {
@@ -28,7 +28,7 @@ function(BackboneUI) {
       var self = this;
       this.el.innerHTML = "<h2>Choose a template to start with?</h2>";
       this.el.innerHTML += "<ul>";
-      console.log(uieState);
+
       _(uieState.pages).each(function(page, ind) {
         self.el.innerHTML += '<li class="page-template" id="page-'+ ind +'">'+ page.name +'</li>';
       });

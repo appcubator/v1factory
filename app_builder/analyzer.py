@@ -7,6 +7,19 @@ from manager import Manager
 import simplejson
 from app_builder import utils
 
+
+def process_link_lang(s):
+  m = re.match(r"internal://(.+)$", s)
+  if m:
+    unprocessed = m.group(1)
+    tokens = unprocessed.split('/')
+    target_page_name = tokens[0]
+    return target_page_name
+  else:
+    raise Exception('this is not even a proper language bro: %s' % s)
+
+
+
 """ MODELS """
 
 class Model(object):
@@ -113,10 +126,16 @@ class Route(object):
     self.page = page
     self.urlparts = url['urlparts']
 
-  def static_url(self):
-    # if the url is static, just display it. else, return "DYNAMIC URL"
+  def is_static_url(self):
     for u in self.urlparts:
       if not(isinstance(u, str) or isinstance(u, unicode)):
+        return True
+    return False
+
+  def static_url(self):
+    # if the url is static, just display it. else, return "DYNAMIC URL"
+    if not self.is_static_url():
+        assert False
         return "/DYNAMIC_URL"
     return "/" + "/".join(self.urlparts)
 
@@ -192,11 +211,9 @@ class Node(UIElement):
   def create_list_entry(cls, uie, page):
     self = cls(uie, page)
     style_string = ''
-    if 'style' in self.attribs:
-      style_string = self.attribs['style']
 
-    style_string = "left: %spx; top: %spx; " % (80 * self.left, 15 * self.top) + style_string
-    self.attribs['style'] = style_string
+    # this is positioning elements inside a list-entry
+    self.wrapper_position_string = "left: %spx; top: %spx; " % (80 * self.left, 15 * self.top)
 
     return self
 
@@ -220,13 +237,11 @@ class Node(UIElement):
 
   def resolve_links(self, pages):
     if 'href' in self.attribs:
-      m = re.match(r"\{\{(.+)\}\}$", self.attribs['href'])
-      if m:
-        link_ref = m.group(1)
-        p = pages.get_by_name(link_ref)
-        if p is None:
-          raise Exception("Bad link reference: {}".format(p))
-        self.attribs['href'] = p
+      target_page_name = process_link_lang(self.attribs['href'])
+      p = pages.get_by_name(target_page_name)
+      if p is None:
+        raise Exception("Bad link reference: {}".format(target_page_name))
+      self.attribs['href'] = p
 
 # abstract
 class Container(UIElement):
@@ -306,7 +321,7 @@ class Form(Container):
     self.nodes = []
 
     if redirect_page_name is None:
-      self.redirect_page_name = "{{ Homepage }}"
+      self.redirect_page_name = "internal://Homepage"
     else:
       self.redirect_page_name = redirect_page_name
 
@@ -362,7 +377,7 @@ class Form(Container):
       f.model_field = f_check
 
   def resolve_goto_page(self, analyzed_app):
-    self.redirect_page = analyzed_app.pages.get_by_name(utils.extract_from_brace(self.redirect_page_name))
+    self.redirect_page = analyzed_app.pages.get_by_name(process_link_lang(self.redirect_page_name))
     assert self.redirect_page is not None, "could not find redirect page: %s" % self.redirect_page_name
 
 class LoginForm(Form):
