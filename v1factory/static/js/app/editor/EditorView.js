@@ -182,8 +182,9 @@ define([
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/deploy/',
-          complete: function(data) {
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + self.urlModel.getAppendixString() +'">'+ data.responseText + self.urlModel.getAppendixString() +'</a>', img:'happy_engineer.png'});
+          success: function(data) {
+            console.log(data);
+            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
           },
           dataType: "JSON"
         });
