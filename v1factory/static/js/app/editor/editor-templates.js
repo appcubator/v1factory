@@ -94,7 +94,7 @@ var FieldTypes = {
 };
 
 Templates.fieldNode = [
-'<label><%= field.get(\'label\') %><br>',
+'<label><%= field.get(\'label\') %></label>',
   '<% if(field.get(\'displayType\') == "single-line-text") { %>',
     FieldTypes['single-line-text'],
   '<% } %>',
@@ -121,8 +121,7 @@ Templates.fieldNode = [
   '<% } %>',
   '<% if(field.get(\'displayType\') == "date-picker") { %>',
     FieldTypes['date-picker'],
-  '<% } %>',
-'</label>'
+  '<% } %>'
 ].join('\n');
 
 Templates.queryView = [

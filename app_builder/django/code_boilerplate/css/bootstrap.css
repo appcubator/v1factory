@@ -1127,9 +1127,6 @@ input,
 button,
 select,
 textarea {
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 20px;
 }
 
 button, .btn { 
@@ -1145,7 +1142,6 @@ textarea {
 
 label {
   display: block;
-  margin-bottom: 5px;
 }
 
 select,
