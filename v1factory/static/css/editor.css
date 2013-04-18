@@ -1158,6 +1158,10 @@ li.model span.title {
   background-position: 10px 12px;
 }
 
+.pages ul li.new-page {
+  background-image: url('../img/plus.png');
+}
+
 .pages:hover ul {
   max-height: 300px;
 }

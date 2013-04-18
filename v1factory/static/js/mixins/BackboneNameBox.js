@@ -8,18 +8,29 @@ function(Backbone) {
   Backbone.NameBox = Backbone.View.extend({
     el: null,
     tagName: 'div',
+    txt: "he",
     events: {
       'click'               : 'showForm',
       'submit form'         : 'createFormSubmitted'
     },
 
-    initialize: function() {
+    initialize: function(inp) {
       _.bindAll(this, 'render', 'showForm', 'createFormSubmitted');
+      if(inp.txt) {
+        this.txt = inp.txt;
+      }
+
       this.render();
       return this;
     },
 
     render: function() {
+      if(this.txt) {
+        this.el.innerHTML += this.txt;
+      }
+      if(!this.$el.find('form').length) {
+        this.el.innerHTML +="<form style='display:none;'><input type='text' placehodler='Name...'></form>";
+      }
       return this;
     },
 

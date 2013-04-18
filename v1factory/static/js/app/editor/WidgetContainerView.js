@@ -41,6 +41,11 @@ function(WidgetCollection,
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
 
+      if(this.model.get('container_info').has('form')) {
+        console.log('hey');
+        self.el =document.createElement('form');
+      }
+
       if(this.model.get('container_info').has('query')) {
         this.model.get('container_info').get('query').bind('change', this.reRender);
       }
@@ -77,6 +82,8 @@ function(WidgetCollection,
 
     render: function() {
       var self = this;
+      var form;
+
       this.el.innerHTML = '';
 
       var width = this.model.get('layout').get('width');
