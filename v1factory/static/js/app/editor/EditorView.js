@@ -222,32 +222,6 @@ define([
     },
 
     style: function() {
-
-      // var basecss = uieState.basecss;
-      // basecss = basecss.replace('body {', '.page {');
-      // basecss = basecss.replace('body{', '.page {');
-      // var styleTag = document.createElement('style');
-      // styleTag.id = "basecss";
-      // styleTag.innerHTML = basecss;
-      // document.getElementsByTagName('head')[0].appendChild(styleTag);
-
-      // _(uieState).each(function(type, key) {
-      //   if(key == "basecss") return;
-
-      //   _(type).each(function(elem) {
-      //     if(elem.attribs) return;
-
-      //     var styleTag = document.createElement('style');
-      //     var styleContent = '.page '+elem.tagName + '.' + elem.class_name + '{';
-      //     styleContent += elem.style;
-      //     styleContent += '}';
-
-      //     styleTag.innerHTML = styleContent;
-      //     this.styleTag = styleTag;
-
-      //     document.getElementsByTagName('head')[0].appendChild(styleTag);
-      //   });
-      // });
     },
 
     hideSettings: function() {
@@ -356,6 +330,7 @@ define([
     createPage: function(name) {
       var pageUrl = { urlparts : [] };
       pageUrl.urlparts[0] = "page" + appState.pages.length;
+      pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       appState.pages.push(pageModel.toJSON());
 
@@ -363,7 +338,10 @@ define([
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
-        success: function() {},
+        complete: function() {
+          console.log('<li><a herf="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>');
+          $('<li><a href="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
+        },
         dataType: "JSON"
       });
     }

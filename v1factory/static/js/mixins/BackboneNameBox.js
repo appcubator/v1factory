@@ -8,7 +8,7 @@ function(Backbone) {
   Backbone.NameBox = Backbone.View.extend({
     el: null,
     tagName: 'div',
-    txt: "he",
+    txt: "",
     events: {
       'click'               : 'showForm',
       'submit form'         : 'createFormSubmitted'

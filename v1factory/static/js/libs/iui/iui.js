@@ -165,7 +165,7 @@ define(['jquery-ui'], function() {
 
     askBeforeLeave: function(message) {
       window.onbeforeunload = function(){
-        return ('You have some unsave changes.');
+        return ('You have some unsaved changes.');
       };
     },
 

@@ -1,79 +1,85 @@
 define(['jquery-ui'], function() {
 
-  var comp = {
+  var comp = function() {
 
-    el : null,
+    this.el = null;
 
-    div : function(txt) {
-      this.el = document.createElement('div');
-      this.el.appendChild(document.createTextNode(txt));
+    this.assign = function(node) {
+      if(this.el) {
+        this.el.appendChild(node);
+        this.lastChild = node;
+      }
+      else {
+        this.el = node;
+      }
+    };
+
+    this.div = function(txt) {
+      var newEl = document.createElement('div');
+      newEl.appendChild(document.createTextNode(txt));
+      this.assign(newEl);
       return this;
-    },
+    };
 
-    h1 : function(txt) {
+    this.h1 = function(txt) {
       var newEl = document.createElement('h1');
       newEl.appendChild(document.createTextNode(txt));
-      this.el.appendChild(newEl);
-      this.el = newEl;
+      this.assign(newEl);
       return this;
-    },
+    };
 
-    span : function(txt) {
+    this.span = function(txt) {
       var newEl = document.createElement('span');
       newEl.appendChild(document.createTextNode(txt));
-      if(this.el){ this.el.appendChild(newEl); } else {this.el = newEl; }
-      this.el = newEl;
+      this.assign(newEl);
       return this;
-    },
+    };
 
-    select: function(txt) {
+    this.select = function(txt) {
       var newEl = document.createElement('select');
       newEl.appendChild(document.createTextNode(txt));
-      if(this.el){ this.el.appendChild(newEl); } else {this.el = newEl; }
-      this.el = newEl;
+      this.assign(newEl);
       return this;
-    },
+    };
 
-    option: function(txt) {
+    this.option = function(txt) {
       var newEl = document.createElement('option');
       newEl.appendChild(document.createTextNode(txt));
-      if(this.el){ this.el.appendChild(newEl); } else {this.el = newEl; }
-      this.el = newEl;
+      this.assign(newEl);
       return this;
-    },
+    };
 
-    valProp: function(val) {
+    this.valProp = function(val) {
       this.el.setAttribute('value', val);
-      return this;      
-    },
+      return this;
+    };
 
-    textarea: function(txt) {
+    this.textarea = function(txt) {
       var newEl = document.createElement('textarea');
       newEl.value = txt;
-      if(this.el){ this.el.appendChild(newEl); } else {this.el = newEl; }
-      this.el = newEl;
+      this.assign(newEl);
       return this;
-    },
+    };
 
-    style: function(style) {
+    this.style = function(style) {
       this.el.setAttribute('style', style);
       return this;
-    },
+    };
 
-    id: function(id) {
+    this.id = function(id) {
       this.el.id = id;
       return this;
-    },
+    };
 
-    classN: function(clsName) {
+    this.classN = function(clsName) {
       this.el.className = clsName;
       return this;
-    },
+    };
 
-    html : function(html) {
+    this.html = function(html) {
       this.el.innerHTML += html;
       return this;
-    }
+    };
   };
 
 
