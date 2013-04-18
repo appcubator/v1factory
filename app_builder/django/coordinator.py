@@ -6,7 +6,7 @@ from app_builder.manager import Manager
 from app_builder.analyzer import CreateForm, EditForm, SignupForm, LoginForm
 
 from model import DjangoModel, DjangoField
-from view import DjangoView
+from view import DjangoView, DjangoLogoutView
 from query import DjangoQuery
 from template import DjangoTemplate
 from url import DjangoUrl
@@ -63,6 +63,13 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
       dq = DjangoQuery(q, analyzed_app)
       dq.find_model(models)
       v.queries.add(dq) # add the query to the view function
+
+  # logout button
+  lv = DjangoLogoutView(name='logout')
+  views.add(lv)
+  lu = DjangoUrl.create_get(p, lv, analyzed_app, models)
+  lu.urlparts = ['logout']
+  urls.add( lu )
 
   # now that we know all the queries, properly name the variables in the templates
   for t in templates.each():
