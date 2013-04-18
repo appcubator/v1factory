@@ -41,11 +41,6 @@ function(WidgetCollection,
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
 
-      if(this.model.get('container_info').has('form')) {
-        console.log('hey');
-        self.el =document.createElement('form');
-      }
-
       if(this.model.get('container_info').has('query')) {
         this.model.get('container_info').get('query').bind('change', this.reRender);
       }
@@ -112,7 +107,10 @@ function(WidgetCollection,
         // this.el.appendChild(tableDiv);
       }
 
-      //this.resizableAndDraggable();
+      if(this.model.get('container_info').has('form')) {
+        self.form = document.createElement('form');
+        self.el.appendChild(self.form);
+      }
 
       return this;
     },
@@ -138,7 +136,7 @@ function(WidgetCollection,
     placeFormElement: function(fieldModel) {
       var inp_class = uieState.textInputs[0].class_name;
       var fieldHtml = _.template(Templates.fieldNode, { field: fieldModel, inpClass: inp_class});
-      $(this.el).append(fieldHtml);
+      $(this.form).append(fieldHtml);
     },
 
     renderElements : function() {

@@ -61,6 +61,7 @@ function(ElementCollection,
         self.appendElement(element);
       });
 
+      this.$el.find('li').on('click', self.dropped);
       return this;
     },
 
@@ -258,6 +259,8 @@ function(ElementCollection,
     },
 
     dropped : function(e, ui) {
+      console.log(e);
+
       var self = this;
       var widget = {};
       var left, top, offsetLeft, offsetTop;
@@ -287,8 +290,16 @@ function(ElementCollection,
       };
       widget.context = "";
 
-      var className = e.target.className;
-      var id = e.target.id;
+      var targetEl;
+      if(e.target.tagName == "LI") {
+        targetEl = e.target;
+      }
+      else{
+        targetEl = e.target.parentNode;
+      }
+
+      var className = targetEl.className;
+      var id = targetEl .id;
 
       var hash, entityCid, formCid, action;
       var entity, form, field;

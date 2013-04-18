@@ -16,7 +16,7 @@ Templates.Entity = [
     '<div class="span58 entity-pane pane">',
       '<div class="" style="padding:0;">',
         '<div style="display:inline-block">',
-        '<div class="offset2 hoff2 span32">',
+        '<div class="offset2 hoff2 span42">',
           '<h2><%- name %></h2>',
         '</div>',
         '<span class="span13 right hoff2 right-panel">',
