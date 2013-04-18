@@ -1141,10 +1141,6 @@ li.model span.title {
   background-color: #2b3545;
   max-height: 42px;
   overflow: hidden;
-  background-image: url('../img/pages.png');
-  background-repeat: no-repeat;
-  background-size: 16px auto;
-  background-position: 10px 12px;
   margin: 0;
 }
 
@@ -1156,10 +1152,14 @@ li.model span.title {
   height: 42px;
   overflow: hidden;
   padding-left: 34px;
+  background-image: url('../img/pages.png');
+  background-repeat: no-repeat;
+  background-size: 16px auto;
+  background-position: 10px 12px;
 }
 
 .pages:hover ul {
-  max-height: 200px;
+  max-height: 300px;
 }
 
 .addbutton {

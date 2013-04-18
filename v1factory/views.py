@@ -21,8 +21,6 @@ def add_statics_to_context(context, app):
 
 @login_required
 def app_list(request):
-  if request.user.username in ['ican', 'icanberk']:
-    return redirect(designer_page)
   if request.user.apps.count() == 0:
     return redirect(app_new)
   else:
