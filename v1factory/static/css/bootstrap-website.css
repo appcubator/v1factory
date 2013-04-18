@@ -6912,3 +6912,11 @@ hr.vert {
   overflow: hidden;
   background-color: #0f2d40 !important;
 }
+
+.analytics-demo {
+  opacity: 0.4;
+  background-color: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px #b9bbbe;
+}
