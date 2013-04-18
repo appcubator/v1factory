@@ -112,6 +112,9 @@ class App(models.Model):
       subdomain = subdomain + '.staging'
     return subdomain
 
+  def github_url(self):
+    return "https://github.com/v1factory/" + self.subdomain()
+
   def css(self, deploy=True):
     """Use uiestate, less, and django templates to generate a string of the CSS"""
     from django.template import Context, loader
