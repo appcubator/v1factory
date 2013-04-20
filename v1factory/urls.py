@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^termsofservice/$', 'v1factory.base_views.terms_of_service'),
     url(r'^faq/$', 'v1factory.base_views.faq'),
     url(r'^account/$', 'v1factory.base_views.account'),
-    url(r'^startx/video/$', 'v1factory.base_views.startx_video')
+    url(r'^startx/video/$', 'v1factory.base_views.startx_video'),
     url(r'^tutorial/$', 'v1factory.base_views.tutorial'),
 )
 
