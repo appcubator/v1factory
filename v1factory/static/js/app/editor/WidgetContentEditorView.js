@@ -75,7 +75,7 @@ function(WidgetClassPickerView) {
       var hash     = 'content_attribs' + '-' + 'src';
       temp         = Templates.tempSourceSelect;
       html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
-      li.appendChild(comp.div('Image Source').classN('key').el);
+      li.appendChild(new comp().div('Image Source').classN('key').el);
       li.innerHTML += html;
       return li;
     },

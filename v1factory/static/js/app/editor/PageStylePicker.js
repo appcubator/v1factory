@@ -5,6 +5,7 @@ function() {
 
   var PageStylePicker = Backbone.ModalView.extend({
     el     : document.getElementById('page-style-picker'),
+    className : 'page-template-picker',
     width  : 800,
     events : {
       'click .page-template' : 'selected'
@@ -26,7 +27,7 @@ function() {
 
     render: function() {
       var self = this;
-      this.el.innerHTML = "<h2>Choose a template to start with?</h2>";
+      this.el.innerHTML = "<h2>Choose a page template to start with?</h2>";
       this.el.innerHTML += "<ul>";
 
       _(uieState.pages).each(function(page, ind) {

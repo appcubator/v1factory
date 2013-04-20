@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -11,18 +11,6 @@
 <link href="{{ STATIC_URL }}css/animate.css" rel="stylesheet">
 {% block css %}
 {% endblock %}
-<script type="text/javascript">
-  var heap=heap||[];
-  heap.load=function(a){window._heapid=a;
-  var b=document.createElement("script");
-  b.type="text/javascript",b.async=!0,b.src=("https:"===document.location.protocol?"https:":"http:")+"//d36lvucg9kzous.cloudfront.net";
-  var c=document.getElementsByTagName("script")[0];
-  c.parentNode.insertBefore(b,c);
-  var d=function(a){return function(){heap.push([a].concat(Array.prototype.slice.call(arguments,0)))}},e=["identify","track"];
-  for(var f=0; f<e.length; f++)
-    heap[e[f]]=d(e[f])};
-  heap.load("1077263705");
-</script>
 </head>
 <body>
   <div class="page">
@@ -48,6 +36,18 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
+</script>
+<script type="text/javascript">
+  var heap=heap||[];
+  heap.load=function(a){window._heapid=a;
+  var b=document.createElement("script");
+  b.type="text/javascript",b.async=!0,b.src=("https:"===document.location.protocol?"https:":"http:")+"//d36lvucg9kzous.cloudfront.net";
+  var c=document.getElementsByTagName("script")[0];
+  c.parentNode.insertBefore(b,c);
+  var d=function(a){return function(){heap.push([a].concat(Array.prototype.slice.call(arguments,0)))}},e=["identify","track"];
+  for(var f=0; f<e.length; f++)
+    heap[e[f]]=d(e[f])};
+  heap.load("1077263705");
 </script>
 <!-- begin olark code -->
 <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
