@@ -142,6 +142,20 @@ def less_sheet(request, app_id):
   add_statics_to_context(page_context, app)
   return render(request, 'app-editor-less-gen.html', page_context)
 
+@csrf_exempt
+def css_sheet(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  els = UIElement.get_library().values()
+  my_els = els.filter(app=app)
+  page_context = { 'app': app,
+                   'title' : 'Editor',
+                   'gallery_elements' : els,
+                   'elements' : simplejson.dumps(list(els)),
+                   'myuielements' : simplejson.dumps(list(my_els)),
+                   'app_id': app_id }
+  add_statics_to_context(page_context, app)
+  return render(request, 'app-editor-css-gen.html', page_context)
 
 
 @require_GET
