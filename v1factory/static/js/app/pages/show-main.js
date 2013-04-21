@@ -1,8 +1,9 @@
 define([
   "app/views/SimpleModalView",
+  "app/tutorial/TutorialView",
   "bootstrap"
 ],
-function(SimpleModalView) {
+function(SimpleModalView, TutorialView) {
 
   var ShowPageMain = function() {
     $('#deploy').on('click', function() {
@@ -18,6 +19,9 @@ function(SimpleModalView) {
             dataType: "JSON"
       });
     });
+
+
+    var tutorial = new TutorialView();
   };
 
   return ShowPageMain;
