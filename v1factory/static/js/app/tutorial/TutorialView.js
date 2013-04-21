@@ -9,8 +9,16 @@ function(Backbone) {
     className: 'tutorial-view',
     width: 700,
 
+    events : {
+      "click #tutorial-menu-list li" : "clickedMenuItem"
+    },
+
     initialize: function(data) {
-      _.bindAll(this, 'render', 'renderLeftMenu', 'renderMainModal', 'appendMenuItem');
+      _.bindAll(this, 'render',
+                      'renderLeftMenu',
+                      'renderMainModal',
+                      'appendMenuItem',
+                      'clickedMenuItem');
       this.render();
     },
 
@@ -27,25 +35,49 @@ function(Backbone) {
       var menuDiv = document.createElement('div');
       menuDiv.className = 'tutorial-menu';
       var menuUl  = document.createElement('ul');
+      menuUl.id = "tutorial-menu-list";
       this.appendMenuItem(menuUl, TutorialDirectory);
-      console.log(this.el);
-      console.log(menuDiv);
+
       menuDiv.appendChild(menuUl);
       this.el.appendChild(menuDiv);
     },
 
-    appendMenuItem: function (node, arr) {
+    appendMenuItem: function (node, arr, pInd) {
       var self =  this;
-      _.each(arr, function(item) {
-        console.log(item);
+      var prefix = "";
+      if(pInd) prefix = pInd + "-";
+
+      _.each(arr, function(item, ind) {
         var itemNode = document.createElement('li');
         itemNode.innerText = item.title;
+        itemNode.id = prefix + ind;
         node.appendChild(itemNode);
         if(item.contents) {
           var menuUl = document.createElement('ul');
-          self.appendMenuItem(menuUl, item.contents);
+          self.appendMenuItem(menuUl, item.contents, ind);
           node.appendChild(menuUl);
         }
+      });
+    },
+
+    clickedMenuItem: function(e) {
+      var addr = String(e.target.id).split('-');
+      var obj = TutorialDirectory[addr[0]];
+      if(addr[1]) {
+        obj = obj[addr[1]];
+      }
+      this.showSlide(obj);
+    },
+
+    showSlide: function(obj) {
+      console.log(obj);
+      $.ajax({
+        type: "GET",
+        url: obj.view,
+        success: function(data) {
+          console.log(data);
+        },
+        dataType: "JSON"
       });
     }
   });

@@ -16,10 +16,11 @@
       <h2>Theme Gallery</h2>
       <ul class="theme-gallery">
         {% for theme in themes %}
-        <li class="span15 theme" id="theme-{{theme.id}}">
-          <img src="{{ STATIC_URL }}img/theme4.png">
-          <span class="theme">{{ theme.name }}</span>
-          <span class="theme">Designed by {{ theme.designer.username }}</span>
+        <li class="span64 theme" class="theme-item" id="theme-{{theme.id}}">
+          <img src="{{ STATIC_URL }}img/theme4.png" class="span16">
+          <div class="details">Click to See Details</div>
+          <h2 class="offset2 span40">{{ theme.name }}</h2>
+          <div class="offset2 span40">Designed by {{ theme.designer.username }}</div>
         </li>
         {% endfor %}
       </ul>
