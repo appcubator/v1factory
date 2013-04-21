@@ -5,15 +5,15 @@ define([
 function(SimpleModalView) {
 
   var ShowPageMain = function() {
-    console.log("SHOW MAIN");
     $('#deploy').on('click', function() {
       iui.startAjaxLoading();
       $.ajax({
             type: "POST",
             url: '/app/'+appId+'/deploy/',
-            complete: function(data) {
+            success: function(data) {
+              console.log(data);
               iui.stopAjaxLoading();
-              new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+              new SimpleModalView({ text: 'Your app is available at <br  /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
             },
             dataType: "JSON"
       });
