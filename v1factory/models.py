@@ -24,6 +24,13 @@ def get_default_app_state():
   f.close()
   return s
 
+def get_default_theme_state():
+  f = open(os.path.join(DEFAULT_STATE_DIR, "flat_ui_theme.json"))
+  s = f.read()
+  simplejson.loads(s) # makes sure it's actually valid
+  f.close()
+  return s
+
 
 class App(models.Model):
   name = models.CharField(max_length=100, unique=True)
@@ -277,4 +284,13 @@ class ApiKeyCounts(models.Model):
 class ApiKeyUses(models.Model):
   api_key = models.ForeignKey(ApiKeyCounts, related_name="api_key_counts")
   api_use = models.DateField(auto_now_add=True)
-  
+
+
+def load_initial_themes():
+  s = get_default_theme_state()
+  t = UITheme(name="Flat UI Kit")
+  t.set_state(s)
+  t.full_clean()
+  t.save()
+  print "Done"
+  return t
