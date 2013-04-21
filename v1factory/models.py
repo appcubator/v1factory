@@ -252,9 +252,13 @@ class UITheme(models.Model):
   uie_state = property(get_state, set_state)
 
   def to_dict(self):
+    try:
+      designer = User.objects.values().get(pk=self.designer_id),
+    except User.DoesNotExist:
+      designer = { 'name' : 'Anon' }
     return { 'id' : self.id,
              'name' : self.name,
-             'designer' : User.objects.values().get(pk=self.designer_id),
+             'designer' : designer,
              'statics' : self.statics.values(),
              'uie_state' : self.uie_state }
 
