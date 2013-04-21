@@ -24,8 +24,21 @@
   color: #fff;
 }
 
+.tutorial-menu ul li.selected {
+  background-color: #1F8DD7;
+  color: #fff;
+}
+
 .tutorial-menu ul ul li {
   padding-left: 32px;
   font-weight: normal;
   font-size:  14px;
+}
+
+.modal.tutorial-view {
+    -webkit-animation-name:none;
+    -moz-animation-name:none;
+    -ms-animation-name:none;
+    -o-animation-name:none;
+    animation-name:none;
 }

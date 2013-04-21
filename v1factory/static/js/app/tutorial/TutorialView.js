@@ -18,7 +18,9 @@ function(Backbone) {
                       'renderLeftMenu',
                       'renderMainModal',
                       'appendMenuItem',
-                      'clickedMenuItem');
+                      'clickedMenuItem',
+                      'chooseSlide',
+                      'selectMenu');
       this.render();
     },
 
@@ -62,22 +64,35 @@ function(Backbone) {
 
     clickedMenuItem: function(e) {
       var addr = String(e.target.id).split('-');
+      this.chooseSlide(addr);
+    },
+
+    chooseSlide: function(addr) {
+      this.addr = addr;
+      this.selectMenu();
+
       var obj = TutorialDirectory[addr[0]];
       if(addr[1]) {
-        obj = obj[addr[1]];
+        obj = obj.contents[addr[1]];
       }
+
       this.showSlide(obj);
     },
 
+    selectMenu: function (addr) {
+      var addrStr = this.addr.join('-');
+      console.log('#'+addrStr);
+      this.$el.find('.selected').removeClass('selected');
+      $('#'+addrStr).addClass('selected');
+    },
+
     showSlide: function(obj) {
-      console.log(obj);
       $.ajax({
         type: "GET",
         url: obj.view,
         success: function(data) {
-          console.log(data);
-        },
-        dataType: "JSON"
+          this.el.innerHTML = data.responseText;
+        }
       });
     }
   });
