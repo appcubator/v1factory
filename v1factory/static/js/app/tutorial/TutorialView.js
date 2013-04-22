@@ -92,7 +92,7 @@ function(Backbone) {
     showSlide: function(obj) {
       //this.el.innerHTML = obj.html;
       // TODO see if this is ok.
-      $('.tutorial-content').html(obj.html);
+      $('.tutorial-content').html(iui.getHTML(obj.view));
     }
   });
 
