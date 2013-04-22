@@ -183,6 +183,8 @@ function(Backbone) {
          self.chooseSlide(self.addr, false);
          break;
       }
+
+      e.preventDefault();
     }
   });
 

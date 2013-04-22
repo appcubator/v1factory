@@ -1,3 +1,7 @@
+.form-editor {
+  height: 600px;
+}
+
 .panel {
   height: 600px;
   display: inline-block;
@@ -36,7 +40,7 @@
 }
 
 .details-panel {
-  width: 200px;
+  width: 260px;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ddd;
 }
@@ -57,7 +61,7 @@
 }
 
 .form-panel {
-  width: 300px;
+  width: 380px;
   padding-left: 0;
   padding-right: 0;
   border-left: 1px solid #ccc;
@@ -86,26 +90,35 @@
 }
 
 .action-panel {
-  width: 200px;
+  width: 240px;
   border-left: 1px solid #aaa;
 }
 
 .field-li-item {
-  width: 100%;
+  width: 96%;
+  margin-left: 2%;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   padding: 8px 20px;
   background-color: transparent;
   -webkit-transition: background-color 50ms linear;
   cursor: n-resize;
+  border: 1px dashed transparent;
+  background-repeat: no-repeat;
+  background-size: 8px auto;
+  background-position: 88% center;
 }
 
-.field-li-item.selected {
+.form-fields-list li.selected {
   background-color: rgba(25, 142, 58, 0.3);
+  border: 1px solid rgba(25, 142, 58, 0.7);
 }
 
-.field-li-item:hover {
-  background-color: rgba(25, 142, 58, 0.3);
+.form-fields-list li:hover {
+/*  background-color: rgba(25, 142, 58, 0.3);
+*/
+  border: 1px dashed #000;
+  background-image: url(../img/cross-updown.png);
 }
 
 h4 {
@@ -130,4 +143,23 @@ h4 {
 
 .form-editor .full.title {
   padding-top: 6px;
+}
+
+li.new-field {
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  background-image: url(../img/add.png);
+  background-repeat: no-repeat;
+  background-size: 26px 26px;
+  background-position: 60px center;
+  font-size: 14px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+li.new-field:hover {
+  opacity: 1;
+  background-image: url(../img/add.png);
+  border: none;
 }
