@@ -4,10 +4,12 @@
   background-color: #fff;
   position: fixed;
   left: 50%;
+  top: 30px;
   margin-left: -600px;
   border-radius: 6px;
   padding-top: 20px;
   padding-bottom: 20px;
+  z-index: 3002;
 }
 
 .tutorial-menu ul li {
@@ -35,10 +37,67 @@
   font-size:  14px;
 }
 
-.modal.tutorial-view {
+.modal.tutorial-view .tutorial-menu {
     -webkit-animation-name:none;
     -moz-animation-name:none;
     -ms-animation-name:none;
     -o-animation-name:none;
     animation-name:none;
 }
+
+.tutorial-view {
+    -webkit-animation-name:flyin;
+    -moz-animation-name:flyin;
+    -ms-animation-name:flyin;
+    -o-animation-name:flyin;
+    animation-name:flyin;
+}
+
+.flyin {
+    -webkit-animation-name:flyin;
+    -moz-animation-name:flyin;
+    -ms-animation-name:flyin;
+    -o-animation-name:flyin;
+    animation-name:flyin;
+}
+
+.flyout {
+    -webkit-animation-name:flyout;
+    -moz-animation-name:flyout;
+    -ms-animation-name:flyout;
+    -o-animation-name:flyout;
+    animation-name:flyout;
+}
+
+
+  @-webkit-keyframes flyin {
+    0% {
+      /*transform*/
+      margin-top: -800px;
+    }
+    55% {
+      margin-top: -550px;
+    }
+    75% {
+      margin-top: -425px;
+    }
+    100% {
+      margin-top: -300px;
+    }
+  }
+
+  @-webkit-keyframes flyout {
+    0% {
+      /*transform*/
+      margin-top: -300px;
+    }
+    55% {
+      margin-top: 100px;
+    }
+    75% {
+      margin-top: 325px;
+    }
+    100% {
+      margin-top: 500px;
+    }
+  }
