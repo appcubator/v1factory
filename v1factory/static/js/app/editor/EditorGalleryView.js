@@ -58,6 +58,11 @@ function(ElementCollection,
       });
 
       _(self.elementsCollection.models).each(function(element) {
+        console.log(element);
+        if(element.get('className') == "buttons" ||
+           element.get('className') == "textInputs" ||
+           element.get('className') == "textAreas" ||
+           element.get('className') == "dropdowns") return;
         self.appendElement(element);
       });
 
