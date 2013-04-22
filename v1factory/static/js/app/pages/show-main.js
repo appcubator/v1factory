@@ -14,7 +14,7 @@ function(SimpleModalView, TutorialView) {
             success: function(data) {
               console.log(data);
               iui.stopAjaxLoading();
-              new SimpleModalView({ text: 'Your app is available at <br  /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+              new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
             },
             dataType: "JSON"
       });

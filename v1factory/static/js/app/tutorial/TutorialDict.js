@@ -68,9 +68,11 @@ var TutorialDirectory = [
       {
         title : "You already have a design?",
         view  : "/tutorial/themes_design/existingdesign",
-        contents : null
+        contents : null,
+        html: "<p>What is this?</p>"
       }
-    ]
+    ],
+    html: "<p>This is where you can choose a general style for the UI Elements on your site.</p>"
   },
   {
     title : "Pages",
@@ -79,7 +81,9 @@ var TutorialDirectory = [
       {
         title : "Page Context",
         view  : "/tutorial/pages/context",
-        contents : null
+        contents : null,
+        html: "<p>A facebook profile page is for one specific user. An airbnb listing page "
+              +  "is for one specific listing. The ID for that listing is in the URL.</p>"
       }
     ]
   },
