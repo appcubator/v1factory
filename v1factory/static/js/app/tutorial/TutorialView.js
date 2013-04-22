@@ -30,7 +30,10 @@ function(Backbone) {
     },
 
     renderMainModal: function() {
+      var mainDiv = document.createElement('div');
+      mainDiv.className = 'tutorial-content';
 
+      this.el.appendChild(mainDiv);
     },
 
     renderLeftMenu: function() {
@@ -87,13 +90,9 @@ function(Backbone) {
     },
 
     showSlide: function(obj) {
-      $.ajax({
-        type: "GET",
-        url: obj.view,
-        success: function(data) {
-          this.el.innerHTML = data.responseText;
-        }
-      });
+      //this.el.innerHTML = obj.html;
+      // TODO see if this is ok.
+      $('.tutorial-content').html(obj.html);
     }
   });
 
