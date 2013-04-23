@@ -6378,3 +6378,24 @@ i.icon-url {
   background-position: left -90px;
 }
 
+.add-box {
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+  float: none;
+  text-align: center;
+  font-size: 28px;
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+.add-box img {
+  float: none;
+  vertical-align: top;
+}
+
+.add-box h2 {
+  display: inline-block;
+  vertical-align: top;
+}
