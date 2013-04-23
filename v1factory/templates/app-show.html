@@ -20,7 +20,7 @@
     </div>
     <hr class="span62 hoff2">
     <div class="span64 hoff1">
-      <a class="pane hi12 span14 entities" href="{% url v1factory.views.app_info app.id %}">
+      <a class="pane hi12 span14 entities" id="app-info" href="#">
         <img src="{{ STATIC_URL }}img/info.png">
         <div class="hoff2 offset2 offsetr2">
         <h3>App Info & Domain</h3>
@@ -47,9 +47,11 @@
     </div>
     <hr class="span62 hoff2">
   </div>
-  <div class="row hoff1 analytics">
-    <h3>Analytics</h3>
-    <img class="span62 analytics-demo hoff1" src="{{ STATIC_URL }}img/analytics.png">
+  <div id="main-container">
+    <div class="row hoff1 analytics">
+      <h3>Analytics</h3>
+      <img class="span62 analytics-demo hoff1" src="{{ STATIC_URL }}img/analytics.png">
+    </div>
   </div>
   <div class="hoff2"></div>
 </div>
@@ -58,6 +60,8 @@
 {% block js %}
 <script type="text/javascript">
   var appId = {{ app_id }};
+  var appState = {{ app.state_json|safe }};
+  console.log(appState);
 </script>
 <script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/show-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
 

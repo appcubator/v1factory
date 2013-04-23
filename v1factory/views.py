@@ -50,7 +50,9 @@ def app_new(request):
 @require_GET
 @login_required
 def app_page(request, app_id):
-  app = get_object_or_404(App.objects.values('id', 'name'), id=app_id, owner=request.user)
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  print app
   return render(request, 'app-show.html', {'app'    : app,
                                            'app_id' : long(app_id),
                                            'title'  : 'The Garage',

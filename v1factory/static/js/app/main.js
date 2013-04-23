@@ -35,23 +35,56 @@ require.config({
 
 //libs
 require([
+  "app/views/SimpleModalView",
+  "app/tutorial/TutorialView",
+  "app/views/AppInfoView",
   "backbone",     //require plugins
   "bootstrap",
   "iui",
   "comp"
 ],
-function () {
-  var $ = require("jquery"),
-    // the start module is defined on the same script tag of data-main.
-    // example: <script data-main="main.js" data-start="pagemodule/main" src="vendor/require.js"/>
-    startModuleName = $("script[data-main][data-start]").attr("data-start");
+function (SimpleModalView, TutorialView, InfoView) {
 
-    if (startModuleName) {
-      require([startModuleName], function (startModule) {
-        $(function(){
-          var fn = $.isFunction(startModule) ? startModule : startModule.init;
-          if (fn) { fn(); }
+  var ShowPageMain = Backbone.View.extend({
+    el : document.body,
+
+    events: {
+      'click #app-info' : 'showAppInfo'
+    },
+
+    initialize: function() {
+      _.bindAll(this, 'render',
+                      'showAppInfo');
+
+      this.render();
+      //var tutorial = new TutorialView();
+    },
+
+    render: function() {
+      $('#deploy').on('click', function() {
+        iui.startAjaxLoading();
+        $.ajax({
+              type: "POST",
+              url: '/app/'+appId+'/deploy/',
+              success: function(data) {
+                console.log(data);
+                iui.stopAjaxLoading();
+                new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+              },
+              dataType: "JSON"
         });
       });
+    },
+
+    showAppInfo: function() {
+      $('#main-container').html('');
+      var infoView = new InfoView();
+      $('#main-container').append(infoView.el);
     }
+
+  });
+
+  console.log('hee');
+  new ShowPageMain();
+
 });

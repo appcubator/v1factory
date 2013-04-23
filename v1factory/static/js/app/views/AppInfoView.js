@@ -1,7 +1,11 @@
-define(['./SimpleModalView', 'backbone', 'iui'],
+define([
+  './SimpleModalView',
+  'templates/MainTemplates'
+],
 function(SimpleModalView) {
+
   var AppInfoView = Backbone.View.extend({
-    el : document.body,
+
     events : {
       'click #save' : 'saveInfo',
       'click .low-save-btn' : 'saveInfo',
@@ -9,6 +13,7 @@ function(SimpleModalView) {
     },
 
     initialize: function() {
+
       _.bindAll(this, 'render',
                       'changeName',
                       'deploy',
@@ -18,13 +23,15 @@ function(SimpleModalView) {
       if(!appState.info) appState.info = {};
 
       this.render();
-
     },
 
     render: function() {
-      iui.get('app-name').value = appState.name;
-      iui.get('app-keywords').value = appState.info.keywords;
-      iui.get('app-description').value = appState.info.description;
+      var page_context = {};
+      page_context.name = appState.name;
+      page_context.keywords = appState.info.keywords;
+      page_context.description = appState.info.description;
+
+      this.el.innerHTML = _.template(MainTemplates.infoPage, page_context);
     },
 
     changeName : function() {
