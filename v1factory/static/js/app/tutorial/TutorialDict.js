@@ -57,7 +57,7 @@ var TutorialDirectory = [
     view  : "tutorial-pages",
     contents : [
       {
-        title : "Page Context",
+        title : "Dynamic URLs",
         view  : "tutorial-pages-context",
         contents : null
       }
@@ -68,8 +68,13 @@ var TutorialDirectory = [
     view  : "tutorial-editor",
     contents : [
       {
-        title : "Page Context",
-        view  : "tutorial-pages-context",
+        title : "Lists",
+        view  : "tutorial-editor-lists",
+        contents : null
+      },
+      {
+        title : "Forms",
+        view  : "tutorial-editor-forms",
         contents : null
       }
     ]
