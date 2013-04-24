@@ -1,1 +1,0 @@
-define(["backbone"],function(){var e=Backbone.Model.extend({defaults:{name:"default-email",subject:"Default Subject",content:"You have received the default email."}});return e});
