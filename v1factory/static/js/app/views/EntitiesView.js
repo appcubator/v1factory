@@ -1,61 +1,26 @@
 define([
   'app/models/EntityModel',
+  'app/collections/EntityCollection',
   'app/models/UserEntityModel',
   'app/models/FieldModel',
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
   'app/views/EntityView',
   'app/views/UserEntityView',
-  'app/collections/EntityCollection',
-  'backbone',
-  'jquery-ui'
+  'app/views/EntitiesListView'
 ],
 
 function(EntityModel,
+         EntityCollection,
          UserEntityModel,
          FieldModel,
          UploadExcelView,
          ShowDataView,
          EntityView,
          UserEntityView,
-         EntityCollection) {
-
-    var EntityListView = Backbone.View.extend({
-      el         : $('#entities'),
-
-      initialize: function(entitiesColl) {
-        _.bindAll(this, 'render', 'appendItem');
-
-        var self = this;
-        var initialEntities = appState.entities || [];
-
-        this.render();
-
-        this.collection = entitiesColl;
-        this.collection.bind("add", this.appendItem);
-        this.collection.add(initialEntities);
-
-        this.userModel = new UserEntityModel(appState.users);
-        new UserEntityView(this.userModel, this.collection);
-
-        this.collection.trigger('initialized');
-      },
-
-      render: function(){
-
-      },
-
-      appendItem: function(entityModel) {
-        var entityView = new EntityView(entityModel, 'entity-list-', this.collection);
-        this.el.appendChild(entityView.el);
-      }
-    });
-
+         EntitiesListView) {
 
     var EntitiesView = Backbone.View.extend({
-      el        : document.body,
-      addButton : $('#add-entity-button'),
-      addForm   : $('#add-entity-form'),
 
       events : {
         'click #save-entities'     : 'saveEntities',
@@ -69,16 +34,25 @@ function(EntityModel,
                         'formSubmitted',
                         'saveEntities');
 
-        this.collection = new EntityCollection();
-        this.entityList = new EntityListView(this.collection);
+        this.entitiesColl = new EntityCollection(appState.entities);
+        this.userEntityModel = new UserEntityModel(appState.users);
+
+        // subviews
+        this.entityList = new EntitiesListView(this.entitiesColl );
+        this.userEntityView = new UserEntityView(this.userEntityModel, this.entitiesColl );
+
       },
 
       render : function() {
-
+        var self = this;
+        this.$el.html(_.template(iui.getHTML('entities-page'), {}  ));
+        this.userEntityView.setElement(self.$('#user-entity')).render();
+        this.entityList.setElement(self.$('#entities')).render();
+        return this;
       },
 
       clickedAdd: function(e) {
-        var newForm = this.addForm.clone();
+        var newForm = this.$el.find('#add-entity-form');
         $(newForm).appendTo('#entities');
         $(newForm).fadeIn();
         $(this.addButton).hide();

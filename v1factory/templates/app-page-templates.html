@@ -1,0 +1,45 @@
+<script type="text/template" id="app-info-page">
+<div class="container hoff5">
+  <div class="row hoff1">
+    <div class="span11 offsetr1">
+    </div>
+    <div class="span36">
+      <div class="hoff1">
+        <h3 class="span10">App Name</h3>
+        <input type="text" class="span26" id="app-name" placeholder="Name of the Applications..." value="<%= name %>">
+      </div>
+      <hr>
+      <div class="hoff2">
+        <h3 class="span10">Description</h3>
+        <textarea class="span26 hi6" id="app-description" placeholder="Description of the application..."><%= description %></textarea>
+      </div>
+      <hr>
+      <div class="hoff2">
+        <h3 class="span10">Keywords</h3>
+        <textarea class="span26 hi6" id="app-keywords" placeholder="Keywords..."><%= keywords %></textarea>
+      </div>
+    </div>
+    <div class="span4 offset3 hoff1">
+      <a class="delete-btn-nofix hoff1" id="delete"></a>
+    </div>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="entities-page">
+<div class="container hoff6" id="entities-page">
+  <div id="user-entity">
+  </div>
+  <div id="entities-container">
+    <ul id="entities" class="entity-list">
+    </ul>
+    <div id="add-entity-button" class="add-entity offset6 span58">
+    <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
+  </div>
+  <form id="add-entity-form" class="pane offset6 span58 hi10 entity hoff1" style="display:none;">
+    <span class="sub-title offset1 hoff2">
+      <input type="text" id="entity-name-input" placeholder="Entity Name">
+    </span>
+  </form>
+</div>
+</script>

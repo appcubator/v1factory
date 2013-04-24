@@ -2,6 +2,8 @@
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app-page.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
 {% endblock %}
 
 {% block topbar %}
@@ -26,7 +28,7 @@
         <h3>App Info & Domain</h3>
         </div>
       </a>
-      <a class="pane hi12 span14 entities offset2" href="{% url v1factory.views.entities app.id %}">
+      <a class="pane hi12 span14 entities offset2" id="data-storage" href="#">
         <img src="{{ STATIC_URL }}img/entities.png">
         <div class="hoff2 offset2 offsetr2">
         <h3>Data & Storage</h3>
@@ -55,6 +57,7 @@
   </div>
   <div class="hoff2"></div>
 </div>
+{% include "app-page-templates.html" %}
 {% endblock %}
 
 {% block js %}

@@ -31,7 +31,7 @@ function(SimpleModalView) {
       page_context.keywords = appState.info.keywords;
       page_context.description = appState.info.description;
 
-      this.el.innerHTML = _.template(MainTemplates.infoPage, page_context);
+      this.el.innerHTML = _.template(iui.getHTML('app-info-page'), page_context);
     },
 
     changeName : function() {

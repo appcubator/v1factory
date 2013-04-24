@@ -1,12 +1,12 @@
 define([
-  'backbone',
   'app/models/FieldModel',
   'app/models/FormModel',
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
-  'app/views/ShowDataView'
+  'app/views/ShowDataView',
+  'app/templates/EntitiesTemplates'
 ],
-function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
+function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
   var EntityView = Backbone.View.extend({
     el         : null,

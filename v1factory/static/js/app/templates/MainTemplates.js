@@ -25,3 +25,8 @@ MainTemplates.infoPage = [
     '</div>',
   '</div>'
 ].join('\n');
+
+
+MainTemplates.entitiesPage = [
+
+].join('\n');

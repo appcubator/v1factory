@@ -6,12 +6,12 @@ define([
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
-  'app/collections/EntityCollection'
+  'app/collections/EntityCollection',
+  'app/templates/EntitiesTemplates'
 ],
   function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
 
     var UserEntityView = EntityView.extend({
-      el : document.getElementById('user-entity'),
 
       events: {
         'change .cb-login'           : 'checkedBox',
@@ -48,12 +48,12 @@ define([
 
         this.model.get('fields').bind('add', this.appendField);
         this.model.get('forms').bind('add', this.appendForm, this);
-
-        this.render();
       },
 
       render: function() {
         var self = this;
+
+        this.$el.html(_.template(Templates.UserEntity, {}));
 
         _(this.model.get('fields').models).each(function(fieldModel) {
           if(fieldModel.get('name') == 'First Name' ||
@@ -71,10 +71,10 @@ define([
           self.$el.find('.property-list').append(template);
         });
 
-        document.getElementById('facebook').checked = this.model.get('facebook');
-        document.getElementById('twitter').checked = this.model.get('linkedin');
-        document.getElementById('linkedin').checked = this.model.get('linkedin');
-        document.getElementById('local').checked = this.model.get('local');
+        // document.getElementById('facebook').checked = this.model.get('facebook');
+        // document.getElementById('twitter').checked = this.model.get('linkedin');
+        // document.getElementById('linkedin').checked = this.model.get('linkedin');
+        // document.getElementById('local').checked = this.model.get('local');
 
         var formsHtml = '';
         _(self.model.get('forms').models).each(function(form){
