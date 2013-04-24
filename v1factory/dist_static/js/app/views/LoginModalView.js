@@ -1,1 +1,0 @@
-define(["mixins/BackboneModal"],function(){var e=Backbone.ModalView.extend({tagName:"div",className:"login-modal",padding:40,initialize:function(e){this.render(),$(".username").focus()},render:function(){return this.el.innerHTML=iui.get("login-form-template").innerHTML,this}});return e});

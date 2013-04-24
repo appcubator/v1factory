@@ -11,6 +11,7 @@
           <li class="brand">
             <h1 class="name"><a class="" href="/app/{{ app.pk }}">v1 Factory</a> <span class="small-t">»</span> {{ title }}</h1>
           </li>
+          <li class="pull-right btn-help" style="width: 80px; margin-right: -80px">Help!</li>
           <li class="pull-right dropd">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if app %}{{ app.name }}{% else %}{{ user.get_full_name }}{% endif %}<b class="caret"></b></a>
             <ul class="dropdown-menu">

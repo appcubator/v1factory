@@ -1,1 +1,0 @@
-define(["backbone"],function(){var e=Backbone.Model.extend({initialize:function(e){this.set("name",e.name),e.displayType?this.set("displayType",e.displayType):alert("form field should have displayType"),e.type&&this.set("type",e.type),this.set("label",e.label||e.name),this.set("placeholder",e.placeholder||e.name),this.set("options",[])}});return e});

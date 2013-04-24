@@ -1,1 +1,0 @@
-define(["app/models/UIElementModel"],function(e){var t=Backbone.Collection.extend({model:e});return t});

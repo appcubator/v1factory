@@ -1,1 +1,0 @@
-define(["backbone"],function(){var e=Backbone.Model.extend({});return e});

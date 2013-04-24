@@ -21,7 +21,12 @@ function(SimpleModalView, TutorialView) {
     });
 
 
-    var tutorial = new TutorialView();
+    //var tutorial = new TutorialView();
+
+    // FIXME hacky help button
+    $('.btn-help').click(function(){
+      new TutorialView();
+    });
   };
 
   return ShowPageMain;
