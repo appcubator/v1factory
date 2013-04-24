@@ -30,7 +30,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/$', 'app_page'),
     url(r'^app/(\d+)/delete/$', 'app_delete'),
     # entities
-    url(r'^app/(\d+)/entities/$', 'entities'),
+    url(r'^app/(\d+)/entities/$', 'app_page'),
     url(r'^app/(\d+)/entities/xl/$', 'process_excel'),
     url(r'^app/(\d+)/entities/fetch_data/$', 'fetch_data'),
     # editor

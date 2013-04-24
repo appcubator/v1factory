@@ -48,68 +48,118 @@ require([
 ],
 function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryView, PagesView) {
 
-  var ShowPageMain = Backbone.View.extend({
-    el : document.body,
+  var v1App = Backbone.Router.extend({
 
-    events: {
-      'click #app-info' : 'showAppInfo',
-      'click #data-storage' : 'showDataStorage',
-      'click #themes'  : 'showThemes',
-      'click #pages'   : 'showPages'
+    routes: {
+      ""         : "index",
+      "info"     : "showInfoPage",
+      "entities" : "showEntitiesPage",
+      "themes"   : "showThemesPage",
+      "pages"    : "showPagesPage"
     },
 
     initialize: function() {
-      _.bindAll(this, 'render',
-                      'showAppInfo',
-                      'showDataStorage',
-                      'showThemes');
 
-      this.render();
-      //var tutorial = new TutorialView();
     },
 
-    render: function() {
-      $('#deploy').on('click', function() {
-        iui.startAjaxLoading();
-        $.ajax({
-              type: "POST",
-              url: '/app/'+appId+'/deploy/',
-              success: function(data) {
-                console.log(data);
-                iui.stopAjaxLoading();
-                new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
-              },
-              dataType: "JSON"
-        });
-      });
+    start: function () {
+
     },
 
-    showAppInfo: function() {
+    index: function () {
+
+    },
+
+    showInfoPage: function() {
       $('#main-container').html('');
       var infoView = new InfoView();
       $('#main-container').append(infoView.el);
     },
 
-    showDataStorage: function() {
+    showEntitiesPage: function() {
+      $('#main-container').html('');
       var entityEditor   = new EntitiesView();
       entityEditor.setElement($('#main-container')).render();
     },
 
-    showThemes: function() {
+    showThemesPage: function() {
       $('#main-container').html('');
       var galleryView = new ThemesGalleryView();
       galleryView.setElement($('#main-container')).render();
     },
 
-    showPages: function() {
+    showPagesPage: function() {
       $('#main-container').html('');
       var pagesView = new PagesView();
       pagesView.setElement($('#main-container')).render();
     }
-
   });
 
-  console.log('hee');
-  new ShowPageMain();
+  new v1App();
+  Backbone.history.start();
+
+  // var ShowPageMain = Backbone.View.extend({
+  //   el : document.body,
+
+  //   events: {
+  //     'click #app-info' : 'showAppInfo',
+  //     'click #data-storage' : 'showDataStorage',
+  //     'click #themes'  : 'showThemes',
+  //     'click #pages'   : 'showPages'
+  //   },
+
+  //   initialize: function() {
+  //     _.bindAll(this, 'render',
+  //                     'showAppInfo',
+  //                     'showDataStorage',
+  //                     'showThemes');
+
+  //     this.render();
+  //     //var tutorial = new TutorialView();
+  //   },
+
+  //   render: function() {
+  //     $('#deploy').on('click', function() {
+  //       iui.startAjaxLoading();
+  //       $.ajax({
+  //             type: "POST",
+  //             url: '/app/'+appId+'/deploy/',
+  //             success: function(data) {
+  //               console.log(data);
+  //               iui.stopAjaxLoading();
+  //               new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+  //             },
+  //             dataType: "JSON"
+  //       });
+  //     });
+  //   },
+
+  //   showAppInfo: function() {
+  //     $('#main-container').html('');
+  //     var infoView = new InfoView();
+  //     $('#main-container').append(infoView.el);
+  //   },
+
+  //   showDataStorage: function() {
+  //     var entityEditor   = new EntitiesView();
+  //     entityEditor.setElement($('#main-container')).render();
+  //   },
+
+  //   showThemes: function() {
+  //     $('#main-container').html('');
+  //     var galleryView = new ThemesGalleryView();
+  //     galleryView.setElement($('#main-container')).render();
+  //   },
+
+  //   showPages: function() {
+  //     $('#main-container').html('');
+  //     var pagesView = new PagesView();
+  //     pagesView.setElement($('#main-container')).render();
+  //   }
+
+  // });
+
+  // console.log('hee');
+  // new ShowPageMain();
 
 });
