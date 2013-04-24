@@ -52,10 +52,15 @@ def app_new(request):
 def app_page(request, app_id):
   app_id = long(app_id)
   app = get_object_or_404(App, id=app_id, owner=request.user)
-  print app
+
+  themes = UITheme.objects.all();
+  themes = [t.to_dict() for t in themes]
+
+  print list(themes)
   return render(request, 'app-show.html', {'app'    : app,
                                            'app_id' : long(app_id),
                                            'title'  : 'The Garage',
+                                           'themes' : simplejson.dumps(list(themes)),
                                            'apps'   : request.user.apps.all()})
 
 @require_POST

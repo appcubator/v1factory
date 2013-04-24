@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app-page.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/gallery.css">
 {% endblock %}
 
 {% block topbar %}
@@ -34,13 +35,13 @@
         <h3>Data & Storage</h3>
         </div>
       </a>
-      <a class="pane hi12 span14 offset2" href="{% url v1factory.views.app_gallery app.id %}">
+      <a class="pane hi12 span14 offset2" id="themes" href="#">
         <img src="{{ STATIC_URL }}img/design.png">
         <div class="hoff2 offset2 offsetr2">
         <h3>Design & Themes</h3>
         </div>
       </a>
-      <a class="pane hi12 span14 offset2 " href="{% url v1factory.views.app_pages app.id %}">
+      <a class="pane hi12 span14 offset2 " id="pages" href="#">
         <img src="{{ STATIC_URL }}img/page.png">
         <div class="hoff2 offset2 offsetr2">
         <h3>Pages</h3>
@@ -64,7 +65,8 @@
 <script type="text/javascript">
   var appId = {{ app_id }};
   var appState = {{ app.state_json|safe }};
-  console.log(appState);
+  var uieState = {{ app.uie_state_json|safe }};
+  var themes = {{ themes|safe }};
 </script>
 <script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/show-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
 

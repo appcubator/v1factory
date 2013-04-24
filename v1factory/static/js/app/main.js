@@ -39,25 +39,30 @@ require([
   "app/tutorial/TutorialView",
   "app/views/AppInfoView",
   "app/views/EntitiesView",
+  "app/views/ThemesGalleryView",
+  "app/views/PagesView",
   "backbone",     //require plugins
   "bootstrap",
   "iui",
   "comp"
 ],
-function (SimpleModalView, TutorialView, InfoView, EntitiesView) {
+function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryView, PagesView) {
 
   var ShowPageMain = Backbone.View.extend({
     el : document.body,
 
     events: {
       'click #app-info' : 'showAppInfo',
-      'click #data-storage' : 'showDataStorage'
+      'click #data-storage' : 'showDataStorage',
+      'click #themes'  : 'showThemes',
+      'click #pages'   : 'showPages'
     },
 
     initialize: function() {
       _.bindAll(this, 'render',
                       'showAppInfo',
-                      'showDataStorage');
+                      'showDataStorage',
+                      'showThemes');
 
       this.render();
       //var tutorial = new TutorialView();
@@ -91,11 +96,15 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView) {
     },
 
     showThemes: function() {
-
+      $('#main-container').html('');
+      var galleryView = new ThemesGalleryView();
+      galleryView.setElement($('#main-container')).render();
     },
 
     showPages: function() {
-      
+      $('#main-container').html('');
+      var pagesView = new PagesView();
+      pagesView.setElement($('#main-container')).render();
     }
 
   });

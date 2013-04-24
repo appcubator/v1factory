@@ -16,19 +16,22 @@ function(PageModel, PageCollection, UrlView, PageView) {
                       'appendPage',
                       'savePages');
 
-      this.render();
-      this.collection = new PageCollection();
+      this.collection = new PageCollection(appState.pages);
       this.collection.bind('add', this.appendPage, this);
-
-      var initUrls = appState.urls || [];
-
-      this.collection.add(appState.pages);
 
       $("#save-entities").on('click', this.savePages);
     },
 
     render: function() {
+      var self = this;
+
+      self.$el.html(_.template(iui.getHTML('pages-page'), {}));
       this.listView = document.getElementById('list-pages');
+
+      _(this.collection.models).each(function(model) {
+        self.appendPage(model);
+      });
+
       var createBox = new Backbone.NameBox({el: document.getElementById('create-page-box')});
       createBox.on('submit', this.createPage);
     },
