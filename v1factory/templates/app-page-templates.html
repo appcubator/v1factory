@@ -27,25 +27,27 @@
 </script>
 
 <script type="text/template" id="entities-page">
-<div class="container hoff6" id="entities-page">
-  <div id="user-entity">
+<div class="container" id="entities-page">
+  <div class="span52 offset11">
+    <div id="user-entity">
+    </div>
+    <div id="entities-container">
+      <ul id="entities" class="entity-list">
+      </ul>
+      <div id="add-entity-button" class="add-entity offset6 span58">
+      <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
+    </div>
+    <form id="add-entity-form" class="pane offset6 span58 hi10 entity hoff1" style="display:none;">
+      <span class="sub-title offset1 hoff2">
+        <input type="text" id="entity-name-input" placeholder="Entity Name">
+      </span>
+    </form>
   </div>
-  <div id="entities-container">
-    <ul id="entities" class="entity-list">
-    </ul>
-    <div id="add-entity-button" class="add-entity offset6 span58">
-    <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
-  </div>
-  <form id="add-entity-form" class="pane offset6 span58 hi10 entity hoff1" style="display:none;">
-    <span class="sub-title offset1 hoff2">
-      <input type="text" id="entity-name-input" placeholder="Entity Name">
-    </span>
-  </form>
 </div>
 </script>
 
 <script type="text/template" id="pages-page">
-<div class="span64">
+<div class="span52 offset11">
     <h2 class="hoff1">Pages</h2>
     <div class="" id="list-pages">
     </div>

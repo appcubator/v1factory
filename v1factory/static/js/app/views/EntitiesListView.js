@@ -32,6 +32,8 @@ function(EntityModel,
       },
 
       render: function(){
+        console.log("render");
+        console.log(this.el);
         var self = this;
         _(this.collection.models).each(function(entityModel) {
           self.appendItem(entityModel);

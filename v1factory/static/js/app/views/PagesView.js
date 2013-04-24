@@ -26,6 +26,7 @@ function(PageModel, PageCollection, UrlView, PageView) {
       var self = this;
 
       self.$el.html(_.template(iui.getHTML('pages-page'), {}));
+      console.log(_.template(iui.getHTML('pages-page'), {}));
       this.listView = document.getElementById('list-pages');
 
       _(this.collection.models).each(function(model) {

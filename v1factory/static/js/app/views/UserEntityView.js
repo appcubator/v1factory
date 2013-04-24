@@ -76,11 +76,11 @@ define([
         // document.getElementById('linkedin').checked = this.model.get('linkedin');
         // document.getElementById('local').checked = this.model.get('local');
 
-        var formsHtml = '';
-        _(self.model.get('forms').models).each(function(form){
-          formsHtml += _.template(Templates.Form, {form: form});
-        });
-        self.$el.find('.form-list').append(formsHtml);
+        // var formsHtml = '';
+        // _(self.model.get('forms').models).each(function(form){
+        //   formsHtml += _.template(Templates.Form, {form: form});
+        // });
+        // self.$el.find('.form-list').append(formsHtml);
       },
 
       checkedBox: function(e) {

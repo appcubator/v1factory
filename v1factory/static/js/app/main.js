@@ -78,6 +78,7 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
 
     showEntitiesPage: function() {
       $('#main-container').html('');
+      console.log(iui.get('main-container'));
       var entityEditor   = new EntitiesView();
       entityEditor.setElement($('#main-container')).render();
     },

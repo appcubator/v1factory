@@ -74,7 +74,9 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       var page_context = { name: self.name,
                            attribs: self.model.get('fields').models,
                            other_models: self.parentCollection.models,
-                           forms: self.model.get('forms').models };
+                           forms: null };
+
+                           //forms: self.model.get('forms').models };
 
       var template = _.template(Templates.Entity, page_context);
       $(this.el).append(template);

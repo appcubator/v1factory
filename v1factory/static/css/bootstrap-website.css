@@ -757,7 +757,7 @@ hr {
   margin: 20px 0;
   border: 0;
   border-top: 1px solid #bbbbbb;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #f6f6f6;
 }
 
 abbr[title],
@@ -5510,8 +5510,8 @@ h1.name {
   -moz-transition: opacity 0.6s; /* Firefox 4 */
   -webkit-transition: opacity 0.6s; /* Safari and Chrome */
   -o-transition: opacity 0.6s; /* Opera */
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
 }
 
 .pane:hover img {
@@ -6398,4 +6398,21 @@ i.icon-url {
 .add-box h2 {
   display: inline-block;
   vertical-align: top;
+}
+
+.app-left-menu {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  width: 130px;
+  margin-left: -480px;
+}
+
+.app-left-menu a {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.app-left-menu a h3 {
+  font-size: 18px;
 }

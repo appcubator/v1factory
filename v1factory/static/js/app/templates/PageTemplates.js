@@ -10,9 +10,9 @@ PageTemplates.tempPage = [
 ].join('\n');
 
 PageTemplates.tempMenu = [
-'<span class="span24 hi4">',
-'<h4 class="hi2 span8 hoff1 offset2">Access Level</h4>',
-  '<select class="span8 hoff1" id="access_level">',
+'<span class="span24 hi6">',
+'<h4 class="hi2 span12 hoff1 offset2">Access Level</h4>',
+  '<select class="span12 offset2" id="access_level">',
     '<option <% if(access_level == \'all\') { %> selected <% } %> value="all">Everyone</option>',
     '<option <% if(access_level == \'users\') { %> selected <% } %> value="users">Only Users</option>',
   '</select>',
