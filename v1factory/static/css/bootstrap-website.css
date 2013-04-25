@@ -5458,6 +5458,9 @@ h1.name {
   font-size: 20px;
   line-height: 20px;
   color: #0f2d40;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 10px;
 }
 
 .pane {
@@ -6103,15 +6106,15 @@ hr.vert {
   .nav {
     width: 100%;
   }
+
   .nav li {
     height: 60px;
-    padding: 20px;
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
     cursor: pointer;
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.8);
 
   }
 
@@ -6125,6 +6128,7 @@ hr.vert {
 
   .nav li.dropd {
     padding: 0 !important;
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
   }
 
   .nav li.dropd a {
@@ -6133,7 +6137,6 @@ hr.vert {
 
   .nav li:hover {
     box-shadow: inset 0px 0px 4px 0 rgba(90, 90, 90, 0.4);
-    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, from(rgba(255, 255, 255, 0.9)), to(rgba(241, 241, 241, 0.5)));
   }
 
   .nav .dropdown-menu li:hover {
@@ -6401,12 +6404,12 @@ i.icon-url {
 }
 
 .app-left-menu {
-  position: absolute;
-  top: 80px;
-  left: 50%;
+  position: fixed;
+  top: 50px;
+  left: 30px;
   width: 130px;
-  margin-left: -480px;
-}
+/*  margin-left: -480px;
+*/}
 
 .app-left-menu a {
   margin-top: 20px;
@@ -6415,4 +6418,85 @@ i.icon-url {
 
 .app-left-menu a h3 {
   font-size: 18px;
+  opacity: 0.5;
+}
+
+
+.app-left-menu a:hover h3 {
+  opacity: 1;
+}
+
+.tb-seperator {
+  display: inline-block;
+  background-image: url(../img/seperator.png);
+  background-repeat: no-repeat;
+  width: 12px;
+  background-position: left;
+  height: 60px;
+  vertical-align: top;
+  margin-top: -20px;
+}
+
+.navigation-menu {
+  display: inline-block;
+  vertical-align: top;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  height: 59px;
+}
+
+.navigation-menu li {
+
+  display: inline-block;
+  background-size: 40px auto;
+  background-repeat: no-repeat;
+  background-position: 10px 10px;
+  color: #0f2d40;
+  font-family: verb_regularregular;
+  max-width: 60px;
+  overflow: hidden;
+  vertical-align: top;
+  height: 59px;
+
+  -webkit-transition: max-width 0.25s linear;
+  -moz-transition: max-width 0.25s linear;
+  -o-transition: max-width 0.25s linear;
+  transition: max-width 0.25s linear;
+
+}
+.navigation-menu li a {
+  display: inline-block;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 10px;
+  padding-left: 50px;
+  min-width: 150px;
+}
+.navigation-menu li span {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.navigation-menu li.active {
+  max-width: 170px;
+}
+
+.navigation-menu li:hover {
+  max-width: 170px;
+  box-shadow: none;
+}
+
+.navigation-menu li.menu-app-info {
+  background-image: url(../img/info.png); 
+}
+
+.navigation-menu li.menu-app-entities {
+  background-image: url(../img/entities.png);
+}
+
+.navigation-menu li.menu-app-themes {
+  background-image: url(../img/design.png);
+}
+
+.navigation-menu li.menu-app-pages {
+  background-image: url(../img/page.png);
 }
