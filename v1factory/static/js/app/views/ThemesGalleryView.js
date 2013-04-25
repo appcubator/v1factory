@@ -17,12 +17,16 @@ function(ThemeDisplayView) {
     render: function() {
       var self = this;
 
+      self.el.innerHTML = ['<div class="span58">',
+                           '<h2 class="hoff2">Themes</h2>',
+                           '<hr class="span58 hoff2">'].join('\n');
+
       var template = [
-        '<li class="span52 offset11 theme hoff3" class="theme-item" id="theme-<%= id %>">',
-          '<img src="/static/img/theme4.png" class="span16">',
+        '<li class="span28 theme hoff3 offsetr1" class="theme-item" id="theme-<%= id %>">',
+          '<img src="/static/img/theme4.png" class="span13">',
           '<div class="details">Click to See Details</div>',
-          '<h2 class="offset2 span28"><%= name %></h2>',
-          '<div class="offset2 span28">Designed by <%= designer %></div>',
+          '<h2 class="offset2 span13"><%= name %></h2>',
+          '<div class="offset2 span13">Designed by <%= designer %></div>',
         '</li>'
       ].join('\n');
 

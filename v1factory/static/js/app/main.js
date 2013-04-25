@@ -67,7 +67,8 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
     },
 
     index: function () {
-
+      $('#main-container').html('');
+      $('#main-container').append(iui.getHTML('app-main-page'));
     },
 
     showInfoPage: function() {
