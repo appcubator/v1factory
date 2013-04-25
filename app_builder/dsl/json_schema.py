@@ -5,6 +5,11 @@ from copy import deepcopy
 
 APP_SCHEMA = { "_type": {}, "_mapping": {
   "name": { "_type" : "", "_minlength": 2, "_maxlength": 255 },
+  "info": { "_type": {}, "_mapping":{
+    "domain": { "_type":"" },
+    "description": { "_type":"" },
+    "keywords": { "_type":"" },
+  }},
   "users": {}, #USER_SETTINGS_SCHEMA,
   "entities": {}, # ENTITY_SCHEMA,
   "pages": {}, # PAGE_SCHEMA

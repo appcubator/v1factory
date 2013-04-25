@@ -23,12 +23,18 @@ function(SimpleModalView) {
 
     render: function() {
       iui.get('app-name').value = appState.name;
+      iui.get('app-domain').value = appState.info.domain;
       iui.get('app-keywords').value = appState.info.keywords;
       iui.get('app-description').value = appState.info.description;
     },
 
     changeName : function() {
       appState.name = iui.get('app-name').value;
+      iui.askBeforeLeave();
+    },
+
+    changeDomain : function() {
+      appState.info.domain = iui.get('app-domain').value;
       iui.askBeforeLeave();
     },
 
@@ -68,6 +74,7 @@ function(SimpleModalView) {
 
     saveInfo: function() {
       this.changeName();
+      this.changeDomain();
       this.changeKeywords();
       this.changeDescription();
 

@@ -43,7 +43,13 @@ class Deployment(models.Model):
     return self
 
   def apache_config(self):
-    return fillout_config(self.subdomain, self.app_dir, domain="springtask.me")
+    try:
+      domain = simplejson.loads(self.app_state_json)['info']['domain']
+    except Exception:
+      print "could not extract domain from app state"
+      domain = None
+
+    return fillout_config(self.subdomain, self.app_dir, domain=domain)
 
   def initialize(self):
     """Setup apache config and write a blank app to the app path"""
