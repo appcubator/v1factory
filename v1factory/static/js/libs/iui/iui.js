@@ -212,7 +212,6 @@ define(['jquery-ui'], function() {
     }
 
     $(function () {
-      console.log("X-CSRFToken");
       /* adds csrftoke to every ajax request we send */
       $.ajaxSetup({
         crossDomain: false, // obviates need for sameOrigin test

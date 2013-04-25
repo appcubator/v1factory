@@ -191,6 +191,7 @@ function(Backbone) {
     },
 
     onClose: function() {
+      $(this.el).empty();
       $(window).unbind('keydown', this.keyhandler);
     }
   });

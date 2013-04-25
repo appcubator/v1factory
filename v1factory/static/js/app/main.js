@@ -125,6 +125,8 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
     },
 
     showPagesPage: function() {
+      console.log(v1App.view);
+
       if(v1App.view) v1App.view.remove();
       v1App.tutorialDirectory = [5];
       var cleanDiv = document.createElement('div');
@@ -160,7 +162,7 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
 
     showTutorial: function() {
       console.log( v1App.tutorialDirectory );
-      var tutorial = new TutorialView(v1App.tutorialDirectory);
+      tutorial = new TutorialView(v1App.tutorialDirectory);
     }
   });
 
