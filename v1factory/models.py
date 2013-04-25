@@ -253,13 +253,15 @@ class UITheme(models.Model):
 
   def to_dict(self):
     try:
-      designer = User.objects.values().get(pk=self.designer_id),
+      designer = User.objects.get(pk=self.designer_id).username,
     except User.DoesNotExist:
-      designer = { 'name' : 'Anon' }
+      designer = 'v1 Factory'
+
+
     return { 'id' : self.id,
              'name' : self.name,
              'designer' : designer,
-             'statics' : self.statics.values(),
+             'statics' : simplejson.dumps(list(self.statics.values())),
              'uie_state' : self.uie_state }
 
   def clone(self, user=None):
