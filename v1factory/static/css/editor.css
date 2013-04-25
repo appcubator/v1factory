@@ -1388,6 +1388,11 @@ ul.list {
   border-left: 1px solid #3b4555;
 }
 
+#content-editor select {
+  margin-left: 3%;
+  width: 94%;
+}
+
 .content-editor > * {
 }
 

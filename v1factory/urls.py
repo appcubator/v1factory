@@ -27,7 +27,6 @@ urlpatterns += patterns('v1factory.views',
 
     url(r'^app/$', 'app_list'),
     url(r'^app/new/$', 'app_new'),
-    url(r'^app/(\d+)/', 'app_page'),
     url(r'^app/(\d+)/delete/$', 'app_delete'),
     # entities
     url(r'^app/(\d+)/entities/xl/$', 'process_excel'),
@@ -49,12 +48,8 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/deploy/local/$', 'app_deploy_local'),
 
     # the rest
-    url(r'^app/(\d+)/analytics/$', 'app_analytics'),
-    url(r'^app/(\d+)/design/$', 'app_design'),
-    url(r'^app/(\d+)/data/$', 'app_data'),
-    url(r'^app/(\d+)/finances/$', 'app_finances'),
-    url(r'^app/(\d+)/pages/editor/(\d+)$', 'app_editor'),
-
+    url(r'^app/(\d+)/editor/(\d+)$', 'app_editor'),
+    url(r'^app/(\d+)/', 'app_page'),
 
     url(r'^uielement/new/$', 'new_uielement'),
 
