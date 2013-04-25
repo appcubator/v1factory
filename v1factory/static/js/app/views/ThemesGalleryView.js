@@ -8,10 +8,10 @@ function(ThemeDisplayView) {
   var ThemesGalleryView = Backbone.View.extend({
 
     events: {
+      'click .theme' : 'showThemeModal'
     },
 
     initialize: function() {
-      $('.theme').on('click', this.showThemeModal);
     },
 
     render: function() {
@@ -21,18 +21,25 @@ function(ThemeDisplayView) {
                            '<h2 class="hoff2">Themes</h2>',
                            '<hr class="span58 hoff2">'].join('\n');
 
+      self.listView = document.createElement('ul');
+      self.listView.className = 'theme-gallery';
+
       var template = [
         '<li class="span28 theme hoff3 offsetr1" class="theme-item" id="theme-<%= id %>">',
           '<img src="/static/img/theme4.png" class="span13">',
           '<div class="details">Click to See Details</div>',
-          '<h2 class="offset2 span13"><%= name %></h2>',
-          '<div class="offset2 span13">Designed by <%= designer %></div>',
+          '<h2 class="offset2 span12"><%= name %></h2>',
+          '<div class="offset2 span12">Designed by <%= designer %></div>',
         '</li>'
       ].join('\n');
 
       _(themes).each(function(theme) {
-        self.el.innerHTML += _.template(template, theme);
+        self.listView.innerHTML += _.template(template, theme);
       });
+
+      $(self.el).append(self.listView);
+
+      return this;
     },
 
     showThemeModal: function(e) {

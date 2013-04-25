@@ -19,7 +19,7 @@ function(PageModel, PageCollection, UrlView, PageView) {
       this.collection = new PageCollection(appState.pages);
       this.collection.bind('add', this.appendPage, this);
 
-      $("#save-entities").on('click', this.savePages);
+      $("#save").unbind().bind('click', this.savePages);
     },
 
     render: function() {
