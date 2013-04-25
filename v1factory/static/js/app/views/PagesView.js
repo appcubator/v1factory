@@ -13,13 +13,10 @@ function(PageModel, PageCollection, UrlView, PageView) {
     initialize: function() {
       _.bindAll(this, 'render',
                       'createPage',
-                      'appendPage',
-                      'savePages');
+                      'appendPage');
 
-      this.collection = new PageCollection(appState.pages);
+      this.collection = v1State.get('pages');
       this.collection.bind('add', this.appendPage, this);
-
-      $("#save").unbind().bind('click', this.savePages);
     },
 
     render: function() {
@@ -37,29 +34,18 @@ function(PageModel, PageCollection, UrlView, PageView) {
     },
 
     createPage: function(name, b) {
-        var pageUrl = { urlparts : [] };
-        pageUrl.urlparts[0] = "page" + this.collection.models.length;
-        this.collection.add({ name: name, url: pageUrl});
-        this.savePages();
+      var pageUrl = { urlparts : [] };
+      pageUrl.urlparts[0] = "page" + this.collection.models.length;
+      this.collection.add({ name: name, url: pageUrl});
+      v1.save();
     },
 
     appendPage: function(model) {
       var ind = _.indexOf(this.collection.models, model);
       var pageView = new PageView(model, ind);
       this.listView.appendChild(pageView.el);
-    },
-
-    savePages: function(e) {
-      appState.pages = this.collection.toJSON();
-
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
-        success: function() {},
-        dataType: "JSON"
-      });
     }
+
   });
 
   return PagesView;

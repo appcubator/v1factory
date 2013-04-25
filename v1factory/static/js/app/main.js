@@ -35,6 +35,7 @@ require.config({
 
 //libs
 require([
+  "app/models/AppModel",
   "app/views/SimpleModalView",
   "app/tutorial/TutorialView",
   "app/views/AppInfoView",
@@ -46,7 +47,7 @@ require([
   "iui",
   "comp"
 ],
-function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryView, PagesView) {
+function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryView, PagesView) {
 
   var v1App = Backbone.Router.extend({
 
@@ -76,7 +77,7 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
     showInfoPage: function() {
       $('#main-container').html('');
       var infoView = new InfoView();
-      $('#main-container').append(infoView.el);
+      infoView.setElement($('#main-container')).render();
     },
 
     showEntitiesPage: function() {
@@ -111,7 +112,14 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
     },
 
     save: function() {
-      alert('sdf');
+      appState = v1State.toJSON();
+      $.ajax({
+          type: "POST",
+          url: '/app/'+appId+'/state/',
+          data: JSON.stringify(appState),
+          success: function() { },
+          dataType: "JSON"
+      });
     },
 
     showTutorial: function() {
@@ -120,6 +128,8 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
   });
 
   v1 = new v1App();
+  v1State = new AppModel(appState);
+  console.log(v1State);
   Backbone.history.start();
 
 });

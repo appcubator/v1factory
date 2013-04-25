@@ -25,15 +25,13 @@ function(EntityModel,
 
         var self = this;
 
-        this.collection = entitiesColl;
+        this.collection = v1State.get('entities');
         this.collection.bind("add", this.appendItem);
 
         this.collection.trigger('initialized');
       },
 
       render: function(){
-        console.log("render");
-        console.log(this.el);
         var self = this;
         _(this.collection.models).each(function(entityModel) {
           self.appendItem(entityModel);

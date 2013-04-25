@@ -22,17 +22,14 @@ function(EntityCollection,
       initialize: function() {
         _.bindAll(this, 'render',
                         'clickedAdd',
-                        'formSubmitted',
-                        'saveEntities');
+                        'formSubmitted');
 
-        this.entitiesColl = new EntityCollection(appState.entities);
-        this.userEntityModel = new UserEntityModel(appState.users);
+        this.entitiesColl = v1State.get('entities');
+        this.userEntityModel = v1State.get('users');
 
         // subviews
-        this.entityList = new EntitiesListView(this.entitiesColl );
+        this.entityList = new EntitiesListView(this.entitiesColl);
         this.userEntityView = new UserEntityView(this.userEntityModel, this.entitiesColl );
-
-        $('#save').unbind().bind('click', this.saveEntities);
       },
 
       render : function() {
@@ -62,20 +59,8 @@ function(EntityCollection,
         $('#entity-name-input').val('');
         $(this.addButton).fadeIn();
         $(e.target).remove();
-      },
-
-      saveEntities : function(e) {
-        appState.entities = this.entitiesColl.toJSON();
-        appState.users = this.userEntityModel.toJSON();
-
-        $.ajax({
-          type: "POST",
-          url: '/app/'+appId+'/state/',
-          data: JSON.stringify(appState),
-          success: function() { },
-          dataType: "JSON"
-        });
       }
+
     });
 
     return EntitiesView;

@@ -26,7 +26,7 @@ define([
         'blur  .property-name-input' : 'formSubmitted'
       },
 
-      initialize: function(userEntityModel, entitiesColl) {
+      initialize: function() {
         _.bindAll(this, 'render',
                         'appendField',
                         'clickedAdd',
@@ -40,9 +40,9 @@ define([
                         'changedAttribs');
 
         this.el = document.getElementById('user-entity');
-        this.model = userEntityModel;
-        this.name = userEntityModel.get('name');
-        this.entitiesColl = entitiesColl;
+        this.model = v1State.get('users');
+        this.name = this.model.get('name');
+        this.entitiesColl = v1State.get('entities');
 
         this.model.get('fields').bind('add', this.appendField);
         this.model.get('forms').bind('add', this.appendForm, this);
@@ -63,7 +63,7 @@ define([
           page_context.type = fieldModel.get('type'),
           page_context.cid = fieldModel.cid;
           page_context.entityName = "User";
-          page_context.other_models = (new EntityCollection(appState.entities)).models;
+          page_context.other_models = v1State.get('entities').models;
 
           var template = _.template(Templates.Property, page_context);
           self.$el.find('.property-list').append(template);
