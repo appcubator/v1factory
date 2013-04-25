@@ -15,7 +15,7 @@ function(Backbone) {
       "click #tutorial-menu-list li" : "clickedMenuItem"
     },
 
-    initialize: function(data) {
+    initialize: function(directory) {
       _.bindAll(this, 'render',
                       'renderLeftMenu',
                       'renderMainModal',
@@ -24,6 +24,9 @@ function(Backbone) {
                       'chooseSlide',
                       'selectMenu',
                       'keyhandler');
+
+      if(directory) this.addr = directory;
+
       this.render();
       this.chooseSlide(this.addr, true);
 

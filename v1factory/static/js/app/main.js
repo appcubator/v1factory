@@ -52,16 +52,36 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
   var v1App = Backbone.Router.extend({
 
     routes: {
-      ""         : "index",
-      "info"     : "showInfoPage",
-      "entities" : "showEntitiesPage",
-      "themes"   : "showThemesPage",
-      "pages"    : "showPagesPage"
+      "app/:appid/"          : "index",
+      "app/:appid/info/"     : "showInfoPage",
+      "app/:appid/entities/" : "showEntitiesPage",
+      "app/:appid/gallery/"  : "showThemesPage",
+      "app/:appid/pages/"    : "showPagesPage"
     },
 
+    tutorialDirectory: [0],
+
     initialize: function() {
+      var self = this;
+
       $('#save').on('click', this.save);
       $('#tutorial').on('click', this.showTutorial);
+
+      $('#main-menu').on('click', function() {
+        self.navigate("app/"+ appId +"/", {trigger: true});
+      });
+      $('#info-menu').on('click', function() {
+        self.navigate("app/"+ appId +"/info/", {trigger: true});
+      });
+      $('#entities-menu').on('click', function() {
+        self.navigate("app/"+ appId +"/entities/", {trigger: true});
+      });
+      $('#gallery-menu').on('click', function() {
+        self.navigate("app/"+ appId +"/gallery/", {trigger: true});
+      });
+      $('#pages-menu').on('click', function() {
+        self.navigate("app/"+ appId +"/pages/", {trigger: true});
+      });
     },
 
     start: function () {
@@ -75,27 +95,43 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
     },
 
     showInfoPage: function() {
-      $('#main-container').html('');
-      var infoView = new InfoView();
-      infoView.setElement($('#main-container')).render();
+      if(v1App.view) v1App.view.remove();
+      v1App.tutorialDirectory = [2];
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div";
+      $('#main-container').append(cleanDiv);
+      v1App.view = new InfoView();
+      v1App.view.setElement(cleanDiv).render();
     },
 
     showEntitiesPage: function() {
-      $('#main-container').html('');
-      var entityEditor   = new EntitiesView();
-      entityEditor.setElement($('#main-container')).render();
+      if(v1App.view) v1App.view.remove();
+      v1App.tutorialDirectory = [3];
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div";
+      $('#main-container').append(cleanDiv);
+      v1App.view    = new EntitiesView();
+      v1App.view.setElement(cleanDiv).render();
     },
 
     showThemesPage: function() {
-      $('#main-container').html('');
-      var galleryView = new ThemesGalleryView();
-      galleryView.setElement($('#main-container')).render();
+      if(v1App.view) v1App.view.remove();
+      v1App.tutorialDirectory = [4];
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div";
+      $('#main-container').append(cleanDiv);
+      v1App.view  = new ThemesGalleryView();
+      v1App.view.setElement(cleanDiv).render();
     },
 
     showPagesPage: function() {
-      $('#main-container').html('');
-      var pagesView = new PagesView();
-      pagesView.setElement($('#main-container')).render();
+      if(v1App.view) v1App.view.remove();
+      v1App.tutorialDirectory = [5];
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div";
+      $('#main-container').append(cleanDiv);
+      v1App.view  = new PagesView();
+      v1App.view.setElement(cleanDiv).render();
     },
 
     deploy: function() {
@@ -123,13 +159,13 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
     },
 
     showTutorial: function() {
-
+      console.log( v1App.tutorialDirectory );
+      var tutorial = new TutorialView(v1App.tutorialDirectory);
     }
   });
 
   v1 = new v1App();
   v1State = new AppModel(appState);
-  console.log(v1State);
-  Backbone.history.start();
+  Backbone.history.start({pushState: true});
 
 });

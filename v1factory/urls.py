@@ -27,15 +27,12 @@ urlpatterns += patterns('v1factory.views',
 
     url(r'^app/$', 'app_list'),
     url(r'^app/new/$', 'app_new'),
-    url(r'^app/(\d+)/$', 'app_page'),
+    url(r'^app/(\d+)/', 'app_page'),
     url(r'^app/(\d+)/delete/$', 'app_delete'),
     # entities
-    url(r'^app/(\d+)/entities/$', 'app_page'),
     url(r'^app/(\d+)/entities/xl/$', 'process_excel'),
     url(r'^app/(\d+)/entities/fetch_data/$', 'fetch_data'),
-    # editor
-    # urls
-    url(r'^app/(\d+)/urls/$', 'app_urls'),
+
     # statix
     url(r'^app/(\d+)/static/$', 'staticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
     url(r'^theme/(\d+)/static/$', 'themestaticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
@@ -54,12 +51,8 @@ urlpatterns += patterns('v1factory.views',
     # the rest
     url(r'^app/(\d+)/analytics/$', 'app_analytics'),
     url(r'^app/(\d+)/design/$', 'app_design'),
-    url(r'^app/(\d+)/gallery/$', 'app_gallery'),
     url(r'^app/(\d+)/data/$', 'app_data'),
     url(r'^app/(\d+)/finances/$', 'app_finances'),
-    url(r'^app/(\d+)/info/$', 'app_info'),
-    url(r'^app/(\d+)/emails/$', 'app_emails'),
-    url(r'^app/(\d+)/pages/$', 'app_pages'),
     url(r'^app/(\d+)/pages/editor/(\d+)$', 'app_editor'),
 
 
