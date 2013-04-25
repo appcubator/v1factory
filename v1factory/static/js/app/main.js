@@ -155,12 +155,13 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
     },
 
     save: function() {
+      iui.startAjaxLoading();
       appState = v1State.toJSON();
       $.ajax({
           type: "POST",
           url: '/app/'+appId+'/state/',
           data: JSON.stringify(appState),
-          success: function() { },
+          success: function() { iui.stopAjaxLoading(); },
           dataType: "JSON"
       });
     },

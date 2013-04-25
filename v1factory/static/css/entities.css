@@ -330,23 +330,24 @@ table tr:hover td {
   color: #aaa;
 }
 
-.icon {
+.entity .icon {
   background-repeat: no-repeat;
-  background-size: auto 120%;
   background-position: center;
   height: 40px;
   width: 50px;
+  background-image: url(../img/entity_sprites.png);
 }
 
- .excel .icon {
-  width: 100%;
-  background-image: url(../img/excel-icon-gray.png);
+.excel .icon {
+  background-position: 0 -6px;
 }
 
- .delete .icon {
-  width: 100%;
-  background-image: url(../img/delete-icon.png);
-  background-size: auto 90%;
+.show-data .icon {
+  background-position: 0 -104px;
+}
+
+.delete .icon {
+  background-position: 0 -58px;
 }
 
 .right-panel .delete {
@@ -359,6 +360,21 @@ table tr:hover td {
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
+  border: 1px solid transparent;
+  padding: 4px;
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+.right-icon:hover {
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 0 1px 0 rgba(50, 30, 30, 0.2);
+}
+
+.right-icon:active {
+  box-shadow: 0 0 0 0 rgba(50, 30, 30, 0.2);
 }
 
 .column {

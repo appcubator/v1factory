@@ -6,7 +6,7 @@ define(['jquery-ui'], function() {
       filepicker.pickMultiple({
           mimetypes: ['image/*'],
           container: 'modal',
-          services:['COMPUTER', 'GMAIL', 'DROPBOX', 'INSTAGRAM', 'IMAGE_SEARCH', 'URL']
+          services:['COMPUTER', 'GMAIL', 'DROPBOX', 'INSTAGRAM', 'IMAGE_SEARCH', 'URL', 'FACEBOOK']
         },
         function(FPFiles){
           for (var i = 0; i < FPFiles.length; i++) {
@@ -34,7 +34,7 @@ define(['jquery-ui'], function() {
       filepicker.pickMultiple({
           mimetypes: ['image/*'],
           container: 'modal',
-          services:['COMPUTER', 'GMAIL', 'DROPBOX', 'INSTAGRAM', 'IMAGE_SEARCH', 'URL']
+          services:['COMPUTER', 'GMAIL', 'DROPBOX', 'INSTAGRAM', 'IMAGE_SEARCH', 'URL', 'FACEBOOK']
         },
         function(FPFiles){
           for (var i = 0; i < FPFiles.length; i++) {
@@ -62,28 +62,6 @@ define(['jquery-ui'], function() {
         console.trace();
         alert('Important Error!');
       }
-    },
-    unite: function(cor1, cor2) {
-      var topLeft = {}, bottomRight = {};
-
-      if(cor1.x < cor2.x) {
-        topLeft.x =  cor1.x; bottomRight.x = cor2.x;
-      } else {
-        topLeft.x =  cor2.x; bottomRight.x = cor1.x;
-      }
-
-      if(cor1.y < cor2.y) {
-        topLeft.y =  cor1.y; bottomRight.y = cor2.y;
-      } else {
-        topLeft.y =  cor2.y; bottomRight.y = cor1.y;
-      }
-
-      topLeft.x--; topLeft.y--;
-
-      return {
-        topLeft : topLeft,
-        bottomRight: bottomRight
-      };
     },
 
     resizableAndDraggable: function(el, self) {
