@@ -253,15 +253,14 @@ class UITheme(models.Model):
 
   def to_dict(self):
     try:
-      designer = User.objects.get(pk=self.designer_id),
+      designer = User.objects.get(pk=self.designer_id).username,
     except User.DoesNotExist:
-      designer = { 'username' : 'Anon' }
+      designer = 'v1 Factory'
 
-    print designer[0].username
 
     return { 'id' : self.id,
              'name' : self.name,
-             'designer' : designer[0].username,
+             'designer' : designer,
              'statics' : simplejson.dumps(list(self.statics.values())),
              'uie_state' : self.uie_state }
 
