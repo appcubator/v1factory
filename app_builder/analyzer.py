@@ -114,7 +114,7 @@ class Page(object):
   def resolve_navbar_pages(self, analyzed_app):
     self.navbar_pages = []
     for pname in self.navbar_page_names:
-      p = analyzed_app.pages.get_by_name(utils.extract_from_brace(pname))
+      p = analyzed_app.pages.get_by_name(process_link_lang(pname))
       assert p is not None
       self.navbar_pages.append(p)
 

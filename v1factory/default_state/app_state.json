@@ -85,10 +85,10 @@
                 "isFixed": true,
                 "items": [
                     {
-                        "name": "{{Homepage}}"
+                        "name": "internal://Homepage/"
                     },
                     {
-                        "name": "{{Registration Page}}"
+                        "name": "internal://Registration Page/"
                     }
                 ]
             },
@@ -102,10 +102,10 @@
                 "isFixed": true,
                 "items": [
                     {
-                        "name": "{{Homepage}}"
+                        "name": "internal://Homepage/"
                     },
                     {
-                        "name": "{{Registration Page}}"
+                        "name": "internal://Registration Page/"
                     }
                 ]
             },
