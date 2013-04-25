@@ -43,7 +43,7 @@ class Deployment(models.Model):
     return self
 
   def apache_config(self):
-    return fillout_config(self.subdomain, self.app_dir)
+    return fillout_config(self.subdomain, self.app_dir, domain="springtask.me")
 
   def initialize(self):
     """Setup apache config and write a blank app to the app path"""
