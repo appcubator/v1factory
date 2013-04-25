@@ -184,30 +184,26 @@ define([
 
     deploy: function() {
       var self = this;
-      var deployFn = function() {
 
-        $.ajax({
-          type: "POST",
-          url: '/app/'+appId+'/deploy/',
-          success: function(data) {
-            console.log(data);
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
-          },
-          dataType: "JSON"
-        });
-      };
-
-      this.save(deployFn);
+      $.ajax({
+        type: "POST",
+        url: '/app/'+appId+'/deploy/',
+        success: function(data) {
+          window.open(data.site_url);
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
+        },
+        dataType: "JSON"
+      });
     },
 
     deployLocal: function() {
-      this.save();
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/local/',
-        complete: function(data) {
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+        success: function(data) {
+          window.open(data.site_url);
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
         },
         dataType: "JSON"
       });
