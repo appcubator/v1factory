@@ -1,5 +1,5 @@
 define([
-  './SimpleModalView',
+  'app/views/SimpleModalView',
   'templates/MainTemplates'
 ],
 function(SimpleModalView) {
@@ -7,8 +7,6 @@ function(SimpleModalView) {
   var AppInfoView = Backbone.View.extend({
 
     events : {
-      'click #save' : 'saveInfo',
-      'click .low-save-btn' : 'saveInfo',
       'click #delete' : 'deleteApp'
     },
 
@@ -18,10 +16,12 @@ function(SimpleModalView) {
                       'changeName',
                       'deploy',
                       'changeDescription',
-                      'changeKeywords');
+                      'changeKeywords',
+                      'saveInfo');
 
       if(!appState.info) appState.info = {};
 
+      $('#save').unbind().bind('click', this.saveInfo);
       this.render();
     },
 
@@ -74,18 +74,17 @@ function(SimpleModalView) {
     },
 
     saveInfo: function() {
-      this.changeName();
       this.changeKeywords();
       this.changeDescription();
+
+      console.log(appId);
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         success: function() {
-          //new SimpleModalView({text:"Good Job!!! <br> ^(^_^)^ ^(^_^)> (>^_^)>"});
           iui.dontAskBeforeLeave();
-          location.reload(true);
         }
       });
     }

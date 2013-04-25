@@ -1,7 +1,5 @@
 define([
-  'backbone',
   'app/models/FieldModel',
-  'app/models/FormModel',
   'app/views/EntityView',
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
@@ -9,7 +7,7 @@ define([
   'app/collections/EntityCollection',
   'app/templates/EntitiesTemplates'
 ],
-  function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
+  function(FieldModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
 
     var UserEntityView = EntityView.extend({
 
@@ -71,11 +69,12 @@ define([
           self.$el.find('.property-list').append(template);
         });
 
-        // document.getElementById('facebook').checked = this.model.get('facebook');
-        // document.getElementById('twitter').checked = this.model.get('linkedin');
-        // document.getElementById('linkedin').checked = this.model.get('linkedin');
-        // document.getElementById('local').checked = this.model.get('local');
+        document.getElementById('facebook').checked = this.model.get('facebook');
+        document.getElementById('twitter').checked = this.model.get('twitter');
+        document.getElementById('linkedin').checked = this.model.get('linkedin');
+        document.getElementById('local').checked = this.model.get('local');
 
+        return this;
         // var formsHtml = '';
         // _(self.model.get('forms').models).each(function(form){
         //   formsHtml += _.template(Templates.Form, {form: form});
@@ -84,6 +83,7 @@ define([
       },
 
       checkedBox: function(e) {
+        console.log(e.target.value);
         this.model.set(e.target.value, e.target.checked);
       },
 

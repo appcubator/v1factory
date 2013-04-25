@@ -1,29 +1,20 @@
 define([
-  'app/models/EntityModel',
   'app/collections/EntityCollection',
   'app/models/UserEntityModel',
-  'app/models/FieldModel',
-  'app/views/UploadExcelView',
   'app/views/ShowDataView',
-  'app/views/EntityView',
   'app/views/UserEntityView',
   'app/views/EntitiesListView'
 ],
 
-function(EntityModel,
-         EntityCollection,
+function(EntityCollection,
          UserEntityModel,
-         FieldModel,
-         UploadExcelView,
          ShowDataView,
-         EntityView,
          UserEntityView,
          EntitiesListView) {
 
     var EntitiesView = Backbone.View.extend({
 
       events : {
-        'click #save-entities'     : 'saveEntities',
         'click #add-entity-button' : 'clickedAdd',
         'submit #add-entity-form'  : 'formSubmitted'
       },
@@ -41,11 +32,12 @@ function(EntityModel,
         this.entityList = new EntitiesListView(this.entitiesColl );
         this.userEntityView = new UserEntityView(this.userEntityModel, this.entitiesColl );
 
+        $('#save').unbind().bind('click', this.saveEntities);
       },
 
       render : function() {
         var self = this;
-        this.$el.html(_.template(iui.getHTML('entities-page'), {}  ));
+        this.$el.html(_.template(iui.getHTML('entities-page'), {}));
         this.userEntityView.setElement(self.$('#user-entity')).render();
         this.entityList.setElement(self.$('#entities')).render();
         return this;
@@ -65,7 +57,7 @@ function(EntityModel,
         var elem = {};
         elem.name = $('#entity-name-input').val();
         elem.fields = [];
-        this.collection.add(elem);
+        this.entitiesColl.add(elem);
 
         $('#entity-name-input').val('');
         $(this.addButton).fadeIn();
@@ -73,8 +65,8 @@ function(EntityModel,
       },
 
       saveEntities : function(e) {
-        appState.entities = this.collection.toJSON();
-        appState.users = this.entityList.userModel.toJSON();
+        appState.entities = this.entitiesColl.toJSON();
+        appState.users = this.userEntityModel.toJSON();
 
         $.ajax({
           type: "POST",

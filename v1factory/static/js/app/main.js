@@ -59,7 +59,8 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
     },
 
     initialize: function() {
-
+      $('#save').on('click', this.save);
+      $('#tutorial').on('click', this.showTutorial);
     },
 
     start: function () {
@@ -69,6 +70,7 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
     index: function () {
       $('#main-container').html('');
       $('#main-container').append(iui.getHTML('app-main-page'));
+      $('#deploy').on('click', this.deploy);
     },
 
     showInfoPage: function() {
@@ -79,7 +81,6 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
 
     showEntitiesPage: function() {
       $('#main-container').html('');
-      console.log(iui.get('main-container'));
       var entityEditor   = new EntitiesView();
       entityEditor.setElement($('#main-container')).render();
     },
@@ -94,74 +95,32 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
       $('#main-container').html('');
       var pagesView = new PagesView();
       pagesView.setElement($('#main-container')).render();
+    },
+
+    deploy: function() {
+      iui.startAjaxLoading();
+        $.ajax({
+              type: "POST",
+              url: '/app/'+appId+'/deploy/',
+              success: function(data) {
+                console.log(data);
+                iui.stopAjaxLoading();
+                new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+              },
+              dataType: "JSON"
+        });
+    },
+
+    save: function() {
+      alert('sdf');
+    },
+
+    showTutorial: function() {
+
     }
   });
 
-  new v1App();
+  v1 = new v1App();
   Backbone.history.start();
-
-  // var ShowPageMain = Backbone.View.extend({
-  //   el : document.body,
-
-  //   events: {
-  //     'click #app-info' : 'showAppInfo',
-  //     'click #data-storage' : 'showDataStorage',
-  //     'click #themes'  : 'showThemes',
-  //     'click #pages'   : 'showPages'
-  //   },
-
-  //   initialize: function() {
-  //     _.bindAll(this, 'render',
-  //                     'showAppInfo',
-  //                     'showDataStorage',
-  //                     'showThemes');
-
-  //     this.render();
-  //     //var tutorial = new TutorialView();
-  //   },
-
-  //   render: function() {
-  //     $('#deploy').on('click', function() {
-  //       iui.startAjaxLoading();
-  //       $.ajax({
-  //             type: "POST",
-  //             url: '/app/'+appId+'/deploy/',
-  //             success: function(data) {
-  //               console.log(data);
-  //               iui.stopAjaxLoading();
-  //               new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
-  //             },
-  //             dataType: "JSON"
-  //       });
-  //     });
-  //   },
-
-  //   showAppInfo: function() {
-  //     $('#main-container').html('');
-  //     var infoView = new InfoView();
-  //     $('#main-container').append(infoView.el);
-  //   },
-
-  //   showDataStorage: function() {
-  //     var entityEditor   = new EntitiesView();
-  //     entityEditor.setElement($('#main-container')).render();
-  //   },
-
-  //   showThemes: function() {
-  //     $('#main-container').html('');
-  //     var galleryView = new ThemesGalleryView();
-  //     galleryView.setElement($('#main-container')).render();
-  //   },
-
-  //   showPages: function() {
-  //     $('#main-container').html('');
-  //     var pagesView = new PagesView();
-  //     pagesView.setElement($('#main-container')).render();
-  //   }
-
-  // });
-
-  // console.log('hee');
-  // new ShowPageMain();
 
 });

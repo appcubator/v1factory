@@ -361,19 +361,6 @@ table tr:hover td {
   text-align: center;
 }
 
-.show-data {
-  width: 100%;
-  background-repeat: no-repeat;
-  background-image: url(../img/table_icon.png);
-  background-size: auto 40%;
-  background-position: center 8px;
-  text-align: center;
-  padding-top: 54px !important;
-  font-weight: bold;
-  line-height: 14px;
-  cursor: pointer;
-}
-
 .column {
   min-width: 90px;
   float: left;
