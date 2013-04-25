@@ -83,7 +83,6 @@ define([
       },
 
       checkedBox: function(e) {
-        console.log(e.target.value);
         this.model.set(e.target.value, e.target.checked);
       },
 

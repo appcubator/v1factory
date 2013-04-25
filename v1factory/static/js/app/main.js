@@ -103,7 +103,6 @@ function (SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryVi
               type: "POST",
               url: '/app/'+appId+'/deploy/',
               success: function(data) {
-                console.log(data);
                 iui.stopAjaxLoading();
                 new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
               },

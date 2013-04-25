@@ -77,8 +77,6 @@ function(SimpleModalView) {
       this.changeKeywords();
       this.changeDescription();
 
-      console.log(appId);
-
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',

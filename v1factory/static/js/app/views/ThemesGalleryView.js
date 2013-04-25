@@ -49,7 +49,6 @@ function(ThemeDisplayView) {
         url: '/theme/'+themeId+'/info/',
         success: function(data) {
           var json = $.parseJSON(data.theme);
-          console.log(json);
           new ThemeDisplayView({id:data.themeId, title: data.title, theme:json});
         },
         dataType: "JSON"
