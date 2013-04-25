@@ -30,7 +30,7 @@ function(Backbone) {
       this.render();
       this.chooseSlide(this.addr, true);
 
-      $(window).on('keydown', this.keyhandler);
+      $(window).bind('keydown', this.keyhandler);
     },
 
     render : function(img, text) {
@@ -188,6 +188,10 @@ function(Backbone) {
       }
 
       e.preventDefault();
+    },
+
+    onClose: function() {
+      $(window).unbind('keydown', this.keyhandler);
     }
   });
 
