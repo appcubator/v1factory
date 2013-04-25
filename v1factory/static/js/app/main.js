@@ -89,9 +89,14 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
     },
 
     index: function () {
-      $('#main-container').html('');
-      $('#main-container').append(iui.getHTML('app-main-page'));
+      if(v1App.view) v1App.view.remove();
+      v1App.tutorialDirectory = [2];
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div";
+      $(cleanDiv).html(iui.getHTML('app-main-page'));
+      $('#main-container').append(cleanDiv);
       $('#deploy').on('click', this.deploy);
+      v1App.view = $(cleanDiv);
     },
 
     showInfoPage: function() {
