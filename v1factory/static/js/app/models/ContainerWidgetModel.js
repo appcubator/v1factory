@@ -34,7 +34,6 @@ function(WidgetModel,
 
     initialize: function(bone) {
       ContainerWidgetModel.__super__.initialize.call(this, bone);
-
       var self = this;
 
       this.set('container_info', new ContainerInfoModel(this.get('container_info')));

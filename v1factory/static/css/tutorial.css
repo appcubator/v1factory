@@ -1,15 +1,37 @@
+.modal.tutorial-view {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+  overflow: visible;
+}
+
+.tutorial-content {
+  display: inline-block;
+  width: 220px;
+  background-color: #fff;
+  position: fixed;
+  width: 700px;
+  margin-left: -40px;
+  height: 580px;
+  top: 50px;
+  z-index: 3002;
+  box-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+
 .tutorial-menu {
   display: inline-block;
   width: 220px;
   background-color: #fff;
   position: fixed;
   left: 50%;
-  top: 30px;
-  margin-left: -600px;
+  top: 60px;
+  margin-left: -560px;
   border-radius: 6px;
   padding-top: 20px;
   padding-bottom: 20px;
-  z-index: 3002;
+  z-index: 3001;
 }
 
 .tutorial-menu ul li {

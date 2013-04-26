@@ -1,5 +1,14 @@
 <script type="text/template" id="app-main-page">
-<div class="row hoff1 span58">
+    <div class="row hoff1 span58 notice">
+      <h3 class="hoff1">Thank you for joining v1Factory Private Beta program!</h3>
+      <div> You just need to complete the following steps to claim your free domain.</div>
+      <ul>
+        <li><input type="checkbox" disabled checked>Read through the <a class="#">tutorial</a>.</li>
+        <li><input type="checkbox" disabled>Create a simple app.</li>
+        <li><input type="checkbox" disabled>Fill the <a class="#">feedback form</a>.</li>
+      </ul>
+    </div>
+    <div class="row hoff1 span58">
       <h2 class="span34 hoff1">{{ app.name }}</h2>
       <div class="pane deploy-pane span24 hi3 right">
         <div class="hi3 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div><hr class="vert">
@@ -11,7 +20,7 @@
         <a class="pane hi11 span13 entities" id="app-info" href="/app/{{ app_id }}/info/">
           <img src="{{ STATIC_URL }}img/info.png">
           <div class="hoff1 offset1 offsetr1">
-          <h3>App Info & Domain</h3>
+          <h3>Domain & SEO</h3>
           </div>
         </a>
         <a class="pane hi11 span13 entities offset2" id="data-storage" href="/app/{{ app_id }}/entities/">

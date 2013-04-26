@@ -10,7 +10,9 @@ function(WidgetModel,
     model : WidgetModel,
     selectedEl: null,
 
-    initialize: function() {
+    initialize: function(bone) {
+      console.log(bone);
+
       _.bindAll(this, 'selectWidgetById',
                       'select',
                       'unselectAll');
