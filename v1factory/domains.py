@@ -64,7 +64,7 @@ class DomainAPI(object):
     else:
       raise Exception("API returned weird status code: %d, content: %s" % (status_code, response))
 
-  def register_domain(self, domain):
+  def register_domain(self, domain, money_mode=False):
     """Registers domain and returns dictionary of the info."""
 
 
@@ -79,11 +79,11 @@ class DomainAPI(object):
       raise Exception("Domain not valid.")
 
     post_data = {"domain":{}}
-    post_data["domain"]["name"] = "springtask.me"
+    post_data["domain"]["name"] = domain
     post_data["domain"]["registrant_id"] = 14454
 
     try:
-      status_code, response = self.call_api("/domain_registrations", simplejson.dumps(post_data), method="post", test=True) # wont charge the card
+      status_code, response = self.call_api("/domain_registrations", simplejson.dumps(post_data), method="post", test=(not money_mode)) # wont charge the card
     except requests.exceptions.RequestException:
       # I guess this is pretty bad... Maybe it should be logged
       raise Exception("Could not make API call to dnsimple")
