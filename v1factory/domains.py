@@ -4,20 +4,38 @@ import simplejson
 class DomainAPI(object):
   """Does all domain registration and configuration"""
 
-  def call_api(self, url_ending, data, post=False):
+  def call_api(self, url_ending, data, method="get", test=False):
     assert url_ending[0] == '/' # just trying to make sure it's kosher
-    url = 'https://dnsimple.com' + url_ending
-    if not post: # GET request
-      r = requests.get(url,
-                           data=data,
-                           headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
-                           #headers={'Accept': 'application/json'},
-                           auth=('founders@v1factory.com', 'domains,mayne'))
-    else: # POST request
-      r = requests.post(url,
-                           data=data,
-                           headers={'Accept': 'application/json'},
-                           auth=('founders@v1factory.com', 'domains,mayne'))
+    if test:
+      url = 'https://test.dnsimple.com' + url_ending
+    else:
+      url = 'https://dnsimple.com' + url_ending
+
+    # set up arguments for requests function
+    args = [ url ]
+    kwargs = {
+      "data":data,
+      "headers": {'Accept': 'application/json' }
+    }
+
+    # if test, then don't use basic auth
+    if test:
+      kwargs['auth'] = ('founders@v1factory.com', 'domains,mayne,test')
+    else:
+      kwargs['auth'] = ('founders@v1factory.com', 'domains,mayne')
+
+    # call the right method
+    method = method.lower()
+    method_map = {
+      "get": requests.get,
+      "post": requests.post,
+      # add more here later
+    }
+
+    if test:
+      print "Making a %s request.\nArgs: %s\nKwargs: %s" % (method, str(args), str(kwargs))
+    r = method_map[method](*args, **kwargs)
+
     return (r.status_code, r.content)
 
   def check_availability(self, domain):
@@ -65,7 +83,7 @@ class DomainAPI(object):
     post_data["domain"]['registrant_id'] = 14454
 
     try:
-      status_code, response = self.call_api('/domain_registrations', post_data, post=True)
+      status_code, response = self.call_api('/domain_registrations', post_data, method="post", test=True) # wont charge the card
     except requests.exceptions.RequestException:
       # I guess this is pretty bad... Maybe it should be logged
       raise Exception("Could not make API call to dnsimple")
