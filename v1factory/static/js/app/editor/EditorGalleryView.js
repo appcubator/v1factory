@@ -1,12 +1,12 @@
 define([
   'app/collections/ElementCollection',
   'app/models/UserEntityModel',
-  'backbone',
+  'app/models/ContainerWidgetModel',
   'iui'
 ],
 function(ElementCollection,
          UserEntityModel,
-         Backbone) {
+         ContainerWidgetModel) {
 
   var EditorGalleryView = Backbone.View.extend({
     el                  : iui.get('top-panel-bb'),
@@ -23,7 +23,7 @@ function(ElementCollection,
       'click .header' : 'sectionClicked'
     },
 
-    initialize   : function(widgetsCollection, containersCollection) {
+    initialize   : function(widgetsCollection) {
        _.bindAll(this, 'render',
                        'appendEntity',
                        'appendContextEntity',
@@ -34,8 +34,6 @@ function(ElementCollection,
 
       this.elementsCollection   = new ElementCollection(defaultElements);
       this.widgetsCollection    = widgetsCollection;
-      this.containersCollection = containersCollection;
-
       this.userModel = v1State.get('users');
 
       v1State.get('entities').bind('add',     this.appendEntity, this);
@@ -315,9 +313,8 @@ function(ElementCollection,
         formCid   = hash[2];
         action    = className.split(' ')[0];
 
-
         if(entityCid === 'user'){
-          entity = g_userModel;
+          entity = v1State.get('users');
           form = entity.get('forms').get(formCid);
         }
         else {
@@ -332,7 +329,8 @@ function(ElementCollection,
           widget.container_info.form = '{{' + form.get('name') + '}}';
         }
 
-        this.containersCollection.push(widget);
+        var widgetContainerModel = new ContainerWidgetModel(widget);
+        this.widgetsCollection.push(widgetContainerModel);
       }
       else if (/(single-data)/.exec(className)) {
         id = String(id).replace('entity-','');

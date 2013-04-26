@@ -12,7 +12,7 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
     className : 'editor-page fadeIn',
     tagName : 'div',
 
-    initialize: function(widgetsCollection, containersCollection){
+    initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
                       'clear',
                       'setLocation',
@@ -20,13 +20,9 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
                       'selectChanged');
 
       this.widgetsCollection    = widgetsCollection;
-      this.containersCollection = containersCollection;
 
       this.model = widgetsCollection.selectedEl;
       this.widgetsCollection.bind('selected', this.selectChanged, this);
-      if(this.containersCollection){ // WidgetEditor can belong to just one collection
-        this.containersCollection.bind('selected', this.clear);
-      }
 
       if(this.model) {
         this.model.bind('change:selected', this.selectChanged);

@@ -47,8 +47,6 @@ function( PageModel,
                       'deploy',
                       'clickedPage',
                       'getContextEntities',
-                      'containerSelected',
-                      'widgetSelected',
                       'keydown',
                       'clickedUrl',
                       'createPage');
@@ -57,18 +55,16 @@ function( PageModel,
       g_contextCollection    = new EntityCollection();
 
       this.model                = v1State.get('pages').models[pageId];
-      this.containersCollection = new ContainersCollection();
-      this.widgetsCollection    = new WidgetCollection();
+      console.log(v1State.get('pages').models[pageId]);
+      //this.containersCollection = new ContainersCollection();
+      this.widgetsCollection    = this.model.get('uielements');
 
-      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection);
-      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection);
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
+      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
-
-      this.containersCollection.on('selected', this.containerSelected);
-      this.widgetsCollection.on('selected', this.widgetSelected);
 
       /* Calls */
       this.getContextEntities();
@@ -271,24 +267,11 @@ function( PageModel,
         this.widgetsCollection.selectedEl = null;
         this.widgetsCollection.unselectAll();
       }
-
-      if(this.containersCollection.selectedEl) {
-        this.containersCollection.selectedEl = null;
-        this.containersCollection.unselectAll();
-      }
     },
 
     clickedUrl: function() {
       var newView =  new UrlView(this.urlModel);
       newView.onClose = this.renderUrlBar;
-    },
-
-    containerSelected: function(e) {
-      this.widgetsCollection.unselectAll();
-    },
-
-    widgetSelected: function(a, b) {
-      this.containersCollection.unselectAll();
     },
 
     createPage: function(name) {

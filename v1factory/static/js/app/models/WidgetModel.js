@@ -89,7 +89,7 @@ function(ContentModel, LayoutModel, PageCollection) {
     },
 
     getListOfPages: function() {
-      var pagesCollection = new PageCollection(appState.pages);
+      var pagesCollection = v1State.get('pages');
 
       if(this.get('context') === "") {
         return pagesCollection.getContextFreePages();

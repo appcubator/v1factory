@@ -16,46 +16,45 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
 
     },
 
-    initialize: function(widgetsCollection, containersCollection) {
+    initialize: function(widgetsCollection) {
       _.bindAll(this, 'render',
                       'changed',
                       'placeWidget',
                       'placeContainer',
+                      'placeUIElement',
                       'style',
                       'copy',
                       'paste');
 
       var self = this;
 
-      this.render();
       this.widgetsCollection = widgetsCollection;
-      this.widgetsCollection.bind('add', this.placeWidget);
-
-      this.containersCollection = containersCollection;
-      this.containersCollection.bind('add', this.placeContainer);
+      this.widgetsCollection.bind('add', this.placeUIElement);
 
       this.widgetsCollection.bind('change', this.changed);
-      this.widgetsCollection.bind('selected', this.containersCollection.unselectAll);
-      this.containersCollection.bind('selected', this.widgetsCollection.unselectAll);
-
-      var page = appState.pages[pageId];
-      if(page.uielements) {
-        _(page.uielements).each(function(element) {
-          if(element.container_info) {
-            self.containersCollection.add(element, self.widgetsCollection);
-          }
-          else {
-            self.widgetsCollection.add(element);
-          }
-        });
-      }
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
+      this.render();
     },
 
     render: function() {
+      var self = this;
       this.widgetsContainer.innerHTML = '';
+      _(self.widgetsCollection.models).each(function(widget) {
+        self.placeUIElement(widget);
+      });
+    },
+
+    // this function decides if widget or container
+    placeUIElement: function(model) {
+      var self = this;
+      if(model.has('container_info')) {
+        self.placeContainer(model);
+      }
+      else {
+        self.placeWidget(model);
+      }
     },
 
     placeWidget: function(widgetModel) {
