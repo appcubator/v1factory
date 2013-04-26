@@ -216,21 +216,35 @@ define([
     },
 
     resizing: function(e, ui) {
-      var dHeight = (ui.size.height + 2) / GRID_HEIGHT;
-      var dWidth = (ui.size.width + 2) / GRID_WIDTH;
+      // this.el.style.paddingTop = '0px';
+      // this.el.style.paddingBottom = '0px';
 
-      var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
+      // console.log(this.el.style.cssText);
+
+      // if(this.model.get('layout').get('t-padding')) {
+      //   ui.size.height = ui.size.height + this.model.get('layout').get('t-padding');
+      // }
+
+      // if(this.model.get('layout').get('b-padding')) {
+      //   ui.size.height = ui.size.height + this.model.get('layout').get('b-padding');
+      // }
+    },
+
+    resized: function(e, ui) {
+      var left = Math.round((ui.position.left / GRID_WIDTH));
+      var deltaHeight = Math.round((ui.size.height + 36) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
 
       this.model.get('layout').set('width', deltaWidth);
       this.model.get('layout').set('height', deltaHeight);
-    },
+      this.model.get('layout').set('left', left);
 
-    resized: function(e, ui) {
       this.el.style.width ='';
       this.el.style.height = '';
+      this.el.style.left = '';
       this.changedWidth();
       this.changedHeight();
+      this.changedLeft();
     },
 
     moving: function(e, ui) {

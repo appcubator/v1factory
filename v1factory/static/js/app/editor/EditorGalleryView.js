@@ -2,11 +2,13 @@ define([
   'app/collections/ElementCollection',
   'app/models/UserEntityModel',
   'app/models/ContainerWidgetModel',
+  'app/models/WidgetModel',
   'iui'
 ],
 function(ElementCollection,
          UserEntityModel,
-         ContainerWidgetModel) {
+         ContainerWidgetModel,
+         WidgetModel) {
 
   var EditorGalleryView = Backbone.View.extend({
     el                  : iui.get('top-panel-bb'),
@@ -261,8 +263,6 @@ function(ElementCollection,
     },
 
     dropped : function(e, ui) {
-      console.log(e);
-
       var self = this;
       var widget = {};
       var left, top, offsetLeft, offsetTop;
@@ -337,24 +337,24 @@ function(ElementCollection,
         var cid = id.split('-')[0];
         field   = id.split('-')[1];
 
-        if(cid === this.userModel.cid) {
+        if(cid === this.userModel.cid || cid === "user") {
           entity = new UserEntityModel(appState.users);
           content =  '{{CurrentUser.'+field+'}}';
         }
         else {
-          entity = this.entitiesCollection.get(cid);
+          entity = v1State.get('entities').get(cid);
           content =  '{{page.'+entity.get('name')+'.'+field+'}}';
         }
 
         widget         = _.extend(widget, uieState['texts'][0]);
         widget.content =  content;
-        this.widgetsCollection.push(widget);
+        var widgetModel = new WidgetModel(widget);
+        this.widgetsCollection.push(widgetModel);
+        widgetModel.select();
       }
       else {
         var type;
         type        = className.replace(' ui-draggable','');
-        console.log(type);
-        console.log(uieState);
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
         this.widgetsCollection.push(widget);

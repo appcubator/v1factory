@@ -17,13 +17,12 @@ function(ContentModel, LayoutModel, PageCollection) {
 
     initialize: function(bone) {
       var self = this;
+      _.bindAll(this, 'select', 'isFullWidth');
 
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
       this.set('selected', false);
       this.set('context', bone.context);
-
-      _.bindAll(this, 'select', 'assignCoord', 'isFullWidth');
     },
 
     select: function() {
@@ -75,17 +74,6 @@ function(ContentModel, LayoutModel, PageCollection) {
     moveDown: function() {
       if(this.collection.editMode) return;
       this.get('layout').set('top', this.get('layout').get('top') + 1);
-    },
-
-
-    assignCoord: function() {
-      var coordinates = currentCoord? iui.unite(currentCoord.initCor, currentCoord.lastCor):
-                                      iui.unite({x: 0, y:2}, {x: 16, y: 10});
-
-      this.get('layout').set('top', coordinates.topLeft.y + 1);
-      this.get('layout').set('left', coordinates.topLeft.x + 1);
-      this.get('layout').set('width', coordinates.bottomRight.x - coordinates.topLeft.x);
-      this.get('layout').set('height', coordinates.bottomRight.y - coordinates.topLeft.y);
     },
 
     getListOfPages: function() {

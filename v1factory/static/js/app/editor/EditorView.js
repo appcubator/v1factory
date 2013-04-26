@@ -10,6 +10,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
+  'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
   '../../libs/keymaster/keymaster.min'
 ],
@@ -23,7 +24,8 @@ function( PageModel,
           WidgetEditorView,
           EditorGalleryView,
           PageStylePicker,
-          NavbarEditorView ) {
+          NavbarEditorView,
+          TutorialView ) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -32,6 +34,7 @@ function( PageModel,
     events    : {
       'click #save'          : 'save',
       'click #deploy'        : 'deploy',
+      'click .menu-button.help' : 'help',
       'click .page'          : 'clickedPage',
       'click .url-bar'       : 'clickedUrl'
     },
@@ -40,6 +43,7 @@ function( PageModel,
       _.bindAll(this, 'render',
                       'copy',
                       'paste',
+                      'help',
                       'renderUrlBar',
                       'save',
                       'deployLocal',
@@ -133,6 +137,10 @@ function( PageModel,
       return false;
     },
 
+    help: function(e) {
+      new TutorialView([6]);
+    },
+
     copy: function(e) {
       if(this.widgetsManager.copy()) { }
     },
@@ -205,37 +213,25 @@ function( PageModel,
     keydown: function(e) {
       switch(e.keyCode) {
         case 37:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveLeft();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveLeft();
           }
           e.preventDefault();
           break;
         case 38:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveUp();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveUp();
           }
           e.preventDefault();
           break;
         case 39:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveRight();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveRight();
           }
           e.preventDefault();
           break;
         case 40:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveDown();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveDown();
           }
           e.preventDefault();
@@ -244,19 +240,11 @@ function( PageModel,
           if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.removeSelected(e);
           }
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.removeSelected(e);
-          }
           break;
         case 27: //escape
           if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl = null;
             this.widgetsCollection.unselectAll();
-          }
-
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl = null;
-            this.containersCollection.unselectAll();
           }
           return false;
       }

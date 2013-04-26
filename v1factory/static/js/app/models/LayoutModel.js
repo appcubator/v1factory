@@ -3,7 +3,7 @@ define(['backbone'], function(Backbone) {
     defaults: {
       'top'    : 0,
       'left'   : 0,
-      'height' : 16,
+      'height' : 8,
       'width'  : 4
     },
     toJSON: function() {

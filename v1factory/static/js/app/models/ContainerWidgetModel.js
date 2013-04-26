@@ -18,9 +18,7 @@ function(WidgetModel,
          ListEditorView,
          QueryModel,
          RowModel,
-         WidgetCollection) 
-{
-
+         WidgetCollection) {
 
   var ContainerWidgetModel = WidgetModel.extend({
     selected: false,
