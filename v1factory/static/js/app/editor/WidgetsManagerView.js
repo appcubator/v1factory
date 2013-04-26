@@ -16,7 +16,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
 
     },
 
-    initialize: function(widgetsCollection, containersCollection, page) {
+    initialize: function(widgetsCollection, containersCollection) {
       _.bindAll(this, 'render',
                       'changed',
                       'placeWidget',
@@ -38,6 +38,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
       this.widgetsCollection.bind('selected', this.containersCollection.unselectAll);
       this.containersCollection.bind('selected', this.widgetsCollection.unselectAll);
 
+      var page = appState.pages[pageId];
       if(page.uielements) {
         _(page.uielements).each(function(element) {
           if(element.container_info) {

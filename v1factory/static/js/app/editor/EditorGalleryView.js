@@ -36,9 +36,9 @@ function(ElementCollection,
       this.widgetsCollection    = widgetsCollection;
       this.containersCollection = containersCollection;
 
-      this.userModel = g_userModel;
+      this.userModel = v1State.get('users');
 
-      g_entityCollection.bind('add',     this.appendEntity, this);
+      v1State.get('entities').bind('add',     this.appendEntity, this);
       g_contextCollection.bind('add',    this.appendContextEntity, this);
       this.elementsCollection.bind('add',this.appendElement, this);
 
@@ -49,7 +49,7 @@ function(ElementCollection,
       var self = this;
       this.appendUserElements();
 
-      _(g_entityCollection.models).each(function(entity) {
+      _(v1State.get('entities').models).each(function(entity) {
         self.appendEntity(entity);
       });
 

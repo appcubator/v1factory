@@ -1164,6 +1164,11 @@ li.model span.title {
   background-image: url('../img/facebook_icon.png');
 }
 
+.twitter {
+  background-size: auto 30px !important;
+  background-image: url('../img/twitter_icon.png');
+}
+
 .linkedin {
   background-size: auto 30px !important;
   background-image: url('../img/linkedin_icon.png');

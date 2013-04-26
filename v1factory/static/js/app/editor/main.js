@@ -34,16 +34,18 @@ require.config({
 });
 
 require([
+  "app/models/AppModel",
   "editor/EditorView",
   "iui",
   "comp"
 ],
-function(EditorView) {
+function(AppModel, EditorView) {
 
   var EditorMain = function() {
     window.onerror = function(error) {
       alert('Segfault: '+ error);
     };
+    v1State = new AppModel(appState);
     var editorView = new EditorView();
   };
 

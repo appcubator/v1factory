@@ -1,35 +1,29 @@
 define([
   'app/models/PageModel',
-  'app/models/UserEntityModel',
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
   'editor/WidgetsManagerView',
-  'editor/WidgetClassPickerView',
   'editor/WidgetEditorView',
-  'editor/DesignEditorView',
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
-  'mixins/BackboneModal',
   'mixins/BackboneNameBox',
   '../../libs/keymaster/keymaster.min'
-],function(PageModel,
-           UserEntityModel,
-           EntityCollection,
-           WidgetCollection,
-           ContainersCollection,
-           UrlView,
-           SimpleModalView,
-           WidgetsManagerView,
-           WidgetClassPickerView,
-           WidgetEditorView,
-           DesignEditorView,
-           EditorGalleryView,
-           PageStylePicker,
-           NavbarEditorView) {
+],
+function( PageModel,
+          EntityCollection,
+          WidgetCollection,
+          ContainersCollection,
+          UrlView,
+          SimpleModalView,
+          WidgetsManagerView,
+          WidgetEditorView,
+          EditorGalleryView,
+          PageStylePicker,
+          NavbarEditorView ) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -37,8 +31,6 @@ define([
 
     events    : {
       'click #save'          : 'save',
-      'click #settings'      : 'showSettings',
-      'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
       'click .page'          : 'clickedPage',
       'click .url-bar'       : 'clickedUrl'
@@ -53,10 +45,7 @@ define([
                       'deployLocal',
                       'amendAppState',
                       'deploy',
-                      'style',
                       'clickedPage',
-                      'hideSettings',
-                      'showSettings',
                       'getContextEntities',
                       'containerSelected',
                       'widgetSelected',
@@ -64,19 +53,15 @@ define([
                       'clickedUrl',
                       'createPage');
 
-      var page = appState.pages[pageId];
-
       /* Globals */
-      g_entityCollection     = new EntityCollection(appState.entities);
       g_contextCollection    = new EntityCollection();
-      g_userModel            = new UserEntityModel(appState.users);
 
-      this.model                = new PageModel(page);
+      this.model                = v1State.get('pages').models[pageId];
       this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = new WidgetCollection();
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection);
-      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, page);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection);
       this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
@@ -89,8 +74,9 @@ define([
       this.getContextEntities();
       this.render();
 
+      var page = appState.pages[pageId];
       if(!page.uielements.length) {
-        new PageStylePicker(this.widgetsCollection);
+        //new PageStylePicker(this.widgetsCollection);
       }
 
       /* Bindings */
@@ -104,7 +90,6 @@ define([
     },
 
     render: function() {
-      this.style();
 
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
       _(appState.pages).each(function(page, ind) {
@@ -176,8 +161,8 @@ define([
 
       curAppState.pages[pageId]['uielements'] = elems;
       curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
-      curAppState.entities                    = g_entityCollection.toJSON();
-      curAppState.users                       = g_userModel.toJSON();
+      curAppState.entities                    = v1State.get('entities').toJSON();
+      curAppState.users                       = v1State.get('users').toJSON();
 
       return curAppState;
     },
@@ -210,23 +195,6 @@ define([
 
     },
 
-    showSettings: function() {
-      $('#page-settings').animate({
-        marginBottom : -10
-      });
-      return false;
-    },
-
-    style: function() {
-    },
-
-    hideSettings: function() {
-      $('#page-settings').animate({
-        marginBottom : '-100%'
-      });
-      return false;
-    },
-
     getContextEntities: function() {
       var self = this;
       var entityModels = [];
@@ -234,7 +202,7 @@ define([
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
       _(contextEntites).each(function(entityName) {
-        g_contextCollection.add(g_entityCollection.getEntityWithName(entityName));
+        g_contextCollection.add(v1State.get('entities').getEntityWithName(entityName));
       });
     },
 
@@ -328,7 +296,7 @@ define([
       pageUrl.urlparts[0] = "page" + appState.pages.length;
       pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
-      appState.pages.push(pageModel.toJSON());
+      v1State.get('pages').push(pageModel);
 
       $.ajax({
         type: "POST",
