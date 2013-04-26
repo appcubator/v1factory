@@ -1,3 +1,6 @@
+import requests
+import simplejson
+
 class DomainAPI(object):
   """Does all domain registration and configuration"""
 
