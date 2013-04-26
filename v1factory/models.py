@@ -60,16 +60,24 @@ class DomainDude(object):
       raise Exception("Could not make API call to dnsimple")
 
 
-    if status_code in [200, 201] or status_code == 404: # <= sometimes gives 404 on valid response, it's a bug on their side.
+    if status_code == 200:
       response = simplejson.loads(response)
-      available = True if response['status'] == 'available' else False # it's readable, see?
-      return available
+      assert response['status'] != 'available'
+      return False
+
+    elif status_code == 404: # <= really messed up API. http://developer.dnsimple.com/domains/#check-domain-availability
+      response = simplejson.loads(response)
+      assert response['status'] == 'available'
+      return True
 
     elif status_code == 400:
       raise Exception("This is not a valid domain")
 
     else:
       assert False, "API returned weird status code: %d, content: %s" % (status_code, response)
+
+  def register_domain(self, domain):
+    pass
 
 
 class App(models.Model):
