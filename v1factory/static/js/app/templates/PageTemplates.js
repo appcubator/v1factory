@@ -3,7 +3,7 @@ PageTemplates = {};
 PageTemplates.tempPage = [
   '<h3 class="offset2 hoff2"><%= page_name %></h3>',
   '<div class="page-menu">',
-    '<a class="edit item" href="editor/<%= ind %>"><i class="icon-edit"></i>Edit Page</a>',
+    '<a class="edit item" href="/app/'+ appId +'/editor/<%= ind %>"><i class="icon-edit"></i>Edit Page</a>',
     '<a class="delete item"><i class="icon-delete"></i>Delete Page</a>',
     '<div class="edit-url item"><i class="icon-url"></i>Edit URL</div>',
   '</div>'

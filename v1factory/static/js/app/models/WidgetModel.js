@@ -16,6 +16,7 @@ function(ContentModel, LayoutModel, PageCollection) {
     },
 
     initialize: function(bone) {
+      console.log(this.cid);
       var self = this;
       _.bindAll(this, 'select', 'isFullWidth');
 

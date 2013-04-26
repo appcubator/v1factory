@@ -13,11 +13,12 @@ function(AppInfoModel,
 
   var AppModel = Backbone.Model.extend({
     initialize: function(appState) {
-      this.set('info', new AppInfoModel(appState.info));
-      this.set('entities', new EntityCollection(appState.entities));
-      this.set('users', new UserEntityModel(appState.users));
-      this.set('pages', new PageCollection(appState.pages));
-      this.set('emails', new EmailCollection(appState.emails));
+      if(!appState) return;
+      if(appState.info) this.set('info', new AppInfoModel(appState.info));
+      if(appState.users) this.set('users', new UserEntityModel(appState.users));
+      if(appState.entities) this.set('entities', new EntityCollection(appState.entities));
+      if(appState.pages) this.set('pages', new PageCollection(appState.pages));
+      if(appState.emails) this.set('emails', new EmailCollection(appState.emails));
     }
   });
 

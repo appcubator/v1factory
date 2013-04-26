@@ -6516,3 +6516,57 @@ i.icon-url {
 .navigation-menu li.menu-app-pages {
   background-image: url(../img/page.png);
 }
+
+.notice {
+  background-color: #0f2d40;
+  color: #fff;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  padding: 30px;
+  font-size: 16px;
+  padding-bottom: 50px;
+  background-image: url('../img/gift.png');
+  background-position: 700px center;
+  background-repeat: no-repeat;
+  background-size: 140px auto;
+  height: 230px;
+  overflow: hidden;
+  -webkit-transition: height linear 0.4s;
+  -moz-transition: height linear 0.4s;
+  -o-transition: height linear 0.4s;
+  transition: height linear 0.4s;
+
+  animation-delay:0.2s;
+  -webkit-animation-delay:0.2s; /* Safari and Chrome */
+  -webkit-animation:expand-height 400ms linear;
+  -moz-animation:expand-height 400ms linear;
+  -ms-animation:expand-height 400ms linear;
+  -o-animation:expand-height 400ms linear;
+  animation:expand-height 400ms linear;
+}
+
+  @-webkit-keyframes expand-height {
+    0% {
+      /*transform*/
+      height: 0px;
+    }
+    100% {
+      height: 230px;
+    }
+  }
+
+
+.notice h3 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.notice a {
+  text-decoration: underline;
+}
+.notice ul {
+  margin-top: 10px;
+}
+.notice ul li {
+  margin-top: 6px;
+}

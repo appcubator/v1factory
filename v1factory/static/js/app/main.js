@@ -173,7 +173,8 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
   });
 
   v1 = new v1App();
-  v1State = new AppModel(appState);
+  v1State = new AppModel();
+  v1State.initialize(appState);
   Backbone.history.start({pushState: true});
 
 });

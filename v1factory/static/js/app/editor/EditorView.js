@@ -95,7 +95,7 @@ function( PageModel,
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
         iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
-                                          '/pages/editor/'+ ind +'">' + page.name +
+                                          '/editor/'+ ind +'">' + page.name +
                                           '</a></li>';
       });
 
@@ -267,8 +267,8 @@ function( PageModel,
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         complete: function() {
-          console.log('<li><a herf="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>');
-          $('<li><a href="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
+          console.log('<li><a herf="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>');
+          $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },
         dataType: "JSON"
       });

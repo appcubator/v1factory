@@ -18,7 +18,7 @@ function(ThemeDisplayView) {
       var self = this;
 
       self.el.innerHTML = ['<div class="span58">',
-                           '<h2 class="hoff2">Themes</h2>',
+                           '<h2 class="hoff1">Themes</h2>',
                            '<hr class="span58 hoff2">'].join('\n');
 
       self.listView = document.createElement('ul');

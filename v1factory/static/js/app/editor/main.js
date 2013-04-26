@@ -45,7 +45,9 @@ function(AppModel, EditorView) {
     window.onerror = function(error) {
       alert('Segfault: '+ error);
     };
-    v1State = new AppModel(appState);
+    v1State = new AppModel(null);
+    v1State.initialize(appState);
+
     var editorView = new EditorView();
   };
 

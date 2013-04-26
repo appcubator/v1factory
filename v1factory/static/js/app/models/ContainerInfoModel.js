@@ -21,10 +21,11 @@ function(WidgetCollection,
         if(!bone.entity.attributes) {
 
           if(bone.entity == "User") {
-            this.set('entity', g_userModel);
+            this.set('entity', v1State.get('users'));
           }
           else {
-            this.set('entity', g_entityCollection.getEntityWithName(bone.entity));
+            console.log(v1State.get('entities'));
+            this.set('entity', v1State.get('entities').getEntityWithName(bone.entity));
           }
         }
         else {

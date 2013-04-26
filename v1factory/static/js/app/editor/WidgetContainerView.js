@@ -50,7 +50,7 @@ function(WidgetCollection,
         //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
         this.rowBindings();
       }
-
+      console.log(this.model);
       if(this.model.get('container_info').has('form')) {
         var form = this.model.get('container_info').get('form');
         if(form.get('fields').models.length < 2) {
@@ -93,6 +93,8 @@ function(WidgetCollection,
       this.setHeight(height * GRID_HEIGHT);
 
       this.el.className += ' widget-wrapper span'+width;
+
+      console.log(this.model);
 
       if(this.model.get('container_info').get('action') == "table-gal") {
         var tableDiv = document.createElement('div');

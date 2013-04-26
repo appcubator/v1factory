@@ -91,7 +91,7 @@ NODE_SCHEMA = { "_type": [],"_each": { "_type": {}, "_mapping": {
 FORM_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
   "entity": { "_type": "" },
   "action": { "_type": "" },
-  "uielements": NODE_SCHEMA
+  "form": { "_type": None }
 }}
 
 ITERATOR_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
