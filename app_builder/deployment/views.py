@@ -81,10 +81,9 @@ def deploy_code(request):
   try:
     d = Deployment.objects.get(subdomain=s)
   except Deployment.DoesNotExist:
-    d = Deployment.create(s)
+    d = Deployment.create(s, app_state=simplejson.loads(app_json))
     d.initialize()
     github_actions.create(s, d.app_dir)
-  d.update_app_state(simplejson.loads(app_json))
   d.update_css(css)
   d.full_clean()
   sys.stdout.flush()
