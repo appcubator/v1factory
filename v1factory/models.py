@@ -74,10 +74,39 @@ class DomainDude(object):
       raise Exception("This is not a valid domain")
 
     else:
-      assert False, "API returned weird status code: %d, content: %s" % (status_code, response)
+      raise Exception("API returned weird status code: %d, content: %s" % (status_code, response))
 
   def register_domain(self, domain):
-    pass
+    """Registers domain and returns dictionary of the info."""
+
+
+    if not self.check_availability(domain):
+      raise Exception("Domain is not available.")
+
+    if len(domain) < 4:
+      raise Exception("Domain too short.")
+
+    valid_domains = ['.com', '.net', '.org']
+    if domain[-4:] not in valid_domains:
+      raise Exception("Domain not valid.")
+
+    post_data = {}
+    post_data['domain[name]'] = 'springtask.me'
+    post_data['domain[registrant_id]'] = 14454
+
+    try:
+      status_code, response = self.call_api('/domain_registration', post_data, post=True)
+    except requests.exceptions.RequestException:
+      # I guess this is pretty bad... Maybe it should be logged
+      raise Exception("Could not make API call to dnsimple")
+
+
+    if status_code == 201:
+      response = simplejson.loads(response)
+      return response
+
+    else:
+      raise Exception("Error: status code: %d, content: %s" % (status_code, response))
 
 
 class App(models.Model):
