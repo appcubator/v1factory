@@ -84,9 +84,10 @@ def deploy_code(request):
     d = Deployment.create(s, app_state=simplejson.loads(app_json))
     d.initialize()
     github_actions.create(s, d.app_dir)
+  else:
+    d.update_app_state(simplejson.loads(app_json))
   d.update_css(css)
   d.full_clean()
-  sys.stdout.flush()
   msgs = d.deploy(d_user)
   github_actions.push(s, d.app_dir)
   d.save()
