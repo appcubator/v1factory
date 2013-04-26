@@ -232,7 +232,7 @@ define([
 
     resized: function(e, ui) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
-      var deltaHeight = Math.round((ui.size.height + 36) / GRID_HEIGHT);
+      var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
 
       this.model.get('layout').set('width', deltaWidth);

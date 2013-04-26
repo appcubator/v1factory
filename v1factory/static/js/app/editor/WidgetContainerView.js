@@ -52,7 +52,11 @@ function(WidgetCollection,
       }
 
       if(this.model.get('container_info').has('form')) {
-        var form = this.model.get('container_info').get('entity').getFormWithName(this.model.get('container_info').get('form'));
+        var form = this.model.get('container_info').get('form');
+        if(form.get('fields').models.length < 2) {
+          new FormEditorView(form, this.model.get('container_info').get('entity'));
+        }
+
         this.formModel = form;
         this.formModel.bind('change', this.reRender);
         this.formModel.get('fields').bind('remove', this.reRender);

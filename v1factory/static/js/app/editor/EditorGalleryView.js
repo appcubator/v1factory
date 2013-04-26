@@ -161,16 +161,20 @@ function(ElementCollection,
       $(this.allList).append(_.template(Templates.tempLiTable, context));
 
       // Displaying just the create forms
-      if(entityModel.has('forms')) {
-        _(entityModel.get('forms').models).each(function(form) {
-          if(form.get('action') == "create") {
-            var html = _.template(Templates.createFormButton, {entity: entityModel,
-                                                               form: form});
+      // if(entityModel.has('forms')) {
+      //   _(entityModel.get('forms').models).each(function(form) {
+      //     if(form.get('action') == "create") {
+      //       var html = _.template(Templates.createFormButton, {entity: entityModel,
+      //                                                          form: form});
 
-            $(self.allList).append(html);
-          }
-        });
-      }
+      //       $(self.allList).append(html);
+      //     }
+      //   });
+      // }
+      var tempForm = '<li id="entity-<%= cid %>" class="create entity">'+
+                     '<span class="name"><%= name %> Create Form</span></li>';
+      $(this.allList).append(_.template(tempForm, context));
+
 
       $('.entity').draggable({
         cursor: "move",
@@ -318,7 +322,7 @@ function(ElementCollection,
           form = entity.get('forms').get(formCid);
         }
         else {
-          entity = g_entityCollection.get(entityCid);
+          entity = v1State.get('entities').get(entityCid);
           form = entity.get('forms').get(formCid);
         }
 

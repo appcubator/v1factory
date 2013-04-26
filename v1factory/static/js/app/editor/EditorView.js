@@ -154,16 +154,9 @@ function( PageModel,
     amendAppState : function() {
       var curAppState   = _.clone(appState);
       var newCollection = _.clone(this.widgetsCollection);
-
-      _(this.containersCollection.models).each(function(container) {
-        newCollection.remove(container.get('container_info').get('uielements').models);
-      });
-
       var widgets    = (newCollection.toJSON() || []);
-      var containers = (this.containersCollection.toJSON() || []);
-      var elems      = _.union(widgets, containers);
 
-      curAppState.pages[pageId]['uielements'] = elems;
+      curAppState.pages[pageId]['uielements'] = widgets;
       curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
       curAppState.entities                    = v1State.get('entities').toJSON();
       curAppState.users                       = v1State.get('users').toJSON();
