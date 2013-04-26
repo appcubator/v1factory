@@ -45,7 +45,8 @@ class Deployment(models.Model):
   def apache_config(self):
     try:
       domain = simplejson.loads(self.app_state_json)['info']['domain']
-    except Exception:
+    except Exception, e:
+      print e
       print "could not extract domain from app state"
       domain = None
 
@@ -92,6 +93,8 @@ class Deployment(models.Model):
     from app_builder.analyzer import AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
+
+    self.initialize()
 
     # GENERATE CODE
     tmp_project_dir = self.write_to_tmpdir(d_user)
