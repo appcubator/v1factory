@@ -2,11 +2,12 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-import simplejson
-import re
 from django.core.exceptions import ValidationError
+
 import os.path
+import re
 import requests
+import simplejson
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 
@@ -30,6 +31,34 @@ def get_default_theme_state():
   simplejson.loads(s) # makes sure it's actually valid
   f.close()
   return s
+
+class DomainDude(object):
+  """Does all domain registration and configuration"""
+
+  def call_api(self, url_ending, post_data):
+    assert url_ending[0] == '/' # just trying to make sure it's kosher
+    r = requests.post('https://dnsimple.com' + url_ending,
+                         data=post_data, auth=('founders@v1factory.com', 'domains,mayne'))
+    return (r.status_code, simplejson.loads(r.content))
+
+  def check_availability(self, domain):
+    """True if available, False if unavailable,
+                Exception if invalid and explosion if API call fails. jk."""
+    try:
+      status_code, response = self.call_api('/domains/{domain}/check', {})
+    except requests.exceptions.RequestException:
+      # I guess this is pretty bad... Maybe it should be logged
+      raise Exception("Could not make API call to dnsimple")
+
+    if status_code in [200, 201]:
+      available = True if response['status'] == 'available' else False # it's readable, see?
+      return available
+
+    elif status_code == 400:
+      raise Exception("This is not a valid domain")
+
+    else:
+      assert False, "API returned unseen status code %d" % status_code
 
 
 class App(models.Model):
