@@ -41,7 +41,8 @@ class DomainDude(object):
     if not post: # GET request
       r = requests.get(url,
                            data=data,
-                           headers={'Accept': 'application/json'},
+                           headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
+                           #headers={'Accept': 'application/json'},
                            auth=('founders@v1factory.com', 'domains,mayne'))
     else: # POST request
       r = requests.post(url,
@@ -90,12 +91,12 @@ class DomainDude(object):
     if domain[-4:] not in valid_domains:
       raise Exception("Domain not valid.")
 
-    post_data = {}
-    post_data['domain[name]'] = 'springtask.me'
-    post_data['domain[registrant_id]'] = 14454
+    post_data = {"domain":{}}
+    post_data["domain"]['name'] = 'springtask.me'
+    post_data["domain"]['registrant_id'] = 14454
 
     try:
-      status_code, response = self.call_api('/domain_registration', post_data, post=True)
+      status_code, response = self.call_api('/domain_registrations', post_data, post=True)
     except requests.exceptions.RequestException:
       # I guess this is pretty bad... Maybe it should be logged
       raise Exception("Could not make API call to dnsimple")
