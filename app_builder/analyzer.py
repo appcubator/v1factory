@@ -452,6 +452,7 @@ class AnalyzedApp:
     self.pages = Manager(Page)
     self.routes = Manager(Route)
 
+    """  # This commented block was a hack to move forms from entity and user to the form dict
     self.backend_forms = Manager(object)
     for e in app_state['entities']:
       for f in e['forms']:
@@ -468,6 +469,7 @@ class AnalyzedApp:
           if 'form' in uie['container_info']:
             uie['container_info']['form'] = self.backend_forms.get_by_name(\
                                               utils.extract_from_brace(uie['container_info']['form']))
+    """
 
     # given user settings, create some models
     base_user = { "name": "User" }
