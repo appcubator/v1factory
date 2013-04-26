@@ -2,11 +2,12 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-import simplejson
-import re
 from django.core.exceptions import ValidationError
+
 import os.path
+import re
 import requests
+import simplejson
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 

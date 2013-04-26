@@ -43,7 +43,13 @@ class Deployment(models.Model):
     return self
 
   def apache_config(self):
-    return fillout_config(self.subdomain, self.app_dir)
+    try:
+      domain = simplejson.loads(self.app_state_json)['info']['domain']
+    except Exception:
+      print "could not extract domain from app state"
+      domain = None
+
+    return fillout_config(self.subdomain, self.app_dir, domain=domain)
 
   def initialize(self):
     """Setup apache config and write a blank app to the app path"""
@@ -155,30 +161,37 @@ class Deployment(models.Model):
 # This was ugly in the main code so I moved it down here.
 APACHE_CONFIG_TMPL = """
 <VirtualHost *:80>
-	ServerName {}.v1factory.com
+	ServerName {subdomain}.v1factory.com
+  {optional_alias_string}
 	ServerAdmin founders@v1factory.com
 
-	WSGIScriptAlias / {}/wsgi.py
-	WSGIDaemonProcess {} python-path={}:/var/www/libs/lib/python2.7/site-packages
-	WSGIProcessGroup {}
+	WSGIScriptAlias / {app_dir}/wsgi.py
+	WSGIDaemonProcess {subdomain} python-path={app_dir}:/var/www/libs/lib/python2.7/site-packages
+	WSGIProcessGroup {subdomain}
 
-	<Directory {}>
+	<Directory {app_dir}>
 	<Files wsgi.py>
 	Order deny,allow
 	Allow from all
 	</Files>
 	</Directory>
 
-	Alias /static/ {}/static/
-	<Directory {}/static/>
+	Alias /static/ {app_dir}/static/
+	<Directory {app_dir}/static/>
 	Order deny,allow
 	Allow from all
 	</Directory>
 
 	LogLevel info
-	ErrorLog {}/error.log
-	CustomLog {}/access.log combined
-</VirtualHost>
-"""
-def fillout_config(subdomain, app_dir):
-  return APACHE_CONFIG_TMPL.format(subdomain, app_dir, subdomain, app_dir, subdomain, *(5*[app_dir]))
+	ErrorLog {app_dir}/error.log
+	CustomLog {app_dir}/access.log combined
+</VirtualHost>"""
+
+def fillout_config(subdomain, app_dir, domain=None):
+  optional_alias_string = ""
+  if domain is not None:
+    optional_alias_string = "ServerAlias %s" % domain
+
+  return APACHE_CONFIG_TMPL.format(subdomain=subdomain,
+                                   app_dir=app_dir,
+                                   optional_alias_string=optional_alias_string)
