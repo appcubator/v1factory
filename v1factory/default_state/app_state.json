@@ -9,86 +9,6 @@
         "fields": [],
         "twitter": false,
         "linkedin": false,
-        "forms": [
-            {
-                "action": "signup",
-                "fields": [
-                    {
-                        "name": "username",
-                        "placeholder": "Username",
-                        "label": "Username",
-                        "displayType": "single-line-text",
-                        "type": "text",
-                        "options": []
-                    },
-                    {
-                        "name": "password1",
-                        "placeholder": "Password",
-                        "label": "Password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "options": []
-                    },
-                    {
-                        "name": "password2",
-                        "placeholder": "Confirm Password",
-                        "label": "Confirm Password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "options": []
-                    },
-                    {
-                        "name": "email",
-                        "placeholder": "Email Address",
-                        "label": "Email Address",
-                        "displayType": "email-text",
-                        "type": "email",
-                        "options": []
-                    },
-                    {
-                        "name": "Sign Up",
-                        "placeholder": "",
-                        "label": "Sign Up!",
-                        "displayType": "button",
-                        "type": "button",
-                        "options": []
-                    }
-                ],
-                "goto": "internal://Homepage",
-                "name": "Sign Up"
-            },
-            {
-                "action": "login",
-                "fields": [
-                    {
-                        "name": "username",
-                        "placeholder": "Username",
-                        "label": "Username",
-                        "displayType": "single-line-text",
-                        "type": "text",
-                        "options": []
-                    },
-                    {
-                        "name": "password",
-                        "placeholder": "Password",
-                        "label": "Password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "options": []
-                    },
-                    {
-                        "name": "Submit",
-                        "placeholder": "Login",
-                        "label": "Login",
-                        "displayType": "button",
-                        "type": "button",
-                        "options": []
-                    }
-                ],
-                "goto": "internal://Homepage",
-                "name": "Local Login"
-            }
-        ],
         "facebook": false,
         "local": true
     },
@@ -219,7 +139,37 @@
                     "container_info": {
                         "entity": "User",
                         "action": "login",
-                        "form": "{{Local Login}}",
+                        "form": {
+                    "action": "login",
+                    "fields": [
+                        {
+                            "name": "username",
+                            "placeholder": "Username",
+                            "label": "Username",
+                            "displayType": "single-line-text",
+                            "type": "text",
+                            "options": []
+                        },
+                        {
+                            "name": "password",
+                            "placeholder": "Password",
+                            "label": "Password",
+                            "displayType": "password-text",
+                            "type": "password",
+                            "options": []
+                        },
+                        {
+                            "name": "Submit",
+                            "placeholder": "Login",
+                            "label": "Login",
+                            "displayType": "button",
+                            "type": "button",
+                            "options": []
+                        }
+                ],
+                "goto": "internal://Homepage",
+                "name": "Local Login"
+            }
                         "uielements": []
                     },
                     "content_attribs": {},
@@ -266,7 +216,53 @@
                     "container_info": {
                         "action": "signup",
                         "uielements": [],
-                        "form": "{{Sign Up}}",
+                        "form": {
+                          "action": "signup",
+                          "fields": [
+                              {
+                                  "name": "username",
+                                  "placeholder": "Username",
+                                  "label": "Username",
+                                  "displayType": "single-line-text",
+                                  "type": "text",
+                                  "options": []
+                              },
+                              {
+                                  "name": "password1",
+                                  "placeholder": "Password",
+                                  "label": "Password",
+                                  "displayType": "password-text",
+                                  "type": "password",
+                                  "options": []
+                              },
+                              {
+                                  "name": "password2",
+                                  "placeholder": "Confirm Password",
+                                  "label": "Confirm Password",
+                                  "displayType": "password-text",
+                                  "type": "password",
+                                  "options": []
+                              },
+                              {
+                                  "name": "email",
+                                  "placeholder": "Email Address",
+                                  "label": "Email Address",
+                                  "displayType": "email-text",
+                                  "type": "email",
+                                  "options": []
+                              },
+                              {
+                                  "name": "Sign Up",
+                                  "placeholder": "",
+                                  "label": "Sign Up!",
+                                  "displayType": "button",
+                                  "type": "button",
+                                  "options": []
+                              }
+                          ],
+                          "goto": "internal://Homepage",
+                          "name": "Sign Up"
+                      },
                         "entity": "User"
                     },
                     "layout": {
