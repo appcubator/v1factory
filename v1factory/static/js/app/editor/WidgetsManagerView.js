@@ -57,6 +57,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
       else {
         self.placeWidget(model);
       }
+      model.trigger('rendered');
     },
 
     placeWidget: function(widgetModel) {

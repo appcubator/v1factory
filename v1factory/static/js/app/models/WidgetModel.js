@@ -28,7 +28,6 @@ function(ContentModel, LayoutModel, PageCollection) {
 
     select: function() {
       this.collection.select(this);
-      this.set('selected', true);
     },
 
     remove :function() {

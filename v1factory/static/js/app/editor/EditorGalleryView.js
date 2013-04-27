@@ -73,8 +73,6 @@ function(ElementCollection,
       // Form, Data elements belonging to the user.
 
       var self = this;
-      //g_entityCollection.push(appState.users, {silent : true});
-
 
       if(this.userModel.has('forms')) {
         _(this.userModel.get('forms').models).each(function(form) {

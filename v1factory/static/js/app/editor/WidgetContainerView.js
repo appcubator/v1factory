@@ -55,17 +55,18 @@ function(WidgetCollection,
         this.rowBindings();
       }
 
-      if((action == "login" || action == "signup")&& this.model.get('container_info').get('form').has('fields')) {
-        var form = constantContainers[this.model.get('container_info').get('form').get('name')];
-        form = new FormModel(form);
-        this.model.get('container_info').set('form', form);
-        this.formModel = form;
-        this.formModel.bind('change', this.reRender);
-        this.formModel.get('fields').bind('remove', this.reRender);
-        this.formModel.get('fields').bind('add', this.reRender);
-        _(this.formModel.get('fields').models).each(function(model){ model.bind('change', self.reRender); });
-      }
-      else if(this.model.get('container_info').has('form')) {
+      // if((action == "login" || action == "signup")&& this.model.get('container_info').get('form').has('fields')) {
+      //   var form = constantContainers[this.model.get('container_info').get('form').get('name')];
+      //   form = new FormModel(form);
+      //   this.model.get('container_info').set('form', form);
+      //   this.formModel = form;
+      //   this.formModel.bind('change', this.reRender);
+      //   this.formModel.get('fields').bind('remove', this.reRender);
+      //   this.formModel.get('fields').bind('add', this.reRender);
+      //   _(this.formModel.get('fields').models).each(function(model){ model.bind('change', self.reRender); });
+      // }
+      // else 
+      if(this.model.get('container_info').has('form')) {
         var form = this.model.get('container_info').get('form');
         if(form.get('fields').models.length < 2) {
           new FormEditorView(form, this.model.get('container_info').get('entity'));

@@ -69,8 +69,6 @@ define([
 
     render: function() {
 
-      //this.model.select();
-
       var width = this.model.get('layout').get('width');
       var height = this.model.get('layout').get('height');
 
@@ -80,7 +78,6 @@ define([
       this.setHeight(height * GRID_HEIGHT);
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
-      //this.el.style.paddingTop = 
 
       if(this.model.get('layout').has('l-padding')) {
         this.el.style.paddingLeft = this.model.get('layout').get('l-padding');
@@ -96,6 +93,12 @@ define([
 
       if(this.model.get('layout').has('b-padding')) {
         this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
+      }
+
+      if(this.model.get('selected') === true) {
+        $(this.el).addClass('selected');
+        this.el.style.zIndex = 2000;
+        this.selected = true;
       }
 
       this.el.innerHTML = this.renderElement();
@@ -122,11 +125,14 @@ define([
 
     select: function(e) {
       this.el.style.zIndex = 2000;
+      this.model.set('selected', true);
       this.model.select();
+
       e.stopPropagation();
     },
 
     outlineSelected: function() {
+
 
       if(this.model.get('selected')) {
         $(this.el).addClass('selected');
@@ -215,20 +221,7 @@ define([
       this.el.firstChild.style.lineHeight = '1em';
     },
 
-    resizing: function(e, ui) {
-      // this.el.style.paddingTop = '0px';
-      // this.el.style.paddingBottom = '0px';
-
-      // console.log(this.el.style.cssText);
-
-      // if(this.model.get('layout').get('t-padding')) {
-      //   ui.size.height = ui.size.height + this.model.get('layout').get('t-padding');
-      // }
-
-      // if(this.model.get('layout').get('b-padding')) {
-      //   ui.size.height = ui.size.height + this.model.get('layout').get('b-padding');
-      // }
-    },
+    resizing: function(e, ui) { },
 
     resized: function(e, ui) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
