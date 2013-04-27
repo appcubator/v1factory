@@ -10,6 +10,13 @@ import requests
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 
+def get_default_data(filename):
+  f = open(os.path.join(DEFAULT_STATE_DIR, filename))
+  s = f.read()
+  simplejson.loads(s) # makes sure it's actually valid
+  f.close()
+  return s
+
 def get_default_uie_state():
   f = open(os.path.join(DEFAULT_STATE_DIR, "uie_state.json"))
   s = f.read()
@@ -291,10 +298,14 @@ class ApiKeyUses(models.Model):
 
 
 def load_initial_themes():
-  s = get_default_theme_state()
+  s = get_default_data('flat_ui_theme.json')
+  s2 = get_default_data('bootstrap_theme.json')
   t = UITheme(name="Flat UI Kit")
-  t.set_state(s)
+  t._uie_state_json = s
+  t.full_clean()
+  t.save()
+  t = UITheme(name="Bootstrap")
+  t._uie_state_json = s2
   t.full_clean()
   t.save()
   print "Done"
-  return t
