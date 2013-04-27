@@ -1,44 +1,121 @@
 var constantContainers = {
-  'facebook' : [
-    {
-      'type' : 'links',
-      'class_name' : 'btn facebook-btn',
-      'content_attribs' : null,
-      'content' : "Login w/ Facebook",
-      'layout' : {
-        top   : 0,
-        left  : 0,
-        width : 16,
-        height: 4
+  'facebook' : {
+    action: "signup",
+    entity: "User",
+    fields: [
+                    {
+                        "name": "Submit",
+                        "placeholder": "Login",
+                        "label": "Login",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
+                    }
+    ]
+  },
+  'twitter' : {
+    action: "signup",
+    entity: "User",
+    fields : [
+      {
+                        "name": "Submit",
+                        "placeholder": "Login",
+                        "label": "Login",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
       }
-    }
-  ],
-  'twitter' : [
-    {
-      'type' : 'links',
-      'class_name' : 'twitter-btn btn',
-      'content_attribs' : "",
-      'content' : "Login w/ Twitter",
-      'layout' : {
-        top   : 0,
-        left  : 0,
-        width : 16,
-        height: 4
+    ]
+  },
+  'linkedin' : {
+    action: "signup",
+    entity: "User",
+    fields : [
+      {
+                        "name": "Submit",
+                        "placeholder": "Login",
+                        "label": "Login",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
       }
-    }
-  ],
-  'linkedin' : [
-    {
-      'type' : 'links',
-      'class_name' : 'linkedin-btn btn',
-      'content_attribs' : null,
-      'content' : "Login w/ LinkedIn",
-      'layout' : {
-        top   : 0,
-        left  : 0,
-        width : 16,
-        height: 4
-      }
-    }
-  ]
+    ]
+  },
+  'Local Login': {
+    action: "login",
+    entity: "User",
+    fields : [
+                    {
+                        "name": "username",
+                        "placeholder": "Username",
+                        "label": "Username",
+                        "displayType": "single-line-text",
+                        "type": "text",
+                        "options": []
+                    },
+                    {
+                        "name": "password",
+                        "placeholder": "Password",
+                        "label": "Password",
+                        "displayType": "password-text",
+                        "type": "password",
+                        "options": []
+                    },
+                    {
+                        "name": "Submit",
+                        "placeholder": "Login",
+                        "label": "Login",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
+                    }
+    ]
+  },
+  'Sign Up' : {
+    "action": "signup",
+    "fields": [
+                    {
+                        "name": "username",
+                        "placeholder": "Username",
+                        "label": "Username",
+                        "displayType": "single-line-text",
+                        "type": "text",
+                        "options": []
+                    },
+                    {
+                        "name": "password1",
+                        "placeholder": "Password",
+                        "label": "Password",
+                        "displayType": "password-text",
+                        "type": "password",
+                        "options": []
+                    },
+                    {
+                        "name": "password2",
+                        "placeholder": "Confirm Password",
+                        "label": "Confirm Password",
+                        "displayType": "password-text",
+                        "type": "password",
+                        "options": []
+                    },
+                    {
+                        "name": "email",
+                        "placeholder": "Email Address",
+                        "label": "Email Address",
+                        "displayType": "email-text",
+                        "type": "email",
+                        "options": []
+                    },
+                    {
+                        "name": "Sign Up",
+                        "placeholder": "",
+                        "label": "Sign Up!",
+                        "displayType": "button",
+                        "type": "button",
+                        "options": []
+                    }
+              ],
+    "goto": "internal://Homepage",
+    "name": "Sign Up"
+  }
 };
