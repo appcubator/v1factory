@@ -194,6 +194,7 @@ function(WidgetCollection,
       entityName = this.model.get('container_info').get('entity').get('name');
 
       // todo: hacky as hell
+      /*
       if(entityName == "User") {
         var form = _.findWhere(appState.users.forms, {name: self.formModel.get('name')});
         index    = _.indexOf(appState.users.forms, form);
@@ -207,6 +208,7 @@ function(WidgetCollection,
         index         = _.indexOf(appState.entities[indexEnt].forms, formVal);
         appState.entities[indexEnt].forms[index] = this.formModel.toJSON();
       }
+      */
     }
   });
 

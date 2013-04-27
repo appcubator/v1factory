@@ -140,37 +140,37 @@
                         "entity": "User",
                         "action": "login",
                         "form": {
-                    "action": "login",
-                    "fields": [
-                        {
-                            "name": "username",
-                            "placeholder": "Username",
-                            "label": "Username",
-                            "displayType": "single-line-text",
-                            "type": "text",
-                            "options": []
-                        },
-                        {
-                            "name": "password",
-                            "placeholder": "Password",
-                            "label": "Password",
-                            "displayType": "password-text",
-                            "type": "password",
-                            "options": []
-                        },
-                        {
-                            "name": "Submit",
-                            "placeholder": "Login",
-                            "label": "Login",
-                            "displayType": "button",
-                            "type": "button",
-                            "options": []
-                        }
-                ],
-                "goto": "internal://Homepage",
-                "name": "Local Login"
-            }
-                        "uielements": []
+                          "action": "login",
+                          "fields": [
+                              {
+                                  "name": "username",
+                                  "placeholder": "Username",
+                                  "label": "Username",
+                                  "displayType": "single-line-text",
+                                  "type": "text",
+                                  "options": []
+                              },
+                              {
+                                  "name": "password",
+                                  "placeholder": "Password",
+                                  "label": "Password",
+                                  "displayType": "password-text",
+                                  "type": "password",
+                                  "options": []
+                              },
+                              {
+                                  "name": "Submit",
+                                  "placeholder": "Login",
+                                  "label": "Login",
+                                  "displayType": "button",
+                                  "type": "button",
+                                  "options": []
+                              }
+                          ],
+                          "goto": "internal://Homepage",
+                          "name": "Local Login"
+                      },
+                      "uielements": []
                     },
                     "content_attribs": {},
                     "content": ""
