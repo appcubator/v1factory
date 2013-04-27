@@ -4,10 +4,9 @@ define([
 ],
 function(Backbone) {
 
-  var TutorialView = Backbone.ModalView.extend({
+  var TutorialView = Backbone.View.extend({
     tagName: 'div',
     className: 'tutorial-view',
-    width: 700,
 
     addr : [0],
 
@@ -34,14 +33,24 @@ function(Backbone) {
     },
 
     render : function(img, text) {
+      this.renderBg();
       this.renderLeftMenu();
       this.renderMainModal();
+      document.body.appendChild(this.el);
+      return this;
+    },
+
+    renderBg: function() {
+      var bgDiv = document.createElement('div');
+      bgDiv.className = 'modal-bg';
+      this.bgDiv = bgDiv;
+      this.el.appendChild(bgDiv);
     },
 
     renderMainModal: function() {
       var mainDiv = document.createElement('div');
       mainDiv.className = 'tutorial-content';
-
+      this.mainDiv = mainDiv;
       this.el.appendChild(mainDiv);
     },
 
@@ -50,8 +59,14 @@ function(Backbone) {
       menuDiv.className = 'tutorial-menu';
       var menuUl  = document.createElement('ul');
       menuUl.id = "tutorial-menu-list";
+
+      var searchLi = document.createElement('div');
+      searchLi.innerHTML = '<form class="tutorial-q-form"><input type="text" placeholder="Type your question here..."></form>';
+      searchLi.className = "search-bar";
+
       this.appendMenuItem(menuUl, TutorialDirectory);
 
+      menuDiv.appendChild(searchLi);
       menuDiv.appendChild(menuUl);
       this.el.appendChild(menuDiv);
     },
@@ -87,11 +102,11 @@ function(Backbone) {
 
       if(!isNew) {
 
-        $(this.modalWindow).animate({
-          marginTop: "800px"
+        $(this.mainDiv).animate({
+          top: "800px"
         }, 240, function() {
 
-          $(this).css({marginTop: '-800px'});
+          $(this).css({top: '-800px'});
           var obj = TutorialDirectory[addr[0]];
           if(addr[1]) {
             obj = obj.contents[addr[1]];
@@ -101,8 +116,8 @@ function(Backbone) {
 
         });
 
-        $(this.modalWindow).delay(240).animate({
-          marginTop: "-300px"
+        $(this.mainDiv).delay(240).animate({
+          top: "50px"
         });
       }
       else {
@@ -124,7 +139,9 @@ function(Backbone) {
     },
 
     showSlide: function(obj) {
-      $('.tutorial-content').html(iui.getHTML(obj.view));
+      console.log(obj);
+      var title = '<h2>'+ obj.title + '</h2><hr>';
+      $('.tutorial-content').html(title + iui.getHTML(obj.view));
     },
 
     selectNext: function (obj) {
@@ -179,20 +196,28 @@ function(Backbone) {
         case 40:
          self.selectNext();
          self.chooseSlide(self.addr, false);
+         e.preventDefault();
          break;
         case 37:
         case 38:
          self.selectPrevious();
          self.chooseSlide(self.addr, false);
+         e.preventDefault();
+         break;
+        case 27:
+         self.closeModal();
          break;
       }
-
-      e.preventDefault();
     },
 
     onClose: function() {
       $(this.el).empty();
       $(window).unbind('keydown', this.keyhandler);
+    },
+
+    closeModal: function() {
+      this.remove();
+      this.stopListening();
     }
   });
 
