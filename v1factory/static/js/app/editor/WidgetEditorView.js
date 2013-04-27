@@ -26,8 +26,6 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
 
       if(this.model) {
         this.model.bind('change:selected', this.selectChanged);
-        this.contentEditor = new WidgetContentEditor(this.model);
-        this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.render();
         this.bindLocation();
       }
@@ -37,17 +35,23 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
       var self = this;
       // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
 
-      console.log('trying to render');
-
       if(!iui.get('widget-wrapper-' + this.model.cid)) {
-        console.log('not found');
         this.model.bind('rendered', self.render);
         return;
       }
 
+      this.layoutEditor = new WidgetLayoutEditor(this.model);
+
       iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
       this.el.appendChild(this.layoutEditor.el);
-      this.el.appendChild(this.contentEditor.el);
+
+      console.log(this.model);
+
+      if(this.model.get('container_info') == null) {
+        this.contentEditor = new WidgetContentEditor(this.model);
+        this.el.appendChild(this.contentEditor.el);
+      }
+
       this.model.unbind('rendered', self.render);
     },
 
@@ -56,8 +60,6 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
     bindLocation: function() {    },
 
     selectChanged : function(chg, ch2) {
-      console.log("SELECTED");
-      console.log(this.widgetsCollection.selectedEl);
       if(this.widgetsCollection.selectedEl === null) {
         this.model = null;
         this.clear();
@@ -66,8 +68,6 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
         this.clear();
         this.model = this.widgetsCollection.selectedEl;
         this.model.bind('change:selected', this.selectChanged);
-        this.contentEditor = new WidgetContentEditor(this.model);
-        this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.render();
         this.bindLocation();
         this.$el.fadeIn();

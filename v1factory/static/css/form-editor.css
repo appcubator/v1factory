@@ -137,10 +137,10 @@
   background-image: url(../img/right-arrow-blue.png);
   background-repeat: no-repeat;
   background-size: 100% auto;
-  background-position: left;
+  background-position: left top;
   float: left;
   margin-left: -46px;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .form-fields-list li.selected .drag-icon {
