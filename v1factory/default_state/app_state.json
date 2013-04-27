@@ -1,111 +1,195 @@
 {
     "info": {
         "keywords": "",
+        "domain": "v1factory.org",
         "description": ""
     },
+    "users": {
+        "name": "User",
+        "fields": [],
+        "twitter": false,
+        "linkedin": false,
+        "facebook": false,
+        "local": true
+    },
+    "emails": [
+        {
+            "content": "Dear {{User.First_Name}},\n\nThanks for signing up!\n\n- {{AppName}} Team",
+            "name": "Welcome Email",
+            "subject": "Thanks for Signing up!"
+        }
+    ],
     "entities": [],
     "pages": [
         {
             "url": {
                 "urlparts": []
             },
-            "uielements": [
-                {
-                    "layout": {
-                        "top": 0,
-                        "left": 0,
-                        "height": 6,
-                        "width": 12,
-                        "alignment": "center",
-                        "t-padding": 15,
-                        "b-padding": 15
-                    },
-                    "style": "font-size: 32px;\nfont-weight: bold;",
-                    "isSingle": false,
-                    "content_attribs": {},
-                    "hoverStyle": "",
-                    "class_name": "header-1",
-                    "content": "Welcome to your v1Factory app!",
-                    "tagName": "h1",
-                    "activeStyle": "",
-                    "type": "headerTexts",
-                    "container_info": null
-                },
-                {
-                    "layout": {
-                        "top": 6,
-                        "left": 0,
-                        "height": 6,
-                        "width": 12,
-                        "t-padding": 15,
-                        "b-padding": 15,
-                        "r-padding": 15,
-                        "l-padding": 15
-                    },
-                    "style": "",
-                    "isSingle": false,
-                    "content_attribs": {
-                        "style": "font-size:24px;"
-                    },
-                    "hoverStyle": "",
-                    "class_name": "txt",
-                    "content": "It's all up and running now. All you need to do is to create your forms and edit your pages.\n\nFeel free to ask questions at help@v1factory.com",
-                    "tagName": "span",
-                    "activeStyle": "",
-                    "type": "texts",
-                    "container_info": null
-                },
-                {
-                    "layout": {
-                        "top": 14,
-                        "left": 2,
-                        "height": 22,
-                        "width": 8,
-                        "alignment": "center",
-                        "t-padding": 15,
-                        "b-padding": 15
-                    },
-                    "style": "border-radius: 6px;\nwidth: 180px;",
-                    "isSingle": true,
-                    "content_attribs": {
-                        "src": "https://www.filepicker.io/api/file/FuHnh0wR7WlGHM1yDhKA"
-                    },
-                    "hoverStyle": "",
-                    "class_name": "img-height-fixed",
-                    "content": "",
-                    "tagName": "img",
-                    "activeStyle": "",
-                    "type": "images",
-                    "container_info": null
-                }
-            ],
             "navbar": {
+                "isFixed": true,
                 "brandName": null,
                 "isHidden": false,
-                "isFixed": true,
                 "items": [
                     {
-                        "name": "{{Homepage}}"
+                        "name": "internal://Homepage/"
                     },
                     {
-                        "name": "{{Registration Page}}"
+                        "name": "internal://Registration Page/"
                     }
                 ]
             },
+            "uielements": [
+                {
+                    "style": "font-size: 32px;\nfont-weight: bold;",
+                    "isSingle": false,
+                    "tagName": "h1",
+                    "hoverStyle": "",
+                    "class_name": "header-1",
+                    "container_info": null,
+                    "content": "Welcome to your v1Factory app!",
+                    "content_attribs": {},
+                    "layout": {
+                        "t-padding": 15,
+                        "top": 0,
+                        "height": 6,
+                        "width": 12,
+                        "b-padding": 15,
+                        "alignment": "center",
+                        "left": 0
+                    },
+                    "type": "headerTexts",
+                    "activeStyle": ""
+                },
+                {
+                    "style": "",
+                    "isSingle": false,
+                    "tagName": "span",
+                    "hoverStyle": "",
+                    "class_name": "txt",
+                    "container_info": null,
+                    "content": "It's all up and running now. All you need to do is to create your forms and edit your pages.\n\nFeel free to ask questions at help@v1factory.com",
+                    "content_attribs": {
+                        "style": "font-size:24px;"
+                    },
+                    "layout": {
+                        "t-padding": 15,
+                        "r-padding": 15,
+                        "top": 6,
+                        "height": 6,
+                        "width": 12,
+                        "b-padding": 15,
+                        "l-padding": 15,
+                        "left": 0
+                    },
+                    "type": "texts",
+                    "activeStyle": ""
+                },
+                {
+                    "style": "border-radius: 6px;\nwidth: 180px;",
+                    "isSingle": true,
+                    "tagName": "img",
+                    "hoverStyle": "",
+                    "class_name": "img-height-fixed",
+                    "container_info": null,
+                    "content": "",
+                    "content_attribs": {
+                        "src": "https://www.filepicker.io/api/file/FuHnh0wR7WlGHM1yDhKA"
+                    },
+                    "layout": {
+                        "t-padding": 15,
+                        "top": 15,
+                        "height": 20,
+                        "width": 6,
+                        "b-padding": 15,
+                        "alignment": "center",
+                        "left": 0
+                    },
+                    "type": "images",
+                    "activeStyle": ""
+                },
+                {
+                    "layout": {
+                        "top": 32,
+                        "left": 7,
+                        "height": 3,
+                        "width": 4
+                    },
+                    "context": "",
+                    "style": "",
+                    "isSingle": false,
+                    "tagName": "a",
+                    "hoverStyle": "",
+                    "class_name": "link-1",
+                    "content": "or Sign up here &raquo;",
+                    "content_attribs": {
+                        "href": "internal://Registration Page"
+                    },
+                    "activeStyle": "",
+                    "type": "links",
+                    "container_info": null
+                },
+                {
+                    "layout": {
+                        "top": 16,
+                        "left": 7,
+                        "height": 16,
+                        "width": 4
+                    },
+                    "context": "",
+                    "container_info": {
+                        "entity": "User",
+                        "action": "login",
+                        "form": {
+                          "action": "login",
+                          "fields": [
+                              {
+                                  "name": "username",
+                                  "placeholder": "Username",
+                                  "label": "Username",
+                                  "displayType": "single-line-text",
+                                  "type": "text",
+                                  "options": []
+                              },
+                              {
+                                  "name": "password",
+                                  "placeholder": "Password",
+                                  "label": "Password",
+                                  "displayType": "password-text",
+                                  "type": "password",
+                                  "options": []
+                              },
+                              {
+                                  "name": "Submit",
+                                  "placeholder": "Login",
+                                  "label": "Login",
+                                  "displayType": "button",
+                                  "type": "button",
+                                  "options": []
+                              }
+                          ],
+                          "goto": "internal://Homepage",
+                          "name": "Local Login"
+                      },
+                      "uielements": []
+                    },
+                    "content_attribs": {},
+                    "content": ""
+                }
+            ],
             "name": "Homepage",
             "access_level": "all"
         },
         {
             "navbar": {
+                "isFixed": true,
                 "brandName": null,
                 "isHidden": false,
-                "isFixed": true,
                 "items": [
                     {
-                        "name": "{{Homepage}}"
+                        "name": "internal://Homepage/"
                     },
                     {
-                        "name": "{{Registration Page}}"
+                        "name": "internal://Registration Page/"
                     }
                 ]
             },
@@ -117,113 +201,83 @@
             "uielements": [
                 {
                     "content": "Sign Up",
+                    "type": "header-text",
+                    "container_info": null,
                     "layout": {
                         "width": 3,
                         "top": 1,
-                        "left": 4,
-                        "height": 1
+                        "height": 5,
+                        "left": 4
                     },
-                    "container_info": null,
-                    "type": "header-text",
                     "tagName": "h1"
+                },
+                {
+                    "content": "",
+                    "container_info": {
+                        "action": "signup",
+                        "uielements": [],
+                        "form": {
+                          "action": "signup",
+                          "fields": [
+                              {
+                                  "name": "username",
+                                  "placeholder": "Username",
+                                  "label": "Username",
+                                  "displayType": "single-line-text",
+                                  "type": "text",
+                                  "options": []
+                              },
+                              {
+                                  "name": "password1",
+                                  "placeholder": "Password",
+                                  "label": "Password",
+                                  "displayType": "password-text",
+                                  "type": "password",
+                                  "options": []
+                              },
+                              {
+                                  "name": "password2",
+                                  "placeholder": "Confirm Password",
+                                  "label": "Confirm Password",
+                                  "displayType": "password-text",
+                                  "type": "password",
+                                  "options": []
+                              },
+                              {
+                                  "name": "email",
+                                  "placeholder": "Email Address",
+                                  "label": "Email Address",
+                                  "displayType": "email-text",
+                                  "type": "email",
+                                  "options": []
+                              },
+                              {
+                                  "name": "Sign Up",
+                                  "placeholder": "",
+                                  "label": "Sign Up!",
+                                  "displayType": "button",
+                                  "type": "button",
+                                  "options": []
+                              }
+                          ],
+                          "goto": "internal://Homepage",
+                          "name": "Sign Up"
+                      },
+                        "entity": "User"
+                    },
+                    "layout": {
+                        "width": 4,
+                        "top": 7,
+                        "height": 28,
+                        "left": 4
+                    },
+                    "content_attribs": {},
+                    "context": ""
                 }
             ],
             "name": "Registration Page",
             "access_level": "all"
         }
     ],
-    "name": "Raaaaacccccccon",
-    "users": {
-        "name": "User",
-        "fields": [],
-        "twitter": false,
-        "linkedin": false,
-        "forms": [
-            {
-                "action": "signup",
-                "fields": [
-                    {
-                        "name": "username",
-                        "placeholder": "Username",
-                        "label": "Username",
-                        "displayType": "single-line-text",
-                        "type": "text",
-                        "options": []
-                    },
-                    {
-                        "name": "password1",
-                        "placeholder": "Password",
-                        "label": "Password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "options": []
-                    },
-                    {
-                        "name": "password2",
-                        "placeholder": "Confirm Password",
-                        "label": "Confirm Password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "options": []
-                    },
-                    {
-                        "name": "email",
-                        "placeholder": "Email Address",
-                        "label": "Email Address",
-                        "displayType": "email-text",
-                        "type": "email",
-                        "options": []
-                    },
-                    {
-                        "name": "Sign Up",
-                        "placeholder": "",
-                        "label": "Sign Up!",
-                        "displayType": "button",
-                        "type": "button",
-                        "options": []
-                    }
-                ],
-                "name": "Sign Up"
-            },
-            {
-                "action": "login",
-                "fields": [
-                    {
-                        "name": "username",
-                        "placeholder": "Username",
-                        "label": "Username",
-                        "displayType": "single-line-text",
-                        "type": "text",
-                        "options": []
-                    },
-                    {
-                        "name": "password",
-                        "placeholder": "Password",
-                        "label": "Password",
-                        "displayType": "password-text",
-                        "type": "password",
-                        "options": []
-                    },
-                    {
-                        "name": "Submit",
-                        "placeholder": "Login",
-                        "label": "Login",
-                        "displayType": "button",
-                        "type": "button",
-                        "options": []
-                    }
-                ],
-                "name": "Local Login"
-            }
-        ],
-        "facebook": false,
-        "local": true
-    },
-    "emails": [
-        {
-            "name": "Welcome Email",
-            "subject": "Thanks for Signing up!",
-            "content": "Dear {{User.First_Name}},\n\nThanks for signing up!\n\n- {{AppName}} Team"
-        }
-    ]
+    "name": "domaintest"
 }

@@ -60,7 +60,6 @@ function(WidgetClassPickerView) {
       var hash     = 'content_attribs' + '-' + 'href';
       temp         = Templates.tempHrefSelect;
       listOfPages  = this.model.getListOfPages();
-      console.log(listOfPages);
       html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
                                         hash: hash,
                                         listOfPages: listOfPages});
@@ -105,9 +104,7 @@ function(WidgetClassPickerView) {
       var sizeSelect = new comp().select('').id(hash).classN('font-picker');
 
       _(['default', '10px', '14px', '16px', '18px', '20px']).each(function(val) {
-        console.log(val);
         sizeSelect.option(val).valProp('font-size:' + val + ';');
-        console.log(sizeSelect);
       });
 
       sizeDiv.innerHTML = '<span class="key">Font Size</span>';
@@ -137,7 +134,6 @@ function(WidgetClassPickerView) {
     },
 
     changeFont: function(e) {
-      console.log(e.target);
       if(!this.model.get('content_attribs').has('style')) {
         this.model.get('content_attribs').set('style', 'font-size:12px;');
       }
@@ -149,8 +145,6 @@ function(WidgetClassPickerView) {
       else {
         curStyle = curStyle + ' ' + e.target.value;
       }
-
-      console.log(curStyle);
 
       this.model.get('content_attribs').set('style', curStyle);
     },

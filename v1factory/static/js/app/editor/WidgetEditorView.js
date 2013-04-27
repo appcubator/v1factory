@@ -12,7 +12,7 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
     className : 'editor-page fadeIn',
     tagName : 'div',
 
-    initialize: function(widgetsCollection, containersCollection){
+    initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
                       'clear',
                       'setLocation',
@@ -20,18 +20,12 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
                       'selectChanged');
 
       this.widgetsCollection    = widgetsCollection;
-      this.containersCollection = containersCollection;
 
       this.model = widgetsCollection.selectedEl;
       this.widgetsCollection.bind('selected', this.selectChanged, this);
-      if(this.containersCollection){ // WidgetEditor can belong to just one collection
-        this.containersCollection.bind('selected', this.clear);
-      }
 
       if(this.model) {
         this.model.bind('change:selected', this.selectChanged);
-        this.contentEditor = new WidgetContentEditor(this.model);
-        this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.render();
         this.bindLocation();
       }
@@ -41,17 +35,27 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
       var self = this;
       // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
 
-      if(!iui.get('widget-wrapper-' + this.model.cid)) return;
+      if(!iui.get('widget-wrapper-' + this.model.cid)) {
+        this.model.bind('rendered', self.render);
+        return;
+      }
+
+      this.layoutEditor = new WidgetLayoutEditor(this.model);
 
       iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
       this.el.appendChild(this.layoutEditor.el);
-      this.el.appendChild(this.contentEditor.el);
+
+      console.log(this.model);
+
+      if(this.model.get('container_info') == null) {
+        this.contentEditor = new WidgetContentEditor(this.model);
+        this.el.appendChild(this.contentEditor.el);
+      }
+
+      this.model.unbind('rendered', self.render);
     },
 
-    setLocation: function() {
-      // this.setTop(GRID_HEIGHT * ((this.model.get('layout').get('top')+this.model.get('layout').get('height'))));
-      // this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
-    },
+    setLocation: function() { },
 
     bindLocation: function() {    },
 
@@ -64,8 +68,6 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
         this.clear();
         this.model = this.widgetsCollection.selectedEl;
         this.model.bind('change:selected', this.selectChanged);
-        this.contentEditor = new WidgetContentEditor(this.model);
-        this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.render();
         this.bindLocation();
         this.$el.fadeIn();

@@ -37,20 +37,6 @@
   border-top: 1px solid #1b2535;
 }
 
-.section ul.sub-list {
-  width: 90%;
-  margin-left: 5%;
-  border-radius: 4px;
-  margin-top: 4px;
-  border-width: 0;
-}
-
-.sub-element {
-  border: 1px solid #1b2535;
-  margin-top: 6px !important;
-  border-radius: 4px;
-}
-
 .section ul li {
   width: 100%;
   margin: 0;
@@ -1164,6 +1150,11 @@ li.model span.title {
   background-image: url('../img/facebook_icon.png');
 }
 
+.twitter {
+  background-size: auto 30px !important;
+  background-image: url('../img/twitter_icon.png');
+}
+
 .linkedin {
   background-size: auto 30px !important;
   background-image: url('../img/linkedin_icon.png');
@@ -1176,6 +1167,10 @@ li.model span.title {
 ul.list {
   background-image: none;
 }
+ul.list li:hover {
+/*  margin-right: 20px;
+*/}
+
 
 .create {
   background-image: url('../img/page_layout_icon&48.png');
@@ -1386,6 +1381,11 @@ ul.list {
   list-style: none;
   border-right: 1px solid #1b2535;
   border-left: 1px solid #3b4555;
+}
+
+#content-editor select {
+  margin-left: 3%;
+  width: 94%;
 }
 
 .content-editor > * {

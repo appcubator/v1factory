@@ -1,35 +1,31 @@
 define([
   'app/models/PageModel',
-  'app/models/UserEntityModel',
   'app/collections/EntityCollection',
   'app/collections/WidgetCollection',
   'app/collections/ContainersCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
   'editor/WidgetsManagerView',
-  'editor/WidgetClassPickerView',
   'editor/WidgetEditorView',
-  'editor/DesignEditorView',
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
-  'mixins/BackboneModal',
+  'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
   '../../libs/keymaster/keymaster.min'
-],function(PageModel,
-           UserEntityModel,
-           EntityCollection,
-           WidgetCollection,
-           ContainersCollection,
-           UrlView,
-           SimpleModalView,
-           WidgetsManagerView,
-           WidgetClassPickerView,
-           WidgetEditorView,
-           DesignEditorView,
-           EditorGalleryView,
-           PageStylePicker,
-           NavbarEditorView) {
+],
+function( PageModel,
+          EntityCollection,
+          WidgetCollection,
+          ContainersCollection,
+          UrlView,
+          SimpleModalView,
+          WidgetsManagerView,
+          WidgetEditorView,
+          EditorGalleryView,
+          PageStylePicker,
+          NavbarEditorView,
+          TutorialView ) {
 
   var EditorView = Backbone.View.extend({
     el        : document.body,
@@ -37,9 +33,8 @@ define([
 
     events    : {
       'click #save'          : 'save',
-      'click #settings'      : 'showSettings',
-      'click #settings-cross': 'hideSettings',
       'click #deploy'        : 'deploy',
+      'click .menu-button.help' : 'help',
       'click .page'          : 'clickedPage',
       'click .url-bar'       : 'clickedUrl'
     },
@@ -48,49 +43,40 @@ define([
       _.bindAll(this, 'render',
                       'copy',
                       'paste',
+                      'help',
                       'renderUrlBar',
                       'save',
                       'deployLocal',
                       'amendAppState',
                       'deploy',
-                      'style',
                       'clickedPage',
-                      'hideSettings',
-                      'showSettings',
                       'getContextEntities',
-                      'containerSelected',
-                      'widgetSelected',
                       'keydown',
                       'clickedUrl',
                       'createPage');
 
-      var page = appState.pages[pageId];
-
       /* Globals */
-      g_entityCollection     = new EntityCollection(appState.entities);
       g_contextCollection    = new EntityCollection();
-      g_userModel            = new UserEntityModel(appState.users);
 
-      this.model                = new PageModel(page);
-      this.containersCollection = new ContainersCollection();
-      this.widgetsCollection    = new WidgetCollection();
+      this.model                = v1State.get('pages').models[pageId];
+      console.log(v1State.get('pages').models[pageId]);
+      //this.containersCollection = new ContainersCollection();
+      this.widgetsCollection    = this.model.get('uielements');
 
-      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection, this.containersCollection);
-      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection, this.containersCollection, page);
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, this.containersCollection);
+      this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
+      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
-
-      this.containersCollection.on('selected', this.containerSelected);
-      this.widgetsCollection.on('selected', this.widgetSelected);
 
       /* Calls */
       this.getContextEntities();
       this.render();
 
+      var page = appState.pages[pageId];
       if(!page.uielements.length) {
-        new PageStylePicker(this.widgetsCollection);
+        //new PageStylePicker(this.widgetsCollection);
       }
 
       /* Bindings */
@@ -104,13 +90,12 @@ define([
     },
 
     render: function() {
-      this.style();
 
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
         iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
-                                          '/pages/editor/'+ ind +'">' + page.name +
+                                          '/editor/'+ ind +'">' + page.name +
                                           '</a></li>';
       });
 
@@ -130,6 +115,7 @@ define([
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
       var curAppState = this.amendAppState();
+      console.log(curAppState);
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
@@ -152,6 +138,10 @@ define([
       return false;
     },
 
+    help: function(e) {
+      new TutorialView([6]);
+    },
+
     copy: function(e) {
       if(this.widgetsManager.copy()) { }
     },
@@ -165,70 +155,42 @@ define([
     amendAppState : function() {
       var curAppState   = _.clone(appState);
       var newCollection = _.clone(this.widgetsCollection);
-
-      _(this.containersCollection.models).each(function(container) {
-        newCollection.remove(container.get('container_info').get('uielements').models);
-      });
-
       var widgets    = (newCollection.toJSON() || []);
-      var containers = (this.containersCollection.toJSON() || []);
-      var elems      = _.union(widgets, containers);
 
-      curAppState.pages[pageId]['uielements'] = elems;
+      curAppState.pages[pageId]['uielements'] = widgets;
       curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
-      curAppState.entities                    = g_entityCollection.toJSON();
-      curAppState.users                       = g_userModel.toJSON();
+      curAppState.entities                    = v1State.get('entities').toJSON();
+      curAppState.users                       = v1State.get('users').toJSON();
 
       return curAppState;
     },
 
     deploy: function() {
       var self = this;
-      var deployFn = function() {
 
-        $.ajax({
-          type: "POST",
-          url: '/app/'+appId+'/deploy/',
-          success: function(data) {
-            console.log(data);
-            new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
-          },
-          dataType: "JSON"
-        });
-      };
-
-      this.save(deployFn);
+      $.ajax({
+        type: "POST",
+        url: '/app/'+appId+'/deploy/',
+        success: function(data) {
+          window.open(data.site_url);
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
+        },
+        dataType: "JSON"
+      });
     },
 
     deployLocal: function() {
-      this.save();
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/local/',
-        complete: function(data) {
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.responseText + '">'+ data.responseText +'</a>'});
+        success: function(data) {
+          window.open(data.site_url);
+          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
         },
         dataType: "JSON"
       });
 
-    },
-
-    showSettings: function() {
-      $('#page-settings').animate({
-        marginBottom : -10
-      });
-      return false;
-    },
-
-    style: function() {
-    },
-
-    hideSettings: function() {
-      $('#page-settings').animate({
-        marginBottom : '-100%'
-      });
-      return false;
     },
 
     getContextEntities: function() {
@@ -238,44 +200,32 @@ define([
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
       _(contextEntites).each(function(entityName) {
-        g_contextCollection.add(g_entityCollection.getEntityWithName(entityName));
+        g_contextCollection.add(v1State.get('entities').getEntityWithName(entityName));
       });
     },
 
     keydown: function(e) {
       switch(e.keyCode) {
         case 37:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveLeft();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveLeft();
           }
           e.preventDefault();
           break;
         case 38:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveUp();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveUp();
           }
           e.preventDefault();
           break;
         case 39:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveRight();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveRight();
           }
           e.preventDefault();
           break;
         case 40:
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl.moveDown();
-          }
-          else if(this.widgetsCollection.selectedEl) {
+          if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl.moveDown();
           }
           e.preventDefault();
@@ -284,19 +234,11 @@ define([
           if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.removeSelected(e);
           }
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.removeSelected(e);
-          }
           break;
         case 27: //escape
           if(this.widgetsCollection.selectedEl) {
             this.widgetsCollection.selectedEl = null;
             this.widgetsCollection.unselectAll();
-          }
-
-          if(this.containersCollection.selectedEl) {
-            this.containersCollection.selectedEl = null;
-            this.containersCollection.unselectAll();
           }
           return false;
       }
@@ -307,11 +249,6 @@ define([
         this.widgetsCollection.selectedEl = null;
         this.widgetsCollection.unselectAll();
       }
-
-      if(this.containersCollection.selectedEl) {
-        this.containersCollection.selectedEl = null;
-        this.containersCollection.unselectAll();
-      }
     },
 
     clickedUrl: function() {
@@ -319,28 +256,20 @@ define([
       newView.onClose = this.renderUrlBar;
     },
 
-    containerSelected: function(e) {
-      this.widgetsCollection.unselectAll();
-    },
-
-    widgetSelected: function(a, b) {
-      this.containersCollection.unselectAll();
-    },
-
     createPage: function(name) {
       var pageUrl = { urlparts : [] };
       pageUrl.urlparts[0] = "page" + appState.pages.length;
       pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
-      appState.pages.push(pageModel.toJSON());
+      v1State.get('pages').push(pageModel);
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         complete: function() {
-          console.log('<li><a herf="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>');
-          $('<li><a href="/app/4/pages/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
+          console.log('<li><a herf="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>');
+          $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },
         dataType: "JSON"
       });

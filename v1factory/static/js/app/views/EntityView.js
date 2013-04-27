@@ -1,12 +1,12 @@
 define([
-  'backbone',
   'app/models/FieldModel',
   'app/models/FormModel',
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
-  'app/views/ShowDataView'
+  'app/views/ShowDataView',
+  'app/templates/EntitiesTemplates'
 ],
-function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
+function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
   var EntityView = Backbone.View.extend({
     el         : null,
@@ -21,7 +21,7 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
       'submit .add-property-form'  : 'formSubmitted',
       'submit .add-form-form'      : 'formFormSubmitted',
       'change .attribs'            : 'changedAttribs',
-      'click  .delete'               : 'clickedDelete',
+      'click  .delete'             : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
       'click .remove-form'         : 'clickedFormRemove',
       'click .excel'               : 'clickedUploadExcel',
@@ -74,7 +74,9 @@ function(Backbone, FieldModel, FormModel, FormEditorView, UploadExcelView, ShowD
       var page_context = { name: self.name,
                            attribs: self.model.get('fields').models,
                            other_models: self.parentCollection.models,
-                           forms: self.model.get('forms').models };
+                           forms: null };
+
+                           //forms: self.model.get('forms').models };
 
       var template = _.template(Templates.Entity, page_context);
       $(this.el).append(template);

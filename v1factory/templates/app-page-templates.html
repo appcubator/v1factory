@@ -1,0 +1,122 @@
+<script type="text/template" id="app-main-page">
+    <div class="row hoff1 span58 notice">
+      <h3 class="hoff1">Thank you for joining v1Factory Private Beta program!</h3>
+      <div> You just need to complete the following steps to claim your free domain.</div>
+      <ul>
+        <li><input type="checkbox" disabled checked>Read through the <a class="#">tutorial</a>.</li>
+        <li><input type="checkbox" disabled>Create a simple app.</li>
+        <li><input type="checkbox" disabled>Fill the <a class="#">feedback form</a>.</li>
+      </ul>
+    </div>
+    <div class="row hoff1 span58">
+      <h2 class="span34 hoff1">{{ app.name }}</h2>
+      <div class="pane deploy-pane span24 hi3 right">
+        <div class="hi3 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div><hr class="vert">
+        <div class="hi3 span13"><h4 class="hoff1 offset1 green">Running</h4></div>
+      </div>
+      <hr class="span58 hoff2">
+    </div>
+    <div class="span58 hoff1 hoff2">
+        <a class="pane hi11 span13 entities" id="app-info" href="/app/{{ app_id }}/info/">
+          <img src="{{ STATIC_URL }}img/info.png">
+          <div class="hoff1 offset1 offsetr1">
+          <h3>Domain & SEO</h3>
+          </div>
+        </a>
+        <a class="pane hi11 span13 entities offset2" id="data-storage" href="/app/{{ app_id }}/entities/">
+          <img src="{{ STATIC_URL }}img/entities.png">
+          <div class="hoff1 offset1 offsetr1">
+          <h3>Data & Storage</h3>
+          </div>
+        </a>
+        <a class="pane hi11 span13 offset2" id="themes" href="/app/{{ app_id }}/gallery/">
+          <img src="{{ STATIC_URL }}img/design.png">
+          <div class="hoff1 offset1 offsetr1">
+          <h3>Design & Themes</h3>
+          </div>
+        </a>
+        <a class="pane hi11 span13 offset2" id="pages" href="/app/{{ app_id }}/pages/">
+          <img src="{{ STATIC_URL }}img/page.png">
+          <div class="hoff1 offset1 offsetr1">
+          <h3>Pages</h3>
+          </div>
+        </a>
+        <hr class="span58 hoff2">
+    </div>
+
+    <div class="span58">
+      <div class="row hoff1 analytics">
+        <h3>Analytics</h3>
+        <img class="span58 analytics-demo hoff1" src="{{ STATIC_URL }}img/analytics.png">
+      </div>
+    </div>
+    <div class="span52 offset11 hoff4 hi4"></div>
+</script>
+
+<script type="text/template" id="app-info-page">
+<div class="container">
+  <div class="row hoff1">
+    <div class="span50">
+      <h2 class="hoff1">App Info</h2>
+      <hr class="hoff2">
+      <div class="hoff2">
+        <h3 class="span10">Description</h3>
+        <textarea class="span26 hi6" id="app-description" placeholder="Description of the application..."><%= description %></textarea>
+      </div>
+      <hr>
+      <div class="hoff2">
+        <h3 class="span10">Keywords</h3>
+        <textarea class="span26 hi6" id="app-keywords" placeholder="Keywords..."><%= keywords %></textarea>
+      </div>
+      <div class="hoff2">
+      <a class="btn hoff1" id="delete">Delete App</a>
+    </div>
+    </div>
+    
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="entities-page">
+<div class="container" id="entities-page">
+  <div class="span58">
+    <h2 class="hoff2">Entities</h2>
+    <hr class="span58 hoff2">
+  <div class="span58">
+    <div id="user-entity">
+    </div>
+    <div id="entities-container">
+      <ul id="entities" class="entity-list">
+      </ul>
+      <div id="add-entity-button" class="add-entity offset6 span58">
+      <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
+    </div>
+    <form id="add-entity-form" class="pane span58 hi10 entity hoff1" style="display:none;">
+      <span class="sub-title offset1 hoff2">
+        <input type="text" id="entity-name-input" placeholder="Entity Name">
+      </span>
+    </form>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="pages-page">
+<div class="span58">
+    <h2 class="hoff2">Pages</h2>
+    <hr class="span58 hoff2">
+    <div class="" id="list-pages">
+    </div>
+    <div class="add-box create-page" id="create-page-box">
+      <div class="box-button span62 hoff2">
+        <img src="/static/img/add.png" class="span3 add-img">
+        <h2 class="offset1">Create a New Page</h2>
+      </div>
+      <form class="page-view span18 hi21 offsetr1 pane create-form" style="display:none;">
+        <div class="hoff2">
+          <input type="text" class="page-name span12 offset2" placeholder="Page Name">
+        </div>
+        <div class="row offset1 hi6"></div>
+      </form>
+    </div>
+</div>
+</script>

@@ -1,17 +1,15 @@
 define([
-  'backbone',
   'app/models/FieldModel',
-  'app/models/FormModel',
   'app/views/EntityView',
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
-  'app/collections/EntityCollection'
+  'app/collections/EntityCollection',
+  'app/templates/EntitiesTemplates'
 ],
-  function(Backbone, FieldModel, FormModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
+  function(FieldModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
 
     var UserEntityView = EntityView.extend({
-      el : document.getElementById('user-entity'),
 
       events: {
         'change .cb-login'           : 'checkedBox',
@@ -28,7 +26,7 @@ define([
         'blur  .property-name-input' : 'formSubmitted'
       },
 
-      initialize: function(userEntityModel, entitiesColl) {
+      initialize: function() {
         _.bindAll(this, 'render',
                         'appendField',
                         'clickedAdd',
@@ -42,18 +40,18 @@ define([
                         'changedAttribs');
 
         this.el = document.getElementById('user-entity');
-        this.model = userEntityModel;
-        this.name = userEntityModel.get('name');
-        this.entitiesColl = entitiesColl;
+        this.model = v1State.get('users');
+        this.name = this.model.get('name');
+        this.entitiesColl = v1State.get('entities');
 
         this.model.get('fields').bind('add', this.appendField);
         this.model.get('forms').bind('add', this.appendForm, this);
-
-        this.render();
       },
 
       render: function() {
         var self = this;
+
+        this.$el.html(_.template(Templates.UserEntity, {}));
 
         _(this.model.get('fields').models).each(function(fieldModel) {
           if(fieldModel.get('name') == 'First Name' ||
@@ -65,22 +63,23 @@ define([
           page_context.type = fieldModel.get('type'),
           page_context.cid = fieldModel.cid;
           page_context.entityName = "User";
-          page_context.other_models = (new EntityCollection(appState.entities)).models;
+          page_context.other_models = v1State.get('entities').models;
 
           var template = _.template(Templates.Property, page_context);
           self.$el.find('.property-list').append(template);
         });
 
         document.getElementById('facebook').checked = this.model.get('facebook');
-        document.getElementById('twitter').checked = this.model.get('linkedin');
+        document.getElementById('twitter').checked = this.model.get('twitter');
         document.getElementById('linkedin').checked = this.model.get('linkedin');
         document.getElementById('local').checked = this.model.get('local');
 
-        var formsHtml = '';
-        _(self.model.get('forms').models).each(function(form){
-          formsHtml += _.template(Templates.Form, {form: form});
-        });
-        self.$el.find('.form-list').append(formsHtml);
+        return this;
+        // var formsHtml = '';
+        // _(self.model.get('forms').models).each(function(form){
+        //   formsHtml += _.template(Templates.Form, {form: form});
+        // });
+        // self.$el.find('.form-list').append(formsHtml);
       },
 
       checkedBox: function(e) {

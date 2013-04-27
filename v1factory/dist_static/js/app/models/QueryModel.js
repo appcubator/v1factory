@@ -1,1 +1,0 @@
-define(["backbone"],function(){var e=Backbone.Model.extend({initialize:function(e,t){this.entity=t,this.set("fieldsToDisplay",e.fieldsToDisplay||[]),this.set("belongsToUser",e.belongsToUser||!1),this.set("sortAccordingTo",e.sortAccordingTo||"Date"),this.set("numberOfRows",e.numberOfRows||0)}});return e});

@@ -24,7 +24,10 @@ function(FormFieldModel) {
       'keyup  .options-input'            : 'changedOptions',
       'change .goto'                     : 'changedGoto',
       'change .form-type-select'         : 'changedFormAction',
-      'change .belongs-to'               : 'changedBelongsTo'
+      'change .belongs-to'               : 'changedBelongsTo',
+      'click  .new-field'                : 'clickedAddField',
+      'change .field-connection'         : 'addField',
+      'submit .new-value-form'           : 'addNewField'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -42,7 +45,10 @@ function(FormFieldModel) {
                       'changedLabel',
                       'changedOrder',
                       'changedFormAction',
-                      'changedBelongsTo');
+                      'changedBelongsTo',
+                      'clickedAddField',
+                      'addField',
+                      'addNewField');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -185,7 +191,7 @@ function(FormFieldModel) {
     },
 
     changedOrder:function(e, ui) {
-      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
+      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" ).slice(1); // FIXME the first element is invalid
       for(var ii = 0; ii < sortedIDs.length; ii++) {
         var cid = sortedIDs[ii].replace('field-','');
         var elem = this.model.get('fields').get(cid);
@@ -207,6 +213,68 @@ function(FormFieldModel) {
 
       console.log(e.target.value);
       this.model.set('belongsTo', null);
+    },
+
+    clickedAddField: function(e) {
+      this.$el.find('.field-text').hide();
+      this.$el.find('.field-connection').fadeIn();
+    },
+
+    addField: function (e) {
+
+      if(e.target.value == 'new-value') {
+        this.$el.find('.new-value-form').fadeIn();
+        this.$el.find('.new-field-inp').focus();
+        $(e.target).hide();
+        return;
+      }
+
+      var self = this;
+      var cid = e.target.value.replace('field-', '');
+
+      var fieldModel = self.entity.get('fields').get(cid);
+      var formFieldModel = new FormFieldModel({name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')});
+
+      if(fieldModel.get('type') == "email") {
+        formFieldModel.set('displayType', "email-text");
+      }
+      if(fieldModel.get('type') == "image") {
+        formFieldModel.set('displayType', "image-uploader");
+      }
+      if(fieldModel.get('type') == "date") {
+        formFieldModel.set('displayType', "date-picker");
+      }
+
+      this.model.get('fields').add(formFieldModel);
+
+      $(e.target).hide();
+      this.$el.find('.field-text').fadeIn();
+    },
+
+    addNewField: function(e) {
+      var self = this;
+      e.preventDefault();
+
+      var name = this.$el.find('.new-field-inp').val();
+      console.log(name);
+      var fieldModel = self.entity.get('fields').push({name: name});
+      console.log(fieldModel);
+      var formFieldModel = new FormFieldModel({name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')});
+
+      if(fieldModel.get('type') == "email") {
+        formFieldModel.set('displayType', "email-text");
+      }
+      if(fieldModel.get('type') == "image") {
+        formFieldModel.set('displayType', "image-uploader");
+      }
+      if(fieldModel.get('type') == "date") {
+        formFieldModel.set('displayType', "date-picker");
+      }
+
+      this.model.get('fields').add(formFieldModel);
+
+      $(e.target).hide();
+      this.$el.find('.field-text').fadeIn();
     }
   });
 

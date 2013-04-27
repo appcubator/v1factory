@@ -10,20 +10,23 @@ function(WidgetModel,
     model : WidgetModel,
     selectedEl: null,
 
-    initialize: function() {
+    initialize: function(bone) {
+      console.log(bone);
+
       _.bindAll(this, 'selectWidgetById',
                       'select',
                       'unselectAll');
 
-      //this.set('selected', null);
       this.bind('change:selected', this.selectedChanged);
+      this.bind('add', this.select);
     },
 
-    unselectAll: function() {
+    unselectAll: function(inpModel) {
       _.each(this.models, function(model) {
+        if(inpModel && model.cid == inpModel.cid) return;
         model.set('selected', false);
       });
-      this.selectedEl = null;
+      this.selectedEl = inpModel;
     },
 
     selectWidgetById: function(id) {
@@ -35,10 +38,11 @@ function(WidgetModel,
     },
 
     select : function(model) {
-      this.unselectAll();
+      console.log(model);
       this.selectedEl = model;
       model.set('selected', true);
       this.trigger('selected');
+      this.unselectAll(model);
     },
 
     removeSelected  : function(e) {

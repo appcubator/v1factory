@@ -42,7 +42,7 @@ function() {
       this.hideChanged();
 
       _(appState.pages).each(function(page) {
-        self.$el.find('#page-link-list').append('<option value="{{'+ page.name +'}}">' + page.name +'</option>');
+        self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'}}">' + page.name +'</option>');
       });
     },
 
@@ -50,7 +50,7 @@ function() {
       var self = this;
       self.$el.find('#items').html('');
       _(self.model.get('items')).each(function(item) {
-        var name = item.name.replace('{{','').replace('}}','');
+        var name = item.name.replace('internal://','').replace('/','');
         self.$el.find('#items').append('<li><a href="#">'+ name +'</a></li>');
       });
     },

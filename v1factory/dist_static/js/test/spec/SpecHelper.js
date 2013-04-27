@@ -1,1 +1,0 @@
-beforeEach(function(){this.addMatchers({toBePlaying:function(e){var t=this.actual;return t.currentlyPlayingSong===e&&t.isPlaying}})});

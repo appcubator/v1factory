@@ -21,10 +21,11 @@ function(WidgetCollection,
         if(!bone.entity.attributes) {
 
           if(bone.entity == "User") {
-            this.set('entity', g_userModel);
+            this.set('entity', v1State.get('users'));
           }
           else {
-            this.set('entity', g_entityCollection.getEntityWithName(bone.entity));
+            console.log(v1State.get('entities'));
+            this.set('entity', v1State.get('entities').getEntityWithName(bone.entity));
           }
         }
         else {
@@ -40,22 +41,22 @@ function(WidgetCollection,
         this.set('query', new QueryModel(bone.query, this.get('entity')));
       }
 
-      // if(bone.form) {
-      //   if(!bone.form.attributes) {
-      //     this.set('form', new FormModel(bone.form, this.get('entity')));
-      //   }
-      //   else {
-      //     this.set('form', bone.form);
-      //   }
-      // }
+      if(bone.form) {
+        if(!bone.form.attributes) {
+          this.set('form', new FormModel(bone.form, this.get('entity')));
+        }
+        else {
+          this.set('form', bone.form);
+        }
+      }
     },
     toJSON: function() {
       var json = _.clone(this.attributes);
       json.uielements = this.get('uielements').toJSON();
 
-      if(json.query) {
-        json.query = this.get('query').toJSON();
-      }
+      if(json.form) json.form = json.form.toJSON();
+      if(json.query) json.query = this.get('query').toJSON();
+      if(this.has('row')) json.row = this.get('row').toJSON();
 
       if(this.has('entity')) {
         if(typeof json.entity !== "string") {
@@ -63,9 +64,6 @@ function(WidgetCollection,
         }
       }
 
-      if(this.has('row')) {
-        json.row = this.get('row').toJSON();
-      }
 
       return json;
     }

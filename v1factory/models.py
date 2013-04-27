@@ -2,11 +2,12 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-import simplejson
-import re
 from django.core.exceptions import ValidationError
+
 import os.path
+import re
 import requests
+import simplejson
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 
@@ -260,13 +261,15 @@ class UITheme(models.Model):
 
   def to_dict(self):
     try:
-      designer = User.objects.values().get(pk=self.designer_id),
+      designer = User.objects.get(pk=self.designer_id).username,
     except User.DoesNotExist:
-      designer = { 'name' : 'Anon' }
+      designer = 'v1 Factory'
+
+
     return { 'id' : self.id,
              'name' : self.name,
              'designer' : designer,
-             'statics' : self.statics.values(),
+             'statics' : simplejson.dumps(list(self.statics.values())),
              'uie_state' : self.uie_state }
 
   def clone(self, user=None):

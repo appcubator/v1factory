@@ -114,7 +114,7 @@ class Page(object):
   def resolve_navbar_pages(self, analyzed_app):
     self.navbar_pages = []
     for pname in self.navbar_page_names:
-      p = analyzed_app.pages.get_by_name(utils.extract_from_brace(pname))
+      p = analyzed_app.pages.get_by_name(process_link_lang(pname))
       assert p is not None
       self.navbar_pages.append(p)
 
@@ -334,7 +334,7 @@ class Form(Container):
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
-               entity_name=uie['container_info']['form']['entity'],
+               entity_name=uie['container_info']['entity'],
                uie=uie,
                fields=fields,
                page=page,
@@ -452,6 +452,7 @@ class AnalyzedApp:
     self.pages = Manager(Page)
     self.routes = Manager(Route)
 
+    """  # This commented block was a hack to move forms from entity and user to the form dict
     self.backend_forms = Manager(object)
     for e in app_state['entities']:
       for f in e['forms']:
@@ -468,6 +469,7 @@ class AnalyzedApp:
           if 'form' in uie['container_info']:
             uie['container_info']['form'] = self.backend_forms.get_by_name(\
                                               utils.extract_from_brace(uie['container_info']['form']))
+    """
 
     # given user settings, create some models
     base_user = { "name": "User" }

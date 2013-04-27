@@ -1,1 +1,0 @@
-define(["app/views/EntitiesView","app/templates/EntitiesTemplates"],function(e,t){var n=function(){var t=new e};return n});

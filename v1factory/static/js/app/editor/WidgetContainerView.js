@@ -5,6 +5,8 @@ define([
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
+  'app/models/FormModel',
+  'dicts/constant-containers',
   'editor/editor-templates'
 ],
 function(WidgetCollection,
@@ -12,7 +14,8 @@ function(WidgetCollection,
         ListEditorView,
         WidgetView,
         SubWidgetView,
-        FormEditorView) {
+        FormEditorView,
+        FormModel) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -40,6 +43,7 @@ function(WidgetCollection,
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
+      var action = this.model.get('container_info').get('action');
 
       if(this.model.get('container_info').has('query')) {
         this.model.get('container_info').get('query').bind('change', this.reRender);
@@ -52,7 +56,11 @@ function(WidgetCollection,
       }
 
       if(this.model.get('container_info').has('form')) {
-        var form = this.model.get('container_info').get('entity').getFormWithName(this.model.get('container_info').get('form'));
+        var form = this.model.get('container_info').get('form');
+        if(form.get('fields').models.length < 2) {
+          new FormEditorView(form, this.model.get('container_info').get('entity'));
+        }
+
         this.formModel = form;
         this.formModel.bind('change', this.reRender);
         this.formModel.get('fields').bind('remove', this.reRender);
@@ -89,6 +97,9 @@ function(WidgetCollection,
       this.setHeight(height * GRID_HEIGHT);
 
       this.el.className += ' widget-wrapper span'+width;
+      this.el.id = 'widget-wrapper-' + this.model.cid;
+
+      console.log(this.model);
 
       if(this.model.get('container_info').get('action') == "table-gal") {
         var tableDiv = document.createElement('div');
@@ -174,6 +185,7 @@ function(WidgetCollection,
       entityName = this.model.get('container_info').get('entity').get('name');
 
       // todo: hacky as hell
+      /*
       if(entityName == "User") {
         var form = _.findWhere(appState.users.forms, {name: self.formModel.get('name')});
         index    = _.indexOf(appState.users.forms, form);
@@ -187,6 +199,7 @@ function(WidgetCollection,
         index         = _.indexOf(appState.entities[indexEnt].forms, formVal);
         appState.entities[indexEnt].forms[index] = this.formModel.toJSON();
       }
+      */
     }
   });
 

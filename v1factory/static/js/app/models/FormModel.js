@@ -19,7 +19,7 @@ function(Backbone, FormFieldCollection) {
       this.set('name', bone.name);
       this.set('fields', new FormFieldCollection());
       this.set('action', bone.action||"create");
-      this.set('goto', bone.goto||"{{Homepage}}");
+      this.set('goto', bone.goto||"internal://Homepage/");
       this.set('belongsTo', bone.belongsTo||null);
 
       if(bone.fields) {
@@ -44,6 +44,7 @@ function(Backbone, FormFieldCollection) {
 
     toJSON: function() {
       var json = _.clone(this.attributes);
+      json.name = json.name || "";
       json.fields = this.get('fields').toJSON();
       return json;
     }

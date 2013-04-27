@@ -18,6 +18,7 @@
 <link type="text/css" href="{{ STATIC_URL }}css/editor.css" rel="stylesheet"/>
 <link type="text/css" href="{{ STATIC_URL }}css/form-editor.css" rel="stylesheet"/>
 <link type="text/css" href="{{ STATIC_URL }}css/design.css" rel="stylesheet"/>
+<link type="text/css" href="{{ STATIC_URL }}css/tutorial.css" rel="stylesheet"/>
 <link type="text/css" href="{{ STATIC_URL }}css/jquery-ui.css" rel="stylesheet"/>
 <link type="text/css" href="/app/{{ app_id}}/uiestate.less" rel="stylesheet"/>
 
@@ -87,10 +88,6 @@
     <div class="top-panel-title">
       <span class="right-arrow"></span><span class="hide-gallery">Hide Gallery</span>
     </div>
-<!--     <div class="info-section" id="class-picker">
-      <h2 class="tip">Choose elements from the pane below to start.</h2>
-      <div class="down-arrow"></div>
-    </div> -->
     <div class="top-panel-title">
       <h2>UI Elements </h2>
     </div><div class="item-gallery section" id="item-gallery"><div class="elements-list" id="elements-list">
@@ -114,18 +111,11 @@
     var GRID_WIDTH = 80;
     var GRID_HEIGHT = 15;
   </script>
-
-
-  <script type="text/javascript">
-    // var GRID_WIDTH = 80;
-    // var GRID_HEIGHT = 15;
-    // var editorView = new EditorView();
-  </script>
   <script type="text/javascript" src="{{ STATIC_URL }}/js/libs/filepicker.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/app/editor/editor-templates.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/design-options.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/dicts/default-uielements.js"></script>
   
-  <script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/editor/main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
-
+  <script data-main="{{ STATIC_URL }}js/app/editor/main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+  {% include "tutorial-texts.html" %}
 </html>

@@ -69,8 +69,6 @@ define([
 
     render: function() {
 
-      //this.model.select();
-
       var width = this.model.get('layout').get('width');
       var height = this.model.get('layout').get('height');
 
@@ -80,7 +78,6 @@ define([
       this.setHeight(height * GRID_HEIGHT);
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
-      //this.el.style.paddingTop = 
 
       if(this.model.get('layout').has('l-padding')) {
         this.el.style.paddingLeft = this.model.get('layout').get('l-padding');
@@ -96,6 +93,12 @@ define([
 
       if(this.model.get('layout').has('b-padding')) {
         this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
+      }
+
+      if(this.model.get('selected') === true) {
+        $(this.el).addClass('selected');
+        this.el.style.zIndex = 2000;
+        this.selected = true;
       }
 
       this.el.innerHTML = this.renderElement();
@@ -122,11 +125,14 @@ define([
 
     select: function(e) {
       this.el.style.zIndex = 2000;
+      this.model.set('selected', true);
       this.model.select();
+
       e.stopPropagation();
     },
 
     outlineSelected: function() {
+
 
       if(this.model.get('selected')) {
         $(this.el).addClass('selected');
@@ -215,22 +221,25 @@ define([
       this.el.firstChild.style.lineHeight = '1em';
     },
 
-    resizing: function(e, ui) {
-      var dHeight = (ui.size.height + 2) / GRID_HEIGHT;
-      var dWidth = (ui.size.width + 2) / GRID_WIDTH;
+    resizing: function(e, ui) { },
 
-      var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
+    resized: function(e, ui) {
+      var left = Math.round((ui.position.left / GRID_WIDTH));
+      var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
 
       this.model.get('layout').set('width', deltaWidth);
       this.model.get('layout').set('height', deltaHeight);
-    },
+      this.model.get('layout').set('left', left);
 
-    resized: function(e, ui) {
       this.el.style.width ='';
       this.el.style.height = '';
+      this.el.style.left = '';
       this.changedWidth();
       this.changedHeight();
+      this.changedLeft();
+
+      this.model.select();
     },
 
     moving: function(e, ui) {
@@ -245,6 +254,7 @@ define([
       this.el.style.top = '';
       this.changedLeft();
       this.changedTop();
+      this.model.select();
     },
 
     staticsAdded: function(files) {

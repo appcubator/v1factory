@@ -1,1 +1,0 @@
-define(["backbone"],function(e){var t=e.Model.extend({defaults:{urlparts:[]},getAppendixString:function(){return"/"+this.get("urlparts").join("/")},getUrlString:function(e){return"http://"+(e||"yourapp.com")+"/"+this.get("urlparts").join("/")}});return t});

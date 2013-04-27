@@ -1,54 +1,50 @@
-define(['./SimpleModalView', 'backbone', 'iui'],
+define([
+  'app/views/SimpleModalView',
+  'templates/MainTemplates'
+],
 function(SimpleModalView) {
+
   var AppInfoView = Backbone.View.extend({
-    el : document.body,
+
     events : {
-      'click #save' : 'saveInfo',
-      'click .low-save-btn' : 'saveInfo',
-      'click #delete' : 'deleteApp'
+      'click #delete'          : 'deleteApp',
+      'keyup #app-name'        : 'changeName',
+      'keyup #app-keywords'    : 'changeKeywords',
+      'keyup #app-description' : 'changeDescription'
     },
 
     initialize: function() {
+
       _.bindAll(this, 'render',
                       'changeName',
-                      'deploy',
                       'changeDescription',
                       'changeKeywords');
 
-      if(!appState.info) appState.info = {};
-
-      this.render();
-
+      this.model = v1State.get('info');
     },
 
     render: function() {
-      iui.get('app-name').value = appState.name;
-      iui.get('app-keywords').value = appState.info.keywords;
-      iui.get('app-description').value = appState.info.description;
+      var page_context = {};
+      page_context.name = this.model.get('name');
+      page_context.keywords = this.model.get('keywords');
+      page_context.description = this.model.get('description');
+
+      this.el.innerHTML = _.template(iui.getHTML('app-info-page'), page_context);
     },
 
-    changeName : function() {
-      appState.name = iui.get('app-name').value;
+    changeName : function(e) {
+      this.model.set('name', e.target.value);
       iui.askBeforeLeave();
     },
 
-    changeKeywords: function() {
-      appState.info.keywords = iui.get('app-keywords').value;
+    changeKeywords: function(e) {
+      this.model.set('keywords', e.target.value);
       iui.askBeforeLeave();
     },
 
-    changeDescription: function() {
-      appState.info.description = iui.get('app-description').value;
+    changeDescription: function(e) {
+      this.model.set('description', e.target.value);
       iui.askBeforeLeave();
-    },
-
-    deploy: function() {
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/deploy/',
-        success: function() { alert("Deployed!"); },
-        dataType: "JSON"
-      });
     },
 
     deleteApp: function() {
@@ -64,23 +60,6 @@ function(SimpleModalView) {
       else {
         return false;
       }
-    },
-
-    saveInfo: function() {
-      this.changeName();
-      this.changeKeywords();
-      this.changeDescription();
-
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
-        success: function() {
-          //new SimpleModalView({text:"Good Job!!! <br> ^(^_^)^ ^(^_^)> (>^_^)>"});
-          iui.dontAskBeforeLeave();
-          location.reload(true);
-        }
-      });
     }
   });
 
