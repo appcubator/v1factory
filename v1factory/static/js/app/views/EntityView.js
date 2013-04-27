@@ -21,7 +21,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       'submit .add-property-form'  : 'formSubmitted',
       'submit .add-form-form'      : 'formFormSubmitted',
       'change .attribs'            : 'changedAttribs',
-      'click  .delete'               : 'clickedDelete',
+      'click  .delete'             : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
       'click .remove-form'         : 'clickedFormRemove',
       'click .excel'               : 'clickedUploadExcel',

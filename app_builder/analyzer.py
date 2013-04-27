@@ -334,7 +334,7 @@ class Form(Container):
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
-               entity_name=uie['container_info']['form']['entity'],
+               entity_name=uie['container_info']['entity'],
                uie=uie,
                fields=fields,
                page=page,
