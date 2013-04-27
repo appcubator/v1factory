@@ -56,7 +56,7 @@ function(WidgetCollection,
       }
 
       if((action == "login" || action == "signup")&& this.model.get('container_info').get('form').has('fields')) {
-        var form = constantContainers[this.model.get('container_info').get('form')];
+        var form = constantContainers[this.model.get('container_info').get('form').get('name')];
         form = new FormModel(form);
         this.model.get('container_info').set('form', form);
         this.formModel = form;
