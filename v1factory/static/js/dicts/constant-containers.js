@@ -1,5 +1,6 @@
 var constantContainers = {
   'facebook' : {
+    name: "facebook",
     action: "signup",
     entity: "User",
     fields: [
@@ -14,6 +15,7 @@ var constantContainers = {
     ]
   },
   'twitter' : {
+    name: "twitter",
     action: "signup",
     entity: "User",
     fields : [
@@ -28,6 +30,7 @@ var constantContainers = {
     ]
   },
   'linkedin' : {
+    name: "linkedin",
     action: "signup",
     entity: "User",
     fields : [
@@ -42,6 +45,7 @@ var constantContainers = {
     ]
   },
   'Local Login': {
+    name: "local login",
     action: "login",
     entity: "User",
     fields : [
