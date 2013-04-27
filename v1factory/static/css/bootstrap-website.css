@@ -5561,7 +5561,6 @@ a:visited {
 
 input[type="text"], input[type="password"] {
   height: 32px;
-  margin: 0;
   outline-width: 1px;
   border: 1px solid #ccc;
 }

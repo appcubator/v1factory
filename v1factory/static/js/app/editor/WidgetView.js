@@ -102,7 +102,6 @@ define([
       }
 
       this.el.innerHTML = this.renderElement();
-      //this.el.firstChild.style.lineHeight = '1em';
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
       if(this.model.isFullWidth()) this.switchOnFullWidth();
