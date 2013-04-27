@@ -2,6 +2,7 @@
 
 
 from settings.common import *
+import os
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -17,17 +18,18 @@ MANAGERS = ADMINS
 import os.path
 PROJECT_ROOT_PATH = os.path.join(os.path.dirname(__file__), "..")
 
+"""
+'default': {
+    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+    'NAME': os.path.join(PROJECT_ROOT_PATH, 'tempdb'),
+},"""
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(PROJECT_ROOT_PATH, 'tempdb'),
-    },
-   #'default': {
-   #    'ENGINE': 'django.db.backends.mysql',
-   #    'NAME': 'westdb',
-   #    'USER': 'master',
-   #    'PASSWORD': 'imadatabase',
-   #    'HOST': 'prodv1factory.cbdwcbfkvkrq.us-west-1.rds.amazonaws.com',
-   #    'PORT': 3306
-   #}
+   'default': {
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME': 'v1factory',
+       'USER': 'root',
+       'PASSWORD': 'obscurepassword321',
+       'HOST': '127.0.0.1',
+       'PORT': 3306
+   }
 }

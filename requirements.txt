@@ -19,4 +19,4 @@ gitpython
 django-social-auth==0.7.22
 sendgrid==0.1.3
 django-less
-
+mysql-python
