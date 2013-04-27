@@ -23,7 +23,7 @@ function(WidgetModel,
 
     unselectAll: function(inpModel) {
       _.each(this.models, function(model) {
-        if(model.cid == inpModel.cid) return;
+        if(inpModel && model.cid == inpModel.cid) return;
         model.set('selected', false);
       });
       this.selectedEl = inpModel;
