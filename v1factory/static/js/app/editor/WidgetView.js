@@ -238,6 +238,8 @@ define([
       this.changedWidth();
       this.changedHeight();
       this.changedLeft();
+
+      this.model.select();
     },
 
     moving: function(e, ui) {
@@ -252,6 +254,7 @@ define([
       this.el.style.top = '';
       this.changedLeft();
       this.changedTop();
+      this.model.select();
     },
 
     staticsAdded: function(files) {
