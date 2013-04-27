@@ -1168,8 +1168,8 @@ ul.list {
   background-image: none;
 }
 ul.list li:hover {
-  margin-right: 20px;
-}
+/*  margin-right: 20px;
+*/}
 
 
 .create {
