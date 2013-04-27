@@ -115,6 +115,7 @@ function( PageModel,
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
       var curAppState = this.amendAppState();
+      console.log(curAppState);
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',

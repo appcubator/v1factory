@@ -44,6 +44,7 @@ function(Backbone, FormFieldCollection) {
 
     toJSON: function() {
       var json = _.clone(this.attributes);
+      json.name = json.name || "";
       json.fields = this.get('fields').toJSON();
       return json;
     }

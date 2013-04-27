@@ -37,15 +37,13 @@ FormEditorTemplates.field = [
   '<% if(field.get(\'displayType\') == "button") { %>',
     FieldTypes['button'],
   '<% } %>',
-'</label></li>'
+'</label><span class="drag-icon"></span></li>'
 ].join('\n');
 
 
 FormEditorTemplates.template = [
-  '<h3 class="hi2 full title"><%= form.get("name") %> Form</h3>',
   '<div class="details-panel panel">',
   '</div><div class="form-panel panel">',
-    '<h4>How It Looks</h4>',
     '<ul class="form-fields-list">',
       '<li class="new-field"><span class="field-text"> Add a new field</span>',
       '<select class="field-connection" style="display:none;">',
@@ -141,7 +139,7 @@ var fieldTypesArr = {
 };
 
 FormEditorTemplates.details = [
-  '<h4>Details of Selected Field</h4>',
+  '<h4>Form Editor</h4>',
   '<label><b>Label</b><br>',
   '<input class="field-label-input" id="field-label-<%= field.cid %>" type="text" placeholder="Field Label..." value="<%= field.get(\'label\') %>">',
   '</label>',

@@ -54,9 +54,9 @@ function(WidgetCollection,
       var json = _.clone(this.attributes);
       json.uielements = this.get('uielements').toJSON();
 
-      if(json.query) {
-        json.query = this.get('query').toJSON();
-      }
+      if(json.form) json.form = json.form.toJSON();
+      if(json.query) json.query = this.get('query').toJSON();
+      if(this.has('row')) json.row = this.get('row').toJSON();
 
       if(this.has('entity')) {
         if(typeof json.entity !== "string") {
@@ -64,9 +64,6 @@ function(WidgetCollection,
         }
       }
 
-      if(this.has('row')) {
-        json.row = this.get('row').toJSON();
-      }
 
       return json;
     }
