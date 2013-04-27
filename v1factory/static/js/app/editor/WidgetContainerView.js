@@ -5,6 +5,8 @@ define([
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
+  'app/models/FormModel',
+  'dicts/constant-containers',
   'editor/editor-templates'
 ],
 function(WidgetCollection,
@@ -12,7 +14,8 @@ function(WidgetCollection,
         ListEditorView,
         WidgetView,
         SubWidgetView,
-        FormEditorView) {
+        FormEditorView,
+        FormModel) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,
@@ -40,6 +43,7 @@ function(WidgetCollection,
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
 
+      var action = this.model.get('container_info').get('action');
 
       if(this.model.get('container_info').has('query')) {
         this.model.get('container_info').get('query').bind('change', this.reRender);
@@ -50,8 +54,18 @@ function(WidgetCollection,
         //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
         this.rowBindings();
       }
-      console.log(this.model);
-      if(this.model.get('container_info').has('form')) {
+
+      if((action == "login" || action == "signup")&& this.model.get('container_info').get('form').has('fields')) {
+        var form = constantContainers[this.model.get('container_info').get('form')];
+        form = new FormModel(form);
+        this.model.get('container_info').set('form', form);
+        this.formModel = form;
+        this.formModel.bind('change', this.reRender);
+        this.formModel.get('fields').bind('remove', this.reRender);
+        this.formModel.get('fields').bind('add', this.reRender);
+        _(this.formModel.get('fields').models).each(function(model){ model.bind('change', self.reRender); });
+      }
+      else if(this.model.get('container_info').has('form')) {
         var form = this.model.get('container_info').get('form');
         if(form.get('fields').models.length < 2) {
           new FormEditorView(form, this.model.get('container_info').get('entity'));
