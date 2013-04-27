@@ -191,7 +191,7 @@ function(FormFieldModel) {
     },
 
     changedOrder:function(e, ui) {
-      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
+      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" ).slice(1); // FIXME the first element is invalid
       for(var ii = 0; ii < sortedIDs.length; ii++) {
         var cid = sortedIDs[ii].replace('field-','');
         var elem = this.model.get('fields').get(cid);

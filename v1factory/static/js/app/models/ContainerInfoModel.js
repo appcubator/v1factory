@@ -41,14 +41,14 @@ function(WidgetCollection,
         this.set('query', new QueryModel(bone.query, this.get('entity')));
       }
 
-      // if(bone.form) {
-      //   if(!bone.form.attributes) {
-      //     this.set('form', new FormModel(bone.form, this.get('entity')));
-      //   }
-      //   else {
-      //     this.set('form', bone.form);
-      //   }
-      // }
+      if(bone.form) {
+        if(!bone.form.attributes) {
+          this.set('form', new FormModel(bone.form, this.get('entity')));
+        }
+        else {
+          this.set('form', bone.form);
+        }
+      }
     },
     toJSON: function() {
       var json = _.clone(this.attributes);
