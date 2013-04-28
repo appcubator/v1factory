@@ -8,8 +8,8 @@ function(FormFieldModel) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
-    width: 882,
-    height: 500,
+    width: 960,
+    height: 600,
     padding: 0,
     className: 'form-editor',
 
@@ -27,7 +27,8 @@ function(FormFieldModel) {
       'change .belongs-to'               : 'changedBelongsTo',
       'click  .new-field'                : 'clickedAddField',
       'change .field-connection'         : 'addField',
-      'submit .new-value-form'           : 'addNewField'
+      'submit .new-value-form'           : 'addNewField',
+      'click .done-btn'                  : 'closeModal'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -57,11 +58,12 @@ function(FormFieldModel) {
       this.model.get('fields').bind('remove', this.fieldRemoved);
       this.model.bind('change:action', this.reRenderFields);
 
+      console.log(formModel);
 
       this.render();
 
       if(this.model.get('fields').models.length > 0) {
-        this.selectedNew(_.last(this.model.get('fields').models));
+        this.selectedNew(_.first(this.model.get('fields').models));
       }
 
       this.callback = callback;
@@ -133,11 +135,17 @@ function(FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
+      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
 
       this.$el.find('.details-panel').html(html);
+
+      if(fieldModel.get('displayType') == "option-boxes") {
+        console.log(fieldModel.get('options'));
+        this.$el.find('.details-panel').append('<span class="options-input-area">Options<br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="'+ fieldModel.get('options').join(',') +'"></span>');
+      }
       this.$el.find('.selected').removeClass('selected');
       this.$el.find('#field-' + fieldModel.cid).addClass('selected');
     },
@@ -185,6 +193,7 @@ function(FormFieldModel) {
     },
 
     changedOptions: function(e) {
+      console.log(this.selected.get('options'));
       var options = String(this.$el.find('.options-input').val()).split(',');
       this.selected.set('options', options);
       e.stopPropagation();

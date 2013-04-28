@@ -15,7 +15,7 @@ var FieldTypes = {
 
 FormEditorTemplates.field = [
 '<% var value =""; if(form.get(\'action\') == "edit"){ value = "{{" + entity.get(\'name\') + "_" + field.get(\'name\') +"}}"; }%>',
-'<li id="field-<%= field.cid %>" class="field-li-item"><label><%= field.get(\'label\') %><br>',
+'<li id="field-<%= field.cid %>" class="field-li-item"><label><%= field.get(\'label\') %></label><span class="form-item">',
   '<% if(field.get(\'displayType\') == "single-line-text") { %>',
     FieldTypes['single-line-text'],
   '<% } %>',
@@ -37,13 +37,14 @@ FormEditorTemplates.field = [
   '<% if(field.get(\'displayType\') == "button") { %>',
     FieldTypes['button'],
   '<% } %>',
-'</label><span class="drag-icon"></span></li>'
+'</span><span class="drag-icon"></span></li>'
 ].join('\n');
 
 
 FormEditorTemplates.template = [
   '<div class="details-panel panel">',
   '</div><div class="form-panel panel">',
+    '<h4>Form Editor</h4>',
     '<ul class="form-fields-list">',
       '<li class="new-field"><span class="field-text"> Add a new field</span>',
       '<select class="field-connection" style="display:none;">',
@@ -56,6 +57,7 @@ FormEditorTemplates.template = [
       '<% }); %>',
     '</ul>',
     '<small>You can click on field to see the details and drag them to arrange the display order</small>',
+    '<div class="bottom-sect"><div class="btn done-btn">Done</div></div>',
   '</div><div class="action-panel panel">',
     '<h4 class="">Form Actions</h4>',
     '<b>Go to</b>',
@@ -139,7 +141,6 @@ var fieldTypesArr = {
 };
 
 FormEditorTemplates.details = [
-  '<h4>Form Editor</h4>',
   '<label><b>Label</b><br>',
   '<input class="field-label-input" id="field-label-<%= field.cid %>" type="text" placeholder="Field Label..." value="<%= field.get(\'label\') %>">',
   '</label>',
@@ -148,7 +149,7 @@ FormEditorTemplates.details = [
   '</label>',
   '<ul class="field-types">',
     '<% _(fieldTypesArr[field.get("type")]).each(function(fieldType) { %>',
-      '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { %>checked<% } %>><%= fieldType.text %></label></li>',
+      '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { var checked = true; %>checked<% } %>><%= fieldType.text %></label></li>',
     '<% }) %>',
   '</ul>'
 ].join('\n');

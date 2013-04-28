@@ -36,12 +36,7 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
                     });
 
       this.set('fields', fieldCollection);
-      this.set('forms', new FormCollection());
       this.set('name', 'User');
-
-      if(bone.forms) {
-        this.get('forms').add(bone.forms);
-      }
     },
 
     toJSON: function () {

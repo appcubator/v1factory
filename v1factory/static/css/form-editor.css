@@ -1,5 +1,8 @@
 .form-editor {
   height: 600px;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 .panel {
@@ -10,18 +13,19 @@
 }
 
 .panel select {
-  width: 160px;
+  width: 200px;
   margin-left: 10px;
 }
 
 .fields-panel {
+  background-color: #fff;
   width: 180px;
   border-right:1px solid #ddd;
 }
 
 .panel h4 {
-  height: 40px;
-  padding-top: 10px;
+  height: 50px;
+  padding-top: 16px;
   padding-left: 10px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -29,6 +33,7 @@
   background-color: rgba(0, 0, 0, 0.05);
   text-shadow: rgb(255, 255, 255) 0px 1px 0px;
   color: #666;
+  text-align: center;
 }
 
 .panel label {
@@ -48,11 +53,15 @@
 }
 
 .details-panel {
+  background-color: #fff;
   width: 260px;
   height: 500px;
+  margin-top: 60px;
   overflow-y: scroll;
   border-left: 1px solid #ccc;
   border-right: 1px solid #C2D7EF;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
 }
 
 .details-panel .options-input-area {
@@ -76,18 +85,34 @@
 }
 
 .form-panel {
-  width: 380px;
+  position: relative;
+  width: 460px;
   padding-left: 0;
   padding-right: 0;
-  padding-top: 20px;
   border-left: 1px solid #C2D7EF;
   border-right: 1px solid #ddd;
   overflow-y: scroll;
   padding-bottom: 60px;
+  background-color: #fff;
+  border-radius: 6px;
 }
 
 .form-panel input[type="text"], .form-panel input[type="password"] {
   border-width: 1px;
+}
+
+.form-panel .bottom-sect {
+  position: absolute;
+  height: 50px;
+  bottom: 0;
+  width: 100%;
+  background-color: #efefef;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.form-panel .done-btn {
+  float: right;
 }
 
 .panel small {
@@ -106,13 +131,18 @@
 }
 
 .action-panel {
-  width: 240px;
+  margin-top: 60px;
+  width: 236px;
+  height: 500px;
   border-left: 1px solid #aaa;
+  background-color: #fff;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  overflow: hidden;
 }
 
 .field-li-item {
-  width: 96%;
-  margin-left: 2%;
+  width: 100%;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   padding: 8px 20px;
@@ -123,6 +153,7 @@
   background-repeat: no-repeat;
   background-size: 14px auto;
   background-position: 88% center;
+  border-bottom: 1px solid #f3f3f3;
 }
 
 .form-fields-list li.selected {
@@ -203,14 +234,21 @@ li.new-field {
   font-size: 14px;
   opacity: 0.5;
   cursor: pointer;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #f3f3f3;
 }
 
 li.new-field:hover {
   opacity: 1;
   background-image: url(../img/add.png);
-  border: none;
+  background-color: #fafafa;
+  border-color:transparent;
 }
 
 input[type="text"] {
   border-width: 1px;
+}
+
+.form-editor .form-item {
+  display: block;
 }
