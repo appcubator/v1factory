@@ -46,7 +46,6 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       json.fields = _.uniq(json.fields, function(val) { return val.name; });
       json.fields = _.filter(json.fields, function(val){ return (val.name != "First Name")&&(val.name != "Last Name");});
 
-      json.forms  = this.get('forms').toJSON();
       return json;
     },
 

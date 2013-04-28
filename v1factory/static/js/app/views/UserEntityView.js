@@ -45,7 +45,6 @@ define([
         this.entitiesColl = v1State.get('entities');
 
         this.model.get('fields').bind('add', this.appendField);
-        this.model.get('forms').bind('add', this.appendForm, this);
       },
 
       render: function() {

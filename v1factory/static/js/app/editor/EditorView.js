@@ -47,7 +47,6 @@ function( PageModel,
                       'renderUrlBar',
                       'save',
                       'deployLocal',
-                      'amendAppState',
                       'deploy',
                       'clickedPage',
                       'getContextEntities',
@@ -113,8 +112,7 @@ function( PageModel,
     save : function(callback) {
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
-      var curAppState = this.amendAppState();
-
+      var curAppState = v1State.toJSON();
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
@@ -149,19 +147,6 @@ function( PageModel,
       if(this.widgetsManager.paste()){
         e.stopPropagation();
       }
-    },
-
-    amendAppState : function() {
-      var curAppState   = _.clone(appState);
-      var newCollection = _.clone(this.widgetsCollection);
-      var widgets    = (newCollection.toJSON() || []);
-
-      curAppState.pages[pageId]['uielements'] = widgets;
-      curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
-      curAppState.entities                    = v1State.get('entities').toJSON();
-      curAppState.users                       = v1State.get('users').toJSON();
-
-      return curAppState;
     },
 
     deploy: function() {
