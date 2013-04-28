@@ -23,19 +23,6 @@ APP_SCHEMA = { "_type": {}, "_mapping": {
 
 # User settingss
 
-FORM_SCHEMA = { "_type": [], "_each": { "_type" : {}, "_mapping": {
-  "name": { "_type" : "" },
-  "action": { "_type":"" },
-  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
-    "name": { "_type" : "" },
-    "placeholder": { "_type" : "" },
-    "label": { "_type" : "" },
-    "displayType": { "_type" : "" },
-    "type": { "_type" : "" },
-    "options": { "_type" : [], "_each": { "_type" : "" }}
-  }}},
-}}}
-
 USER_SETTINGS_SCHEMA = { "_type": {}, "_mapping": {
   "facebook": { "_type": True },
   "linkedin": { "_type": True },
@@ -48,8 +35,7 @@ USER_SETTINGS_SCHEMA = { "_type": {}, "_mapping": {
       "required": { "_type": False },
       "type": { "_type" : "" }
     }}
-  },
-  "forms": FORM_SCHEMA
+  }
 }}
 
 # Entities
@@ -63,7 +49,6 @@ ENTITY_FIELD_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
 ENTITY_SCHEMA = { "_type": [], "_each": { "_type": {}, "_mapping": {
   "name": { "_type" : "" },
   "fields": ENTITY_FIELD_SCHEMA,
-  "forms": FORM_SCHEMA
 }}}
 
 # Pages
@@ -88,10 +73,23 @@ NODE_SCHEMA = { "_type": [],"_each": { "_type": {}, "_mapping": {
   "content": { "_type": "" },
 }}}
 
+FORM_SCHEMA = { "_type": [], "_each": { "_type" : {}, "_mapping": {
+  "name": { "_type" : "" },
+  "action": { "_type":"" },
+  "fields": { "_type" : [], "_each": { "_type" : {}, "_mapping": {
+    "name": { "_type" : "" },
+    "placeholder": { "_type" : "" },
+    "label": { "_type" : "" },
+    "displayType": { "_type" : "" },
+    "type": { "_type" : "" },
+    "options": { "_type" : [], "_each": { "_type" : "" }}
+  }}},
+}}}
+
 FORM_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
   "entity": { "_type": "" },
   "action": { "_type": "" },
-  #"form": { "_type": None }
+  "form": FORM_SCHEMA
 }}
 
 ITERATOR_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
