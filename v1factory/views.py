@@ -5,12 +5,16 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+
 from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts
 from v1factory.email.sendgrid_email import send_email
+from v1factory.models import DomainRegistration
+
 from app_builder.analyzer import AnalyzedApp
 from app_builder.utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
 from app_builder.validator import validate_app_state
+
 import requests
 import traceback
 import datetime
@@ -590,4 +594,36 @@ def send_hosted_email(request):
     return HttpResponse("Email sent successfully")
   else:
     return HttpResponse("API quota reached")
-  
+
+@require_POST
+@csrf_exempt
+def check_availability(request, domain):
+  domain_is_available = DomainRegistration.check_availability(domain)
+
+  if domain_is_available:
+    return JSONResponse(True)
+  else:
+    return JSONResponse(False)
+
+@require_POST
+@login_required
+@csrf_exempt
+def register_domain(request, domain):
+  # Protect against trolls
+  assert len(domain) < 50
+
+  # Check domain cap
+  if request.user.domains.count() >= DomainRegistration.MAX_FREE_DOMAINS:
+    return JSONResponse({"error":0})
+
+  # Try to register
+  try:
+    d = DomainRegistration.register_domain(domain, test_only=settings.DEBUG)
+  except Exception, e:
+    return JSONResponse({ "errors": str(e) })
+
+  # Take the domain info!
+  return JSONResponse(d.domain_info)
+
+  # afterwards in a separate worker
+  #d.configure_dns(domain, staging=settings.STAGING)
