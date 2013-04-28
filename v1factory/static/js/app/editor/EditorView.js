@@ -79,7 +79,7 @@ function( PageModel,
       }
 
       /* Bindings */
-      window.addEventListener('keydown', this.keydown);
+      $(window).bind('keydown', this.keydown);
       key('⌘+s, ctrl+s', this.save);
       key('⌘+c, ctrl+c', this.copy);
       key('⌘+v, ctrl+v', this.paste);
@@ -204,6 +204,11 @@ function( PageModel,
     },
 
     keydown: function(e) {
+
+      if($._data($(window)[0],"events").keydown.length > 1) {
+        return ;
+      }
+
       switch(e.keyCode) {
         case 37:
           if(this.widgetsCollection.selectedEl) {

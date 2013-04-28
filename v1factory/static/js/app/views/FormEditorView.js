@@ -49,6 +49,7 @@ function(FormFieldModel) {
                       'changedBelongsTo',
                       'clickedAddField',
                       'addField',
+                      'keydownHandler',
                       'addNewField');
 
       this.model = formModel;
@@ -58,8 +59,6 @@ function(FormFieldModel) {
       this.model.get('fields').bind('remove', this.fieldRemoved);
       this.model.bind('change:action', this.reRenderFields);
 
-      console.log(formModel);
-
       this.render();
 
       if(this.model.get('fields').models.length > 0) {
@@ -67,6 +66,7 @@ function(FormFieldModel) {
       }
 
       this.callback = callback;
+      $(window).bind('keydown', this.keydownHandler);
     },
 
     render : function(text) {
@@ -135,7 +135,6 @@ function(FormFieldModel) {
     },
 
     selectedNew: function(fieldModel) {
-      console.log(fieldModel);
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
@@ -143,7 +142,6 @@ function(FormFieldModel) {
       this.$el.find('.details-panel').html(html);
 
       if(fieldModel.get('displayType') == "option-boxes") {
-        console.log(fieldModel.get('options'));
         this.$el.find('.details-panel').append('<span class="options-input-area">Options<br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="'+ fieldModel.get('options').join(',') +'"></span>');
       }
       this.$el.find('.selected').removeClass('selected');
@@ -193,7 +191,6 @@ function(FormFieldModel) {
     },
 
     changedOptions: function(e) {
-      console.log(this.selected.get('options'));
       var options = String(this.$el.find('.options-input').val()).split(',');
       this.selected.set('options', options);
       e.stopPropagation();
@@ -219,8 +216,6 @@ function(FormFieldModel) {
     },
 
     changedBelongsTo: function(e) {
-
-      console.log(e.target.value);
       this.model.set('belongsTo', null);
     },
 
@@ -265,9 +260,7 @@ function(FormFieldModel) {
       e.preventDefault();
 
       var name = this.$el.find('.new-field-inp').val();
-      console.log(name);
       var fieldModel = self.entity.get('fields').push({name: name});
-      console.log(fieldModel);
       var formFieldModel = new FormFieldModel({name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')});
 
       if(fieldModel.get('type') == "email") {
@@ -284,6 +277,14 @@ function(FormFieldModel) {
 
       $(e.target).hide();
       this.$el.find('.field-text').fadeIn();
+    },
+
+    keydownHandler: function(e) {
+      e.stopPropagation();
+    },
+
+    onClose: function() {
+      $(window).unbind('keydown', this.keydownHandler);
     }
   });
 

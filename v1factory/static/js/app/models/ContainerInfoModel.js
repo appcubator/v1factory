@@ -42,7 +42,6 @@ function(WidgetCollection,
 
       if(bone.form) {
         if(!bone.form.attributes) {
-          console.log(bone.form);
           this.set('form', new FormModel(bone.form, this.get('entity')));
         }
         else {

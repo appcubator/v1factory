@@ -1,9 +1,9 @@
-.modal.tutorial-view {
-  background-color: transparent;
+.tutorial-view {
   padding: 0;
   box-shadow: none;
   border: none;
   overflow: visible;
+  color: #000;
 }
 
 .tutorial-content {
