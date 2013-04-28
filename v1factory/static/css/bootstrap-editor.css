@@ -5324,6 +5324,14 @@ input[type="submit"].btn.btn-mini {
   border-width: 5px 0 5px 5px;
 }
 
+.right-arrow {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-right-color: #000000;
+  border-width: 5px 5px 5px 0;
+}
+
 .tooltip.bottom .tooltip-arrow {
   top: 0;
   left: 50%;

@@ -189,7 +189,7 @@ function( PageModel,
     },
 
     keydown: function(e) {
-
+      console.log($._data($(window)[0],"events").keydown);
       if($._data($(window)[0],"events").keydown.length > 1) {
         return ;
       }

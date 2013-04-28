@@ -8,7 +8,7 @@ function(FormFieldModel) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
-    width: 960,
+    width: 700,
     height: 600,
     padding: 0,
     className: 'form-editor',
@@ -83,7 +83,9 @@ function(FormFieldModel) {
       this.el.innerHTML = html;
 
       $('.form-fields-list').sortable({
-        stop: this.changedOrder
+        stop: this.changedOrder,
+        cancel: ".not-sortable",
+        axis: "y"
       });
       return this;
     },
@@ -125,7 +127,7 @@ function(FormFieldModel) {
 
     fieldAdded: function(fieldModel) {
       var self = this;
-      var html = _.template(FormEditorTemplates.field, { field: fieldModel, form: self.model, entity: self.entity});
+      var html = _.template(FormEditorTemplates.field, { field: fieldModel, form: self.model, entity: self.entity, sortable: ''});
       this.$el.find('.form-fields-list').append(html);
       this.selectedNew(fieldModel);
     },
@@ -139,13 +141,17 @@ function(FormFieldModel) {
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
 
-      this.$el.find('.details-panel').html(html);
+      this.$el.find('.details-panel').hide();
 
+      this.$el.find('.details-panel').html(html);
       if(fieldModel.get('displayType') == "option-boxes") {
-        this.$el.find('.details-panel').append('<span class="options-input-area">Options<br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="'+ fieldModel.get('options').join(',') +'"></span>');
+        this.$el.find('.details-panel').append('<span class="options-input-area"><b>Options</b><br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="'+ fieldModel.get('options').join(',') +'"></span>');
       }
+
       this.$el.find('.selected').removeClass('selected');
       this.$el.find('#field-' + fieldModel.cid).addClass('selected');
+      this.$el.find('.details-panel').fadeIn();
+      this.$el.find('.drag-icon').css({opacity: 0}).animate({opacity: 1});
     },
 
     clickedField: function(e) {
@@ -197,13 +203,23 @@ function(FormFieldModel) {
     },
 
     changedOrder:function(e, ui) {
-      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" ).slice(1); // FIXME the first element is invalid
+      console.log($( '.form-fields-list' ).sortable( "toArray" ));
+      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
+
+      var submitBtn = _.last(this.model.get('fields').models);
+      console.log(submitBtn);
+      this.model.get('fields').remove(submitBtn, {silent: true});
+      this.model.get('fields').push(submitBtn, {silent: true});
+
       for(var ii = 0; ii < sortedIDs.length; ii++) {
         var cid = sortedIDs[ii].replace('field-','');
         var elem = this.model.get('fields').get(cid);
-        this.model.get('fields').remove(elem);
-        this.model.get('fields').push(elem);
+        console.log(elem);
+        this.model.get('fields').remove(elem, {silent: true});
+        this.model.get('fields').push(elem, {silent: true});
       }
+
+      console.log(this.model.get('fields').models);
     },
 
     changedGoto: function(e) {
@@ -249,7 +265,10 @@ function(FormFieldModel) {
         formFieldModel.set('displayType', "date-picker");
       }
 
-      this.model.get('fields').add(formFieldModel);
+      var submitBtn = _.last(this.model.get('fields').models);
+      var ind = this.model.get('fields').models.length - 1;
+      console.log(ind);
+      this.model.get('fields').push(formFieldModel, {at: ind});
 
       $(e.target).hide();
       this.$el.find('.field-text').fadeIn();
@@ -284,6 +303,7 @@ function(FormFieldModel) {
     },
 
     onClose: function() {
+      console.log(this.model.get('fields').models);
       $(window).unbind('keydown', this.keydownHandler);
     }
   });

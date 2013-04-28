@@ -53,21 +53,23 @@
 }
 
 .details-panel {
+  position: fixed;
   background-color: #fff;
   width: 260px;
   height: 500px;
-  margin-top: 60px;
+  margin-top: 56px;
   overflow-y: scroll;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #C2D7EF;
+  border: 1px solid #ccc;
+/*  border-right: 1px solid #C2D7EF;
+*/ 
+  
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
+  border-radius: 6px;
+  z-index: 3002;
+  margin-left: -250px;
 }
 
-.details-panel .options-input-area {
-  padding: 10px;
-  width: 100%;
-}
 .details-panel h4 {
   background-color: #DFEFFF;
   border-bottom: 1px solid #C2D7EF;
@@ -145,15 +147,22 @@
   width: 100%;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  padding: 8px 20px;
+  padding: 8px 30px;
   background-color: transparent;
   -webkit-transition: background-color 50ms linear;
-  cursor: n-resize;
+  cursor: move;
   border: 1px dashed transparent;
   background-repeat: no-repeat;
   background-size: 14px auto;
   background-position: 88% center;
   border-bottom: 1px solid #f3f3f3;
+  position: relative;
+}
+
+.field-li-item.li-button {
+  text-align: right;
+  cursor: pointer;
+  list-style: none;
 }
 
 .form-fields-list li.selected {
@@ -161,17 +170,19 @@
   border: 1px solid #C2D7EF;
 }
 
-.form-fields-list li .drag-icon {
+.field-li-item .drag-icon {
+  position: absolute;
+  top: 4px;
+  z-index: 3003;
   display: none;
-  width: 40px;
-  height: 60px;
-  background-image: url(../img/right-arrow-blue.png);
+  width: 20px;
+  height: 36px;
+  background-image: url(../img/right-arrow-gray.png);
   background-repeat: no-repeat;
-  background-size: 100% auto;
+  background-size: 100% 100%;
   background-position: left top;
   float: left;
-  margin-left: -46px;
-  margin-top: 4px;
+  margin-left: -24px;
 }
 
 .form-fields-list li.selected .drag-icon {
@@ -213,7 +224,12 @@ h4 {
   margin-right: 4px;
 }
 
-
+.options-input-area {
+  width: 220px;
+  margin-left: 20px;
+  padding: 10px;
+  background-color: #DFEFFF;
+}
 
 .add-on {
   min-height: 32px;
@@ -223,7 +239,7 @@ h4 {
   padding-top: 6px;
 }
 
-li.new-field {
+.new-field {
   padding: 20px;
   text-align: center;
   font-weight: bold;
@@ -238,7 +254,7 @@ li.new-field {
   border-bottom: 1px solid #f3f3f3;
 }
 
-li.new-field:hover {
+.new-field:hover {
   opacity: 1;
   background-image: url(../img/add.png);
   background-color: #fafafa;
