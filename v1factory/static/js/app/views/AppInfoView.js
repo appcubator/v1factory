@@ -76,6 +76,13 @@ function(SimpleModalView) {
     checkForDomain: function(e) {
       var name = $('.register-domain-input').val();
 
+      $.ajax({
+          type: "POST",
+          url: '/domains/'+name+'/available_check/',
+          complete: function(resp) { console.log(resp); },
+          dataType: "JSON"
+      });
+
       if(name == "availabledomain") {
         $('.register-domain-input').removeClass('not-available');
         $('.register-domain-input').addClass('available');
