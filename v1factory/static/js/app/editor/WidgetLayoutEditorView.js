@@ -41,7 +41,6 @@ function(WidgetClassPickerView, FormEditorView) {
       direction = direction.replace(' tt', '');
       direction = direction.replace('a-','');
 
-      console.log(direction);
       this.model.get('layout').set('alignment', direction);
       e.target.className += ' selected';
     },

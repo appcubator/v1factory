@@ -7,8 +7,6 @@ function(Backbone, FormFieldCollection) {
   var FormModel = Backbone.Model.extend({
     initialize: function(bone, entity) {
 
-      console.log("FORM MODEL");
-
       if(typeof bone == "string") {
         var formName = /\{\{([^\}]+)\}\}/g.exec(bone)[1];
         var formObj  = entity.get('forms').where({name: formName})[0];

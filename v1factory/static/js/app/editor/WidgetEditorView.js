@@ -45,8 +45,6 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
       iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
       this.el.appendChild(this.layoutEditor.el);
 
-      console.log(this.model);
-
       if(this.model.get('container_info') == null) {
         this.contentEditor = new WidgetContentEditor(this.model);
         this.el.appendChild(this.contentEditor.el);

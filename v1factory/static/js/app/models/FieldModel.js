@@ -4,12 +4,7 @@ define(['backbone'], function() {
     defaults :{
         "required" : false,
         "type"     : "text"
-    },
-
-    initialize: function(bone) {
-      console.log(bone);
     }
-
   });
 
   return FieldModel;

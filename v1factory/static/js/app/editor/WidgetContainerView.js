@@ -99,8 +99,6 @@ function(WidgetCollection,
       this.el.className += ' widget-wrapper span'+width;
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
-      console.log(this.model);
-
       if(this.model.get('container_info').get('action') == "table-gal") {
         var tableDiv = document.createElement('div');
         tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);

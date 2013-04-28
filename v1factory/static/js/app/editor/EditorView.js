@@ -59,7 +59,6 @@ function( PageModel,
       g_contextCollection    = new EntityCollection();
 
       this.model                = v1State.get('pages').models[pageId];
-      console.log(v1State.get('pages').models[pageId]);
       //this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = this.model.get('uielements');
 
@@ -115,7 +114,7 @@ function( PageModel,
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
       var curAppState = this.amendAppState();
-      console.log(curAppState);
+
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
@@ -268,7 +267,6 @@ function( PageModel,
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         complete: function() {
-          console.log('<li><a herf="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>');
           $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },
         dataType: "JSON"

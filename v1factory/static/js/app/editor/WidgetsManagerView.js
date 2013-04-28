@@ -49,9 +49,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
     // this function decides if widget or container
     placeUIElement: function(model) {
       var self = this;
-      console.log(model);
       if(model.has('container_info')) {
-        console.log(model);
         self.placeContainer(model);
       }
       else {

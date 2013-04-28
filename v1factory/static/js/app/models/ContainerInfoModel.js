@@ -24,7 +24,6 @@ function(WidgetCollection,
             this.set('entity', v1State.get('users'));
           }
           else {
-            console.log(v1State.get('entities'));
             this.set('entity', v1State.get('entities').getEntityWithName(bone.entity));
           }
         }
