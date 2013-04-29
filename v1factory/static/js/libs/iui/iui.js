@@ -159,10 +159,27 @@ define(['jquery-ui'], function() {
       }
     },
 
-    stopAjaxLoading: function() {
+    stopAjaxLoading: function(txt) {
       if(document.getElementById('ajax-loader')) {
         var child = document.getElementById('ajax-loader');
         child.parentNode.removeChild(child);
+      }
+
+      if(txt) {
+        var notifId = 'notif-' + Math.floor(Math.random()*11);
+        var notifDiv = document.createElement('div');
+        notifDiv.id = notifId;
+        notifDiv.className = "fadeIn notification";
+        notifDiv.innerHTML = txt;
+        document.body.appendChild(notifDiv);
+
+        setTimeout(function(){
+          var elem = document.getElementById(notifId);
+          $(elem).fadeOut(220, function() {
+            $(this).remove();
+          });
+          //.parentNode.removeChild(elem);
+        },2000);
       }
     }
   };

@@ -6561,3 +6561,15 @@ i.icon-url {
 .notice ul li {
   margin-top: 6px;
 }
+
+.notification {
+  padding: 12px 20px;
+  font-weight: bold;
+  text-align: center;
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  border-radius: 8px;
+  color: #fff;
+  background-color: rgba(30, 30, 30, 0.6)
+}

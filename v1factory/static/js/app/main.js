@@ -172,7 +172,7 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
           type: "POST",
           url: '/app/'+appId+'/state/',
           data: JSON.stringify(appState),
-          complete: function() { iui.stopAjaxLoading(); },
+          complete: function() { iui.stopAjaxLoading("Saved"); },
           dataType: "JSON"
       });
     },
