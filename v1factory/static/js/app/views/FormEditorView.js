@@ -80,6 +80,7 @@ function(FormFieldModel, TutorialView) {
       temp_context.form = self.model;
       temp_context.entity = self.entity;
       temp_context.pages = appState.pages;
+      temp_context.emails = ["Email 1", "Email 2"];
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
       //this.entity.getBelongsTo();
 

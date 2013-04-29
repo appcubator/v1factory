@@ -24,16 +24,18 @@
 }
 
 .panel h4 {
-  height: 50px;
-  padding-top: 16px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   padding-left: 10px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.05);
   text-shadow: rgb(255, 255, 255) 0px 1px 0px;
   color: #666;
   text-align: center;
+
+  background-image: linear-gradient(to bottom, #fdfdfd, #eaeaea);
+  background-color: #fcfcfc;
 }
 
 .panel label {
@@ -70,11 +72,6 @@
   margin-left: -250px;
 }
 
-.details-panel h4 {
-  background-color: #DFEFFF;
-  border-bottom: 1px solid #C2D7EF;
-}
-
 
 .panel b {
   font-weight: bold;
@@ -84,6 +81,44 @@
   display: inline-block;
   margin-left: 10px;
   margin-top: 12px;
+}
+
+.action-panel .section-header {
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 0;
+  background-image: linear-gradient(to bottom, #fdfdfd, #f2f2f2);
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #eee;
+
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  color: #666;
+  text-align: center;
+}
+
+ul.action li {
+  position: relative;
+  font-size: 12px;
+  padding: 10px 28px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+ul.action li .add-to-list {
+  position: absolute;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  right: 10px;
+  top: 10px;
+  background-image:url(../img/add.png);
+  background-size: 100% 100%;
+  opacity: 0.4;
+}
+
+ul.action li:hover .add-to-list {
+  opacity: 1;
 }
 
 .form-panel {
@@ -255,6 +290,7 @@
 h4 {
   font-weight: bold;
   margin-bottom: 4px;
+  height: auto;
 }
 
 .field-types {
