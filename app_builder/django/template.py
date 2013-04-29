@@ -71,7 +71,6 @@ class DjangoTemplate(Renderable):
       # function to do the replacing
       def repl_handlebars(match):
         unprocessed = match.group(1)
-        print unprocessed
         tokens = unprocessed.split('.')
         context, access_tokens = tokens[0], tokens[1:]
 
@@ -101,7 +100,7 @@ class DjangoTemplate(Renderable):
         elif context == 'page':
           return "{{ "+m.identifier().lower()+"."+f.identifier()+" }}"
 
-      return re.sub(r'\{\{ ?(.*) ?\}\}', repl_handlebars, s)
+      return re.sub(r'\{\{ ?([^\}]*) ?\}\}', repl_handlebars, s)
 
     for uie in query_containers:
       for n in uie.nodes:
