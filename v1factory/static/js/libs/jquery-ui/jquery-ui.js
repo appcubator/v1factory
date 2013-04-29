@@ -2552,11 +2552,27 @@ $.widget("ui.resizable", $.ui.mouse, {
       curtop += $(o.containment).scrollTop() || 0;
     }
 
+    // Determine measurements to use based on box model
+    var width, height;
+    switch( el.css("box-sizing") ){
+      case "border-box":
+        width = el.outerWidth();
+        height = el.outerHeight();
+        break;
+      case "padding-box":
+        width = el.innerWidth();
+        height = el.innerHeight();
+        break;
+      default: //content-box
+        width = el.width();
+        height = el.height();
+    }
+
     //Store needed variables
     this.offset = this.helper.offset();
     this.position = { left: curleft, top: curtop };
-    this.size = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
-    this.originalSize = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+    this.size = { width: width, height: height };
+    this.originalSize = { width: width, height: height };
     this.originalPosition = { left: curleft, top: curtop };
     this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };
     this.originalMousePosition = { left: event.pageX, top: event.pageY };
@@ -3085,8 +3101,24 @@ $.ui.plugin.add("resizable", "alsoResize", {
       _store = function (exp) {
         $(exp).each(function() {
           var el = $(this);
+
+          var width, height;
+          switch( el.css("box-sizing") ){
+            case "border-box":
+              width = el.outerWidth();
+              height = el.outerHeight();
+              break;
+            case "padding-box":
+              width = el.innerWidth();
+              height = el.innerHeight();
+              break;
+            default: //content-box
+              width = el.width();
+              height = el.height();
+          }
+
           el.data("ui-resizable-alsoresize", {
-            width: parseInt(el.width(), 10), height: parseInt(el.height(), 10),
+            width: parseInt(width, 10), height: parseInt(height, 10),
             left: parseInt(el.css("left"), 10), top: parseInt(el.css("top"), 10)
           });
         });
@@ -3173,6 +3205,7 @@ $.ui.plugin.add("resizable", "ghost", {
 $.ui.plugin.add("resizable", "grid", {
 
   resize: function() {
+
     var that = $(this).data("ui-resizable"),
       o = that.options,
       cs = that.size,
