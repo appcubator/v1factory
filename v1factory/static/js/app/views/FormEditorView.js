@@ -1,10 +1,11 @@
 define([
   'app/models/FormFieldModel',
+  'app/tutorial/TutorialView',
   'app/templates/FormEditorTemplates',
   'mixins/BackboneModal',
   'jquery-ui'
 ],
-function(FormFieldModel) {
+function(FormFieldModel, TutorialView) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
@@ -29,7 +30,8 @@ function(FormFieldModel) {
       'change .field-connection'         : 'addField',
       'submit .new-value-form'           : 'addNewField',
       'click .done-btn'                  : 'closeModal',
-      'click .delete-field'              : 'deleteField'
+      'click .delete-field'              : 'deleteField',
+      'click .q-mark'                    : 'showTutorial'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -304,6 +306,10 @@ function(FormFieldModel) {
 
     keydownHandler: function(e) {
       e.stopPropagation();
+    },
+
+    showTutorial: function() {
+      new TutorialView([6, 1]);
     },
 
     onClose: function() {
