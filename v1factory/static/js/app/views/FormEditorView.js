@@ -205,23 +205,18 @@ function(FormFieldModel) {
     },
 
     changedOrder:function(e, ui) {
-      console.log($( '.form-fields-list' ).sortable( "toArray" ));
       var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
 
       var submitBtn = _.last(this.model.get('fields').models);
-      console.log(submitBtn);
       this.model.get('fields').remove(submitBtn, {silent: true});
       this.model.get('fields').push(submitBtn, {silent: true});
 
       for(var ii = 0; ii < sortedIDs.length; ii++) {
         var cid = sortedIDs[ii].replace('field-','');
         var elem = this.model.get('fields').get(cid);
-        console.log(elem);
         this.model.get('fields').remove(elem, {silent: true});
         this.model.get('fields').push(elem, {silent: true});
       }
-
-      console.log(this.model.get('fields').models);
     },
 
     changedGoto: function(e) {
@@ -312,7 +307,6 @@ function(FormFieldModel) {
     },
 
     onClose: function() {
-      console.log(this.model.get('fields').models);
       $(window).unbind('keydown', this.keydownHandler);
     }
   });

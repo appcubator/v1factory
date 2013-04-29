@@ -98,8 +98,6 @@ function(WidgetClassPickerView, FormEditorView) {
     },
 
     renderLayoutInfo: function() {
-      console.log(this.model.get('layout').get('alignment') == "left");
-
       var aLeft = this.model.get('layout').get('alignment') == "left" ? " selected" : "";
       var aCenter = this.model.get('layout').get('alignment') == "center" ? " selected" : "";
       var aRight = this.model.get('layout').get('alignment') == "right" ? " selected" : "";
