@@ -37,8 +37,7 @@ function(WidgetCollection,
                       'placeWidget',
                       'placeFormElement',
                       'renderElements',
-                      'showDetails',
-                      'formEditorClosed');
+                      'showDetails');
 
       var collection = new WidgetCollection();
       this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
@@ -167,8 +166,7 @@ function(WidgetCollection,
       }
       if(this.model.get('container_info').has('form')) {
         new FormEditorView(this.formModel,
-                           this.model.get('container_info').get('entity'),
-                           this.formEditorClosed);
+                           this.model.get('container_info').get('entity'));
       }
 
       if(this.model.get('container_info').has('row')) {
@@ -176,28 +174,6 @@ function(WidgetCollection,
                           this.model.get('container_info').get('query'),
                           this.model.get('container_info').get('row'));
       }
-    },
-
-    formEditorClosed: function() {
-      var self = this, index, entityName;
-      entityName = this.model.get('container_info').get('entity').get('name');
-
-      // todo: hacky as hell
-      /*
-      if(entityName == "User") {
-        var form = _.findWhere(appState.users.forms, {name: self.formModel.get('name')});
-        index    = _.indexOf(appState.users.forms, form);
-        form     = this.formModel.toJSON();
-        appState.users.forms[index] = form;
-      }
-      else {
-        var entityVal = _.findWhere(appState.entities, {name: entityName});
-        indexEnt      = _.indexOf(appState.entities, entityVal);
-        var formVal   = _.findWhere(appState.entities[indexEnt], entityVal);
-        index         = _.indexOf(appState.entities[indexEnt].forms, formVal);
-        appState.entities[indexEnt].forms[index] = this.formModel.toJSON();
-      }
-      */
     }
   });
 

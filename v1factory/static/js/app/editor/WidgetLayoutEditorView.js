@@ -98,16 +98,25 @@ function(WidgetClassPickerView, FormEditorView) {
     },
 
     renderLayoutInfo: function() {
+      console.log(this.model.get('layout').get('alignment') == "left");
+
+      var aLeft = this.model.get('layout').get('alignment') == "left" ? " selected" : "";
+      var aCenter = this.model.get('layout').get('alignment') == "center" ? " selected" : "";
+      var aRight = this.model.get('layout').get('alignment') == "right" ? " selected" : "";
+
       var ul = document.createElement('ul');
       ul.className = "alignment-picker";
-      ul.innerHTML += '<li class="a-left a-pick tt" id="a-left"></li><li class="a-center a-pick tt" id="a-center"></li><li class="a-right a-pick tt" id="a-right"></li>';
+      ul.innerHTML += '<li class="a-left a-pick tt'+ aLeft +'" id="a-left"></li><li class="a-center a-pick tt'+ aCenter +'" id="a-center"></li><li class="a-right a-pick tt'+ aRight +'" id="a-right"></li>';
       return ul;
     },
 
     renderPaddingInfo: function() {
+      var paddingLR = this.model.get('layout').get('r-padding') > 0 ? "selected" : "";
+      var paddingTB = this.model.get('layout').get('b-padding') > 0 ? "selected" : "";
+
       var ul = document.createElement('ul');
       ul.className = "padding-picker right";
-      ul.innerHTML += '<li class="padding tb tt" id="padding-tb"></li><li class="padding lr tt" id="padding-lr"></li>';
+      ul.innerHTML += '<li class="padding tb tt '+ paddingTB +'" id="padding-tb"></li><li class="padding lr tt '+ paddingLR +'" id="padding-lr"></li>';
       return ul;
     },
 

@@ -220,7 +220,11 @@ define([
       this.el.firstChild.style.lineHeight = '1em';
     },
 
-    resizing: function(e, ui) { },
+    resizing: function(e, ui) { 
+
+      ui.size.width = ui.size.width + 16;
+
+    },
 
     resized: function(e, ui) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
