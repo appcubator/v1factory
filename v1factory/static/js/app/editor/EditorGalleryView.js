@@ -325,8 +325,8 @@ function(ElementCollection,
         form = constantContainers[formType];
         console.log(form);
         widget.container_info = {};
-        widget.container_info.entity = entity;
-        widget.container_info.action = action;
+        widget.container_info.entity = "User";
+        widget.container_info.action = "signup";
         widget.container_info.form = form;
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);

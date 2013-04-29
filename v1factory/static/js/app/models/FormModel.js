@@ -16,11 +16,15 @@ function(Backbone, FormFieldCollection) {
         bone = formObj.toJSON();
       }
 
+      console.log(bone);
+
       this.set('name', bone.name);
       this.set('fields', new FormFieldCollection());
       this.set('action', bone.action||"create");
       this.set('goto', bone.goto||"internal://Homepage/");
       this.set('belongsTo', bone.belongsTo||null);
+
+      console.log(this);
 
       if(bone.fields) {
         this.get('fields').add(bone.fields);
@@ -44,6 +48,7 @@ function(Backbone, FormFieldCollection) {
 
     toJSON: function() {
       var json = _.clone(this.attributes);
+      console.log(json);
       json.name = json.name || "";
       json.fields = this.get('fields').toJSON();
       return json;
