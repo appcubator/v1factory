@@ -267,7 +267,6 @@ function(FormFieldModel) {
 
       var submitBtn = _.last(this.model.get('fields').models);
       var ind = this.model.get('fields').models.length - 1;
-      console.log(ind);
       this.model.get('fields').push(formFieldModel, {at: ind});
 
       $(e.target).hide();
@@ -292,7 +291,8 @@ function(FormFieldModel) {
         formFieldModel.set('displayType', "date-picker");
       }
 
-      this.model.get('fields').add(formFieldModel);
+      var ind = this.model.get('fields').models.length - 1;
+      this.model.get('fields').add(formFieldModel, {at: ind});
 
       $(e.target).hide();
       this.$el.find('.field-text').fadeIn();
