@@ -173,9 +173,9 @@ ul.action li:hover .add-to-list {
  font-size: 10px;
  font-style: italic;
  padding: 10px;
- margin-top: 1px solid #ccc;
- display: inline-block;
-  border-bottom: 1px solid #f3f3f3;
+/* margin-top: 1px solid #ccc;
+*/ display: inline-block;
+  border-bottom: 1px solid #ccc;
  width: 100%;
 }
 
