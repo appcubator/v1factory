@@ -612,6 +612,7 @@ h6 {
   line-height: 20px;
   color: inherit;
   text-rendering: optimizelegibility;
+  display: inline-block;
 }
 
 h1 small,

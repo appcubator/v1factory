@@ -45,6 +45,7 @@ FormEditorTemplates.template = [
   '<div class="details-panel panel">',
   '</div><div class="form-panel panel">',
     '<h4>Form Editor</h4>',
+    '<small>You can click on field to see the details and drag them to arrange the display order</small>',
     '<ul class="form-fields-list">',
       '<% _(form.get(\'fields\').models).each(function(field, ind) { if(ind == form.get(\'fields\').models.length - 1) return;%>',
         FormEditorTemplates.field,
@@ -60,9 +61,7 @@ FormEditorTemplates.template = [
       '<% var field = _.last(form.get(\'fields\').models); var sortable = "not-sortable"; %>',
         FormEditorTemplates.field,
       '<% %>',
-
-    '<small>You can click on field to see the details and drag them to arrange the display order</small>',
-    '<div class="bottom-sect"><div class="btn done-btn">Done</div></div>',
+    '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>',
   '</div><div class="action-panel panel">',
     '<h4 class="">Form Actions</h4>',
     '<b>Go to</b>',

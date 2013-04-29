@@ -117,12 +117,31 @@
   float: right;
 }
 
+.form-panel .q-mark {
+  display: inline-block;
+  width: 50px;
+  height: 40px;
+  background-image: url(../img/q-mark-gray.png);
+  background-repeat: no-repeat;
+  background-position: 0 -6px;
+  cursor: pointer;
+}
+
+.form-panel .q-mark:hover {
+  background-position: -46px -6px;
+}
+
+.form-panel small {
+}
+
 .panel small {
  font-size: 10px;
  font-style: italic;
  padding: 10px;
  margin-top: 1px solid #ccc;
  display: inline-block;
+  border-bottom: 1px solid #f3f3f3;
+ width: 100%;
 }
 
 .form-fields-list {
@@ -193,7 +212,6 @@
 /*  background-color: rgba(25, 142, 58, 0.3);
 */
   border: 1px dashed #000;
-  background-image: url(../img/cross-updown.png);
 }
 
 h4 {
