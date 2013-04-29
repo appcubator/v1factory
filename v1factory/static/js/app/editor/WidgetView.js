@@ -222,8 +222,6 @@ define([
 
     resizing: function(e, ui) { 
 
-      ui.size.width = ui.size.width + 16;
-
     },
 
     resized: function(e, ui) {
