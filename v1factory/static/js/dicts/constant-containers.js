@@ -5,9 +5,9 @@ var constantContainers = {
     entity: "User",
     fields: [
                     {
-                        "name": "Submit",
-                        "placeholder": "Login",
-                        "label": "Login",
+                        "name": "",
+                        "placeholder": "Login w/ Facebook",
+                        "label": "",
                         "displayType": "button",
                         "type": "button",
                         "options": []
@@ -20,9 +20,9 @@ var constantContainers = {
     entity: "User",
     fields : [
       {
-                        "name": "Submit",
-                        "placeholder": "Login",
-                        "label": "Login",
+                        "name": "",
+                        "placeholder": "Login w/ Twitter",
+                        "label": "",
                         "displayType": "button",
                         "type": "button",
                         "options": []
@@ -35,9 +35,9 @@ var constantContainers = {
     entity: "User",
     fields : [
       {
-                        "name": "Submit",
-                        "placeholder": "Login",
-                        "label": "Login",
+                        "name": "",
+                        "placeholder": "Login w/ LinkedIn",
+                        "label": "",
                         "displayType": "button",
                         "type": "button",
                         "options": []
@@ -66,7 +66,7 @@ var constantContainers = {
                         "options": []
                     },
                     {
-                        "name": "Submit",
+                        "name": "",
                         "placeholder": "Login",
                         "label": "Login",
                         "displayType": "button",

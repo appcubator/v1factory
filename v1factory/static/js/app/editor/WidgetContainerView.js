@@ -56,7 +56,7 @@ function(WidgetCollection,
 
       if(this.model.get('container_info').has('form')) {
         var form = this.model.get('container_info').get('form');
-        if(form.get('fields').models.length < 2) {
+        if(form.get('fields').models.length < 2 && form.get('action') != "signup") {
           new FormEditorView(form, this.model.get('container_info').get('entity'));
         }
 

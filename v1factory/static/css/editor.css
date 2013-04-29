@@ -569,7 +569,7 @@
 }
 
 
-.elements-list ul li.entity {
+.elements-list ul li.entity, .elements-list ul li.authentication {
   width: 172px;
   padding: 0;
   background-repeat: no-repeat;
@@ -585,7 +585,7 @@
   background-size: auto 20px;
 }
 
-.elements-list ul li.entity span {
+.elements-list ul li.entity span, .elements-list ul li.authentication span {
   display: inline-block;
   vertical-align: middle;
   height: 80px;
