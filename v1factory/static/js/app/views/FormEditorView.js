@@ -28,7 +28,8 @@ function(FormFieldModel) {
       'click  .new-field'                : 'clickedAddField',
       'change .field-connection'         : 'addField',
       'submit .new-value-form'           : 'addNewField',
-      'click .done-btn'                  : 'closeModal'
+      'click .done-btn'                  : 'closeModal',
+      'click .delete-field'              : 'deleteField'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -50,7 +51,8 @@ function(FormFieldModel) {
                       'clickedAddField',
                       'addField',
                       'keydownHandler',
-                      'addNewField');
+                      'addNewField',
+                      'deleteField');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -296,6 +298,13 @@ function(FormFieldModel) {
 
       $(e.target).hide();
       this.$el.find('.field-text').fadeIn();
+    },
+
+    deleteField: function(e) {
+      var id = String(e.target.id).replace('delete-btn-field-', '');
+      this.model.get('fields').remove(id);
+
+      e.stopPropagation();
     },
 
     keydownHandler: function(e) {

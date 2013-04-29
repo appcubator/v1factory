@@ -37,7 +37,7 @@ FormEditorTemplates.field = [
   '<% if(field.get(\'displayType\') == "button") { %>',
     FieldTypes['button'],
   '<% } %>',
-'</span><span class="drag-icon"></span></li>'
+'</span><span class="drag-icon"></span><span class="delete-field" id="delete-btn-field-<%= field.cid %>">Delete Field</span></li>'
 ].join('\n');
 
 
