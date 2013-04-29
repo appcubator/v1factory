@@ -97,6 +97,7 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
       $('#main-container').append(cleanDiv);
       $('#deploy').on('click', this.deploy);
       v1App.view = $(cleanDiv);
+      $('.active').removeClass('active');
     },
 
     showInfoPage: function() {
@@ -107,6 +108,8 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
       $('#main-container').append(cleanDiv);
       v1App.view = new InfoView();
       v1App.view.setElement(cleanDiv).render();
+      $('.active').removeClass('active');
+      $('.menu-app-info').addClass('active');
     },
 
     showEntitiesPage: function() {
@@ -117,6 +120,8 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
       $('#main-container').append(cleanDiv);
       v1App.view    = new EntitiesView();
       v1App.view.setElement(cleanDiv).render();
+      $('.active').removeClass('active');
+      $('.menu-app-entities').addClass('active');
     },
 
     showThemesPage: function() {
@@ -127,6 +132,8 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
       $('#main-container').append(cleanDiv);
       v1App.view  = new ThemesGalleryView();
       v1App.view.setElement(cleanDiv).render();
+      $('.active').removeClass('active');
+      $('.menu-app-themes').addClass('active');
     },
 
     showPagesPage: function() {
@@ -139,6 +146,9 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
       $('#main-container').append(cleanDiv);
       v1App.view  = new PagesView();
       v1App.view.setElement(cleanDiv).render();
+
+      $('.active').removeClass('active');
+      $('.menu-app-pages').addClass('active');
     },
 
     deploy: function() {

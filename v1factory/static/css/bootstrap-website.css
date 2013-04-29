@@ -4019,19 +4019,6 @@ input[type="submit"].btn.btn-mini {
   color: #999999;
 }
 
-.navbar-inverse .nav > li > a:focus,
-.navbar-inverse .nav > li > a:hover {
-  color: #ffffff;
-  background-color: transparent;
-}
-
-.navbar-inverse .nav .active > a,
-.navbar-inverse .nav .active > a:hover,
-.navbar-inverse .nav .active > a:focus {
-  color: #ffffff;
-  background-color: #111111;
-}
-
 .navbar-inverse .navbar-link {
   color: #999999;
 }
@@ -6496,8 +6483,12 @@ i.icon-url {
 }
 
 .navigation-menu li:hover {
-  max-width: 170px;
+  max-width: 170px !important;
   box-shadow: none;
+}
+
+.navigation-menu:hover li.active  {
+    max-width: 60px;
 }
 
 .navigation-menu li.menu-app-info {
