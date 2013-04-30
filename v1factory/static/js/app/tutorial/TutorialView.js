@@ -41,9 +41,13 @@ function(Backbone) {
     },
 
     renderBg: function() {
+      var self = this;
       var bgDiv = document.createElement('div');
       bgDiv.className = 'modal-bg';
       this.bgDiv = bgDiv;
+      $(bgDiv).on('click', function(e) {
+        self.closeModal();
+      });
       this.el.appendChild(bgDiv);
     },
 
@@ -140,8 +144,8 @@ function(Backbone) {
 
     showSlide: function(obj) {
       console.log(obj);
-      var title = '<h2>'+ obj.title + '</h2><hr>';
-      $('.tutorial-content').html(title + iui.getHTML(obj.view));
+      var title = '<h2>'+ obj.title + '</h2><div class="main-img" style="background-img:url('+ obj.img +')"></div>';
+      $('.tutorial-content').html(title + '<div class="text-cont">' + iui.getHTML(obj.view) +'</div>');
     },
 
     selectNext: function (obj) {

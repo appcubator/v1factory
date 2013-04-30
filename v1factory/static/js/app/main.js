@@ -90,7 +90,7 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
 
     index: function () {
       if(v1App.view) v1App.view.remove();
-      v1App.tutorialDirectory = [2];
+      v1App.tutorialDirectory = [0];
       var cleanDiv = document.createElement('div');
       cleanDiv.className = "clean-div";
       $(cleanDiv).html(iui.getHTML('app-main-page'));
