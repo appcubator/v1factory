@@ -40,11 +40,16 @@ FormEditorTemplates.field = [
 '</span><span class="drag-icon"></span><span class="delete-field" id="delete-btn-field-<%= field.cid %>">Delete Field</span></li>'
 ].join('\n');
 
+FormEditorTemplates.possibleActions = [
+  '<% _(pages).each(function(page) { %>',
+    '<li class="page-redirect" id="<% print(page.name.replace(\' \',\'_\')); %>">Go to <%= page.name %><div class="add-to-list"></div></li>',
+  '<% });%>'
+].join('\n');
 
 FormEditorTemplates.template = [
+  '<h4 class="form-editor-title">Form Editor</h4><h4 class="form-action-title">Actions on form submission</h4>',
   '<div class="details-panel panel">',
   '</div><div class="form-panel panel">',
-    '<h4>Form Editor</h4>',
     '<small>You can click on field to see the details and drag them to arrange the display order</small>',
     '<ul class="form-fields-list">',
       '<% _(form.get(\'fields\').models).each(function(field, ind) { if(ind == form.get(\'fields\').models.length - 1) return;%>',
@@ -63,20 +68,17 @@ FormEditorTemplates.template = [
       '<% %>',
     '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>',
   '</div><div class="action-panel panel">',
-    '<h4 class="">What will happen when the form is submitted?</h4>',
     '<small>Choose options from the list below.</small>',
-    '<ul></ul>',
+    '<ul class="current-actions"></ul>',
     '<div class="section-header">Options</div>',
     '<ul class="action goto-list">',
-      '<% _(pages).each(function(page) { %>',
-        '<li>Go to <%= page.name %><div class="add-to-list"></div></li>',
-      '<% });%>',
+      FormEditorTemplates.possibleActions,
     '</ul>',
-    '<ul class="action email-list">',
-      '<% _(emails).each(function(email) { %>',
-        '<li>Send Email <%= email.name %><div class="add-to-list"></div></li>',
-      '<% }) %>',
-    '</ul>',
+    // '<ul class="action email-list">',
+    //   '<% _(emails).each(function(email) { %>',
+    //     '<li>Send Email <%= email %><div class="add-to-list"></div></li>',
+    //   '<% }) %>',
+    // '</ul>',
   '</div>'
 ].join('\n');
 

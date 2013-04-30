@@ -9,7 +9,7 @@ function(FormFieldModel, TutorialView) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
-    width: 700,
+    width: 960,
     height: 600,
     padding: 0,
     className: 'form-editor',
@@ -23,7 +23,6 @@ function(FormFieldModel, TutorialView) {
       'keyup   .field-placeholder-input' : 'changedPlaceholder',
       'keyup   input.field-label-input'  : 'changedLabel',
       'keyup  .options-input'            : 'changedOptions',
-      'change .goto'                     : 'changedGoto',
       'change .form-type-select'         : 'changedFormAction',
       'change .belongs-to'               : 'changedBelongsTo',
       'click  .new-field'                : 'clickedAddField',
@@ -31,7 +30,8 @@ function(FormFieldModel, TutorialView) {
       'submit .new-value-form'           : 'addNewField',
       'click .done-btn'                  : 'closeModal',
       'click .delete-field'              : 'deleteField',
-      'click .q-mark'                    : 'showTutorial'
+      'click .q-mark'                    : 'showTutorial',
+      'click li.page-redirect'           : 'changedGoto'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -54,7 +54,8 @@ function(FormFieldModel, TutorialView) {
                       'addField',
                       'keydownHandler',
                       'addNewField',
-                      'deleteField');
+                      'deleteField',
+                      'renderPossibleActions');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -86,6 +87,11 @@ function(FormFieldModel, TutorialView) {
 
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
+
+      if(this.model.has('goto')) {
+        var page_name = this.model.get('goto').replace('internal://','');
+        this.$el.find('.current-actions').append('<li id="'+page_name +'">Go to '+page_name+'<div class="remove-from-list"></div></li>');
+      }
 
       $('.form-fields-list').sortable({
         stop: this.changedOrder,
@@ -223,8 +229,15 @@ function(FormFieldModel, TutorialView) {
     },
 
     changedGoto: function(e) {
-      var page_val = 'internal://' + $(e.target).val();
+      var page_name = e.target.id;
+      var page_id = page_name.replace(' ','_');
+      var page_val = 'internal://' + e.target.id;
       this.model.set('goto', page_val);
+      //$(e.target).remove();
+      this.renderPossibleActions();
+      this.$el.find('#'+ page_name).remove();
+      this.$el.find('.current-actions').html('');
+      this.$el.find('.current-actions').append('<li id="'+page_id +'">Go to '+page_name+'<div class="remove-from-list"></div></li>');
     },
 
     changedFormAction: function(e) {
@@ -311,6 +324,14 @@ function(FormFieldModel, TutorialView) {
 
     showTutorial: function() {
       new TutorialView([6, 1]);
+    },
+
+    renderPossibleActions: function() {
+      var page_context = {};
+      page_context.pages = appState.pages;
+      var html = _.template(FormEditorTemplates.possibleActions, page_context);
+      this.$el.find('.goto-list').html(html);
+      return this;
     },
 
     onClose: function() {
