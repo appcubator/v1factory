@@ -1780,3 +1780,12 @@ h3.edit-url {
 .single-data, .entity {
   background-color: #2b3545;
 }
+
+#brand-name-form {
+  margin-bottom: 0;
+}
+
+#brand-name-input {
+  height: 32px;
+  margin: 0;
+}
