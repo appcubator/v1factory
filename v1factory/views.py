@@ -60,12 +60,12 @@ def app_page(request, app_id):
   themes = UITheme.objects.all();
   themes = [t.to_dict() for t in themes]
 
-  print list(themes)
   return render(request, 'app-show.html', {'app'    : app,
                                            'app_id' : long(app_id),
                                            'title'  : 'The Garage',
                                            'themes' : simplejson.dumps(list(themes)),
-                                           'apps'   : request.user.apps.all()})
+                                           'apps'   : request.user.apps.all(),
+                                           'user'   : request.user})
 
 @require_POST
 @login_required

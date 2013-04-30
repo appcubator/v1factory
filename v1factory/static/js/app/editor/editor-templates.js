@@ -50,7 +50,6 @@ Templates.tempHrefSelect = [
   '</select>'
 ].join('\n');
 
-
 Templates.tempSourceSelect = [
   '<select class="statics"  id="prop-<%= hash %>">',
   '<option class="upload-image">Placeholder</option>',
@@ -126,27 +125,24 @@ Templates.fieldNode = [
 
 Templates.queryView = [
   '<h1 class="title"><%= entity.get(\'name\') %> <% if(c.row) { print(\'List\'); } else { print(\'Table\'); } %></h1>',
-  '<hr>',
-  '<div class="sect">',
+  '<small>',
   '<p id="query-description"><%= c.nLang %></p>',
-  '</div>',
-  '<hr>',
-  '<div class="sect">',
-  '<p>What fields would you like to display?</p>',
+  '</small>',
+  '<div class="sections-container">',
+    '<div class="sect">',
+    '<p>What fields would you like to display?</p>',
 
-  '<% _.each(entity.get("fields").models, function(field) { %>',
-    '<% var checked = \'\'; var u_id = field.cid; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) { checked = \'checked\'; } %>',
-    '<label><input class="fields-to-display btn" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %></label>',
-  '<% }) %>',
-  '</div>',
-  '<hr>',
+    '<% _.each(entity.get("fields").models, function(field) { %>',
+      '<% var checked = \'\'; var u_id = field.cid; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) { checked = \'checked\'; } %>',
+      '<label><input class="fields-to-display btn" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %></label>',
+    '<% }) %>',
+    '</div>',
     '<div class="sect">',
     '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
     '<p>Do you want to show the rows that just belong to the logged in user?</p>',
     '<label><input type="radio" class="belongs-to-user" name="belongsTo" value="true" checked> Yes</label>',
     '<label><input type="radio" class="belongs-to-user" name="belongsTo" value="false"<%= checked %>> No</label>',
     '</div>',
-    '<hr>',
     '<div class="sect">',
     '<p>How do you want to sort the rows?</p>',
     '<select class="sort-by">',
@@ -157,14 +153,15 @@ Templates.queryView = [
     '<% }); %>',
     '</select>',
     '</div>',
-    '<hr>',
+
     '<div class="sect">',
     '<p>How many rows would you like to show?</p>',
     '<label><input type="radio" class="nmr-rows" id="all-rows" name="nmrRows" value="All" <%= c.rAll %>> All</label>',
     '<label><input type="radio" class="nmr-rows" id="first-rows" name="nmrRows" value="First" <%= c.rFirst %>> First <input type="text" id="first-nmr" value="<%= c.rFirstNmr %>"> rows</label>',
     '<label><input type="radio" class="nmr-rows" id="last-rows" name="nmrRows" value="Last" <%= c.rLast %>> Last <input type="text" id="last-nmr" value="<%= c.rLastNmr %>"> rows</label>',
     '</div>',
-    '<hr>'
+  '</div>',
+  '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>'
 ].join('\n');
 
 Templates.listQueryView = [

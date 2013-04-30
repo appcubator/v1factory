@@ -1,11 +1,11 @@
 define([
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
-  'backbone',
+  'editor/WidgetInfoEditorView',
   'mixins/BackboneUI',
   'iui'
 ],
-function(WidgetContentEditor, WidgetLayoutEditor) {
+function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
     el     : document.getElementById('editor-page'),
@@ -33,22 +33,27 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
 
     render: function() {
       var self = this;
-      // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
-
       if(!iui.get('widget-wrapper-' + this.model.cid)) {
         this.model.bind('rendered', self.render);
         return;
       }
 
-      this.layoutEditor = new WidgetLayoutEditor(this.model);
+      if(!(this.model.has('container_info') && this.model.get('container_info').has('query'))) {
+        this.layoutEditor = new WidgetLayoutEditor(this.model);
+        this.el.appendChild(this.layoutEditor.el);
+      }
 
-      iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
-      this.el.appendChild(this.layoutEditor.el);
+      if(this.model.has('container_info') && this.model.get('container_info').has('query')) {
+        this.infoEditor = new WidgetInfoEditorView(this.model);
+        this.el.appendChild(this.infoEditor.el);
+      }
 
-      if(this.model.get('container_info') == null) {
+      if(this.model.get('container_info') === null) {
         this.contentEditor = new WidgetContentEditor(this.model);
         this.el.appendChild(this.contentEditor.el);
       }
+
+      iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
 
       this.model.unbind('rendered', self.render);
     },
@@ -75,6 +80,8 @@ function(WidgetContentEditor, WidgetLayoutEditor) {
     clear: function() {
       if(this.contentEditor) this.contentEditor.clear();
       if(this.layoutEditor) this.layoutEditor.clear();
+      if(this.infoEditor) this.infoEditor.clear();
+
       this.el.innerHTML = '';
       this.model = null;
       this.$el.hide();
