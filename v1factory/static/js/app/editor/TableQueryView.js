@@ -10,7 +10,8 @@ define([
       'click .belongs-to-user'      : 'belongsToUserChanged',
       'click .nmr-rows'             : 'nmrRowsChanged',
       'keydown #first-nmr, #last-nmr': 'nmrRowsNumberChanged',
-      'change .sort-by'             : 'sortByChanged'
+      'change .sort-by'             : 'sortByChanged',
+      'click .done-btn'             : 'closeModal'
     },
     initialize: function(widgetModel, queryModel) {
       _.bindAll(this, 'fieldsToDisplayChanged',
@@ -61,8 +62,6 @@ define([
       };
 
       var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks});
-      contentHTML += '<input type="submit" class="btn offsetr1 pull-right" value="Done"><div class="hoff1 span10"></div>';
-
       this.el.innerHTML = contentHTML;
       return this;
     },
