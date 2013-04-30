@@ -102,7 +102,6 @@ define([
       }
 
       this.el.innerHTML = this.renderElement();
-      //this.el.firstChild.style.lineHeight = '1em';
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
       if(this.model.isFullWidth()) this.switchOnFullWidth();
@@ -221,7 +220,9 @@ define([
       this.el.firstChild.style.lineHeight = '1em';
     },
 
-    resizing: function(e, ui) { },
+    resizing: function(e, ui) { 
+
+    },
 
     resized: function(e, ui) {
       var left = Math.round((ui.position.left / GRID_WIDTH));

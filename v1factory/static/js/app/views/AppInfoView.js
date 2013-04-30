@@ -10,7 +10,9 @@ function(SimpleModalView) {
       'click #delete'          : 'deleteApp',
       'keyup #app-name'        : 'changeName',
       'keyup #app-keywords'    : 'changeKeywords',
-      'keyup #app-description' : 'changeDescription'
+      'keyup #app-description' : 'changeDescription',
+      'click #register-new-domain' : 'showDomainRegistrationForm',
+      'keyup .register-domain-input' : 'checkForDomain'
     },
 
     initialize: function() {
@@ -18,7 +20,10 @@ function(SimpleModalView) {
       _.bindAll(this, 'render',
                       'changeName',
                       'changeDescription',
-                      'changeKeywords');
+                      'changeKeywords',
+                      'showDomainRegistrationForm',
+                      'deleteApp',
+                      'checkForDomain');
 
       this.model = v1State.get('info');
     },
@@ -59,6 +64,34 @@ function(SimpleModalView) {
       }
       else {
         return false;
+      }
+    },
+
+    showDomainRegistrationForm: function(e) {
+      $(e.target).hide();
+      this.$el.find('.register-domain-form').fadeIn();
+      this.$el.find('.register-domain-input').focus();
+    },
+
+    checkForDomain: function(e) {
+      var name = $('.register-domain-input').val();
+
+      $.ajax({
+          type: "POST",
+          url: '/domains/'+name+'/available_check/',
+          complete: function(resp) { console.log(resp); },
+          dataType: "JSON"
+      });
+
+      if(name == "availabledomain") {
+        $('.register-domain-input').removeClass('not-available');
+        $('.register-domain-input').addClass('available');
+        $('.register-domain-button').fadeIn();
+      }
+      else {
+        $('.register-domain-input').addClass('not-available');
+        $('.register-domain-input').removeClass('available');
+        $('.register-domain-button').hide();
       }
     }
   });

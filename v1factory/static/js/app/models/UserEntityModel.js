@@ -36,12 +36,7 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
                     });
 
       this.set('fields', fieldCollection);
-      this.set('forms', new FormCollection());
       this.set('name', 'User');
-
-      if(bone.forms) {
-        this.get('forms').add(bone.forms);
-      }
     },
 
     toJSON: function () {
@@ -51,7 +46,6 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       json.fields = _.uniq(json.fields, function(val) { return val.name; });
       json.fields = _.filter(json.fields, function(val){ return (val.name != "First Name")&&(val.name != "Last Name");});
 
-      json.forms  = this.get('forms').toJSON();
       return json;
     },
 

@@ -15,7 +15,7 @@ var FieldTypes = {
 
 FormEditorTemplates.field = [
 '<% var value =""; if(form.get(\'action\') == "edit"){ value = "{{" + entity.get(\'name\') + "_" + field.get(\'name\') +"}}"; }%>',
-'<li id="field-<%= field.cid %>" class="field-li-item"><label><%= field.get(\'label\') %><br>',
+'<li id="field-<%= field.cid %>" class="field-li-item <%= sortable %> li-<%= field.get(\'displayType\')%>"><label><%= field.get(\'label\') %></label><span class="form-item">',
   '<% if(field.get(\'displayType\') == "single-line-text") { %>',
     FieldTypes['single-line-text'],
   '<% } %>',
@@ -37,35 +37,48 @@ FormEditorTemplates.field = [
   '<% if(field.get(\'displayType\') == "button") { %>',
     FieldTypes['button'],
   '<% } %>',
-'</label><span class="drag-icon"></span></li>'
+'</span><span class="drag-icon"></span><span class="delete-field" id="delete-btn-field-<%= field.cid %>">Delete Field</span></li>'
 ].join('\n');
 
+FormEditorTemplates.possibleActions = [
+  '<% _(pages).each(function(page) { %>',
+    '<li class="page-redirect" id="<% print(page.name.replace(\' \',\'_\')); %>">Go to <%= page.name %><div class="add-to-list"></div></li>',
+  '<% });%>'
+].join('\n');
 
 FormEditorTemplates.template = [
+  '<h4 class="form-editor-title">Form Editor</h4><h4 class="form-action-title">Actions on form submission</h4>',
   '<div class="details-panel panel">',
   '</div><div class="form-panel panel">',
+    '<small>You can click on field to see the details and drag them to arrange the display order</small>',
     '<ul class="form-fields-list">',
-      '<li class="new-field"><span class="field-text"> Add a new field</span>',
+      '<% _(form.get(\'fields\').models).each(function(field, ind) { if(ind == form.get(\'fields\').models.length - 1) return;%>',
+        FormEditorTemplates.field,
+      '<% }); %>',
+    '</ul>',
+      '<div class="new-field not-sortable"><span class="field-text"> Add a new field</span>',
       '<select class="field-connection" style="display:none;">',
       '<option>Choose the connected field</option>',
       '<% _(entity.get("fields").models).each(function(field) { %>',
       '<option class="field-name-box" value="<%= field.cid %>"><%= field.get(\'name\') %></option>',
-      '<% }); %><option value="new-value">Add a new field</option></select><form class="new-value-form" style="display:none;"><input type="text" class="new-field-inp" placeholder="Name of the field..."></form></li>',
-      '<% _(form.get(\'fields\').models).each(function(field) { %>',
+      '<% }); %><option value="new-value">Add a new field</option></select><form class="new-value-form" style="display:none;"><input type="text" class="new-field-inp" placeholder="Name of the field..."></form></div>',
+
+      '<% var field = _.last(form.get(\'fields\').models); var sortable = "not-sortable"; %>',
         FormEditorTemplates.field,
-      '<% }); %>',
-    '</ul>',
-    '<small>You can click on field to see the details and drag them to arrange the display order</small>',
+      '<% %>',
+    '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>',
   '</div><div class="action-panel panel">',
-    '<h4 class="">Form Actions</h4>',
-    '<b>Go to</b>',
-    '<select class="goto">',
-      '<% _(pages).each(function(page) { %>',
-        '<option <% if(form.get("goto") == "{{"+page.name+"}}"){ %> selected<% }; %>><%= page.name %></option>',
-      '<% });%>',
-    '</select>',
-    '<br><b>Email</b>',
-    '<select><option>Email 1</option><option>Email 2</option></select>',
+    '<small>Choose options from the list below.</small>',
+    '<ul class="current-actions"></ul>',
+    '<div class="section-header">Options</div>',
+    '<ul class="action goto-list">',
+      FormEditorTemplates.possibleActions,
+    '</ul>',
+    // '<ul class="action email-list">',
+    //   '<% _(emails).each(function(email) { %>',
+    //     '<li>Send Email <%= email %><div class="add-to-list"></div></li>',
+    //   '<% }) %>',
+    // '</ul>',
   '</div>'
 ].join('\n');
 
@@ -139,7 +152,6 @@ var fieldTypesArr = {
 };
 
 FormEditorTemplates.details = [
-  '<h4>Form Editor</h4>',
   '<label><b>Label</b><br>',
   '<input class="field-label-input" id="field-label-<%= field.cid %>" type="text" placeholder="Field Label..." value="<%= field.get(\'label\') %>">',
   '</label>',
@@ -148,7 +160,7 @@ FormEditorTemplates.details = [
   '</label>',
   '<ul class="field-types">',
     '<% _(fieldTypesArr[field.get("type")]).each(function(fieldType) { %>',
-      '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { %>checked<% } %>><%= fieldType.text %></label></li>',
+      '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { var checked = true; %>checked<% } %>><%= fieldType.text %></label></li>',
     '<% }) %>',
   '</ul>'
 ].join('\n');

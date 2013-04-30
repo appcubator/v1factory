@@ -47,7 +47,6 @@ function( PageModel,
                       'renderUrlBar',
                       'save',
                       'deployLocal',
-                      'amendAppState',
                       'deploy',
                       'clickedPage',
                       'getContextEntities',
@@ -59,7 +58,6 @@ function( PageModel,
       g_contextCollection    = new EntityCollection();
 
       this.model                = v1State.get('pages').models[pageId];
-      console.log(v1State.get('pages').models[pageId]);
       //this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = this.model.get('uielements');
 
@@ -80,7 +78,7 @@ function( PageModel,
       }
 
       /* Bindings */
-      window.addEventListener('keydown', this.keydown);
+      $(window).bind('keydown', this.keydown);
       key('⌘+s, ctrl+s', this.save);
       key('⌘+c, ctrl+c', this.copy);
       key('⌘+v, ctrl+v', this.paste);
@@ -114,8 +112,7 @@ function( PageModel,
     save : function(callback) {
 
       $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
-      var curAppState = this.amendAppState();
-      console.log(curAppState);
+      var curAppState = v1State.toJSON();
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
@@ -150,19 +147,6 @@ function( PageModel,
       if(this.widgetsManager.paste()){
         e.stopPropagation();
       }
-    },
-
-    amendAppState : function() {
-      var curAppState   = _.clone(appState);
-      var newCollection = _.clone(this.widgetsCollection);
-      var widgets    = (newCollection.toJSON() || []);
-
-      curAppState.pages[pageId]['uielements'] = widgets;
-      curAppState.pages[pageId]['navbar']     = this.model.get('navbar').toJSON();
-      curAppState.entities                    = v1State.get('entities').toJSON();
-      curAppState.users                       = v1State.get('users').toJSON();
-
-      return curAppState;
     },
 
     deploy: function() {
@@ -205,6 +189,11 @@ function( PageModel,
     },
 
     keydown: function(e) {
+      console.log($._data($(window)[0],"events").keydown);
+      if($._data($(window)[0],"events").keydown.length > 1) {
+        return ;
+      }
+
       switch(e.keyCode) {
         case 37:
           if(this.widgetsCollection.selectedEl) {
@@ -268,7 +257,6 @@ function( PageModel,
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(appState),
         complete: function() {
-          console.log('<li><a herf="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>');
           $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },
         dataType: "JSON"

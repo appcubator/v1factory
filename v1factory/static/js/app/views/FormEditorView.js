@@ -1,15 +1,16 @@
 define([
   'app/models/FormFieldModel',
+  'app/tutorial/TutorialView',
   'app/templates/FormEditorTemplates',
   'mixins/BackboneModal',
   'jquery-ui'
 ],
-function(FormFieldModel) {
+function(FormFieldModel, TutorialView) {
 
   var FormEditorView = Backbone.ModalView.extend({
     tagName: 'div',
-    width: 882,
-    height: 500,
+    width: 960,
+    height: 600,
     padding: 0,
     className: 'form-editor',
 
@@ -22,12 +23,15 @@ function(FormFieldModel) {
       'keyup   .field-placeholder-input' : 'changedPlaceholder',
       'keyup   input.field-label-input'  : 'changedLabel',
       'keyup  .options-input'            : 'changedOptions',
-      'change .goto'                     : 'changedGoto',
       'change .form-type-select'         : 'changedFormAction',
       'change .belongs-to'               : 'changedBelongsTo',
       'click  .new-field'                : 'clickedAddField',
       'change .field-connection'         : 'addField',
-      'submit .new-value-form'           : 'addNewField'
+      'submit .new-value-form'           : 'addNewField',
+      'click .done-btn'                  : 'closeModal',
+      'click .delete-field'              : 'deleteField',
+      'click .q-mark'                    : 'showTutorial',
+      'click li.page-redirect'           : 'changedGoto'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -48,7 +52,10 @@ function(FormFieldModel) {
                       'changedBelongsTo',
                       'clickedAddField',
                       'addField',
-                      'addNewField');
+                      'keydownHandler',
+                      'addNewField',
+                      'deleteField',
+                      'renderPossibleActions');
 
       this.model = formModel;
       this.entity = entityModel;
@@ -57,14 +64,14 @@ function(FormFieldModel) {
       this.model.get('fields').bind('remove', this.fieldRemoved);
       this.model.bind('change:action', this.reRenderFields);
 
-
       this.render();
 
       if(this.model.get('fields').models.length > 0) {
-        this.selectedNew(_.last(this.model.get('fields').models));
+        this.selectedNew(_.first(this.model.get('fields').models));
       }
 
       this.callback = callback;
+      $(window).bind('keydown', this.keydownHandler);
     },
 
     render : function(text) {
@@ -74,14 +81,22 @@ function(FormFieldModel) {
       temp_context.form = self.model;
       temp_context.entity = self.entity;
       temp_context.pages = appState.pages;
+      temp_context.emails = ["Email 1", "Email 2"];
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
       //this.entity.getBelongsTo();
 
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
 
+      if(this.model.has('goto')) {
+        var page_name = this.model.get('goto').replace('internal://','');
+        this.$el.find('.current-actions').append('<li id="'+page_name +'">Go to '+page_name+'<div class="remove-from-list"></div></li>');
+      }
+
       $('.form-fields-list').sortable({
-        stop: this.changedOrder
+        stop: this.changedOrder,
+        cancel: ".not-sortable",
+        axis: "y"
       });
       return this;
     },
@@ -123,7 +138,7 @@ function(FormFieldModel) {
 
     fieldAdded: function(fieldModel) {
       var self = this;
-      var html = _.template(FormEditorTemplates.field, { field: fieldModel, form: self.model, entity: self.entity});
+      var html = _.template(FormEditorTemplates.field, { field: fieldModel, form: self.model, entity: self.entity, sortable: ''});
       this.$el.find('.form-fields-list').append(html);
       this.selectedNew(fieldModel);
     },
@@ -137,9 +152,17 @@ function(FormFieldModel) {
       this.selected = fieldModel;
       this.selected.bind('change', this.renderField);
 
+      this.$el.find('.details-panel').hide();
+
       this.$el.find('.details-panel').html(html);
+      if(fieldModel.get('displayType') == "option-boxes") {
+        this.$el.find('.details-panel').append('<span class="options-input-area"><b>Options</b><br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="'+ fieldModel.get('options').join(',') +'"></span>');
+      }
+
       this.$el.find('.selected').removeClass('selected');
       this.$el.find('#field-' + fieldModel.cid).addClass('selected');
+      this.$el.find('.details-panel').fadeIn();
+      this.$el.find('.drag-icon').css({opacity: 0}).animate({opacity: 1});
     },
 
     clickedField: function(e) {
@@ -191,18 +214,30 @@ function(FormFieldModel) {
     },
 
     changedOrder:function(e, ui) {
-      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" ).slice(1); // FIXME the first element is invalid
+      var sortedIDs = $( '.form-fields-list' ).sortable( "toArray" );
+
+      var submitBtn = _.last(this.model.get('fields').models);
+      this.model.get('fields').remove(submitBtn, {silent: true});
+      this.model.get('fields').push(submitBtn, {silent: true});
+
       for(var ii = 0; ii < sortedIDs.length; ii++) {
         var cid = sortedIDs[ii].replace('field-','');
         var elem = this.model.get('fields').get(cid);
-        this.model.get('fields').remove(elem);
-        this.model.get('fields').push(elem);
+        this.model.get('fields').remove(elem, {silent: true});
+        this.model.get('fields').push(elem, {silent: true});
       }
     },
 
     changedGoto: function(e) {
-      var page_val = 'internal://' + $(e.target).val();
+      var page_name = e.target.id;
+      var page_id = page_name.replace(' ','_');
+      var page_val = 'internal://' + e.target.id;
       this.model.set('goto', page_val);
+      //$(e.target).remove();
+      this.renderPossibleActions();
+      this.$el.find('#'+ page_name).remove();
+      this.$el.find('.current-actions').html('');
+      this.$el.find('.current-actions').append('<li id="'+page_id +'">Go to '+page_name+'<div class="remove-from-list"></div></li>');
     },
 
     changedFormAction: function(e) {
@@ -210,8 +245,6 @@ function(FormFieldModel) {
     },
 
     changedBelongsTo: function(e) {
-
-      console.log(e.target.value);
       this.model.set('belongsTo', null);
     },
 
@@ -245,7 +278,9 @@ function(FormFieldModel) {
         formFieldModel.set('displayType', "date-picker");
       }
 
-      this.model.get('fields').add(formFieldModel);
+      var submitBtn = _.last(this.model.get('fields').models);
+      var ind = this.model.get('fields').models.length - 1;
+      this.model.get('fields').push(formFieldModel, {at: ind});
 
       $(e.target).hide();
       this.$el.find('.field-text').fadeIn();
@@ -256,9 +291,7 @@ function(FormFieldModel) {
       e.preventDefault();
 
       var name = this.$el.find('.new-field-inp').val();
-      console.log(name);
       var fieldModel = self.entity.get('fields').push({name: name});
-      console.log(fieldModel);
       var formFieldModel = new FormFieldModel({name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')});
 
       if(fieldModel.get('type') == "email") {
@@ -271,10 +304,38 @@ function(FormFieldModel) {
         formFieldModel.set('displayType', "date-picker");
       }
 
-      this.model.get('fields').add(formFieldModel);
+      var ind = this.model.get('fields').models.length - 1;
+      this.model.get('fields').add(formFieldModel, {at: ind});
 
       $(e.target).hide();
       this.$el.find('.field-text').fadeIn();
+    },
+
+    deleteField: function(e) {
+      var id = String(e.target.id).replace('delete-btn-field-', '');
+      this.model.get('fields').remove(id);
+
+      e.stopPropagation();
+    },
+
+    keydownHandler: function(e) {
+      e.stopPropagation();
+    },
+
+    showTutorial: function() {
+      new TutorialView([6, 1]);
+    },
+
+    renderPossibleActions: function() {
+      var page_context = {};
+      page_context.pages = appState.pages;
+      var html = _.template(FormEditorTemplates.possibleActions, page_context);
+      this.$el.find('.goto-list').html(html);
+      return this;
+    },
+
+    onClose: function() {
+      $(window).unbind('keydown', this.keydownHandler);
     }
   });
 

@@ -60,19 +60,33 @@
       <h2 class="hoff1">App Info</h2>
       <hr class="hoff2">
       <div class="hoff2">
+        <h3 class="span10">Domains</h3>
+        <span class="span32 domains">
+          <a href="domain1.com">Domain.v1factory.com</a><br  />
+          <a href="#" class="btn" id="register-new-domain">Register a new domain</a>
+          <form class="register-domain-form" style="display:none;">
+            <input type="text" placeholder="Type the domain name..." class="span18 hi3 register-domain-input">
+            <a class="register-domain-button btn span10" style="display:none;">Register</a>
+          </form>
+        </span>
+      </div>
+      <hr class="hoff2 span50">
+      <div class="hoff2 span36">
         <h3 class="span10">Description</h3>
         <textarea class="span26 hi6" id="app-description" placeholder="Description of the application..."><%= description %></textarea>
       </div>
-      <hr>
-      <div class="hoff2">
+      <hr class="span50">
+      <div class="hoff2 span50">
         <h3 class="span10">Keywords</h3>
         <textarea class="span26 hi6" id="app-keywords" placeholder="Keywords..."><%= keywords %></textarea>
       </div>
-      <div class="hoff2">
-      <a class="btn hoff1" id="delete">Delete App</a>
+      
+      <hr class="span50">
+      <div class="span50 hi10">
+        <a class="btn hoff1 span8" id="delete">Delete App</a>
+      </div>
+      <div class="hoff8"></div>
     </div>
-    </div>
-    
   </div>
 </div>
 </script>

@@ -5,9 +5,16 @@ define([
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
   'app/collections/EntityCollection',
+  'app/tutorial/TutorialView',
   'app/templates/EntitiesTemplates'
 ],
-  function(FieldModel, EntityView, FormEditorView, UploadExcelView, ShowDataView, EntityCollection) {
+  function( FieldModel,
+            EntityView,
+            FormEditorView,
+            UploadExcelView,
+            ShowDataView,
+            EntityCollection,
+            TutorialView) {
 
     var UserEntityView = EntityView.extend({
 
@@ -23,7 +30,8 @@ define([
         'click .edit-form'           : 'clickedEditForm',
         'click .add-form-button'     : 'clickedAddForm',
         'submit .add-form-form'      : 'formFormSubmitted',
-        'blur  .property-name-input' : 'formSubmitted'
+        'blur  .property-name-input' : 'formSubmitted',
+        'click .q-mark-circle'        : 'showTutorial'
       },
 
       initialize: function() {
@@ -37,7 +45,8 @@ define([
                         'clickedDelete',
                         'modelRemoved',
                         'clickedPropDelete',
-                        'changedAttribs');
+                        'changedAttribs',
+                        'showTutorial');
 
         this.el = document.getElementById('user-entity');
         this.model = v1State.get('users');
@@ -45,7 +54,6 @@ define([
         this.entitiesColl = v1State.get('entities');
 
         this.model.get('fields').bind('add', this.appendField);
-        this.model.get('forms').bind('add', this.appendForm, this);
       },
 
       render: function() {
@@ -134,6 +142,10 @@ define([
         var attrib = props[0];
         var value = e.target.options[e.target.selectedIndex].value||e.target.value;
         this.model.get('fields').get(cid).set(attrib, value);
+      },
+
+      showTutorial: function() {
+        new TutorialView([3, 1]);
       }
     });
 

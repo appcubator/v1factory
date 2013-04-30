@@ -392,3 +392,18 @@ table tr:hover td {
 .description {
   display: inline-block;
 }
+
+.q-mark-circle {
+  display: inline-block;
+  width: 40px;
+  height: 30px;
+  background-image: url(../img/q-mark-gray.png);
+  background-repeat: no-repeat;
+  background-position: -94px -6px;
+  cursor: pointer;
+  vertical-align: top;
+}
+
+.q-mark-circle:hover {
+  background-position: -144px -6px;
+}

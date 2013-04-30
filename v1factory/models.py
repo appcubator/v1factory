@@ -311,4 +311,44 @@ def load_initial_themes():
   t._uie_state_json = s2
   t.full_clean()
   t.save()
-  print "Done"
+
+  return t
+
+class DomainRegistration(models.Model):
+  MAX_FREE_DOMAINS = 3
+
+  user = models.ForeignKey(User, related_name="domains", blank=True, null=True)
+  domain = models.CharField(max_length=50)
+  _domain_info_json = models.TextField()
+  dns_configured = models.IntegerField(default=0)
+
+  @property
+  def domain_info(self):
+    return simplejson.loads(self._domain_info_json)
+
+  #Audit field
+  created_on = models.DateTimeField(auto_now_add = True)
+  updated_on = models.DateTimeField(auto_now = True)
+
+  from v1factory.domains import DomainAPI
+  api = DomainAPI()
+
+  @classmethod
+  def check_availability(self, domain):
+    return DomainRegistration.api.check_availability(domain)
+
+  @classmethod
+  def register_domain(self, domain, test_only=False):
+    d = cls()
+    d.domain = d
+    if test_only:
+      d._domain_info_json = "lol"
+    else:
+      d._domain_info_json = simplejson.dumps(DomainRegistration.api.register_domain(domain, money_mode=True))
+      d.save()
+    return d
+
+  def configure_dns(self, staging=True):
+    DomainRegistration.api.configure_domain_records(domain, staging=staging)
+    self.dns_configured = 1
+    self.save()

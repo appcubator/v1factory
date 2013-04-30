@@ -21,7 +21,6 @@ function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollect
       this.set('uielements', new WidgetCollection());
       var self = this;
       _(bone.uielements).each(function(uielement) {
-        console.log(uielement);
         if(uielement.container_info) {
           self.get('uielements').push(new ContainerWidgetModel(uielement));
         }

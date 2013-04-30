@@ -118,7 +118,7 @@ class DomainAPI(object):
         }
     }
     if not staging:
-      assert False # TODO change the content of A record to production server IP addr
+      a_post_data['content'] = "107.21.224.34"
 
     try:
       status_code, response = self.call_api("/domains/%s/records" % domain, simplejson.dumps(a_post_data), method="post")

@@ -11,8 +11,6 @@ function(WidgetModel,
     selectedEl: null,
 
     initialize: function(bone) {
-      console.log(bone);
-
       _.bindAll(this, 'selectWidgetById',
                       'select',
                       'unselectAll');
@@ -38,7 +36,6 @@ function(WidgetModel,
     },
 
     select : function(model) {
-      console.log(model);
       this.selectedEl = model;
       model.set('selected', true);
       this.trigger('selected');

@@ -3,7 +3,7 @@ define([
   'app/models/UserEntityModel',
   'app/models/ContainerWidgetModel',
   'app/models/WidgetModel',
-  'iui'
+  'dicts/constant-containers'
 ],
 function(ElementCollection,
          UserEntityModel,
@@ -74,24 +74,25 @@ function(ElementCollection,
 
       var self = this;
 
-      if(this.userModel.has('forms')) {
-        _(this.userModel.get('forms').models).each(function(form) {
 
-            var html = _.template(Templates.formButton, {entity: {cid: "user"},
-                                                                  form: form});
-            $(self.allList).append(html);
-        });
+      if(appState.users.local) {
+        var tempLocal = '<li id="entity-user-Local Login" class="login authentication">'+
+                     '<span class="name">Login Form</span></li>';
+
+        //$(this.userList).append(tempFb);
+        $(self.allList).append(tempLocal);
       }
 
       if(appState.users.facebook) {
-        var tempFb = '<li id="entity-user" class="facebook entity">'+
+        var tempFb = '<li id="entity-user-facebook" class="facebook authentication">' +
                      '<span class="name">Facebook Login Button</span></li>';
 
         //$(this.userList).append(tempFb);
         $(self.allList).append(tempFb);
       }
+
       if(appState.users.twitter) {
-        var tempTw = '<li id="entity-user" class="twitter entity">'+
+        var tempTw = '<li id="entity-user-twitter" class="twitter authentication">'+
                      '<span class="name"> Twitter Button</span></li>';
 
         //$(this.userList).append(tempTw);
@@ -99,7 +100,7 @@ function(ElementCollection,
       }
 
       if(appState.users.linkedin) {
-        var tempLi = '<li id="entity-user" class="linkedin entity">'+
+        var tempLi = '<li id="entity-user-linkedin" class="linkedin authentication">'+
                      '<span class="name">LinkedIn Login Button</span></li>';
 
         //$(this.userList).append(tempLi);
@@ -113,9 +114,20 @@ function(ElementCollection,
         name : "User",
         cid : "user"
       };
+
       $(this.allList).append(_.template(Templates.tempLiTable, context));
 
       $('.entity').draggable({
+        cursor: "move",
+        cursorAt: { top: 0, left: 0 },
+        helper: "clone",
+        start : function(e) {
+          self.dragActive = true;
+        },
+        stop: self.dropped
+      });
+
+      $('.authentication').draggable({
         cursor: "move",
         cursorAt: { top: 0, left: 0 },
         helper: "clone",
@@ -308,27 +320,43 @@ function(ElementCollection,
       var hash, entityCid, formCid, action;
       var entity, form, field;
 
-      if(/(entity)/.exec(className)) {
+      if(/(authentication)/.exec(className)) {
+        var formType = String(id).replace('entity-user-','');
+        form = constantContainers[formType];
+        console.log(form);
+        widget.container_info = {};
+        widget.container_info.entity = "User";
+        widget.container_info.action = "signup";
+        widget.container_info.form = form;
+        var widgetContainerModel = new ContainerWidgetModel(widget);
+        this.widgetsCollection.push(widgetContainerModel);
+
+      }
+      else if(/(entity)/.exec(className)) {
 
         hash      = String(id).split('-');
+        console.log(id);
+        console.log(hash);
         entityCid = hash[1];
         formCid   = hash[2];
         action    = className.split(' ')[0];
 
         if(entityCid === 'user'){
           entity = v1State.get('users');
-          form = entity.get('forms').get(formCid);
+          console.log(formCid);
+          console.log(form);
         }
         else {
           entity = v1State.get('entities').get(entityCid);
-          form = entity.get('forms').get(formCid);
+          //form = entity.get('forms').get(formCid);
         }
 
         widget.container_info = {};
         widget.container_info.entity = entity;
         widget.container_info.action = action;
+
         if(form) {
-          widget.container_info.form = '{{' + form.get('name') + '}}';
+          widget.container_info.form = form;
         }
 
         var widgetContainerModel = new ContainerWidgetModel(widget);

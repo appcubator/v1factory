@@ -19,7 +19,7 @@ function() {
 
       this.set('label', (bone.label||bone.name));
       this.set('placeholder', (bone.placeholder||bone.name));
-      this.set('options', []);
+      this.set('options', bone.options||[]);
     }
   });
 

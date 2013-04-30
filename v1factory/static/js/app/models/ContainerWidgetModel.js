@@ -43,7 +43,7 @@ function(WidgetModel,
       }
 
       if(this.get('container_info').has('form')) {
-        //console.log(this.get('container_info').get('form'));
+
       }
       else if(constantContainers[this.get('container_info').get('action')]) {
         this.get('container_info').set('uielements',  new WidgetCollection());
@@ -59,7 +59,6 @@ function(WidgetModel,
         var action = this.get('container_info').get('action') ;
 
         if(action == "create") {
-          console.log(this);
           if(!this.get('container_info').has('form')) {
             var form = new FormModel({}, this.get('container_info').get('entity'));
             this.get('container_info').set('form', form);
