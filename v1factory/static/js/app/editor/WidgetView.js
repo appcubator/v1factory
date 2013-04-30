@@ -132,7 +132,6 @@ define([
 
     outlineSelected: function() {
 
-
       if(this.model.get('selected')) {
         $(this.el).addClass('selected');
         this.el.style.zIndex = 2000;

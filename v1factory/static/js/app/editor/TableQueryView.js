@@ -13,7 +13,7 @@ define([
       'change .sort-by'             : 'sortByChanged',
       'click .done-btn'             : 'closeModal'
     },
-    initialize: function(widgetModel, queryModel) {
+    initialize: function(widgetModel) {
       _.bindAll(this, 'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
@@ -22,7 +22,7 @@ define([
                       'changeDescription');
 
       this.widgetModel = widgetModel;
-      this.model = queryModel;
+      this.model = widgetModel.get('container_info').get('query');
       this.entity = widgetModel.get('container_info').get('entity');
       this.render();
 

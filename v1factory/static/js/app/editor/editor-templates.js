@@ -50,7 +50,6 @@ Templates.tempHrefSelect = [
   '</select>'
 ].join('\n');
 
-
 Templates.tempSourceSelect = [
   '<select class="statics"  id="prop-<%= hash %>">',
   '<option class="upload-image">Placeholder</option>',
