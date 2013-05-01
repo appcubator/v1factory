@@ -1,25 +1,38 @@
 <script type="text/template" id="tutorial-intro">
-  <p>Welcome to v1 Factory Alpha!</p>
-  <p>v1 Factory is a site builder that helps you build your dynamic website fast, without writing code.</p>
-  <p>This tutorial will help you understand the basics of building a website using v1 Factory, and by the end of it, you'll have a live, working site, and you'll be able to download your site's codebase.</p>
+  <p>Hi {{ user.first_name }}!</p>
+
+  <p>This tutorial, consisting of short slides, aims to help you understand the basics of using v1Factory. Please read through them once before you start and ask us any questions you have.</p>
+
+  <p>Through out your experiences, you can refer back to this guide by clicking the question marks on the right side of the pages or next to elements. They will bring you to the right slide!</p>
+
+  <div class="images">
+  <img height="50" class="img-polaroid" src="{{ STATIC_URL }}img/tutorial/q-mark1.png">
+  <img height="50" class="img-polaroid" src="{{ STATIC_URL }}img/tutorial/q-mark2.png">
+  </div>
+  <p>By the end of it, you'll have a live, working application, and you will even be able to download the code written for you! We expect this tutorial to take ~15 minutes.</p>
 </script>
 
 
 <script type="text/template" id="tutorial-overview">
-  <p>There are several components to a site built using v1 Factory:</p>
+  <p><strong>"What's an application?"</strong>, you might ask. We want to give you an overview of how things work on a running applcation, no matter how big or small it is.</p>
+  <p>You can think of a web application like a operating a restaurant. There are many different parts to it, such as:</p>
+  <ul>
+    <li>The presentation. How things look is an important part of any business. If things look good and elegant, it's likely that you will have more customers and a better business.</li>
+    <li>Storage; You need to store things, such as the food, somewhere in your restaurant so that you can serve them when it's the time.</li>
+    <li>Customer Input; You need to learn what your customers want so that you can serve the right thing.</li>
+  </ul>
 
-  <h2>Data storage</h2>
-  <p>Control your application's data, such as users, listings, likes, comments, etc.</p>
-
-  <h2>Design</h2>
-  <p>Customize the overall look and feel of your site, including colors, fonts, buttons, etc.</p>
-
-  <h2>Pages</h2>
-  <p>Customize the layout, content, and logic of your pages.</p>
 </script>
 
 <script type="text/template" id="tutorial-app_info">
-<p>***Here are some keywords that will be used to help people find your site via a search engine like google.</p>
+<p>
+This page helps set up the basics of the application.
+</p>
+<ul>
+  <li><strong>Domain;</strong> You can register your domain address here and your app will show up on these domains. v1Factory gives you a test domain by default.</li>
+  <li><strong>Descript;</strong> This information will be added as meta-data to your pages and increase the visibility of your site on Google.</li>
+  <li><strong>Keywords;</strong> Adding descriptive keywords will increase your SEO. Try to refrain from generic words, and try to add as specific words as possible.</li>
+
 </script>
 
 <script type="text/template" id="tutorial-data_storage">

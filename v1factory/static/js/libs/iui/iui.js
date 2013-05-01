@@ -179,7 +179,7 @@ define(['jquery-ui'], function() {
             $(this).remove();
           });
           //.parentNode.removeChild(elem);
-        },2000);
+        },800);
       }
     }
   };

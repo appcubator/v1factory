@@ -64,7 +64,8 @@ def app_page(request, app_id):
                                            'app_id' : long(app_id),
                                            'title'  : 'The Garage',
                                            'themes' : simplejson.dumps(list(themes)),
-                                           'apps'   : request.user.apps.all()})
+                                           'apps'   : request.user.apps.all(),
+                                           'user'   : request.user})
 
 @require_POST
 @login_required

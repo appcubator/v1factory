@@ -42,7 +42,7 @@ function() {
       this.hideChanged();
 
       _(appState.pages).each(function(page) {
-        self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'}}">' + page.name +'</option>');
+        self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'">' + page.name +'</option>');
       });
     },
 
@@ -91,13 +91,15 @@ function() {
       this.$el.find('#brand-name-input').val(this.model.get('brandName'));
     },
 
-    submittedBrandName: function() {
+    submittedBrandName: function(e) {
       var brandName = this.$el.find('#brand-name-input').val();
       this.$el.find('#brand-name').html(brandName);
       this.model.set('brandName', brandName);
       this.$el.find('#brand-name').fadeIn();
       this.$el.find('#brand-name-form').hide();
       this.$el.find('#brand-name-input').val('');
+
+      e.preventDefault();
     }
   });
 

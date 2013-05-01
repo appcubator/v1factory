@@ -1572,36 +1572,6 @@ h3.edit-url {
 }
 
 
-.modal.query-modal {
-  padding: 0!important;
-}
-
-.modal.query-modal .sect {
-  padding: 0px 20px;
-}
-
-.modal.query-modal p {
-  margin-bottom: 6px;
-}
-
-.modal.query-modal input {
-  border-width: 1px !important;
-}
-
-.modal.query-modal label {
-  margin-top: 0px;
-  padding: 4px;
-}
-
-.modal.query-modal label input[type="checkbox"], .modal.query-modal label input[type="radio"] {
-  margin-top: -4px;
-  margin-right: 4px;
-}
-
-.modal.query-modal label input[type="text"] {
-  width: 40px;
-  margin-top: 4px;
-}
 
 .navbar .hide-btn#hide-toggle {
   display: inline-block;
@@ -1809,4 +1779,13 @@ h3.edit-url {
 
 .single-data, .entity {
   background-color: #2b3545;
+}
+
+#brand-name-form {
+  margin-bottom: 0;
+}
+
+#brand-name-input {
+  height: 32px;
+  margin: 0;
 }
