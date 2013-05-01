@@ -302,13 +302,8 @@ class ApiKeyUses(models.Model):
 
 def load_initial_themes():
   s = get_default_data('flat_ui_theme.json')
-  s2 = get_default_data('bootstrap_theme.json')
   t = UITheme(name="Flat UI Kit")
-  t._uie_state_json = s
-  t.full_clean()
-  t.save()
-  t = UITheme(name="Bootstrap")
-  t._uie_state_json = s2
+  t.set_state(simplejson.loads(s))
   t.full_clean()
   t.save()
 
