@@ -632,7 +632,9 @@ def register_domain(request, domain):
 def log_slide(request):
   title     = request.POST['title']
   directory = request.POST['directory']
-  TutorialLog.create_log(request.user, title, directory)
+
+  if title is not None or directory is not None:
+    TutorialLog.create_log(request.user, title, directory)
 
   d = {}
   d['percentage'] = TutorialLog.get_percentage(request.user)
