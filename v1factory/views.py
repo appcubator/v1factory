@@ -60,7 +60,6 @@ def app_page(request, app_id):
   themes = UITheme.objects.all();
   themes = [t.to_dict() for t in themes]
 
-  print list(themes)
   return render(request, 'app-show.html', {'app'    : app,
                                            'app_id' : long(app_id),
                                            'title'  : 'The Garage',
@@ -447,7 +446,6 @@ def theme_show(request, theme):
 def theme_info(request, theme_id):
   theme = get_object_or_404(UITheme, pk = theme_id)
   page_context = { 'title' : theme.name , 'themeId':  theme.pk, 'theme' : theme._uie_state_json }
-  print page_context
   return HttpResponse(simplejson.dumps(page_context), mimetype="application/json")
 
 @login_required
