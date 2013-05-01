@@ -1,5 +1,6 @@
 define([
   'mixins/BackboneModal',
+  'answer',
   './TutorialDict'
 ],
 function(Backbone) {
@@ -18,6 +19,7 @@ function(Backbone) {
       _.bindAll(this, 'render',
                       'renderLeftMenu',
                       'renderMainModal',
+                      'parseAnswers',
                       'appendMenuItem',
                       'clickedMenuItem',
                       'chooseSlide',
@@ -28,6 +30,9 @@ function(Backbone) {
 
       this.render();
       this.chooseSlide(this.addr, true);
+      this.reader = new answer();
+      this.parseAnswers(TutorialDirectory);
+      console.log(this.reader.match("how to setup domain?"));
 
       $(window).bind('keydown', this.keyhandler);
     },
@@ -90,6 +95,20 @@ function(Backbone) {
           self.appendMenuItem(menuUl, item.contents, ind);
           node.appendChild(menuUl);
         }
+      });
+    },
+
+    parseAnswers: function(dict) {
+      var self = this;
+      _(dict).each(function(item) {
+        console.log(item.view);
+        if(item.view) {
+          self.reader.read(iui.getHTML(item.view));
+        }
+
+        // if(item.contents) {
+        //   self.parseAnswers(item.contents);
+        // }
       });
     },
 
