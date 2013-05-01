@@ -221,15 +221,6 @@ textarea {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  color: #333333;
-  background-color: #ffffff;
-}
-
 a {
   color: #0088cc;
   text-decoration: none;
@@ -5367,7 +5358,8 @@ a.badge:hover {
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/*  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+font-family: "freight-sans-pro", sans-serif;
   font-size: 14px;
   line-height: 20px;
   background-color: #fff;

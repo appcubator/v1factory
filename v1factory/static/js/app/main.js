@@ -53,7 +53,7 @@ function (AppModel,
           TutorialView,
           InfoView,
           EntitiesView,
-          hemesGalleryView,
+          ThemesGalleryView,
           PagesView,
           OverviewPageView) {
 
