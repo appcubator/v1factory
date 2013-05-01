@@ -340,3 +340,20 @@ class DomainRegistration(models.Model):
     DomainRegistration.api.configure_domain_records(domain, staging=staging)
     self.dns_configured = 1
     self.save()
+
+class TutorialLog(models.Model):
+  user = models.ForeignKey(User, related_name="logs")
+  opened_on = models.DateTimeField(auto_now_add = True)
+  title =  models.CharField(max_length=300, blank = True)
+  directory =  models.CharField(max_length=50, blank = True)
+
+  @classmethod
+  def create_log(cls, user, title, directory):
+    log = cls(user = user, title = title, directory = directory)
+    log.save()
+
+  @classmethod
+  def get_percentage(cls, user):
+    log = cls.objects.filter(user=user).exclude(directory='').values("directory").annotate(n=models.Count("pk"))
+    percentage = (len(log)*100) / 15
+    return percentage

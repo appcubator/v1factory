@@ -51,6 +51,9 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/editor/(\d+)$', 'app_editor'),
     url(r'^app/(\d+)/', 'app_page'),
 
+    # tutorial and logging
+    url(r'^log/slide/$', 'log_slide'),
+
     url(r'^uielement/new/$', 'new_uielement'),
 
     url(r'^hipsterdesignersonly/$', 'designer_page'),

@@ -6,7 +6,7 @@ from django.shortcuts import redirect,render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts
+from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts, TutorialLog
 from v1factory.email.sendgrid_email import send_email
 from v1factory.models import DomainRegistration
 
@@ -626,3 +626,15 @@ def register_domain(request, domain):
 
   # afterwards in a separate worker
   #d.configure_dns(domain, staging=settings.STAGING)
+
+@require_POST
+@login_required
+def log_slide(request):
+  title     = request.POST['title']
+  directory = request.POST['directory']
+  TutorialLog.create_log(request.user, title, directory)
+
+  d = {}
+  d['percentage'] = TutorialLog.get_percentage(request.user)
+
+  return JSONResponse(d)
