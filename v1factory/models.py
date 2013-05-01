@@ -296,7 +296,7 @@ class ApiKeyUses(models.Model):
 def load_initial_themes():
   s = get_default_theme_state()
   t = UITheme(name="Flat UI Kit")
-  t.set_state(s)
+  t.set_state(simplejson.loads(s))
   t.full_clean()
   t.save()
   print "Done"
