@@ -1789,3 +1789,23 @@ h3.edit-url {
   height: 32px;
   margin: 0;
 }
+
+@media all and (max-width: 1340px) {
+  .page-wrapper {
+    width: 964px;
+    top: 32px;
+    margin-left: -483px;
+  }
+
+  .url-bar {
+    width: 946px;
+  }
+
+  .page.full {
+    width: 960px;
+  }
+
+  #elements-container {
+    margin-left: 0;
+  }
+}

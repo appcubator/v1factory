@@ -11,7 +11,8 @@ function(Backbone) {
     addr : [0],
 
     events : {
-      "click #tutorial-menu-list li" : "clickedMenuItem"
+      "click #tutorial-menu-list li" : "clickedMenuItem",
+      "submit .tutorial-q-form" : 'submittedQuestion'
     },
 
     initialize: function(directory) {
@@ -22,7 +23,9 @@ function(Backbone) {
                       'clickedMenuItem',
                       'chooseSlide',
                       'selectMenu',
-                      'keyhandler');
+                      'keyhandler',
+                      'submittedQuestion',
+                      'showQuestionSlide');
 
       if(directory) this.addr = directory;
 
@@ -65,7 +68,7 @@ function(Backbone) {
       menuUl.id = "tutorial-menu-list";
 
       var searchLi = document.createElement('div');
-      searchLi.innerHTML = '<form class="tutorial-q-form"><input type="text" placeholder="Type your question here..."></form>';
+      searchLi.innerHTML = '<form class="tutorial-q-form"><input type="text" class="q-input" placeholder="Type your question..."><input class="btn" type="submit" value="?"></form>';
       searchLi.className = "search-bar";
 
       this.appendMenuItem(menuUl, TutorialDirectory);
@@ -116,7 +119,7 @@ function(Backbone) {
             obj = obj.contents[addr[1]];
           }
 
-          self.showSlide(obj);
+          self.showSlide(obj, addr);
 
         });
 
@@ -130,7 +133,7 @@ function(Backbone) {
           obj = obj.contents[addr[1]];
         }
 
-        this.showSlide(obj);
+        this.showSlide(obj, addr);
       }
 
 
@@ -142,10 +145,28 @@ function(Backbone) {
       $('#'+addrStr).addClass('selected');
     },
 
-    showSlide: function(obj) {
-      console.log(obj);
+    showSlide: function(obj, addr) {
       var title = '<h2>'+ obj.title + '</h2><div class="main-img" style="background-img:url('+ obj.img +')"></div>';
       $('.tutorial-content').html(title + '<div class="text-cont">' + iui.getHTML(obj.view) +'</div>');
+
+      $.ajax({
+          type: "POST",
+          url: '/log/slide/',
+          data: {
+            title: obj.title,
+            directory: addr.join(',')
+          },
+          success: function(data) {
+          },
+          dataType: "JSON"
+      });
+
+
+    },
+
+    showQuestionSlide: function(question) {
+      var title = '<h2>'+ 'Question' + '</h2><div class="main-img" style="background-img:url(/static/large-q-mark.png)">'+ question +'</div>';
+      $('.tutorial-content').html(title + '<div class="text-cont"></div>');
     },
 
     selectNext: function (obj) {
@@ -212,6 +233,25 @@ function(Backbone) {
          self.closeModal();
          break;
       }
+    },
+
+    submittedQuestion: function(e) {
+      var question = this.$el.find('.q-input').val();
+
+      $.ajax({
+        type: "POST",
+        url: '/log/slide/',
+        data: {
+          directory: null,
+          title : question
+        },
+        success: function(data) {
+        },
+        dataType: "JSON"
+      });
+
+      this.showQuestionSlide(question);
+      e.preventDefault();
     },
 
     onClose: function() {

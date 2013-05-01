@@ -209,3 +209,12 @@
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 2002;
 }
+
+.tutorial-q-form input[type="text"] {
+  width: 150px;
+}
+
+.tutorial-q-form .btn {
+  vertical-align: top;
+  margin-left: 6px;
+}
