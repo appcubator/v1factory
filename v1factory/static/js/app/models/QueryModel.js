@@ -8,7 +8,7 @@ define(['backbone'], function() {
       this.set('fieldsToDisplay', bone.fieldsToDisplay||[]);
       this.set('belongsToUser', bone.belongsToUser||false);
       this.set('sortAccordingTo', bone.sortAccordingTo||"Date");
-      this.set('numberOfRows', bone.numberOfRows||0);
+      this.set('numberOfRows', bone.numberOfRows||-1);
     }
 
   });

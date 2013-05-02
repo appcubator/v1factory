@@ -115,7 +115,6 @@ function(WidgetModel,
         if(!self.get('container_info').has('query')) {
           var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
           self.get('container_info').set('query', queryModel);
-          new TableQueryView(self, queryModel);
         }
 
       }

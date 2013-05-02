@@ -658,6 +658,11 @@ body {
   border: 2px solid #666;
   border-color: rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.45);
   box-shadow: 0 0 30px 2px rgba(120, 120, 120, 0.4);
+
+  transition: width 0.2s;
+  -moz-transition: width 0.2s;
+  -webkit-transition: width 0.2s;
+  -o-transition: width 0.2s;
 }
 
 .url-bar {
@@ -674,6 +679,11 @@ body {
   cursor: pointer;
   -webkit-transition: border-color 60ms linear;
   -webkit-transition: box-shadow 60ms linear;
+
+  transition: width 0.2s;
+  -moz-transition: width 0.2s;
+  -webkit-transition: width 0.2s;
+  -o-transition: width 0.2s;
 }
 
 .url-bar:hover {
@@ -694,9 +704,12 @@ body {
   border-color: rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.45);
   overflow-y: scroll;
   overflow-x: visible;
-/*  border: 1px solid #aaa;
-*//*  box-shadow: 0 0 40px 6px rgba(90, 90, 90, 0.6);
-*/}
+
+  transition: width 0.2s;
+  -moz-transition: width 0.2s;
+  -webkit-transition: width 0.2s;
+  -o-transition: width 0.2s;
+}
 
 .page .navbar {
   line-height: 20px;
