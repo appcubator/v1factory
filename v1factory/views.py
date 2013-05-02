@@ -227,7 +227,7 @@ def process_user_excel(request, app_id):
   f = request.FILES['file_name']
   app = get_object_or_404(App, id=app_id, owner=request.user)
 
-  data = { "api_secret": "deployinG!!" }
+  data = { "api_secret": "uploadinG!!" }
   files = { 'excel_file': f }
   r = requests.post(app.url() + "user_excel_import/", data=data, files=files)
 
