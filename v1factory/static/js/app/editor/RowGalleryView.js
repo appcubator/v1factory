@@ -5,7 +5,7 @@ function(ElementCollection) {
 
   var RowGalleryView = Backbone.View.extend({
     el       : null,
-    className: 'elements-list',
+    className: 'elements-list item-gallery',
     events : {
     },
 
