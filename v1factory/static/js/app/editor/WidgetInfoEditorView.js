@@ -1,20 +1,22 @@
 define([
   'app/editor/TableQueryView',
-  'backbone'
+  'app/editor/ListEditorView'
 ],
-function(TableQueryView) {
+function(TableQueryView, ListEditorView) {
 
   var WidgetInfoEditorView = Backbone.View.extend({
     el     : document.getElementById('content-editor'),
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'click .edit-query-button' : 'queryEditClicked'
+      'click .edit-query-button' : 'queryEditClicked',
+      'click .edit-row-button'   : 'rowEditClicked'
     },
 
     initialize: function(widgetModel){
       _.bindAll(this, 'render',
                       'renderQueryButton',
+                      'rowEditClicked',
                       'queryEditClicked');
 
       this.model = widgetModel;
@@ -25,6 +27,10 @@ function(TableQueryView) {
       var self = this;
 
       this.el.appendChild(this.renderQueryButton());
+
+      if(this.model.get('container_info').has('row')) {
+        this.el.appendChild(this.renderRowButton());
+      }
     },
 
     renderQueryButton: function() {
@@ -34,8 +40,29 @@ function(TableQueryView) {
       return li;
     },
 
+    renderRowButton: function() {
+      var li       = document.createElement('li');
+      li.className = 'option-button edit-row-button';
+      li.innerHTML = 'Edit Row View';
+      return li;
+    },
+
     queryEditClicked: function() {
-      new TableQueryView(this.model);
+      var type = 'table';
+      if(this.model.get('container_info').has('row')) {
+        type = 'list';
+      }
+
+      new TableQueryView(this.model, type);
+    },
+
+    rowEditClicked: function() {
+      //widgetModel, queryModel, rowModel
+      console.log(this.model);
+      console.log(this.model.get('container_info').get('query'));
+      new ListEditorView(this.model,
+                         this.model.get('container_info').get('query'),
+                         this.model.get('container_info').get('row'));
     },
 
     clear: function() {

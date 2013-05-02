@@ -124,19 +124,20 @@ Templates.fieldNode = [
 ].join('\n');
 
 Templates.queryView = [
-  '<h1 class="title"><%= entity.get(\'name\') %> <% if(c.row) { print(\'List\'); } else { print(\'Table\'); } %></h1>',
+  '<h1 class="title"><%= entity.get(\'name\') %> <% if(type == "list") { print(\'List\'); } else { print(\'Table\'); } %></h1>',
   '<small>',
   '<p id="query-description"><%= c.nLang %></p>',
   '</small>',
   '<div class="sections-container">',
+    '<% if(type == "table") { %>',
     '<div class="sect">',
     '<p>What fields would you like to display?</p>',
-
     '<% _.each(entity.get("fields").models, function(field) { %>',
       '<% var checked = \'\'; var u_id = field.cid; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) { checked = \'checked\'; } %>',
       '<label><input class="fields-to-display btn" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %></label>',
     '<% }) %>',
     '</div>',
+    '<% } %>',
     '<div class="sect">',
     '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
     '<p>Do you want to show the rows that just belong to the logged in user?</p>',

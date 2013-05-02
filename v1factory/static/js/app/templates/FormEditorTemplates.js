@@ -9,7 +9,7 @@ var FieldTypes = {
   "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" placeholder="<%= field.get(\'placeholder\') %>"></div>',
   "button"           : '<div class="btn"><%= field.get(\'placeholder\') %></div>',
   "image-uploader"   : '<input type="file" placeholder="<%= field.get(\'placeholder\') %>">',
-  "date-picker"      : 'date picker will be here.<input type="text" placeholder="<%= field.get(\'placeholder\') %>">'
+  "date-picker"      : '<input type="text" style="width:40px;" placeholder="mm">/<input type="text" style="width:40px;" placeholder="dd">/<input type="text" style="width:60px;" placeholder="yyyy">'
 };
 
 

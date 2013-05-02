@@ -49,6 +49,11 @@ def app_new(request):
     except Exception, e:
       return render(request,  'apps-new.html', {'old_name': app_name, 'errors':e}, status=400)
     a.save()
+    d_user = {
+      'user_name' : request.user.username,
+      'date_joined' : str(request.user.date_joined)
+    }
+    a.deploy(simplejson.dumps(d_user))
     return redirect(app_page, a.id)
 
 @require_GET
@@ -214,6 +219,20 @@ def process_excel(request, app_id):
   for sheet in xl_data:
     add_xl_data(xl_data, fe_data, app_state_entities, d.app_dir + "/db")
   return HttpResponse("ok")
+
+@login_required
+@csrf_exempt
+@require_POST
+def process_user_excel(request, app_id):
+  f = request.FILES['file_name']
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+
+  data = { "api_secret": "uploadinG!!" }
+  files = { 'excel_file': f }
+  r = requests.post(app.url() + "user_excel_import/", data=data, files=files)
+
+  return HttpResponse(r.content, status=r.status_code, mimetype="application/json")
+
 
 @login_required
 @require_POST

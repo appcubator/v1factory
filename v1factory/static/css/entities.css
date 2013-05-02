@@ -407,3 +407,48 @@ table tr:hover td {
 .q-mark-circle:hover {
   background-position: -144px -6px;
 }
+
+.dragndrop {
+  display: block;
+  height: 420px;
+  width: 100%;
+  border: 4px dashed #ccc;
+}
+
+.dragndrop:hover {
+  background-color: #eee;
+}
+
+.dragndrop form {
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dragndrop span {
+  font-size: 24px;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  line-height: 32px;
+}
+
+.dragndrop .pick-btn {
+  margin-top: 30px;
+}
+
+.progressHolder {
+  width: 340px;
+  margin-left: auto;
+  margin-right:auto;
+}
+
+.progressHolder .progress {
+  background-color: #0088cc;
+  background-image: none;
+}
+
+.preview {
+  display: block;
+  width: 100%;
+  text-align: center;
+}

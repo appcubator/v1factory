@@ -89,7 +89,7 @@
                     "isSingle": true,
                     "tagName": "img",
                     "hoverStyle": "",
-                    "class_name": "img-height-fixed",
+                    "class_name": "full-width-height",
                     "container_info": null,
                     "content": "",
                     "content_attribs": {

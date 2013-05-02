@@ -127,6 +127,9 @@ class App(models.Model):
       subdomain = subdomain + '.staging'
     return subdomain
 
+  def url(self):
+    return "http://%s.v1factory.com/" % self.subdomain()
+
   def github_url(self):
     return "https://github.com/v1factory/" + self.subdomain()
 
