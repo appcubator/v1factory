@@ -53,7 +53,7 @@
             "isSingle": true,
             "tagName": "img",
             "hoverStyle": "",
-            "class_name": "img-width-fixed",
+            "class_name": "full-width-height",
             "content": null,
             "content_attribs": {
                 "src": "/static/img/placeholder.png"
