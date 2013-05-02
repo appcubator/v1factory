@@ -49,6 +49,11 @@ def app_new(request):
     except Exception, e:
       return render(request,  'apps-new.html', {'old_name': app_name, 'errors':e}, status=400)
     a.save()
+    d_user = {
+      'user_name' : request.user.username,
+      'date_joined' : str(request.user.date_joined)
+    }
+    a.deploy(simplejson.dumps(d_user))
     return redirect(app_page, a.id)
 
 @require_GET
