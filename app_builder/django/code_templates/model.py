@@ -6,6 +6,10 @@ class {{ model.identifier() }}(models.Model):
 {% if model.identifier() == "UserProfile" %}
 def upload_user_excel(upldr):
 
+  created_cnt = 0
+  updated_cnt = 0
+  errors = []
+
   field_name_map = {   # will be used for setting attributes later
     {% for f in model.fields.each() %}
     "{{ f.name }}": "{{ f.identifier() }}",
@@ -21,10 +25,6 @@ def upload_user_excel(upldr):
   data = upldr.extract_data(common_fields)
 
   password_present = "password" in common_fields
-
-  created_cnt = 0
-  updated_cnt = 0
-  errors = []
 
   # For each row in the excel data
   for entry in data:
