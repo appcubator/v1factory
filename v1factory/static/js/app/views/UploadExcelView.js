@@ -82,6 +82,20 @@ function(Backbone) {
 
         uploadStarted:function(i, file, len){
           self.$el.find('.dragndrop').append('<div class="file-info">'+ file.name +'</div>');
+
+          var tmpl = '<a class="preview">'+
+            '<span class="imageHolder">'+
+              '<img src="" class="document-icon"/>'+
+              '<span class="uploaded"></span></span>'+
+            '<div class="progressHolder">'+
+              '<div class="progress"></div></div></a>';
+
+          tmpl = $(tmpl);
+          //var preview = $('div').html(tmpl);
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          self.$el.find('.dragndrop').append(tmpl);
+          $.data(file,tmpl);
           // var tmpl = '<a class="preview">'+
           //   '<span class="imageHolder">'+
           //     '<img src="" class="document-icon"/>'+

@@ -415,6 +415,10 @@ table tr:hover td {
   border: 4px dashed #ccc;
 }
 
+.dragndrop:hover {
+  background-color: #eee;
+}
+
 .dragndrop form {
   text-align: center;
   width: 100%;
