@@ -224,7 +224,7 @@ def process_user_excel(request, app_id):
 
   data = { "api_secret": "deployinG!!" }
   files = { 'excel_file': f }
-  r = requests.post(app.url(), data=data, files=files)
+  r = requests.post(app.url() + "user_excel_import/", data=data, files=files)
 
   return HttpResponse(r.content, status=r.status_code, mimetype="application/json")
 
