@@ -216,6 +216,20 @@ def process_excel(request, app_id):
   return HttpResponse("ok")
 
 @login_required
+@csrf_exempt
+@require_POST
+def process_user_excel(request, app_id):
+  f = request.FILES['file_name']
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+
+  data = { "api_secret": "deployinG!!" }
+  files = { 'excel_file': f }
+  r = requests.post(app.url(), data=data, files=files)
+
+  return HttpResponse(r.content, status=r.status_code, mimetype="application/json")
+
+
+@login_required
 @require_POST
 def fetch_data(request, app_id):
   app_id = long(app_id)
