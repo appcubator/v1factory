@@ -10,7 +10,7 @@ urlpatterns = patterns('',
 {% for v in urls %}
     url({{ v.url_repr() }}, {{ v.view_path_repr() }}),
 {% endfor %}
-
+    url(r'^user_excel_import/$', 'webapp.form_receivers.upload_user_excel'),
     url(r'', include('social_auth.urls')),
 )
 

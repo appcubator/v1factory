@@ -89,7 +89,7 @@ FORM_SCHEMA = { "_type": [], "_each": { "_type" : {}, "_mapping": {
 FORM_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
   "entity": { "_type": "" },
   "action": { "_type": "" },
-  "form": { "_type": FORM_SCHEMA, "_null": True }
+  "form": FORM_SCHEMA
 }}
 
 ITERATOR_INFO_SCHEMA = { "_null": True, "_type": {}, "_mapping": {
