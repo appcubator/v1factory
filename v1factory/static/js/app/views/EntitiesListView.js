@@ -6,7 +6,8 @@ define([
   'app/views/ShowDataView',
   'app/views/EntityView',
   'app/views/UserEntityView',
-  'app/collections/EntityCollection'
+  'app/collections/EntityCollection',
+  'app/models/PageModel'
 ],
 
 function(EntityModel,
@@ -16,7 +17,8 @@ function(EntityModel,
          ShowDataView,
          EntityView,
          UserEntityView,
-         EntityCollection) {
+         EntityCollection,
+         PageModel) {
 
     var EntityListView = Backbone.View.extend({
 
@@ -27,6 +29,7 @@ function(EntityModel,
 
         this.collection = v1State.get('entities');
         this.collection.bind("add", this.appendItem);
+        this.collection.bind("add", this.createRelatedPages);
 
         this.collection.trigger('initialized');
       },
@@ -42,7 +45,19 @@ function(EntityModel,
       appendItem: function(entityModel) {
         var entityView = new EntityView(entityModel, 'entity-list-', this.collection);
         this.el.appendChild(entityView.el);
+      },
+
+      createRelatedPages: function(entityModel) {
+        var underscoredName = entityModel.get('name').replace(' ', '_');
+        var contextPage = new PageModel({
+          name : underscoredName + ' Page',
+          url : {
+            urlparts : [underscoredName, '{{' +  entityModel.get('name') + '}}']
+          }
+        });
+        v1State.get('pages').push(contextPage);
       }
+
     });
 
     return EntityListView;

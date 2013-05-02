@@ -1842,7 +1842,7 @@ overflow: hidden;
   background-position: -46px -6px;
 }
 
-@media all and (max-width: 1340px) {
+@media all and (max-width: 1300px) {
   .page-wrapper {
     width: 964px;
     top: 32px;
@@ -1859,5 +1859,25 @@ overflow: hidden;
 
   #elements-container {
     margin-left: 0;
+  }
+}
+
+@media all and (min-width: 1300px) and (max-width: 1500px) {
+  .page-wrapper {
+    width: 1064px;
+    top: 32px;
+    margin-left: -533px;
+  }
+
+  .url-bar {
+    width: 1046px;
+  }
+
+  .page.full {
+    width: 1060px;
+  }
+
+  #elements-container {
+    margin-left: 50px;
   }
 }

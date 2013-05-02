@@ -34,8 +34,9 @@ function(PageModel, PageCollection, UrlView, PageView) {
     },
 
     createPage: function(name, b) {
-      var pageUrl = { urlparts : [] };
-      pageUrl.urlparts[0] = "page" + this.collection.models.length;
+      var pageUrlPart = name.replace(' ', '_');
+      var pageUrl = { urlparts : pageUrlPart };
+
       this.collection.add({ name: name, url: pageUrl});
       v1.save();
     },
