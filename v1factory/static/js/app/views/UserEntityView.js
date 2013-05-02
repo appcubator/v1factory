@@ -43,7 +43,6 @@ define([
                         'changedAttribs',
                         'addedEntity',
                         'clickedDelete',
-                        'modelRemoved',
                         'clickedPropDelete',
                         'changedAttribs',
                         'showTutorial');

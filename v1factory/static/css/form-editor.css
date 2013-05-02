@@ -323,6 +323,10 @@ ul.action li:hover .add-to-list {
   border: 1px dashed #000;
 }
 
+.field-li-item:hover {
+  border: 1px dashed #000;
+}
+
 h4 {
   font-weight: bold;
   margin-bottom: 0;
@@ -378,14 +382,19 @@ h4 {
   opacity: 0.5;
   cursor: pointer;
   border-top: 1px solid transparent;
-  border-bottom: 1px solid #f3f3f3;
+  border-bottom: 1px solid #e3e3e3;
+  height: 62px;
+}
+
+.new-field select {
+  margin-top: -6px;
 }
 
 .new-field:hover {
   opacity: 1;
   background-image: url(../img/add.png);
   background-color: #fafafa;
-  border-color:transparent;
+  border-bottom: 1px solid #e3e3e3;
 }
 
 input[type="text"] {

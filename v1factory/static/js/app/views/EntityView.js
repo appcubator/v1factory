@@ -33,7 +33,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
     initialize: function(item, name, entitiesColl){
       _.bindAll(this, 'render',
-                      'doBindings',
                       'appendField',
                       'appendForm',
                       'clickedAdd',
@@ -42,7 +41,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
                       'changedAttribs',
                       'addedEntity',
                       'clickedDelete',
-                      'modelRemoved',
                       'clickedPropDelete',
                       'clickedUploadExcel',
                       'clickedFormRemove',
@@ -55,6 +53,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
       this.parentCollection = item.collection;
       this.parentCollection.bind('initialized', this.doBindings);
+      this.parentCollection.bind('add', this.addedEntity);
 
       this.name = item.get('name');
       this.parentName = name;
@@ -62,11 +61,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       this.model.get('fields').bind('add', this.appendField);
       this.model.get('forms').bind('add', this.appendForm);
       this.render();
-    },
-
-    doBindings: function() {
-      this.parentCollection.bind('add', this.addedEntity);
-      this.parentCollection.bind('remove', this.modelRemoved);
     },
 
     render: function() {
@@ -163,13 +157,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
     clickedDelete: function(e) {
-      this.parentCollection.remove(this.model.cid);
-    },
-
-    modelRemoved: function(model) {
-      if (model == this.model) {
-        this.remove();
-      }
+      v1State.get('entities').remove(this.model.cid);
+      this.remove();
     },
 
     clickedPropDelete: function(e) {
