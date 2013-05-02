@@ -435,3 +435,20 @@ table tr:hover td {
 .dragndrop .pick-btn {
   margin-top: 30px;
 }
+
+.progressHolder {
+  width: 340px;
+  margin-left: auto;
+  margin-right:auto;
+}
+
+.progressHolder .progress {
+  background-color: #0088cc;
+  background-image: none;
+}
+
+.preview {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
