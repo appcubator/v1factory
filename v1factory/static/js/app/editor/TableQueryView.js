@@ -13,7 +13,7 @@ define([
       'change .sort-by'             : 'sortByChanged',
       'click .done-btn'             : 'closeModal'
     },
-    initialize: function(widgetModel) {
+    initialize: function(widgetModel, type) {
       _.bindAll(this, 'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
@@ -22,6 +22,7 @@ define([
                       'changeDescription');
 
       this.widgetModel = widgetModel;
+      this.type = type;
       this.model = widgetModel.get('container_info').get('query');
       this.entity = widgetModel.get('container_info').get('entity');
       this.render();
@@ -61,7 +62,7 @@ define([
         nLang     : self.getNLdescription()
       };
 
-      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks});
+      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks, type: this.type });
       this.el.innerHTML = contentHTML;
       return this;
     },

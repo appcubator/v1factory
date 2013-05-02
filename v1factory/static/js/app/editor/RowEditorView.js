@@ -37,7 +37,6 @@ function(WidgetView, WidgetEditorView) {
 
     render: function() {
       var self = this;
-      this.el.innerHTML = "<h3>List Editor</h3>";
       //<div class='list-view list-type'>List View</div><div class='grid-view list-type'>Grid View</div>
 
       var rowWidget = document.createElement('div');

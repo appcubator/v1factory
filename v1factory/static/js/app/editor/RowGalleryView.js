@@ -136,11 +136,11 @@ function(ElementCollection) {
         id = String(id).replace('entity-','');
         var cid = id.split('-')[0];
 
-        if(cid === g_userModel.cid) {
-          entity = new UserEntityModel(appState.users);
+        if(cid === v1State.get('users').cid) {
+          entity =  v1State.get('users');
         }
         else {
-          entity = g_entityCollection.get(cid);
+          entity = v1State.get('entities').get(cid);
         }
 
         field          = id.split('-')[1];
