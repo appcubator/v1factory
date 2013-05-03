@@ -114,10 +114,11 @@ class App(models.Model):
     return tmp_project_dir
 
   def subdomain(self):
-    subdomain = self.owner.username.lower() + "-" + self.name.lower()
+    subdomain = self.owner.username.lower() + "-" + self.name.replace(" ", "-").lower()
     if not settings.PRODUCTION or settings.STAGING:
-      subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
       subdomain = subdomain + '.staging'
+      if not settings.STAGING:
+        subdomain = "dev-" + subdomain
     return subdomain
 
   def url(self):
