@@ -13,7 +13,7 @@ define([
       'change .sort-by'             : 'sortByChanged',
       'click .done-btn'             : 'closeModal'
     },
-    initialize: function(widgetModel, type) {
+    initialize: function(widgetModel, containerType) {
       _.bindAll(this, 'fieldsToDisplayChanged',
                       'belongsToUserChanged',
                       'nmrRowsChanged',
@@ -21,8 +21,10 @@ define([
                       'getNLdescription',
                       'changeDescription');
 
+      console.log(containerType);
+      console.trace();
       this.widgetModel = widgetModel;
-      this.type = type;
+      this.containerType = containerType;
       this.model = widgetModel.get('container_info').get('query');
       this.entity = widgetModel.get('container_info').get('entity');
       this.render();
@@ -62,7 +64,9 @@ define([
         nLang     : self.getNLdescription()
       };
 
-      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks, type: this.type });
+      console.log(self.containerType);
+
+      var contentHTML = _.template(Templates.queryView, {entity: self.entity, query: self.model, c: checks, type: self.containerType });
       this.el.innerHTML = contentHTML;
       return this;
     },
