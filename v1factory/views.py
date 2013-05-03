@@ -229,7 +229,13 @@ def process_user_excel(request, app_id):
 
   data = { "api_secret": "uploadinG!!" }
   files = { 'excel_file': f }
-  r = requests.post(app.url() + "user_excel_import/", data=data, files=files)
+  if settings.DEBUG and not settings.STAGING:
+    try:
+      r = requests.post("http://localhost:8001/" + "user_excel_import/", data=data, files=files)
+    except Exception:
+      print "To test excel in dev mode, you have to have the child webapp running on port 8001"
+  else:
+    r = requests.post(app.url() + "user_excel_import/", data=data, files=files)
 
   return HttpResponse(r.content, status=r.status_code, mimetype="application/json")
 

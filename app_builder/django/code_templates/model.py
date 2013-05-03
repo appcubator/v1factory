@@ -29,6 +29,12 @@ def upload_user_excel(upldr):
   # For each row in the excel data
   for entry in data:
 
+    # Fixes float formatting when saving text fields
+    if type(entry['username']) == type(1.0):
+      entry['username'] = '{0:g}'.format(entry['username'])
+    if type(entry['password']) == type(1.0):
+      entry['password'] = '{0:g}'.format(entry['password'])
+
     # Try to get the user, create if not exists
     try:
       user = User.objects.get(username=entry['username'])
@@ -48,7 +54,8 @@ def upload_user_excel(upldr):
       user.set_password(entry['password'])
       for common_field in common_fields:
         if common_field not in ['username', 'password']:
-          setattr(userprofile, field_name_map[common_field], entry[common_field])
+          name_of_model_field = field_name_map[common_field]
+          setattr(userprofile, name_of_model_field, entry[common_field])
 
       # Validate and save
       try:
@@ -65,6 +72,7 @@ def upload_user_excel(upldr):
 
       updated_cnt += 1
     except Exception, e:
+      print e
       if newly_created_user:
         user.delete()
 
