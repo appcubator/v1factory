@@ -79,20 +79,23 @@ function(SimpleModalView) {
       $.ajax({
           type: "POST",
           url: '/domains/'+name+'/available_check/',
-          complete: function(resp) { console.log(resp); },
+          success: function(domainIsAvailable) {
+            console.log(domainIsAvailable);
+            if (domainIsAvailable) {
+              $('.register-domain-input').removeClass('not-available');
+              $('.register-domain-input').addClass('available');
+              $('.register-domain-button').fadeIn();
+            } else {
+              $('.register-domain-input').removeClass('available');
+              $('.register-domain-input').addClass('not-available');
+              $('.register-domain-button').hide();
+            }
+          },
+          error: function(resp) {
+            // TODO error modal
+          },
           dataType: "JSON"
       });
-
-      if(name == "availabledomain") {
-        $('.register-domain-input').removeClass('not-available');
-        $('.register-domain-input').addClass('available');
-        $('.register-domain-button').fadeIn();
-      }
-      else {
-        $('.register-domain-input').addClass('not-available');
-        $('.register-domain-input').removeClass('available');
-        $('.register-domain-button').hide();
-      }
     }
   });
 
