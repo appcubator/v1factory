@@ -189,7 +189,6 @@ function( PageModel,
     },
 
     keydown: function(e) {
-      console.log($._data($(window)[0],"events").keydown);
       if($._data($(window)[0],"events").keydown.length > 1) {
         return ;
       }
@@ -246,16 +245,16 @@ function( PageModel,
     },
 
     createPage: function(name) {
-      var pageUrl = { urlparts : [] };
-      pageUrl.urlparts[0] = "page" + appState.pages.length;
-      pageInd = appState.pages.length;
+      var pageUrlPart = name.replace(' ', '_');
+      var pageUrl = { urlparts :pageUrlPart };
+      var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
+        data: JSON.stringify(v1State.toJSON()),
         complete: function() {
           $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },

@@ -229,9 +229,10 @@ function(FormFieldModel, TutorialView) {
     },
 
     changedGoto: function(e) {
-      var page_name = e.target.id;
-      var page_id = page_name.replace(' ','_');
-      var page_val = 'internal://' + e.target.id;
+      console.log(e.target.id);
+      var page_name = String(e.target.id).replace('_', ' ');
+      var page_id = String(e.target.id).replace(' ','_');
+      var page_val = 'internal://' + page_name;
       this.model.set('goto', page_val);
       //$(e.target).remove();
       this.renderPossibleActions();
@@ -241,6 +242,7 @@ function(FormFieldModel, TutorialView) {
     },
 
     changedFormAction: function(e) {
+      console.log(e.target.value);
       this.model.set('action', e.target.value);
     },
 

@@ -14,7 +14,7 @@ function( WidgetCollection,
   var ListEditorView = Backbone.ModalView.extend({
     className : 'list-editor-modal',
     width: 920,
-    height: 600,
+    height: 500,
     padding: 0,
     events: {
       'change .fields-to-display'    : 'fieldsToDisplayChanged',
@@ -22,7 +22,8 @@ function( WidgetCollection,
       'click .nmr-rows'              : 'nmrRowsChanged',
       'keydown #first-nmr, #last-nmr': 'nmrRowsNumberChanged',
       'change .sort-by'              : 'sortByChanged',
-      'change .item-goes-to'         : 'itemLinkChanged'
+      'change .item-goes-to'         : 'itemLinkChanged',
+      'click .done-btn'              : 'closeModal'
     },
     initialize: function(widgetModel, queryModel, rowModel) {
       var self = this;
@@ -70,6 +71,7 @@ function( WidgetCollection,
       this.$el.append('<h3>List Editor</h3>');
       this.el.appendChild(editorDiv);
       this.el.appendChild(rowDiv);
+      this.$el.append('<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>');
 
       return this;
     },

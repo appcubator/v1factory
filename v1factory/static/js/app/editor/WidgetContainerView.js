@@ -162,7 +162,7 @@ function(WidgetCollection,
 
     showDetails: function() {
       if(this.model.get('container_info').get('action') === "table-gal") {
-        new TableQueryView(this.model, this.model.get('container_info').get('query'));
+        new TableQueryView(this.model, 'table');
       }
       if(this.model.get('container_info').has('form')) {
         new FormEditorView(this.formModel,
