@@ -84,11 +84,6 @@ define([
         document.getElementById('local').checked = this.model.get('local');
 
         return this;
-        // var formsHtml = '';
-        // _(self.model.get('forms').models).each(function(form){
-        //   formsHtml += _.template(Templates.Form, {form: form});
-        // });
-        // self.$el.find('.form-list').append(formsHtml);
       },
 
       checkedBox: function(e) {
