@@ -10,7 +10,7 @@
   {% elif field.display_type == "email-text" %}
   <div class="input-prepend"><span class="add-on">@</span><input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
   {% elif field.display_type == "button" %}
-  <div class="btn">{{ field.placeholder }}</div>
+  <input type="submit" value="{{ field.kwargs.placeholder }}" class="btn" />
   {% elif field.display_type == "dropdown" %}
   <select class="dropdown">
 {% for option in field.options %}

@@ -16,7 +16,8 @@ class DjangoFormReceiver(object):
 
   def init_fields(self):
     for f in self.included_fields:
-      self.form_fields.append(DjangoFormField.create(f, self))
+      if f.field_type != 'button':
+        self.form_fields.append(DjangoFormField.create(f, self))
     pass
 
   @classmethod
@@ -60,7 +61,8 @@ class DjangoFormReceiver(object):
     """Gets the Django Model"""
     """maps to model fields"""
     self.model = models.get_by_name(self.model.name)
-    for f in self.included_fields:
+    for f in filter(lambda x: x.field_type != 'button', self.included_fields):
+
       if f.is_model_field() and f.name != 'username':
         f._django_field = self.model.fields.get_by_name(f.model_field.name)
         f.post_name = f._django_field.identifier()
