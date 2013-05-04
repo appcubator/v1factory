@@ -63,7 +63,7 @@ function( WidgetCollection,
       editorDiv.appendChild(rowView.el);
 
       var rowDiv = document.createElement('div');
-      rowDiv.className = 'list-gallery-container';
+      rowDiv.className = 'list-gallery-container elements-list';
       var rowGalleryView = new RowGalleryView(this.rowModel, this.entity);
       rowDiv.appendChild(rowGalleryView.el);
 

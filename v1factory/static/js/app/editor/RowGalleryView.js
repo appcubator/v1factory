@@ -1,38 +1,38 @@
 define([
+  'app/editor/EditorGalleryView',
   'app/collections/ElementCollection'
 ],
-function(ElementCollection) {
+function(EditorGalleryView, ElementCollection) {
 
-  var RowGalleryView = Backbone.View.extend({
+  var RowGalleryView = EditorGalleryView.extend({
     el       : null,
-    className: 'elements-list item-gallery',
+    tagName  : 'ul',
+    // allList  : iui.get('elements-list item-gallery'),
     events : {
     },
 
     initialize: function(rowModel, entityModel){
-      _.bindAll(this, 'render', 'dropped');
       this.entity = entityModel;
       this.row = rowModel;
-      this.elementsCollection   = new ElementCollection(defaultElements);
-      this.render();
+      this.widgetsCollection = this.row.get('uielements');
+      this.editorContext = "loop";
+
+      _.bindAll(this, 'render', 'dropped', 'renderContextEntity');
+      this.allList = this.el;
+
+      RowGalleryView.__super__.initialize.call(this, rowModel.get('uielements'));
+
     },
 
     render: function() {
+      // Basic UI Elements
+      // Context Entity Elements and Update Forms
       var self = this;
 
-      var list = document.createElement('ul');
-      list.className = 'section';
-      this.el.appendChild(list);
-      this.allList = list;
+      this.renderUIElementList();
+      this.renderContextEntity();
 
-      this.appendContextEntity(this.entity);
-
-      _(self.elementsCollection.models).each(function(element) {
-        self.appendElement(element);
-      });
-
-      //this.el.innerHTML += "<h3><div class='list-view list-type'>List View</div><div class='grid-view list-type'>Grid View</div></h3>"
-      this.$el.find('.entity').draggable({
+      this.$el.find('li:not(.ui-draggable)').draggable({
         cursor: "move",
         cursorAt: { top: 0, left: 0 },
         helper: "clone",
@@ -41,123 +41,31 @@ function(ElementCollection) {
         },
         stop: self.dropped
       });
-
-      this.$el.find('.single-data').draggable({
-        cursor: "move",
-        cursorAt: { top: 0, left: 0 },
-        helper: "clone",
-        start : function(e) {
-          self.dragActive = true;
-        },
-        stop: self.dropped
-      });
-
+      this.$el.find('li').on('click', self.dropped);
       return this;
     },
 
-    appendContextEntity : function(entityModel) {
+    renderContextEntity : function() {
       // Form, Data elements belonging to the entity
       var self = this;
 
-      _(entityModel.get('fields').models).each(function(model, ind) {
-        var context = {
-          name : entityModel.get('name'),
-          cid  : entityModel.cid,
-          attr : model.get('name'),
-          type : model.get('type')
-        };
+      var tempLi = ['<li class="context-entity" id="context-field-<%= entity_id %>-<%= field_id %>">',
+                      '<span class="plus-icon"></span>',
+                      '<span class="wide-text"><%= entity_name %> <%= field_name %></span>',
+                    '</li>'].join('\n');
 
-        $(self.allList).append(_.template(Templates.tempLiSingleData, context));
+      var entityName = self.entity.get('name');
+      var entityId = self.entity.cid;
+      var context = {entity_id : entityId, entity_name : entityName};
+      //$(self.allList).append(_.template(tempLiForm, context));
+
+      _(self.entity.get('fields').models).each(function(field) {
+        var context = { entity_id : entityId, entity_name : entityName,
+                        field_id : field.cid, field_name: field.get('name') };
+
+        $(self.allList).append(_.template(tempLi, context));
       });
-    },
-
-    appendElement: function(elementModel) {
-      var self = this;
-      var li = document.createElement('li');
-      li.className = elementModel.get('className');
-      li.innerHTML = '<span class="name">'+ elementModel.get('text')+'</span>';
-
-      $(this.allList).append(li);
-
-      this.$el.find('.' + elementModel.get('className')).draggable({
-        cursor  : "move",
-        cursorAt: { top: 0, left: 0 },
-        helper: function( event ) {
-          return $(elementModel.get('el')).css('position','fixed');
-        },
-        start : function(e) {
-          self.dragActive = true;
-        },
-        stop: self.dropped
-      });
-
-      $(li).on('click', self.dropped);
-    },
-
-    dropped: function(e) {
-        var self = this;
-      var widget = {};
-      var left, top, offsetLeft;
-
-      this.dragActive = false;
-
-      // if(e.type != 'click') {
-      //   offsetLeft = document.getElementById('page-wrapper').offsetLeft + 100;
-      //   left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
-      //   top  = Math.round((e.pageY - $('.page')[0].offsetTop - 180)/GRID_HEIGHT);
-
-      //   if(top < 0) top = 0;
-      //   if(left < 0) left = 0;
-      //   if(left + 4 > 12) left = 8;
-      // }
-      // else {
-      //   left = 0;
-      //   top = 1;
-      //   window.scrollTo(0,0);
-      // }
-
-      left = 0;
-      top = 1;
-
-      widget.layout = {
-        top   : top,
-        left  : left,
-        height: 6
-      };
-
-      var className = e.target.className;
-      var id = e.target.id;
-
-      var hash, entityCid, formCid, action;
-      var entity, form, field;
-
-      widget.context = this.entity.get('name');
-      if (/(single-data)/.exec(className)) {
-        id = String(id).replace('entity-','');
-        var cid = id.split('-')[0];
-
-        if(cid === v1State.get('users').cid) {
-          entity =  v1State.get('users');
-        }
-        else {
-          entity = v1State.get('entities').get(cid);
-        }
-
-        field          = id.split('-')[1];
-
-        widget         = _.extend(widget, uieState['texts'][0]);
-        widget.content =  '{{loop.'+entity.get('name')+'.'+field+'}}';
-        this.row.get('uielements').push(widget);
-      }
-      else {
-        var type;
-        type        = className.replace(' ui-draggable','');
-        widget      = _.extend(widget, uieState[type][0]);
-        widget.type = type;
-        this.row.get('uielements').push(widget);
-      }
     }
-
   });
 
   return RowGalleryView;

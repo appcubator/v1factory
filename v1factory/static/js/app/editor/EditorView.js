@@ -247,7 +247,7 @@ function( PageModel,
 
     createPage: function(name) {
       var pageUrlPart = name.replace(' ', '_');
-      var pageUrl = { urlparts :pageUrlPart };
+      var pageUrl = { urlparts : [pageUrlPart] };
       var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);
