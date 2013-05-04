@@ -31,10 +31,10 @@
                 "isHidden": false,
                 "items": [
                     {
-                        "name": "internal://Homepage/"
+                        "name": "internal://Homepage"
                     },
                     {
-                        "name": "internal://Registration Page/"
+                        "name": "internal://Registration Page"
                     }
                 ]
             },
@@ -186,10 +186,10 @@
                 "isHidden": false,
                 "items": [
                     {
-                        "name": "internal://Homepage/"
+                        "name": "internal://Homepage"
                     },
                     {
-                        "name": "internal://Registration Page/"
+                        "name": "internal://Registration Page"
                     }
                 ]
             },
