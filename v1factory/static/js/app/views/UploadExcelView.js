@@ -1,6 +1,6 @@
 define([
   'backbone',
-  '../../../libs/jquery/jquery.filedrop',
+  'jquery.filedrop',
   'mixins/BackboneModal'
 ],
 function(Backbone) {
