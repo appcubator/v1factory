@@ -140,10 +140,10 @@ function(WidgetClassPickerView) {
       var curStyle = this.model.get('content_attribs').get('style');
 
       if(/font-size:([^]+);/g.exec(curStyle)) {
-        curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+        curStyle = curStyle.replace(/(font-size:)(.*?)(;)/gi, "$1"+ e.target.value +"$3");
       }
       else {
-        curStyle = curStyle + ' ' + e.target.value;
+        curStyle = curStyle + ' font-size:' + e.target.value +';';
       }
 
       this.model.get('content_attribs').set('style', curStyle);
