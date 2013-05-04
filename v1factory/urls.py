@@ -64,8 +64,8 @@ urlpatterns += patterns('v1factory.views',
     url(r'^theme/(\d)/editor/(\d+)$', 'theme_page_editor'),
     url(r'^sendhostedemail/$', 'send_hosted_email'),
 
-    url(r'^domains/([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,})/available_check/$', 'check_availability'),
-    url(r'^domains/([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,})/register/$', 'register_domain'),
+    url(r'^domains/(.)/available_check/$', 'check_availability'),
+    url(r'^domains/(.)/register/$', 'register_domain'),
 
     url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments
     url(r'^deploy/local/$', 'deploy_local'), # tries to deploy locally
@@ -77,7 +77,6 @@ if settings.PRODUCTION:
   urlpatterns += patterns('app_builder.deployment.views',
       url(r'^deployment/$', 'list_deployments'), # list the deployments and their statuses
       url(r'^deployment/available_check/$', 'available_check'), # check if the domain is available
-      url(r'^deployment/init/$', 'init_subdomain'), # set up directories and apache
       url(r'^deployment/push/$', 'deploy_code'), # push the new code into the directory
       url(r'^deployment/delete/$', 'delete_deployment'), # push the new code into the directory
   )
