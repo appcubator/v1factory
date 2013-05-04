@@ -6460,15 +6460,17 @@ i.icon-url {
 }
 .navigation-menu li a {
   display: inline-block;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  margin-top: 15px;
   padding-right: 10px;
-  padding-left: 50px;
-  min-width: 150px;
+  padding-left: 15px;
+  width: 180px;
+  height: 30px;
 }
 .navigation-menu li span {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 15px;
+  vertical-align: top;
+  line-height: 30px;
 }
 
 .navigation-menu li.active {
@@ -6481,24 +6483,39 @@ i.icon-url {
 }
 
 .navigation-menu:hover li.active  {
-    max-width: 60px;
+  max-width: 60px;
 }
 
-.navigation-menu li.menu-app-info {
-  background-image: url(../img/info.png); 
+.navigation-menu .info-icon,
+.navigation-menu .entities-icon,
+.navigation-menu .gallery-icon,
+.navigation-menu .pages-icon {
+  background-image: url(../img/navbar_sprite.png); 
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  margin-left: 0;
+  margin-top: 0;
 }
 
-.navigation-menu li.menu-app-entities {
-  background-image: url(../img/entities.png);
+.navigation-menu .info-icon {
+  background-position: -10px -15px;
 }
 
-.navigation-menu li.menu-app-themes {
-  background-image: url(../img/design.png);
+.navigation-menu .entities-icon {
+  background-position: -60px -15px;
 }
 
-.navigation-menu li.menu-app-pages {
-  background-image: url(../img/page.png);
+.navigation-menu .gallery-icon {
+  background-position: -110px -15px;
 }
+
+.navigation-menu .pages-icon {
+  background-position: -160px -15px;
+}
+
+
 
 .notice {
   background-color: #0f2d40;
