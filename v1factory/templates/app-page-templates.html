@@ -62,14 +62,35 @@
       <hr class="hoff2">
       <div class="hoff2">
         <h3 class="span10">Domains</h3>
-        <span class="span32 domains">
-          <a href="domain1.com">Domain.v1factory.com</a><br  />
-          <a href="#" class="btn" id="register-new-domain">Register a new domain</a>
-          <form class="register-domain-form" style="display:none;">
-            <input type="text" placeholder="Type the domain name..." class="span18 hi3 register-domain-input">
-            <a class="register-domain-button btn span10" style="display:none;">Register</a>
-          </form>
-        </span>
+        <div class="span32 domains">
+          <a href="{{ app.url }}">{{ app.subdomain }}.v1factory.com</a><br  />
+
+          <div class="hi6 hoff2">
+            <h4>Pick a subdomain</h4>
+            <form class="register-subdomain-form hoff1 hi7">
+              <p class="span18"><input type="text" placeholder="subdomain" class="span10" />.v1factory.com</p>
+              <a class="btn span13">Check availability</a>
+            </form>
+          </div>
+
+          <div class="hi6 hoff2">
+            <h4>Register your own domain</h4>
+            <form class="register-domain-form hoff1 hi7">
+              <p class="span18"><input type="text" placeholder="subdomain" class="span15" /></p>
+              <a class="btn span13">Check availability</a>
+            </form>
+          </div>
+
+          <div class="hi6 hoff2">
+            <h4>This is old.</h4>
+            <a href="#" class="btn" id="register-new-domain">Register a new domain</a>
+            <form class="register-domain-form" style="display:none;">
+              <input type="text" placeholder="Type the domain name..." class="span18 hi3 register-domain-input">
+              <a class="register-domain-button btn span10" style="display:none;">Register</a>
+            </form>
+          </div>
+
+        </div>
       </div>
       <hr class="hoff2 span50">
       <div class="hoff2 span36">
