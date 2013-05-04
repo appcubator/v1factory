@@ -143,7 +143,7 @@ function(WidgetCollection,
 
     placeFormElement: function(fieldModel) {
       var inp_class = uieState.textInputs[0].class_name;
-      var fieldHtml = _.template(Templates.fieldNode, { field: fieldModel, inpClass: inp_class});
+      var fieldHtml = _.template(Templates.fieldNode, { field: fieldModel, inpClass: ""});
       $(this.form).append(fieldHtml);
     },
 

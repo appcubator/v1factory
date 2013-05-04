@@ -81,15 +81,15 @@ Templates.formButton = [
 ].join('\n');
 
 var FieldTypes = {
-  "single-line-text" : '<input type="text" class="'+ uieState.textInputs[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>">',
-  "paragraph-text"   : '<textarea class="'+ uieState.textAreas[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
+  "single-line-text" : '<input type="text" class="" placeholder="<%= field.get(\'placeholder\') %>">',
+  "paragraph-text"   : '<textarea class="" placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
   "dropdown"         : '<select class="drowdown"><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
   "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>',
-  "password-text"    : '<input type="password" class="'+ uieState.passwords[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>">',
-  "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" class="'+ uieState.textInputs[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>"></div>',
-  "button"           : '<input type="submit" class="btn '+ uieState.buttons[0].class_name +'" value="<%= field.get(\'placeholder\') %>">',
+  "password-text"    : '<input type="password" class="" placeholder="<%= field.get(\'placeholder\') %>">',
+  "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" class="" placeholder="<%= field.get(\'placeholder\') %>"></div>',
+  "button"           : '<input type="submit" class="btn" value="<%= field.get(\'placeholder\') %>">',
   "image-uploader"   : '<input type="file" placeholder="<%= field.get(\'placeholder\') %>">',
-  "date-picker"      : 'date picker will be here.<input type="text" placeholder="<%= field.get(\'placeholder\') %>">'
+  "date-picker"      : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">'
 };
 
 Templates.fieldNode = [
