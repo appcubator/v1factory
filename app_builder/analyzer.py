@@ -225,7 +225,7 @@ class Node(UIElement):
 
   def content(self):
     if self._content is not None:
-      return self._content
+      return self._content.replace('\n','<br>')
     else:
       return ""
 
