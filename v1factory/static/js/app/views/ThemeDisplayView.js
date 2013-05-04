@@ -37,8 +37,6 @@ function() {
       });
 
       /* Load Statics */
-      console.log(self.id);
-
       $.ajax({
         type: "GET",
         url: '/theme/'+self.id+'/static/',

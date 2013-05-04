@@ -151,10 +151,14 @@ function( PageModel,
 
     deploy: function() {
       var self = this;
+      iui.get('deploy').innerHTML = '<span>Deploying...</span>';
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/',
+        complete: function() {
+          iui.get('deploy').innerHTML = '<span>Test Run</span>';
+        },
         success: function(data) {
           window.open(data.site_url);
           new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
@@ -247,7 +251,7 @@ function( PageModel,
 
     createPage: function(name) {
       var pageUrlPart = name.replace(' ', '_');
-      var pageUrl = { urlparts :pageUrlPart };
+      var pageUrl = { urlparts : [pageUrlPart] };
       var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);

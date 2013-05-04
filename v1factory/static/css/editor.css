@@ -1178,3 +1178,8 @@ overflow: hidden;
   .page.full { width: 1060px; }
   #elements-container { margin-left: 50px; }
 }
+
+.modal.list-editor-modal {
+  overflow: hidden;
+}
+

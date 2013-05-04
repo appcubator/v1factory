@@ -225,7 +225,7 @@ class Node(UIElement):
 
   def content(self):
     if self._content is not None:
-      return self._content
+      return self._content.replace('\n','<br>')
     else:
       return ""
 
@@ -242,6 +242,18 @@ class Node(UIElement):
       if p is None:
         raise Exception("Bad link reference: {}".format(target_page_name))
       self.attribs['href'] = p
+
+  def padding_string(self):
+    tp, rp, bp, lp = (0, 0, 0, 0)
+    if 't-padding' in self.uie['layout']:
+      tp = self.uie['layout']['t-padding']
+    if 'r-padding' in self.uie['layout']:
+      rp = self.uie['layout']['r-padding']
+    if 'b-padding' in self.uie['layout']:
+      bp = self.uie['layout']['b-padding']
+    if 'l-padding' in self.uie['layout']:
+      lp = self.uie['layout']['l-padding']
+    return "padding: {}px {}px {}px {}px;".format(tp, rp, bp, lp)
 
 # abstract
 class Container(UIElement):

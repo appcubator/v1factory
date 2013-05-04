@@ -64,6 +64,7 @@ function(ElementCollection,
     renderUIElementList: function() {
       var self = this;
       var collection = new ElementCollection(defaultElements);
+
       _(collection.models).each(function(element) {
         if(element.get('className') == "buttons" ||
            element.get('className') == "textInputs" ||
@@ -81,6 +82,8 @@ function(ElementCollection,
       li.className = 'uielement ' + elementModel.get('className');
       li.id='type-' + elementModel.get('className');
       li.innerHTML = '<span class="icon '+  elementModel.get('className') + '"></span><span class="name">'+ elementModel.get('text')+'</span>';
+
+      console.log(this.allList);
 
       $(this.allList).append(li);
 
@@ -234,7 +237,9 @@ function(ElementCollection,
         entity = v1State.get('entities').get(hash[0]);
         field = entity.get('fields').get(hash[1]);
 
-        content =  '{{page.'+ entity.get('name') +'.'+field.get('name')+'}}';
+        var editorContext = this.editorContext ? this.editorContext : "page";
+
+        content =  '{{' + editorContext +'.'+ entity.get('name') +'.'+field.get('name')+'}}';
 
         widget         = _.extend(widget, uieState['texts'][0]);
         widget.content =  content;
