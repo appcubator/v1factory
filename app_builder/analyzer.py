@@ -342,7 +342,7 @@ class Form(Container):
   @classmethod
   def create(cls, uie, page):
     field_dicts = uie['container_info']['form']['fields']
-    fields = [ FormField.create(f) for f in field_dicts if f['type'] != 'button' ] # will eventually support buttons, but not now
+    fields = [ FormField.create(f) for f in field_dicts ]
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
@@ -385,7 +385,7 @@ class Form(Container):
     for f in self.included_fields:
       f_check = f_manager.get_by_name(f.name)
       if f_check is None:
-        assert f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
+        assert f.field_type == 'button' or f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
       f.model_field = f_check
 
   def resolve_goto_page(self, analyzed_app):
