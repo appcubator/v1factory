@@ -52,7 +52,7 @@ uiLibrary = {
     {
       tagName  : 'a',
       attribs  : {
-        'href' : '{{homepage}}'
+        'href' : 'internal://Homepage'
       },
       content: {
         'text' : 'Default Link...'

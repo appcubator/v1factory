@@ -47,6 +47,8 @@ Templates.tempHrefSelect = [
   "<% _(listOfPages).each(function(page){ var b = ''; if(('internal://'+page) == val){ b = 'selected';}%>",
   '<option value="internal://<%= page %>" <%= b %>><%= page %></option>',
   '<%  }) %>',
+  '<% if(external) { %><option value="<%= external %>" selected><%= external %></option><% }; %>',
+  '<option value="external-link">External Link</option>',
   '</select>'
 ].join('\n');
 

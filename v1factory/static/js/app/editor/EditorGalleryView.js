@@ -82,9 +82,6 @@ function(ElementCollection,
       li.className = 'uielement ' + elementModel.get('className');
       li.id='type-' + elementModel.get('className');
       li.innerHTML = '<span class="icon '+  elementModel.get('className') + '"></span><span class="name">'+ elementModel.get('text')+'</span>';
-
-      console.log(this.allList);
-
       $(this.allList).append(li);
 
       $(li).draggable({
