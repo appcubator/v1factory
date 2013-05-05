@@ -47,9 +47,16 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/deploy/$', 'app_deploy'),
     url(r'^app/(\d+)/deploy/local/$', 'app_deploy_local'),
 
+    # domains
+    url(r'^domains/(.*)/available_check/$', 'check_availability'),
+    url(r'^domains/(.*)/register/$', 'register_domain'),
+    # subdomains
+    url(r'^subdomains/(.*)/available_check/$', 'sub_check_availability'),
+    url(r'^app/(\d)/subdomain/(.*)/$', 'sub_register_domain'),
+
     # the rest
     url(r'^app/(\d+)/editor/(\d+)$', 'app_editor'),
-    url(r'^app/(\d+)/', 'app_page'),
+    url(r'^app/(\d+)/', 'app_page'), # this serves all the app pages
 
     # tutorial and logging
     url(r'^log/slide/$', 'log_slide'),
@@ -63,9 +70,6 @@ urlpatterns += patterns('v1factory.views',
     url(r'^theme/(\d)/delete/$', 'theme_delete'),
     url(r'^theme/(\d)/editor/(\d+)$', 'theme_page_editor'),
     url(r'^sendhostedemail/$', 'send_hosted_email'),
-
-    url(r'^domains/(.)/available_check/$', 'check_availability'),
-    url(r'^domains/(.)/register/$', 'register_domain'),
 
     # broken, dont wanna fix right now
     #url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments

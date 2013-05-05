@@ -59,7 +59,7 @@ class Deployment(models.Model):
     # make app directory
     try:
       os.makedirs(self.app_dir)
-    except OSError:
+    except OSError: # directory is already there! no problemo
       pass
 
     a_conf = open(self.config_file_path, "w")

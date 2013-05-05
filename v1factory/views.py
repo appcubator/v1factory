@@ -30,7 +30,6 @@ def app_list(request):
   else:
     return redirect(app_page, request.user.apps.all()[0].id)
 
-
 @login_required
 def app_new(request):
   if request.method == 'GET':
@@ -428,7 +427,7 @@ def app_deploy(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  site_url = app.deploy(simplejson.dumps(d_user))
+  site_url = app.deploy(d_user)
   github_url = app.github_url()
   return HttpResponse(simplejson.dumps({"site_url":site_url, "github_url":github_url}), mimetype="application/json")
 
@@ -549,11 +548,36 @@ def register_domain(request, domain):
   except Exception, e:
     return JSONResponse({ "errors": str(e) })
 
-  # Take the domain info!
+  # TODO afterwards in a separate worker
+  d.configure_dns(domain, staging=settings.STAGING)
+
+  # Give client the domain info
   return JSONResponse(d.domain_info)
 
-  # afterwards in a separate worker
-  #d.configure_dns(domain, staging=settings.STAGING)
+@require_POST
+@login_required
+@csrf_exempt
+def sub_check_availability(request, subdomain):
+  domain_is_available = not App.objects.filter(subdomain=subdomain).exists()
+
+  if domain_is_available:
+    return JSONResponse(True)
+  else:
+    return JSONResponse(False)
+
+@require_POST
+@login_required
+@csrf_exempt
+def sub_register_domain(request, app_id, subdomain):
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+  app.subdomain = subdomain
+  app.save()
+  d_user = {
+    'user_name' : request.user.username,
+    'date_joined' : str(request.user.date_joined)
+  }
+  app.deploy(d_user)
+  return HttpResponse("ok")
 
 @require_POST
 @login_required

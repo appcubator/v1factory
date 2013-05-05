@@ -146,14 +146,12 @@ class App(models.Model):
 
   def deploy(self, d_user):
     # this will post the data to v1factory.com
-    subdomain = self.subdomain
-
     post_data = {
                  "u_name": self.u_name(),
-                 "subdomain": subdomain,
+                 "subdomain": self.subdomain,
                  "app_json": self.state_json,
                  "css": self.css(),
-                 "d_user" : d_user,
+                 "d_user" : simplejson.dumps(d_user),
                  "deploy_secret": "v1factory rocks!"
                 }
     # deploy to the staging server unless this is the production server.
@@ -163,7 +161,7 @@ class App(models.Model):
       r = requests.post("http://staging.v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:
-      return "http://%s.v1factory.com" % subdomain
+      return "http://%s.v1factory.com" % self.subdomain
     else:
       raise Exception(r.content)
 

@@ -60,6 +60,7 @@ def deploy_code(request):
     d.initialize()
     github_actions.create(u_name, d.app_dir)
   else:
+    d.subdomain = s
     d.update_app_state(simplejson.loads(app_json))
   d.update_css(css)
   d.full_clean()
