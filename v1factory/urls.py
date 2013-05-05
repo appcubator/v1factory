@@ -67,9 +67,10 @@ urlpatterns += patterns('v1factory.views',
     url(r'^domains/(.)/available_check/$', 'check_availability'),
     url(r'^domains/(.)/register/$', 'register_domain'),
 
-    url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments
-    url(r'^deploy/local/$', 'deploy_local'), # tries to deploy locally
-    url(r'^deploy/hosted/$', 'deploy_hosted'), # issues a command to the server to host a deployment
+    # broken, dont wanna fix right now
+    #url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments
+    #url(r'^deploy/local/$', 'deploy_local'), # tries to deploy locally
+    #url(r'^deploy/hosted/$', 'deploy_hosted'), # issues a command to the server to host a deployment
 )
 
 # production (hosted) deployments

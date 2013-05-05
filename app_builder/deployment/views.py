@@ -7,7 +7,7 @@
 """
 import re
 import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
@@ -76,6 +76,12 @@ def deploy_code(request):
 #@login_required
 def delete_deployment(request):
   u_name = request.POST['u_name']
-  d = get_object_or_404(Deployment, u_name=u_name)
+
+  try:
+    d = Deployment.objects.get(u_name=u_name)
+  except Deployment.DoesNotExist:
+    print "couldn't find deployment... ruh roh. u_name was: ", u_name
+    raise Http404
+
   d.delete()
   return HttpResponse("ok")

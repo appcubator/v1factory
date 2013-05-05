@@ -149,6 +149,7 @@ class App(models.Model):
     subdomain = self.subdomain
 
     post_data = {
+                 "u_name": self.u_name(),
                  "subdomain": subdomain,
                  "app_json": self.state_json,
                  "css": self.css(),
@@ -200,12 +201,20 @@ class App(models.Model):
   def delete(self, *args, **kwargs):
     try:
       post_data = {"u_name": self.u_name()}
-      r = requests.post("http://v1factory.com/deployment/delete/", post_data)
+      if settings.STAGING:
+        r = requests.post("http://staging.v1factory.com/deployment/delete/", post_data)
+      elif settings.PRODUCTION:
+        r = requests.post("http://v1factory.com/deployment/delete/", post_data)
+      else:
+        raise Exception("")
+
     except Exception:
       print "Warning: could not reach v1factory server."
     else:
       if r.status_code != 200:
         print "Error: v1factory could not delete the deployment. Plz do it manually."
+        import pprint
+        pprint.pprint(r.__dict__)
     finally:
       super(App, self).delete(*args, **kwargs)
 
