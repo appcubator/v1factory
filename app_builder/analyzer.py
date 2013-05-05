@@ -237,11 +237,16 @@ class Node(UIElement):
 
   def resolve_links(self, pages):
     if 'href' in self.attribs:
-      target_page_name = process_link_lang(self.attribs['href'])
-      p = pages.get_by_name(target_page_name)
-      if p is None:
-        raise Exception("Bad link reference: {}".format(target_page_name))
-      self.attribs['href'] = p
+      if self.attribs['href'].startswith('internal'):
+        target_page_name = process_link_lang(self.attribs['href'])
+        p = pages.get_by_name(target_page_name)
+        if p is None:
+          raise Exception("Bad link reference: {}".format(target_page_name))
+        self.attribs['href'] = p
+      else:
+        if not self.attribs['href'].startswith('http'): # prepend http the the href if it's not there
+          self.attribs['href'] = 'http://' + self.attribs['href']
+
 
   def padding_string(self):
     tp, rp, bp, lp = (0, 0, 0, 0)

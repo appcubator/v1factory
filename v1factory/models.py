@@ -34,10 +34,18 @@ def get_default_theme_state():
 
 
 class App(models.Model):
-  name = models.CharField(max_length=100, unique=True)
+  name = models.CharField(max_length=100)
   owner = models.ForeignKey(User, related_name='apps')
+
+  subdomain = models.CharField(max_length=50, blank=True)
+
   _state_json = models.TextField(blank=True, default=get_default_app_state)
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
+
+  def save(self, *args, **kwargs):
+    if self.subdomain == "":
+      self.subdomain = self.u_name()
+    return super(App, self).save(*args, **kwargs)
 
   def get_state(self):
     return simplejson.loads(self._state_json)
@@ -113,19 +121,21 @@ class App(models.Model):
 
     return tmp_project_dir
 
-  def subdomain(self):
-    subdomain = self.owner.username.lower() + "-" + self.name.replace(" ", "-").lower()
+  def u_name(self):
+    """Used to be the way we generate subdomains, but now it's just a function
+    that almost always returns a unique name for this app"""
+    u_name = self.owner.username.lower() + "-" + self.name.replace(" ", "-").lower()
     if not settings.PRODUCTION or settings.STAGING:
-      subdomain = subdomain + '.staging'
+      u_name = u_name + '.staging'
       if not settings.STAGING:
-        subdomain = "dev-" + subdomain
-    return subdomain
+        u_name = "dev-" + u_name
+    return u_name
 
   def url(self):
-    return "http://%s.v1factory.com/" % self.subdomain()
+    return "http://%s.v1factory.com/" % self.subdomain
 
   def github_url(self):
-    return "https://github.com/v1factory/" + self.subdomain()
+    return "https://github.com/v1factory/" + self.u_name()
 
   def css(self, deploy=True):
     """Use uiestate, less, and django templates to generate a string of the CSS"""
@@ -137,13 +147,12 @@ class App(models.Model):
 
   def deploy(self, d_user):
     # this will post the data to v1factory.com
-    subdomain = self.subdomain()
-
     post_data = {
-                 "subdomain": subdomain,
+                 "u_name": self.u_name(),
+                 "subdomain": self.subdomain,
                  "app_json": self.state_json,
                  "css": self.css(),
-                 "d_user" : d_user,
+                 "d_user" : simplejson.dumps(d_user),
                  "deploy_secret": "v1factory rocks!"
                 }
     # deploy to the staging server unless this is the production server.
@@ -153,7 +162,7 @@ class App(models.Model):
       r = requests.post("http://staging.v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:
-      return "http://%s.v1factory.com" % subdomain
+      return "http://%s.v1factory.com" % self.subdomain
     else:
       raise Exception(r.content)
 
@@ -190,13 +199,21 @@ class App(models.Model):
 
   def delete(self, *args, **kwargs):
     try:
-      post_data = {"subdomain": self.subdomain()}
-      r = requests.post("http://v1factory.com/deployment/delete/", post_data)
+      post_data = {"u_name": self.u_name()}
+      if settings.STAGING:
+        r = requests.post("http://staging.v1factory.com/deployment/delete/", post_data)
+      elif settings.PRODUCTION:
+        r = requests.post("http://v1factory.com/deployment/delete/", post_data)
+      else:
+        raise Exception("")
+
     except Exception:
       print "Warning: could not reach v1factory server."
     else:
       if r.status_code != 200:
         print "Error: v1factory could not delete the deployment. Plz do it manually."
+        import pprint
+        pprint.pprint(r.__dict__)
     finally:
       super(App, self).delete(*args, **kwargs)
 
