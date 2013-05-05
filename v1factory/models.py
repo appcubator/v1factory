@@ -42,9 +42,10 @@ class App(models.Model):
   _state_json = models.TextField(blank=True, default=get_default_app_state)
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
-  def __init__(self, *args, **kwargs):
-    super(App, self).__init__(*args, **kwargs)
-    self.subdomain = self.u_name()
+  def save(self, *args, **kwargs):
+    if self.subdomain == "":
+      self.subdomain = self.u_name()
+    return super(App, self).save(*args, **kwargs)
 
   def get_state(self):
     return simplejson.loads(self._state_json)

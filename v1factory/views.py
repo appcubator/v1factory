@@ -52,7 +52,7 @@ def app_new(request):
       'user_name' : request.user.username,
       'date_joined' : str(request.user.date_joined)
     }
-    a.deploy(simplejson.dumps(d_user))
+    a.deploy(d_user)
     return redirect(app_page, a.id)
 
 @require_GET
@@ -441,7 +441,7 @@ def app_deploy_local(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  m = app.write_to_tmpdir(simplejson.dumps(d_user))
+  m = app.write_to_tmpdir(d_user)
   return HttpResponse(m)
 
 
@@ -470,7 +470,7 @@ def deploy_local(request):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  r = d.write_to_tmpdir(simplejson.dumps(d_user))
+  r = d.write_to_tmpdir(d_user)
   return HttpResponse(r)
 
 @require_POST
@@ -571,6 +571,7 @@ def sub_check_availability(request, subdomain):
 def sub_register_domain(request, app_id, subdomain):
   app = get_object_or_404(App, id=app_id, owner=request.user)
   app.subdomain = subdomain
+  app.full_clean()
   app.save()
   d_user = {
     'user_name' : request.user.username,
