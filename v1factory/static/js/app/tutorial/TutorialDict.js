@@ -37,7 +37,7 @@ var TutorialDirectory = [
       },
       {
         title : "Upload and Download Data",
-        img : null,
+        img : '/static/img/tutorial/upload-download.png',
         view  : "tutorial-data_storage-upload",
         contents : null
       }
@@ -45,7 +45,7 @@ var TutorialDirectory = [
   },
   {
     title : "Themes & Design",
-    img : null,
+    img : '/static/img/tutorial/themes.png',
     view  : "tutorial-themes_design",
     contents : [
       {
@@ -57,7 +57,7 @@ var TutorialDirectory = [
   },
   {
     title : "Pages",
-    img : null,
+    img : '/static/img/tutorial/pages-page.png',
     view  : "tutorial-pages",
     contents : [
       {
