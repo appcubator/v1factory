@@ -1183,3 +1183,16 @@ overflow: hidden;
   overflow: hidden;
 }
 
+#delete-button-xcv {
+  display: none;
+  text-align: center;
+  font-size: 10px;
+  color: #fff;
+  background-color: #ec6a5f;
+  border:1px solid #dc5a4f;
+  border-radius: 6px;
+  vertical-align: top;
+  padding: 2px;
+  margin-right: 4px;
+  margin-top: -36px;
+}

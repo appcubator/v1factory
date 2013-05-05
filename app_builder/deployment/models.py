@@ -23,7 +23,8 @@ def copytree(src, dst, symlinks=False, ignore=None):
       shutil.copy2(s, d)
 
 class Deployment(models.Model):
-  subdomain = models.CharField(max_length=255, unique=True)
+  subdomain = models.CharField(max_length=50, unique=True)
+  u_name = models.CharField(max_length=100, unique=True)
   app_state_json = models.TextField(blank=True)
   css = models.TextField(blank=True)
   app_dir = models.TextField()
@@ -34,10 +35,10 @@ class Deployment(models.Model):
   updated_on = models.DateTimeField(auto_now = True)
 
   @classmethod
-  def create(cls, subdomain, app_state=None):
-    self = cls(subdomain=subdomain)
-    self.app_dir = "/var/www/apps/" + subdomain
-    self.config_file_path = "/var/www/configs/" + subdomain
+  def create(cls, subdomain, u_name=None, app_state=None):
+    self = cls(subdomain=subdomain, u_name=u_name)
+    self.app_dir = "/var/www/apps/" + u_name
+    self.config_file_path = "/var/www/configs/" + u_name
     if app_state is not None:
       self.app_state_json = simplejson.dumps(app_state)
     return self
@@ -50,7 +51,7 @@ class Deployment(models.Model):
       print "could not extract domain from app state"
       domain = None
 
-    return fillout_config(self.subdomain, self.app_dir, domain=domain)
+    return fillout_config(self.u_name, self.subdomain, self.app_dir, domain=domain)
 
   def initialize(self):
     """Setup apache config and write a blank app to the app path"""
@@ -58,7 +59,7 @@ class Deployment(models.Model):
     # make app directory
     try:
       os.makedirs(self.app_dir)
-    except OSError:
+    except OSError: # directory is already there! no problemo
       pass
 
     a_conf = open(self.config_file_path, "w")
@@ -142,7 +143,7 @@ class Deployment(models.Model):
         shutil.rmtree(self.app_dir)
 
       # try to delete github repo
-      repo_name = self.subdomain
+      repo_name = self.u_name
       assert repo_name != 'v1factory'
       r = requests.delete("https://api.github.com/repos/v1factory/%s" % repo_name, auth=('v1factory', 'obscurepassword321'))
 
@@ -169,8 +170,8 @@ APACHE_CONFIG_TMPL = """
 	ServerAdmin founders@v1factory.com
 
 	WSGIScriptAlias / {app_dir}/wsgi.py
-	WSGIDaemonProcess {subdomain} python-path={app_dir}:/var/www/libs/lib/python2.7/site-packages
-	WSGIProcessGroup {subdomain}
+	WSGIDaemonProcess {u_name} python-path={app_dir}:/var/www/libs/lib/python2.7/site-packages
+	WSGIProcessGroup {u_name}
 
 	<Directory {app_dir}>
 	<Files wsgi.py>
@@ -190,11 +191,12 @@ APACHE_CONFIG_TMPL = """
 	CustomLog {app_dir}/access.log combined
 </VirtualHost>"""
 
-def fillout_config(subdomain, app_dir, domain=None):
+def fillout_config(u_name, subdomain, app_dir, domain=None):
   optional_alias_string = ""
   if domain is not None:
     optional_alias_string = "ServerAlias %s" % domain
 
   return APACHE_CONFIG_TMPL.format(subdomain=subdomain,
+                                   u_name=u_name,
                                    app_dir=app_dir,
                                    optional_alias_string=optional_alias_string)
