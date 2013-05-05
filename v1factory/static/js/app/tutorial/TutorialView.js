@@ -35,7 +35,6 @@ function(Backbone) {
       this.chooseSlide(this.addr, true);
       this.reader = new answer();
       this.parseAnswers(TutorialDirectory);
-      console.log(this.reader.match("how to setup domain?"));
 
       $(window).bind('keydown', this.keyhandler);
     },
@@ -103,10 +102,10 @@ function(Backbone) {
 
     parseAnswers: function(dict) {
       var self = this;
-      _(dict).each(function(item) {
-        console.log(item.view);
+      _(dict).each(function(item, ind) {
+        console.log(ind);
         if(item.view) {
-          self.reader.read(iui.getHTML(item.view));
+          self.reader.read(iui.getHTML(item.view), [ind] ,item.title);
         }
 
         // if(item.contents) {
@@ -183,9 +182,14 @@ function(Backbone) {
 
     },
 
-    showQuestionSlide: function(question) {
+    showQuestionSlide: function(question, results) {
       var title = '<h2>'+ 'Question' + '</h2><div class="main-img" style="background-img:url(/static/large-q-mark.png)">'+ question +'</div>';
-      $('.tutorial-content').html(title + '<div class="text-cont"></div>');
+      var resultItems = '';
+      _(results).each(function(result) {
+        resultItems += '<li id="slide-'+result.dir.join('-') + '"><h3>'+ result.title +'</h3>' + result.article + '</li>';
+      });
+
+      $('.tutorial-content').html(title + '<ul class="text-cont">'+resultItems+'</ul>');
     },
 
     selectNext: function (obj) {
@@ -255,7 +259,13 @@ function(Backbone) {
     },
 
     submittedQuestion: function(e) {
+      e.preventDefault();
+
       var question = this.$el.find('.q-input').val();
+      var results = this.reader.match(question);
+      console.log(results);
+      this.showQuestionSlide(question, results);
+
 
       $.ajax({
         type: "POST",
@@ -269,7 +279,6 @@ function(Backbone) {
         dataType: "JSON"
       });
 
-      this.showQuestionSlide(question);
       e.preventDefault();
     },
 

@@ -12,7 +12,7 @@ require.config({
     "dicts" : "../dicts",
     "mixins" : "../mixins",
     "key" : "../libs/keymaster/keymaster",
-    "answer" : "../libs/answer/answer.min"
+    "answer" : "../libs/answer/answer"
   },
 
   shim: {
@@ -31,7 +31,7 @@ require.config({
       deps: ["jquery"]
     },
     "answer" : {
-      deps: ["../libs/answer/lib/natural", "underscore", "jquery", "../libs/answer/lib/jspos/lexer", "../libs/answer/lib/jspos/lexicon", "../libs/answer/lib/jspos/POSTagger" ]
+      deps: ["../libs/answer/lib/natural", "underscore", "jquery"]
     }
   }
 
