@@ -4,6 +4,25 @@
   border: none;
   overflow: visible;
   color: #000;
+  font-family: freight-sans-pro, sans-serif;
+}
+
+.tutorial-view h1,
+.tutorial-view h2,
+.tutorial-view h3 {
+  font-family: verb_regularbold;
+}
+
+.tutorial-view .main-img {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ccc;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+.tutorial-view  .main-img.q-mark {
+  
 }
 
 .tutorial-content {

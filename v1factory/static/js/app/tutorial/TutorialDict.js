@@ -1,25 +1,25 @@
 var TutorialDirectory = [
   {
     title : "Introduction",
-    img : null,
+    img : '/static/img/tutorial/intro.png',
     view  : "tutorial-intro",
     contents: null
   },
   {
     title : "Overview",
-    img : null,
+    img : '/static/img/tutorial/Appcubator.png',
     view  : "tutorial-overview",
     contents: null
   },
   {
     title : "Domain & SEO",
-    img : null,
+    img : '/static/img/tutorial/domainseo.png',
     view  : "tutorial-app_info",
     contents : null
   },
   {
     title : "Data & Storage",
-    img : null,
+    img : '/static/img/tutorial/dataentities.png',
     view  : "tutorial-data_storage",
     html: "<p>Data storage!</p>",
     contents : [
