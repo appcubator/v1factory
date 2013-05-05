@@ -114,11 +114,15 @@ class App(models.Model):
     return tmp_project_dir
 
   def subdomain(self):
-    subdomain = self.owner.username.lower() + "-" + self.name.lower()
+    subdomain = self.owner.username.lower() + "-" + self.name.replace(" ", "-").lower()
     if not settings.PRODUCTION or settings.STAGING:
-      subdomain = "dev-" + subdomain # try to avoid name collisions with production apps
       subdomain = subdomain + '.staging'
+      if not settings.STAGING:
+        subdomain = "dev-" + subdomain
     return subdomain
+
+  def url(self):
+    return "http://%s.v1factory.com/" % self.subdomain()
 
   def github_url(self):
     return "https://github.com/v1factory/" + self.subdomain()
@@ -296,7 +300,7 @@ class ApiKeyUses(models.Model):
 def load_initial_themes():
   s = get_default_theme_state()
   t = UITheme(name="Flat UI Kit")
-  t.set_state(s)
+  t.set_state(simplejson.loads(s))
   t.full_clean()
   t.save()
   print "Done"
@@ -340,3 +344,20 @@ class DomainRegistration(models.Model):
     DomainRegistration.api.configure_domain_records(domain, staging=staging)
     self.dns_configured = 1
     self.save()
+
+class TutorialLog(models.Model):
+  user = models.ForeignKey(User, related_name="logs")
+  opened_on = models.DateTimeField(auto_now_add = True)
+  title =  models.CharField(max_length=300, blank = True)
+  directory =  models.CharField(max_length=50, blank = True)
+
+  @classmethod
+  def create_log(cls, user, title, directory):
+    log = cls(user = user, title = title, directory = directory)
+    log.save()
+
+  @classmethod
+  def get_percentage(cls, user):
+    log = cls.objects.filter(user=user).exclude(directory='').values("directory").annotate(n=models.Count("pk"))
+    percentage = (len(log)*100) / 15
+    return percentage

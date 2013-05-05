@@ -37,12 +37,11 @@ function(WidgetView, WidgetEditorView) {
 
     render: function() {
       var self = this;
-      this.el.innerHTML = "<h3>List Editor</h3>";
       //<div class='list-view list-type'>List View</div><div class='grid-view list-type'>Grid View</div>
 
       var rowWidget = document.createElement('div');
       this.rowWidget = rowWidget;
-      rowWidget.className = 'editor-window container-wrapper';
+      rowWidget.className = 'editor-window container-wrapper fdededfcbcbcd';
       rowWidget.className += (' hi' + this.rowModel.get('layout').get('height'));
 
       if(this.rowModel.get('isListOrGrid') == "list") {
@@ -61,6 +60,7 @@ function(WidgetView, WidgetEditorView) {
     },
 
     placeWidget: function(widgetModel) {
+      console.log(widgetModel);
       var curWidget = new WidgetView(widgetModel);
 
       if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);

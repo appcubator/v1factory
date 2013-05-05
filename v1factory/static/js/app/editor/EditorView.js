@@ -54,11 +54,12 @@ function( PageModel,
                       'clickedUrl',
                       'createPage');
 
+      this.model             = v1State.get('pages').models[pageId];
+
       /* Globals */
       g_contextCollection    = new EntityCollection();
+      this.getContextEntities();
 
-      this.model                = v1State.get('pages').models[pageId];
-      //this.containersCollection = new ContainersCollection();
       this.widgetsCollection    = this.model.get('uielements');
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
@@ -69,7 +70,6 @@ function( PageModel,
       this.urlModel      = this.model.get('url');
 
       /* Calls */
-      this.getContextEntities();
       this.render();
 
       var page = appState.pages[pageId];
@@ -151,10 +151,14 @@ function( PageModel,
 
     deploy: function() {
       var self = this;
+      iui.get('deploy').innerHTML = '<span>Deploying...</span>';
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/deploy/',
+        complete: function() {
+          iui.get('deploy').innerHTML = '<span>Test Run</span>';
+        },
         success: function(data) {
           window.open(data.site_url);
           new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
@@ -184,12 +188,12 @@ function( PageModel,
       contextEntites = _.map(contextEntites, function(str){ return (/\{\{([^\}]+)\}\}/g.exec(str))[1];});
 
       _(contextEntites).each(function(entityName) {
-        g_contextCollection.add(v1State.get('entities').getEntityWithName(entityName));
+        var entity =  v1State.get('entities').getEntityWithName(entityName);
+        g_contextCollection.push(entity);
       });
     },
 
     keydown: function(e) {
-      console.log($._data($(window)[0],"events").keydown);
       if($._data($(window)[0],"events").keydown.length > 1) {
         return ;
       }
@@ -246,16 +250,16 @@ function( PageModel,
     },
 
     createPage: function(name) {
-      var pageUrl = { urlparts : [] };
-      pageUrl.urlparts[0] = "page" + appState.pages.length;
-      pageInd = appState.pages.length;
+      var pageUrlPart = name.replace(' ', '_');
+      var pageUrl = { urlparts : [pageUrlPart] };
+      var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);
 
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
+        data: JSON.stringify(v1State.toJSON()),
         complete: function() {
           $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },

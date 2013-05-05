@@ -27,13 +27,13 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
       'click .edit-form'           : 'clickedEditForm',
-      'blur  .property-name-input' : 'formSubmitted'
+      'blur  .property-name-input' : 'formSubmitted',
+      'change .attrib-required-check' : 'changedRequiredField'
     },
 
 
     initialize: function(item, name, entitiesColl){
       _.bindAll(this, 'render',
-                      'doBindings',
                       'appendField',
                       'appendForm',
                       'clickedAdd',
@@ -42,11 +42,11 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
                       'changedAttribs',
                       'addedEntity',
                       'clickedDelete',
-                      'modelRemoved',
                       'clickedPropDelete',
                       'clickedUploadExcel',
                       'clickedFormRemove',
                       'clickedEditForm',
+                      'changedRequiredField',
                       'showData');
 
       this.model = item;
@@ -55,6 +55,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
       this.parentCollection = item.collection;
       this.parentCollection.bind('initialized', this.doBindings);
+      this.parentCollection.bind('add', this.addedEntity);
 
       this.name = item.get('name');
       this.parentName = name;
@@ -62,11 +63,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       this.model.get('fields').bind('add', this.appendField);
       this.model.get('forms').bind('add', this.appendForm);
       this.render();
-    },
-
-    doBindings: function() {
-      this.parentCollection.bind('add', this.addedEntity);
-      this.parentCollection.bind('remove', this.modelRemoved);
     },
 
     render: function() {
@@ -79,6 +75,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
                            //forms: self.model.get('forms').models };
 
       var template = _.template(Templates.Entity, page_context);
+
       $(this.el).append(template);
     },
 
@@ -103,13 +100,13 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
         var curFields = this.model.get('fields') || [];
 
-        curFields.add(new FieldModel({
+        curFields.push(new FieldModel({
           name: name,
           type: 'text',
-          required: true
+          required: false
         }));
-
       }
+
       $('.property-name-input', this.el).val('');
       $('.add-property-form', this.el).hide();
       $('.add-property-button', this.el).fadeIn();
@@ -134,11 +131,12 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     appendField: function (fieldModel) {
       var self = this;
 
-      var template = _.template( Templates.Property, {  name: fieldModel.get('name'),
-                                                        cid : fieldModel.cid,
-                                                        type: fieldModel.get('type'),
-                                                        entityName : self.model.get('name'),
-                                                        other_models: self.parentCollection.models});
+      var page_context = {};
+      page_context = _.clone(fieldModel.attributes);
+      page_context.cid = fieldModel.cid;
+      page_context.entityName = self.model.get('name');
+      page_context.other_models = self.parentCollection.models;
+      var template = _.template( Templates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
     },
@@ -163,13 +161,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
     clickedDelete: function(e) {
-      this.parentCollection.remove(this.model.cid);
-    },
-
-    modelRemoved: function(model) {
-      if (model == this.model) {
-        this.remove();
-      }
+      v1State.get('entities').remove(this.model.cid);
+      this.remove();
     },
 
     clickedPropDelete: function(e) {
@@ -193,6 +186,12 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       var cid = String(e.target.id).replace('edit-', '');
       var formModel = this.model.get('forms').get(cid);
       new FormEditorView(formModel, this.model);
+    },
+
+    changedRequiredField: function(e) {
+      var fieldCid = String(e.target.id).replace('checkbox-field-','');
+      var isRequired = e.target.checked;
+      this.model.get('fields').get(fieldCid).set('required', isRequired);
     },
 
     showData: function(e) {

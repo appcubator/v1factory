@@ -12,7 +12,10 @@ function() {
       'click .add-link'         : 'clickedAddLink',
       'change #page-link-list'  : 'pageSelected',
       'click #brand-name'       : 'clickedBrandName',
-      'submit #brand-name-form' : 'submittedBrandName'
+      'submit #brand-name-form' : 'submittedBrandName',
+      'mouseover li.navbar-item-xcv': 'showDeleteButton',
+      'mouseout li.navbar-item-xcv': 'hideDeleteButton',
+      'click .menu-item'        : 'removeItem'
     },
 
     initialize: function(navbarModel) {
@@ -23,7 +26,10 @@ function() {
                       'pageSelected',
                       'clickedBrandName',
                       'clickedAddLink',
-                      'submittedBrandName');
+                      'submittedBrandName',
+                      'showDeleteButton',
+                      'hideDeleteButton',
+                      'removeItem');
 
       this.model = navbarModel;
       this.model.bind('change:isHidden', this.hideChanged);
@@ -51,7 +57,10 @@ function() {
       self.$el.find('#items').html('');
       _(self.model.get('items')).each(function(item) {
         var name = item.name.replace('internal://','').replace('/','');
-        self.$el.find('#items').append('<li><a href="#">'+ name +'</a></li>');
+        var newli = document.createElement('li');
+        newli.innerHTML = '<a href="#" class="menu-item">'+ name +'</a>';
+        $(newli).hover(self.showDeleteButton, self.hideDeleteButton);
+        self.$el.find('#items').append(newli);
       });
     },
 
@@ -100,6 +109,25 @@ function() {
       this.$el.find('#brand-name-input').val('');
 
       e.preventDefault();
+    },
+
+    showDeleteButton: function(e) {
+      $('#hide-toggle').hide();
+      $('#delete-button-xcv').fadeIn();
+    },
+
+    hideDeleteButton: function(e) {
+      $('#delete-button-xcv').hide();
+      $('#hide-toggle').fadeIn();
+    },
+
+    removeItem: function(e) {
+      var self = this;
+      var name = $(e.target).html();
+      name = "internal://" + name;
+      var newArr = _.reject(self.model.get('items'), function(item) { return item.name == name; });
+      self.model.set('items', newArr);
+      $(e.target).remove();
     }
   });
 

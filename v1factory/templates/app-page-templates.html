@@ -3,8 +3,9 @@
       <h3 class="hoff1">Thank you for joining v1Factory Private Beta program!</h3>
       <div> You just need to complete the following steps to claim your free domain.</div>
       <ul>
-        <li><input type="checkbox" disabled checked>Read through the <a class="#">tutorial</a>.</li>
-        <li><input type="checkbox" disabled>Create a simple app.</li>
+        <li><input type="checkbox" disabled checked>Create a simple app.</li>
+
+        <li><input type="checkbox" id="tutorial-check" disabled>Read through the <a class="tutorial" href="#">tutorial</a>.</li>
         <li><input type="checkbox" disabled>Fill the <a class="#">feedback form</a>.</li>
       </ul>
     </div>
@@ -61,14 +62,25 @@
       <hr class="hoff2">
       <div class="hoff2">
         <h3 class="span10">Domains</h3>
-        <span class="span32 domains">
-          <a href="domain1.com">Domain.v1factory.com</a><br  />
-          <a href="#" class="btn" id="register-new-domain">Register a new domain</a>
-          <form class="register-domain-form" style="display:none;">
-            <input type="text" placeholder="Type the domain name..." class="span18 hi3 register-domain-input">
-            <a class="register-domain-button btn span10" style="display:none;">Register</a>
-          </form>
-        </span>
+        <div class="span32 domains">
+          <div class="span40 hi6">
+            <h4>v1Factory subdomain</h4>
+            <form class="register-subdomain-form hoff1 hi7">
+              <p class="span18"><input type="text" placeholder="subdomain" class="span10" value="{{ app.subdomain }}"/><span>.v1factory.com</span></p>
+            </form>
+          </div>
+          <hr class="span40">
+          <div class="span40 hoff1">
+            <h4 class="span40">Custom Domains</h4>
+            <a href="#">No registered domains right now. </a>
+            <br  /><a href="#" class="btn" id="register-new-domain">Register a new domain</a>
+            <form class="register-domain-form" style="display:none;">
+              <input type="text" placeholder="Type the domain name..." class="span18 hi3 register-domain-input">
+              <a class="register-domain-button btn span10" style="display:none;">Register</a>
+            </form>
+          </div>
+
+        </div>
       </div>
       <hr class="hoff2 span50">
       <div class="hoff2 span36">

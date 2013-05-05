@@ -31,7 +31,8 @@ define([
         'click .add-form-button'     : 'clickedAddForm',
         'submit .add-form-form'      : 'formFormSubmitted',
         'blur  .property-name-input' : 'formSubmitted',
-        'click .q-mark-circle'        : 'showTutorial'
+        'click .q-mark-circle'        : 'showTutorial',
+        'change .attrib-required-check' : 'changedRequiredField'
       },
 
       initialize: function() {
@@ -43,7 +44,6 @@ define([
                         'changedAttribs',
                         'addedEntity',
                         'clickedDelete',
-                        'modelRemoved',
                         'clickedPropDelete',
                         'changedAttribs',
                         'showTutorial');
@@ -68,7 +68,8 @@ define([
 
           var page_context = {};
           page_context.name = fieldModel.get('name');
-          page_context.type = fieldModel.get('type'),
+          page_context.type = fieldModel.get('type');
+          page_context.required = fieldModel.get('required');
           page_context.cid = fieldModel.cid;
           page_context.entityName = "User";
           page_context.other_models = v1State.get('entities').models;
@@ -83,11 +84,6 @@ define([
         document.getElementById('local').checked = this.model.get('local');
 
         return this;
-        // var formsHtml = '';
-        // _(self.model.get('forms').models).each(function(form){
-        //   formsHtml += _.template(Templates.Form, {form: form});
-        // });
-        // self.$el.find('.form-list').append(formsHtml);
       },
 
       checkedBox: function(e) {
@@ -101,9 +97,8 @@ define([
            fieldModel.get('name') =='Email') return;
 
         var page_context = {};
-        page_context.name = fieldModel.get('name');
+        page_context = _.clone(fieldModel.attributes);
         page_context.cid = fieldModel.cid;
-        page_context.type = fieldModel.get('type');
         page_context.entityName = "User";
         page_context.other_models = this.entitiesColl.models;
 
@@ -120,7 +115,7 @@ define([
           this.model.get('fields').add(new FieldModel({
             name: name,
             type: 'text',
-            required: true
+            required: false
           }));
         }
 

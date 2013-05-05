@@ -14,7 +14,7 @@ function( WidgetCollection,
   var ListEditorView = Backbone.ModalView.extend({
     className : 'list-editor-modal',
     width: 920,
-    height: 600,
+    height: 500,
     padding: 0,
     events: {
       'change .fields-to-display'    : 'fieldsToDisplayChanged',
@@ -22,7 +22,8 @@ function( WidgetCollection,
       'click .nmr-rows'              : 'nmrRowsChanged',
       'keydown #first-nmr, #last-nmr': 'nmrRowsNumberChanged',
       'change .sort-by'              : 'sortByChanged',
-      'change .item-goes-to'         : 'itemLinkChanged'
+      'change .item-goes-to'         : 'itemLinkChanged',
+      'click .done-btn'              : 'closeModal'
     },
     initialize: function(widgetModel, queryModel, rowModel) {
       var self = this;
@@ -52,58 +53,25 @@ function( WidgetCollection,
     render: function() {
       var self = this;
 
-      var queryDiv = document.createElement('div');
-      queryDiv.className = "list-query-view";
-
-      var checks = {};
-      var rFirstNmr=5, rLastNmr=5, rAllNmr = 0;
-      var rFirst = '', rLast ='', rAll ='';
-
-      if(String(this.queryModel.get('numberOfRows')).indexOf('First') != -1) {
-        rFirst = 'checked';
-        rFirstNmr = (this.queryModel.get('numberOfRows').replace('First-',''));
-        if(rFirstNmr === "") rFirstNmr = 5;
-      }
-      else if (String(this.queryModel.get('numberOfRows')).indexOf('Last') != -1) {
-        rLast = 'checked';
-        rLastNmr = (this.queryModel.get('numberOfRows').replace('Last-',''));
-        if(rLastNmr === "") rLastNmr = 5;
-      }
-      else {
-        rAll = 'checked';
-      }
-
-      checks = {
-        rFirstNmr : rFirstNmr,
-        rFirst    : rFirst,
-        rLastNmr  : rLastNmr,
-        rLast     : rLast,
-        rAll      : rAll,
-        rAllNmr   : rAllNmr,
-        row       : true
-      };
-
-      var contentHTML = _.template(Templates.listQueryView, {entity: self.entity,
-                                                             query: self.queryModel,
-                                                             row: self.rowModel,
-                                                             c: checks });
-      queryDiv.innerHTML += contentHTML;
-
       var editorDiv = document.createElement('div');
       editorDiv.className = 'list-editor-container';
+
+      var RowEditorView = require('editor/RowEditorView');
       var rowView = new RowEditorView(this.rowModel, this.entity);
+
       this.rowEditorView = rowView;
       editorDiv.appendChild(rowView.el);
 
       var rowDiv = document.createElement('div');
-      rowDiv.className = 'list-gallery-container';
+      rowDiv.className = 'list-gallery-container elements-list';
       var rowGalleryView = new RowGalleryView(this.rowModel, this.entity);
       rowDiv.appendChild(rowGalleryView.el);
 
 
+      this.$el.append('<h3>List Editor</h3>');
       this.el.appendChild(editorDiv);
-      this.el.appendChild(queryDiv);
       this.el.appendChild(rowDiv);
+      this.$el.append('<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>');
 
       return this;
     },

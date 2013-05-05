@@ -6,7 +6,7 @@ from django.shortcuts import redirect,render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts
+from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts, TutorialLog
 from v1factory.email.sendgrid_email import send_email
 from v1factory.models import DomainRegistration
 
@@ -49,6 +49,11 @@ def app_new(request):
     except Exception, e:
       return render(request,  'apps-new.html', {'old_name': app_name, 'errors':e}, status=400)
     a.save()
+    d_user = {
+      'user_name' : request.user.username,
+      'date_joined' : str(request.user.date_joined)
+    }
+    a.deploy(simplejson.dumps(d_user))
     return redirect(app_page, a.id)
 
 @require_GET
@@ -185,40 +190,6 @@ def app_save_uie_state(request, app):
   app.save()
   return (200, 'ok')
 
-def app_urls(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app, 'title' : 'URLs', 'app_id': app_id }
-  return render(request, 'app-urls.html', page_context)
-
-def app_design(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app, 'title' : 'Design' }
-  return render(request, 'app-design.html', page_context)
-
-def app_gallery(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  els = UIElement.get_library()
-  themes = UITheme.objects.all();
-  themes = [t.to_dict() for t in themes]
-  page_context = { 'app': app,
-                   'title' : 'Gallery',
-                   'elements' : els,
-                   'themes' : themes,
-                   'app_id': app_id  }
-  add_statics_to_context(page_context, app)
-  return render(request, 'app-gallery.html', page_context)
-
-def app_pages(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  els = UIElement.get_library()
-
-  page_context = { 'app': app, 'title' : 'Pages', 'elements' : els, 'app_id': app_id }
-  return render(request, 'app-pages.html', page_context)
-
 
 def app_emails(request, app_id):
   app_id = long(app_id)
@@ -227,37 +198,6 @@ def app_emails(request, app_id):
   page_context = { 'app': app, 'title' : 'Emails', 'app_id': app_id }
   return render(request, 'app-emails.html', page_context)
 
-def app_analytics(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app , 'title' : 'Analytics' }
-  return render(request, 'app-analytics.html', page_context)
-
-def app_data(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app , 'title' : 'Data' }
-  return render(request, 'app-data.html', page_context)
-
-def app_finances(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app , 'title' : 'Finances' }
-  return render(request, 'app-finances.html', page_context)
-
-def account(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app, 'title' : 'Account Info' }
-  return render(request, 'app-account.html', page_context)
-
-@require_GET
-@login_required
-def entities(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  page_context = { 'app': app, 'title' : 'Entities', 'app_id': app_id  }
-  return render(request, 'app-entities.html', page_context)
 
 @login_required
 @csrf_exempt
@@ -279,6 +219,26 @@ def process_excel(request, app_id):
   for sheet in xl_data:
     add_xl_data(xl_data, fe_data, app_state_entities, d.app_dir + "/db")
   return HttpResponse("ok")
+
+@login_required
+@csrf_exempt
+@require_POST
+def process_user_excel(request, app_id):
+  f = request.FILES['file_name']
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+
+  data = { "api_secret": "uploadinG!!" }
+  files = { 'excel_file': f }
+  if settings.DEBUG and not settings.STAGING:
+    try:
+      r = requests.post("http://localhost:8001/" + "user_excel_import/", data=data, files=files)
+    except Exception:
+      print "To test excel in dev mode, you have to have the child webapp running on port 8001"
+  else:
+    r = requests.post(app.url() + "user_excel_import/", data=data, files=files)
+
+  return HttpResponse(r.content, status=r.status_code, mimetype="application/json")
+
 
 @login_required
 @require_POST
@@ -381,44 +341,12 @@ def app_editor(request, app_id, page_id):
   add_statics_to_context(page_context, app)
   return render(request, 'app-editor-main.html', page_context)
 
-@require_GET
-@login_required
-def app_info(request, app_id):
-  app_id = long(app_id)
-  app = get_object_or_404(App, id=app_id, owner=request.user)
-  els = UIElement.get_library()
-  page_context = { 'app': app, 'title' : 'Info', 'elements' : els, 'app_id': app_id  }
-  return render(request, 'app-info.html', page_context)
-
-def generate_create_container(container_content):
-  form_html = '<form action="/app/create/' + container_content['entity'] + '">'
-  for element in container_content['elements']:
-    form_html += '<input name="yolo" type="text">'
-  form_html += '</form>'
-  return form_html
 
 ### UIElement creation form
 from django.forms import ModelForm
 class UIElementForm(ModelForm):
   class Meta:
     model = UIElement
-
-def new_uielement(request):
-  if request.method == 'GET':
-    new_form = UIElementForm()
-    return render(request, "uielement/new_element.html", {'form': new_form} )
-
-  elif request.method == 'POST':
-    new_form = UIElementForm(request.POST)
-
-    if new_form.is_valid():
-      obj = new_form.save()
-      return HttpResponse("Success")
-    else:
-      return render(request, "uielement/new_element.html", {'form': new_form} )
-
-  else:
-    return HttpResponse("Only GET and POST allowed", status=405)
 
 @login_required
 def designer_page(request):
@@ -626,3 +554,17 @@ def register_domain(request, domain):
 
   # afterwards in a separate worker
   #d.configure_dns(domain, staging=settings.STAGING)
+
+@require_POST
+@login_required
+def log_slide(request):
+  title     = request.POST['title']
+  directory = request.POST['directory']
+
+  if title is not None or directory is not None:
+    TutorialLog.create_log(request.user, title, directory)
+
+  d = {}
+  d['percentage'] = TutorialLog.get_percentage(request.user)
+
+  return JSONResponse(d)

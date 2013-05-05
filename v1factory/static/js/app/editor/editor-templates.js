@@ -47,6 +47,8 @@ Templates.tempHrefSelect = [
   "<% _(listOfPages).each(function(page){ var b = ''; if(('internal://'+page) == val){ b = 'selected';}%>",
   '<option value="internal://<%= page %>" <%= b %>><%= page %></option>',
   '<%  }) %>',
+  '<% if(external) { %><option value="<%= external %>" selected><%= external %></option><% }; %>',
+  '<option value="external-link">External Link</option>',
   '</select>'
 ].join('\n');
 
@@ -81,15 +83,15 @@ Templates.formButton = [
 ].join('\n');
 
 var FieldTypes = {
-  "single-line-text" : '<input type="text" class="'+ uieState.textInputs[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>">',
-  "paragraph-text"   : '<textarea class="'+ uieState.textAreas[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
+  "single-line-text" : '<input type="text" class="" placeholder="<%= field.get(\'placeholder\') %>">',
+  "paragraph-text"   : '<textarea class="" placeholder="<%= field.get(\'placeholder\') %>"></textarea>',
   "dropdown"         : '<select class="drowdown"><% _(field.get(\'options\')).each(function(option, ind){ %><option><%= option %><% }); %></option>',
   "option-boxes"     : '<span class="option-boxes"><% _(field.get(\'options\')).each(function(option, ind){ %><label for="opt-<%= ind %>"></label><input id="opt-<%= ind %>" class="field-type" type="radio" name="types" value="single-line-text"><%= option %><% }); %></span>',
-  "password-text"    : '<input type="password" class="'+ uieState.passwords[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>">',
-  "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" class="'+ uieState.textInputs[0].class_name +'" placeholder="<%= field.get(\'placeholder\') %>"></div>',
-  "button"           : '<input type="submit" class="btn '+ uieState.buttons[0].class_name +'" value="<%= field.get(\'placeholder\') %>">',
+  "password-text"    : '<input type="password" class="" placeholder="<%= field.get(\'placeholder\') %>">',
+  "email-text"       : '<div class="input-prepend"><span class="add-on">@</span><input type="text" class="" placeholder="<%= field.get(\'placeholder\') %>"></div>',
+  "button"           : '<input type="submit" class="btn" value="<%= field.get(\'placeholder\') %>">',
   "image-uploader"   : '<input type="file" placeholder="<%= field.get(\'placeholder\') %>">',
-  "date-picker"      : 'date picker will be here.<input type="text" placeholder="<%= field.get(\'placeholder\') %>">'
+  "date-picker"      : '<input type="text" placeholder="<%= field.get(\'placeholder\') %>">'
 };
 
 Templates.fieldNode = [
@@ -124,19 +126,20 @@ Templates.fieldNode = [
 ].join('\n');
 
 Templates.queryView = [
-  '<h1 class="title"><%= entity.get(\'name\') %> <% if(c.row) { print(\'List\'); } else { print(\'Table\'); } %></h1>',
+  '<h1 class="title"><%= entity.get(\'name\') %> <% if(type == "list") { print(\'List\'); } else { print(\'Table\'); } %></h1>',
   '<small>',
   '<p id="query-description"><%= c.nLang %></p>',
   '</small>',
   '<div class="sections-container">',
+    '<% if(type == "table") { %>',
     '<div class="sect">',
     '<p>What fields would you like to display?</p>',
-
     '<% _.each(entity.get("fields").models, function(field) { %>',
       '<% var checked = \'\'; var u_id = field.cid; if(_.contains(query.get(\'fieldsToDisplay\'), field.get(\'name\'))) { checked = \'checked\'; } %>',
       '<label><input class="fields-to-display btn" id="field-<%= field.cid %>" type="checkbox" value="<%= field.get(\'name\') %>" <%= checked %>><%= field.get(\'name\') %></label>',
     '<% }) %>',
     '</div>',
+    '<% } %>',
     '<div class="sect">',
     '<% var checked = (query.get(\'belongsToUser\') === false)? "checked" : \'\' %>',
     '<p>Do you want to show the rows that just belong to the logged in user?</p>',

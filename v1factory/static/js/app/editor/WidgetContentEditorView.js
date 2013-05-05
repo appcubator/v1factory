@@ -15,7 +15,8 @@ function(WidgetClassPickerView) {
       'click #toggle-bold'          : 'toggleBold',
       'change .font-picker'         : 'changeFont',
       'change .statics'             : 'changeSrc',
-      'change .select-href'         : 'changeHref'
+      'change .select-href'         : 'changeHref',
+      'submit #external-link-form'  : 'addExternalLink'
     },
 
     initialize: function(widgetModel){
@@ -27,7 +28,8 @@ function(WidgetClassPickerView) {
                       'changeSrc',
                       'changeHref',
                       'renderFontPicker',
-                      'renderTextEditing');
+                      'renderTextEditing',
+                      'addExternalLink');
 
       this.model = widgetModel;
       this.render();
@@ -56,17 +58,29 @@ function(WidgetClassPickerView) {
     },
 
     renderHrefInfo: function() {
-      var li       = document.createElement('li');
+      if(!this.hrefLi) {
+        this.hrefLi = document.createElement('li');
+      }
+
       var hash     = 'content_attribs' + '-' + 'href';
       temp         = Templates.tempHrefSelect;
       listOfPages  = this.model.getListOfPages();
+
+      var external;
+      if(String(this.model.get('content_attribs').get('href')).indexOf('internal://') < 0) {
+        external = this.model.get('content_attribs').get('href');
+      }
+      console.log(external);
+
       html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
                                         hash: hash,
-                                        listOfPages: listOfPages});
+                                        listOfPages: listOfPages,
+                                        external: external});
 
-      li.appendChild(new comp().div('Target').classN('key').el);
-      li.innerHTML += html;
-      return li;
+      this.hrefLi.appendChild(new comp().div('Target').classN('key').el);
+      this.hrefLi.innerHTML += html;
+
+      return this.hrefLi;
     },
 
     renderSrcInfo: function() {
@@ -140,10 +154,10 @@ function(WidgetClassPickerView) {
       var curStyle = this.model.get('content_attribs').get('style');
 
       if(/font-size:([^]+);/g.exec(curStyle)) {
-        curStyle = curStyle.replace(/font-size:([a-z0-9]+);/g, e.target.value);
+        curStyle = curStyle.replace(/(font-size:)(.*?)(;)/gi, "$1"+ e.target.value +"$3");
       }
       else {
-        curStyle = curStyle + ' ' + e.target.value;
+        curStyle = curStyle + ' font-size:' + e.target.value +';';
       }
 
       this.model.get('content_attribs').set('style', curStyle);
@@ -182,10 +196,26 @@ function(WidgetClassPickerView) {
     changeHref: function(e) {
       var self = this;
       var target = e.target.value;
-      if(this.model.get('context')) {
+
+      console.log(self.hrefLi);
+      console.log(self);
+
+      if(target == "external-link") {
+        self.hrefLi.innerHTML = '<form id="external-link-form"><input id="external-link-input" type="text"></form>';
+        $('#external-link-input').focus();  
+      }
+      else if(this.model.get('context')) {
         target += ('/' + this.model.get('context'));
       }
       this.model.get('content_attribs').set('href', target);
+    },
+
+    addExternalLink: function(e) {
+      e.preventDefault();
+      var page_link = iui.get('external-link-input').value;
+      this.model.get('content_attribs').set('href', page_link);
+      $('#external-link-form').remove();
+      this.renderHrefInfo();
     },
 
     clear: function() {

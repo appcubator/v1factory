@@ -225,7 +225,7 @@ class Node(UIElement):
 
   def content(self):
     if self._content is not None:
-      return self._content
+      return self._content.replace('\n','<br>')
     else:
       return ""
 
@@ -242,6 +242,18 @@ class Node(UIElement):
       if p is None:
         raise Exception("Bad link reference: {}".format(target_page_name))
       self.attribs['href'] = p
+
+  def padding_string(self):
+    tp, rp, bp, lp = (0, 0, 0, 0)
+    if 't-padding' in self.uie['layout']:
+      tp = self.uie['layout']['t-padding']
+    if 'r-padding' in self.uie['layout']:
+      rp = self.uie['layout']['r-padding']
+    if 'b-padding' in self.uie['layout']:
+      bp = self.uie['layout']['b-padding']
+    if 'l-padding' in self.uie['layout']:
+      lp = self.uie['layout']['l-padding']
+    return "padding: {}px {}px {}px {}px;".format(tp, rp, bp, lp)
 
 # abstract
 class Container(UIElement):
@@ -330,7 +342,7 @@ class Form(Container):
   @classmethod
   def create(cls, uie, page):
     field_dicts = uie['container_info']['form']['fields']
-    fields = [ FormField.create(f) for f in field_dicts if f['type'] != 'button' ] # will eventually support buttons, but not now
+    fields = [ FormField.create(f) for f in field_dicts ]
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
@@ -373,7 +385,7 @@ class Form(Container):
     for f in self.included_fields:
       f_check = f_manager.get_by_name(f.name)
       if f_check is None:
-        assert f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
+        assert f.field_type == 'button' or f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
       f.model_field = f_check
 
   def resolve_goto_page(self, analyzed_app):
@@ -476,7 +488,7 @@ class AnalyzedApp:
     if app_state['users']['local']:
       self.local_login = True
       base_user['fields'] = app_state['users']['fields']
-      assert len([ f for f in base_user['fields'] if f['name'].lower() in ['username', 'email', 'first name', 'last name']]) == 0, "Plz get rid of username field from user fields."
+      assert len([ f for f in base_user['fields'] if f['name'].lower() in ['username', 'email', 'First Name', 'Last Name']]) == 0, "Plz get rid of username field from user fields."
       base_user['fields'].append(simplejson.loads(r"""{"name": "username","required": true,"type": "text"}""")) # adds username
       base_user['fields'].append(simplejson.loads(r"""{"name": "email","required": true,"type": "text"}"""))
       base_user['fields'].append(simplejson.loads(r"""{"name": "First Name","required": true,"type": "text"}"""))

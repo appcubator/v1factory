@@ -58,6 +58,7 @@ function(WidgetModel,
       else {
         var action = this.get('container_info').get('action') ;
 
+        console.log(this.get('container_info'));
         if(action == "create") {
           if(!this.get('container_info').has('form')) {
             var form = new FormModel({}, this.get('container_info').get('entity'));
@@ -65,7 +66,9 @@ function(WidgetModel,
           }
         }
         else if(this.get('container_info').get('action') == 'table') {
-
+          if(!this.get('container_info').has('query')) {
+            this.get('container_info').set('query', new QueryModel({}, this.get('container_info').get('entity')));
+          }
         }
         else {
           this.containerHandler[this.get('container_info').get('action')].call(this);
@@ -109,13 +112,13 @@ function(WidgetModel,
         }
       },
       'table-gal' : function() {
+        alert('dont delete me');
         var self = this;
         var isNew = false;
 
         if(!self.get('container_info').has('query')) {
           var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
           self.get('container_info').set('query', queryModel);
-          new TableQueryView(self, queryModel);
         }
 
       }

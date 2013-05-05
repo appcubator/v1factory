@@ -46,12 +46,20 @@ require([
   "app/views/EntitiesView",
   "app/views/ThemesGalleryView",
   "app/views/PagesView",
-  "backbone",     //require plugins
+  "app/views/OverviewPageView",
+  "backbone",
   "bootstrap",
   "iui",
   "comp"
 ],
-function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, ThemesGalleryView, PagesView) {
+function (AppModel,
+          SimpleModalView,
+          TutorialView,
+          InfoView,
+          EntitiesView,
+          ThemesGalleryView,
+          PagesView,
+          OverviewPageView) {
 
   var v1App = Backbone.Router.extend({
 
@@ -97,10 +105,9 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
       v1App.tutorialDirectory = [0];
       var cleanDiv = document.createElement('div');
       cleanDiv.className = "clean-div";
-      $(cleanDiv).html(iui.getHTML('app-main-page'));
       $('#main-container').append(cleanDiv);
-      $('#deploy').on('click', this.deploy);
-      v1App.view = $(cleanDiv);
+      v1App.view = new OverviewPageView();
+      v1App.view.setElement(cleanDiv).render();
       $('.active').removeClass('active');
     },
 
@@ -182,7 +189,6 @@ function (AppModel, SimpleModalView, TutorialView, InfoView, EntitiesView, Theme
     },
 
     showTutorial: function() {
-      console.log( v1App.tutorialDirectory );
       tutorial = new TutorialView(v1App.tutorialDirectory);
     }
   });
