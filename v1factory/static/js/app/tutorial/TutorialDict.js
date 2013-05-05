@@ -25,20 +25,14 @@ var TutorialDirectory = [
     contents : [
       {
         title : "Entity",
-        img : null,
+        img : '/static/img/tutorial/entity.png',
         view  : "tutorial-data_storage-entity",
         contents: null
       },
       {
         title : "User Entity",
-        img : null,
+        img : '/static/img/tutorial/user-entity.png',
         view  : "tutorial-data_storage-user",
-        contents : null
-      },
-      {
-        title : "Sample Entity",
-        img : null,
-        view  : "tutorial-data_storage-sample",
         contents : null
       },
       {
