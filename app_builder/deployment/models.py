@@ -165,9 +165,9 @@ class Deployment(models.Model):
 # This was ugly in the main code so I moved it down here.
 APACHE_CONFIG_TMPL = """
 <VirtualHost *:80>
-	ServerName {subdomain}.v1factory.com
+	ServerName {subdomain}.appcubator.com
   {optional_alias_string}
-	ServerAdmin founders@v1factory.com
+	ServerAdmin founders@appcubator.com
 
 	WSGIScriptAlias / {app_dir}/wsgi.py
 	WSGIDaemonProcess {u_name} python-path={app_dir}:/var/www/libs/lib/python2.7/site-packages
