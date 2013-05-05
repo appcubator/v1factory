@@ -132,7 +132,7 @@ class App(models.Model):
     return u_name
 
   def url(self):
-    return "http://%s.v1factory.com/" % self.subdomain
+    return "http://%s.appcubator.com/" % self.subdomain
 
   def github_url(self):
     return "https://github.com/v1factory/" + self.u_name()
@@ -146,7 +146,7 @@ class App(models.Model):
     return css_string
 
   def deploy(self, d_user):
-    # this will post the data to v1factory.com
+    # this will post the data to appcubator.com
     post_data = {
                  "u_name": self.u_name(),
                  "subdomain": self.subdomain,
@@ -157,12 +157,12 @@ class App(models.Model):
                 }
     # deploy to the staging server unless this is the production server.
     if settings.PRODUCTION and not settings.STAGING:
-      r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+      r = requests.post("http://appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
     else:
-      r = requests.post("http://staging.v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+      r = requests.post("http://staging.appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:
-      return "http://%s.v1factory.com" % self.subdomain
+      return "http://%s.appcubator.com" % self.subdomain
     else:
       raise Exception(r.content)
 
@@ -201,19 +201,17 @@ class App(models.Model):
     try:
       post_data = {"u_name": self.u_name()}
       if settings.STAGING:
-        r = requests.post("http://staging.v1factory.com/deployment/delete/", post_data)
+        r = requests.post("http://staging.appcubator.com/deployment/delete/", post_data)
       elif settings.PRODUCTION:
-        r = requests.post("http://v1factory.com/deployment/delete/", post_data)
+        r = requests.post("http://appcubator.com/deployment/delete/", post_data)
       else:
         raise Exception("")
 
     except Exception:
-      print "Warning: could not reach v1factory server."
+      print "Warning: could not reach appcubator server."
     else:
       if r.status_code != 200:
-        print "Error: v1factory could not delete the deployment. Plz do it manually."
-        import pprint
-        pprint.pprint(r.__dict__)
+        print "Error: appcubator could not delete the deployment. Plz do it manually."
     finally:
       super(App, self).delete(*args, **kwargs)
 

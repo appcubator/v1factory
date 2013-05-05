@@ -451,13 +451,13 @@ def app_deploy_local(request, app_id):
 @require_GET
 def deploy_panel(request):
   if request.method == "GET":
-    r = requests.get('http://v1factory.com/deployment/')
+    r = requests.get('http://appcubator.com/deployment/')
     if r.status_code == 200:
       page_context = {}
       page_context['deployments'] = simplejson.loads(r.content)
       return render(request, 'deploy-panel.html', page_context)
     else:
-      return HttpResponse("v1factory.com returned status of %s" % r.status_code)
+      return HttpResponse("appcubator.com returned status of %s" % r.status_code)
 
 @require_POST
 @csrf_exempt
@@ -479,7 +479,7 @@ def deploy_local(request):
 def deploy_hosted(request):
   subdomain = request.POST['subdomain']
   app_json = request.POST['app_json']
-  #this will post the data to v1factory.com
+  #this will post the data to appcubator.com
   d_user = {
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
@@ -489,7 +489,7 @@ def deploy_hosted(request):
     "app_json": app_json,
     "d_user" : simplejson.dumps(d_user)
   }
-  r = requests.post("http://v1factory.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
+  r = requests.post("http://appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
   return HttpResponse(r.content)
 
 @require_POST
