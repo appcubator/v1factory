@@ -15,17 +15,20 @@
   <div class="container">
     <div class="offset18">
       <div class="hi91">
-        <h2 class="hoff2">Sign Up</h2>
+        
       </div>
     </div>
   </div>
 </div>
 <div class="container">
-  <div class="row sign-up-container">
-    <img class="span12" src="{{ STATIC_URL}}img/mascot.png" width="180">
+  <div class="span14">
+    <h2 class="hoff2 span14 pull-right">Sign Up</h2>
+    <img class="span12 hoff2" src="{{ STATIC_URL}}img/mascot.png" width="180">
+  </div>
+  <div class="sign-up-container span46 hoff1">
     <form method="POST" class="span46 offset6" action="{% url v1factory.base_views.signup %}">
         <div class="row hoff1">
-          <h4>Username</h4>
+          <h4>Username</h4><br  />
           <input class="span10" name="username" type="text">
           <div class="form-error field-name-username"></div>
         </div>
@@ -59,13 +62,13 @@
         </div>
       </div>
       <div class="row hoff1">
-        <h4>Email Address</h4>
+        <h4>Email Address</h4><br  />
         <input class="span10" name="email" type="text"><br>
         <div class="form-error field-name-email"></div>
       </div>
 
       <div class="row hoff1">
-        <h4>Beta Secret</h4>
+        <h4>Beta Secret</h4><br  />
         <input class="span10" name="betasecret" type="password"><br>
         <div class="form-error field-name-betasecret"></div>
       </div>
