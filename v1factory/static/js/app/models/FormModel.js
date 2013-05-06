@@ -42,6 +42,12 @@ function(Backbone, FormFieldCollection) {
       this.entity = entity;
     },
 
+    fillWithProps: function(entity) {
+      _(entity.get('fields').models).each(function(fieldModel) {
+        console.log(fieldModel);
+      });
+    },
+
     toJSON: function() {
       var json = _.clone(this.attributes);
       json.name = json.name || "";

@@ -263,7 +263,7 @@ function(ElementCollection,
           widget.container_info.action = "show";
         }
 
-        var widgetContainerModel = new ContainerWidgetModel(widget);
+        var widgetContainerModel = new ContainerWidgetModel(widget, true);
         this.widgetsCollection.push(widgetContainerModel);
       }
       else if (/(current-user)/.exec(className)) {

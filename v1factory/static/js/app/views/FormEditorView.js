@@ -285,6 +285,7 @@ function(FormFieldModel, TutorialView) {
       this.model.get('fields').push(formFieldModel, {at: ind});
 
       $(e.target).hide();
+      $(e.target)[0].selectedIndex = 0;
       this.$el.find('.field-text').fadeIn();
     },
 

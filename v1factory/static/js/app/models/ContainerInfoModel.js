@@ -4,7 +4,8 @@ define([
   'app/models/EntityModel',
   'app/models/UserEntityModel',
   'app/models/FormModel',
-  'app/models/RowModel'
+  'app/models/RowModel',
+  'dicts/constant-containers'
 ],
 function(WidgetCollection,
          QueryModel,
@@ -14,7 +15,9 @@ function(WidgetCollection,
          RowModel) {
 
   var ContainerInfoModel = Backbone.Model.extend({
-    initialize: function(bone) {
+    initialize: function(bone, isNew) {
+      _.bindAll(this, 'setUpNew');
+
       this.set('uielements', new WidgetCollection(bone.uielements));
 
       if(bone.entity) {
@@ -48,7 +51,47 @@ function(WidgetCollection,
           this.set('form', bone.form);
         }
       }
+
+      if(isNew) this.setUpNew(bone);
     },
+
+    setUpNew: function(bone) {
+      var self = this;
+      var action = bone.action;
+
+      if(bone.action == "signup") {
+        this.set('uielements',  new WidgetCollection());
+
+        _(constantContainers[bone.action]).each(function(element){
+          elementDefault = uieState[element.type][0];
+          element = _.extend(elementDefault, element);
+          self.get('uielements').push(element);
+        });
+      }
+      else if(action == "create") {
+        var form = new FormModel({}, this.get('entity'));
+        form.fillWithProps(this.get('entity'));
+        this.set('form', form);
+      }
+      else if(action == 'table') {
+        alert('yo');
+        this.set('query', new QueryModel({}, this.get('entity')));
+      }
+      else if(action == 'show') {
+        var queryModel = new QueryModel({}, this.get('entity'));
+        var rowModel   = new RowModel({});
+        self.set('query', queryModel);
+        self.set('row', rowModel);
+      }
+      else if(action == 'table-gal') {
+        var queryM = new QueryModel({}, this.get('entity'));
+        self.set('query', queryM);
+      }
+      else {
+        alert('UFO!');
+      }
+    },
+
     toJSON: function() {
       var json = _.clone(this.attributes);
       json.uielements = this.get('uielements').toJSON();
