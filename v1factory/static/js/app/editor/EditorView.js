@@ -1,8 +1,6 @@
 define([
   'app/models/PageModel',
   'app/collections/EntityCollection',
-  'app/collections/WidgetCollection',
-  'app/collections/ContainersCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
   'editor/WidgetsManagerView',
@@ -16,8 +14,6 @@ define([
 ],
 function( PageModel,
           EntityCollection,
-          WidgetCollection,
-          ContainersCollection,
           UrlView,
           SimpleModalView,
           WidgetsManagerView,

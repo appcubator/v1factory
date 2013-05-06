@@ -5,7 +5,6 @@ define([
   'editor/WidgetView',
   'editor/SubWidgetView',
   'app/views/FormEditorView',
-  'app/models/FormModel',
   'dicts/constant-containers',
   'editor/editor-templates'
 ],
@@ -14,8 +13,7 @@ function(WidgetCollection,
         ListEditorView,
         WidgetView,
         SubWidgetView,
-        FormEditorView,
-        FormModel) {
+        FormEditorView) {
 
   var WidgetContainerView = WidgetView.extend({
     el: null,

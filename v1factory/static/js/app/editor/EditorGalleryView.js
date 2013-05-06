@@ -1,12 +1,10 @@
 define([
   'app/collections/ElementCollection',
-  'app/models/UserEntityModel',
   'app/models/ContainerWidgetModel',
   'app/models/WidgetModel',
   'dicts/constant-containers'
 ],
 function(ElementCollection,
-         UserEntityModel,
          ContainerWidgetModel,
          WidgetModel) {
 
