@@ -109,7 +109,7 @@ INSTALLED_APPS = (
     'v1factory',
     'app_builder',
     'app_builder.deployment',
-    'djcelery',
+#    'djcelery',
     'less'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
