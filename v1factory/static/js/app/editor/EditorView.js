@@ -52,7 +52,6 @@ function( PageModel,
 
       if(pId) pageId = pId;
 
-      console.log(pageId);
       this.model             = v1State.get('pages').models[pageId];
 
       /* Globals */
@@ -97,8 +96,6 @@ function( PageModel,
       createBox.on('submit', this.createPage);
 
       iui.get('page-list').appendChild(createBox.el);
-
-      console.log(iui.get('all-list'));
 
       this.renderUrlBar();
       this.galleryEditor.render();

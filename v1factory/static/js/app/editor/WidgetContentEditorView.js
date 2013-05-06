@@ -70,7 +70,6 @@ function(WidgetClassPickerView) {
       if(String(this.model.get('content_attribs').get('href')).indexOf('internal://') < 0) {
         external = this.model.get('content_attribs').get('href');
       }
-      console.log(external);
 
       html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
                                         hash: hash,

@@ -2,11 +2,12 @@ define([
   'editor/WidgetView',
   'editor/WidgetContainerView',
   'app/models/WidgetModel',
+  'app/editor/WidgetEditorView',
   'backbone'
 ],
-function(WidgetView, WidgetContainerView, WidgetModel) {
+function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
 
-  var WidgetEditorView = Backbone.View.extend({
+  var WidgetManagerView = Backbone.View.extend({
     el : $('.page'),
     widgetsContainer : null,
     widgets : [],
@@ -32,7 +33,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
       this.widgetsCollection.bind('add', this.placeUIElement);
       this.widgetsCollection.bind('change', this.changed);
 
-      //this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
@@ -47,7 +48,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
         self.placeUIElement(widget);
       });
 
-      //this.widgetEditorView.render();
+      this.widgetEditorView.render();
     },
 
     // this function decides if widget or container
@@ -121,5 +122,5 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
     }
   });
 
-  return WidgetEditorView;
+  return WidgetManagerView;
 });

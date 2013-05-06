@@ -20,8 +20,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'selectChanged');
 
       this.widgetsCollection    = widgetsCollection;
-
       this.model = widgetsCollection.selectedEl || _.last(widgetsCollection.models);
+
       this.widgetsCollection.bind('selected', this.selectChanged, this);
 
       if(this.model) {
@@ -32,11 +32,13 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     render: function() {
       var self = this;
+
       if(this.model && !iui.get('widget-wrapper-' + this.model.cid)) {
         this.model.bind('rendered', self.render);
         return;
       }
 
+      this.$el.fadeIn();
       if(this.model && !(this.model.has('container_info') && this.model.get('container_info').has('query'))) {
         this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.el.appendChild(this.layoutEditor.el);
@@ -71,8 +73,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         this.model = this.widgetsCollection.selectedEl;
         this.model.bind('change:selected', this.selectChanged);
         this.render();
-        this.bindLocation();
-        this.$el.fadeIn();
       }
     },
 
