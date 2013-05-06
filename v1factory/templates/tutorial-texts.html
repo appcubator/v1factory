@@ -36,19 +36,23 @@ This page helps set up the basics of the application.
 </script>
 
 <script type="text/template" id="tutorial-data_storage">
-<p>Your application has a database to store information about users and their interaction with the site.
-For example, when a user signs up or submits a form, the data is saved in your site's database.</p>
+<p>Your application has a database to store information about everything and retrieve them back. You can think of it as the compilation of multiple Excel sheets. It's important to classify information well and put them into the right Excel sheets for using them easily.</p>
 </script>
 
 <script type="text/template" id="tutorial-data_storage-entity">
-  <p>You can think of the database as similar to a bunch of Excel spreadsheet.
-  We'll work through the example of a User.</p>
+  <p>You can think of an entity as an Excel spreadsheet. If you want to show a list of documents, for example, you need to have a `Document` entity. Any type of important informatino that is central to your application should have an entity likewise. Photo, Tweet, Post, Game are some very popular samples.
+    <br  />
+    After you identify important entities in your app, you should add their properties, just like the columns on an Excel table.
+    <br  />
+    Users are also entities, but they have exceptional properties.
+
+  </p>
 
 </script>
 
 <script type="text/template" id="tutorial-data_storage-user">
-  <p>By default, your v1 Factory database ships with a User spreadsheet. This is where the application
-  stores information about it's users, such as their names, email addresses, etc.</p>
+  <p>User is an entity, and it's central to your application. Therefore, we provided a lot of the user functionality by default. </p>
+  <p>You can add new properties to it and also choose the authentication types from the checkboxes at the bottom.</p>
 </script>
 
 <script type="text/template" id="tutorial-data_storage-sample">
@@ -63,37 +67,17 @@ For example, when a user signs up or submits a form, the data is saved in your s
 
 
 <script type="text/template" id="tutorial-themes_design">
-  <p>A theme defines the look and feel of the basic UI Elements:</p>
+  <p>You can choose from our beautiful themes and all the styles will be available when you go to the Editor. Different themes will give your site a different feel - ie, modern, antiquated, childish, or professional.</p>
+  <p>In the future, we are planning to support this feature with a designer market place so that you can find people to design for your specific needs.</p>
 
-  <ul>
-    <li>Headers</li>
-    <li>Texts</li>
-    <li>Fonts</li>
-    <li>Buttons</li>
-    <li>Images</li>
-    <li>Links</li>
-    <li>Forms</li>
-    <li>Lines</li>
-    <li>Dropdowns</li>
-    <li>Containers</li>
-  </ul>
-
-  <p>Different themes will give your site a different feel - ie, modern, antiquated, childish, or professional.</p>
 </script>
 
 <script type="text/template" id="tutorial-themes_design-existingdesign">
-  <p>If you know CSS, make your own theme!</p>
-  <p>If not, hire a v1 Factory programmer to theme-ify your site.</p>
+  <p>If you already have some design, we would like to help you. Please e-mail us at team@appcubator.com and we will translate it into a private Appcubator theme for you.</p>
 </script>
 
 <script type="text/template" id="tutorial-pages">
-  <p>The pages screen is where you can create and edit the urls of your pages. For example,
-  you could set up your site to have a homepage and a registration page.</p>
-
-  <p>You can edit the URLs of your pages to your liking, and you can also have dynamic URLs,
-  such as "yoursite.com/listing/2123231/description".
-  Dynamic URLs are explained further in the next topic.</p>
-
+  <p>The pages screen is where you can add and organize pages for your application. You can have as many as you want. For example, you can make a profile page for your users. We creat the Homepage and a registration page for you by default.</p>
 </script>
 
 <script type="text/template" id="tutorial-pages-context">

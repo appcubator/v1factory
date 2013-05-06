@@ -12,7 +12,8 @@ require.config({
     "editor" : "./editor",
     "dicts" : "../dicts",
     "mixins" : "../mixins",
-    "key" : "../libs/keymaster/keymaster"
+    "key" : "../libs/keymaster/keymaster",
+    "answer" : "../libs/answer/answer"
   },
 
   shim: {
@@ -29,6 +30,9 @@ require.config({
     },
     "bootstrap" : {
       deps: ["jquery"]
+    },
+    "answer" : {
+      deps: ["../libs/answer/lib/natural", "underscore", "jquery"]
     }
   }
 
