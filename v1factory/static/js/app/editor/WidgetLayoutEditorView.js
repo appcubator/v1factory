@@ -1,7 +1,7 @@
 define([
   'app/editor/WidgetClassPickerView',
   'app/views/FormEditorView',
-  'editor/tool-tip-hints'
+  'app/editor/tool-tip-hints'
 ],
 function(WidgetClassPickerView, FormEditorView) {
 

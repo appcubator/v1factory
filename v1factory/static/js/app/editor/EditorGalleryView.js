@@ -2,6 +2,7 @@ define([
   'app/collections/ElementCollection',
   'app/models/ContainerWidgetModel',
   'app/models/WidgetModel',
+  'dicts/default-uielements',
   'dicts/constant-containers'
 ],
 function(ElementCollection,
@@ -26,11 +27,10 @@ function(ElementCollection,
                        'renderCurrentUserElements',
                        'renderEntitiyFormsTablesLists',
                        'renderContextEntityForms',
-                       'getFieldType');
+                       'getFieldType',
+                       'appendUIElement');
 
       this.widgetsCollection = widgetsCollection;
-
-      this.render();
     },
 
     render: function() {
@@ -40,6 +40,8 @@ function(ElementCollection,
       // All Create Forms, Tables, Lists
       // Context Entity Elements and Update Forms
       var self = this;
+
+      this.allList = iui.get('all-list');
 
       this.renderAuthenticationForms();
       this.renderCurrentUserElements();
@@ -218,7 +220,6 @@ function(ElementCollection,
       if(/(authentication)/.exec(className)) {
         var formType = String(id).replace('entity-user-','');
         form = constantContainers[formType];
-        console.log(form);
         widget.container_info = {};
         widget.container_info.entity = "User";
         widget.container_info.action = "signup";

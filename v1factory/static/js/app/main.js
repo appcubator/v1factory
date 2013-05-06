@@ -48,6 +48,7 @@ require([
   "app/views/ThemesGalleryView",
   "app/views/PagesView",
   "app/views/OverviewPageView",
+  "app/editor/EditorView",
   "backbone",
   "bootstrap",
   "iui",
@@ -60,7 +61,8 @@ function (AppModel,
           EntitiesView,
           ThemesGalleryView,
           PagesView,
-          OverviewPageView) {
+          OverviewPageView,
+          EditorView) {
 
   var v1App = Backbone.Router.extend({
 
@@ -69,7 +71,8 @@ function (AppModel,
       "app/:appid/info/"     : "showInfoPage",
       "app/:appid/entities/" : "showEntitiesPage",
       "app/:appid/gallery/"  : "showThemesPage",
-      "app/:appid/pages/"    : "showPagesPage"
+      "app/:appid/pages/"    : "showPagesPage",
+      "app/:appid/editorone/:pageid" : "showEditor"
     },
 
     tutorialDirectory: [0],
@@ -161,6 +164,28 @@ function (AppModel,
 
       $('.active').removeClass('active');
       $('.menu-app-pages').addClass('active');
+    },
+
+    showEditor: function(appId, pageId) {
+      console.log(v1App.view);
+
+      if(v1App.view) v1App.view.remove();
+      v1App.tutorialDirectory = [5];
+      $('.page').fadeOut();
+
+      pageId = pageId;
+      console.log(pageId);
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div";
+      $(document.body).append(cleanDiv);
+      v1App.view  = new EditorView({}, pageId);
+      v1App.view.setElement(cleanDiv).render();
+
+//       $('.active').removeClass('active');
+//       $('.menu-app-pages').addClass('active');
+
+
+// 
     },
 
     deploy: function() {
