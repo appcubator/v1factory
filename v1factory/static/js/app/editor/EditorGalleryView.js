@@ -27,7 +27,8 @@ function(ElementCollection,
                        'renderAuthenticationForms',
                        'renderCurrentUserElements',
                        'renderEntitiyFormsTablesLists',
-                       'renderContextEntityForms');
+                       'renderContextEntityForms',
+                       'getFieldType');
 
       this.widgetsCollection = widgetsCollection;
 
@@ -238,7 +239,7 @@ function(ElementCollection,
 
         content =  '{{' + editorContext +'.'+ entity.get('name') +'.'+field.get('name')+'}}';
 
-        widget         = _.extend(widget, uieState['texts'][0]);
+        widget         = _.extend(widget, uieState[self.getFieldType(field)][0]);
         widget.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
@@ -272,7 +273,7 @@ function(ElementCollection,
         entity = v1State.get('users');
         content =  '{{CurrentUser.'+field.get('name')+'}}';
 
-        widget         = _.extend(widget, uieState['texts'][0]);
+        widget         = _.extend(widget, uieState[self.getFieldType(field)][0]);
         widget.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
@@ -304,6 +305,24 @@ function(ElementCollection,
       if(top < 0) top = 0;
 
       return top;
+    },
+
+    getFieldType: function (fieldModel) {
+      var type;
+
+      switch(fieldModel.get('type')) {
+        case "text":
+        case "date":
+        case "number":
+        case "email":
+          type = "texts";
+          break;
+        case "image":
+          type = "images";
+          break;
+      }
+
+      return type;
     }
 
   });
