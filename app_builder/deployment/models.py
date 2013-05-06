@@ -125,7 +125,18 @@ class Deployment(models.Model):
 
     # COMMANDS TO RUN AFTER APP CODE HAS BEEN DEPLOYED
     commands = []
+
     commands.append('python manage.py syncdb --noinput')
+
+    # if migrations is not yet a directory, then setup south
+    if not os.path.isdir(os.path.join(self.app_dir, 'webapp', 'migrations')):
+      commands.append('python manage.py convert_to_south webapp')
+
+    # else, try to migrate the schema
+    else:
+      commands.append('python manage.py schemamigration webapp --auto')
+      commands.append('python manage.py migrate webapp')
+
     debug_info = []
     for c in commands:
       print "Running `{}`".format(c)

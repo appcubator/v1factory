@@ -64,7 +64,7 @@ def deploy_code(request):
     d.update_app_state(simplejson.loads(app_json))
   d.update_css(css)
   d.full_clean()
-  msgs = d.deploy(d_user)
+  msgs = d.deploy(simplejson.loads(d_user))
   github_actions.push(u_name, d.app_dir)
   d.save()
   ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
