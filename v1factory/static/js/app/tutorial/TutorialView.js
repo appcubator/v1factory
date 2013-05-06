@@ -14,7 +14,8 @@ function(Backbone) {
 
     events : {
       "click #tutorial-menu-list li" : "clickedMenuItem",
-      "submit .tutorial-q-form" : 'submittedQuestion'
+      "submit .tutorial-q-form" : 'submittedQuestion',
+      'click .answer-slide'     : 'showAnswer'
     },
 
     initialize: function(directory) {
@@ -28,7 +29,8 @@ function(Backbone) {
                       'selectMenu',
                       'keyhandler',
                       'submittedQuestion',
-                      'showQuestionSlide');
+                      'showQuestionSlide',
+                      'showAnswer');
 
       if(directory) this.addr = directory;
 
@@ -135,7 +137,9 @@ function(Backbone) {
     },
 
     chooseSlide: function(addr, isNew) {
-      var self = this;
+      console.log(addr);
+
+      var self = this; 
 
       this.addr = addr;
       this.selectMenu();
@@ -143,7 +147,8 @@ function(Backbone) {
       if(!isNew) {
 
         $(this.mainDiv).animate({
-          top: "800px"
+          top: "800px",
+          opacity: "0"
         }, 240, function() {
 
           $(this).css({top: '-800px'});
@@ -157,10 +162,12 @@ function(Backbone) {
         });
 
         $(this.mainDiv).delay(240).animate({
-          top: "50px"
+          top: "50px",
+          opacity: "1"
         });
       }
       else {
+        console.log( TutorialDirectory[addr[0]]);
         var obj = TutorialDirectory[addr[0]];
         if(addr[1]) {
           obj = obj.contents[addr[1]];
@@ -198,12 +205,21 @@ function(Backbone) {
     },
 
     showQuestionSlide: function(question, results) {
-      var title = '<h2>'+ 'Question' + '</h2><div class="main-img q-mark" style="background-image:url(/static/large-q-mark.png)">'+ question +'</div>';
+      console.log(results);
+
+      var title = '<h2>'+ 'Question' + '</h2><div class="main-img q-mark" style="background-image:url(/static/img/tutorial/large-q-mark.png)">'+ question +'</div>';
       var resultItems = '';
+
       _(results).each(function(result) {
-        resultItems += '<li id="slide-'+result.dir.join('-') + '"><h3>'+ result.title +'</h3>' + result.article + '</li>';
+        console.log(result);
+        resultItems += '<li class="answer-slide" id="slide-'+result.dir.join('-') + '"><h3>'+ result.title +'</h3>' + result.article + '</li>';
       });
 
+      if(!results.length) {
+        resultItems += '<li class="no-result">No answers could be found :( But we\'ll get back to you soon!</li>';
+      }
+
+      $('.tutorial-content').html('');
       $('.tutorial-content').html(title + '<ul class="text-cont">'+resultItems+'</ul>');
     },
 
@@ -278,7 +294,6 @@ function(Backbone) {
 
       var question = this.$el.find('.q-input').val();
       var results = this.reader.match(question);
-      console.log(results);
       this.showQuestionSlide(question, results);
 
 
@@ -295,6 +310,12 @@ function(Backbone) {
       });
 
       e.preventDefault();
+    },
+
+    showAnswer: function(e) {
+      console.log(e.target.id);
+      var id = (e.target.id||e.target.parentNode.id).replace('slide-', '');
+      this.chooseSlide([id], false);
     },
 
     onClose: function() {
