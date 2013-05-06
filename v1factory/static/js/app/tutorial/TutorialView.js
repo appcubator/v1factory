@@ -164,7 +164,7 @@ function(Backbone) {
     },
 
     showSlide: function(obj, addr) {
-      var title = '<h2>'+ obj.title + '</h2><div class="main-img" style="background-img:url('+ obj.img +')"></div>';
+      var title = '<h2>'+ obj.title + '</h2><div class="main-img" style="background-image:url('+ obj.img +')"></div>';
       $('.tutorial-content').html(title + '<div class="text-cont">' + iui.getHTML(obj.view) +'</div>');
 
       $.ajax({
@@ -183,7 +183,7 @@ function(Backbone) {
     },
 
     showQuestionSlide: function(question, results) {
-      var title = '<h2>'+ 'Question' + '</h2><div class="main-img" style="background-img:url(/static/large-q-mark.png)">'+ question +'</div>';
+      var title = '<h2>'+ 'Question' + '</h2><div class="main-img q-mark" style="background-image:url(/static/large-q-mark.png)">'+ question +'</div>';
       var resultItems = '';
       _(results).each(function(result) {
         resultItems += '<li id="slide-'+result.dir.join('-') + '"><h3>'+ result.title +'</h3>' + result.article + '</li>';
