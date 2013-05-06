@@ -52,7 +52,8 @@ function(AppModel, EditorView) {
     v1State = new AppModel(null);
     v1State.initialize(appState);
 
-    var editorView = new EditorView();
+    editorView  = new EditorView({}, pageId);
+    editorView.setElement(document.body).render();
   };
 
   new EditorMain();

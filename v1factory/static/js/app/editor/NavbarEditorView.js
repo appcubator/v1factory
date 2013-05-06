@@ -33,8 +33,6 @@ function() {
 
       this.model = navbarModel;
       this.model.bind('change:isHidden', this.hideChanged);
-      this.render();
-
     },
 
     render: function() {

@@ -10,7 +10,8 @@ define([
   'editor/NavbarEditorView',
   'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
-  '../../libs/keymaster/keymaster.min'
+  'key',
+  'app/editor/editor-templates'
 ],
 function( PageModel,
           EntityCollection,
@@ -24,7 +25,6 @@ function( PageModel,
           TutorialView ) {
 
   var EditorView = Backbone.View.extend({
-    el        : document.body,
     className : 'sample',
 
     events    : {
@@ -35,7 +35,7 @@ function( PageModel,
       'click .url-bar'       : 'clickedUrl'
     },
 
-    initialize: function() {
+    initialize: function(bone, pId) {
       _.bindAll(this, 'render',
                       'copy',
                       'paste',
@@ -50,6 +50,9 @@ function( PageModel,
                       'clickedUrl',
                       'createPage');
 
+      if(pId) pageId = pId;
+
+      console.log(pageId);
       this.model             = v1State.get('pages').models[pageId];
 
       /* Globals */
@@ -60,18 +63,13 @@ function( PageModel,
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
 
-      /* Calls */
-      this.render();
+
 
       var page = appState.pages[pageId];
-      if(!page.uielements.length) {
-        //new PageStylePicker(this.widgetsCollection);
-      }
 
       /* Bindings */
       $(window).bind('keydown', this.keydown);
@@ -80,12 +78,14 @@ function( PageModel,
       key('⌘+v, ctrl+v', this.paste);
       key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
 
-      $('#loading-gif').fadeOut().remove();
     },
 
     render: function() {
 
+      if(!this.el.innerHTML) this.el.innerHTML = iui.getHTML('editor-page');
+
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
+
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
         iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
@@ -98,7 +98,14 @@ function( PageModel,
 
       iui.get('page-list').appendChild(createBox.el);
 
+      console.log(iui.get('all-list'));
+
       this.renderUrlBar();
+      this.galleryEditor.render();
+      this.widgetsManager.render();
+      this.navbarEditor.render();
+
+      $('#loading-gif').fadeOut().remove();
     },
 
     renderUrlBar: function() {

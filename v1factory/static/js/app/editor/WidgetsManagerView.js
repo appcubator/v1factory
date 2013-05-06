@@ -8,7 +8,7 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
 
   var WidgetEditorView = Backbone.View.extend({
     el : $('.page'),
-    widgetsContainer : document.getElementById('elements-container'),
+    widgetsContainer : null,
     widgets : [],
     selectedEl: null,
     copiedEl: null,
@@ -30,20 +30,24 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
 
       this.widgetsCollection = widgetsCollection;
       this.widgetsCollection.bind('add', this.placeUIElement);
-
       this.widgetsCollection.bind('change', this.changed);
+
+      //this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
+
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
-      this.render();
     },
 
     render: function() {
       var self = this;
+      this.widgetsContainer = document.getElementById('elements-container');
       this.widgetsContainer.innerHTML = '';
       _(self.widgetsCollection.models).each(function(widget) {
         self.placeUIElement(widget);
       });
+
+      //this.widgetEditorView.render();
     },
 
     // this function decides if widget or container
