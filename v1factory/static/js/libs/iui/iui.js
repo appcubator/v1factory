@@ -1,6 +1,16 @@
 define(['jquery-ui'], function() {
 
   var iui = {
+    onServerReady: function(callback) {
+      $.ajax('/ping/', {
+        type: 'POST',
+        success: callback,
+        error: function(){
+          console.log("Server not ready. Waiting 100ms and trying again.");
+          window.setTimeout(function(){this.onServerReady(callback)}, 100);
+        }
+      });
+    },
     openFilePick: function(callback, success, appId) {
       filepicker.setKey("AAO81GwtTTec7D8nH9SaTz");
       filepicker.pickMultiple({
