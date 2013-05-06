@@ -47,6 +47,11 @@ class App(models.Model):
       self.subdomain = self.u_name()
     return super(App, self).save(*args, **kwargs)
 
+  def clean(self):
+    from django.core.exceptions import ValidationError
+    if self.owner.apps.filter(name=self.name).exists():
+        raise ValidationError('You have another app with the same name.')
+
   def get_state(self):
     return simplejson.loads(self._state_json)
 
