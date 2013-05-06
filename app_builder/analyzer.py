@@ -271,7 +271,7 @@ class Container(UIElement):
       u = Form.create_subform(uie, page)
     elif uie['container_info']['action'] == 'show':
       u = ListQuerysetWrapper(uie, page)
-    elif uie['container_info']['action'] == 'table-gal':
+    elif uie['container_info']['action'] == 'table':
       u = TableQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] in ['facebook', 'linkedin']:
       u = ThirdPartyLogin(uie, page)
