@@ -1,3 +1,14 @@
+function whenServerIsReady(callback) {
+  $.ajax('/ping/', {
+    type: 'POST',
+    success: callback,
+    error: function(){
+      console.log("Server not ready. Waiting 100ms and trying again.");
+      window.setTimeout(function(){whenServerIsReady(callback)}, 100);
+    }
+  });
+}
+
 define([
   'app/views/SimpleModalView',
   'templates/MainTemplates'
@@ -89,7 +100,9 @@ function(SimpleModalView) {
         type:"POST",
         url:'/app/'+appId+'/subdomain/'+subdomain+'/',
         data: {},
-        success: function(d){location.reload(true);},
+        success: function(d){
+          whenServerIsReady(function(){location.reload(true);});
+        },
         error: function() {
           iui.stopAjaxLoading();
           alert("error: see logs");

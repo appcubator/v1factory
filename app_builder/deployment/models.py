@@ -18,7 +18,9 @@ def copytree(src, dst, symlinks=False, ignore=None):
     s = os.path.join(src, item)
     d = os.path.join(dst, item)
     if os.path.isdir(s):
-      shutil.copytree(s, d, symlinks, ignore)
+      if not os.path.isdir(d):
+        os.makedirs(d)
+      copytree(s, d, symlinks, ignore)
     else:
       shutil.copy2(s, d)
 
@@ -113,13 +115,14 @@ class Deployment(models.Model):
     # COPY THE CODE TO THE RIGHT DIRECTORY
     print "Removing existing app code"
     for f in os.listdir(self.app_dir):
-      if f in ["db", ".git"]:
+      if f in ["db", ".git", "migrations"]:
         continue
       f_path = os.path.join(self.app_dir, f)
       if os.path.isfile(f_path):
         os.remove(f_path)
       else:
-        shutil.rmtree(f_path)
+        if f != "webapp": # migrations folder is in this one
+          shutil.rmtree(f_path)
     print "Copying temp project dir to the real path -> " + self.app_dir
     copytree(tmp_project_dir, self.app_dir)
 
@@ -140,7 +143,13 @@ class Deployment(models.Model):
     debug_info = []
     for c in commands:
       print "Running `{}`".format(c)
-      log_msg = subprocess.check_output(shlex.split(c), env=child_env, cwd=self.app_dir)
+      try:
+        log_msg = subprocess.check_output(shlex.split(c), env=child_env, cwd=self.app_dir)
+      except subprocess.CalledProcessError, e:
+        print repr(e.cmd) + " returned with exit code of " + str(e.returncode)
+        print "Command output: " + e.output
+        # TODO send error to someone! don't let this fail silently
+
       print log_msg
       debug_info.append(log_msg)
 

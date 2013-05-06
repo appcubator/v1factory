@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^faq/$', 'v1factory.base_views.faq'),
     url(r'^account/$', 'v1factory.base_views.account'),
     url(r'^tutorial/$', 'v1factory.base_views.tutorial'),
+    url(r'^ping/$', 'v1factory.base_views.ping'),
 )
 
 urlpatterns += patterns('v1factory.views',

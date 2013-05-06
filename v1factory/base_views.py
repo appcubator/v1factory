@@ -117,3 +117,5 @@ def faq(request):
   page_context["title"] = "Homepage"
   return render(request, 'website-faq.html', page_context)
 
+def ping(request):
+  return HttpResponse("ok")
