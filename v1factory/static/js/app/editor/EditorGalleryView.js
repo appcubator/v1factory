@@ -222,7 +222,7 @@ function(ElementCollection,
         form = constantContainers[formType];
         widget.container_info = {};
         widget.container_info.entity = "User";
-        widget.container_info.action = "signup";
+        widget.container_info.action = "login";
         widget.container_info.form = form;
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);
