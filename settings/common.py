@@ -97,6 +97,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.csrf",
     "v1factory.context_processors.list_of_users_apps.list_of_users_apps",
+    "v1factory.context_processors.list_of_users_apps.debug",
 )
 
 INSTALLED_APPS = (
@@ -164,7 +165,7 @@ LOGGING = {
             'propagate': True,
             'level':'DEBUG',
         },
-        'deployment.models': {
+        'deployment_models': {
             'handlers':['console'],
             'propagate': True,
             'level':'DEBUG',

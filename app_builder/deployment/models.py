@@ -12,7 +12,8 @@ import shutil
 from django.db import models
 import requests
 import logging
-logger = logging.getLogger("deployment.models")
+logger = logging.getLogger("deployment_models")
+from app_builder.deployment import tasks
 
 def copytree(src, dst, symlinks=False, ignore=None):
   """shutil.copytree wrapper which works even when the dest dir exists"""
@@ -134,32 +135,8 @@ class Deployment(models.Model):
     logger.info("Copying temp project dir to the real path -> " + self.app_dir)
     copytree(tmp_project_dir, self.app_dir)
 
-    # COMMANDS TO RUN AFTER APP CODE HAS BEEN DEPLOYED
-    commands = []
-
-    commands.append('python manage.py syncdb --noinput')
-
-    # if migrations is not yet a directory, then setup south
-    if not os.path.isdir(os.path.join(self.app_dir, 'webapp', 'migrations')):
-      logger.info("Web app has not yet been migrated - converting to south.")
-      commands.append('python manage.py convert_to_south webapp')
-
-    # else, try to migrate the schema
-    else:
-      commands.append('python manage.py schemamigration webapp --auto')
-      commands.append('python manage.py migrate webapp')
-
-    debug_info = []
-    for c in commands:
-      logger.debug("Running `{}`".format(c))
-      try:
-        log_msg = subprocess.check_output(shlex.split(c), env=child_env, cwd=self.app_dir)
-      except subprocess.CalledProcessError, e:
-        logger.error(repr(e.cmd) + " returned with exit code of " + str(e.returncode))
-        logger.error("Command output: " + e.output)
-        # TODO send error to someone! don't let this fail silently
-
-      logger.debug(log_msg)
+    logger.info("Sync the db, perform migrations if needed")
+    r = tasks.syncdb.delay(self, child_env)
 
     return {}
 
