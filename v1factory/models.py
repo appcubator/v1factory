@@ -384,6 +384,19 @@ class TutorialLog(models.Model):
     log.save()
 
   @classmethod
+  def create_feedbacklog(cls, user, message):
+    log = cls(user = user, title=message, directory = "feedback")
+    log.save()
+
+  @classmethod
+  def is_donewithfeedback(cls, user):
+    log = cls.objects.filter(user = user, directory="feedback")
+    if len(log) is 0:
+      return False
+    else:
+      return True
+
+  @classmethod
   def get_percentage(cls, user):
     log = cls.objects.filter(user=user).exclude(directory='').values("directory").annotate(n=models.Count("pk"))
     percentage = (len(log)*100) / 15

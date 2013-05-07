@@ -61,6 +61,7 @@ urlpatterns += patterns('v1factory.views',
 
     # tutorial and logging
     url(r'^log/slide/$', 'log_slide'),
+    url(r'^log/feedback/$', 'log_feedback'),
 
     url(r'^designer/$', 'designer_page'),
     url(r'^theme/new/$', 'theme_new'),

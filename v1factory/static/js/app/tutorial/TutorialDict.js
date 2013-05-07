@@ -85,5 +85,11 @@ var TutorialDirectory = [
         contents : null
       }
     ]
+  },
+  {
+    title : "Feedback Form",
+    img : null,
+    view  : "feedback-form-page",
+    contents : null
   }
 ];
