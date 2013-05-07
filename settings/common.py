@@ -109,7 +109,8 @@ INSTALLED_APPS = (
     'v1factory',
     'app_builder',
     'app_builder.deployment',
-#    'djcelery',
+    'djcelery',
+    'kombu.transport.django',
     'less'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -153,7 +154,7 @@ LOGGING = {
 }
 import djcelery
 djcelery.setup_loader()
-BROKER_URL = 'django:///'
+BROKER_URL = "django://"
 
 LOGOUT_URL="/"
 LOGIN_URL="/login/"
