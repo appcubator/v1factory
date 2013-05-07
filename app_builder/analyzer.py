@@ -466,6 +466,7 @@ class AnalyzedApp:
 
   def __init__(self, app_state):
     # create "managers" which will help a dev find things inside lists
+    logging.info("Converting app state to analyzed app.")
     self.models = Manager(Model)
     self.pages = Manager(Page)
     self.routes = Manager(Route)
