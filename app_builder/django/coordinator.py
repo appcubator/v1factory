@@ -2,6 +2,7 @@
 
 import re
 import logging
+logger = logging.getLogger("app_builder")
 
 from app_builder.manager import Manager
 from app_builder.analyzer import CreateForm, EditForm, SignupForm, LoginForm
@@ -16,7 +17,7 @@ from form_receiver import LoginFormReceiver, SignupFormReceiver, DjangoFormRecei
 from app import DjangoApp
 
 def analyzed_app_to_app_components(analyzed_app, d_user):
-  logging.info("Converting analyzed app to django app components.")
+  logger.info("Converting analyzed app to django app components.")
   models = Manager(DjangoModel)
   views = Manager(DjangoView)
   urls = Manager(DjangoUrl)
@@ -24,12 +25,12 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
   form_receivers = Manager(DjangoFormReceiver)
   queries = []
   # create and add django models
-  logging.debug("Creating django model and non-relational field objects.")
+  logger.debug("Creating django model and non-relational field objects.")
   for m in analyzed_app.models.each():
     models.add( DjangoModel.create(m) ) # this skips the relational fields
 
   # create relational fields
-  logging.debug("Creating the relational field objects.")
+  logger.debug("Creating the relational field objects.")
   for am1 in analyzed_app.models.each():
     for f in am1.fields:
       if f.content_type == 'list of blah':
@@ -54,7 +55,7 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
           dm2.fields.add(df)
 
   # create django templates
-  logging.debug("Creating django template, view, and url objects for each page.")
+  logger.debug("Creating django template, view, and url objects for each page.")
   for p in analyzed_app.pages.each():
     t = DjangoTemplate.create(p) # resolves links, creates row/column structure of html
     templates.add(t)
@@ -70,7 +71,7 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
       v.queries.add(dq) # add the query to the view function
 
   # logout button
-  logging.debug("Adding a view and url object for the logout action.")
+  logger.debug("Adding a view and url object for the logout action.")
   lv = DjangoLogoutView(name='logout')
   views.add(lv)
   lu = DjangoUrl.create_get(p, lv, analyzed_app, models)
@@ -78,13 +79,13 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
   urls.add( lu )
 
   # now that we know all the queries, properly name the variables in the templates
-  logging.debug("Name template variables (links, loop, page context, single vars).")
+  logger.debug("Name template variables (links, loop, page context, single vars).")
   for t in templates.each():
     t.resolve_links(analyzed_app.pages)
     t.properly_name_vars_in_q_container(models)
 
   # form POST receiver creation
-  logging.debug("Creating form receiver objects and urls for the forms.")
+  logger.debug("Creating form receiver objects and urls for the forms.")
   for f in analyzed_app.forms.each():
     if isinstance(f, SignupForm):
       rec = SignupFormReceiver.create_signup(f, analyzed_app)

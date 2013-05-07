@@ -4,6 +4,7 @@
 
 import re
 import logging
+logger = logging.getLogger("app_builder")
 from manager import Manager
 import simplejson
 from app_builder import utils
@@ -466,12 +467,12 @@ class AnalyzedApp:
 
   def __init__(self, app_state):
     # create "managers" which will help a dev find things inside lists
-    logging.info("Converting app state to analyzed app.")
+    logger.info("Converting app state to analyzed app.")
     self.models = Manager(Model)
     self.pages = Manager(Page)
     self.routes = Manager(Route)
 
-    logging.debug("Adding user fields to the analyzed app.")
+    logger.debug("Adding user fields to the analyzed app.")
     base_user = { "name": "User" }
     if app_state['users']['local']:
       self.local_login = True
@@ -487,41 +488,41 @@ class AnalyzedApp:
     if app_state['users']['facebook']:
       self.facebook_login = True
 
-    logging.debug("Adding entities to the analyzed app.")
+    logger.debug("Adding entities to the analyzed app.")
     for ent in app_state['entities']:
       m = Model.create(ent)
       self.models.add(m)
-    logging.debug("Initing entities.")
+    logger.debug("Initing entities.")
     self.init_models()
 
     # create pages from app_state pages
-    logging.debug("Adding pages to the analyzed app.")
+    logger.debug("Adding pages to the analyzed app.")
     for p in app_state['pages']:
       page = Page(p)
       self.pages.add(page)
-      logging.debug("Adding route for a page.")
+      logger.debug("Adding route for a page.")
       u = p['url']
       r = Route(u, page)
       self.routes.add(r)
       # this shouldn't be here, but who cares
       if page.navbar_brandname is None:
-        logging.debug("Navbar set to app name.")
+        logger.debug("Navbar set to app name.")
         page.navbar_brandname = app_state['name']
       # (ensures all navbar brandnames are strings)
 
-    logging.debug("Resolving internal links in navbar.")
+    logger.debug("Resolving internal links in navbar.")
     for p in self.pages.each():
       p.resolve_navbar_pages(self)
 
-    logging.debug("Resolving the models in URLs.")
+    logger.debug("Resolving the models in URLs.")
     self.link_models_to_routes()
-    logging.debug("Resolving the routes and pages.")
+    logger.debug("Resolving the routes and pages.")
     self.link_routes_and_pages()
-    logging.debug("Resolving links in nodes.")
+    logger.debug("Resolving links in nodes.")
     self.fill_in_hrefs()
-    logging.debug("Resolving forms: entity, required fields, goto page.")
+    logger.debug("Resolving forms: entity, required fields, goto page.")
     self.init_forms()
-    logging.debug("Resolving entities in the lists and tables.")
+    logger.debug("Resolving entities in the lists and tables.")
     self.init_queries(app_state)
 
   # link routes and models
