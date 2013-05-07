@@ -67,13 +67,9 @@ def deploy_code(request):
   d.full_clean()
   msgs = d.deploy(simplejson.loads(d_user))
   # Async call via celery
-  async_r = push.delay(u_name, d.app_dir)
-  print u_name, d.app_dir
-  print "OH LORD", async_r.get(timeout=5)
+  push.delay(u_name, d.app_dir)
   d.save()
   ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
-  ret_code = 0
-  assert(ret_code == 0)
   return HttpResponse(msgs)
 
 @require_POST

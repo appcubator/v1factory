@@ -14,5 +14,8 @@ def push(name, cwd, changes=True):
     child_env = os.environ.copy()
     print "HERE"
     ret_code = subprocess.call(['git', 'add', '.'], env=child_env, cwd=cwd)
+    print "Git add: ", ret_code
     ret_code = subprocess.call(['git', 'commit', '-a', '-m', '"changes"'], env=child_env, cwd=cwd)
+    print "Git commit: ", ret_code
     ret_code = subprocess.call(['git', 'push', '-u', 'origin', 'master'], env=child_env, cwd=cwd)
+    print "Git push: ", ret_code
