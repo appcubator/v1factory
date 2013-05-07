@@ -3,6 +3,7 @@ define([
   'app/collections/EntityCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
+  'app/views/ErrorModalView',
   'editor/WidgetsManagerView',
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
@@ -17,6 +18,7 @@ function( PageModel,
           EntityCollection,
           UrlView,
           SimpleModalView,
+          ErrorModalView,
           WidgetsManagerView,
           WidgetEditorView,
           EditorGalleryView,
@@ -128,7 +130,13 @@ function( PageModel,
             $('#save').html("<span>Save</span>").fadeIn();
           },3000);
         },
-        error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
+        error: function(data, t) {
+          var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+          if(DEBUG) {
+            content = { text: "LULZ  <br  />" + data.responseText };
+          }
+          new ErrorModalView(content);
+        }
       });
 
 
@@ -162,6 +170,13 @@ function( PageModel,
         success: function(data) {
           window.open(data.site_url);
           new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
+        },
+        error: function(data) {
+          var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+          if(DEBUG) {
+            content = { text: data.responseText };
+          }
+          new ErrorModalView(content);
         },
         dataType: "JSON"
       });
