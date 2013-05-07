@@ -14,10 +14,11 @@ define([
     shadowElem : null,
 
     events: {
-      'click'         : 'select',
+      'mousedown'         : 'select',
       'click .delete' : 'remove',
       'keyDown'       : 'keyHandler',
-      'mouseover'     : 'hovered'
+      'mouseover'     : 'hovered',
+      'mouseout'      : 'unhovered'
     },
 
     initialize: function(widgetModel){
@@ -25,7 +26,6 @@ define([
       _.bindAll(this, 'render',
                       'renderElement',
                       'select',
-                      'outlineSelected',
                       'changedWidth',
                       'changedHeight',
                       'changedValue',
@@ -47,7 +47,6 @@ define([
 
       this.render();
 
-      this.model.bind("change:selected", this.outlineSelected, this);
       this.model.bind("change:type", this.changedType, this);
       this.model.bind("change:class_name", this.changedType, this);
       this.model.bind("remove", this.remove, this);
@@ -107,8 +106,6 @@ define([
 
       if(this.model.isFullWidth()) this.switchOnFullWidth();
 
-      this.resizableAndDraggable();
-
       return this;
     },
 
@@ -124,25 +121,12 @@ define([
     },
 
     select: function(e) {
+      this.model.trigger('selected');
       this.el.style.zIndex = 2000;
       this.model.set('selected', true);
       this.model.select();
 
       e.stopPropagation();
-    },
-
-    outlineSelected: function() {
-
-      if(this.model.get('selected')) {
-        $(this.el).addClass('selected');
-        this.el.style.zIndex = 2000;
-        this.selected = true;
-      }
-      else {
-        $(this.el).removeClass('selected');
-        this.selected = false;
-        this.el.style.zIndex = '';
-      }
     },
 
     changedWidth: function(a) {
@@ -268,7 +252,11 @@ define([
     },
 
     hovered: function() {
-      this.model.collection.hover(this.model);
+      this.model.trigger('hovered');
+    },
+
+    unhovered: function() {
+      this.model.trigger('unhovered');
     },
 
     keyHandler: function (e) {

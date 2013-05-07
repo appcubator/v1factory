@@ -8,38 +8,56 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     el     : document.getElementById('elements-container'),
     className : 'editor-page fadeIn',
     tagName : 'div',
+    selectedEl : null,
 
     initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
                       'clear',
                       'setLayout',
                       'doBindings',
-                      'hoverChanged');
+                      'widgetHover',
+                      'widgetUnhover',
+                      'newSelected');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('selected', this.selectChanged, this);
-      this.widgetsCollection.bind('hovered', this.hoverChanged, this);
+      //this.widgetsCollection.bind('hovered', this.hoverChanged, this);
 
       this.doBindings();
     },
 
     render: function() {
       var hoverDiv = document.createElement('div');
-      hoverDiv.style.backgroundColor = 'red';
+      hoverDiv.id = "hover-div";
       hoverDiv.style.width = 0;
       hoverDiv.style.height = 0;
-      hoverDiv.style.position = "absolute";
       this.hoverDiv = hoverDiv;
       this.el.appendChild(hoverDiv);
 
       var selectDiv = document.createElement('div');
-      selectDiv.style.backgroundColor = 'blue';
+      selectDiv.id = "select-div";
       selectDiv.style.width = 0;
       selectDiv.style.height = 0;
-      selectDiv.style.position = "absolute";
-
       this.selectDiv = selectDiv;
       this.el.appendChild(selectDiv);
+
+      $(selectDiv).resizable({
+        handles: "n, e, s, w, se",
+        // grid: [80, 15],
+        containment: "parent",
+        resize: self.resizing,
+        stop  : self.resized
+      });
+
+      $(selectDiv).draggable({
+        containment: "parent",
+        //grid: [80, 15],
+        drag: self.moving,
+        stop: self.moved,
+        snapMode : "outer"
+      });
+
+      selectDiv.style.zIndex = "2000";
 
       return this;
     },
@@ -47,18 +65,24 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     doBindings: function() {
       var self = this;
       _(this.widgetsCollection.models).each(function(widget) {
-        widget.bind('hovered', self.hoverChanged);
+        widget.bind('hovered', function() {
+          self.widgetHover(this);
+        });
+
+        widget.on('unhovered', function() {
+          self.widgetUnhover(this);
+        });
+
+        widget.on('selected', function() {
+          self.newSelected(this);
+        });
+
       });
     },
 
-    hoverChanged: function() {
-      var widgetModel = this.widgetsCollection.hoveredEl;
-      console.log(widgetModel);
-      console.log(this.hoverDiv);
-      this.setLayout(this.hoverDiv, widgetModel);
-    },
-
     setLayout: function(node, widgetModel) {
+      console.log('setting layout');
+      console.trace();
       node.style.width = widgetModel.get('layout').get('width') * 80;
       node.style.height = widgetModel.get('layout').get('height') * 15;
       node.style.left = widgetModel.get('layout').get('left') * 80;
@@ -66,10 +90,21 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       return node;
     },
 
+    widgetHover: function(widgetModel) {
+      this.setLayout(this.hoverDiv, widgetModel);
+    },
+
+    widgetUnhover: function(widgetModel) {
+      this.hoverDiv.style.height = 0;
+      this.hoverDiv.style.width = 0;
+    },
+
     bindLocation: function() { },
 
-    selectChanged : function(chg, ch2) {
-
+    newSelected: function(widgetModel) {
+      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      this.selectedEl = widgetModel;
+      this.setLayout(this.selectDiv, widgetModel);
     },
 
     clear: function() {

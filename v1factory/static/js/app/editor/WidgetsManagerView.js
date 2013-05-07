@@ -71,7 +71,6 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetS
 
       if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
       else iui.get('full-container').appendChild(curWidget.el);
-      curWidget.resizableAndDraggable();
     },
 
     placeContainer: function(containerWidgetModel) {
