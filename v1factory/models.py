@@ -274,6 +274,7 @@ class UITheme(models.Model):
   name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
   parent_theme = models.ForeignKey('self', blank=True, null=True, default=None)
+  image = models.URLField(blank=True, default="/static/img/theme4.png")
 
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 

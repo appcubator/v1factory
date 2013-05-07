@@ -25,8 +25,8 @@ function(Backbone) {
     },
 
     createTheme: function() {
-      $('.create-theme').hide();
-      $('.create-container').fadeIn();
+      $('.create-theme-text').hide();
+      $('.create-form').fadeIn();
     },
 
     createFormSubmitted: function(e) {
@@ -35,13 +35,26 @@ function(Backbone) {
         type: "POST",
         url: '/theme/new/',
         data: { name : name },
-        success: function(data) { console.log(data); },
+        success: function(data) {
+          var template = [
+            '<li class="hi5 hoff1 span40 pane border">',
+              '<a href="/theme/{{ theme.pk }}/">',
+                '<span><%= name %></span>',
+                '<form method="POST" action="/theme/<%= id %>/delete/">',
+                  '<input type="submit"  class="btn btn-warning right" value="Delete">',
+                '</form>',
+              '</a>',
+            '</li>'
+          ].join('\n');
+          var html = _.template(template, data);
+          $('#themes-list').append(html);
+        },
         dataType: "JSON"
       });
 
       e.preventDefault();
       $(e.target).hide();
-      $('.create-theme').fadeIn();
+      $('.create-theme-text').fadeIn();
     }
   });
 
