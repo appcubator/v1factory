@@ -42,6 +42,7 @@ require.config({
 require([
   "app/models/AppModel",
   "app/views/SimpleModalView",
+  "app/views/ErrorModalView",
   "app/tutorial/TutorialView",
   "app/views/AppInfoView",
   "app/views/EntitiesView",
@@ -56,6 +57,7 @@ require([
 ],
 function (AppModel,
           SimpleModalView,
+          ErrorModalView,
           TutorialView,
           InfoView,
           EntitiesView,
@@ -197,6 +199,13 @@ function (AppModel,
                 iui.stopAjaxLoading();
                 new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
               },
+              error: function(data) {
+                var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+                if(DEBUG) {
+                  content = { text: data.responseText };
+                }
+                new ErrorModalView(content);
+              },
               dataType: "JSON"
         });
     },
@@ -210,6 +219,13 @@ function (AppModel,
           url: '/app/'+appId+'/state/',
           data: JSON.stringify(appState),
           complete: function() { iui.stopAjaxLoading("Saved"); },
+          error: function(data) {
+            var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+            if(DEBUG) {
+              content = { text: data.responseText };
+            }
+            new ErrorModalView(content);
+          },
           dataType: "JSON"
       });
     },
