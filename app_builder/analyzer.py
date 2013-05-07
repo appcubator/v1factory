@@ -3,6 +3,8 @@
 #       so we won't have to change the django code writer.
 
 import re
+import logging
+logger = logging.getLogger("app_builder")
 from manager import Manager
 import simplejson
 from app_builder import utils
@@ -465,30 +467,12 @@ class AnalyzedApp:
 
   def __init__(self, app_state):
     # create "managers" which will help a dev find things inside lists
+    logger.info("Converting app state to analyzed app.")
     self.models = Manager(Model)
     self.pages = Manager(Page)
     self.routes = Manager(Route)
 
-    """  # This commented block was a hack to move forms from entity and user to the form dict
-    self.backend_forms = Manager(object)
-    for e in app_state['entities']:
-      for f in e['forms']:
-        f['entity'] = e['name']
-        self.backend_forms.add(f)
-    for f in app_state['users']['forms']:
-      f['entity'] = 'User'
-      self.backend_forms.add(f)
-
-    # replace the form name with a reference to the actual form dictionary.
-    for page in app_state['pages']:
-      for uie in page['uielements']:
-        if uie['container_info'] is not None:
-          if 'form' in uie['container_info']:
-            uie['container_info']['form'] = self.backend_forms.get_by_name(\
-                                              utils.extract_from_brace(uie['container_info']['form']))
-    """
-
-    # given user settings, create some models
+    logger.debug("Adding user fields to the analyzed app.")
     base_user = { "name": "User" }
     if app_state['users']['local']:
       self.local_login = True
@@ -504,32 +488,41 @@ class AnalyzedApp:
     if app_state['users']['facebook']:
       self.facebook_login = True
 
-    # create models from app_state entities
+    logger.debug("Adding entities to the analyzed app.")
     for ent in app_state['entities']:
       m = Model.create(ent)
       self.models.add(m)
+    logger.debug("Initing entities.")
     self.init_models()
 
     # create pages from app_state pages
+    logger.debug("Adding pages to the analyzed app.")
     for p in app_state['pages']:
       page = Page(p)
       self.pages.add(page)
+      logger.debug("Adding route for a page.")
       u = p['url']
       r = Route(u, page)
       self.routes.add(r)
       # this shouldn't be here, but who cares
       if page.navbar_brandname is None:
+        logger.debug("Navbar set to app name.")
         page.navbar_brandname = app_state['name']
       # (ensures all navbar brandnames are strings)
 
+    logger.debug("Resolving internal links in navbar.")
     for p in self.pages.each():
       p.resolve_navbar_pages(self)
 
+    logger.debug("Resolving the models in URLs.")
     self.link_models_to_routes()
+    logger.debug("Resolving the routes and pages.")
     self.link_routes_and_pages()
+    logger.debug("Resolving links in nodes.")
     self.fill_in_hrefs()
-    # will eventually do forms.
+    logger.debug("Resolving forms: entity, required fields, goto page.")
     self.init_forms()
+    logger.debug("Resolving entities in the lists and tables.")
     self.init_queries(app_state)
 
   # link routes and models
