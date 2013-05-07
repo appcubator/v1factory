@@ -1,2 +1,2 @@
 #! /bin/bash
-sudo tail -n150 -f /var/log/apache2/error.log
+sudo tail -n350 -f /var/log/apache2/error.log
