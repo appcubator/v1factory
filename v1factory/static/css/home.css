@@ -67,37 +67,19 @@ to {margin-top: 20px;}
 }
 
 .site-trackstudent {
-  width: 230px;
+  width: 300px;
   height: 180px;
   margin-top: 20px;
-  margin-left: 80px;
-animation: myfirst 1s;
--moz-animation: myfirst 1s; /* Firefox */
--webkit-animation: myfirst 1s; /* Safari and Chrome */
--o-animation: myfirst 1s; /* Opera */
-background-image: url(../img/home/trackstudent-site.png);
+  margin-left: 45px;
+animation: myfirst 0.4s;
+-moz-animation: myfirst 0.4s; /* Firefox */
+-webkit-animation: myfirst 0.4s; /* Safari and Chrome */
+-o-animation: myfirst 0.4s; /* Opera */
+background-image: url(../img/home/home-pics.png);
 background-position: center;
-background-size: 100% auto;
 background-repeat: no-repeat;
 }
 
-.mobile-trackstudent {
-  position: absolute;
-  top: 14px;
-  width: 50px;
-  height: 200px;
-  margin-left: 50px;
-  margin-top: 20px;
-animation: myfirst 1s;
--moz-animation: myfirst 1s; /* Firefox */
--webkit-animation: myfirst 1s; /* Safari and Chrome */
--o-animation: myfirst 1s; /* Opera */
-
-background-image: url(../img/home/trackstudent-mobile.png);
-background-position: center 40px;
-background-size: 100% auto;
-background-repeat: no-repeat;
-}
 
 .nocode {
   background-image: url('../img/home/0code.png');
