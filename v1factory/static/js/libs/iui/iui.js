@@ -7,7 +7,7 @@ define(['jquery-ui'], function() {
         success: callback,
         error: function(){
           console.log("Server not ready. Waiting 100ms and trying again.");
-          window.setTimeout(function(){this.onServerReady(callback)}, 100);
+          window.setTimeout(function(){iui.onServerReady(callback)}, 100);
         }
       });
     },
