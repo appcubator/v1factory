@@ -9,13 +9,13 @@ function(WidgetModel,
 
     model : WidgetModel,
     selectedEl: null,
+    hoveredEl: null,
 
     initialize: function(bone) {
       _.bindAll(this, 'selectWidgetById',
                       'select',
                       'unselectAll');
 
-      this.bind('change:selected', this.selectedChanged);
       this.bind('add', this.select);
     },
 
@@ -32,14 +32,16 @@ function(WidgetModel,
       this.selectedEl = this.get(id);
     },
 
-    selectedChanged : function(model) {
-    },
-
     select : function(model) {
       this.selectedEl = model;
       model.set('selected', true);
       this.trigger('selected');
       this.unselectAll(model);
+    },
+
+    hover : function(model) {
+      this.hoveredEl = model;
+      this.trigger('hovered');
     },
 
     removeSelected  : function(e) {

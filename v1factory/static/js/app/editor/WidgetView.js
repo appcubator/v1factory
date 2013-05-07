@@ -16,7 +16,8 @@ define([
     events: {
       'click'         : 'select',
       'click .delete' : 'remove',
-      'keyDown'       : 'keyHandler'
+      'keyDown'       : 'keyHandler',
+      'mouseover'     : 'hovered'
     },
 
     initialize: function(widgetModel){
@@ -264,6 +265,10 @@ define([
       });
       this.model.get('content_attribs').set('src', _.last(files).url);
       //this.show(this.model);
+    },
+
+    hovered: function() {
+      this.model.collection.hover(this.model);
     },
 
     keyHandler: function (e) {

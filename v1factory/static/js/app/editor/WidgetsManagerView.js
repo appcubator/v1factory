@@ -3,9 +3,10 @@ define([
   'editor/WidgetContainerView',
   'app/models/WidgetModel',
   'app/editor/WidgetEditorView',
+  'app/editor/WidgetSelectorView',
   'backbone'
 ],
-function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
+function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetSelectorView) {
 
   var WidgetManagerView = Backbone.View.extend({
     el : $('.page'),
@@ -34,6 +35,7 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
       this.widgetsCollection.bind('change', this.changed);
 
       this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
+      this.widgetSelectorView = new WidgetSelectorView(this.widgetsCollection);
 
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
@@ -49,6 +51,7 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
       });
 
       this.widgetEditorView.render();
+      this.widgetSelectorView.render();
     },
 
     // this function decides if widget or container
