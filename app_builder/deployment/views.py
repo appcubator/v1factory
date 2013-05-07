@@ -70,7 +70,7 @@ def deploy_code(request):
   push.delay(u_name, d.app_dir)
   d.save()
   ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
-  return HttpResponse(msgs)
+  return HttpResponse(simplejson.dumps(msgs), mimetype="application/json")
 
 @require_POST
 @csrf_exempt
