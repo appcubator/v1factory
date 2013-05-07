@@ -2,6 +2,8 @@ import os
 import os.path
 import shutil
 import tempfile
+import logging
+logger = logging.getLogger("app_builder")
 
 from app_builder.utils import get_api_key
 from os.path import join
@@ -82,8 +84,12 @@ class DjangoAppWriter:
   """
 
   def write_to_fs(self, dest=None):
+    logger.info("Writing app to temporary directory.")
+
     if dest is None:
+      logger.debug("Making temporary directory as destination.")
       dest = tempfile.mkdtemp()
+      logger.debug("Destination: %s" % dest)
 
     bpsrc = DjangoAppWriter.bpsrc
 
@@ -93,6 +99,7 @@ class DjangoAppWriter:
       raise Exception("I'm not going to write into a nonempty directory, that's dangerous")
 
     # create directories
+    logger.debug("Creating internal directories.")
     if not os.path.exists(dest):
       os.makedirs(dest)
     webapp_dir = join(dest, "webapp")
@@ -120,6 +127,7 @@ class DjangoAppWriter:
       return f_transporter(src_str, dest_str, shutil.copyfile)
 
     # copy boilerplate
+    logger.debug("Copying boilerplate files.")
     copy_file('.gitignore', '.gitignore')
     copy_file('requirements.txt', 'requirements.txt')
     copy_file('__init__.py', '__init__.py')
@@ -128,6 +136,7 @@ class DjangoAppWriter:
     copy_file('wsgi.py', 'wsgi.py')
 
     # main webapp files
+    logger.debug("Rendering and writing webapp files.")
     copy_file('__init__.py', 'webapp/__init__.py')
     write_string(self.render_models_py(), 'webapp/models.py')
     write_string(self.render_views_py(), 'webapp/views.py')
@@ -136,17 +145,20 @@ class DjangoAppWriter:
     write_string(self.render_emailer_py(), 'webapp/emailer.py')
 
     # templates
+    logger.debug("Rendering and writing template files.")
     copy_file('base.html', 'templates/base.html')
     for fname, template in self.render_templates():
       write_string(template, 'templates/webapp/{}'.format(fname))
 
     # static
+    logger.debug("Copying static files, and writing CSS.")
     f_transporter('jslibs', 'static/jslibs', shutil.copytree)
     f_transporter('img', 'static/img', shutil.copytree)
     copy_file('ajaxify.js', 'static/ajaxify.js')
     copy_file('css/bootstrap.css', 'static/bootstrap.css')
     copy_file('css/reset.css', 'static/reset.css')
     write_string(self.css, 'static/style.css')
-    # TODO copy the other css files here too later.
+
+    logger.info("Finished writing django app.")
 
     return dest
