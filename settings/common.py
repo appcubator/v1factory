@@ -164,7 +164,7 @@ LOGGING = {
             'propagate': True,
             'level':'DEBUG',
         },
-        'deployment.models': {
+        'deployment_models': {
             'handlers':['console'],
             'propagate': True,
             'level':'DEBUG',

@@ -107,6 +107,5 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
     if isinstance(f, CreateForm):
       rec.init_foreign_keys(models) # should automatically add foreign keys
 
-  assert False, "lol"
   dw = DjangoApp(models, views, urls, templates, form_receivers, d_user)
   return dw
