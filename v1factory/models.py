@@ -174,7 +174,13 @@ class App(models.Model):
       r = requests.post("http://staging.appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:
-      return "http://%s.appcubator.com" % self.subdomain
+      response_content = r.json()
+      result = {}
+      result['site_url'] = "http://%s.appcubator.com" % self.subdomain
+      result['github_url'] = self.github_url()
+      if 'errors' in response_content:
+        result['errors'] = response_content['errors']
+      return result
     else:
       raise Exception(r.content)
 

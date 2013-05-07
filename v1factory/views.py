@@ -428,9 +428,8 @@ def app_deploy(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  site_url = app.deploy(d_user)
-  github_url = app.github_url()
-  return HttpResponse(simplejson.dumps({"site_url":site_url, "github_url":github_url}), mimetype="application/json")
+  result = app.deploy(d_user)
+  return HttpResponse(simplejson.dumps(result), mimetype="application/json")
 
 @login_required
 @require_POST
