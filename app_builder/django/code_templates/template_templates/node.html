@@ -1,7 +1,13 @@
 <!-- node -->
 <div class="span{{context.width}} hi{{context.height}} node-wrapper" style="text-align:{{context.alignment}}; {{ context.overlap_styles }} {{ context.wrapper_position_string }} {{ context.padding_string() }}">
+{% if context.wrap_link %}
+<a href="{{ context.wrap_link_href }}">
+{% endif %}
 <{{context.tagname}}{% for attrib in context.attribs %} {{ attrib }}="{{ context.attribs[attrib] }}"{% endfor %} class="node {{ context.uie.class_name }}">
   {% if not context.uie.isSingle %}{{context.content()}}
 </{{context.tagname}}>{% endif %}
+{% if context.wrap_link %}
+</a>
+{% endif %}
 </div>
 <!-- /node -->

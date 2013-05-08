@@ -209,6 +209,8 @@ class Node(UIElement):
       self.attribs.update(uie['cons_attribs'])
     self._content = uie['content']
 
+    self.wrap_link = False # this may change after resolve_links
+
   @classmethod
   def create_list_entry(cls, uie, page):
     self = cls(uie, page)
@@ -248,6 +250,12 @@ class Node(UIElement):
       else:
         if not self.attribs['href'].startswith('http'): # prepend http the the href if it's not there
           self.attribs['href'] = 'http://' + self.attribs['href']
+
+      # this is allows other tags to be links
+      if self.tagname != 'a':
+        self.wrap_link = True
+        self.wrap_link_href = self.attribs['href']
+        del self.attribs['href'] # href should go in the wrapper anchor tag only
 
 
   def padding_string(self):
