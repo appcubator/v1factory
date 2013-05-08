@@ -222,13 +222,13 @@ function (AppModel,
     save: function() {
       iui.startAjaxLoading();
       appState = v1State.toJSON();
-      console.log(appState);
       $.ajax({
           type: "POST",
           url: '/app/'+appId+'/state/',
           data: JSON.stringify(appState),
           complete: function() { iui.stopAjaxLoading("Saved"); },
           error: function(data) {
+            if(data.responseText == "ok") return;
             var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
             if(DEBUG) {
               content = { text: data.responseText };
