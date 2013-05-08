@@ -6293,9 +6293,11 @@ i.icon-url {
     padding-left: 10px;
   }
 
+  .well {
+    padding: 0;
+  }
   .container {
     width: 100%;
-    display: bl
   }
 
   .container h2 {
@@ -6325,10 +6327,14 @@ i.icon-url {
 
   .hero-text h2 {
     font-size: 24px;
+    line-height: 36px;
   }
 
   .hero-text .motto {
     font-size: 18px;
+    width: 100%;
+    line-height: 24px;
+    margin-top: 20px;
   }
 
   .img-circle.img-polaroid {
@@ -6354,6 +6360,8 @@ i.icon-url {
     position: absolute;
     top: 130px;
     left: 0;
+    margin-left: 0;
+    padding-left: 30px;
   }
 
   .bottom {
