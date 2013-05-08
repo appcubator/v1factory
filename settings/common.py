@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'v1factory',
     'app_builder',
     'app_builder.deployment',
+    'south',
     'djcelery',
     'less'
     # Uncomment the next line to enable the admin:
