@@ -239,7 +239,7 @@ function (AppModel,
     betaCheck: function(data) {
       if(data.percentage > 30 && data.feedback === true) {
         $('.notice').css('height', '118px');
-        $('.notice').html('<h3 class="hoff1">Thank you for joining Appcubator Private Beta program!</h3><div>You can claim your free domain from <a class="menu-app-info">Domain & SEO</a> page.</div>');
+        $('.notice').html('<h3 class="">Thank you for joining Appcubator Private Beta program!</h3><div>You can claim your free domain from <a class="menu-app-info">Domain & SEO</a> page.</div>');
         v1.menuBindings();
       }
 
