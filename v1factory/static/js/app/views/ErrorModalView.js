@@ -19,6 +19,8 @@ function(Backbone) {
       }
 
       if(text) {
+        text = text.replace('\n', '<br />');
+        text = text.replace(' ', '&nbsp;');
         this.el.innerHTML += '<h3>'+text+'</h3>';
       }
       return this;
