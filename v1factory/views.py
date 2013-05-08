@@ -100,7 +100,7 @@ def app_get_state(request, app):
 def app_save_state(request, app):
   old_state = app.state
   app._state_json = request.body
-  app.name = app.state['name']
+  app.state['name'] = app.name
   try:
     app.full_clean()
   except Exception, e:
