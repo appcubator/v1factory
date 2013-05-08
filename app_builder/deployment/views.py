@@ -22,6 +22,10 @@ import logging
 print __name__
 logger = logging.getLogger(__name__)
 
+# for what it's worth
+import threading
+threading._DummyThread._Thread__stop = lambda x: 42
+
 class ProJSON(simplejson.JSONEncoder):
   """It's about time we handled datetime"""
   def default(self, obj):
@@ -64,7 +68,10 @@ def deploy_code(request):
     logger.debug("Not found - creating one now.")
     d = Deployment.create(s, u_name=u_name, app_state=simplejson.loads(app_json))
     d.initialize()
-    github_actions.create(u_name, d.app_dir)
+    try: # DEBUG
+      github_actions.create(u_name, d.app_dir)
+    except:
+      print "you foollllll"
   else:
     logger.debug("Found deployment.")
     d.subdomain = s
