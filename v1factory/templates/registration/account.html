@@ -2,11 +2,11 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/website.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-website.css">
 {% endblock %}
 
 {% block topbar %}
-{% include "infra-topbar.html" %}
+{% include "infra-topbar-plain.html" %}
 {% endblock %}
 
 {% block page %}
@@ -15,24 +15,19 @@
     <div class="span11 offsetr1">
     </div>
     <div class="span36">
+      <h3 class="">Profile Info</h3><br  />
+      <h4 class="">Name</h4><br  />
+      <input type="text" class="span16 hoff1" id="app-name" placeholder="Name"><br  />
+      <h4 class="">Email</h4><br  />
+      <input type="text" class="span16 hoff1" id="app-name" placeholder="Email"><br  />
+      <input type="submit" class="btn" value="Save Changes">
+      <hr>
       <div class="hoff1">
-        <h3 class="span10">App Name</h3>
-        <input type="text" class="span26" id="app-name" placeholder="Name of the Applications...">
+        <h3 class="">Password</h3><br  />
+        <input type="text" class="span16 hoff1" id="app-name" placeholder="New Password..."><br  />
+        <input type="text" class="span16" id="app-name" placeholder="Confirm Password..."><br  />
+        <input type="submit" class="btn" value="Change Password">
       </div>
-      <hr>
-      <div class="hoff2">
-        <h3 class="span10">Description</h3>
-        <textarea class="span26 hi6" id="app-description" placeholder="Description of the application..."></textarea>
-      </div>
-      <hr>
-      <div class="hoff2">
-        <h3 class="span10">Keywords</h3>
-        <textarea class="span26 hi6" id="app-keywords" placeholder="Keywords..."></textarea>
-      </div>
-    </div>
-    <div class="span4 offset3 hoff1">
-      <a class="save-btn-nofix" id="save"></a>
-      <a class="delete-btn-nofix hoff1" id="delete"></a>
     </div>
   </div>
 </div>
