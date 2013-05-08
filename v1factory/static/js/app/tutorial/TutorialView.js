@@ -198,7 +198,7 @@ function(Backbone) {
             directory: addr.join(',')
           },
           success: function(data) {
-            v1.betaCheck(data);
+            if(typeof v1 != 'undefined') { v1.betaCheck(data); }
           },
           dataType: "JSON"
       });
