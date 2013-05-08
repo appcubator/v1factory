@@ -336,12 +336,13 @@ class Form(Container):
 
   required_fields = []
 
-  def __init__(self, name=None, action=None, fields=None, entity_name=None, uie=None, page=None,\
+  def __init__(self, name=None, action=None, fields=None, ui_fields=None, entity_name=None, uie=None, page=None,\
                                                       redirect_page_name=None):
     super(Form, self).__init__(uie=uie)
     self.name = name
     self.action = action
     self.included_fields = fields
+    self.ui_fields = ui_fields
     self.entity = entity_name
     self.uie = uie
     self.page = page
@@ -357,13 +358,18 @@ class Form(Container):
   @classmethod
   def create(cls, uie, page):
     field_dicts = uie['container_info']['form']['fields']
-    fields = [ FormField.create(f) for f in field_dicts ]
+
+    # buttons allowed here:
+    all_fields = [ FormField.create(f) for f in field_dicts ]
+    # but not here
+    relevant_fields = [ f for f in all_fields if f.field_type != 'button' ]
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
                entity_name=uie['container_info']['entity'],
                uie=uie,
-               fields=fields,
+               ui_fields=all_fields,
+               fields=relevant_fields,
                page=page,
                redirect_page_name = uie['container_info']['form']['goto'])
 
@@ -400,7 +406,7 @@ class Form(Container):
     for f in self.included_fields:
       f_check = f_manager.get_by_name(f.name)
       if f_check is None:
-        assert f.field_type == 'button' or f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
+        assert f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
       f.model_field = f_check
 
   def resolve_goto_page(self, analyzed_app):
