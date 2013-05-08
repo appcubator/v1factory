@@ -143,6 +143,11 @@ class DjangoField(object):
       kwargs['auto_now_add'] = repr(True)
     elif self.field_type == '_MODIFIED':
       kwargs['auto_now'] = repr(True)
+    if self.required:
+      if self.field_type in ['text', 'email', 'image']:
+        kwargs['default'] = repr("")
+      if self.field_type in ['float', 'date']:
+        kwargs['default'] = repr(0)
     if not self.required:
       kwargs['blank'] = repr(True)
     if self.is_relational:

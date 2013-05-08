@@ -11,7 +11,8 @@ require.config({
     "editor" : "./../editor",
     "dicts" : "../../dicts",
     "mixins" : "../../mixins",
-    "key" : "../../libs/keymaster/keymaster"
+    "key" : "../../libs/keymaster/keymaster",
+    "answer" : "../../libs/answer/answer"
   },
 
   shim: {
@@ -28,6 +29,9 @@ require.config({
     },
     "bootstrap" : {
       deps: ["jquery"]
+    },
+    "answer" : {
+      deps: ["../../libs/answer/lib/natural", "underscore", "jquery"]
     }
   }
 
@@ -48,7 +52,8 @@ function(AppModel, EditorView) {
     v1State = new AppModel(null);
     v1State.initialize(appState);
 
-    var editorView = new EditorView();
+    editorView  = new EditorView({}, pageId);
+    editorView.setElement(document.body).render();
   };
 
   new EditorMain();

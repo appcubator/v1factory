@@ -14,6 +14,7 @@ from django.utils import simplejson
 from django.shortcuts import redirect,render, get_object_or_404
 from app_builder.deployment.models import Deployment
 from django.views.decorators.csrf import csrf_exempt
+from tasks import push
 import github_actions
 import sys
 import subprocess
@@ -64,13 +65,12 @@ def deploy_code(request):
     d.update_app_state(simplejson.loads(app_json))
   d.update_css(css)
   d.full_clean()
-  msgs = d.deploy(d_user)
-  github_actions.push(u_name, d.app_dir)
+  msgs = d.deploy(simplejson.loads(d_user))
+  # Async call via celery
+  push.delay(u_name, d.app_dir)
   d.save()
   ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
-  ret_code = 0
-  assert(ret_code == 0)
-  return HttpResponse(msgs)
+  return HttpResponse(simplejson.dumps(msgs), mimetype="application/json")
 
 @require_POST
 @csrf_exempt

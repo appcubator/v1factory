@@ -1,7 +1,8 @@
 define([
   'mixins/BackboneModal',
   'iui'
-],function() {
+],
+function() {
 
   var TableQueryView = Backbone.ModalView.extend({
     className : 'query-modal modal',

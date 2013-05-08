@@ -1,6 +1,6 @@
-var Templates = {};
+var EntitiesTemplates = {};
 
-Templates.Form = [
+EntitiesTemplates.Form = [
   '<div class="span10 hi9 offsetr1 form-pane" id="form-<%= form.cid %>">',
     '<div class="hi3 hdr"><%= form.get("name") %></div>',
     '<div class="hi2 edit-form btn span8" id="edit-<%- form.cid %>">Edit Form</div>',
@@ -8,7 +8,7 @@ Templates.Form = [
   '</div>'
 ].join('\n');
 
-Templates.Entity = [
+EntitiesTemplates.Entity = [
   '<div class="row hoff2">',
     '<div class="span58 entity-pane pane">',
       '<div class="" style="padding:0; padding-bottom: 20px;">',
@@ -79,7 +79,7 @@ Templates.Entity = [
 ].join('\n');
 
 
-Templates.Property = [
+EntitiesTemplates.Property = [
 '<div class="column" id="column-<%- cid %>">',
   '<div class="hi3 hdr"><%- name %></div>',
   '<div class="hi3">',
@@ -103,7 +103,7 @@ Templates.Property = [
 '</div>'
 ].join('\n');
 
-Templates.UserEntity = [
+EntitiesTemplates.UserEntity = [
 '<div class="row hoff1">',
   '<div class="span58 entity-pane pane entity" id="user-entity">',
     '<div style="display:inline-block;">',

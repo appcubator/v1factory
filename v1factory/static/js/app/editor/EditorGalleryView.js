@@ -1,12 +1,11 @@
 define([
   'app/collections/ElementCollection',
-  'app/models/UserEntityModel',
   'app/models/ContainerWidgetModel',
   'app/models/WidgetModel',
+  'dicts/default-uielements',
   'dicts/constant-containers'
 ],
 function(ElementCollection,
-         UserEntityModel,
          ContainerWidgetModel,
          WidgetModel) {
 
@@ -27,11 +26,11 @@ function(ElementCollection,
                        'renderAuthenticationForms',
                        'renderCurrentUserElements',
                        'renderEntitiyFormsTablesLists',
-                       'renderContextEntityForms');
+                       'renderContextEntityForms',
+                       'getFieldType',
+                       'appendUIElement');
 
       this.widgetsCollection = widgetsCollection;
-
-      this.render();
     },
 
     render: function() {
@@ -41,6 +40,8 @@ function(ElementCollection,
       // All Create Forms, Tables, Lists
       // Context Entity Elements and Update Forms
       var self = this;
+
+      this.allList = iui.get('all-list');
 
       this.renderAuthenticationForms();
       this.renderCurrentUserElements();
@@ -100,9 +101,12 @@ function(ElementCollection,
     renderAuthenticationForms: function() {
       var self = this;
       if(appState.users.local) {
-        var tempLocal = '<li id="entity-user-Local Login" class="login authentication">'+
+        var tempLocalLogin = '<li id="entity-user-Local_Login" class="login authentication">'+
                      '<span class="name">Login Form</span></li>';
-        $(self.allList).append(tempLocal);
+        var tempLocalSignup = '<li id="entity-user-Sign_Up" class="login authentication">'+
+                     '<span class="name">Sign Up</span></li>';
+        $(self.allList).append(tempLocalLogin);
+        $(self.allList).append(tempLocalSignup);
       }
 
       if(appState.users.facebook) {
@@ -211,18 +215,18 @@ function(ElementCollection,
       }
 
       var className = targetEl.className;
-      var id = targetEl .id;
+      var id = targetEl.id;
 
       var hash, entityCid, formCid, action;
       var entity, form, field;
 
       if(/(authentication)/.exec(className)) {
         var formType = String(id).replace('entity-user-','');
+        formType = formType.replace('_', ' '); // "Local_Login" => "Local Login"
         form = constantContainers[formType];
-        console.log(form);
         widget.container_info = {};
-        widget.container_info.entity = "User";
-        widget.container_info.action = "signup";
+        widget.container_info.entity = form.entity;
+        widget.container_info.action = form.action;
         widget.container_info.form = form;
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);
@@ -238,7 +242,7 @@ function(ElementCollection,
 
         content =  '{{' + editorContext +'.'+ entity.get('name') +'.'+field.get('name')+'}}';
 
-        widget         = _.extend(widget, uieState['texts'][0]);
+        widget         = _.extend(widget, uieState[self.getFieldType(field)][0]);
         widget.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
@@ -262,7 +266,7 @@ function(ElementCollection,
           widget.container_info.action = "show";
         }
 
-        var widgetContainerModel = new ContainerWidgetModel(widget);
+        var widgetContainerModel = new ContainerWidgetModel(widget, true);
         this.widgetsCollection.push(widgetContainerModel);
       }
       else if (/(current-user)/.exec(className)) {
@@ -272,7 +276,7 @@ function(ElementCollection,
         entity = v1State.get('users');
         content =  '{{CurrentUser.'+field.get('name')+'}}';
 
-        widget         = _.extend(widget, uieState['texts'][0]);
+        widget         = _.extend(widget, uieState[self.getFieldType(field)][0]);
         widget.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
@@ -304,6 +308,24 @@ function(ElementCollection,
       if(top < 0) top = 0;
 
       return top;
+    },
+
+    getFieldType: function (fieldModel) {
+      var type;
+
+      switch(fieldModel.get('type')) {
+        case "text":
+        case "date":
+        case "number":
+        case "email":
+          type = "texts";
+          break;
+        case "image":
+          type = "images";
+          break;
+      }
+
+      return type;
     }
 
   });

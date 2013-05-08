@@ -74,7 +74,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
                            //forms: self.model.get('forms').models };
 
-      var template = _.template(Templates.Entity, page_context);
+      var template = _.template(EntitiesTemplates.Entity, page_context);
 
       $(this.el).append(template);
     },
@@ -136,14 +136,14 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       page_context.cid = fieldModel.cid;
       page_context.entityName = self.model.get('name');
       page_context.other_models = self.parentCollection.models;
-      var template = _.template( Templates.Property, page_context);
+      var template = _.template(EntitiesTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
     },
 
     appendForm: function(formModel) {
       var self = this;
-      var template = _.template(Templates.Form, { form: formModel});
+      var template = _.template(EntitiesTemplates.Form, { form: formModel});
       self.$el.find('.form-list').append(template);
     },
 

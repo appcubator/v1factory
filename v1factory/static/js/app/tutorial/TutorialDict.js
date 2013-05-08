@@ -1,49 +1,43 @@
 var TutorialDirectory = [
   {
     title : "Introduction",
-    img : null,
+    img : '/static/img/tutorial/intro.png',
     view  : "tutorial-intro",
     contents: null
   },
   {
     title : "Overview",
-    img : null,
+    img : '/static/img/tutorial/Appcubator.png',
     view  : "tutorial-overview",
     contents: null
   },
   {
     title : "Domain & SEO",
-    img : null,
+    img : '/static/img/tutorial/domainseo.png',
     view  : "tutorial-app_info",
     contents : null
   },
   {
     title : "Data & Storage",
-    img : null,
+    img : '/static/img/tutorial/dataentities.png',
     view  : "tutorial-data_storage",
     html: "<p>Data storage!</p>",
     contents : [
       {
         title : "Entity",
-        img : null,
+        img : '/static/img/tutorial/entity.png',
         view  : "tutorial-data_storage-entity",
         contents: null
       },
       {
         title : "User Entity",
-        img : null,
+        img : '/static/img/tutorial/user-entity.png',
         view  : "tutorial-data_storage-user",
         contents : null
       },
       {
-        title : "Sample Entity",
-        img : null,
-        view  : "tutorial-data_storage-sample",
-        contents : null
-      },
-      {
         title : "Upload and Download Data",
-        img : null,
+        img : '/static/img/tutorial/upload-download.png',
         view  : "tutorial-data_storage-upload",
         contents : null
       }
@@ -51,7 +45,7 @@ var TutorialDirectory = [
   },
   {
     title : "Themes & Design",
-    img : null,
+    img : '/static/img/tutorial/themes.png',
     view  : "tutorial-themes_design",
     contents : [
       {
@@ -63,7 +57,7 @@ var TutorialDirectory = [
   },
   {
     title : "Pages",
-    img : null,
+    img : '/static/img/tutorial/pages-page.png',
     view  : "tutorial-pages",
     contents : [
       {
@@ -91,5 +85,11 @@ var TutorialDirectory = [
         contents : null
       }
     ]
+  },
+  {
+    title : "Feedback Form",
+    img : null,
+    view  : "feedback-form-page",
+    contents : null
   }
 ];

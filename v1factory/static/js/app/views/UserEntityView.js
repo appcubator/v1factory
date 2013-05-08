@@ -58,8 +58,7 @@ define([
 
       render: function() {
         var self = this;
-
-        this.$el.html(_.template(Templates.UserEntity, {}));
+        this.$el.html(_.template(EntitiesTemplates.UserEntity, {}));
 
         _(this.model.get('fields').models).each(function(fieldModel) {
           if(fieldModel.get('name') == 'First Name' ||
@@ -74,7 +73,7 @@ define([
           page_context.entityName = "User";
           page_context.other_models = v1State.get('entities').models;
 
-          var template = _.template(Templates.Property, page_context);
+          var template = _.template(EntitiesTemplates.Property, page_context);
           self.$el.find('.property-list').append(template);
         });
 
@@ -102,7 +101,7 @@ define([
         page_context.entityName = "User";
         page_context.other_models = this.entitiesColl.models;
 
-        var template = _.template(Templates.Property, page_context);
+        var template = _.template(EntitiesTemplates.Property, page_context);
 
         $('.property-list', this.el).append(template);
       },

@@ -1,10 +1,9 @@
 define([
   'app/models/PageModel',
   'app/collections/EntityCollection',
-  'app/collections/WidgetCollection',
-  'app/collections/ContainersCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
+  'app/views/ErrorModalView',
   'editor/WidgetsManagerView',
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
@@ -12,14 +11,14 @@ define([
   'editor/NavbarEditorView',
   'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
-  '../../libs/keymaster/keymaster.min'
+  'key',
+  'app/editor/editor-templates'
 ],
 function( PageModel,
           EntityCollection,
-          WidgetCollection,
-          ContainersCollection,
           UrlView,
           SimpleModalView,
+          ErrorModalView,
           WidgetsManagerView,
           WidgetEditorView,
           EditorGalleryView,
@@ -28,7 +27,6 @@ function( PageModel,
           TutorialView ) {
 
   var EditorView = Backbone.View.extend({
-    el        : document.body,
     className : 'sample',
 
     events    : {
@@ -39,20 +37,23 @@ function( PageModel,
       'click .url-bar'       : 'clickedUrl'
     },
 
-    initialize: function() {
+    initialize: function(bone, pId) {
       _.bindAll(this, 'render',
                       'copy',
                       'paste',
                       'help',
                       'renderUrlBar',
-                      'save',
-                      'deployLocal',
-                      'deploy',
                       'clickedPage',
                       'getContextEntities',
                       'keydown',
                       'clickedUrl',
-                      'createPage');
+                      'createPage',
+
+                      'save',
+                      'deploy',
+                      'renderDeployResponse');
+
+      if(pId) pageId = pId;
 
       this.model             = v1State.get('pages').models[pageId];
 
@@ -64,32 +65,30 @@ function( PageModel,
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
 
-      /* Calls */
-      this.render();
+
 
       var page = appState.pages[pageId];
-      if(!page.uielements.length) {
-        //new PageStylePicker(this.widgetsCollection);
-      }
 
+      var self = this; // for binding deploy to ctrlshiftd
       /* Bindings */
       $(window).bind('keydown', this.keydown);
       key('⌘+s, ctrl+s', this.save);
       key('⌘+c, ctrl+c', this.copy);
       key('⌘+v, ctrl+v', this.paste);
-      key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
+      key('⌘+shift+d, ctrl+shift+d', function(){ self.deploy({local:true}); });
 
-      $('#loading-gif').fadeOut().remove();
     },
 
     render: function() {
 
+      if(!this.el.innerHTML) this.el.innerHTML = iui.getHTML('editor-page');
+
       iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
+
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
         iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
@@ -103,6 +102,11 @@ function( PageModel,
       iui.get('page-list').appendChild(createBox.el);
 
       this.renderUrlBar();
+      this.galleryEditor.render();
+      this.widgetsManager.render();
+      this.navbarEditor.render();
+
+      $('#loading-gif').fadeOut().remove();
     },
 
     renderUrlBar: function() {
@@ -128,7 +132,13 @@ function( PageModel,
             $('#save').html("<span>Save</span>").fadeIn();
           },3000);
         },
-        error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
+        error: function(data, t) {
+          var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+          if(DEBUG) {
+            content = { text: "LULZ  <br  />" + data.responseText };
+          }
+          new ErrorModalView(content);
+        }
       });
 
 
@@ -149,36 +159,43 @@ function( PageModel,
       }
     },
 
-    deploy: function() {
+    deploy: function(options) {
+      var url = '/app/'+appId+'/deploy/'
+      if(options.local) url = url + 'local/'
+
       var self = this;
       iui.get('deploy').innerHTML = '<span>Deploying...</span>';
 
-      $.ajax({
+      $.ajax(url, {
         type: "POST",
-        url: '/app/'+appId+'/deploy/',
         complete: function() {
           iui.get('deploy').innerHTML = '<span>Test Run</span>';
         },
         success: function(data) {
-          window.open(data.site_url);
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
+          self.renderDeployResponse(true, data, self);
+        },
+        error: function(jqXHR) {
+          var data = JSON.parse(jqXHR.responseText);
+          if(DEBUG)
+            self.renderDeployResponse(false, data, self);
+          else {
+            var fakedata = { errors: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+            self.renderDeployResponse(false, fakedata, self);
+          }
         },
         dataType: "JSON"
       });
     },
 
-    deployLocal: function() {
-
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/deploy/local/',
-        success: function(data) {
-          window.open(data.site_url);
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
-        },
-        dataType: "JSON"
-      });
-
+    renderDeployResponse: function(success, responseData, self) {
+      if(success)
+      {
+        new SimpleModalView({ text: 'Your app is available at <a target="_blank" href="'+ responseData.site_url + self.urlModel.getAppendixString() +'">'+ responseData.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a target="_blank" href="'+ responseData.github_url +'">Github</a>', img:'happy_engineer.png'});
+      }
+      else
+      {
+        new ErrorModalView({ text: responseData.errors });
+      }
     },
 
     getContextEntities: function() {
@@ -255,6 +272,8 @@ function( PageModel,
       var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);
+
+      console.log(v1State);
 
       $.ajax({
         type: "POST",

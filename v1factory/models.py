@@ -54,6 +54,11 @@ class App(models.Model):
       self.subdomain = self.u_name()
     return super(App, self).save(*args, **kwargs)
 
+  def clean(self):
+    from django.core.exceptions import ValidationError
+    if self.owner.apps.filter(name=self.name).exists():
+        raise ValidationError('You have another app with the same name.')
+
   def get_state(self):
     return simplejson.loads(self._state_json)
 
@@ -169,7 +174,13 @@ class App(models.Model):
       r = requests.post("http://staging.appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
 
     if r.status_code == 200:
-      return "http://%s.appcubator.com" % self.subdomain
+      response_content = r.json()
+      result = {}
+      result['site_url'] = "http://%s.appcubator.com" % self.subdomain
+      result['github_url'] = self.github_url()
+      if 'errors' in response_content:
+        result['errors'] = response_content['errors']
+      return result
     else:
       raise Exception(r.content)
 
@@ -263,6 +274,7 @@ class UITheme(models.Model):
   name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
   parent_theme = models.ForeignKey('self', blank=True, null=True, default=None)
+  image = models.URLField(blank=True, default="/static/img/theme4.png")
 
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
@@ -377,6 +389,19 @@ class TutorialLog(models.Model):
   def create_log(cls, user, title, directory):
     log = cls(user = user, title = title, directory = directory)
     log.save()
+
+  @classmethod
+  def create_feedbacklog(cls, user, message):
+    log = cls(user = user, title=message, directory = "feedback")
+    log.save()
+
+  @classmethod
+  def is_donewithfeedback(cls, user):
+    log = cls.objects.filter(user = user, directory="feedback")
+    if len(log) is 0:
+      return False
+    else:
+      return True
 
   @classmethod
   def get_percentage(cls, user):

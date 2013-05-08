@@ -9,8 +9,10 @@
 <link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap-website.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/animate.css" rel="stylesheet">
-<link href="{{ STATIC_URL }}css/tutorial.css" rel="stylesheet">
 
+<script type="text/javascript">
+  var DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
+</script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/kqa1all.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 {% block css %}
@@ -74,6 +76,21 @@ b[k]=o+'d.write("'+p().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'
 loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure","extend","declare","identify"]});
 /* custom configuration goes here (www.olark.com/documentation) */
 olark.identify('6509-786-10-1962');/*]]>*/</script><noscript><a href="https://www.olark.com/site/6509-786-10-1962/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
+
+<script type='text/javascript'>
+    window.Muscula = { settings:{
+        logId:"8babd49a-93ba-43de-8f2e-4550a7acfd36", suppressErrors: false, branding: 'none'
+    }};
+    (function () {
+        var m = document.createElement('script'); m.type = 'text/javascript'; m.async = true;
+        m.src = (window.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//musculahq.appspot.com/Muscula.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
+        window.Muscula.run=function(c){eval(c);window.Muscula.run=function(){};};
+        window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
+        return window.Muscula.settings.suppressErrors===undefined;}
+    })();
+</script>
 <!-- end olark code -->
 {% include "tutorial-texts.html" %}
 </body>

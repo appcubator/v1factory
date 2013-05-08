@@ -22,7 +22,7 @@ function(ContentModel, LayoutModel, PageCollection) {
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
       this.set('selected', false);
-      this.set('context', bone.context);
+      this.set('context', bone.context|| null);
     },
 
     select: function() {
@@ -78,7 +78,7 @@ function(ContentModel, LayoutModel, PageCollection) {
     getListOfPages: function() {
       var pagesCollection = v1State.get('pages');
 
-      if(this.get('context') === "") {
+      if(this.get('context') === null || this.get('context') === "") {
         return pagesCollection.getContextFreePages();
       }
 

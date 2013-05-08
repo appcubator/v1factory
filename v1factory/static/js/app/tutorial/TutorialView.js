@@ -1,5 +1,6 @@
 define([
   'mixins/BackboneModal',
+  'answer',
   './TutorialDict'
 ],
 function(Backbone) {
@@ -7,32 +8,55 @@ function(Backbone) {
   var TutorialView = Backbone.View.extend({
     tagName: 'div',
     className: 'tutorial-view',
+    css : "tutorial",
 
     addr : [0],
 
     events : {
       "click #tutorial-menu-list li" : "clickedMenuItem",
-      "submit .tutorial-q-form" : 'submittedQuestion'
+      "submit .tutorial-q-form" : 'submittedQuestion',
+      'click .answer-slide'     : 'showAnswer',
+      "submit #feedback-form"   : 'submittedFeedback'
     },
 
     initialize: function(directory) {
       _.bindAll(this, 'render',
                       'renderLeftMenu',
                       'renderMainModal',
+                      'parseAnswers',
                       'appendMenuItem',
                       'clickedMenuItem',
                       'chooseSlide',
                       'selectMenu',
                       'keyhandler',
                       'submittedQuestion',
-                      'showQuestionSlide');
+                      'showQuestionSlide',
+                      'showAnswer',
+                      'submittedFeedback');
 
       if(directory) this.addr = directory;
 
+      this.loadCSS();
       this.render();
       this.chooseSlide(this.addr, true);
+      this.reader = new answer();
+      this.parseAnswers(TutorialDirectory);
 
       $(window).bind('keydown', this.keyhandler);
+    },
+
+    loadCSS: function() {
+      var self = this;
+    //<link type="text/css" href="{{ STATIC_URL }}css/tutorial.css" rel="stylesheet"/>
+      if(!iui.get('css-tutorial')) {
+        var cssFile = document.createElement('link');
+        cssFile.setAttribute('type', 'text/css');
+        cssFile.setAttribute('href', '/static/css/' + self.css + '.css');
+        cssFile.setAttribute('rel', 'stylesheet');
+        cssFile.id = 'css-' + self.css;
+        console.log(cssFile);
+        document.getElementsByTagName('head')[0].appendChild(cssFile);
+      }
     },
 
     render : function(img, text) {
@@ -96,13 +120,28 @@ function(Backbone) {
       });
     },
 
+    parseAnswers: function(dict) {
+      var self = this;
+      _(dict).each(function(item, ind) {
+        if(item.view) {
+          self.reader.read(iui.getHTML(item.view), [ind] ,item.title);
+        }
+
+        // if(item.contents) {
+        //   self.parseAnswers(item.contents);
+        // }
+      });
+    },
+
     clickedMenuItem: function(e) {
       var addr = String(e.target.id).split('-');
       this.chooseSlide(addr);
     },
 
     chooseSlide: function(addr, isNew) {
-      var self = this;
+      console.log(addr);
+
+      var self = this; 
 
       this.addr = addr;
       this.selectMenu();
@@ -110,7 +149,8 @@ function(Backbone) {
       if(!isNew) {
 
         $(this.mainDiv).animate({
-          top: "800px"
+          top: "800px",
+          opacity: "0"
         }, 240, function() {
 
           $(this).css({top: '-800px'});
@@ -124,10 +164,12 @@ function(Backbone) {
         });
 
         $(this.mainDiv).delay(240).animate({
-          top: "50px"
+          top: "50px",
+          opacity: "1"
         });
       }
       else {
+        console.log( TutorialDirectory[addr[0]]);
         var obj = TutorialDirectory[addr[0]];
         if(addr[1]) {
           obj = obj.contents[addr[1]];
@@ -146,7 +188,7 @@ function(Backbone) {
     },
 
     showSlide: function(obj, addr) {
-      var title = '<h2>'+ obj.title + '</h2><div class="main-img" style="background-img:url('+ obj.img +')"></div>';
+      var title = '<h2>'+ obj.title + '</h2><div class="main-img '+ obj.view +'" style="background-image:url('+ obj.img +')"></div>';
       $('.tutorial-content').html(title + '<div class="text-cont">' + iui.getHTML(obj.view) +'</div>');
 
       $.ajax({
@@ -164,9 +206,23 @@ function(Backbone) {
 
     },
 
-    showQuestionSlide: function(question) {
-      var title = '<h2>'+ 'Question' + '</h2><div class="main-img" style="background-img:url(/static/large-q-mark.png)">'+ question +'</div>';
-      $('.tutorial-content').html(title + '<div class="text-cont"></div>');
+    showQuestionSlide: function(question, results) {
+      console.log(results);
+
+      var title = '<h2>'+ 'Question' + '</h2><div class="main-img q-mark" style="background-image:url(/static/img/tutorial/large-q-mark.png)">'+ question +'</div>';
+      var resultItems = '';
+
+      _(results).each(function(result) {
+        console.log(result);
+        resultItems += '<li class="answer-slide" id="slide-'+result.dir.join('-') + '"><h3>'+ result.title +'</h3>' + result.article + '</li>';
+      });
+
+      if(!results.length) {
+        resultItems += '<li class="no-result">No answers could be found :( But we\'ll get back to you soon!</li>';
+      }
+
+      $('.tutorial-content').html('');
+      $('.tutorial-content').html(title + '<ul class="text-cont">'+resultItems+'</ul>');
     },
 
     selectNext: function (obj) {
@@ -236,7 +292,12 @@ function(Backbone) {
     },
 
     submittedQuestion: function(e) {
+      e.preventDefault();
+
       var question = this.$el.find('.q-input').val();
+      var results = this.reader.match(question);
+      this.showQuestionSlide(question, results);
+
 
       $.ajax({
         type: "POST",
@@ -250,7 +311,32 @@ function(Backbone) {
         dataType: "JSON"
       });
 
-      this.showQuestionSlide(question);
+      e.preventDefault();
+    },
+
+    showAnswer: function(e) {
+      console.log(e.target.id);
+      var id = (e.target.id||e.target.parentNode.id).replace('slide-', '');
+      this.chooseSlide([id], false);
+    },
+
+    submittedFeedback: function(e) {
+      var response = {};
+      response.like = $('#like-appcubator').val();
+      response.dislike = $('#dislike-appcubator').val();
+      response.features = $('#features-appcubator').val();
+
+      $.ajax({
+          type: "POST",
+          url: '/log/feedback/',
+          data: response,
+          success: function(data) {
+          },
+          dataType: "JSON"
+      });
+
+      this.closeModal();
+      alert('Thanks for your feedback!');
       e.preventDefault();
     },
 

@@ -2,13 +2,15 @@ define([
   'editor/WidgetView',
   'editor/WidgetContainerView',
   'app/models/WidgetModel',
+  'app/editor/WidgetEditorView',
+  'app/editor/WidgetListView',
   'backbone'
 ],
-function(WidgetView, WidgetContainerView, WidgetModel) {
+function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetListView) {
 
-  var WidgetEditorView = Backbone.View.extend({
+  var WidgetManagerView = Backbone.View.extend({
     el : $('.page'),
-    widgetsContainer : document.getElementById('elements-container'),
+    widgetsContainer : null,
     widgets : [],
     selectedEl: null,
     copiedEl: null,
@@ -30,25 +32,33 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
 
       this.widgetsCollection = widgetsCollection;
       this.widgetsCollection.bind('add', this.placeUIElement);
-
       this.widgetsCollection.bind('change', this.changed);
+
+      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
+
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
-      this.render();
     },
 
     render: function() {
       var self = this;
+      this.widgetsContainer = document.getElementById('elements-container');
       this.widgetsContainer.innerHTML = '';
       _(self.widgetsCollection.models).each(function(widget) {
         self.placeUIElement(widget);
       });
+
+      this.widgetEditorView.render();
     },
 
     // this function decides if widget or container
     placeUIElement: function(model) {
       var self = this;
+
+      if(model.has('container_info') && model.get('container_info').has('row')) {
+        self.placeList(model);
+      }
       if(model.has('container_info')) {
         self.placeContainer(model);
       }
@@ -68,6 +78,13 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
 
     placeContainer: function(containerWidgetModel) {
       var curWidget= new WidgetContainerView(containerWidgetModel);
+      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
+      else iui.get('full-container').appendChild(curWidget.el);
+      curWidget.resizableAndDraggable();
+    },
+
+    placeList: function(containerWidgetModel) {
+      var curWidget= new WidgetListView(containerWidgetModel);
       if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
       else iui.get('full-container').appendChild(curWidget.el);
       curWidget.resizableAndDraggable();
@@ -117,5 +134,5 @@ function(WidgetView, WidgetContainerView, WidgetModel) {
     }
   });
 
-  return WidgetEditorView;
+  return WidgetManagerView;
 });

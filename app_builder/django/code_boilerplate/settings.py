@@ -2,7 +2,7 @@
 import os
 import os.path
 
-DEBUG = not ("HEROKU" in os.environ and os.environ["HEROKU"] == "1")
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -13,20 +13,10 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(os.path.dirname(__file__), 'db'),
     }
 }
-if DEBUG:
-  DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.sqlite3',
-          'NAME': os.path.join(os.path.dirname(__file__), 'db'),
-      }
-  }
-
-if not DEBUG:
-  import dj_database_url
-  DATABASES['default'] =  dj_database_url.config()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -125,6 +115,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'social_auth', # django-social-auth
     'webapp',
+    'south',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

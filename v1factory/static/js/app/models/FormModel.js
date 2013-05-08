@@ -42,6 +42,27 @@ function(Backbone, FormFieldCollection) {
       this.entity = entity;
     },
 
+    fillWithProps: function(entity) {
+      var self = this;
+      _(entity.get('fields').models).each(function(fieldModel) {
+
+        var formFieldModel = {name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')};
+
+        if(fieldModel.get('type') == "email") {
+          formFieldModel.displayType = "email-text";
+        }
+        if(fieldModel.get('type') == "image") {
+          formFieldModel.displayType = "image-uploader";
+        }
+        if(fieldModel.get('type') == "date") {
+          formFieldModel.displayType = "date-picker";
+        }
+
+        var ind = self.get('fields').models.length - 1;
+        self.get('fields').push(formFieldModel, {at: ind});
+      });
+    },
+
     toJSON: function() {
       var json = _.clone(this.attributes);
       json.name = json.name || "";

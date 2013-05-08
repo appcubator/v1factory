@@ -66,11 +66,13 @@ function(WidgetClassPickerView) {
       temp         = Templates.tempHrefSelect;
       listOfPages  = this.model.getListOfPages();
 
+      console.log(this.model);
+      console.log(listOfPages);
+
       var external;
       if(String(this.model.get('content_attribs').get('href')).indexOf('internal://') < 0) {
         external = this.model.get('content_attribs').get('href');
       }
-      console.log(external);
 
       html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
                                         hash: hash,

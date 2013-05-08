@@ -250,7 +250,6 @@ ul.action li:hover .add-to-list {
 }
 
 .field-li-item.li-button {
-  text-align: right;
   cursor: pointer;
   list-style: none;
 }
@@ -313,7 +312,7 @@ ul.action li:hover .add-to-list {
   display: none;
 }
 
-.form-fields-list li.selected .drag-icon {
+.field-li-item.selected .drag-icon {
   display: inline-block;
 }
 

@@ -1,0 +1,10 @@
+Put the files in the right place:
+
+sudo ln -s $PWD/init_script /etc/init.d/celeryd
+sudo ln -s $PWD/defaults /etc/defaults/celeryd
+
+^ make sure settings.staging vs settings.prod is correct
+
+Then start like a normal service
+
+sudo service celeryd start

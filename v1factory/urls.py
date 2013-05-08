@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 import django.contrib.auth.views
-import v1factory.base_views, v1factory.views
+import v1factory.base_views, v1factory.views, v1factory.theme_views
 import django.views.generic.base
 
 # from django.contrib import admin
@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^faq/$', 'v1factory.base_views.faq'),
     url(r'^account/$', 'v1factory.base_views.account'),
     url(r'^tutorial/$', 'v1factory.base_views.tutorial'),
+    url(r'^ping/$', 'v1factory.base_views.ping'),
 )
 
 urlpatterns += patterns('v1factory.views',
@@ -34,7 +35,6 @@ urlpatterns += patterns('v1factory.views',
 
     # statix
     url(r'^app/(\d+)/static/$', 'staticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
-    url(r'^theme/(\d+)/static/$', 'themestaticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
 
@@ -60,7 +60,12 @@ urlpatterns += patterns('v1factory.views',
 
     # tutorial and logging
     url(r'^log/slide/$', 'log_slide'),
+    url(r'^log/feedback/$', 'log_feedback'),
 
+    url(r'^sendhostedemail/$', 'send_hosted_email'),
+)
+
+urlpatterns += patterns('v1factory.theme_views',
     url(r'^designer/$', 'designer_page'),
     url(r'^theme/new/$', 'theme_new'),
     url(r'^theme/(\d+)/$', 'theme_show'),
@@ -69,12 +74,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^theme/(\d)/clone/$', 'theme_clone'),
     url(r'^theme/(\d)/delete/$', 'theme_delete'),
     url(r'^theme/(\d)/editor/(\d+)$', 'theme_page_editor'),
-    url(r'^sendhostedemail/$', 'send_hosted_email'),
-
-    # broken, dont wanna fix right now
-    #url(r'^deploythisship/$', 'deploy_panel'), # a way to view and edit local and hosted deployments
-    #url(r'^deploy/local/$', 'deploy_local'), # tries to deploy locally
-    #url(r'^deploy/hosted/$', 'deploy_hosted'), # issues a command to the server to host a deployment
+    url(r'^theme/(\d+)/static/$', 'themestaticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
 )
 
 # production (hosted) deployments

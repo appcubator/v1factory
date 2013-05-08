@@ -1,28 +1,9 @@
 define([
   'app/models/WidgetModel',
-  'app/models/ContentModel',
-  'app/models/LayoutModel',
-  'app/models/ContainerInfoModel',
-  'app/models/FormModel',
-  'editor/TableQueryView',
-  'editor/ListEditorView',
-  'app/models/QueryModel',
-  'app/models/RowModel',
-  'app/views/FormEditorView',
-  'app/collections/WidgetCollection',
-  'dicts/constant-containers'
+  'app/models/ContainerInfoModel'
 ],
 function(WidgetModel,
-         ContentModel,
-         LayoutModel,
-         ContainerInfoModel,
-         FormModel,
-         TableQueryView,
-         ListEditorView,
-         QueryModel,
-         RowModel,
-         FormEditorView,
-         WidgetCollection) {
+         ContainerInfoModel) {
 
   var ContainerWidgetModel = WidgetModel.extend({
     selected: false,
@@ -32,49 +13,9 @@ function(WidgetModel,
       'deletable' : true
     },
 
-    initialize: function(bone) {
+    initialize: function(bone, isNew) {
       ContainerWidgetModel.__super__.initialize.call(this, bone);
-      var self = this;
-
-      this.set('container_info', new ContainerInfoModel(this.get('container_info')));
-
-      if(this.get('container_info').get('uielements').length || this.get('container_info').has('query')) {
-        return;
-      }
-
-      if(this.get('container_info').has('form')) {
-
-      }
-      else if(constantContainers[this.get('container_info').get('action')]) {
-        this.get('container_info').set('uielements',  new WidgetCollection());
-
-        _(constantContainers[this.get('container_info').get('action')]).each(function(element){
-          elementDefault = uieState[element.type][0];
-          element = _.extend(elementDefault, element);
-          self.get('container_info').get('uielements').push(element);
-          //self.get('container_info')widgetsCollections.push(element);
-        });
-      }
-      else {
-        var action = this.get('container_info').get('action') ;
-
-        console.log(this.get('container_info'));
-        if(action == "create") {
-          if(!this.get('container_info').has('form')) {
-            var form = new FormModel({}, this.get('container_info').get('entity'));
-            this.get('container_info').set('form', form);
-          }
-        }
-        else if(this.get('container_info').get('action') == 'table') {
-          if(!this.get('container_info').has('query')) {
-            this.get('container_info').set('query', new QueryModel({}, this.get('container_info').get('entity')));
-          }
-        }
-        else {
-          this.containerHandler[this.get('container_info').get('action')].call(this);
-        }
-      }
-
+      this.set('container_info', new ContainerInfoModel(this.get('container_info'), isNew));
     },
 
     toJSON : function() {
@@ -93,35 +34,6 @@ function(WidgetModel,
       }
 
       return json;
-    },
-
-
-    containerHandler: {
-      'show' : function() {
-        var self = this;
-        var isNew = false;
-
-        if(!self.get('container_info').has('query')) {
-          var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
-          var rowModel   = new RowModel({});
-
-          self.get('container_info').set('query', queryModel);
-          self.get('container_info').set('row', rowModel);
-
-          new ListEditorView(self, queryModel, rowModel);
-        }
-      },
-      'table-gal' : function() {
-        alert('dont delete me');
-        var self = this;
-        var isNew = false;
-
-        if(!self.get('container_info').has('query')) {
-          var queryModel = new QueryModel({}, this.get('container_info').get('entity'));
-          self.get('container_info').set('query', queryModel);
-        }
-
-      }
     }
   });
 

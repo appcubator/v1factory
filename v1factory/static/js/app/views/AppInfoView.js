@@ -64,7 +64,9 @@ function(SimpleModalView) {
         $.ajax({
           type: "POST",
           url: '/app/'+appId+'/delete/',
-          complete: function() { window.location.href='/app/'; },
+          complete: function() {
+            iui.onServerReady(function(){window.location.href='/app/'; })
+          },
           dataType: "JSON"
         });
       }
@@ -89,7 +91,9 @@ function(SimpleModalView) {
         type:"POST",
         url:'/app/'+appId+'/subdomain/'+subdomain+'/',
         data: {},
-        success: function(d){location.reload(true);},
+        success: function(d){
+          iui.onServerReady(function(){location.reload(true);});
+        },
         error: function() {
           iui.stopAjaxLoading();
           alert("error: see logs");

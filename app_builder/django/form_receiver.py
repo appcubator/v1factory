@@ -16,8 +16,7 @@ class DjangoFormReceiver(object):
 
   def init_fields(self):
     for f in self.included_fields:
-      if f.field_type != 'button':
-        self.form_fields.append(DjangoFormField.create(f, self))
+      self.form_fields.append(DjangoFormField.create(f, self))
     pass
 
   @classmethod
@@ -61,7 +60,7 @@ class DjangoFormReceiver(object):
     """Gets the Django Model"""
     """maps to model fields"""
     self.model = models.get_by_name(self.model.name)
-    for f in filter(lambda x: x.field_type != 'button', self.included_fields):
+    for f in self.included_fields:
 
       if f.is_model_field() and f.name != 'username':
         f._django_field = self.model.fields.get_by_name(f.model_field.name)
@@ -106,13 +105,20 @@ class DjangoFormReceiver(object):
       template = env.get_template('signup_form_receiver.py')
       return template.render(form_receiver=self)
 
-
 class SignupFormReceiver(DjangoFormReceiver):
+
+  def __init__(self, *args, **kwargs):
+    super(SignupFormReceiver, self).__init__(*args, **kwargs)
+    self.name = "receive_signup"
 
   @property
   def userprofile_fields(self):
     up_fields = [ f._django_field for f in self.included_fields if f._django_field is not None and f._django_field.name != 'username' ]
     return up_fields
+
+  def render(self, env):
+    template = env.get_template('signup_form_receiver.py')
+    return template.render(form_receiver=self)
 
 class LoginFormReceiver(DjangoFormReceiver):
 
