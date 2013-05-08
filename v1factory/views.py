@@ -316,7 +316,8 @@ def app_deploy(request, app_id):
     'date_joined' : str(request.user.date_joined)
   }
   result = app.deploy(d_user)
-  return HttpResponse(simplejson.dumps(result), mimetype="application/json")
+  status = 500 if 'errors' in result else 200
+  return HttpResponse(simplejson.dumps(result), status=status, mimetype="application/json")
 
 @login_required
 @require_POST
@@ -328,56 +329,14 @@ def app_deploy_local(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  m = app.write_to_tmpdir(d_user)
-  return HttpResponse(m)
+  result = {}
+  try:
+    result['site_url'] = app.write_to_tmpdir(d_user)
+    result['github_url'] = result['site_url']
+  except Exception, e:
+    result['errors'] = traceback.format_exc()
+  return HttpResponse(result)
 
-
-#FOR THE DEPLOYMENT PANEL
-
-@login_required
-@require_GET
-def deploy_panel(request):
-  if request.method == "GET":
-    r = requests.get('http://appcubator.com/deployment/')
-    if r.status_code == 200:
-      page_context = {}
-      page_context['deployments'] = simplejson.loads(r.content)
-      return render(request, 'deploy-panel.html', page_context)
-    else:
-      return HttpResponse("appcubator.com returned status of %s" % r.status_code)
-
-@require_POST
-@csrf_exempt
-@login_required
-def deploy_local(request):
-  subdomain = request.POST['subdomain']
-  app_json = request.POST['app_json']
-  d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
-  d_user = {
-    'user_name' : request.user.username,
-    'date_joined' : str(request.user.date_joined)
-  }
-  r = d.write_to_tmpdir(d_user)
-  return HttpResponse(r)
-
-@require_POST
-@csrf_exempt
-@login_required
-def deploy_hosted(request):
-  subdomain = request.POST['subdomain']
-  app_json = request.POST['app_json']
-  #this will post the data to appcubator.com
-  d_user = {
-    'user_name' : request.user.username,
-    'date_joined' : str(request.user.date_joined)
-  }
-  post_data = {
-    "subdomain": subdomain,
-    "app_json": app_json,
-    "d_user" : simplejson.dumps(d_user)
-  }
-  r = requests.post("http://appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
-  return HttpResponse(r.content)
 
 @require_POST
 @csrf_exempt

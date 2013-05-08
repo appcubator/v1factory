@@ -197,7 +197,16 @@ function (AppModel,
               url: '/app/'+appId+'/deploy/',
               success: function(data) {
                 iui.stopAjaxLoading();
-                new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+                if(data.errors) {
+                  var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+                  if(DEBUG) {
+                    content = { text: data.errors };
+                  }
+                  new ErrorModalView(content);
+                }
+                else {
+                  new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+                }
               },
               error: function(data) {
                 var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
