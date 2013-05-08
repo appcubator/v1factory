@@ -6230,7 +6230,7 @@ i.icon-url {
   background-image: url('../img/gift.png');
   background-position: 700px center;
   background-repeat: no-repeat;
-  background-size: 140px auto;
+  background-size: 100px auto;
   height: 230px;
   overflow: hidden;
   -webkit-transition: height linear 0.4s;
