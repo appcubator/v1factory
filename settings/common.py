@@ -110,6 +110,7 @@ INSTALLED_APPS = (
     'v1factory',
     'app_builder',
     'app_builder.deployment',
+    'south',
     'djcelery',
     'kombu.transport.django',
     'less'
@@ -166,6 +167,11 @@ LOGGING = {
             'level':'DEBUG',
         },
         'deployment_models': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'app_builder.deployment.views': {
             'handlers':['console'],
             'propagate': True,
             'level':'DEBUG',
