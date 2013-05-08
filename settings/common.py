@@ -171,6 +171,11 @@ LOGGING = {
             'propagate': True,
             'level':'DEBUG',
         },
+        'app_builder.deployment.views': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
     }
 }
 
