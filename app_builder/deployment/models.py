@@ -107,7 +107,10 @@ class Deployment(models.Model):
     try:
       tmp_project_dir = self.write_to_tmpdir(d_user)
     except Exception, e:
-      return { "errors": traceback.format_exc() }
+      trace = traceback.format_exc()
+      logger.error(str(e))
+      logger.error(trace)
+      return { "errors": trace }
 
     logger.info("Project written to " + tmp_project_dir)
 
