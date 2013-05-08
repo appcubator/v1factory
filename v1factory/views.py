@@ -266,9 +266,9 @@ class StaticFileForm(ModelForm):
     return super(StaticFileForm, self).save(*args, **kwargs)
 
 
-def JSONResponse(serializable_obj):
+def JSONResponse(serializable_obj, **kwargs):
   """Just a convenience function, in the middle of horrible code"""
-  return HttpResponse(simplejson.dumps(serializable_obj), mimetype="application/json")
+  return HttpResponse(simplejson.dumps(serializable_obj), mimetype="application/json", **kwargs)
 
 @login_required
 def staticfiles(request, app_id):
@@ -333,9 +333,11 @@ def app_deploy_local(request, app_id):
   try:
     result['site_url'] = app.write_to_tmpdir(d_user)
     result['github_url'] = result['site_url']
+    status = 200
   except Exception, e:
     result['errors'] = traceback.format_exc()
-  return HttpResponse(result)
+    status = 500
+  return JSONResponse(result, status=status)
 
 
 @require_POST
