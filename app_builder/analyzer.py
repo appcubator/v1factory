@@ -275,7 +275,7 @@ class Container(UIElement):
       u = ListQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] == 'table':
       u = TableQuerysetWrapper(uie, page)
-    elif uie['container_info']['action'] in ['facebook', 'linkedin']:
+    elif uie['container_info']['action'] in ['facebook', 'twitter', 'linkedin']:
       u = ThirdPartyLogin(uie, page)
     else:
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
@@ -561,6 +561,21 @@ class AnalyzedApp:
           uie.resolve_entity(self)
           uie.check_required_fields()
           uie.resolve_goto_page(self)
+
+          # hack to make form names unique
+          form_counter = 0
+          def make_unique(name, level=0):
+            if self.forms.get_by_name(name) is None:
+              return name
+            elif level == 0:
+              name += p.name + " page"
+              return make_unique(name, level=1)
+            else:
+              name += str(form_counter)
+              form_counter += 1
+              return name
+
+          uie.name = make_unique(uie.name)
           self.forms.add(uie)
 
   def init_queries(self, app_state):

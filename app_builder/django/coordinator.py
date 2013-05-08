@@ -86,7 +86,12 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
 
   # form POST receiver creation
   logger.debug("Creating form receiver objects and urls for the forms.")
+  ##form_counter = 0
   for f in analyzed_app.forms.each():
+    # hack to fix form name uniqueness
+    ##f.name = f.name + str(form_counter)
+    ##form_counter += 1
+
     if isinstance(f, SignupForm):
       rec = SignupFormReceiver.create_signup(f, analyzed_app)
     elif isinstance(f, LoginForm):
@@ -99,13 +104,18 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
       raise Exception("What is this form?: %s" % type(f))
 
     rec.find_model(models)
-    form_receivers.add(rec)
-    # create the url for the POST
-    u = DjangoUrl.create_post(rec, analyzed_app, models)
-    urls.add(u)
+    try:
+      form_receivers.add(rec)
+    except Exception:
+      # hack to allow multiple login/signup forms on a page
+      f.form_receiver = form_receivers.get_by_name(rec.name)
+    else:
+      # create the url for the POST
+      u = DjangoUrl.create_post(rec, analyzed_app, models)
+      urls.add(u)
 
-    if isinstance(f, CreateForm):
-      rec.init_foreign_keys(models) # should automatically add foreign keys
+      if isinstance(f, CreateForm):
+        rec.init_foreign_keys(models) # should automatically add foreign keys
 
   dw = DjangoApp(models, views, urls, templates, form_receivers, d_user)
   return dw

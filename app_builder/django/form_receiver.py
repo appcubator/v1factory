@@ -106,13 +106,20 @@ class DjangoFormReceiver(object):
       template = env.get_template('signup_form_receiver.py')
       return template.render(form_receiver=self)
 
-
 class SignupFormReceiver(DjangoFormReceiver):
+
+  def __init__(self, *args, **kwargs):
+    super(SignupFormReceiver, self).__init__(*args, **kwargs)
+    self.name = "receive_signup"
 
   @property
   def userprofile_fields(self):
     up_fields = [ f._django_field for f in self.included_fields if f._django_field is not None and f._django_field.name != 'username' ]
     return up_fields
+
+  def render(self, env):
+    template = env.get_template('signup_form_receiver.py')
+    return template.render(form_receiver=self)
 
 class LoginFormReceiver(DjangoFormReceiver):
 

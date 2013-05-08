@@ -244,6 +244,7 @@ function(FormFieldModel, TutorialView) {
     },
 
     changedFormAction: function(e) {
+      alert("This should never have happened");
       console.log(e.target.value);
       this.model.set('action', e.target.value);
     },

@@ -101,9 +101,12 @@ function(ElementCollection,
     renderAuthenticationForms: function() {
       var self = this;
       if(appState.users.local) {
-        var tempLocal = '<li id="entity-user-Local Login" class="login authentication">'+
+        var tempLocalLogin = '<li id="entity-user-Local_Login" class="login authentication">'+
                      '<span class="name">Login Form</span></li>';
-        $(self.allList).append(tempLocal);
+        var tempLocalSignup = '<li id="entity-user-Sign_Up" class="login authentication">'+
+                     '<span class="name">Sign Up</span></li>';
+        $(self.allList).append(tempLocalLogin);
+        $(self.allList).append(tempLocalSignup);
       }
 
       if(appState.users.facebook) {
@@ -212,17 +215,18 @@ function(ElementCollection,
       }
 
       var className = targetEl.className;
-      var id = targetEl .id;
+      var id = targetEl.id;
 
       var hash, entityCid, formCid, action;
       var entity, form, field;
 
       if(/(authentication)/.exec(className)) {
         var formType = String(id).replace('entity-user-','');
+        formType = formType.replace('_', ' '); // "Local_Login" => "Local Login"
         form = constantContainers[formType];
         widget.container_info = {};
-        widget.container_info.entity = "User";
-        widget.container_info.action = "login";
+        widget.container_info.entity = form.entity;
+        widget.container_info.action = form.action;
         widget.container_info.form = form;
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);
