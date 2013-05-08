@@ -229,6 +229,8 @@ define(['jquery-ui'], function() {
       });
     });
 
+    document.addEventListener("touchstart", function(){}, true);
+
   window.iui = iui;
 
   if (typeof window.define === "function" && window.define.amd) {
