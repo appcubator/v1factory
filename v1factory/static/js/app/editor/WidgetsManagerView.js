@@ -3,9 +3,10 @@ define([
   'editor/WidgetContainerView',
   'app/models/WidgetModel',
   'app/editor/WidgetEditorView',
+  'app/editor/WidgetListView',
   'backbone'
 ],
-function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
+function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetListView) {
 
   var WidgetManagerView = Backbone.View.extend({
     el : $('.page'),
@@ -54,6 +55,10 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
     // this function decides if widget or container
     placeUIElement: function(model) {
       var self = this;
+
+      if(model.has('container_info') && model.get('container_info').has('row')) {
+        self.placeList(model);
+      }
       if(model.has('container_info')) {
         self.placeContainer(model);
       }
@@ -73,6 +78,13 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView) {
 
     placeContainer: function(containerWidgetModel) {
       var curWidget= new WidgetContainerView(containerWidgetModel);
+      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
+      else iui.get('full-container').appendChild(curWidget.el);
+      curWidget.resizableAndDraggable();
+    },
+
+    placeList: function(containerWidgetModel) {
+      var curWidget= new WidgetListView(containerWidgetModel);
       if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
       else iui.get('full-container').appendChild(curWidget.el);
       curWidget.resizableAndDraggable();
