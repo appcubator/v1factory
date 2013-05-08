@@ -11,7 +11,7 @@ function(Backbone) {
       var self = this;
 
       $(self.el).resizable({
-        handles: "n, e, s, w, se",
+        handles: "n, e, s, w, nw, ne, sw, se",
         // grid: [80, 15],
         containment: "parent",
         resize: self.resizing,
