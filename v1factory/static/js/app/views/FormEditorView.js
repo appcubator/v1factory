@@ -52,7 +52,7 @@ function(FormFieldModel, TutorialView) {
                       'changedBelongsTo',
                       'clickedAddField',
                       'addField',
-                      'keydownHandler',
+                      'handleKey',
                       'addNewField',
                       'deleteField',
                       'renderPossibleActions');
@@ -71,7 +71,9 @@ function(FormFieldModel, TutorialView) {
       }
 
       this.callback = callback;
-      $(window).bind('keydown', this.keydownHandler);
+      //$(window).bind('keydown', this.handleKey);
+      //console.log($._data($(window)[0],"events").keydown);
+
     },
 
     render : function(text) {
@@ -321,10 +323,6 @@ function(FormFieldModel, TutorialView) {
       e.stopPropagation();
     },
 
-    keydownHandler: function(e) {
-      e.stopPropagation();
-    },
-
     showTutorial: function() {
       new TutorialView([6, 1]);
     },
@@ -335,10 +333,6 @@ function(FormFieldModel, TutorialView) {
       var html = _.template(FormEditorTemplates.possibleActions, page_context);
       this.$el.find('.goto-list').html(html);
       return this;
-    },
-
-    onClose: function() {
-      $(window).unbind('keydown', this.keydownHandler);
     }
   });
 

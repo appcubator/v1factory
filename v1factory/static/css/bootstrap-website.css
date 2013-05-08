@@ -6003,6 +6003,10 @@ hr.vert {
     background-color: #0f2d40;  
   }
 
+  .footer .links {
+    color: #fff;
+  }
+
   .footer .links a {
     color:#fff;
     display: inline-block;

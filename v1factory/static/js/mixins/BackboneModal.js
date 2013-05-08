@@ -39,15 +39,18 @@ function(Backbone) {
       div.style.zIndex = 3000;
       document.body.appendChild(div);
 
+      var closeHandler = function(e) {
+        if(e.keyCode == 27) {
+          self.closeModal(closeHandler);
+        }
+      };
+
       $(div).on('click', function() {
-        self.closeModal();
+        self.closeModal(closeHandler);
       });
 
-      $(window).on('keydown', function(e) {
-        if(e.keyCode == 27) {
-          self.closeModal();
-        }
-      });
+
+      $(window).on('keydown', closeHandler);
 
       return div;
     },
@@ -90,7 +93,7 @@ function(Backbone) {
       return div;
     },
 
-    closeModal: function() {
+    closeModal: function(closeHandlerFn) {
       var self = this;
       this.undelegateEvents();
       if(this.callback) this.callback();
@@ -105,6 +108,10 @@ function(Backbone) {
         $(self.modalWindow).remove();
         $(self.backgroundDiv).remove();
       }, 550);
+
+      if(closeHandlerFn) {
+        $(window).unbind('keydown', closeHandlerFn);
+      }
 
       this.stopListening();
     },
