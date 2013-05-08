@@ -19,6 +19,7 @@ def push(name, cwd, changes=True):
 def syncdb(app, child_env):
   commands = []
   commands.append('python manage.py syncdb --noinput')
+  commands.append('python manage.py migrate social_auth')
 
   # if migrations is not yet a directory, then setup south
   if not os.path.isdir(os.path.join(app.app_dir, 'webapp', 'migrations')):
