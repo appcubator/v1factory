@@ -6,37 +6,36 @@
         <li><input type="checkbox" disabled checked>Create a simple app.</li>
 
         <li><input type="checkbox" id="tutorial-check" disabled>Read through the <a class="tutorial" href="#">tutorial</a>.</li>
-        <li><input type="checkbox" disabled>Fill the <a class="#">feedback form</a>.</li>
+        <li><input type="checkbox" id="feedback-check" disabled>Fill the <a class="feedback" href="#">feedback form</a>.</li>
       </ul>
     </div>
     <div class="row hoff1 span58">
-      <h2 class="span34 hoff1">{{ app.name }}</h2>
-      <div class="pane deploy-pane span24 hi3 right">
-        <div class="hi3 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div><hr class="vert">
-        <div class="hi3 span13"><h4 class="hoff1 offset1 green">Running</h4></div>
+      <h2 class="span48 hoff1">{{ app.name }}</h2>
+      <div class="pane deploy-pane span10 hi3 right">
+        <div class="hi3 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div>
       </div>
       <hr class="span58 hoff2">
     </div>
     <div class="span58 hoff1 hoff2">
-        <a class="pane hi11 span13 entities" id="app-info" href="/app/{{ app_id }}/info/">
+        <a class="pane hi11 span13 menu-app-info" id="app-info" href="#">
           <img src="{{ STATIC_URL }}img/info.png">
           <div class="hoff1 offset1 offsetr1">
           <h3>Domain & SEO</h3>
           </div>
         </a>
-        <a class="pane hi11 span13 entities offset2" id="data-storage" href="/app/{{ app_id }}/entities/">
+        <a class="pane hi11 span13 menu-app-entities offset2" id="data-storage" href="">
           <img src="{{ STATIC_URL }}img/entities.png">
           <div class="hoff1 offset1 offsetr1">
           <h3>Data & Storage</h3>
           </div>
         </a>
-        <a class="pane hi11 span13 offset2" id="themes" href="/app/{{ app_id }}/gallery/">
+        <a class="pane hi11 span13 offset2 menu-app-gallery" id="themes" href="">
           <img src="{{ STATIC_URL }}img/design.png">
           <div class="hoff1 offset1 offsetr1">
           <h3>Design & Themes</h3>
           </div>
         </a>
-        <a class="pane hi11 span13 offset2" id="pages" href="/app/{{ app_id }}/pages/">
+        <a class="pane hi11 span13 offset2 menu-app-pages" id="pages" href="">
           <img src="{{ STATIC_URL }}img/page.png">
           <div class="hoff1 offset1 offsetr1">
           <h3>Pages</h3>

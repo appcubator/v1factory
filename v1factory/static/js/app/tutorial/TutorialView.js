@@ -139,8 +139,6 @@ function(Backbone) {
     },
 
     chooseSlide: function(addr, isNew) {
-      console.log(addr);
-
       var self = this; 
 
       this.addr = addr;
@@ -182,6 +180,7 @@ function(Backbone) {
     },
 
     selectMenu: function (addr) {
+      console.log(addr);
       var addrStr = this.addr.join('-');
       this.$el.find('.selected').removeClass('selected');
       $('#'+addrStr).addClass('selected');
@@ -199,6 +198,7 @@ function(Backbone) {
             directory: addr.join(',')
           },
           success: function(data) {
+            v1.betaCheck(data);
           },
           dataType: "JSON"
       });
@@ -335,6 +335,7 @@ function(Backbone) {
           dataType: "JSON"
       });
 
+      $('#feedback-check').prop('checked', true);
       this.closeModal();
       alert('Thanks for your feedback!');
       e.preventDefault();

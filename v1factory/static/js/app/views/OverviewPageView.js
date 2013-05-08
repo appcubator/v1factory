@@ -8,13 +8,15 @@ function(SimpleModalView) {
 
     events : {
       'click .tutorial'        : 'showTutorial',
+      'click .feedback'        : 'showFeedback',
       'click #deploy'          : 'deploy'
     },
 
     initialize: function() {
       _.bindAll(this, 'render',
                       'deploy',
-                      'showTutorial');
+                      'showTutorial',
+                      'showFeedback');
 
     },
 
@@ -22,17 +24,23 @@ function(SimpleModalView) {
       var page_context = {};
       this.el.innerHTML = _.template(iui.getHTML('app-main-page'), page_context);
       this.checkTutorialProgress();
+      v1.menuBindings();
     },
 
     checkTutorialProgress: function() {
+      var self = this;
+
       $.ajax({
         type: "POST",
         url: '/log/slide/',
         data: { title: null, directory: null },
         success: function(data) {
-          if(data.percentage > 99) {
-            $('#tutorial-check').prop('checked', true);
-          } 
+          v1.betaCheck(data);
+        },
+        error: function() {
+          setTimeout(function() {
+            self.checkTutorialProgress();
+          }, 400);
         },
         dataType: "JSON"
       });
@@ -44,6 +52,10 @@ function(SimpleModalView) {
 
     showTutorial: function() {
       v1.showTutorial();
+    },
+
+    showFeedback: function() {
+      v1.showTutorial(null, [7]);
     }
 
   });
