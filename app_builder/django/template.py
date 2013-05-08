@@ -44,6 +44,7 @@ class DjangoTemplate(Renderable):
     for uie in self.page.uielements:
       if isinstance(uie, Container):
         for n in uie.nodes:
+          n.wrap_link = False
           if 'href' in n.attribs:
             if isinstance(n.attribs['href'], Page):
               dest_view = n.attribs['href']._django_view
@@ -55,6 +56,12 @@ class DjangoTemplate(Renderable):
                   n.attribs['href'] = "{% url "+dest_view.view_path()+" item.id %}"
                   continue
               n.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
+
+              # this is allows other tags to be links
+              if n.tagname != 'a':
+                n.wrap_link = True
+                n.wrap_link_href = n.attribs['href']
+                del n.attribs['href'] # href should go in the wrapper anchor tag only
 
       else:
         if 'href' in uie.attribs:

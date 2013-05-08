@@ -251,13 +251,6 @@ class Node(UIElement):
         if not self.attribs['href'].startswith('http'): # prepend http the the href if it's not there
           self.attribs['href'] = 'http://' + self.attribs['href']
 
-      # this is allows other tags to be links
-      if self.tagname != 'a':
-        self.wrap_link = True
-        self.wrap_link_href = self.attribs['href']
-        del self.attribs['href'] # href should go in the wrapper anchor tag only
-
-
   def padding_string(self):
     tp, rp, bp, lp = (0, 0, 0, 0)
     if 't-padding' in self.uie['layout']:
