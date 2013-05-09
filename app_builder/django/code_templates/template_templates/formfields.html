@@ -25,8 +25,8 @@
 {% endfor %}
   </span>
   {% elif field.display_type == "image-uploader" %}
-  <input type="button" value="{{ field.kwargs.placeholder }}" class="btn" />
-  <input type="hidden" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+  <input id="button-id-{{ field.post_name }}" type="button" value="{{ field.kwargs.placeholder }}" class="btn upload" />
+  <input id="id-{{ field.post_name }}" type="hidden" name="{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "date-picker" %}
   date picker will be here<input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% else %}
