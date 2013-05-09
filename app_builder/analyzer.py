@@ -579,17 +579,24 @@ class AnalyzedApp:
           # hack to make form names unique
           form_counter = 0
           def make_unique(name, level=0):
-            if self.forms.get_by_name(name) is None:
+            if name != "" and self.forms.get_by_name(name) is None:
               return name
             elif level == 0:
-              name += p.name + " page"
+              name += " " + uie.action
               return make_unique(name, level=1)
+            elif level == 1:
+              name += uie.entity
+              return make_unique(name, level=2)
+            elif level == 2:
+              name += " on " + p.name + " page"
+              return make_unique(name, level=3)
             else:
               name += str(form_counter)
               form_counter += 1
               return name
 
           uie.name = make_unique(uie.name)
+          print "I just named my form "+  uie.name
           self.forms.add(uie)
 
   def init_queries(self, app_state):
