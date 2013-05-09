@@ -114,7 +114,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.setLayout(this.selectDiv, widgetModel);
     },
 
-
     resizing: function(e, ui) {
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
       elem.style.width = ui.size.width + 'px';
@@ -123,34 +122,27 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     resized: function(e, ui) {
-      console.log("HEY");
       var left = Math.round((ui.position.left / GRID_WIDTH));
       var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
-
-      console.log(this);
-      console.log(this.model);
       this.selectedEl.get('layout').set('width', deltaWidth);
       this.selectedEl.get('layout').set('height', deltaHeight);
       this.selectedEl.get('layout').set('left', left);
-
-      this.el.style.width ='';
-      this.el.style.height = '';
-      this.el.style.left = '';
+      this.setLayout(this.selectDiv, this.selectedEl);
     },
 
     moving: function(e, ui) {
+      var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
+      elem.style.top = ui.position.top + 'px';
+      elem.style.left = ui.position.left+ 'px';
+    },
+
+    moved: function(e, ui) {
       var top = Math.round((ui.position.top / GRID_HEIGHT));
       var left = Math.round((ui.position.left / GRID_WIDTH));
       this.selectedEl.get('layout').set('top', top);
       this.selectedEl.get('layout').set('left', left);
-    },
-
-    moved: function(e, ui) {
-      this.el.style.left ='';
-      this.el.style.top = '';
-      this.selectedEl.trigger('change:left');
-      this.selectedEl.trigger('change:top');
+      this.setLayout(this.selectDiv, this.selectedEl);
     },
 
     clear: function() {

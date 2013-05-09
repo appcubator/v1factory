@@ -18,9 +18,11 @@ function( TableQueryView,
     entity: null,
     type: null,
     events: {
-      'click'         : 'select',
       'click .delete' : 'remove',
-      'dblclick'      : 'showDetails'
+      'dblclick'      : 'showDetails',
+      'mousedown'     : 'select',
+      'mouseover'     : 'hovered',
+      'mouseout'      : 'unhovered'
     },
 
     initialize: function(widgetModel) {
