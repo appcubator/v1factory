@@ -41,6 +41,7 @@ function(EntityCollection,
       },
 
       clickedAdd: function(e) {
+        alert('he');
         var newForm = this.$el.find('#add-entity-form');
         $(newForm).appendTo('#entities');
         $(newForm).fadeIn();
@@ -58,7 +59,7 @@ function(EntityCollection,
 
         $('#entity-name-input').val('');
         $(this.addButton).fadeIn();
-        $(e.target).remove();
+        $(e.target).hide();
       }
 
     });
