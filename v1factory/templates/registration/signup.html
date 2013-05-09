@@ -115,16 +115,6 @@ $(document).ready(function() {
 
     });
   });
-
-  $('.btn.upload').click(function(e) {
-    openFilepicker(function(file){
-      console.log(file);
-      var id = String(e.target.id).replace('button-', '');
-      $('#'+id).val(file.url);
-    });
-
-    e.preventDefault();
-  });
 });
 </script>
 {% endblock %}

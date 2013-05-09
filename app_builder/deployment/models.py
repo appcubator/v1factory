@@ -11,6 +11,9 @@ import time
 import shutil
 from django.db import models
 import requests
+import logging
+logger = logging.getLogger("deployment_models")
+from app_builder.deployment import tasks
 
 def copytree(src, dst, symlinks=False, ignore=None):
   """shutil.copytree wrapper which works even when the dest dir exists"""
@@ -97,13 +100,22 @@ class Deployment(models.Model):
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
+    logger.info("Writing config files and making sure hosting folder exists.")
     self.initialize()
 
     # GENERATE CODE
-    tmp_project_dir = self.write_to_tmpdir(d_user)
-    print "Project written to " + tmp_project_dir
+    try:
+      tmp_project_dir = self.write_to_tmpdir(d_user)
+    except Exception, e:
+      trace = traceback.format_exc()
+      logger.error(str(e))
+      logger.error(trace)
+      return { "errors": trace }
+
+    logger.info("Project written to " + tmp_project_dir)
 
     if not django.conf.settings.PRODUCTION:
+      logger.info("Not a production deployment - returning now.")
       return tmp_project_dir
 
     child_env = os.environ.copy()
@@ -113,7 +125,7 @@ class Deployment(models.Model):
     child_env["PATH"] = "/var/www/v1factory/venv/bin:" + child_env["PATH"]
 
     # COPY THE CODE TO THE RIGHT DIRECTORY
-    print "Removing existing app code"
+    logger.info("Removing existing app code.")
     for f in os.listdir(self.app_dir):
       if f in ["db", ".git", "migrations"]:
         continue
@@ -123,37 +135,13 @@ class Deployment(models.Model):
       else:
         if f != "webapp": # migrations folder is in this one
           shutil.rmtree(f_path)
-    print "Copying temp project dir to the real path -> " + self.app_dir
+    logger.info("Copying temp project dir to the real path -> " + self.app_dir)
     copytree(tmp_project_dir, self.app_dir)
 
-    # COMMANDS TO RUN AFTER APP CODE HAS BEEN DEPLOYED
-    commands = []
+    logger.info("Sync the db, perform migrations if needed")
+    r = tasks.syncdb.delay(self, child_env)
 
-    commands.append('python manage.py syncdb --noinput')
-
-    # if migrations is not yet a directory, then setup south
-    if not os.path.isdir(os.path.join(self.app_dir, 'webapp', 'migrations')):
-      commands.append('python manage.py convert_to_south webapp')
-
-    # else, try to migrate the schema
-    else:
-      commands.append('python manage.py schemamigration webapp --auto')
-      commands.append('python manage.py migrate webapp')
-
-    debug_info = []
-    for c in commands:
-      print "Running `{}`".format(c)
-      try:
-        log_msg = subprocess.check_output(shlex.split(c), env=child_env, cwd=self.app_dir)
-      except subprocess.CalledProcessError, e:
-        print repr(e.cmd) + " returned with exit code of " + str(e.returncode)
-        print "Command output: " + e.output
-        # TODO send error to someone! don't let this fail silently
-
-      print log_msg
-      debug_info.append(log_msg)
-
-    return "\n".join(debug_info)
+    return {}
 
   def delete(self, delete_files=True, *args, **kwargs):
     try:

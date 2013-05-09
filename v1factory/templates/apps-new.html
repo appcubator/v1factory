@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block topbar %}
-{% include "infra-topbar.html" %}
+{% include "infra-topbar-plain.html" %}
 {% endblock %}
 
 {% block page %}
@@ -27,4 +27,14 @@
 {% block js %}
 <script src="{{ STATIC_URL }}js/libs/jquery/jquery.min.js"></script>
 <script src="{{ STATIC_URL }}js/libs/bootstrap/bootstrap.js"></script>
+<script>
+    $(function () {
+      $('form').on('submit', function(e) {
+        $(e.target).on('submit', function(e) {
+          e.preventDefault();
+        });
+      });
+    });
+</script>
+
 {% endblock %}

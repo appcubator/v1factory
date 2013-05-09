@@ -15,7 +15,8 @@ function(Backbone) {
     events : {
       "click #tutorial-menu-list li" : "clickedMenuItem",
       "submit .tutorial-q-form" : 'submittedQuestion',
-      'click .answer-slide'     : 'showAnswer'
+      'click .answer-slide'     : 'showAnswer',
+      "submit #feedback-form"   : 'submittedFeedback'
     },
 
     initialize: function(directory) {
@@ -30,7 +31,8 @@ function(Backbone) {
                       'keyhandler',
                       'submittedQuestion',
                       'showQuestionSlide',
-                      'showAnswer');
+                      'showAnswer',
+                      'submittedFeedback');
 
       if(directory) this.addr = directory;
 
@@ -137,8 +139,6 @@ function(Backbone) {
     },
 
     chooseSlide: function(addr, isNew) {
-      console.log(addr);
-
       var self = this; 
 
       this.addr = addr;
@@ -180,13 +180,14 @@ function(Backbone) {
     },
 
     selectMenu: function (addr) {
+      console.log(addr);
       var addrStr = this.addr.join('-');
       this.$el.find('.selected').removeClass('selected');
       $('#'+addrStr).addClass('selected');
     },
 
     showSlide: function(obj, addr) {
-      var title = '<h2>'+ obj.title + '</h2><div class="main-img" style="background-image:url('+ obj.img +')"></div>';
+      var title = '<h2>'+ obj.title + '</h2><div class="main-img '+ obj.view +'" style="background-image:url('+ obj.img +')"></div>';
       $('.tutorial-content').html(title + '<div class="text-cont">' + iui.getHTML(obj.view) +'</div>');
 
       $.ajax({
@@ -197,6 +198,7 @@ function(Backbone) {
             directory: addr.join(',')
           },
           success: function(data) {
+            if(typeof v1 != 'undefined') { v1.betaCheck(data); }
           },
           dataType: "JSON"
       });
@@ -316,6 +318,27 @@ function(Backbone) {
       console.log(e.target.id);
       var id = (e.target.id||e.target.parentNode.id).replace('slide-', '');
       this.chooseSlide([id], false);
+    },
+
+    submittedFeedback: function(e) {
+      var response = {};
+      response.like = $('#like-appcubator').val();
+      response.dislike = $('#dislike-appcubator').val();
+      response.features = $('#features-appcubator').val();
+
+      $.ajax({
+          type: "POST",
+          url: '/log/feedback/',
+          data: response,
+          success: function(data) {
+          },
+          dataType: "JSON"
+      });
+
+      $('#feedback-check').prop('checked', true);
+      this.closeModal();
+      alert('Thanks for your feedback!');
+      e.preventDefault();
     },
 
     onClose: function() {

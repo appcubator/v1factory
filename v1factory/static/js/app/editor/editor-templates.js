@@ -233,7 +233,7 @@ Templates.tempUIElementSized = [
   '<%=key%> = "<%=val%>"<% }); %>',
   '<% } %>',
   '<% _(element.get(\'content_attribs\').attributes).each(function(val, key) { %>',
-  '<%=key%> = "<%=val%>"<% }); %> style="position:absolute; top:<%=element.get(\'layout\').get(\'top\') * 15%>px; left:<%=element.get(\'layout\').get(\'left\')*80%>px;">',
+  '<%=key%> = "<%=val%>"<% }); %> style="">',
   '<% if(!element.get(\'isSingle\')) { %>',
   '<%= element.get(\'content\') %>',
   '</<%= element.get(\'tagName\') %>>',

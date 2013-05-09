@@ -20,7 +20,6 @@ body {
   color: #fff;
   background-image: url(../img/editor_bg.png);
   font: normal 16px "proxima-nova", Arial, sans-serif;
-  line-height: 1em;
 }
 
 .section {
@@ -196,14 +195,12 @@ body {
   position: absolute;
   cursor: move;
   border-radius: 3px;
-  line-height: 1em;
   overflow: visible;
   background-color: rgba(124, 192, 213, 0.0);
   -webkit-transition: backgroundColor 50ms linear;
 }
 
 .widget-wrapper:first-child  {
-  line-height: 1em;
 }
 
 .pseudo-outline {
@@ -895,7 +892,6 @@ h3.edit-url {
   position: absolute;
   cursor: move;
   border-radius: 3px;
-  line-height: 1em;
   overflow: visible;
   background-color: rgba(25, 142, 58, 0.0);
   -webkit-transition: background-color 50ms linear;

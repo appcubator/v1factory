@@ -18,6 +18,13 @@ from tasks import push
 import github_actions
 import sys
 import subprocess
+import logging
+print __name__
+logger = logging.getLogger(__name__)
+
+# for what it's worth
+import threading
+threading._DummyThread._Thread__stop = lambda x: 42
 
 class ProJSON(simplejson.JSONEncoder):
   """It's about time we handled datetime"""
@@ -54,27 +61,33 @@ def deploy_code(request):
   app_json = request.POST['app_json']
   css = request.POST['css']
   d_user = request.POST['d_user']
+  logger.debug("Trying to get deployment object.")
   try:
     d = Deployment.objects.get(u_name=u_name)
   except Deployment.DoesNotExist:
+    logger.debug("Not found - creating one now.")
     d = Deployment.create(s, u_name=u_name, app_state=simplejson.loads(app_json))
     d.initialize()
-    github_actions.create(u_name, d.app_dir)
+    try: # DEBUG
+      github_actions.create(u_name, d.app_dir)
+    except:
+      print "you foollllll"
   else:
+    logger.debug("Found deployment.")
     d.subdomain = s
     d.update_app_state(simplejson.loads(app_json))
   d.update_css(css)
   d.full_clean()
+  logger.debug("Attempting to deploy.")
   msgs = d.deploy(simplejson.loads(d_user))
   # Async call via celery
-  async_r = push.delay(u_name, d.app_dir)
-  print u_name, d.app_dir
-  print "OH LORD", async_r.get(timeout=5)
+  logger.debug("Git push delegated to celery.")
+  push.delay(u_name, d.app_dir)
+  logger.debug("Save deployment object.")
   d.save()
+  logger.debug("Reload server.")
   ret_code = subprocess.call(["sudo", "/var/www/v1factory/reload_apache.sh"])
-  ret_code = 0
-  assert(ret_code == 0)
-  return HttpResponse(msgs)
+  return HttpResponse(simplejson.dumps(msgs), mimetype="application/json")
 
 @require_POST
 @csrf_exempt

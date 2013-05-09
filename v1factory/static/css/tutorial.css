@@ -259,3 +259,31 @@ ul.text-cont li.answer-slide {
 ul.text-cont li.answer-slide:hover {
   background-color: #fefefe;
 }
+
+.main-img.feedback-form-page {
+  height: 0;
+  padding: 0;
+}
+
+.tutorial-view .feedback-form {
+  margin-left: 100px;
+  display: inline-block;
+  width: 460px;
+  font-size: 14px;
+}
+
+.feedback-form p {
+  margin-bottom: 30px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.feedback-form textarea {
+  display: inline-block;
+  width: 460px;
+}
+
+.feedback-form .btn {
+  margin-top: 20px;
+  float: right;
+}

@@ -1,5 +1,5 @@
 {{ "{% csrf_token %}" }}
-{% for field in context.included_fields %}
+{% for field in context.ui_fields %}
 {% if field.label != None %} <label for="id-{{ field.post_name }}">{{ field.label }}</label>{% endif %}
   {% if field.display_type == "single-line-text" %}
   <input type="text" name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
@@ -25,7 +25,8 @@
 {% endfor %}
   </span>
   {% elif field.display_type == "image-uploader" %}
-  <input type="file" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+  <input id="button-id-{{ field.post_name }}" type="button" value="{{ field.kwargs.placeholder }}" class="btn upload" />
+  <input id="id-{{ field.post_name }}" type="hidden" name="{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "date-picker" %}
   date picker will be here<input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% else %}

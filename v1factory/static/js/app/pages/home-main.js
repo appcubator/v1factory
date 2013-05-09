@@ -62,7 +62,6 @@ function(SimpleModalView, LoginModalView) {
       $('.IN-widget').children().first().children().first().trigger('click');
     });
 
-    console.log('hey');
     $('#login-btn').on('click', function() {
       new LoginModalView();
     });

@@ -65,6 +65,7 @@ function( WidgetCollection,
       var rowDiv = document.createElement('div');
       rowDiv.className = 'list-gallery-container elements-list';
       var rowGalleryView = new RowGalleryView(this.rowModel, this.entity);
+      rowGalleryView.render();
       rowDiv.appendChild(rowGalleryView.el);
 
 

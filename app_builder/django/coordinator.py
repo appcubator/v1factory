@@ -1,6 +1,8 @@
 "A class for every file in the webapp, which knows how to create and write itself."
 
 import re
+import logging
+logger = logging.getLogger("app_builder")
 
 from app_builder.manager import Manager
 from app_builder.analyzer import CreateForm, EditForm, SignupForm, LoginForm
@@ -15,6 +17,7 @@ from form_receiver import LoginFormReceiver, SignupFormReceiver, DjangoFormRecei
 from app import DjangoApp
 
 def analyzed_app_to_app_components(analyzed_app, d_user):
+  logger.info("Converting analyzed app to django app components.")
   models = Manager(DjangoModel)
   views = Manager(DjangoView)
   urls = Manager(DjangoUrl)
@@ -22,10 +25,12 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
   form_receivers = Manager(DjangoFormReceiver)
   queries = []
   # create and add django models
+  logger.debug("Creating django model and non-relational field objects.")
   for m in analyzed_app.models.each():
     models.add( DjangoModel.create(m) ) # this skips the relational fields
 
   # create relational fields
+  logger.debug("Creating the relational field objects.")
   for am1 in analyzed_app.models.each():
     for f in am1.fields:
       if f.content_type == 'list of blah':
@@ -50,6 +55,7 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
           dm2.fields.add(df)
 
   # create django templates
+  logger.debug("Creating django template, view, and url objects for each page.")
   for p in analyzed_app.pages.each():
     t = DjangoTemplate.create(p) # resolves links, creates row/column structure of html
     templates.add(t)
@@ -65,6 +71,7 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
       v.queries.add(dq) # add the query to the view function
 
   # logout button
+  logger.debug("Adding a view and url object for the logout action.")
   lv = DjangoLogoutView(name='logout')
   views.add(lv)
   lu = DjangoUrl.create_get(p, lv, analyzed_app, models)
@@ -72,12 +79,19 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
   urls.add( lu )
 
   # now that we know all the queries, properly name the variables in the templates
+  logger.debug("Name template variables (links, loop, page context, single vars).")
   for t in templates.each():
     t.resolve_links(analyzed_app.pages)
     t.properly_name_vars_in_q_container(models)
 
   # form POST receiver creation
+  logger.debug("Creating form receiver objects and urls for the forms.")
+  ##form_counter = 0
   for f in analyzed_app.forms.each():
+    # hack to fix form name uniqueness
+    ##f.name = f.name + str(form_counter)
+    ##form_counter += 1
+
     if isinstance(f, SignupForm):
       rec = SignupFormReceiver.create_signup(f, analyzed_app)
     elif isinstance(f, LoginForm):
@@ -90,13 +104,18 @@ def analyzed_app_to_app_components(analyzed_app, d_user):
       raise Exception("What is this form?: %s" % type(f))
 
     rec.find_model(models)
-    form_receivers.add(rec)
-    # create the url for the POST
-    u = DjangoUrl.create_post(rec, analyzed_app, models)
-    urls.add(u)
+    try:
+      form_receivers.add(rec)
+    except Exception:
+      # hack to allow multiple login/signup forms on a page
+      f.form_receiver = form_receivers.get_by_name(rec.name)
+    else:
+      # create the url for the POST
+      u = DjangoUrl.create_post(rec, analyzed_app, models)
+      urls.add(u)
 
-    if isinstance(f, CreateForm):
-      rec.init_foreign_keys(models) # should automatically add foreign keys
+      if isinstance(f, CreateForm):
+        rec.init_foreign_keys(models) # should automatically add foreign keys
 
   dw = DjangoApp(models, views, urls, templates, form_receivers, d_user)
   return dw

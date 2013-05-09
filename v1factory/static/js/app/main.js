@@ -42,6 +42,7 @@ require.config({
 require([
   "app/models/AppModel",
   "app/views/SimpleModalView",
+  "app/views/ErrorModalView",
   "app/tutorial/TutorialView",
   "app/views/AppInfoView",
   "app/views/EntitiesView",
@@ -56,6 +57,7 @@ require([
 ],
 function (AppModel,
           SimpleModalView,
+          ErrorModalView,
           TutorialView,
           InfoView,
           EntitiesView,
@@ -79,29 +81,32 @@ function (AppModel,
 
     initialize: function() {
       var self = this;
-
       $('#save').on('click', this.save);
       $('#tutorial').on('click', this.showTutorial);
-
-      $('#main-menu').on('click', function() {
-        self.navigate("app/"+ appId +"/", {trigger: true});
-      });
-      $('#info-menu').on('click', function() {
-        self.navigate("app/"+ appId +"/info/", {trigger: true});
-      });
-      $('#entities-menu').on('click', function() {
-        self.navigate("app/"+ appId +"/entities/", {trigger: true});
-      });
-      $('#gallery-menu').on('click', function() {
-        self.navigate("app/"+ appId +"/gallery/", {trigger: true});
-      });
-      $('#pages-menu').on('click', function() {
-        self.navigate("app/"+ appId +"/pages/", {trigger: true});
-      });
+      this.menuBindings();
     },
 
     start: function () {
 
+    },
+
+    menuBindings: function() {
+      var self = this;
+      $('#main-menu').on('click', function() {
+        self.navigate("app/"+ appId +"/", {trigger: true});
+      });
+      $('.menu-app-info').on('click', function() {
+        self.navigate("app/"+ appId +"/info/", {trigger: true});
+      });
+      $('.menu-app-entities').on('click', function() {
+        self.navigate("app/"+ appId +"/entities/", {trigger: true});
+      });
+      $('.menu-app-themes').on('click', function() {
+        self.navigate("app/"+ appId +"/gallery/", {trigger: true});
+      });
+      $('.menu-app-pages').on('click', function() {
+        self.navigate("app/"+ appId +"/pages/", {trigger: true});
+      });
     },
 
     index: function () {
@@ -152,8 +157,6 @@ function (AppModel,
     },
 
     showPagesPage: function() {
-      console.log(v1App.view);
-
       if(v1App.view) v1App.view.remove();
       v1App.tutorialDirectory = [5];
       var cleanDiv = document.createElement('div');
@@ -167,25 +170,16 @@ function (AppModel,
     },
 
     showEditor: function(appId, pageId) {
-      console.log(v1App.view);
-
       if(v1App.view) v1App.view.remove();
       v1App.tutorialDirectory = [5];
       $('.page').fadeOut();
 
       pageId = pageId;
-      console.log(pageId);
       var cleanDiv = document.createElement('div');
       cleanDiv.className = "clean-div";
       $(document.body).append(cleanDiv);
       v1App.view  = new EditorView({}, pageId);
       v1App.view.setElement(cleanDiv).render();
-
-//       $('.active').removeClass('active');
-//       $('.menu-app-pages').addClass('active');
-
-
-// 
     },
 
     deploy: function() {
@@ -195,7 +189,23 @@ function (AppModel,
               url: '/app/'+appId+'/deploy/',
               success: function(data) {
                 iui.stopAjaxLoading();
-                new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+                if(data.errors) {
+                  var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+                  if(DEBUG) {
+                    content = { text: data.errors };
+                  }
+                  new ErrorModalView(content);
+                }
+                else {
+                  new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+                }
+              },
+              error: function(data) {
+                var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+                if(DEBUG) {
+                  content = { text: data.responseText };
+                }
+                new ErrorModalView(content);
               },
               dataType: "JSON"
         });
@@ -204,24 +214,47 @@ function (AppModel,
     save: function() {
       iui.startAjaxLoading();
       appState = v1State.toJSON();
-      console.log(appState);
       $.ajax({
           type: "POST",
           url: '/app/'+appId+'/state/',
           data: JSON.stringify(appState),
           complete: function() { iui.stopAjaxLoading("Saved"); },
+          error: function(data) {
+            if(data.responseText == "ok") return;
+            var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+            if(DEBUG) {
+              content = { text: data.responseText };
+            }
+            new ErrorModalView(content);
+          },
           dataType: "JSON"
       });
     },
 
-    showTutorial: function() {
-      tutorial = new TutorialView(v1App.tutorialDirectory);
+    showTutorial: function(e, inp) {
+      if(!inp) inp = v1App.tutorialDirectory;
+      tutorial = new TutorialView(inp);
+    },
+
+    betaCheck: function(data) {
+      if(data.percentage > 30 && data.feedback === true) {
+        $('.notice').css('height', '118px');
+        $('.notice').html('<h3 class="">Thank you for joining Appcubator Private Beta program!</h3><div>You can claim your free domain from <a class="menu-app-info">Domain & SEO</a> page.</div>');
+        v1.menuBindings();
+      }
+
+      if(data.percentage > 30) {
+        $('#tutorial-check').prop('checked', true);
+      }
+      if(data.feedback === true) {
+        $('#feedback-check').prop('checked', true);
+      }
     }
   });
 
-  v1 = new v1App();
   v1State = new AppModel();
   v1State.initialize(appState);
+  v1 = new v1App();
   Backbone.history.start({pushState: true});
 
 });

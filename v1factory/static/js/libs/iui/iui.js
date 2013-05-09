@@ -7,7 +7,7 @@ define(['jquery-ui'], function() {
         success: callback,
         error: function(){
           console.log("Server not ready. Waiting 100ms and trying again.");
-          window.setTimeout(function(){this.onServerReady(callback)}, 100);
+          window.setTimeout(function(){iui.onServerReady(callback)}, 100);
         }
       });
     },
@@ -228,6 +228,19 @@ define(['jquery-ui'], function() {
         }
       });
     });
+
+    $(function () {
+      /* prevents submitting twice */
+      console.log("prevent");
+      $('form').on('submit', function(e) {
+        console.log("prevent");
+        $(e.target).on('submit', function(e) {
+          e.preventDefault();
+        });
+      });
+    });
+
+    document.addEventListener("touchstart", function(){}, true);
 
   window.iui = iui;
 

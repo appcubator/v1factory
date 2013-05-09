@@ -66,7 +66,6 @@ FormEditorTemplates.template = [
       '<% var field = _.last(form.get(\'fields\').models); var sortable = "not-sortable"; %>',
         FormEditorTemplates.field,
       '<% %>',
-    '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>',
   '</div><div class="action-panel panel">',
     '<small>Choose options from the list below.</small>',
     '<ul class="current-actions"></ul>',
@@ -74,12 +73,8 @@ FormEditorTemplates.template = [
     '<ul class="action goto-list">',
       FormEditorTemplates.possibleActions,
     '</ul>',
-    // '<ul class="action email-list">',
-    //   '<% _(emails).each(function(email) { %>',
-    //     '<li>Send Email <%= email %><div class="add-to-list"></div></li>',
-    //   '<% }) %>',
-    // '</ul>',
-  '</div>'
+  '</div>',
+  '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>'
 ].join('\n');
 
 var fieldTypesArr = {

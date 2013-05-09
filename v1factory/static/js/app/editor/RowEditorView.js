@@ -29,6 +29,7 @@ function(WidgetView, WidgetEditorView) {
       this.render();
 
       _(self.widgetsCollection.models).each(function(widgetModel) {
+        widgetModel.set('context', self.entity.get('name'));
         self.placeWidget(widgetModel);
       });
 
@@ -60,9 +61,7 @@ function(WidgetView, WidgetEditorView) {
     },
 
     placeWidget: function(widgetModel) {
-      console.log(widgetModel);
       var curWidget = new WidgetView(widgetModel);
-
       if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);
       curWidget.resizableAndDraggable();
     },

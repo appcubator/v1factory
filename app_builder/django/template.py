@@ -44,6 +44,7 @@ class DjangoTemplate(Renderable):
     for uie in self.page.uielements:
       if isinstance(uie, Container):
         for n in uie.nodes:
+          n.wrap_link = False
           if 'href' in n.attribs:
             if isinstance(n.attribs['href'], Page):
               dest_view = n.attribs['href']._django_view
@@ -53,14 +54,31 @@ class DjangoTemplate(Renderable):
                 if len(model_refs) > 0:
                   assert len(model_refs) == 1, "more than one model ref on dest page, but only one in the for loop"
                   n.attribs['href'] = "{% url "+dest_view.view_path()+" item.id %}"
+                  # this is allows other tags to be links
+                  if n.tagname != 'a':
+                    n.wrap_link = True
+                    n.wrap_link_href = n.attribs['href']
+                    del n.attribs['href'] # href should go in the wrapper anchor tag only
                   continue
               n.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
 
+              # this is allows other tags to be links
+              if n.tagname != 'a':
+                n.wrap_link = True
+                n.wrap_link_href = n.attribs['href']
+                del n.attribs['href'] # href should go in the wrapper anchor tag only
+
       else:
+        uie.wrap_link = False
         if 'href' in uie.attribs:
           dest_view = uie.attribs['href']._django_view
           if isinstance(uie.attribs['href'], Page):
             uie.attribs['href'] = "{% url "+dest_view.view_path()+" %}"
+            # this is allows other tags to be links
+            if uie.tagname != 'a':
+              uie.wrap_link = True
+              uie.wrap_link_href = uie.attribs['href']
+              del uie.attribs['href'] # href should go in the wrapper anchor tag only
 
   def properly_name_vars_in_q_container(self, models):
     """Replaces the model handlebars with the template text require to render the for loop properly"""
@@ -106,8 +124,13 @@ class DjangoTemplate(Renderable):
       for n in uie.nodes:
         fix_attempt = fix_the_string(n.content(), single=False)
         n.set_content(fix_attempt)
+        if n.tagname == 'img':
+          n.attribs['src'] = fix_attempt
     for n in plain_old_nodes:
-      n.set_content(fix_the_string(n.content(), single=True))
+      fix_attempt = fix_the_string(n.content(), single=True)
+      n.set_content(fix_attempt)
+      if n.tagname == 'img':
+        n.attribs['src'] = fix_attempt
 
   def create_tree(self, uiels, recursive_num=0, top_offset=0, left_offset=0):
     """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""

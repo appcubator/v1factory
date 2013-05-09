@@ -33,7 +33,11 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     render: function() {
       var self = this;
 
-      if(this.model && !iui.get('widget-wrapper-' + this.model.cid)) {
+      if(!this.model) {
+        return;
+      }
+
+      if(!iui.get('widget-wrapper-' + this.model.cid)) {
         this.model.bind('rendered', self.render);
         return;
       }

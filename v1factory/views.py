@@ -100,7 +100,7 @@ def app_get_state(request, app):
 def app_save_state(request, app):
   old_state = app.state
   app._state_json = request.body
-  app.name = app.state['name']
+  app.state['name'] = app.name
   try:
     app.full_clean()
   except Exception, e:
@@ -265,29 +265,10 @@ class StaticFileForm(ModelForm):
     self.instance.app = self.app
     return super(StaticFileForm, self).save(*args, **kwargs)
 
-class ThemeStaticFileForm(ModelForm):
-  class Meta:
-    model = StaticFile
-    exclude = ('app', 'theme')
 
-  def __init__(self, theme, *args, **kwargs):
-    self.theme = theme
-    super(ThemeStaticFileForm, self).__init__(*args, **kwargs)
-
-  def save(self, *args, **kwargs):
-    self.instance.theme = self.theme
-    return super(ThemeStaticFileForm, self).save(*args, **kwargs)
-
-def single_theme(f):
-  def ret_f(request, theme_id, *args, **kwargs):
-    # permissions plz...
-    theme = get_object_or_404(UITheme, pk=theme_id)
-    return f(request, theme, *args, **kwargs)
-  return ret_f
-
-def JSONResponse(serializable_obj):
+def JSONResponse(serializable_obj, **kwargs):
   """Just a convenience function, in the middle of horrible code"""
-  return HttpResponse(simplejson.dumps(serializable_obj), mimetype="application/json")
+  return HttpResponse(simplejson.dumps(serializable_obj), mimetype="application/json", **kwargs)
 
 @login_required
 def staticfiles(request, app_id):
@@ -307,22 +288,6 @@ def staticfiles(request, app_id):
       else:
         return JSONResponse({ "error": "One of the fields was not valid." })
 
-@login_required
-@single_theme
-def themestaticfiles(request, theme):
-  if request.method != 'GET' and request.method != 'POST':
-    return HttpResponse("Method not allowed", status=405)
-  if request.method == 'GET':
-    sf = StaticFile.objects.filter(theme=theme).values('name','url','type')
-    return JSONResponse(list(sf))
-  if request.method == 'POST':
-    sf_form = ThemeStaticFileForm(theme, request.POST)
-    if sf_form.is_valid():
-      sf_form.save()
-      return JSONResponse({})
-    else:
-      return JSONResponse({ "error": "One of the fields was not valid." })
-
 @require_GET
 @login_required
 def app_editor(request, app_id, page_id):
@@ -341,84 +306,6 @@ def app_editor(request, app_id, page_id):
   return render(request, 'app-editor-main.html', page_context)
 
 
-### UIElement creation form
-from django.forms import ModelForm
-class UIElementForm(ModelForm):
-  class Meta:
-    model = UIElement
-
-@login_required
-def designer_page(request):
-  themes = UITheme.objects.all()
-  page_context = { 'title' : 'Gallery', 'themes' : themes }
-  return render(request, 'designer-page.html', page_context)
-
-@require_POST
-@login_required
-def theme_new(request):
-  if request.method=="POST":
-    name = request.POST['name']
-    theme = UITheme(name=name, designer=request.user)
-    theme.save()
-    return HttpResponse(simplejson.dumps(theme.to_dict()), mimetype="application/json")
-
-@login_required
-@single_theme
-def theme_show(request, theme):
-  #theme = get_object_or_404(UITheme, pk = theme_id)
-  page_context = { 'title' : theme.name , 'themeId': theme.pk, 'theme' : theme._uie_state_json, 'statics' : simplejson.dumps(list(theme.statics.values()))}
-  return render(request, 'designer-theme-show.html', page_context)
-
-@require_POST
-@login_required
-def theme_info(request, theme_id):
-  theme = get_object_or_404(UITheme, pk = theme_id)
-  page_context = { 'title' : theme.name , 'themeId':  theme.pk, 'theme' : theme._uie_state_json }
-  print page_context
-  return HttpResponse(simplejson.dumps(page_context), mimetype="application/json")
-
-@login_required
-def theme_page_editor(request, theme_id, page_id):
-  theme_id = long(theme_id)
-  theme = get_object_or_404(UITheme, pk = theme_id)
-  page_context = { 'theme': theme,
-                   'title' : 'Design Editor',
-                   'theme_state' : theme._uie_state_json,
-                   'page_id': page_id,
-                   'theme_id': theme_id }
-  #add_statics_to_context(page_context, app)
-  return render(request, 'designer-editor-main.html', page_context)
-
-@require_POST
-@login_required
-@single_theme
-def theme_edit(request, theme):
-  if 'name' in request.POST:
-    theme.name = request.POST['name']
-
-  if 'uie_state' in request.POST:
-    uie_json = request.POST['uie_state']
-    theme.uie_state = simplejson.loads(uie_json)
-
-  theme.save()
-  return HttpResponse("ok")
-
-@require_POST
-@login_required
-@single_theme
-def theme_clone(request, theme):
-  # want to start a new theme from an existing theme
-  new_theme = theme.clone(user=request.user)
-  return HttpResponse(simplejson.dumps(new_theme.to_dict), mimetype="application/json")
-
-@require_POST
-@login_required
-@single_theme
-def theme_delete(request, theme):
-  # want to get a specific theme
-  theme.delete()
-  return HttpResponse("ok")
-
 @login_required
 @require_POST
 @csrf_exempt
@@ -428,9 +315,9 @@ def app_deploy(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  site_url = app.deploy(d_user)
-  github_url = app.github_url()
-  return HttpResponse(simplejson.dumps({"site_url":site_url, "github_url":github_url}), mimetype="application/json")
+  result = app.deploy(d_user)
+  status = 500 if 'errors' in result else 200
+  return HttpResponse(simplejson.dumps(result), status=status, mimetype="application/json")
 
 @login_required
 @require_POST
@@ -442,56 +329,16 @@ def app_deploy_local(request, app_id):
     'user_name' : request.user.username,
     'date_joined' : str(request.user.date_joined)
   }
-  m = app.write_to_tmpdir(d_user)
-  return HttpResponse(m)
+  result = {}
+  try:
+    result['site_url'] = app.write_to_tmpdir(d_user)
+    result['github_url'] = result['site_url']
+    status = 200
+  except Exception, e:
+    result['errors'] = traceback.format_exc()
+    status = 500
+  return JSONResponse(result, status=status)
 
-
-#FOR THE DEPLOYMENT PANEL
-
-@login_required
-@require_GET
-def deploy_panel(request):
-  if request.method == "GET":
-    r = requests.get('http://appcubator.com/deployment/')
-    if r.status_code == 200:
-      page_context = {}
-      page_context['deployments'] = simplejson.loads(r.content)
-      return render(request, 'deploy-panel.html', page_context)
-    else:
-      return HttpResponse("appcubator.com returned status of %s" % r.status_code)
-
-@require_POST
-@csrf_exempt
-@login_required
-def deploy_local(request):
-  subdomain = request.POST['subdomain']
-  app_json = request.POST['app_json']
-  d = Deployment.create(subdomain, app_state=simplejson.loads(app_json))
-  d_user = {
-    'user_name' : request.user.username,
-    'date_joined' : str(request.user.date_joined)
-  }
-  r = d.write_to_tmpdir(d_user)
-  return HttpResponse(r)
-
-@require_POST
-@csrf_exempt
-@login_required
-def deploy_hosted(request):
-  subdomain = request.POST['subdomain']
-  app_json = request.POST['app_json']
-  #this will post the data to appcubator.com
-  d_user = {
-    'user_name' : request.user.username,
-    'date_joined' : str(request.user.date_joined)
-  }
-  post_data = {
-    "subdomain": subdomain,
-    "app_json": app_json,
-    "d_user" : simplejson.dumps(d_user)
-  }
-  r = requests.post("http://appcubator.com/deployment/push/", data=post_data, headers={"X-Requested-With":"XMLHttpRequest"})
-  return HttpResponse(r.content)
 
 @require_POST
 @csrf_exempt
@@ -592,5 +439,32 @@ def log_slide(request):
 
   d = {}
   d['percentage'] = TutorialLog.get_percentage(request.user)
+  d['feedback'] = TutorialLog.is_donewithfeedback(request.user)
 
   return JSONResponse(d)
+
+@require_POST
+@login_required
+def log_feedback(request):
+  user     = request.user.first_name
+  like     = request.POST['like']
+  dislike  = request.POST['dislike']
+  features = request.POST['features']
+
+
+  message =  user + " says.\n\n Like: \n" + like + "\n\n Dislike: \n" + dislike +  "\n\n Feature request: \n" + features
+
+  TutorialLog.create_feedbacklog(request.user, message)
+
+  requests.post(
+      "https://api.mailgun.net/v2/v1factory.mailgun.org/messages",
+      auth=("api", "key-8iina6flmh4rtfyeh8kj5ai1maiddha8"),
+      data={
+             "from": "v1Factory Bot <postmaster@v1factory.mailgun.org>",
+             "to": "team@appcubator.com",
+             "subject": "Someone has some feedback!",
+             "text": message
+           }
+  )
+
+  return JSONResponse("ok")

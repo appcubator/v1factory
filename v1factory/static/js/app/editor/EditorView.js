@@ -3,6 +3,7 @@ define([
   'app/collections/EntityCollection',
   'app/views/UrlView',
   'app/views/SimpleModalView',
+  'app/views/ErrorModalView',
   'editor/WidgetsManagerView',
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
@@ -17,6 +18,7 @@ function( PageModel,
           EntityCollection,
           UrlView,
           SimpleModalView,
+          ErrorModalView,
           WidgetsManagerView,
           WidgetEditorView,
           EditorGalleryView,
@@ -41,14 +43,15 @@ function( PageModel,
                       'paste',
                       'help',
                       'renderUrlBar',
-                      'save',
-                      'deployLocal',
-                      'deploy',
                       'clickedPage',
                       'getContextEntities',
                       'keydown',
                       'clickedUrl',
-                      'createPage');
+                      'createPage',
+
+                      'save',
+                      'deploy',
+                      'renderDeployResponse');
 
       if(pId) pageId = pId;
 
@@ -70,12 +73,13 @@ function( PageModel,
 
       var page = appState.pages[pageId];
 
+      var self = this; // for binding deploy to ctrlshiftd
       /* Bindings */
       $(window).bind('keydown', this.keydown);
       key('⌘+s, ctrl+s', this.save);
       key('⌘+c, ctrl+c', this.copy);
       key('⌘+v, ctrl+v', this.paste);
-      key('⌘+shift+d, ctrl+shift+d', this.deployLocal);
+      key('⌘+shift+d, ctrl+shift+d', function(){ self.deploy({local:true}); });
 
     },
 
@@ -128,7 +132,13 @@ function( PageModel,
             $('#save').html("<span>Save</span>").fadeIn();
           },3000);
         },
-        error: function(jqxhr, t) { alert('Error saving! ' + t); console.log(jqxhr); }
+        error: function(data, t) {
+          var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+          if(DEBUG) {
+            content = { text: "LULZ  <br  />" + data.responseText };
+          }
+          new ErrorModalView(content);
+        }
       });
 
 
@@ -149,36 +159,43 @@ function( PageModel,
       }
     },
 
-    deploy: function() {
+    deploy: function(options) {
+      var url = '/app/'+appId+'/deploy/'
+      if(options.local) url = url + 'local/'
+
       var self = this;
       iui.get('deploy').innerHTML = '<span>Deploying...</span>';
 
-      $.ajax({
+      $.ajax(url, {
         type: "POST",
-        url: '/app/'+appId+'/deploy/',
         complete: function() {
           iui.get('deploy').innerHTML = '<span>Test Run</span>';
         },
         success: function(data) {
-          window.open(data.site_url);
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + self.urlModel.getAppendixString() +'">'+ data.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a href="'+ data.github_url +'">Github</a>', img:'happy_engineer.png'});
+          self.renderDeployResponse(true, data, self);
+        },
+        error: function(jqXHR) {
+          var data = JSON.parse(jqXHR.responseText);
+          if(DEBUG)
+            self.renderDeployResponse(false, data, self);
+          else {
+            var fakedata = { errors: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
+            self.renderDeployResponse(false, fakedata, self);
+          }
         },
         dataType: "JSON"
       });
     },
 
-    deployLocal: function() {
-
-      $.ajax({
-        type: "POST",
-        url: '/app/'+appId+'/deploy/local/',
-        success: function(data) {
-          window.open(data.site_url);
-          new SimpleModalView({ text: 'Your app is available at <a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
-        },
-        dataType: "JSON"
-      });
-
+    renderDeployResponse: function(success, responseData, self) {
+      if(success)
+      {
+        new SimpleModalView({ text: 'Your app is available at <a target="_blank" href="'+ responseData.site_url + self.urlModel.getAppendixString() +'">'+ responseData.site_url + self.urlModel.getAppendixString() +'</a><br /><br />You can also see your code on <a target="_blank" href="'+ responseData.github_url +'">Github</a>', img:'happy_engineer.png'});
+      }
+      else
+      {
+        new ErrorModalView({ text: responseData.errors });
+      }
     },
 
     getContextEntities: function() {
@@ -255,6 +272,8 @@ function( PageModel,
       var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);
+
+      console.log(v1State);
 
       $.ajax({
         type: "POST",

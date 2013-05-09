@@ -3,6 +3,8 @@
 #       so we won't have to change the django code writer.
 
 import re
+import logging
+logger = logging.getLogger("app_builder")
 from manager import Manager
 import simplejson
 from app_builder import utils
@@ -207,6 +209,8 @@ class Node(UIElement):
       self.attribs.update(uie['cons_attribs'])
     self._content = uie['content']
 
+    self.wrap_link = False # this may change after resolve_links
+
   @classmethod
   def create_list_entry(cls, uie, page):
     self = cls(uie, page)
@@ -225,7 +229,14 @@ class Node(UIElement):
 
   def content(self):
     if self._content is not None:
-      return self._content.replace('\n','<br>')
+      # for images, return content if it exists, else return src
+      if self.tagname == 'img':
+        if len(self._content) > 0:
+          return self._content.replace("\n","<br />")
+        return self.attribs['src']
+
+      # else, just return content
+      return self._content.replace("\n","<br />")
     else:
       return ""
 
@@ -246,7 +257,6 @@ class Node(UIElement):
       else:
         if not self.attribs['href'].startswith('http'): # prepend http the the href if it's not there
           self.attribs['href'] = 'http://' + self.attribs['href']
-
 
   def padding_string(self):
     tp, rp, bp, lp = (0, 0, 0, 0)
@@ -273,7 +283,7 @@ class Container(UIElement):
       u = ListQuerysetWrapper(uie, page)
     elif uie['container_info']['action'] == 'table':
       u = TableQuerysetWrapper(uie, page)
-    elif uie['container_info']['action'] in ['facebook', 'linkedin']:
+    elif uie['container_info']['action'] in ['facebook', 'twitter', 'linkedin']:
       u = ThirdPartyLogin(uie, page)
     else:
       raise Exception("Unknown container action \"%s\"" % uie['container_info']['action'])
@@ -326,12 +336,13 @@ class Form(Container):
 
   required_fields = []
 
-  def __init__(self, name=None, action=None, fields=None, entity_name=None, uie=None, page=None,\
+  def __init__(self, name=None, action=None, fields=None, ui_fields=None, entity_name=None, uie=None, page=None,\
                                                       redirect_page_name=None):
     super(Form, self).__init__(uie=uie)
     self.name = name
     self.action = action
     self.included_fields = fields
+    self.ui_fields = ui_fields
     self.entity = entity_name
     self.uie = uie
     self.page = page
@@ -347,13 +358,18 @@ class Form(Container):
   @classmethod
   def create(cls, uie, page):
     field_dicts = uie['container_info']['form']['fields']
-    fields = [ FormField.create(f) for f in field_dicts ]
+
+    # buttons allowed here:
+    all_fields = [ FormField.create(f) for f in field_dicts ]
+    # but not here
+    relevant_fields = [ f for f in all_fields if f.field_type != 'button' ]
 
     self = cls(name=uie['container_info']['form']['name'],
                action=uie['container_info']['form']['action'],
                entity_name=uie['container_info']['entity'],
                uie=uie,
-               fields=fields,
+               ui_fields=all_fields,
+               fields=relevant_fields,
                page=page,
                redirect_page_name = uie['container_info']['form']['goto'])
 
@@ -390,7 +406,7 @@ class Form(Container):
     for f in self.included_fields:
       f_check = f_manager.get_by_name(f.name)
       if f_check is None:
-        assert f.field_type == 'button' or f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
+        assert f.name in ['password1','password2', 'password'], "ruh roh, field called %s is not an actual field in the model" % f.name
       f.model_field = f_check
 
   def resolve_goto_page(self, analyzed_app):
@@ -465,30 +481,12 @@ class AnalyzedApp:
 
   def __init__(self, app_state):
     # create "managers" which will help a dev find things inside lists
+    logger.info("Converting app state to analyzed app.")
     self.models = Manager(Model)
     self.pages = Manager(Page)
     self.routes = Manager(Route)
 
-    """  # This commented block was a hack to move forms from entity and user to the form dict
-    self.backend_forms = Manager(object)
-    for e in app_state['entities']:
-      for f in e['forms']:
-        f['entity'] = e['name']
-        self.backend_forms.add(f)
-    for f in app_state['users']['forms']:
-      f['entity'] = 'User'
-      self.backend_forms.add(f)
-
-    # replace the form name with a reference to the actual form dictionary.
-    for page in app_state['pages']:
-      for uie in page['uielements']:
-        if uie['container_info'] is not None:
-          if 'form' in uie['container_info']:
-            uie['container_info']['form'] = self.backend_forms.get_by_name(\
-                                              utils.extract_from_brace(uie['container_info']['form']))
-    """
-
-    # given user settings, create some models
+    logger.debug("Adding user fields to the analyzed app.")
     base_user = { "name": "User" }
     if app_state['users']['local']:
       self.local_login = True
@@ -504,32 +502,41 @@ class AnalyzedApp:
     if app_state['users']['facebook']:
       self.facebook_login = True
 
-    # create models from app_state entities
+    logger.debug("Adding entities to the analyzed app.")
     for ent in app_state['entities']:
       m = Model.create(ent)
       self.models.add(m)
+    logger.debug("Initing entities.")
     self.init_models()
 
     # create pages from app_state pages
+    logger.debug("Adding pages to the analyzed app.")
     for p in app_state['pages']:
       page = Page(p)
       self.pages.add(page)
+      logger.debug("Adding route for a page.")
       u = p['url']
       r = Route(u, page)
       self.routes.add(r)
       # this shouldn't be here, but who cares
       if page.navbar_brandname is None:
+        logger.debug("Navbar set to app name.")
         page.navbar_brandname = app_state['name']
       # (ensures all navbar brandnames are strings)
 
+    logger.debug("Resolving internal links in navbar.")
     for p in self.pages.each():
       p.resolve_navbar_pages(self)
 
+    logger.debug("Resolving the models in URLs.")
     self.link_models_to_routes()
+    logger.debug("Resolving the routes and pages.")
     self.link_routes_and_pages()
+    logger.debug("Resolving links in nodes.")
     self.fill_in_hrefs()
-    # will eventually do forms.
+    logger.debug("Resolving forms: entity, required fields, goto page.")
     self.init_forms()
+    logger.debug("Resolving entities in the lists and tables.")
     self.init_queries(app_state)
 
   # link routes and models
@@ -568,6 +575,28 @@ class AnalyzedApp:
           uie.resolve_entity(self)
           uie.check_required_fields()
           uie.resolve_goto_page(self)
+
+          # hack to make form names unique
+          form_counter = 0
+          def make_unique(name, level=0):
+            if name != "" and self.forms.get_by_name(name) is None:
+              return name
+            elif level == 0:
+              name += " " + uie.action
+              return make_unique(name, level=1)
+            elif level == 1:
+              name += uie.entity
+              return make_unique(name, level=2)
+            elif level == 2:
+              name += " on " + p.name + " page"
+              return make_unique(name, level=3)
+            else:
+              name += str(form_counter)
+              form_counter += 1
+              return name
+
+          uie.name = make_unique(uie.name)
+          print "I just named my form "+  uie.name
           self.forms.add(uie)
 
   def init_queries(self, app_state):

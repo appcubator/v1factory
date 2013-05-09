@@ -119,3 +119,8 @@ def faq(request):
 
 def ping(request):
   return HttpResponse("ok")
+
+def marketing(request):
+  page_context = {}
+  page_context["title"] = "Homepage"
+  return render(request, 'hello.html', page_context)

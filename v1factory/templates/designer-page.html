@@ -4,35 +4,39 @@
 {% endblock %}
 
 {% block topbar %}
-{% include "infra-topbar.html" %}
+{% include "infra-topbar-designer.html" %}
 {% endblock %}
 
 {% block page %}
-<div class="hoff2">
-  <div class="container">
-    <div class="span64">
-      <div class="hi8">
-        <div class="hi8">
-          <h2 class="hoff5">Designer Interface</h2>
-        </div>
-      </div>
+<div class="container hoff2">
+
+  <div class="span20 hoff5">
+    <h2 class="">Profile</h2>
+  </div>
+  <div class="offset2 span40 hoff5">
+    <h2 class="hi4 span40">Current Themes</h2>
+    <ul id="themes-list">
+      {% for theme in themes %}
+      <li class="hoff1 span40">
+        <a href="/theme/{{ theme.pk }}/" class="span40">
+          <div class="span8">
+            <img src="{{theme.image}}">
+          </div>
+          <span class="span24 hoff1 offset2">{{ theme.name }}</span>
+          <form class="span8 hoff1" method="POST" action="/theme/{{theme.pk}}/delete/">
+            {% csrf_token %}
+            <input type="submit"  class="btn btn-warning" value="Delete">
+          </form>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="hi5 hoff1 span40 pane border create-theme">
+      <div class="create-theme-text">+ Create a new theme</div>
+      <form class="create-form hi3 hoff1 span36" style="display:none;"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form>
     </div>
   </div>
-</div>
-<div class="container">
-  <ul>
-    {% for theme in themes %}
-    <li class="hi5 hoff1 span29 offset1 pane border">
-      <a href="/theme/{{ theme.pk }}/">{{ theme.name }}</a>
-      <form method="POST" action="/theme/{{theme.pk}}/delete/">
-        {% csrf_token %}
-        <input type="submit"  class="btn btn-warning right" value="Delete">
-      </form>
-    </li>
-    {% endfor %}
-    <li class="hi5 hoff1 span29 offset1 pane border create-theme">+ Create a new theme</li>
-    <li class="create-container hi3 hoff1 span36" style="display:none;"><form class="create-form"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form></li>
-  </ul>
+
 </div>
 {% endblock %}
 {% block js %}

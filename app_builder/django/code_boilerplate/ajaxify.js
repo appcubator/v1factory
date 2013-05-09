@@ -1,4 +1,18 @@
 $(document).ready(function() {
+  filepicker.setKey("AAO81GwtTTec7D8nH9SaTz");
+  function openImagepicker(callback) {
+    filepicker.pick({
+        mimetypes: ['image/*'],
+        services: ['COMPUTER', 'FACEBOOK', 'IMAGE_SEARCH', 'INSTAGRAM', 'URL'],
+      },
+      function(fpfile){
+        callback(fpfile);
+      },
+      function(fperror){
+        console.log(fperror);
+        alert(fperror);
+      });
+  }
 
   $('form').each(function(ind, node) {
 
@@ -28,15 +42,20 @@ $(document).ready(function() {
       return false;
 
     });
+
   });
 
+  // image upload buttons
   $('.btn.upload').click(function(e) {
-    openFilepicker(function(file){
-      console.log(file);
-      var id = String(e.target.id).replace('button-', '');
-      $('#'+id).val(file.url);
+    openImagepicker(function(file){
+      var fieldId = String(e.target.id).replace('button-', '');
+      $('#'+fieldId).val(file.url);
     });
 
     e.preventDefault();
   });
+
+
+
+
 });
