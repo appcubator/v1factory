@@ -124,8 +124,12 @@ class DjangoTemplate(Renderable):
       for n in uie.nodes:
         fix_attempt = fix_the_string(n.content(), single=False)
         n.set_content(fix_attempt)
+        if n.tagname == 'img':
+          n.attribs['src'] = n.content()
     for n in plain_old_nodes:
       n.set_content(fix_the_string(n.content(), single=True))
+      if n.tagname == 'img':
+        n.attribs['src'] = n.content()
 
   def create_tree(self, uiels, recursive_num=0, top_offset=0, left_offset=0):
     """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
