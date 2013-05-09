@@ -112,7 +112,7 @@ define([
 
     select: function(e) {
       this.model.trigger('selected');
-      this.el.style.zIndex = 2000;
+      this.el.style.zIndex = 2003;
       e.stopPropagation();
     },
 

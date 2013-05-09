@@ -44,8 +44,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.clear();
       this.$el.fadeIn();
 
-      this.el.style.zIndex = 2002;
-
       if(this.selectedEl && !(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').has('query'))) {
         this.layoutEditor = new WidgetLayoutEditor(this.selectedEl);
         this.el.appendChild(this.layoutEditor.el);
@@ -62,6 +60,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       }
 
       iui.get('widget-wrapper-' + this.selectedEl.cid).appendChild(this.el);
+      iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2002;
 
       $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
       $('#elements-container').on('mousedown', this.deselect);
@@ -70,6 +69,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     deselect: function() {
+      iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2000;
       this.selectedEl = null;
       this.clear();
     },

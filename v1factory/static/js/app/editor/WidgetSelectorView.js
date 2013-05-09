@@ -35,7 +35,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     },
 
-    mousedown: function(e) { console.log("YO"); e.stopImmediatePropagation(); },
+    mousedown: function(e) { e.stopImmediatePropagation(); },
 
     render: function() {
       var self = this;
@@ -71,15 +71,12 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       selectDiv.style.zIndex = "2002";
 
       $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
-      console.log($('#elements-container'));
       $('#elements-container').on('mousedown', this.deselect);
 
       return this;
     },
 
     bindWidget: function(widget) {
-      console.log(widget);
-      console.log(this);
       var self = this;
       widget.bind('hovered', function() {
         self.widgetHover(widget);
@@ -116,11 +113,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     bindLocation: function() { },
 
     newSelected: function(widgetModel) {
-      console.log(widgetModel);
-
-      if(this.selectedEl != null && this.selectedEl.cid == widgetModel.cid) return;
-            console.log("SELECTED");
-      console.log(this);
+      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
       this.selectedEl = widgetModel;
       this.setLayout(this.selectDiv, widgetModel);
     },
@@ -143,9 +136,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     moving: function(e, ui) {
-      console.log(this);
-      console.log(this.selectedEl);
-      console.log(this.selectedEl.cid);
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
       elem.style.top = ui.position.top + 'px';
       elem.style.left = ui.position.left+ 'px';
