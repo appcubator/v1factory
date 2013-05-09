@@ -4,7 +4,8 @@
 <a href="{{ context.wrap_link_href }}">
 {% endif %}
 <{{context.tagname}} {% for attrib in context.attribs %} {{ attrib }}="{{ context.attribs[attrib] }}"{% endfor %} class="node {{ context.uie.class_name }}">
-  {% if not context.uie.isSingle %}{{context.content()}}
+{% if not context.uie.isSingle %}
+{{ context.content() }}
 </{{context.tagname}}>{% endif %}
 {% if context.wrap_link %}
 </a>

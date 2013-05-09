@@ -229,11 +229,14 @@ class Node(UIElement):
 
   def content(self):
     if self._content is not None:
-      if len(self._content) > 0:
-        return self._content
+      # for images, return content if it exists, else return src
       if self.tagname == 'img':
+        if len(self._content) > 0:
+          return self._content.replace("\n","<br />")
         return self.attribs['src']
-      return self._content.replace('\n','<br>')
+
+      # else, just return content
+      return self._content.replace("\n","<br />")
     else:
       return ""
 
