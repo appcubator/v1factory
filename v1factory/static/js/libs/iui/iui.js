@@ -229,6 +229,17 @@ define(['jquery-ui'], function() {
       });
     });
 
+    $(function () {
+      /* prevents submitting twice */
+      console.log("prevent");
+      $('form').on('submit', function(e) {
+        console.log("prevent");
+        $(e.target).on('submit', function(e) {
+          e.preventDefault();
+        });
+      });
+    });
+
     document.addEventListener("touchstart", function(){}, true);
 
   window.iui = iui;
