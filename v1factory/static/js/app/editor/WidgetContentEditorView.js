@@ -183,6 +183,8 @@ function(WidgetClassPickerView) {
         statics.push(file);
       });
       self.model.get('content_attribs').set('src', _.last(files).url);
+      alert("2");
+      self.model.set('content', _.last(files).url);
     },
 
     changeSrc: function(e) {
@@ -192,6 +194,8 @@ function(WidgetClassPickerView) {
       }
       else {
         this.model.get('content_attribs').set('src', e.target.value);
+        alert("1");
+        this.model.set('content', e.target.value);
       }
     },
 
