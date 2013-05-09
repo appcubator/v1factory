@@ -221,14 +221,7 @@ textarea {
           box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-/*  line-height: 1.1em;
-*/  color: #333333;
-  background-color: #ffffff;
-}
+body { }
 
 a {
   color: #0088cc;
@@ -3931,7 +3924,6 @@ input[type="submit"].btn.btn-mini {
 
 .nav > li > a:hover {
   text-decoration: none;
-  background-color: #eeeeee;
 }
 
 .nav > li > a > img {
@@ -4562,7 +4554,6 @@ input[type="submit"].btn.btn-mini {
 
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
-  color: #333333;
   text-decoration: none;
   background-color: transparent;
 }
