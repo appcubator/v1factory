@@ -229,6 +229,8 @@ class Node(UIElement):
 
   def content(self):
     if self._content is not None:
+      if len(self._content) > 0:
+        return self._content
       if self.tagname == 'img':
         return self.attribs['src']
       return self._content.replace('\n','<br>')
