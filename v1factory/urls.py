@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^account/$', 'v1factory.base_views.account'),
     url(r'^tutorial/$', 'v1factory.base_views.tutorial'),
     url(r'^ping/$', 'v1factory.base_views.ping'),
+    url(r'^whatisthis/$', 'v1factory.base_views.marketing'),
 )
 
 urlpatterns += patterns('v1factory.views',
