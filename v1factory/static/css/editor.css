@@ -245,15 +245,9 @@ body {
   -webkit-transition: border-color 200ms linear;
 }
 
-
-.widget-wrapper:hover .meta, .widgets-container:hover .meta {
-  height: 60px;
-}
-
-.widget-wrapper:hover .ui-resizable-handle {
+#select-div:hover .ui-resizable-handle {
   opacity: 1;
 }
-
 
 .widgets-container {
   z-index: 1000;
@@ -472,11 +466,19 @@ body {
   padding-top: 20px !important;
 }
 
-.ui-resizable-handle {
+#select-div .ui-resizable-handle,
+#select-div .ui-resizable-handle.ui-icon-gripsmall-diagonal-se {
   overflow: visible;
   background-image:url('../img/dot.png');
   background-repeat: no-repeat;
   background-position: center center;
+}
+
+#select-div .ui-resizable-se {
+  width: 9px;
+  height: 9px;
+  right: -5px;
+  bottom: -5px;
 }
 
 .section ul li .key {

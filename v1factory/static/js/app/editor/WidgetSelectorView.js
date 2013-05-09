@@ -55,8 +55,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.el.appendChild(selectDiv);
 
       $(selectDiv).resizable({
-        handles: "n, e, s, w, se",
-        // grid: [80, 15],
+        handles: "n, e, s, w, nw, ne, sw, se",
         containment: "parent",
         resize: self.resizing,
         stop  : self.resized
@@ -64,7 +63,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
       $(selectDiv).draggable({
         containment: "parent",
-        //grid: [80, 15],
         drag: self.moving,
         stop: self.moved,
         snapMode : "outer"
