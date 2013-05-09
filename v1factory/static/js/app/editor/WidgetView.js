@@ -14,7 +14,7 @@ define([
     shadowElem : null,
 
     events: {
-      'mousedown'         : 'select',
+      'mousedown'     : 'select',
       'click .delete' : 'remove',
       'keyDown'       : 'keyHandler',
       'mouseover'     : 'hovered',
@@ -36,10 +36,6 @@ define([
                       'changedStyle',
                       'changedSource',
                       'toggleFull',
-                      'moving',
-                      'moved',
-                      'resizing',
-                      'resized',
                       'staticsAdded',
                       'keyHandler');
 
@@ -130,10 +126,10 @@ define([
     },
 
     changedWidth: function(a) {
+      this.el.style.width = '';
       this.el.className = 'selected widget-wrapper ';
       this.el.className += 'span' + this.model.get('layout').get('width');
       this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
-
     },
 
     changedAlignment: function() {
@@ -202,44 +198,6 @@ define([
     changedStyle: function() {
       this.el.firstChild.setAttribute('style', this.model.get('content_attribs').get('style'));
       this.el.firstChild.style.lineHeight = '1em';
-    },
-
-    resizing: function(e, ui) { 
-
-    },
-
-    resized: function(e, ui) {
-      var left = Math.round((ui.position.left / GRID_WIDTH));
-      var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
-      var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
-
-      this.model.get('layout').set('width', deltaWidth);
-      this.model.get('layout').set('height', deltaHeight);
-      this.model.get('layout').set('left', left);
-
-      this.el.style.width ='';
-      this.el.style.height = '';
-      this.el.style.left = '';
-      this.changedWidth();
-      this.changedHeight();
-      this.changedLeft();
-
-      this.model.select();
-    },
-
-    moving: function(e, ui) {
-      var top = Math.round((ui.position.top / GRID_HEIGHT));
-      var left = Math.round((ui.position.left / GRID_WIDTH));
-      this.model.get('layout').set('top', top);
-      this.model.get('layout').set('left', left);
-    },
-
-    moved: function(e, ui) {
-      this.el.style.left ='';
-      this.el.style.top = '';
-      this.changedLeft();
-      this.changedTop();
-      this.model.select();
     },
 
     staticsAdded: function(files) {

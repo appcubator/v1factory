@@ -17,7 +17,11 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'doBindings',
                       'widgetHover',
                       'widgetUnhover',
-                      'newSelected');
+                      'newSelected',
+                      'resizing',
+                      'resized',
+                      'moving',
+                      'moved');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('selected', this.selectChanged, this);
@@ -27,6 +31,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     render: function() {
+      var self = this;
+
       var hoverDiv = document.createElement('div');
       hoverDiv.id = "hover-div";
       hoverDiv.style.width = 0;
@@ -82,7 +88,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     setLayout: function(node, widgetModel) {
       console.log('setting layout');
-      console.trace();
       node.style.width = widgetModel.get('layout').get('width') * 80;
       node.style.height = widgetModel.get('layout').get('height') * 15;
       node.style.left = widgetModel.get('layout').get('left') * 80;
@@ -91,6 +96,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     widgetHover: function(widgetModel) {
+      if(this.selectedEl && widgetModel.cid === this.selectedEl.cid) return;
       this.setLayout(this.hoverDiv, widgetModel);
     },
 
@@ -102,9 +108,49 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     bindLocation: function() { },
 
     newSelected: function(widgetModel) {
+      console.log("selected");
       if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
       this.selectedEl = widgetModel;
       this.setLayout(this.selectDiv, widgetModel);
+    },
+
+
+    resizing: function(e, ui) {
+      var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
+      elem.style.width = ui.size.width + 'px';
+      elem.style.height = ui.size.height + 'px';
+      elem.style.left = ui.position.left + 'px';
+    },
+
+    resized: function(e, ui) {
+      console.log("HEY");
+      var left = Math.round((ui.position.left / GRID_WIDTH));
+      var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
+      var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
+
+      console.log(this);
+      console.log(this.model);
+      this.selectedEl.get('layout').set('width', deltaWidth);
+      this.selectedEl.get('layout').set('height', deltaHeight);
+      this.selectedEl.get('layout').set('left', left);
+
+      this.el.style.width ='';
+      this.el.style.height = '';
+      this.el.style.left = '';
+    },
+
+    moving: function(e, ui) {
+      var top = Math.round((ui.position.top / GRID_HEIGHT));
+      var left = Math.round((ui.position.left / GRID_WIDTH));
+      this.selectedEl.get('layout').set('top', top);
+      this.selectedEl.get('layout').set('left', left);
+    },
+
+    moved: function(e, ui) {
+      this.el.style.left ='';
+      this.el.style.top = '';
+      this.selectedEl.trigger('change:left');
+      this.selectedEl.trigger('change:top');
     },
 
     clear: function() {
