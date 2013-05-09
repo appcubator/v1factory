@@ -286,6 +286,7 @@ function(ElementCollection,
         var type    = id.replace('type-','');
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
+        if(this.entity) { widget.context = this.entity.get('name'); }
         this.widgetsCollection.push(widget);
       }
       else {

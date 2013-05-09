@@ -29,6 +29,7 @@ function(WidgetView, WidgetEditorView) {
       this.render();
 
       _(self.widgetsCollection.models).each(function(widgetModel) {
+        widgetModel.set('context', self.entity.get('name'));
         self.placeWidget(widgetModel);
       });
 
