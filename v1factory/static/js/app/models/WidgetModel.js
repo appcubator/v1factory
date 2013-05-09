@@ -17,16 +17,12 @@ function(ContentModel, LayoutModel, PageCollection) {
 
     initialize: function(bone) {
       var self = this;
-      _.bindAll(this, 'select', 'isFullWidth');
+      _.bindAll(this, 'isFullWidth');
 
       this.set('content_attribs', new ContentModel(this.get('content_attribs')));
       this.set('layout', new LayoutModel(this.get('layout')));
       this.set('selected', false);
       this.set('context', bone.context|| null);
-    },
-
-    select: function() {
-      this.collection.select(this);
     },
 
     remove :function() {

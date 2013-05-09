@@ -6,29 +6,36 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
   var WidgetSelectorView = Backbone.UIView.extend({
     el     : document.getElementById('elements-container'),
-    className : 'editor-page fadeIn',
+    className : 'editor-page',
     tagName : 'div',
     selectedEl : null,
+    events : {
+      'mousedown' : 'mousedown'
+    },
 
     initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
                       'clear',
                       'setLayout',
-                      'doBindings',
                       'widgetHover',
                       'widgetUnhover',
                       'newSelected',
                       'resizing',
                       'resized',
                       'moving',
-                      'moved');
+                      'moved',
+                      'bindWidget',
+                      'mousedown',
+                      'deselect');
 
       this.widgetsCollection    = widgetsCollection;
-      this.widgetsCollection.bind('selected', this.selectChanged, this);
-      //this.widgetsCollection.bind('hovered', this.hoverChanged, this);
+      this.widgetsCollection.bind('add', this.bindWidget);
+      var self = this;
+      _(this.widgetsCollection.models).each(self.bindWidget);
 
-      this.doBindings();
     },
+
+    mousedown: function(e) { console.log("YO"); e.stopImmediatePropagation(); },
 
     render: function() {
       var self = this;
@@ -63,31 +70,34 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         snapMode : "outer"
       });
 
-      selectDiv.style.zIndex = "2000";
+      selectDiv.style.zIndex = "2002";
+
+      $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
+      console.log($('#elements-container'));
+      $('#elements-container').on('mousedown', this.deselect);
 
       return this;
     },
 
-    doBindings: function() {
+    bindWidget: function(widget) {
+      console.log(widget);
+      console.log(this);
       var self = this;
-      _(this.widgetsCollection.models).each(function(widget) {
-        widget.bind('hovered', function() {
-          self.widgetHover(this);
-        });
+      widget.bind('hovered', function() {
+        self.widgetHover(widget);
+      });
 
-        widget.on('unhovered', function() {
-          self.widgetUnhover(this);
-        });
+      widget.on('unhovered', function() {
+        self.widgetUnhover(widget);
+      });
 
-        widget.on('selected', function() {
-          self.newSelected(this);
-        });
-
+      widget.on('selected', function() {
+        self.newSelected(widget);
       });
     },
 
     setLayout: function(node, widgetModel) {
-      console.log('setting layout');
+      $(this.selectDiv).fadeIn();
       node.style.width = widgetModel.get('layout').get('width') * 80;
       node.style.height = widgetModel.get('layout').get('height') * 15;
       node.style.left = widgetModel.get('layout').get('left') * 80;
@@ -108,8 +118,11 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     bindLocation: function() { },
 
     newSelected: function(widgetModel) {
-      console.log("selected");
-      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      console.log(widgetModel);
+
+      if(this.selectedEl != null && this.selectedEl.cid == widgetModel.cid) return;
+            console.log("SELECTED");
+      console.log(this);
       this.selectedEl = widgetModel;
       this.setLayout(this.selectDiv, widgetModel);
     },
@@ -132,6 +145,9 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     moving: function(e, ui) {
+      console.log(this);
+      console.log(this.selectedEl);
+      console.log(this.selectedEl.cid);
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
       elem.style.top = ui.position.top + 'px';
       elem.style.left = ui.position.left+ 'px';
@@ -145,8 +161,16 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.setLayout(this.selectDiv, this.selectedEl);
     },
 
+    deselect: function() {
+      this.selectedEl = null;
+      this.selectDiv.style.height = 0;
+      this.selectDiv.style.width = 0;
+      $(this.selectDiv).fadeOut();
+    },
+
     clear: function() {
     }
+
   });
 
   return WidgetSelectorView;

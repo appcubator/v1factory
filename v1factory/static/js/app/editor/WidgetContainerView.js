@@ -61,7 +61,6 @@ function( TableQueryView,
       }
 
       this.render();
-      this.resizableAndDraggable();
       this.renderElements();
     },
 
@@ -99,7 +98,6 @@ function( TableQueryView,
       $( this.el ).resizable( "destroy" );
       $( this.el ).draggable( "destroy" );
       this.render();
-      this.resizableAndDraggable();
       this.renderElements();
     },
 

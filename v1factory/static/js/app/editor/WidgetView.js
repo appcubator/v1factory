@@ -91,12 +91,6 @@ define([
         this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
       }
 
-      if(this.model.get('selected') === true) {
-        $(this.el).addClass('selected');
-        this.el.style.zIndex = 2000;
-        this.selected = true;
-      }
-
       this.el.innerHTML = this.renderElement();
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
@@ -119,9 +113,6 @@ define([
     select: function(e) {
       this.model.trigger('selected');
       this.el.style.zIndex = 2000;
-      this.model.set('selected', true);
-      this.model.select();
-
       e.stopPropagation();
     },
 
