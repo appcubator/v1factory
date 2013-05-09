@@ -1,4 +1,18 @@
 $(document).ready(function() {
+  filepicker.setKey("AAO81GwtTTec7D8nH9SaTz");
+  function openImagepicker(callback) {
+    filepicker.pick({
+        mimetypes: ['image/*'],
+        services: ['COMPUTER', 'FACEBOOK', 'IMAGE_SEARCH', 'INSTAGRAM', 'URL'],
+      },
+      function(fpfile){
+        callback(fpfile);
+      },
+      function(fperror){
+        console.log(fperror);
+        alert(fperror);
+      });
+  }
 
   $('form').each(function(ind, node) {
 
@@ -28,22 +42,10 @@ $(document).ready(function() {
       return false;
 
     });
+
   });
 
-  function openImagepicker(callback) {
-    filepicker.pick({
-        mimetypes: ['image/*'],
-        services: ['COMPUTER', 'FACEBOOK', 'IMAGE_SEARCH', 'INSTAGRAM', 'URL'],
-      },
-      function(fpfile){
-        callback(fpfile);
-      },
-      function(fperror){
-        console.log(fperror);
-        alert(fperror);
-      });
-  }
-
+  // image upload buttons
   $('.btn.upload').click(function(e) {
     openImagepicker(function(file){
       var fieldId = String(e.target.id).replace('button-', '');
@@ -52,6 +54,7 @@ $(document).ready(function() {
 
     e.preventDefault();
   });
+
 
 
 
