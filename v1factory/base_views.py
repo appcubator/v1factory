@@ -86,6 +86,23 @@ def account(request):
       user.save()
       return HttpResponse(simplejson.dumps({"redirect_to":"/account/"}), mimetype="application/json")
 
+@login_required
+@require_POST
+def change_password(request):
+  password1 = request.POST['password1']
+  password2 = request.POST['password2']
+
+  if password1 == "":
+    return HttpResponse(simplejson.dumps({"password1":["Password cannot be blank."]}), mimetype="application/json")
+
+  if password1 != password2:
+    return HttpResponse(simplejson.dumps({"password2":["Passwords do not match."]}), mimetype="application/json")
+
+  user = request.user
+  user.set_password(password1)
+  user.save()
+  return HttpResponse(simplejson.dumps({"redirect_to":"/account/"}), mimetype="application/json")
+
 
 @require_GET
 def tutorial(request):
