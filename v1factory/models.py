@@ -409,3 +409,17 @@ class TutorialLog(models.Model):
     log = cls.objects.filter(user=user).exclude(directory='').values("directory").annotate(n=models.Count("pk"))
     percentage = (len(log)*100) / 15
     return percentage
+
+
+def temp_fix_hr():
+  for a in App.objects.all():
+    try:
+      u = a.uie_state
+      for l in u['lines']:
+        if l['cons_attribs']['class'] == u"span12":
+          del l['cons_attribs']['class']
+          print "fix"
+      a._uie_state_json = simplejson.dumps(u)
+      a.save()
+    except Exception:
+      print "does not seem to be bootstrap"

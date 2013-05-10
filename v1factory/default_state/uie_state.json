@@ -350,7 +350,6 @@
             "style": "border-color:#49afcd;",
             "isSingle": true,
             "cons_attribs": {
-                "class": "span12"
             },
             "hoverStyle": "",
             "class_name": "line-1",
@@ -362,7 +361,6 @@
             "style": "border-color:#ccc;",
             "isSingle": true,
             "cons_attribs": {
-                "class": "span12"
             },
             "hoverStyle": "",
             "class_name": "line-4",
@@ -374,7 +372,6 @@
             "style": "",
             "isSingle": true,
             "cons_attribs": {
-                "class": "span12"
             },
             "hoverStyle": "",
             "class_name": "line-3",
