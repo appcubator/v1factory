@@ -68,7 +68,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         snapMode : "outer"
       });
 
-      selectDiv.style.zIndex = "2002";
+      selectDiv.style.zIndex = "2004";
 
       $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
       $('#elements-container').on('mousedown', this.deselect);
@@ -114,6 +114,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     newSelected: function(widgetModel) {
       if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      this.deselect();
       this.selectedEl = widgetModel;
       this.setLayout(this.selectDiv, widgetModel);
     },
@@ -129,6 +130,9 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
       var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
+      var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
+      elem.style.width = '';
+      elem.style.height = '';
       this.selectedEl.get('layout').set('width', deltaWidth);
       this.selectedEl.get('layout').set('height', deltaHeight);
       this.selectedEl.get('layout').set('left', left);
@@ -150,6 +154,9 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     deselect: function() {
+      // if(this.selectedEl) {
+      //   iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2002;
+      // }
       this.selectedEl = null;
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;

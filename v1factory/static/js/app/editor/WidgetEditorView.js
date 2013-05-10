@@ -36,6 +36,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     newSelected: function(widgetModel) {
       if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      this.deselect();
       this.selectedEl = widgetModel;
       this.render();
     },
@@ -69,7 +70,9 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     deselect: function() {
-      iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2000;
+      if(this.selectedEl) {
+        iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2000;
+      }
       this.selectedEl = null;
       this.clear();
     },
