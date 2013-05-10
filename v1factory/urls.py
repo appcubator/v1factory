@@ -29,6 +29,7 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/$', 'app_list'),
     url(r'^app/new/$', 'app_new'),
     url(r'^app/(\d+)/delete/$', 'app_delete'),
+
     # entities
     url(r'^app/(\d+)/entities/xl/$', 'process_excel'),
     url(r'^app/(\d+)/entities/userxl/$', 'process_user_excel'),
@@ -36,6 +37,7 @@ urlpatterns += patterns('v1factory.views',
 
     # statix
     url(r'^app/(\d+)/static/$', 'staticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
+
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
 

@@ -300,6 +300,7 @@ class UITheme(models.Model):
     return { 'id' : self.id,
              'name' : self.name,
              'designer' : designer,
+             'image' : self.image,
              'statics' : simplejson.dumps(list(self.statics.values())),
              'uie_state' : self.uie_state }
 

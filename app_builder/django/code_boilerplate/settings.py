@@ -151,6 +151,8 @@ LOGGING = {
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.contrib.linkedin.LinkedinBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -171,7 +173,12 @@ AUTH_PROFILE_MODULE = "webapp.UserProfile"
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
-# TODO make this a template
 FACEBOOK_APP_ID = '145000778994158'
 FACEBOOK_API_SECRET = 'f5f3f2a69011b36da2005fbea8aa3476'
+TWITTER_CONSUMER_KEY         = '4XzJvQ1nZTMVcVmPwBjw'
+TWITTER_CONSUMER_SECRET      = 'YejAm6MhKfwh2YhqcG4Ljf0Hakgsnp5HzfyBA7bJBDk'
+LINKEDIN_CONSUMER_KEY        = 't0q97cjtk5kf'
+LINKEDIN_CONSUMER_SECRET     = '1R8SdQPxL9rzAlvD'
+
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']

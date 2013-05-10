@@ -85,8 +85,7 @@ def theme_show(request, theme):
 @login_required
 def theme_info(request, theme_id):
   theme = get_object_or_404(UITheme, pk = theme_id)
-  page_context = { 'title' : theme.name , 'themeId':  theme.pk, 'theme' : theme._uie_state_json }
-  print page_context
+  page_context = { 'themeInfo' : theme.to_dict(), 'theme' : theme._uie_state_json }
   return HttpResponse(simplejson.dumps(page_context), mimetype="application/json")
 
 

@@ -16,25 +16,69 @@
     </div>
     <div class="span36">
       <h3 class="">Profile Info</h3><br  />
-      <h4 class="">Name</h4><br  />
-      <input type="text" class="span16 hoff1" id="app-name" placeholder="Name"><br  />
-      <h4 class="">Email</h4><br  />
-      <input type="text" class="span16 hoff1" id="app-name" placeholder="Email"><br  />
-      <input type="submit" class="btn" value="Save Changes">
-      <hr>
-      <div class="hoff1">
-        <h3 class="">Password</h3><br  />
-        <input type="text" class="span16 hoff1" id="app-name" placeholder="New Password..."><br  />
-        <input type="text" class="span16" id="app-name" placeholder="Confirm Password..."><br  />
-        <input type="submit" class="btn" value="Change Password">
-      </div>
+      <form action="/account/" method="POST">
+        <h4 class="">Name</h4><br  />
+        <input type="text" class="span8 hoff1" placeholder="First Name" name="first_name" value="{{ user.first_name }}">
+        <input type="text" class="span8 hoff1" placeholder="Last Name" name="last_name" value="{{ user.last_name }}"><br  />
+        <div class="span8 form-error field-name-first_name"></div>
+        <div class="span8 form-error field-name-last_name"></div><br />
+        <h4 class="">Email</h4><br  />
+        <input type="text" class="span16 hoff1" placeholder="Email" name="email" value="{{ user.email }}"><br  />
+        <div class="span16 form-error field-name-email"></div><br />
+        <input type="submit" class="btn" value="Save Changes">
+        <hr>
+        <div class="hoff1">
+          <h3 class="">Password</h3><br  />
+          <input type="text" class="span16 hoff1" id="app-name" placeholder="New Password..."><br  />
+          <input type="text" class="span16" id="app-name" placeholder="Confirm Password..."><br  />
+          <input type="submit" class="btn" value="Change Password">
+        </div>
+      </form>
     </div>
   </div>
 </div>
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui/iui-nonamd.js"></script>
 <script type="text/javascript">
+// ajaxify forms @ksikka
+$(document).ready(function() {
+  $('form').each(function(ind, node) {
+
+    $(node).submit(function(e) {
+      var self = this;
+      var ajax_info = {
+        type : $(node).attr('method'),
+        url  : $(node).attr('action'),
+        data : $(node).serialize(),
+        success : function(data, statusStr, xhr) {
+          if (typeof(data.redirect_to) !== 'undefined') {
+            location.href = data.redirect_to;
+          } else {
+            _.each(data, function(val, key, ind) {
+              if(key==='__all__') {
+                $(self).find('.form-error.field-all').html(val.join('<br />'));
+              } else {
+                $(self).find('.form-error.field-name-'+key).html(val.join('<br />'));
+              }
+            });
+          }
+        }
+      };
+      $.ajax(ajax_info);
+      $(self).find('.form-error').html("");
+
+      return false;
+
+    });
+
+  });
+
+
+
+
+});
 </script>
-<script data-main="{{ STATIC_URL }}js/app/info-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}
