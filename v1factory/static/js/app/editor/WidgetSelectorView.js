@@ -160,7 +160,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.selectedEl = null;
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
-      $(this.selectDiv).fadeOut();
     },
 
     clear: function() {
