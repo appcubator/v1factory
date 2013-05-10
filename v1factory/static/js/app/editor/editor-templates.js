@@ -258,3 +258,14 @@ Templates.listNode = [
   '</div>'
 ].join('\n');
 
+
+Templates.sliderTemp = [
+  '<ul class="flex slides">',
+    '<% _(slides).each(function(slide) { %>',
+    '<li>',
+      '<img src="<%= slide.image %>" />',
+      '<p class="flex-caption"><%= slide.text %><p/>',
+    '</li>',
+    '<% }); %>',
+  '</ul>'
+].join('\n');

@@ -2,6 +2,7 @@ require.config({
   paths: {
     "jquery" : "../../libs/jquery/jquery",
     "jquery-ui" : "../../libs/jquery-ui/jquery-ui",
+    "jquery.flexslider" : "../../libs/jquery/jquery.flexslider-min",
     "underscore" : "../../libs/underscore-amd/underscore",
     "backbone" : "../../libs/backbone-amd/backbone",
     "iui" : "../../libs/iui/iui",

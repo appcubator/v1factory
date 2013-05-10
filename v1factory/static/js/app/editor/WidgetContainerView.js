@@ -4,7 +4,8 @@ define([
   'editor/SubWidgetView',
   'app/views/FormEditorView',
   'dicts/constant-containers',
-  'editor/editor-templates'
+  'editor/editor-templates',
+  'jquery.flexslider'
 ],
 function( TableQueryView,
           WidgetView,
@@ -79,10 +80,17 @@ function( TableQueryView,
       this.el.className += ' widget-wrapper span'+width;
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
-      if(this.model.get('container_info').get('action') == "table-gal") {
+      if(this.model.get('container_info').get('action') == "table") {
         var tableDiv = document.createElement('div');
         tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('query').attributes);
         this.el.appendChild(tableDiv);
+      }
+
+      if(this.model.get('container_info').get('action') == "imageslider" ) {
+        var slideDiv = document.createElement('div');
+        slideDiv.innerHTML = _.template(Templates.sliderTemp, {slides: this.model.get('container_info').get('slides').toJSON() });
+        $(slideDiv).flexslider();
+        this.el.appendChild(slideDiv);
       }
 
       if(this.model.get('container_info').has('form')) {

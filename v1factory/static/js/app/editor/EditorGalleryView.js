@@ -284,13 +284,23 @@ function(ElementCollection,
       }
       else if (/(uielement)/.exec(className)){
         var type    = id.replace('type-','');
+
+        if(type == "imageslider") {
+          console.log("HEEEY");
+          widget.container_info = {};
+          widget.container_info.action = "imageslider";
+          var widgetContainerModel = new ContainerWidgetModel(widget, true);
+          this.widgetsCollection.push(widgetContainerModel);
+          return;
+        }
+
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
         if(this.entity) { widget.context = this.entity.get('name'); }
         this.widgetsCollection.push(widget);
       }
       else {
-        alert('ufo!');
+        alert('ufo:' + className);
       }
     },
 

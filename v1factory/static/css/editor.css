@@ -1192,3 +1192,43 @@ overflow: hidden;
   margin-right: 4px;
   margin-top: -36px;
 }
+
+.image-slider-editor {
+  height: 160px;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.image-slider-editor h2 {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  color: #666;
+  text-align: center;
+  height: 62px;
+  background-image: linear-gradient(to bottom, #fdfdfd, #eaeaea);
+  background-color: #fcfcfc;
+  vertical-align: top;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.image-slider-editor ul {
+  list-style: none;
+}
+
+.image-slider-editor span {
+  display: block;
+  list-style: none;
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+}
+
+.image-slider-editor img { 
+  height: 140px;
+  display: inline-block;
+}

@@ -52,10 +52,14 @@ var defaultElements = [
     className : "dropdowns",
     el : "<select><option>Option 1</option></select>"
   },
-
   {
     text: "Box",
     className : "boxes",
     el : "<div style='background-color:#ccc;height:120px' class='span20'></div>"
+  },
+  {
+    text: "Image Slider",
+    className : "imageslider",
+    el : "<img class='span24' src='/static/img/placeholder.png'>"
   }
 ];

@@ -273,8 +273,6 @@ function( PageModel,
       var pageModel = new PageModel({ name: name, url: pageUrl});
       v1State.get('pages').push(pageModel);
 
-      console.log(v1State);
-
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',

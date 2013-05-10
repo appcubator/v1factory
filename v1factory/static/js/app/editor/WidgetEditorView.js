@@ -2,22 +2,28 @@ define([
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
   'editor/WidgetInfoEditorView',
+  'editor/ImageSliderEditorView',
   'mixins/BackboneUI',
   'iui'
 ],
-function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
+function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView, ImageSliderEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
     el     : document.getElementById('editor-page'),
     className : 'editor-page fadeIn',
     tagName : 'div',
 
+    events : {
+      'click .edit-slides-button' : 'openSlideEditor'
+    },
+
     initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
                       'clear',
                       'setLocation',
                       'bindLocation',
-                      'selectChanged');
+                      'selectChanged',
+                      'openSlideEditor');
 
       this.widgetsCollection    = widgetsCollection;
       this.model = widgetsCollection.selectedEl || _.last(widgetsCollection.models);
@@ -46,6 +52,13 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       if(this.model && !(this.model.has('container_info') && this.model.get('container_info').has('query'))) {
         this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.el.appendChild(this.layoutEditor.el);
+      }
+
+      if(this.model.has('container_info') && this.model.get('container_info').get('action') == "imageslider") {
+        var slidesElem = document.createElement('ul');
+        var html = '<li class="option-button edit-slides-button">Edit Slides</li>';
+        slidesElem.innerHTML = html;
+        this.el.appendChild(slidesElem);
       }
 
       if(this.model.has('container_info') && this.model.get('container_info').has('query')) {
@@ -78,6 +91,10 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         this.model.bind('change:selected', this.selectChanged);
         this.render();
       }
+    },
+
+    openSlideEditor: function() {
+      new ImageSliderEditorView(this.model);
     },
 
     clear: function() {

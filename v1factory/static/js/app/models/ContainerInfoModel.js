@@ -5,6 +5,8 @@ define([
   'app/models/UserEntityModel',
   'app/models/FormModel',
   'app/models/RowModel',
+  'app/collections/SlideCollection',
+  'app/models/SlideModel',
   'dicts/constant-containers'
 ],
 function(WidgetCollection,
@@ -12,7 +14,9 @@ function(WidgetCollection,
          EntityModel,
          UserEntityModel,
          FormModel,
-         RowModel) {
+         RowModel,
+         SlideCollection,
+         SlideModel) {
 
   var ContainerInfoModel = Backbone.Model.extend({
     initialize: function(bone, isNew) {
@@ -33,6 +37,10 @@ function(WidgetCollection,
         else {
           this.set('entity', bone.entity);
         }
+      }
+
+      if(bone.slides) {
+        this.set('slides', new SlideCollection());
       }
 
       if(bone.row) {
@@ -86,6 +94,11 @@ function(WidgetCollection,
       else if(action == 'table-gal') {
         var queryM = new QueryModel({}, this.get('entity'));
         self.set('query', queryM);
+      }
+      else if(action == "imageslider") {
+        self.set('slides', new SlideCollection());
+        self.get('slides').push(new SlideModel());
+        self.get('slides').push(new SlideModel());
       }
       else {
         alert('UFO!');
