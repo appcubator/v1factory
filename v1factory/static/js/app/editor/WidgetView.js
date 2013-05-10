@@ -14,9 +14,11 @@ define([
     shadowElem : null,
 
     events: {
-      'click'         : 'select',
+      'mousedown'     : 'select',
       'click .delete' : 'remove',
-      'keyDown'       : 'keyHandler'
+      'keyDown'       : 'keyHandler',
+      'mouseover'     : 'hovered',
+      'mouseout'      : 'unhovered'
     },
 
     initialize: function(widgetModel){
@@ -24,7 +26,6 @@ define([
       _.bindAll(this, 'render',
                       'renderElement',
                       'select',
-                      'outlineSelected',
                       'changedWidth',
                       'changedHeight',
                       'changedValue',
@@ -35,10 +36,6 @@ define([
                       'changedStyle',
                       'changedSource',
                       'toggleFull',
-                      'moving',
-                      'moved',
-                      'resizing',
-                      'resized',
                       'staticsAdded',
                       'keyHandler');
 
@@ -46,7 +43,6 @@ define([
 
       this.render();
 
-      this.model.bind("change:selected", this.outlineSelected, this);
       this.model.bind("change:type", this.changedType, this);
       this.model.bind("change:class_name", this.changedType, this);
       this.model.bind("remove", this.remove, this);
@@ -95,18 +91,10 @@ define([
         this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
       }
 
-      if(this.model.get('selected') === true) {
-        $(this.el).addClass('selected');
-        this.el.style.zIndex = 2000;
-        this.selected = true;
-      }
-
       this.el.innerHTML = this.renderElement();
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
       if(this.model.isFullWidth()) this.switchOnFullWidth();
-
-      this.resizableAndDraggable();
 
       return this;
     },
@@ -123,32 +111,16 @@ define([
     },
 
     select: function(e) {
-      this.el.style.zIndex = 2000;
-      this.model.set('selected', true);
-      this.model.select();
-
+      this.model.trigger('selected');
+      this.el.style.zIndex = 2003;
       e.stopPropagation();
     },
 
-    outlineSelected: function() {
-
-      if(this.model.get('selected')) {
-        $(this.el).addClass('selected');
-        this.el.style.zIndex = 2000;
-        this.selected = true;
-      }
-      else {
-        $(this.el).removeClass('selected');
-        this.selected = false;
-        this.el.style.zIndex = '';
-      }
-    },
-
     changedWidth: function(a) {
+      this.el.style.width = '';
       this.el.className = 'selected widget-wrapper ';
       this.el.className += 'span' + this.model.get('layout').get('width');
       this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
-
     },
 
     changedAlignment: function() {
@@ -219,44 +191,6 @@ define([
       this.el.firstChild.style.lineHeight = '1em';
     },
 
-    resizing: function(e, ui) { 
-
-    },
-
-    resized: function(e, ui) {
-      var left = Math.round((ui.position.left / GRID_WIDTH));
-      var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
-      var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
-
-      this.model.get('layout').set('width', deltaWidth);
-      this.model.get('layout').set('height', deltaHeight);
-      this.model.get('layout').set('left', left);
-
-      this.el.style.width ='';
-      this.el.style.height = '';
-      this.el.style.left = '';
-      this.changedWidth();
-      this.changedHeight();
-      this.changedLeft();
-
-      this.model.select();
-    },
-
-    moving: function(e, ui) {
-      var top = Math.round((ui.position.top / GRID_HEIGHT));
-      var left = Math.round((ui.position.left / GRID_WIDTH));
-      this.model.get('layout').set('top', top);
-      this.model.get('layout').set('left', left);
-    },
-
-    moved: function(e, ui) {
-      this.el.style.left ='';
-      this.el.style.top = '';
-      this.changedLeft();
-      this.changedTop();
-      this.model.select();
-    },
-
     staticsAdded: function(files) {
       _(files).each(function(file){
         file.name = file.filename;
@@ -264,6 +198,14 @@ define([
       });
       this.model.get('content_attribs').set('src', _.last(files).url);
       //this.show(this.model);
+    },
+
+    hovered: function() {
+      this.model.trigger('hovered');
+    },
+
+    unhovered: function() {
+      this.model.trigger('unhovered');
     },
 
     keyHandler: function (e) {

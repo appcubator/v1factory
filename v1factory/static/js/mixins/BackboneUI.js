@@ -8,6 +8,8 @@ function(Backbone) {
   Backbone.UIView = Backbone.View.extend({
 
     resizableAndDraggable: function() {
+
+      console.trace();
       var self = this;
 
       $(self.el).resizable({

@@ -37,7 +37,6 @@ function(WidgetClassPickerView) {
 
     render: function() {
       var self = this;
-
       if(this.model.has('content') && this.model.get('content') !== null &&
         !this.model.get('content_attribs').has('src') &&
         this.model.get('type') != "images" &&
@@ -180,7 +179,6 @@ function(WidgetClassPickerView) {
         statics.push(file);
       });
       self.model.get('content_attribs').set('src', _.last(files).url);
-      alert("2");
       self.model.set('content', _.last(files).url);
     },
 
@@ -191,7 +189,6 @@ function(WidgetClassPickerView) {
       }
       else {
         this.model.get('content_attribs').set('src', e.target.value);
-        alert("1");
         this.model.set('content', e.target.value);
       }
     },

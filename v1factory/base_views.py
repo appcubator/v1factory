@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect,render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import forms as auth_forms, authenticate, login
+from django.core.exceptions import ValidationError
 from django import forms
 from django.utils import simplejson
 
@@ -64,11 +65,44 @@ def homepage(request):
   page_context["title"] = "Homepage"
   return render(request, 'website-home.html', page_context)
 
-@require_GET
+@login_required
 def account(request):
-  page_context = {}
-  page_context["title"] = "Account"
-  return render(request, 'registration/account.html', page_context)
+  if request.method == 'GET':
+    page_context = {}
+    page_context["title"] = "Account"
+    return render(request, 'registration/account.html', page_context)
+  elif request.method == 'POST':
+    user = request.user
+    user.first_name = request.POST['first_name']
+    user.last_name = request.POST['last_name']
+    user.email = request.POST['email']
+    if user.email == "":
+      return HttpResponse(simplejson.dumps({"email":["Email cannot be blank."]}), mimetype="application/json")
+    try:
+      user.full_clean()
+    except ValidationError, e:
+      return HttpResponse(simplejson.dumps(e.message_dict), mimetype="application/json")
+    else:
+      user.save()
+      return HttpResponse(simplejson.dumps({"redirect_to":"/account/"}), mimetype="application/json")
+
+@login_required
+@require_POST
+def change_password(request):
+  password1 = request.POST['password1']
+  password2 = request.POST['password2']
+
+  if password1 == "":
+    return HttpResponse(simplejson.dumps({"password1":["Password cannot be blank."]}), mimetype="application/json")
+
+  if password1 != password2:
+    return HttpResponse(simplejson.dumps({"password2":["Passwords do not match."]}), mimetype="application/json")
+
+  user = request.user
+  user.set_password(password1)
+  user.save()
+  return HttpResponse(simplejson.dumps({"redirect_to":"/account/"}), mimetype="application/json")
+
 
 @require_GET
 def tutorial(request):

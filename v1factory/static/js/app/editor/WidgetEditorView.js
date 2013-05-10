@@ -19,78 +19,75 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView, ImageSli
 
     initialize: function(widgetsCollection){
       _.bindAll(this, 'render',
+                      'deselect',
+                      'bindWidget',
                       'clear',
-                      'setLocation',
-                      'bindLocation',
-                      'selectChanged',
                       'openSlideEditor');
 
       this.widgetsCollection    = widgetsCollection;
-      this.model = widgetsCollection.selectedEl || _.last(widgetsCollection.models);
+      this.widgetsCollection.bind('add', this.bindWidget);
+      var self = this;
+      _(this.widgetsCollection.models).each(self.bindWidget);
 
-      this.widgetsCollection.bind('selected', this.selectChanged, this);
+    },
 
-      if(this.model) {
-        this.model.bind('change:selected', this.selectChanged);
-        this.bindLocation();
-      }
+    mousedown: function(e) { e.stopImmediatePropagation(); },
+
+    bindWidget: function(widget) {
+      var self = this;
+      widget.on('selected', function() {
+        self.newSelected(this);
+      });
+    },
+
+    newSelected: function(widgetModel) {
+      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      this.deselect();
+      this.selectedEl = widgetModel;
+      this.render();
     },
 
     render: function() {
-      var self = this;
-
-      if(!this.model) {
-        return;
-      }
-
-      if(!iui.get('widget-wrapper-' + this.model.cid)) {
-        this.model.bind('rendered', self.render);
-        return;
-      }
-
+      this.clear();
       this.$el.fadeIn();
-      if(this.model && !(this.model.has('container_info') && this.model.get('container_info').has('query'))) {
-        this.layoutEditor = new WidgetLayoutEditor(this.model);
+
+      if(this.selectedEl && !(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').has('query'))) {
+        this.layoutEditor = new WidgetLayoutEditor(this.selectedEl);
         this.el.appendChild(this.layoutEditor.el);
       }
 
-      if(this.model.has('container_info') && this.model.get('container_info').get('action') == "imageslider") {
+      if(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').get('action') == "imageslider") {
         var slidesElem = document.createElement('ul');
         var html = '<li class="option-button edit-slides-button">Edit Slides</li>';
         slidesElem.innerHTML = html;
         this.el.appendChild(slidesElem);
       }
 
-      if(this.model.has('container_info') && this.model.get('container_info').has('query')) {
-        this.infoEditor = new WidgetInfoEditorView(this.model);
+      if(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').has('query')) {
+        this.infoEditor = new WidgetInfoEditorView(this.selectedEl);
         this.el.appendChild(this.infoEditor.el);
       }
 
-      if(this.model.get('container_info') === null) {
-        this.contentEditor = new WidgetContentEditor(this.model);
+      if(this.selectedEl.get('container_info') === null) {
+        this.contentEditor = new WidgetContentEditor(this.selectedEl);
         this.el.appendChild(this.contentEditor.el);
       }
 
-      iui.get('widget-wrapper-' + this.model.cid).appendChild(this.el);
+      iui.get('widget-wrapper-' + this.selectedEl.cid).appendChild(this.el);
+      iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2002;
 
-      this.model.unbind('rendered', self.render);
+      $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
+      $('#elements-container').on('mousedown', this.deselect);
+
+      return this;
     },
 
-    setLocation: function() { },
-
-    bindLocation: function() {    },
-
-    selectChanged : function(chg, ch2) {
-      if(this.widgetsCollection.selectedEl === null) {
-        this.model = null;
-        this.clear();
+    deselect: function() {
+      if(this.selectedEl) {
+        iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2000;
       }
-      else if(this.widgetsCollection.selectedEl != this.model) {
-        this.clear();
-        this.model = this.widgetsCollection.selectedEl;
-        this.model.bind('change:selected', this.selectChanged);
-        this.render();
-      }
+      this.selectedEl = null;
+      this.clear();
     },
 
     openSlideEditor: function() {
@@ -101,9 +98,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView, ImageSli
       if(this.contentEditor) this.contentEditor.clear();
       if(this.layoutEditor) this.layoutEditor.clear();
       if(this.infoEditor) this.infoEditor.clear();
-
       this.el.innerHTML = '';
-      this.model = null;
       this.$el.hide();
     }
   });

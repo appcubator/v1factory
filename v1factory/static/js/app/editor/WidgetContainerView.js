@@ -19,9 +19,11 @@ function( TableQueryView,
     entity: null,
     type: null,
     events: {
-      'click'         : 'select',
       'click .delete' : 'remove',
-      'dblclick'      : 'showDetails'
+      'dblclick'      : 'showDetails',
+      'mousedown'     : 'select',
+      'mouseover'     : 'hovered',
+      'mouseout'      : 'unhovered'
     },
 
     initialize: function(widgetModel) {
@@ -60,7 +62,6 @@ function( TableQueryView,
       }
 
       this.render();
-      this.resizableAndDraggable();
       this.renderElements();
     },
 
@@ -105,7 +106,6 @@ function( TableQueryView,
       $( this.el ).resizable( "destroy" );
       $( this.el ).draggable( "destroy" );
       this.render();
-      this.resizableAndDraggable();
       this.renderElements();
     },
 

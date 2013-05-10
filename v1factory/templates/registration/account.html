@@ -26,14 +26,18 @@
         <input type="text" class="span16 hoff1" placeholder="Email" name="email" value="{{ user.email }}"><br  />
         <div class="span16 form-error field-name-email"></div><br />
         <input type="submit" class="btn" value="Save Changes">
-        <hr>
-        <div class="hoff1">
-          <h3 class="">Password</h3><br  />
-          <input type="text" class="span16 hoff1" id="app-name" placeholder="New Password..."><br  />
-          <input type="text" class="span16" id="app-name" placeholder="Confirm Password..."><br  />
-          <input type="submit" class="btn" value="Change Password">
-        </div>
       </form>
+      <hr>
+      <div class="hoff1">
+        <h3 class="">Password</h3><br  />
+        <form action="/account/set_password/" method="POST">
+          <input type="password" class="span16 hoff1" name="password1" placeholder="New Password..."><br />
+          <div class="span16 form-error field-name-password1"></div><br />
+          <input type="password" class="span16" name="password2" placeholder="Confirm Password..."><br />
+          <div class="span16 form-error field-name-password2"></div><br />
+          <input type="submit" class="btn" value="Change Password">
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -41,7 +45,9 @@
 
 {% block js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/underscore-amd/underscore.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui/iui-nonamd.js"></script>
+
 <script type="text/javascript">
 // ajaxify forms @ksikka
 $(document).ready(function() {
