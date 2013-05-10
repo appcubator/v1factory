@@ -8,13 +8,16 @@ import os.path
 import re
 import requests
 import simplejson
+import traceback
+import sys
 
 DEFAULT_STATE_DIR = os.path.join(os.path.dirname(__file__), os.path.normpath("default_state"))
 
 def get_default_data(filename):
   f = open(os.path.join(DEFAULT_STATE_DIR, filename))
   s = f.read()
-  simplejson.loads(s) # makes sure it's actually valid
+  # makes sure it's actually valid
+  simplejson.loads(s)
   f.close()
   return s
 
@@ -274,7 +277,7 @@ class UITheme(models.Model):
   name = models.CharField(max_length=255, blank=True)
   designer = models.ForeignKey(User, blank=True, null=True)
   parent_theme = models.ForeignKey('self', blank=True, null=True, default=None)
-  image = models.URLField(blank=True, default="/static/img/theme4.png")
+  image = models.URLField(blank=True, default="http://appcubator.com/static/img/theme4.png")
 
   _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
@@ -333,13 +336,26 @@ class ApiKeyUses(models.Model):
 
 
 def load_initial_themes():
-  s = get_default_data('flat_ui_theme.json')
-  t = UITheme(name="Flat UI Kit")
-  t.set_state(simplejson.loads(s))
-  t.full_clean()
-  t.save()
+  theme_json_filenames = os.listdir(os.path.join(DEFAULT_STATE_DIR, "themes"))
 
-  return t
+  for filename in theme_json_filenames:
+    try:
+      sys.stdout.write("Loading %s" % filename); sys.stdout.flush()
+      s = simplejson.loads(get_default_data(os.path.join("themes", filename)))
+      sys.stdout.write("."); sys.stdout.flush()
+      t = UITheme(name=filename.replace(".json",""))
+      sys.stdout.write("."); sys.stdout.flush()
+      t.set_state(s)
+      sys.stdout.write("."); sys.stdout.flush()
+      t.full_clean()
+      sys.stdout.write("."); sys.stdout.flush()
+      t.save()
+      sys.stdout.write("."); sys.stdout.flush()
+      print ""
+    except Exception:
+      # don't crash if one theme fails
+      print "\nError with %s" % filename
+      traceback.print_exc()
 
 class DomainRegistration(models.Model):
   MAX_FREE_DOMAINS = 3
@@ -412,6 +428,8 @@ class TutorialLog(models.Model):
 
 
 def temp_fix_hr():
+  """hr may have a span12 class in the uiestate. this fixes that
+  May 10, 2013"""
   for a in App.objects.all():
     try:
       u = a.uie_state
