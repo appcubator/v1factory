@@ -78,6 +78,11 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     bindWidget: function(widget) {
       var self = this;
+
+      widget.bind('remove', function() {
+        self.deselect();
+      });
+
       widget.bind('hovered', function() {
         self.widgetHover(widget);
       });
