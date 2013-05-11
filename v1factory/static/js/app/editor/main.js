@@ -41,10 +41,11 @@ require.config({
 require([
   "app/models/AppModel",
   "editor/EditorView",
+  'editor/KeyDispatcher',
   "iui",
   "comp"
 ],
-function(AppModel, EditorView) {
+function(AppModel, EditorView, KeyDispatcher) {
 
   var EditorMain = function() {
     window.onerror = function(error) {
@@ -53,6 +54,7 @@ function(AppModel, EditorView) {
     v1State = new AppModel(null);
     v1State.initialize(appState);
 
+    keyDispatcher  = new KeyDispatcher();
     editorView  = new EditorView({}, pageId);
     editorView.setElement(document.body).render();
   };

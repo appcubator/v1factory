@@ -26,13 +26,18 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'moved',
                       'bindWidget',
                       'mousedown',
-                      'deselect');
+                      'deselect',
+                      'doKeyBindings',
+                      'moveSelectedDown',
+                      'moveSelectedUp',
+                      'moveSelectedLeft',
+                      'moveSelectedRight');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
       var self = this;
       _(this.widgetsCollection.models).each(self.bindWidget);
-
+      this.doKeyBindings();
     },
 
     mousedown: function(e) { e.stopImmediatePropagation(); },
@@ -92,6 +97,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       });
 
       widget.on('selected', function() {
+        self.widgetUnhover(widget);
         self.newSelected(widget);
       });
     },
@@ -118,9 +124,18 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     bindLocation: function() { },
 
     newSelected: function(widgetModel) {
+      var self = this;
       if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+
+      if(this.selectedEl) {
+        widgetModel.get('layout').unbind('change', self.setLayout);
+      }
+
       this.deselect();
       this.selectedEl = widgetModel;
+      widgetModel.get('layout').bind('change', function() {
+        self.setLayout(self.selectDiv, widgetModel);
+      });
       this.setLayout(this.selectDiv, widgetModel);
     },
 
@@ -159,16 +174,40 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     deselect: function() {
-      // if(this.selectedEl) {
-      //   iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2002;
-      // }
       this.selectedEl = null;
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
     },
 
-    clear: function() {
-    }
+    moveSelectedDown: function(e) {
+      if(!this.selectedEl) return;
+      this.selectedEl.moveDown();
+      e.preventDefault();
+    },
+
+    moveSelectedUp: function() {
+      if(!this.selectedEl) return;
+      this.selectedEl.moveUp();
+    },
+
+    moveSelectedLeft: function() {
+      if(!this.selectedEl) return;
+      this.selectedEl.moveLeft();
+    },
+
+    moveSelectedRight: function() {
+      if(!this.selectedEl) return;
+      this.selectedEl.moveRight();
+    },
+
+    doKeyBindings: function() {
+      keyDispatcher.key('down', this.moveSelectedDown);
+      keyDispatcher.key('up', this.moveSelectedUp);
+      keyDispatcher.key('left', this.moveSelectedLeft);
+      keyDispatcher.key('right', this.moveSelectedRight);
+    },
+
+    clear: function() { }
 
   });
 

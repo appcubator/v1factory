@@ -16,7 +16,6 @@ define([
     events: {
       'mousedown'     : 'select',
       'click .delete' : 'remove',
-      'keyDown'       : 'keyHandler',
       'mouseover'     : 'hovered',
       'mouseout'      : 'unhovered'
     },
@@ -36,8 +35,7 @@ define([
                       'changedStyle',
                       'changedSource',
                       'toggleFull',
-                      'staticsAdded',
-                      'keyHandler');
+                      'staticsAdded');
 
       this.model = widgetModel;
 
@@ -59,8 +57,6 @@ define([
       this.model.get('content_attribs').bind("change:src", this.changedSource, this);
       this.model.get('content_attribs').bind("change:value", this.changedValue, this);
       this.model.get('content_attribs').bind("change:style", this.changedStyle, this);
-
-      window.addEventListener('keydown', this.keyHandler);
     },
 
     render: function() {
@@ -206,16 +202,6 @@ define([
 
     unhovered: function() {
       this.model.trigger('unhovered');
-    },
-
-    keyHandler: function (e) {
-      switch(e.keyCode) {
-        case 13: //enter
-          break;
-        case 27:
-          break;
-      }
-      return false;
     }
   });
 

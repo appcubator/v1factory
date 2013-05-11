@@ -11,7 +11,6 @@ define([
   'editor/NavbarEditorView',
   'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
-  'key',
   'app/editor/editor-templates'
 ],
 function( PageModel,
@@ -75,11 +74,10 @@ function( PageModel,
 
       var self = this; // for binding deploy to ctrlshiftd
       /* Bindings */
-      $(window).bind('keydown', this.keydown);
-      key('⌘+s, ctrl+s', this.save);
-      key('⌘+c, ctrl+c', this.copy);
-      key('⌘+v, ctrl+v', this.paste);
-      key('⌘+shift+d, ctrl+shift+d', function(){ self.deploy({local:true}); });
+      keyDispatcher.key('⌘+s, ctrl+s', this.save);
+      keyDispatcher.key('⌘+c, ctrl+c', this.copy);
+      keyDispatcher.key('⌘+v, ctrl+v', this.paste);
+      keyDispatcher.key('⌘+shift+d, ctrl+shift+d', function(){ self.deploy({local:true}); });
 
     },
 
@@ -211,47 +209,47 @@ function( PageModel,
     },
 
     keydown: function(e) {
-      if($._data($(window)[0],"events").keydown.length > 1) {
-        return ;
-      }
+      // if($._data($(window)[0],"events").keydown.length > 1) {
+      //   return ;
+      // }
 
-      switch(e.keyCode) {
-        case 37:
-          if(this.widgetsCollection.selectedEl) {
-            this.widgetsCollection.selectedEl.moveLeft();
-          }
-          e.preventDefault();
-          break;
-        case 38:
-          if(this.widgetsCollection.selectedEl) {
-            this.widgetsCollection.selectedEl.moveUp();
-          }
-          e.preventDefault();
-          break;
-        case 39:
-          if(this.widgetsCollection.selectedEl) {
-            this.widgetsCollection.selectedEl.moveRight();
-          }
-          e.preventDefault();
-          break;
-        case 40:
-          if(this.widgetsCollection.selectedEl) {
-            this.widgetsCollection.selectedEl.moveDown();
-          }
-          e.preventDefault();
-          break;
-        case 8: //backspace
-          if(this.widgetsCollection.selectedEl) {
-            this.widgetsCollection.removeSelected(e);
-          }
-          break;
-        case 27: //escape
-          if(this.widgetsCollection.selectedEl) {
-            this.widgetsCollection.selectedEl = null;
-            this.widgetsCollection.unselectAll();
-          }
-          return false;
-      }
+      // switch(e.keyCode) {
+      //   case 37:
+      //     if(this.widgetsCollection.selectedEl) {
+      //       this.widgetsCollection.selectedEl.moveLeft();
+      //     }
+      //     e.preventDefault();
+      //     break;
+      //   case 38:
+      //     if(this.widgetsCollection.selectedEl) {
+      //       this.widgetsCollection.selectedEl.moveUp();
+      //     }
+      //     e.preventDefault();
+      //     break;
+      //   case 39:
+      //     if(this.widgetsCollection.selectedEl) {
+      //       this.widgetsCollection.selectedEl.moveRight();
+      //     }
+      //     e.preventDefault();
+      //     break;
+      //   case 40:
+      //     if(this.widgetsCollection.selectedEl) {
+      //       this.widgetsCollection.selectedEl.moveDown();
+      //     }
+      //     e.preventDefault();
+      //     break;
+      //   case 8: //backspace
+      //     if(this.widgetsCollection.selectedEl) {
+      //       this.widgetsCollection.removeSelected(e);
+      //     }
+      //     break;
+      //   case 27: //escape
+      //     if(this.widgetsCollection.selectedEl) {
+      //       this.widgetsCollection.selectedEl = null;
+      //       this.widgetsCollection.unselectAll();
+      //     }
+      //     return false;
+      // }
     },
 
     clickedPage: function() {
