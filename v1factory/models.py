@@ -340,17 +340,13 @@ def load_initial_themes():
 
   for filename in theme_json_filenames:
     try:
-      sys.stdout.write("Loading %s" % filename); sys.stdout.flush()
-      s = simplejson.loads(get_default_data(os.path.join("themes", filename)))
-      sys.stdout.write("."); sys.stdout.flush()
-      t = UITheme(name=filename.replace(".json",""))
-      sys.stdout.write("."); sys.stdout.flush()
-      t.set_state(s)
-      sys.stdout.write("."); sys.stdout.flush()
-      t.full_clean()
-      sys.stdout.write("."); sys.stdout.flush()
-      t.save()
-      sys.stdout.write("."); sys.stdout.flush()
+      sys.stdout.write("Loading %s" % filename);
+      s = simplejson.loads(get_default_data(os.path.join("themes", filename))); sys.stdout.write(".")
+      assert 'lines' in s
+      t = UITheme(name=filename.replace(".json","")); sys.stdout.write(".")
+      t.set_state(s); sys.stdout.write(".")
+      t.full_clean(); sys.stdout.write(".")
+      t.save(); sys.stdout.write(".")
       print ""
     except Exception:
       # don't crash if one theme fails
