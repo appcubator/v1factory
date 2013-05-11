@@ -30,6 +30,13 @@ function(UrlView, SimpleModalView) {
 
       this.urlModel = pageModel.get('url');
       this.render();
+
+      $(this.el).bind('click', function() {
+
+             v1.navigate("app/"+ appId +"/editorone/" + ind, {trigger: true});
+
+      });
+
       this.renderMenu();
     },
 

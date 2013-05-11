@@ -51,6 +51,7 @@ require([
   "app/views/PagesView",
   "app/views/OverviewPageView",
   "app/editor/EditorView",
+  "app/editor/KeyDispatcher",
   "backbone",
   "bootstrap",
   "iui",
@@ -65,7 +66,8 @@ function (AppModel,
           ThemesGalleryView,
           PagesView,
           OverviewPageView,
-          EditorView) {
+          EditorView,
+          KeyDispatcher) {
 
   var v1App = Backbone.Router.extend({
 
@@ -256,6 +258,9 @@ function (AppModel,
   v1State = new AppModel();
   v1State.initialize(appState);
   v1 = new v1App();
+
+  keyDispatcher  = new KeyDispatcher();
+
   Backbone.history.start({pushState: true});
 
 });

@@ -23,6 +23,9 @@
     var appState = {{ app.state_json|safe }};
     var uieState = {{ app.uie_state_json|safe }};
     var themes = {{ themes|safe }};
+    var GRID_WIDTH = 80;
+    var GRID_HEIGHT = 15;
+
   </script>
   <script data-main="{{ STATIC_URL }}js/app/main" data-start="{{ STATIC_URL }}js/app/pages/show-main.js" src="{{ STATIC_URL }}js/libs/require.js"></script>
 

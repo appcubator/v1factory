@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.utils import simplejson
-from django.shortcuts import redirect,render, get_object_or_404
+from django.shortcuts import redirect,render,render_to_response, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
@@ -155,7 +155,7 @@ def less_sheet(request, app_id):
                    'myuielements' : simplejson.dumps(list(my_els)),
                    'app_id': app_id }
   add_statics_to_context(page_context, app)
-  return render(request, 'app-editor-less-gen.html', page_context)
+  return render_to_response('app-editor-less-gen.html', page_context, mimetype='text/css')
 
 @csrf_exempt
 def css_sheet(request, app_id):
