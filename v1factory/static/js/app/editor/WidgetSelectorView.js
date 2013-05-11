@@ -31,7 +31,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'moveSelectedDown',
                       'moveSelectedUp',
                       'moveSelectedLeft',
-                      'moveSelectedRight');
+                      'moveSelectedRight',
+                      'deleteSelected');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
@@ -200,11 +201,17 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.selectedEl.moveRight();
     },
 
+    deleteSelected: function() {
+      if(!this.selectedEl) return;
+      this.selectedEl.remove();
+    },
+
     doKeyBindings: function() {
       keyDispatcher.key('down', this.moveSelectedDown);
       keyDispatcher.key('up', this.moveSelectedUp);
       keyDispatcher.key('left', this.moveSelectedLeft);
       keyDispatcher.key('right', this.moveSelectedRight);
+      keyDispatcher.key('backspace', this.deleteSelected);
     },
 
     clear: function() { }
