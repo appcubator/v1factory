@@ -29,11 +29,11 @@ def validate(thing, schema):
   except Exception:
     raise Exception('schema structure doesn\'t begin with _type')
 
-  if type(thing) == type(u""):
-    thing = str(thing)
+  if type(thing) == type(""):
+    thing = unicode(thing)
 
   try:
-    assert(type(thing) == type(schema['_type']))
+    assert type(thing) == type(schema['_type']) or (type(thing) == type(u"") and type(schema['_type']) == type(""))
   except Exception:
     errors.append("type of this thing doesn't match schema.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
     return errors
