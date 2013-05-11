@@ -137,14 +137,14 @@ class DjangoTemplate(Renderable):
     tree = DomTree()
 
     tree.rows = self.split_to_rows(uiels, top_offset=top_offset)
-    for r in tree.rows:
+    for i, r in enumerate(tree.rows):
       r.cols = self.split_to_cols(r.uiels, left_offset=left_offset)
       for c in r.cols:
         if len(c.uiels) == 1:
           c.tree = None # termination of recursion
         else:
-          top_offset=r.uiels[0].uie['layout']['top']
-          left_offset=c.uiels[0].uie['layout']['left']
+          inner_top_offset=r.uiels[0].uie['layout']['top']
+          inner_left_offset=c.uiels[0].uie['layout']['left']
           if len(tree.rows) == 1 and len(r.cols) == 1:
             # in this case, recursion will not terminate since input is not subdivided into smaller components
             # create a relative container and absolute position the contents.
@@ -152,8 +152,8 @@ class DjangoTemplate(Renderable):
             min_top = c.uiels[0].top
             max_bottom = c.uiels[0].top + c.uiels[0].height
             for uie in c.uiels:
-              uie.top_offset = uie.top - top_offset
-              uie.left_offset = uie.left - left_offset
+              uie.top_offset = uie.top - inner_top_offset
+              uie.left_offset = uie.left - inner_left_offset
               uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
               min_top = min(uie.top, min_top)
               max_bottom = max(uie.top + uie.height, max_bottom)
@@ -165,7 +165,7 @@ class DjangoTemplate(Renderable):
 
             c.tree = None
           else:
-            c.tree = self.create_tree(c.uiels, top_offset=top_offset, left_offset=left_offset)
+            c.tree = self.create_tree(c.uiels, top_offset=inner_top_offset, left_offset=inner_left_offset, recursive_num = recursive_num + 1)
     return tree
 
   def split_to_cols(self, uiels, left_offset=0):
