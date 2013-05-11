@@ -232,7 +232,7 @@ function(FormFieldModel, TutorialView) {
 
     changedGoto: function(e) {
       console.log(e.target.id);
-      var page_name = String(e.target.id).replace('_', ' ');
+      var page_name = String(e.target.id||e.target.parentNode.id).replace('_', ' ');
       var page_id = String(e.target.id).replace(' ','_');
       var page_val = 'internal://' + page_name;
       this.model.set('goto', page_val);
