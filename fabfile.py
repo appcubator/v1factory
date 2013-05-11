@@ -22,3 +22,11 @@ def pull_staging():
   with cd(code_dir):
     run("git pull")
     run("touch staging_wsgi.py")
+
+@hosts('v1factory@appcubator.com', 'v1factory@staging.appcubator.com')
+def pull_both():
+  code_dir = '/var/www/v1factory'
+  with cd(code_dir):
+    run("git pull")
+    run("touch staging_wsgi.py")
+    run("touch prod_wsgi.py")
