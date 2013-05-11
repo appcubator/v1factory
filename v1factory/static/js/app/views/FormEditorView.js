@@ -13,6 +13,7 @@ function(FormFieldModel, TutorialView) {
     height: 600,
     padding: 0,
     className: 'form-editor',
+    css: 'form-editor',
 
     events: {
       'change  .field-name-box'          : 'fieldBoxChanged',
@@ -56,6 +57,8 @@ function(FormFieldModel, TutorialView) {
                       'addNewField',
                       'deleteField',
                       'renderPossibleActions');
+
+      iui.loadCSS(this.css);
 
       this.model = formModel;
       this.entity = entityModel;

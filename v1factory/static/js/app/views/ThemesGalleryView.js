@@ -6,17 +6,17 @@ define([
 function(ThemeDisplayView) {
 
   var ThemesGalleryView = Backbone.View.extend({
-
+    css: 'gallery',
     events: {
       'click .theme' : 'showThemeModal'
     },
 
     initialize: function() {
+      iui.loadCSS(this.css);
     },
 
     render: function() {
       var self = this;
-
       self.el.innerHTML = ['<div class="span58">',
                            '<h2 class="hoff1">Themes</h2>',
                            '<hr class="span58 hoff2">'].join('\n');

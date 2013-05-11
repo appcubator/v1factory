@@ -16,7 +16,7 @@ function(ElementCollection,
     containersCollection: null,
     curId               : 'all-elements',
     dragActive          : false,
-
+    css                 : 'editor-gallery',
     events : { },
 
     initialize   : function(widgetsCollection) {
@@ -40,7 +40,7 @@ function(ElementCollection,
       // All Create Forms, Tables, Lists
       // Context Entity Elements and Update Forms
       var self = this;
-
+      iui.loadCSS(this.css);
       this.allList = iui.get('all-list');
 
       this.renderAuthenticationForms();

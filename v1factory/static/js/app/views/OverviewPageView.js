@@ -5,6 +5,7 @@ define([
 function(SimpleModalView) {
 
   var OverviewPageView = Backbone.View.extend({
+    css: 'app-page',
 
     events : {
       'click .tutorial'        : 'showTutorial',
@@ -17,7 +18,7 @@ function(SimpleModalView) {
                       'deploy',
                       'showTutorial',
                       'showFeedback');
-
+      iui.loadCSS(this.css);
     },
 
     render: function() {

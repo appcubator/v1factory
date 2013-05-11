@@ -13,6 +13,7 @@ function(EntityCollection,
          EntitiesListView) {
 
     var EntitiesView = Backbone.View.extend({
+      css: 'entities',
 
       events : {
         'click #add-entity-button' : 'clickedAdd',
@@ -23,6 +24,8 @@ function(EntityCollection,
         _.bindAll(this, 'render',
                         'clickedAdd',
                         'formSubmitted');
+
+        iui.loadCSS(this.css);
 
         this.entitiesColl = v1State.get('entities');
         this.userEntityModel = v1State.get('users');

@@ -35,27 +35,13 @@ function() {
 
       if(directory) this.addr = directory;
 
-      this.loadCSS();
+      iui.loadCSS(this.css);
       this.render();
       this.chooseSlide(this.addr, true);
       this.reader = new answer();
       this.parseAnswers(TutorialDirectory);
 
       $(window).bind('keydown', this.keyhandler);
-    },
-
-    loadCSS: function() {
-    //   var self = this;
-    // //<link type="text/css" href="{{ STATIC_URL }}css/tutorial.css" rel="stylesheet"/>
-    //   if(!iui.get('css-tutorial')) {
-    //     var cssFile = document.createElement('link');
-    //     cssFile.setAttribute('type', 'text/css');
-    //     cssFile.setAttribute('href', '/static/css/' + self.css + '.css');
-    //     cssFile.setAttribute('rel', 'stylesheet');
-    //     cssFile.id = 'css-' + self.css;
-    //     console.log(cssFile);
-    //     document.getElementsByTagName('head')[0].appendChild(cssFile);
-    //   }
     },
 
     render : function(img, text) {

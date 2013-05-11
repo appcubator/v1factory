@@ -6,6 +6,8 @@ function() {
 
   var TableQueryView = Backbone.ModalView.extend({
     className : 'query-modal modal',
+    css : 'query-editor',
+
     events: {
       'change .fields-to-display'   : 'fieldsToDisplayChanged',
       'click .belongs-to-user'      : 'belongsToUserChanged',
@@ -22,8 +24,7 @@ function() {
                       'getNLdescription',
                       'changeDescription');
 
-      console.log(containerType);
-      console.trace();
+      iui.loadCSS(this.css);
       this.widgetModel = widgetModel;
       this.containerType = containerType;
       this.model = widgetModel.get('container_info').get('query');

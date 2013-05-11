@@ -27,6 +27,7 @@ function( PageModel,
 
   var EditorView = Backbone.View.extend({
     className : 'sample',
+    css: "bootstrap-editor",
 
     events    : {
       'click #save'          : 'save',
@@ -51,6 +52,9 @@ function( PageModel,
                       'renderDeployResponse');
 
       if(pId) pageId = pId;
+
+      iui.loadCSS(this.css);
+      iui.loadCSS('jquery-ui');
 
       this.model             = v1State.get('pages').models[pageId];
 

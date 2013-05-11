@@ -1,10 +1,8 @@
   {% extends "infra-html.html" %}
 
   {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app-page.css">
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/entities.css">
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/form-editor.css">
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/gallery.css">
+  <link type="text/css" href="/app/{{ app_id}}/uiestate.less" rel="stylesheet"/>
+
   {% endblock %}
 
   {% block topbar %}

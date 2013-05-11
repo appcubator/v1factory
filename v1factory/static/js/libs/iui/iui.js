@@ -191,7 +191,19 @@ define(['jquery-ui'], function() {
           //.parentNode.removeChild(elem);
         },800);
       }
+    },
+
+    loadCSS : function(css) {
+        if(!document.getElementById('css-' + css)) {
+          var cssFile = document.createElement('link');
+          cssFile.setAttribute('type', 'text/css');
+          cssFile.setAttribute('href', '/static/css/' + css + '.css');
+          cssFile.setAttribute('rel', 'stylesheet');
+          cssFile.id = 'css-' + css;
+          document.getElementsByTagName('head')[0].appendChild(cssFile);
+        }
     }
+
   };
 
   function csrfSafeMethod(method) {
