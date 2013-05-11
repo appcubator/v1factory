@@ -1,9 +1,8 @@
 define([
-  'mixins/BackboneModal',
   'answer',
   './TutorialDict'
 ],
-function(Backbone) {
+function() {
 
   var TutorialView = Backbone.View.extend({
     tagName: 'div',
@@ -46,17 +45,17 @@ function(Backbone) {
     },
 
     loadCSS: function() {
-      var self = this;
-    //<link type="text/css" href="{{ STATIC_URL }}css/tutorial.css" rel="stylesheet"/>
-      if(!iui.get('css-tutorial')) {
-        var cssFile = document.createElement('link');
-        cssFile.setAttribute('type', 'text/css');
-        cssFile.setAttribute('href', '/static/css/' + self.css + '.css');
-        cssFile.setAttribute('rel', 'stylesheet');
-        cssFile.id = 'css-' + self.css;
-        console.log(cssFile);
-        document.getElementsByTagName('head')[0].appendChild(cssFile);
-      }
+    //   var self = this;
+    // //<link type="text/css" href="{{ STATIC_URL }}css/tutorial.css" rel="stylesheet"/>
+    //   if(!iui.get('css-tutorial')) {
+    //     var cssFile = document.createElement('link');
+    //     cssFile.setAttribute('type', 'text/css');
+    //     cssFile.setAttribute('href', '/static/css/' + self.css + '.css');
+    //     cssFile.setAttribute('rel', 'stylesheet');
+    //     cssFile.id = 'css-' + self.css;
+    //     console.log(cssFile);
+    //     document.getElementsByTagName('head')[0].appendChild(cssFile);
+    //   }
     },
 
     render : function(img, text) {
@@ -167,7 +166,6 @@ function(Backbone) {
         });
       }
       else {
-        console.log( TutorialDirectory[addr[0]]);
         var obj = TutorialDirectory[addr[0]];
         if(addr[1]) {
           obj = obj.contents[addr[1]];
@@ -180,7 +178,6 @@ function(Backbone) {
     },
 
     selectMenu: function (addr) {
-      console.log(addr);
       var addrStr = this.addr.join('-');
       this.$el.find('.selected').removeClass('selected');
       $('#'+addrStr).addClass('selected');

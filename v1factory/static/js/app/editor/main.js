@@ -5,6 +5,7 @@ require.config({
     "jquery.flexslider" : "../../libs/jquery/jquery.flexslider-min",
     "underscore" : "../../libs/underscore-amd/underscore",
     "backbone" : "../../libs/backbone-amd/backbone",
+    "backbone-v1" : "../../mixins/BackboneView",
     "iui" : "../../libs/iui/iui",
     "comp": "../../libs/iui/comp",
     "bootstrap" : "../../libs/bootstrap/bootstrap",
@@ -24,7 +25,7 @@ require.config({
     "underscore": {
       exports: "_"
     },
-    "backbone": {
+    "backbone-v1": {
       exports: "Backbone",
       deps: ["underscore", "jquery"]
     },

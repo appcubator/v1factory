@@ -3,10 +3,9 @@ define([
 ],
 function () {
 
-  console.log(key);
   var KeyDispatcher = function() {
     this.bindings = {};
-    
+
     this.bind = function(keyComb, fn, type) {
       key(keyComb, fn);
       if(type) { this.store(keyComb, fn ,type); }

@@ -1232,6 +1232,7 @@
     this.cid = _.uniqueId('view');
     this._configure(options || {});
     this._ensureElement();
+    this.loadCSS.apply(this, arguments, options);
     this.initialize.apply(this, arguments);
     this.delegateEvents();
   };
@@ -1240,7 +1241,7 @@
   var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
   // List of view options to be merged as properties.
-  var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+  var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events', 'css'];
 
   // Set up all inheritable **Backbone.View** properties and methods.
   _.extend(View.prototype, Events, {
@@ -1263,6 +1264,24 @@
     // convention is for **render** to always return `this`.
     render: function() {
       return this;
+    },
+
+    loadCSS: function(a) {
+      console.log(a);
+      console.log("LOADING");
+      console.log(this);
+      console.log(this.css);
+        if(this.css) {
+          if(!document.getElementById('css-' + self.css)) {
+            var cssFile = document.createElement('link');
+            cssFile.setAttribute('type', 'text/css');
+            cssFile.setAttribute('href', '/static/css/' + self.css + '.css');
+            cssFile.setAttribute('rel', 'stylesheet');
+            cssFile.id = 'css-' + self.css;
+            console.log(cssFile);
+            document.getElementsByTagName('head')[0].appendChild(cssFile);
+          }
+        }
     },
 
     // Remove this view by taking the element out of the DOM, and removing any
