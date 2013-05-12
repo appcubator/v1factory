@@ -22,7 +22,7 @@ define([
 
   var WidgetView = Backbone.UIView.extend({
     el: null,
-    className: 'pseudo-outline widget-wrapper',
+    className: 'widget-wrapper',
     tagName : 'div',
     widgetsContainer :null,
     selected : false,
@@ -81,6 +81,7 @@ define([
       this.model.bind("startEditing", this.switchEditModeOn, this);
       this.model.bind("deselected",   this.switchEditModeOff, this);
 
+      keyDispatcher.key('shift+enter', this.switchEditModeOff);
     },
 
     render: function() {
@@ -258,19 +259,22 @@ define([
       this.editMode = true;
       var el = $(this.el.firstChild);
       this.el.firstChild.style.zIndex = 2003;
+      this.$el.addClass('textediting');
       el.attr('contenteditable', 'true');
       el.focus();
       el.selectText();
+      keyDispatcher.textEditing = true;
     },
 
     switchEditModeOff: function() {
       if(this.editMode === false) return;
-      console.log("OFFF");
       this.editMode = false;
+      this.$el.removeClass('textediting');
       var el = $(this.el.firstChild);
       val = el.html();
       this.model.set('content', val);
       el.attr('contenteditable', 'false');
+      keyDispatcher.textEditing = false;
     }
 
   });

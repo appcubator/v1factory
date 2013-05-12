@@ -223,6 +223,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     deleteSelected: function(e) {
       if(!this.selectedEl) return;
+      if(keyDispatcher.textEditing === true) return;
       this.selectedEl.remove();
       e.preventDefault();
     },

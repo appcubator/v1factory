@@ -3049,6 +3049,10 @@ a.badge:hover {
   background-color: rgba(124, 192, 213, 0.0);
 }
 
+.widget-wrapper.textediting {
+  border: 1px dashed #ccc;
+}
+
 .widget-wrapper .meta .delete, .widgets-container .meta .delete {
   position: absolute;
   display: inline-block;
