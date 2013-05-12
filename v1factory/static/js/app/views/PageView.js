@@ -15,13 +15,15 @@ function(UrlView, SimpleModalView) {
     events: {
       'click .delete' : 'deletePage',
       'change #access_level' : 'accessLevelChanged',
-      'click .edit-url' : 'renderUrl'
+      'click .edit-url' : 'renderUrl',
+      'click .edit'     : 'goToEditor'
     },
 
     initialize: function(pageModel, ind) {
       _.bindAll(this, 'render',
                       'renderMenu',
                       'renderUrl',
+                      'goToEditor',
                       'accessLevelChanged',
                       'deletePage');
 
@@ -30,12 +32,6 @@ function(UrlView, SimpleModalView) {
 
       this.urlModel = pageModel.get('url');
       this.render();
-
-      $(this.el).bind('click', function() {
-
-             v1.navigate("app/"+ appId +"/editorone/" + ind, {trigger: true});
-
-      });
 
       this.renderMenu();
     },
@@ -80,6 +76,11 @@ function(UrlView, SimpleModalView) {
 
       this.model.collection.remove(this.model);
       this.remove();
+    },
+
+    goToEditor: function(e) {
+      e.preventDefault();
+      v1.navigate("app/"+ appId +"/editor/" + this.ind + '/', {trigger: true});
     }
   });
 

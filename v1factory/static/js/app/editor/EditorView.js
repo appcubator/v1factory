@@ -34,7 +34,8 @@ function( PageModel,
       'click #deploy'        : 'deploy',
       'click .menu-button.help' : 'help',
       'click .page'          : 'clickedPage',
-      'click .url-bar'       : 'clickedUrl'
+      'click .url-bar'       : 'clickedUrl',
+      'click .home'          : 'clickedHome'
     },
 
     initialize: function(bone, pId) {
@@ -238,6 +239,11 @@ function( PageModel,
         },
         dataType: "JSON"
       });
+    },
+
+    clickedHome: function(e) {
+      e.preventDefault();
+      v1.navigate("app/"+ appId +"/pages/", {trigger: true});
     }
 
   });

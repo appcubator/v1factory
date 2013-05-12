@@ -59,7 +59,6 @@ urlpatterns += patterns('v1factory.views',
     url(r'^app/(\d+)/subdomain/(.*)/$', 'sub_register_domain'),
 
     # the rest
-    url(r'^app/(\d+)/editor/(\d+)$', 'app_editor'),
     url(r'^app/(\d+)/', 'app_page'), # this serves all the app pages
 
     # tutorial and logging

@@ -77,7 +77,7 @@ function (AppModel,
       "app/:appid/entities/" : "showEntitiesPage",
       "app/:appid/gallery/"  : "showThemesPage",
       "app/:appid/pages/"    : "showPagesPage",
-      "app/:appid/editorone/:pageid" : "showEditor"
+      "app/:appid/editor/:pageid/" : "showEditor"
     },
 
     tutorialDirectory: [0],
@@ -160,6 +160,7 @@ function (AppModel,
     },
 
     showPagesPage: function() {
+      $('.page').fadeIn();
       if(v1App.view) v1App.view.remove();
       v1App.tutorialDirectory = [5];
       var cleanDiv = document.createElement('div');
