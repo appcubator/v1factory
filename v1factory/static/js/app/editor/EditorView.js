@@ -33,9 +33,9 @@ function( PageModel,
       'click #save'          : 'save',
       'click #deploy'        : 'deploy',
       'click .menu-button.help' : 'help',
-      'click .page'          : 'clickedPage',
       'click .url-bar'       : 'clickedUrl',
-      'click .home'          : 'clickedHome'
+      'click .home'          : 'clickedHome',
+      'click .go-to-page'    : 'clickedGoToPage'
     },
 
     initialize: function(bone, pId) {
@@ -44,13 +44,13 @@ function( PageModel,
                       'paste',
                       'help',
                       'renderUrlBar',
-                      'clickedPage',
                       'getContextEntities',
                       'clickedUrl',
                       'createPage',
                       'save',
                       'deploy',
-                      'renderDeployResponse');
+                      'renderDeployResponse',
+                      'clickedGoToPage');
 
       if(pId) pageId = pId;
 
@@ -92,8 +92,7 @@ function( PageModel,
 
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
-        iui.get('page-list').innerHTML += '<li><a href="'+ '/app/' + appId +
-                                          '/editor/'+ ind +'">' + page.name +
+        iui.get('page-list').innerHTML += '<li class="go-to-page" id="page-'+ind+'"><a>' + page.name +
                                           '</a></li>';
       });
 
@@ -211,13 +210,6 @@ function( PageModel,
       });
     },
 
-    clickedPage: function() {
-      if(this.widgetsCollection.selectedEl) {
-        this.widgetsCollection.selectedEl = null;
-        this.widgetsCollection.unselectAll();
-      }
-    },
-
     clickedUrl: function() {
       var newView =  new UrlView(this.urlModel);
       newView.onClose = this.renderUrlBar;
@@ -235,7 +227,7 @@ function( PageModel,
         url: '/app/'+appId+'/state/',
         data: JSON.stringify(v1State.toJSON()),
         complete: function() {
-          $('<li><a href="/app/'+ appId +'/editor/'+pageInd+'">'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
+          $('<li class="go-to-page" id="page-'+pageInd+'"><a>'+name+'</a></li>').insertBefore($('#page-list').find(".new-page"));
         },
         dataType: "JSON"
       });
@@ -244,6 +236,13 @@ function( PageModel,
     clickedHome: function(e) {
       e.preventDefault();
       v1.navigate("app/"+ appId +"/pages/", {trigger: true});
+    },
+
+    clickedGoToPage: function(e) {
+      e.preventDefault();
+      var goToPageId = (e.target.id||e.target.parentNode.id).replace('page-','');
+      console.log(goToPageId);
+      v1.navigate("app/"+ appId +"/editor/" + goToPageId +"/", {trigger: true});
     }
 
   });

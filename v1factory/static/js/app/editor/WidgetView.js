@@ -108,7 +108,6 @@ define([
     },
 
     select: function(e) {
-      console.log("SELECT");
       this.model.trigger('selected');
       this.el.style.zIndex = 2003;
       e.stopPropagation();

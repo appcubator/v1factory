@@ -9,7 +9,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     tagName : 'div',
     selectedEl : null,
     events : {
-      'mousedown' : 'mousedown'
+      'mousedown' : 'mousedown',
+      'click #hover-div' : 'hoverClicked'
     },
 
     initialize: function(widgetsCollection){
@@ -31,7 +32,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'moveSelectedUp',
                       'moveSelectedLeft',
                       'moveSelectedRight',
-                      'deleteSelected');
+                      'deleteSelected',
+                      'hoverClicked');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
@@ -217,9 +219,10 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       this.selectedEl.moveRight();
     },
 
-    deleteSelected: function() {
+    deleteSelected: function(e) {
       if(!this.selectedEl) return;
       this.selectedEl.remove();
+      e.preventDefault();
     },
 
     doKeyBindings: function() {
@@ -228,6 +231,12 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       keyDispatcher.key('left', this.moveSelectedLeft);
       keyDispatcher.key('right', this.moveSelectedRight);
       keyDispatcher.key('backspace', this.deleteSelected);
+    },
+
+    hoverClicked: function() {
+      if(this.hoveredEl) {
+        this.hoveredEl.trigger('selected');
+      }
     },
 
     clear: function() { }
