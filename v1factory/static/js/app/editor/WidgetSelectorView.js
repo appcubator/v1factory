@@ -202,22 +202,26 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     moveSelectedDown: function(e) {
       if(!this.selectedEl) return;
+      if(keyDispatcher.textEditing === true) return;
       this.selectedEl.moveDown();
       e.preventDefault();
     },
 
     moveSelectedUp: function() {
       if(!this.selectedEl) return;
+      if(keyDispatcher.textEditing === true) return;
       this.selectedEl.moveUp();
     },
 
     moveSelectedLeft: function() {
       if(!this.selectedEl) return;
+      if(keyDispatcher.textEditing === true) return;
       this.selectedEl.moveLeft();
     },
 
     moveSelectedRight: function() {
       if(!this.selectedEl) return;
+      if(keyDispatcher.textEditing === true) return;
       this.selectedEl.moveRight();
     },
 
