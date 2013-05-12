@@ -49,7 +49,7 @@ function(ElementCollection,
       this.renderContextEntityForms();
       this.renderUIElementList();
 
-      this.$el.find('li:not(.ui-draggable)').draggable({
+      $(this.allList).find('li:not(.ui-draggable)').draggable({
         cursor: "move",
         cursorAt: { top: 0, left: 0 },
         helper: "clone",

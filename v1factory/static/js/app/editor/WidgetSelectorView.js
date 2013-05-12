@@ -5,7 +5,6 @@ define([
 function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
   var WidgetSelectorView = Backbone.UIView.extend({
-    el     : document.getElementById('elements-container'),
     className : 'editor-page',
     tagName : 'div',
     selectedEl : null,
@@ -67,6 +66,12 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         stop  : self.resized
       });
 
+      $(hoverDiv).draggable({
+        drag: self.moving,
+        stop: self.moved,
+        snapMode : "outer"
+      });
+
       $(selectDiv).draggable({
         containment: "parent",
         drag: self.moving,
@@ -74,10 +79,14 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         snapMode : "outer"
       });
 
-      selectDiv.style.zIndex = "2004";
 
-      $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
-      $('#elements-container').on('mousedown', this.deselect);
+      selectDiv.style.zIndex = "2004";
+      hoverDiv.style.zIndex = "2005";
+      hoverDiv.style.position = "absolute";
+      selectDiv.style.position = "absolute";
+
+      //$('.page.fdededfcbcbcd').on('mousedown', this.deselect);
+      //$('#elements-container').on('mousedown', this.deselect);
 
       return this;
     },
@@ -105,15 +114,16 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     setLayout: function(node, widgetModel) {
       $(this.selectDiv).fadeIn();
-      node.style.width = widgetModel.get('layout').get('width') * 80;
-      node.style.height = widgetModel.get('layout').get('height') * 15;
-      node.style.left = widgetModel.get('layout').get('left') * 80;
-      node.style.top = widgetModel.get('layout').get('top') * 15;
+      node.style.width = (widgetModel.get('layout').get('width') * 80) + 'px';
+      node.style.height = (widgetModel.get('layout').get('height') * 15) + 'px';
+      node.style.left = (widgetModel.get('layout').get('left') * 80) + 'px';
+      node.style.top = (widgetModel.get('layout').get('top') * 15) + 'px';
       return node;
     },
 
     widgetHover: function(widgetModel) {
       if(this.selectedEl && widgetModel.cid === this.selectedEl.cid) return;
+      this.hoveredEl = widgetModel;
       this.setLayout(this.hoverDiv, widgetModel);
     },
 
@@ -161,17 +171,23 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     moving: function(e, ui) {
-      var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
+      model = this.selectedEl;
+      if(e.target.id == "hover-div") { model = this.hoveredEl; }
+
+      var elem = iui.get('widget-wrapper-' + model.cid);
       elem.style.top = ui.position.top + 'px';
       elem.style.left = ui.position.left+ 'px';
     },
 
     moved: function(e, ui) {
+      model = this.selectedEl;
+      if(e.target.id == "hover-div") { model = this.hoveredEl; }
+
       var top = Math.round((ui.position.top / GRID_HEIGHT));
       var left = Math.round((ui.position.left / GRID_WIDTH));
-      this.selectedEl.get('layout').set('top', top);
-      this.selectedEl.get('layout').set('left', left);
-      this.setLayout(this.selectDiv, this.selectedEl);
+      model.get('layout').set('top', top);
+      model.get('layout').set('left', left);
+      this.setLayout(e.target, model);
     },
 
     deselect: function() {

@@ -41,8 +41,7 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetL
       _(self.widgetsCollection.models).each(function(widget) {
         self.placeUIElement(widget);
       });
-
-      this.widgetSelectorView.render();
+      this.widgetSelectorView.setElement(this.widgetsContainer).render();
     },
 
     // this function decides if widget or container

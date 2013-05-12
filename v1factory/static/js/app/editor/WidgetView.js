@@ -14,7 +14,7 @@ define([
     shadowElem : null,
 
     events: {
-      'mousedown'     : 'select',
+      'click'         : 'select',
       'click .delete' : 'remove',
       'mouseover'     : 'hovered',
       'mouseout'      : 'unhovered'
@@ -35,7 +35,8 @@ define([
                       'changedStyle',
                       'changedSource',
                       'toggleFull',
-                      'staticsAdded');
+                      'staticsAdded',
+                      'isMouseOn');
 
       this.model = widgetModel;
 
@@ -107,6 +108,7 @@ define([
     },
 
     select: function(e) {
+      console.log("SELECT");
       this.model.trigger('selected');
       this.el.style.zIndex = 2003;
       e.stopPropagation();
@@ -197,11 +199,34 @@ define([
     },
 
     hovered: function() {
+      this.hovered = true;
       this.model.trigger('hovered');
     },
 
-    unhovered: function() {
+    unhovered: function(e) {
+      if(this.isMouseOn(e)) return;
       this.model.trigger('unhovered');
+    },
+
+    isMouseOn: function(e) {
+      var self = this;
+
+      mouseX = e.pageX;
+      mouseY = e.pageY;
+      var div = $('#widget-wrapper-' + this.model.cid);
+      divTop = div.offset().top,
+      divLeft = div.offset().left,
+      divRight = divLeft + div.width(),
+      divBottom = divTop + div.height();
+      if(mouseX >= divLeft && mouseX <= divRight && mouseY >= divTop && mouseY <= divBottom) {
+        $('#hover-div').bind('mouseout', function(e) {
+          self.unhovered(e);
+          $(e.target).unbind('mouseout');
+        });
+        return true;
+      }
+
+      return false;
     }
   });
 
