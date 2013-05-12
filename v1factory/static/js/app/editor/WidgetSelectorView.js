@@ -33,7 +33,9 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'moveSelectedLeft',
                       'moveSelectedRight',
                       'deleteSelected',
-                      'hoverClicked');
+                      'hoverClicked',
+                      'clickedPage',
+                      'isMouseOn');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
@@ -87,8 +89,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       hoverDiv.style.position = "absolute";
       selectDiv.style.position = "absolute";
 
-      //$('.page.fdededfcbcbcd').on('mousedown', this.deselect);
-      //$('#elements-container').on('mousedown', this.deselect);
+      $('.page.full').on('click', this.clickedPage);
 
       return this;
     },
@@ -237,6 +238,27 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       if(this.hoveredEl) {
         this.hoveredEl.trigger('selected');
       }
+    },
+
+    clickedPage: function(e) {
+      if(this.isMouseOn(e)) return;
+      this.deselect();
+    },
+
+    isMouseOn: function(e) {
+      var self = this;
+
+      mouseX = e.pageX;
+      mouseY = e.pageY;
+      var div = $('#widget-wrapper-' + this.selectedEl.cid);
+      divTop = div.offset().top,
+      divLeft = div.offset().left,
+      divRight = divLeft + div.width(),
+      divBottom = divTop + div.height();
+      if(mouseX >= divLeft && mouseX <= divRight && mouseY >= divTop && mouseY <= divBottom) {
+        return true;
+      }
+      return false;
     },
 
     clear: function() { }
