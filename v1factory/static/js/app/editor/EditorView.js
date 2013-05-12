@@ -26,7 +26,7 @@ function( PageModel,
           TutorialView ) {
 
   var EditorView = Backbone.View.extend({
-    className : 'sample',
+    className : 'editor-page',
     css: "bootstrap-editor",
 
     events    : {
@@ -114,8 +114,8 @@ function( PageModel,
     },
 
     save : function(callback) {
-
-      $('#save').fadeOut().html("<span>Saving...</span>").fadeIn();
+      var $el = $('.menu-button.save');
+      $el.fadeOut().html("<span>Saving...</span>").fadeIn();
       var curAppState = v1State.toJSON();
       $.ajax({
         type: "POST",
@@ -125,11 +125,11 @@ function( PageModel,
           iui.dontAskBeforeLeave();
         },
         success: function() {
-          $('#save').html("<span>Saved</span>").fadeIn();
+          $el.html("<span>Saved</span>").fadeIn();
           if(typeof(callback) !== 'undefined'&&typeof(callback) == 'function')
             { callback(); }
           setTimeout(function(){
-            $('#save').html("<span>Save</span>").fadeIn();
+            $el.html("<span>Save</span>").fadeIn();
           },3000);
         },
         error: function(data, t) {

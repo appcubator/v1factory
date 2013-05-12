@@ -63,13 +63,14 @@ def app_page(request, app_id):
 
   themes = UITheme.objects.all();
   themes = [t.to_dict() for t in themes]
-
-  return render(request, 'app-show.html', {'app'    : app,
-                                           'app_id' : long(app_id),
-                                           'title'  : 'The Garage',
-                                           'themes' : simplejson.dumps(list(themes)),
-                                           'apps'   : request.user.apps.all(),
-                                           'user'   : request.user})
+  page_context = {'app'    : app,
+                  'app_id' : long(app_id),
+                  'title'  : 'The Garage',
+                  'themes' : simplejson.dumps(list(themes)),
+                  'apps'   : request.user.apps.all(),
+                  'user'   : request.user}
+  add_statics_to_context(page_context, app)
+  return render(request, 'app-show.html', page_context)
 
 @require_POST
 @login_required

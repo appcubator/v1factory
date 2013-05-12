@@ -179,7 +179,7 @@ function (AppModel,
 
       pageId = pageId;
       var cleanDiv = document.createElement('div');
-      cleanDiv.className = "clean-div";
+      cleanDiv.className = "clean-div editor-page";
       $(document.body).append(cleanDiv);
       v1App.view  = new EditorView({}, pageId);
       v1App.view.setElement(cleanDiv).render();
