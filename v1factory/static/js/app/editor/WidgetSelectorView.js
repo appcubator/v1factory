@@ -27,6 +27,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'bindWidget',
                       'mousedown',
                       'deselect',
+                      'hideNode',
                       'doKeyBindings',
                       'moveSelectedDown',
                       'moveSelectedUp',
@@ -51,16 +52,14 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
       var hoverDiv = document.createElement('div');
       hoverDiv.id = "hover-div";
-      hoverDiv.style.width = 0;
-      hoverDiv.style.height = 0;
       this.hoverDiv = hoverDiv;
+      this.hideNode(hoverDiv);
       this.el.appendChild(hoverDiv);
 
       var selectDiv = document.createElement('div');
       selectDiv.id = "select-div";
-      selectDiv.style.width = 0;
-      selectDiv.style.height = 0;
       this.selectDiv = selectDiv;
+      this.hideNode(selectDiv);
       this.el.appendChild(selectDiv);
 
       $(selectDiv).resizable({
@@ -116,7 +115,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     setLayout: function(node, widgetModel) {
-      $(this.selectDiv).fadeIn();
+      $(node).show();
       node.style.width = (widgetModel.get('layout').get('width') * 80) + 'px';
       node.style.height = (widgetModel.get('layout').get('height') * 15) + 'px';
       node.style.left = (widgetModel.get('layout').get('left') * 80) + 'px';
@@ -131,8 +130,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     widgetUnhover: function(widgetModel) {
-      this.hoverDiv.style.height = 0;
-      this.hoverDiv.style.width = 0;
+      this.hideNode(this.hoverDiv);
     },
 
     bindLocation: function() { },
@@ -195,8 +193,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     deselect: function() {
       this.selectedEl = null;
-      this.selectDiv.style.height = 0;
-      this.selectDiv.style.width = 0;
+      this.hideNode(this.selectDiv);
     },
 
     moveSelectedDown: function(e) {
@@ -261,7 +258,13 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       return false;
     },
 
-    clear: function() { }
+    clear: function() { },
+
+    hideNode: function(node) {
+      node.style.height = 0;
+      node.style.width = 0;
+      $(node).hide();
+    }
 
   });
 
