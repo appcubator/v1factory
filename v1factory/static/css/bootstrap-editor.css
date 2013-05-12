@@ -2869,14 +2869,6 @@ a.badge:hover {
 
 
 /* Reset */
-.page > * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 
 .section > * {
   box-sizing:border-box;
@@ -3052,7 +3044,6 @@ a.badge:hover {
 .widget-wrapper {
   z-index: 1001;
   position: absolute;
-  cursor: move;
   border-radius: 3px;
   overflow: visible;
   background-color: rgba(124, 192, 213, 0.0);

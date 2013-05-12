@@ -3,6 +3,23 @@ define([
   'mixins/BackboneUI'
 ],function() {
 
+    $.fn.selectText = function(){
+     var doc = document;
+     var element = this[0];
+     console.log(this, element);
+     if (doc.body.createTextRange) {
+         var range = document.body.createTextRange();
+         range.moveToElementText(element);
+         range.select();
+     } else if (window.getSelection) {
+         var selection = window.getSelection();        
+         var range = document.createRange();
+         range.selectNodeContents(element);
+         selection.removeAllRanges();
+         selection.addRange(range);
+     }
+  };
+
   var WidgetView = Backbone.UIView.extend({
     el: null,
     className: 'pseudo-outline widget-wrapper',
@@ -36,7 +53,9 @@ define([
                       'changedSource',
                       'toggleFull',
                       'staticsAdded',
-                      'isMouseOn');
+                      'isMouseOn',
+                      'switchEditModeOn',
+                      'switchEditModeOff');
 
       this.model = widgetModel;
 
@@ -58,6 +77,10 @@ define([
       this.model.get('content_attribs').bind("change:src", this.changedSource, this);
       this.model.get('content_attribs').bind("change:value", this.changedValue, this);
       this.model.get('content_attribs').bind("change:style", this.changedStyle, this);
+
+      this.model.bind("startEditing", this.switchEditModeOn, this);
+      this.model.bind("deselected",   this.switchEditModeOff, this);
+
     },
 
     render: function() {
@@ -108,9 +131,11 @@ define([
     },
 
     select: function(e) {
-      this.model.trigger('selected');
-      this.el.style.zIndex = 2003;
-      e.stopPropagation();
+        if(!this.editMode) {
+        this.model.trigger('selected');
+        this.el.style.zIndex = 2003;
+        e.stopPropagation();
+      }
     },
 
     changedWidth: function(a) {
@@ -198,6 +223,7 @@ define([
     },
 
     hovered: function() {
+      if(this.editMode) return;
       this.hovered = true;
       this.model.trigger('hovered');
     },
@@ -226,7 +252,27 @@ define([
       }
 
       return false;
+    },
+
+    switchEditModeOn: function() {
+      this.editMode = true;
+      var el = $(this.el.firstChild);
+      this.el.firstChild.style.zIndex = 2003;
+      el.attr('contenteditable', 'true');
+      el.focus();
+      el.selectText();
+    },
+
+    switchEditModeOff: function() {
+      if(this.editMode === false) return;
+      console.log("OFFF");
+      this.editMode = false;
+      var el = $(this.el.firstChild);
+      val = el.html();
+      this.model.set('content', val);
+      el.attr('contenteditable', 'false');
     }
+
   });
 
   return WidgetView;

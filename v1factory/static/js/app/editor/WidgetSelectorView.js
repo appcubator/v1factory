@@ -10,7 +10,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     selectedEl : null,
     events : {
       'mousedown' : 'mousedown',
-      'click #hover-div' : 'hoverClicked'
+      'click #hover-div' : 'hoverClicked',
+      'dblclick #select-div' : 'doubleClicked'
     },
 
     initialize: function(widgetsCollection){
@@ -192,6 +193,9 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     deselect: function() {
+      if(this.selectedEl) {
+        this.selectedEl.trigger('deselected');
+      }
       this.selectedEl = null;
       this.hideNode(this.selectDiv);
     },
@@ -238,8 +242,14 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
     },
 
     clickedPage: function(e) {
-      if(this.isMouseOn(e)) return;
-      this.deselect();
+      if(this.selectedEl && !this.isMouseOn(e)) {
+        this.deselect();
+      }
+    },
+
+    doubleClicked: function(e) {
+      this.selectedEl.trigger('startEditing');
+      this.hideNode(this.selectDiv);
     },
 
     isMouseOn: function(e) {
