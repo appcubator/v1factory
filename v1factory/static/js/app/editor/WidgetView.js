@@ -268,6 +268,7 @@ define([
 
     switchEditModeOff: function() {
       if(this.editMode === false) return;
+      this.model.trigger('stopEditing');
       this.editMode = false;
       this.$el.removeClass('textediting');
       var el = $(this.el.firstChild);

@@ -27,7 +27,6 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetL
       this.widgetsCollection = widgetsCollection;
       this.widgetsCollection.bind('add', this.placeUIElement);
 
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection);
       this.widgetSelectorView = new WidgetSelectorView(this.widgetsCollection);
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });

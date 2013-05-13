@@ -1,8 +1,9 @@
 define([
+  'app/editor/WidgetEditorView',
   'mixins/BackboneUI',
   'iui'
 ],
-function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
+function(WidgetEditorView) {
 
   var WidgetSelectorView = Backbone.UIView.extend({
     className : 'editor-page',
@@ -37,10 +38,13 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
                       'deleteSelected',
                       'hoverClicked',
                       'clickedPage',
-                      'isMouseOn');
+                      'isMouseOn',
+                      'stoppedEditing');
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
+      this.widgetEditorView = new WidgetEditorView();
+
       var self = this;
       _(this.widgetsCollection.models).each(self.bindWidget);
       this.doKeyBindings();
@@ -117,10 +121,10 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     setLayout: function(node, widgetModel) {
       $(node).show();
-      node.style.width = (widgetModel.get('layout').get('width') * 80) + 'px';
+      node.style.width  = (widgetModel.get('layout').get('width') * 80) + 'px';
       node.style.height = (widgetModel.get('layout').get('height') * 15) + 'px';
-      node.style.left = (widgetModel.get('layout').get('left') * 80) + 'px';
-      node.style.top = (widgetModel.get('layout').get('top') * 15) + 'px';
+      node.style.left   = (widgetModel.get('layout').get('left') * 80) + 'px';
+      node.style.top    = (widgetModel.get('layout').get('top') * 15) + 'px';
       return node;
     },
 
@@ -150,6 +154,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
         self.setLayout(self.selectDiv, widgetModel);
       });
       this.setLayout(this.selectDiv, widgetModel);
+      this.selectDiv.appendChild(this.widgetEditorView.setModel(widgetModel).render().el);
     },
 
     resizing: function(e, ui) {
@@ -196,6 +201,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
       if(this.selectedEl) {
         this.selectedEl.trigger('deselected');
       }
+      this.widgetEditorView.clear();
       this.selectedEl = null;
       this.hideNode(this.selectDiv);
     },
@@ -254,7 +260,12 @@ function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView) {
 
     doubleClicked: function(e) {
       this.selectedEl.trigger('startEditing');
+      this.selectedEl.bind('stopEditing', this.stoppedEditing);
       this.hideNode(this.selectDiv);
+    },
+
+    stoppedEditing: function() {
+      this.setLayout(this.selectDiv, this.selectedEl);
     },
 
     isMouseOn: function(e) {

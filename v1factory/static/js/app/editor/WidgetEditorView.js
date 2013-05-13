@@ -9,85 +9,57 @@ define([
 function(WidgetContentEditor, WidgetLayoutEditor, WidgetInfoEditorView, ImageSliderEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
-    el     : document.getElementById('editor-page'),
-    className : 'editor-page fadeIn',
+    className : 'widget-editor fadeIn',
+    id: 'widget-editor',
     tagName : 'div',
+    css : 'widget-editor',
 
     events : {
       'click .edit-slides-button' : 'openSlideEditor'
     },
 
-    initialize: function(widgetsCollection){
+    initialize: function(){
       _.bindAll(this, 'render',
-                      'deselect',
-                      'bindWidget',
                       'clear',
-                      'openSlideEditor');
+                      'openSlideEditor',
+                      'setModel');
 
-      this.widgetsCollection    = widgetsCollection;
-      this.widgetsCollection.bind('add', this.bindWidget);
+      iui.loadCSS(this.css);
       var self = this;
-      _(this.widgetsCollection.models).each(self.bindWidget);
-
+      this.model = null;
     },
 
-    mousedown: function(e) { e.stopImmediatePropagation(); },
-
-    bindWidget: function(widget) {
-      var self = this;
-      widget.on('selected', function() {
-        self.newSelected(this);
-      });
-    },
-
-    newSelected: function(widgetModel) {
-      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
-      this.deselect();
-      this.selectedEl = widgetModel;
-      this.render();
+    setModel: function(widgetModel) {
+      this.model = widgetModel;
+      return this;
     },
 
     render: function() {
-      this.clear();
       this.$el.fadeIn();
-
-      if(this.selectedEl && !(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').has('query'))) {
-        this.layoutEditor = new WidgetLayoutEditor(this.selectedEl);
+      console.log(this.model);
+      if(!(this.model.has('container_info') && this.model.get('container_info').has('query'))) {
+        this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.el.appendChild(this.layoutEditor.el);
       }
 
-      if(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').get('action') == "imageslider") {
+      if(this.model.has('container_info') && this.model.get('container_info').get('action') == "imageslider") {
         var slidesElem = document.createElement('ul');
         var html = '<li class="option-button edit-slides-button">Edit Slides</li>';
         slidesElem.innerHTML = html;
         this.el.appendChild(slidesElem);
       }
 
-      if(this.selectedEl.has('container_info') && this.selectedEl.get('container_info').has('query')) {
-        this.infoEditor = new WidgetInfoEditorView(this.selectedEl);
+      if(this.model.has('container_info') && this.model.get('container_info').has('query')) {
+        this.infoEditor = new WidgetInfoEditorView(this.model);
         this.el.appendChild(this.infoEditor.el);
       }
 
-      if(this.selectedEl.get('container_info') === null) {
-        this.contentEditor = new WidgetContentEditor(this.selectedEl);
+      if(this.model.get('container_info') === null) {
+        this.contentEditor = new WidgetContentEditor(this.model);
         this.el.appendChild(this.contentEditor.el);
       }
 
-      iui.get('widget-wrapper-' + this.selectedEl.cid).appendChild(this.el);
-      iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2002;
-
-      $('.page.fdededfcbcbcd').on('mousedown', this.deselect);
-      $('#elements-container').on('mousedown', this.deselect);
-
       return this;
-    },
-
-    deselect: function() {
-      if(this.selectedEl) {
-        iui.get('widget-wrapper-' + this.selectedEl.cid).style.zIndex = 2000;
-      }
-      this.selectedEl = null;
-      this.clear();
     },
 
     openSlideEditor: function() {

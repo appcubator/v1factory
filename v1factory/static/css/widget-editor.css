@@ -1,0 +1,11 @@
+#widget-editor {
+  width: 240px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #fff;
+}
+
+#widget-editor  ul {
+  margin: 0;
+}
