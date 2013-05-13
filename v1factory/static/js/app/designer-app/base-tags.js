@@ -93,7 +93,6 @@
       {
         tagName : 'hr',
         cons_attribs : {
-          class : 'span12'
         },
         content : null,
         isSingle: true

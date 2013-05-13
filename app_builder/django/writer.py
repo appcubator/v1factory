@@ -119,8 +119,8 @@ class DjangoAppWriter:
 
     def write_string(content, dest_str):
       dest_tokens = dest_str.split('/')
-      f = open(join(dest, *dest_tokens), "w")
-      f.write(content)
+      f = open(join(dest, *dest_tokens), "wb")
+      f.write(content.encode("utf-8"))
       f.close()
 
     def copy_file(src_str, dest_str):

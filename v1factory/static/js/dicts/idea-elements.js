@@ -103,7 +103,6 @@ uiLibrary = {
     {
       tagName : 'div',
       attribs : {
-        class : 'span12'
       },
       content : null,
       isSingle: false
