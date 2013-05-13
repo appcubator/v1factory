@@ -9,6 +9,7 @@ from django import forms
 from django.utils import simplejson
 
 import requests
+import re
 
 # Operations
 def format_full_details(details):
