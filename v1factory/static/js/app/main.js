@@ -42,8 +42,8 @@ require.config({
 //libs
 require([
   "app/models/AppModel",
-  "app/views/SimpleModalView",
-  "app/views/ErrorModalView",
+  "mixins/SimpleModalView",
+  "mixins/ErrorModalView",
   "app/tutorial/TutorialView",
   "app/views/AppInfoView",
   "app/views/EntitiesView",
@@ -52,6 +52,8 @@ require([
   "app/views/OverviewPageView",
   "app/editor/EditorView",
   "app/editor/KeyDispatcher",
+  "mixins/SimpleDialogueView",
+  "mixins/ErrorDialogueView",
   "backbone",
   "bootstrap",
   "iui",
@@ -67,7 +69,9 @@ function (AppModel,
           PagesView,
           OverviewPageView,
           EditorView,
-          KeyDispatcher) {
+          KeyDispatcher,
+          SimpleDialogueView,
+          ErrorDialogueView) {
 
   var v1App = Backbone.Router.extend({
 
@@ -198,10 +202,10 @@ function (AppModel,
                   if(DEBUG) {
                     content = { text: data.errors };
                   }
-                  new ErrorModalView(content);
+                  new ErrorDialogueView(content);
                 }
                 else {
-                  new SimpleModalView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
+                  new SimpleDialogueView({ text: 'Your app is available at <br /><a href="'+ data.site_url + '">'+ data.site_url +'</a>'});
                 }
               },
               error: function(data) {

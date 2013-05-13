@@ -1,6 +1,6 @@
 define([
   'app/views/UrlView',
-  'app/views/SimpleModalView',
+  'mixins/SimpleModalView',
   'app/templates/PageTemplates',
   'iui',
   'backbone'
