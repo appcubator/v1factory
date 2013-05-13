@@ -53,6 +53,7 @@ class MyUserCreationForm(auth_forms.UserCreationForm):
   def clean_username(self):
     if not re.search(r'^[a-zA-Z0-9_]+$', self.cleaned_data['username']):
       raise forms.ValidationError("Username must be alphanumeric.")
+    return super(MyUserCreationForm, self).clean_username()
 
 
   def __init__(self, *args, **kwargs):
