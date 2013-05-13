@@ -71,8 +71,6 @@ function( PageModel,
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
 
-
-
       var page = appState.pages[pageId];
 
       var self = this; // for binding deploy to ctrlshiftd
@@ -105,6 +103,8 @@ function( PageModel,
       this.galleryEditor.render();
       this.widgetsManager.render();
       this.navbarEditor.render();
+
+      this.setupPageWrapper();
 
       $('#loading-gif').fadeOut().remove();
     },
@@ -243,6 +243,11 @@ function( PageModel,
       var goToPageId = (e.target.id||e.target.parentNode.id).replace('page-','');
       console.log(goToPageId);
       v1.navigate("app/"+ appId +"/editor/" + goToPageId +"/", {trigger: true});
+    },
+
+    setupPageWrapper: function() {
+      var height = window.innerHeight - 10;
+      iui.get('page-wrapper').style.height = height+ 'px';
     }
 
   });
