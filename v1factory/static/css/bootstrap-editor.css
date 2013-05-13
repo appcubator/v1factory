@@ -6088,3 +6088,14 @@ a.badge:hover {
   text-align: center;
   color: #000;
 }
+
+.navbar .hide-btn#hide-toggle {
+  display: inline-block;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 120px;
+  height: 30px;
+  font-size: 12px;
+  margin-top: -36px;
+  margin-right: 4px;
+  z-index: 2000;
+}
