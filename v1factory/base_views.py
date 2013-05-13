@@ -49,6 +49,10 @@ class MyUserCreationForm(auth_forms.UserCreationForm):
     if bs not in ['v1key']:
       raise forms.ValidationError("Incorrect beta secret")
 
+  def clean_username(self):
+    if not re.search(r'^[a-zA-Z0-9_]+$', self.cleaned_data['username']):
+      raise forms.ValidationError("Username must be alphanumeric.")
+
 
   def __init__(self, *args, **kwargs):
     super(MyUserCreationForm, self).__init__(*args, **kwargs)
