@@ -11,18 +11,13 @@ function(WidgetClassPickerView, FormEditorView) {
     events : {
       'click .a-pick'            : 'changeAlignment',
       'click .padding'           : 'changePadding',
-      'click #pick-style'        : 'openStylePicker',
       'click #delete-widget'     : 'deleteWidget',
-      'click #edit-form-btn'     : 'openFormEditor',
       'mouseover .tt'            : 'showToolTip',
       'mouseout .tt'             : 'hideToolTip'
     },
 
     initialize: function(widgetModel){
       _.bindAll(this, 'render',
-                      'renderStyleEditing',
-                      'renderEditForm',
-                      'openFormEditor',
                       'clear',
                       'changeAlignment',
                       'changePadding',
@@ -74,27 +69,8 @@ function(WidgetClassPickerView, FormEditorView) {
 
     render: function() {
       var self = this;
-
       this.el.appendChild(this.renderPaddingInfo());
       this.el.appendChild(this.renderLayoutInfo());
-      if(this.model.get('container_info')&& this.model.get('container_info').has('form')) {
-        this.el.appendChild(this.renderEditForm());
-      }
-      else {
-        this.el.appendChild(this.renderStyleEditing());
-      }
-    },
-
-    renderStyleEditing: function(e) {
-      var li       = document.createElement('ul');
-      li.innerHTML += '<span id="pick-style" class="option-button tt" style="width:194px; display: inline-block;"><strong>Pick Style</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:34px; margin-left:1px; display: inline-block;"></span>';
-      return li;
-    },
-
-    renderEditForm: function(e) {
-      var li       = document.createElement('ul');
-      li.innerHTML += '<span id="edit-form-btn" class="option-button tt" style="width:194px; display: inline-block;"><strong>Edit Form</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:34px; margin-left:1px; display: inline-block;"></span>';
-      return li;
     },
 
     renderLayoutInfo: function() {
@@ -118,10 +94,6 @@ function(WidgetClassPickerView, FormEditorView) {
       return ul;
     },
 
-    openStylePicker: function(e) {
-      new WidgetClassPickerView(this.model);
-    },
-
     showToolTip: function(e) {
       if(this.toolTip) {
         $(this.toolTip).remove();
@@ -142,10 +114,6 @@ function(WidgetClassPickerView, FormEditorView) {
       if(this.toolTip) {
         $(this.toolTip).remove();
       }
-    },
-
-    openFormEditor: function() {
-      new FormEditorView(this.model.get('container_info').get('form'), this.model.get('container_info').get('entity'));
     },
 
     deleteWidget: function() {

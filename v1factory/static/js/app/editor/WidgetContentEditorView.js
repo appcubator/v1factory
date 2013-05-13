@@ -52,7 +52,6 @@ function(WidgetClassPickerView) {
 
       if(this.model.get('content_attribs').has('src')) {
         this.el.appendChild(this.renderSrcInfo());
-        this.el.appendChild(this.renderHrefInfo());
       }
     },
 
