@@ -9,6 +9,7 @@ from django import forms
 from django.utils import simplejson
 
 import requests
+import re
 
 # Operations
 def format_full_details(details):
@@ -48,6 +49,11 @@ class MyUserCreationForm(auth_forms.UserCreationForm):
 
     if bs not in ['v1key']:
       raise forms.ValidationError("Incorrect beta secret")
+
+  def clean_username(self):
+    if not re.search(r'^[a-zA-Z0-9_]+$', self.cleaned_data['username']):
+      raise forms.ValidationError("Username must be alphanumeric.")
+    return super(MyUserCreationForm, self).clean_username()
 
 
   def __init__(self, *args, **kwargs):
