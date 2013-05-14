@@ -50,6 +50,9 @@ def app_new(request):
     a.save()
     return redirect(app_page, a.id)
 
+def app_new_racoon(request):
+  return render(request, 'app-new-racoon.html')
+
 @require_GET
 @login_required
 def app_page(request, app_id):

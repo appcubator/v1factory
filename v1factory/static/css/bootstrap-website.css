@@ -5092,6 +5092,9 @@ hr.vert {
     background-repeat: no-repeat;
     background-size: auto 100%;
   }
+  .mascot.happy {
+    background-image: url(../img/mascot-happy.png);
+  }
 
   .modal-cross {
     font-size: 16px;
