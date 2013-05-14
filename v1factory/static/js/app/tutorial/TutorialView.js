@@ -13,9 +13,9 @@ function() {
 
     events : {
       "click #tutorial-menu-list li" : "clickedMenuItem",
-      "submit .tutorial-q-form" : 'submittedQuestion',
-      'click .answer-slide'     : 'showAnswer',
-      "submit #feedback-form"   : 'submittedFeedback'
+      "submit .tutorial-q-form" : "submittedQuestion",
+      "click .answer-slide"     : "showAnswer",
+      "submit #feedback-form"   : "submittedFeedback"
     },
 
     initialize: function(directory) {
@@ -31,7 +31,8 @@ function() {
                       'submittedQuestion',
                       'showQuestionSlide',
                       'showAnswer',
-                      'submittedFeedback');
+                      'submittedFeedback',
+                      'menuScrolled');
 
       if(directory) this.addr = directory;
 
@@ -73,8 +74,10 @@ function() {
     renderLeftMenu: function() {
       var menuDiv = document.createElement('div');
       menuDiv.className = 'tutorial-menu';
+      menuDiv.innerHTML = '<div class="bottom-arrow"></div>';
       var menuUl  = document.createElement('ul');
       menuUl.id = "tutorial-menu-list";
+      $(menuUl).scroll(this.menuScrolled);
 
       var searchLi = document.createElement('div');
       searchLi.innerHTML = '<form class="tutorial-q-form"><input type="text" class="q-input" placeholder="Type your question..."><input class="btn" type="submit" value="?"></form>';
@@ -124,7 +127,7 @@ function() {
     },
 
     chooseSlide: function(addr, isNew) {
-      var self = this; 
+      var self = this;
 
       this.addr = addr;
       this.selectMenu();
@@ -132,11 +135,11 @@ function() {
       if(!isNew) {
 
         $(this.mainDiv).animate({
-          top: "800px",
+          top: "-100%",
           opacity: "0"
         }, 240, function() {
 
-          $(this).css({top: '-800px'});
+          $(this).css({top: '100%'});
           var obj = TutorialDirectory[addr[0]];
           if(addr[1]) {
             obj = obj.contents[addr[1]];
@@ -147,7 +150,7 @@ function() {
         });
 
         $(this.mainDiv).delay(240).animate({
-          top: "50px",
+          top: "3%",
           opacity: "1"
         });
       }
@@ -332,7 +335,22 @@ function() {
     closeModal: function() {
       this.remove();
       this.stopListening();
+    },
+
+    menuScrolled: function(e) {
+      var el = $(e.target);
+      var a = el.scrollTop();
+      var b = $(el).innerHeight();
+      var c = e.target.scrollHeight;
+
+      if(a+b == c) {
+        $('.bottom-arrow').fadeOut();
+      }
+      else {
+        $('.bottom-arrow').fadeIn();
+      }
     }
+
   });
 
   return TutorialView;

@@ -1,10 +1,14 @@
 .tutorial-view {
+  position: fixed;
+  top: 0;
   padding: 0;
   box-shadow: none;
   border: none;
   overflow: visible;
   color: #000;
+  height: 100%;
   font-family: freight-sans-pro, sans-serif;
+  z-index: 2002;
 }
 
 .tutorial-view h1,
@@ -29,14 +33,15 @@
   display: block;
   background-color: #fff;
   position: fixed;
+  width: 800px;
+  margin-top: 0;
+  margin-left: -390px;
+  height: 94%;
+  top: 3%;
   left: 50%;
-  width: 700px;
-  margin-left: -340px;
-  height: 580px;
-  top: 50px;
   z-index: 3002;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-  border-radius: 6px;
+  border-radius: 3px;
   overflow: hidden;
   overflow-y: scroll;
 
@@ -60,12 +65,12 @@
 }
 
 .tutorial-content .main-img {
-  width: 712px;
-  margin-left: -6px;
+  width: 100%;
   height: 220px;
-  border-top: 1px solid #bbbbbb;
-  border-bottom: 1px solid #bbbbbb;
-  box-shadow: inset 0 0 6px 0 rgba(60, 60, 60, 0.4);
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .tutorial-content ul {
@@ -92,17 +97,17 @@
 }
 
 .tutorial-menu {
+  position: fixed;
   width: 220px;
-  height: 560px;
   overflow: hidden;
   background-color: #fff;
-  position: fixed;
   left: 50%;
   top: 60px;
-  margin-left: -560px;
-  border-radius: 6px;
+  height: 90%;
+  top: 5%;
+  margin-left: -600px;
+  border-radius: 3px;
   padding-top: 60px;
-  padding-bottom: 20px;
   z-index: 3001;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   background-color: #f3f3f3;
@@ -113,7 +118,7 @@
 
 .search-bar {
   position: fixed;
-  top: 60px;
+  top: 5%;
   height: 60px;
   width: 220px;
   background-color: #fff;
@@ -126,9 +131,12 @@
 }
 
 .tutorial-menu ul {
-  height: 500px;
+  height: 100%;
+  overflow: scroll;
   overflow-y: scroll;
+  padding-bottom: 20px;
 }
+
 .tutorial-menu ul li {
   font-size: 14px;
   padding: 20px;
@@ -153,6 +161,7 @@
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #fefefe;
   background-color: #f9f9f9;
+  padding-bottom: 0;
 
 /*  box-shadow: inset -2px 0 3px 0 rgba(0, 0, 0, 0.3);
 */}
@@ -287,3 +296,13 @@ ul.text-cont li.answer-slide:hover {
   margin-top: 20px;
   float: right;
 }
+
+.bottom-arrow {
+  position: fixed;
+  bottom: 5%;
+  height: 20px;
+  width: 220px;
+  background-color: transparent;
+  background-image: url(../img/fade-down.png);
+}
+
