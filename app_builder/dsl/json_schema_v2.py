@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from validator_v2 import DictInited
 
 # Users
@@ -88,7 +90,7 @@ class Iterator(DictInited):
 
 UIElement._schema['container_info'] = { "_one_of": [ {"_type": FormContainer},
                                                      {"_type": Iterator},
-                                                     {"_type": None, "_null": True} ] }
+                                                     {"_type": None } ] }
 
 
 class Page(DictInited):
@@ -114,6 +116,6 @@ class App(DictInited):
             "keywords": { "_type":"" },
         }},
         "users": { "_type": UserConfig },
-        "entities": { "_type": [], "_each": Entity },
+        "entities": { "_type": [], "_each": { "_type":Entity }},
         "pages": { "_type": [], "_each": {"_type":Page} }
     }
