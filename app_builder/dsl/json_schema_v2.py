@@ -51,6 +51,11 @@ class UIElement(DictInited):
     _schema = {
         "layout": { "_type": Layout },
         "content": { "_type": "" },
+        "style": { "_type" : "" },
+        "isSingle": { "_type" : False },
+        "content_attribs": { "_type" : [] },
+        "class_name" : { "_type" : "" },
+        "tagName" : { "_type" : "" }
     }
     # this is going to get a container_info key later on
 
