@@ -107,7 +107,7 @@ class Navbar(DictInited):
         }
 
     _schema = {
-        "brandName": { "_type": "" },
+        "brandName": { "_one_of" : [{ "_type": "" }, {"_type" :None}] },
         "isHidden": { "_type": True },
         "items": { "_type": [], "_each": { "_type": NavbarItem }}
     }
