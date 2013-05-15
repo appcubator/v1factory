@@ -38,7 +38,12 @@ class Layout(DictInited):
         "width": { "_type": 0, "_min": 1, "_max": 64 },
         "height": { "_type": 0, "_min": 1 },
         "top": { "_type": 0, "_min": 0 },
-        "left": { "_type": 0, "_min": 0, "_max": 64 }
+        "left": { "_type": 0, "_min": 0, "_max": 64 },
+        "t_padding": { "_type": 0, "_min": 0, "_max": 64 },
+        "b_padding": { "_type": 0, "_min": 0, "_max": 64 },
+        "l_padding": { "_type": 0, "_min": 0, "_max": 64 },
+        "r_padding": { "_type": 0, "_min": 0, "_max": 64 },
+        "alignment": { "_type": "" }
     }
 
 
@@ -93,6 +98,20 @@ UIElement._schema['container_info'] = { "_one_of": [ {"_type": FormContainer},
                                                      {"_type": None } ] }
 
 
+class Navbar(DictInited):
+
+    class NavbarItem(DictInited):
+        _schema = {
+            "name": { "_type": "" },
+            #"link": { "_type": "" }
+        }
+
+    _schema = {
+        "brandName": { "_type": "" },
+        "isHidden": { "_type": True },
+        "items": { "_type": [], "_each": { "_type": NavbarItem }}
+    }
+
 class Page(DictInited):
     _schema = {
         "name": { "_type" : "" },
@@ -101,10 +120,17 @@ class Page(DictInited):
                 "_each": { "_type" : "" }
             }
         }},
+        "navbar": { "_type": Navbar },
         "uielements": { "_type": [], "_each": { "_type": UIElement }},
         "access_level": { "_type" : "" }
     }
 
+class Email(DictInited):
+    _schema = {
+        "name": { "_type": "" },
+        "subject": { "_type": "" },
+        "content": { "_type": "" },
+    }
 
 # Put it all together, you get an App
 class App(DictInited):
@@ -117,5 +143,6 @@ class App(DictInited):
         }},
         "users": { "_type": UserConfig },
         "entities": { "_type": [], "_each": { "_type":Entity }},
-        "pages": { "_type": [], "_each": {"_type":Page} }
+        "pages": { "_type": [], "_each": { "_type":Page }},
+        "emails": { "_type": [], "_each": { "_type":Email }},
     }
