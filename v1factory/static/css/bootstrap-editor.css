@@ -3286,41 +3286,6 @@ ul.list {
   background-image: url(../img/full-width-icon.png);
 }
 
-.top-panel-title {
-  height: 40px;
-  border-bottom: 1px solid #1b2535;
-  border-top: 1px solid #3b4555;
-  vertical-align: top;
-}
-
-.top-panel-title span.hide-gallery {
-  padding: 10px;
-}
-
-.top-panel-title .right-arrow {
-  display: inline-block;
-  height: 100%;
-  width: 40px;
-  background-image: url(../img/right-arrow.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  border-right: 1px solid #1b2535;
-}
-
-.top-panel-title h2 {
-  display: inline-block;
-  vertical-align: top;
-  font-weight: bold;
-  height: 40px;
-  padding-top: 8px;
-  padding-left: 8px;
-  border-left: 1px solid #3b4555;
-  color: #fff;
-  margin: 0;
-  font-size: 16px;
-  line-height: 20px;
-}
-
 .down-arrow {
   background-image: url('../img/down_arrow.png');
   background-position: center;

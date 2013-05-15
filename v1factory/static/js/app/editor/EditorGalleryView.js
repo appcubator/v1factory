@@ -66,6 +66,11 @@ function(ElementCollection,
       var self = this;
       var collection = new ElementCollection(defaultElements);
 
+      var li = document.createElement('li');
+      li.className = 'gallery-header';
+      li.innerHTML = 'Design Elements';
+      $(this.allList).append(li);
+
       _(collection.models).each(function(element) {
         if(element.get('className') == "buttons" ||
            element.get('className') == "textInputs" ||
@@ -99,6 +104,11 @@ function(ElementCollection,
     },
 
     renderAuthenticationForms: function() {
+      var li = document.createElement('li');
+      li.className = 'gallery-header';
+      li.innerHTML = 'Authentication';
+      $(this.allList).append(li);
+
       var self = this;
       if(appState.users.local) {
         var tempLocalLogin = '<li id="entity-user-Local_Login" class="login authentication">'+
@@ -129,6 +139,11 @@ function(ElementCollection,
     },
 
     renderCurrentUserElements: function() {
+      var li = document.createElement('li');
+      li.className = 'gallery-header';
+      li.innerHTML = 'Current User';
+      $(this.allList).append(li);
+
       var self = this;
       var tempLi = ['<li class="current-user" id="current-user-<%= id %>">',
                       '<span class="current-user-icon"></span>',
@@ -142,6 +157,13 @@ function(ElementCollection,
     },
 
     renderEntitiyFormsTablesLists: function() {
+
+      var li = document.createElement('li');
+      li.className = 'gallery-header';
+      li.innerHTML = 'Table Data';
+      $(this.allList).append(li);
+
+
       var self = this;
       var tempCreateFormLi = ['<li class="entity-create-form" id="entity-<%= entity_id %>">',
                               '<span class="create-form-icon"></span>',
@@ -168,6 +190,15 @@ function(ElementCollection,
     },
 
     renderContextEntityForms: function() {
+
+      if(g_contextCollection.models.length > 0) {
+        var li = document.createElement('li');
+        li.className = 'gallery-header';
+        li.innerHTML = 'Page Context Data';
+        $(this.allList).append(li);
+      }
+
+
       var self = this;
       var tempLi = ['<li class="context-entity" id="context-field-<%= entity_id %>-<%= field_id %>">',
                       '<span class="plus-icon"></span>',

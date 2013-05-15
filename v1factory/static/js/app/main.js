@@ -188,6 +188,7 @@ function (AppModel,
       $(document.body).append(cleanDiv);
       v1App.view  = new EditorView({}, pageId);
       v1App.view.setElement(cleanDiv).render();
+      olark('api.box.hide');
     },
 
     deploy: function() {

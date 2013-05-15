@@ -1,5 +1,6 @@
 define([
   'answer',
+  'backbone',
   './TutorialDict'
 ],
 function() {
