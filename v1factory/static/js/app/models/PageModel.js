@@ -14,6 +14,7 @@ function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollect
       "access_level" : "all",
       "uielements"   : []
     },
+
     initialize: function(bone) {
       bone = bone||{};
       this.set('url', new UrlModel(bone.url||{}));
@@ -28,6 +29,18 @@ function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollect
           self.get('uielements').push(new WidgetModel(uielement));
         }
       });
+    },
+
+    getHeight: function() {
+      var height  = 0;
+
+      _(this.get('uielements').models).each(function(uielement) {
+        var layout = uielement.get('layout');
+        var bottom = layout.get('top') + layout.get('height');
+        if(bottom > height) { console.log(uielement); height = bottom; }
+      });
+
+      return height;
     },
 
     toJSON: function() {

@@ -23,7 +23,7 @@ function( PageModel,
           EditorGalleryView,
           PageStylePicker,
           NavbarEditorView,
-          TutorialView ) {
+          TutorialView) {
 
   var EditorView = Backbone.View.extend({
     className : 'editor-page',
@@ -50,7 +50,9 @@ function( PageModel,
                       'save',
                       'deploy',
                       'renderDeployResponse',
-                      'clickedGoToPage');
+                      'clickedGoToPage',
+                      'setupPageHeight',
+                      'setupPageWrapper');
 
       if(pId) pageId = pId;
 
@@ -105,6 +107,8 @@ function( PageModel,
       this.navbarEditor.render();
 
       this.setupPageWrapper();
+      this.setupPageHeight();
+      window.onresize = this.setupPageWrapper;
 
       $('#loading-gif').fadeOut().remove();
     },
@@ -248,6 +252,12 @@ function( PageModel,
     setupPageWrapper: function() {
       var height = window.innerHeight - 10;
       iui.get('page-wrapper').style.height = height+ 'px';
+      this.$el.find('.page.full').css('height', height - 46);
+    },
+
+    setupPageHeight: function() {
+      var height = (this.model.getHeight() + 4) * 15;
+      this.$el.find('#elements-container').css('height', height);
     }
 
   });

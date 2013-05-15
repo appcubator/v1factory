@@ -2924,11 +2924,11 @@ a.badge:hover {
 #elements-container {
   position: relative;
   top: 0;
-  min-height: 900px;
-  width: 960px;
+/*  min-height: 900px;
+*/  width: 960px;
   margin-left: 100px;
-  height: 2000px;
-}
+/*  height: 2000px;
+*/}
 
 
 .page-wrapper {
