@@ -41,7 +41,6 @@ function(EntityCollection,
       },
 
       clickedAdd: function(e) {
-        alert('he');
         var newForm = this.$el.find('#add-entity-form');
         $(newForm).appendTo('#entities');
         $(newForm).fadeIn();
