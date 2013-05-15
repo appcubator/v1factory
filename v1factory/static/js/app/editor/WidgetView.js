@@ -96,20 +96,20 @@ define([
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
 
-      if(this.model.get('layout').has('l-padding')) {
-        this.el.style.paddingLeft = this.model.get('layout').get('l-padding');
+      if(this.model.get('layout').has('l_padding')) {
+        this.el.style.paddingLeft = this.model.get('layout').get('l_padding');
       }
 
-      if(this.model.get('layout').has('r-padding')) {
-        this.el.style.paddingRight = this.model.get('layout').get('r-padding');
+      if(this.model.get('layout').has('r_padding')) {
+        this.el.style.paddingRight = this.model.get('layout').get('r_padding');
       }
 
-      if(this.model.get('layout').has('t-padding')) {
-        this.el.style.paddingTop = this.model.get('layout').get('t-padding');
+      if(this.model.get('layout').has('t_padding')) {
+        this.el.style.paddingTop = this.model.get('layout').get('t_padding');
       }
 
-      if(this.model.get('layout').has('b-padding')) {
-        this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
+      if(this.model.get('layout').has('b_padding')) {
+        this.el.style.paddingBottom = this.model.get('layout').get('b_padding');
       }
 
       this.el.innerHTML = this.renderElement();
@@ -151,10 +151,10 @@ define([
     },
 
     changedPadding: function() {
-      this.el.style.paddingTop    = this.model.get('layout').get('t-padding');
-      this.el.style.paddingBottom = this.model.get('layout').get('b-padding');
-      this.el.style.paddingLeft   = this.model.get('layout').get('l-padding');
-      this.el.style.paddingRight  = this.model.get('layout').get('r-padding');
+      this.el.style.paddingTop    = this.model.get('layout').get('t_padding');
+      this.el.style.paddingBottom = this.model.get('layout').get('b_padding');
+      this.el.style.paddingLeft   = this.model.get('layout').get('l_padding');
+      this.el.style.paddingRight  = this.model.get('layout').get('r_padding');
     },
 
     toggleFull: function (argument) {

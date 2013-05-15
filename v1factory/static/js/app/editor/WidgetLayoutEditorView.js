@@ -47,22 +47,22 @@ function(WidgetClassPickerView, FormEditorView) {
 
       if(padding == "tb") {
         if($(e.target).hasClass('selected')) {
-          this.model.get('layout').set('t-padding', 15);
-          this.model.get('layout').set('b-padding', 15);
+          this.model.get('layout').set('t_padding', 15);
+          this.model.get('layout').set('b_padding', 15);
         }
         else {
-          this.model.get('layout').set('t-padding', 0);
-          this.model.get('layout').set('b-padding', 0);
+          this.model.get('layout').set('t_padding', 0);
+          this.model.get('layout').set('b_padding', 0);
         }
       }
       else {
         if($(e.target).hasClass('selected')) {
-          this.model.get('layout').set('r-padding', 15);
-          this.model.get('layout').set('l-padding', 15);
+          this.model.get('layout').set('r_padding', 15);
+          this.model.get('layout').set('l_padding', 15);
         }
         else {
-          this.model.get('layout').set('r-padding', 0);
-          this.model.get('layout').set('l-padding', 0);
+          this.model.get('layout').set('r_padding', 0);
+          this.model.get('layout').set('l_padding', 0);
         }
       }
     },
@@ -85,8 +85,8 @@ function(WidgetClassPickerView, FormEditorView) {
     },
 
     renderPaddingInfo: function() {
-      var paddingLR = this.model.get('layout').get('r-padding') > 0 ? "selected" : "";
-      var paddingTB = this.model.get('layout').get('b-padding') > 0 ? "selected" : "";
+      var paddingLR = this.model.get('layout').get('r_padding') > 0 ? "selected" : "";
+      var paddingTB = this.model.get('layout').get('b_padding') > 0 ? "selected" : "";
 
       var ul = document.createElement('ul');
       ul.className = "padding-picker right";

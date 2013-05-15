@@ -4,7 +4,12 @@ define(['backbone'], function(Backbone) {
       'top'    : 0,
       'left'   : 0,
       'height' : 8,
-      'width'  : 4
+      'width'  : 4,
+      't_padding' : '0',
+      'b_padding' : '0',
+      'l_padding' : '0',
+      'r_padding' : '0',
+      'alignment' : 'left'
     },
     toJSON: function() {
       var json = _.clone(this.attributes);
