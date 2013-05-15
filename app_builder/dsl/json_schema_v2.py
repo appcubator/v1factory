@@ -47,26 +47,6 @@ class Layout(DictInited):
     }
 
 
-class UIElement(DictInited):
-    _schema = {
-        "layout": { "_type": Layout },
-        "content": { "_type": "" },
-        "style": { "_type" : "" },
-        "isSingle": { "_type" : False },
-        "content_attribs": { "_type" : [] },
-        "class_name" : { "_type" : "" },
-        "tagName" : { "_type" : "" }
-    }
-    # this is going to get a container_info key later on
-
-
-class Node(DictInited):
-    _schema = {
-        "layout": { "_type": Layout },
-        "content": { "_type": "" },
-    }
-
-
 class Form(DictInited):
     _schema = {
         "name": { "_type" : "" },
@@ -90,6 +70,17 @@ class FormContainer(DictInited):
     }
 
 
+class Node(DictInited): # a uielement with no container_info
+    _schema = {
+        "layout": { "_type": Layout },
+        "content": { "_type": "" },
+        "style": { "_type" : "" },
+        "isSingle": { "_type" : False },
+        "content_attribs": { "_type" : [] },
+        "class_name": { "_type" : "" },
+        "tagName": { "_type" : "" },
+    }
+
 class Iterator(DictInited):
     _schema = {
         "entity": { "_type": "" },
@@ -98,9 +89,19 @@ class Iterator(DictInited):
     }
 
 
-UIElement._schema['container_info'] = { "_one_of": [ {"_type": FormContainer},
-                                                     {"_type": Iterator},
-                                                     {"_type": None } ] }
+class UIElement(DictInited):
+    _schema = {
+        "layout": { "_type": Layout },
+        "content": { "_type": "" },
+        "style": { "_type" : "" },
+        "isSingle": { "_type" : False },
+        "content_attribs": { "_type" : [] },
+        "class_name": { "_type" : "" },
+        "tagName": { "_type" : "" },
+        "container_info": { "_one_of": [ {"_type": FormContainer},
+                                         {"_type": Iterator},
+                                         {"_type": None } ] }
+    }
 
 
 class Navbar(DictInited):
