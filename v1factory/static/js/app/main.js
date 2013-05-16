@@ -14,7 +14,8 @@ require.config({
     "dicts" : "../dicts",
     "mixins" : "../mixins",
     "key" : "../libs/keymaster/keymaster",
-    "answer" : "../libs/answer/answer"
+    "answer" : "../libs/answer/answer",
+    "prettyCheckable" : "../libs/jquery/prettyCheckable"
   },
 
   shim: {

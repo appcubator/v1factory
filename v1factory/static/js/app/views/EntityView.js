@@ -4,7 +4,8 @@ define([
   'app/views/FormEditorView',
   'app/views/UploadExcelView',
   'app/views/ShowDataView',
-  'app/templates/EntitiesTemplates'
+  'app/templates/EntitiesTemplates',
+  'prettyCheckable'
 ],
 function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
@@ -75,8 +76,10 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
                            //forms: self.model.get('forms').models };
 
       var template = _.template(EntitiesTemplates.Entity, page_context);
-
       $(this.el).append(template);
+      console.log(this.$el.find('input[type=checkbox]'));
+      iui.loadCSS('prettyCheckable');
+      this.$el.find('input[type=checkbox]').prettyCheckable();
     },
 
 

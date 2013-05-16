@@ -82,6 +82,9 @@ define([
         document.getElementById('linkedin').checked = this.model.get('linkedin');
         document.getElementById('local').checked = this.model.get('local');
 
+        iui.loadCSS('prettyCheckable');
+        this.$el.find('input[type=checkbox]').prettyCheckable();
+
         return this;
       },
 
