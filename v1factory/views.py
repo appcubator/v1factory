@@ -10,10 +10,9 @@ from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, Ap
 from v1factory.email.sendgrid_email import send_email
 from v1factory.models import DomainRegistration
 
-from app_builder.analyzer import AnalyzedApp
+from app_builder.analyzer import App as AnalyzedApp
 from app_builder.utils import get_xl_data, add_xl_data, get_model_data
 from app_builder.deployment.models import Deployment
-from app_builder.validator import validate_app_state
 
 import requests
 import traceback
@@ -114,19 +113,11 @@ def app_save_state(request, app):
 
 def validate_state(app_state):
 
-  # type check
-  state_errs = validate_app_state(app_state)
-  if len(state_errs) > 0:
-    return "\n\n".join(state_errs)
-
   # other checks
   try:
-    a = AnalyzedApp(app_state)
+    a = AnalyzedApp.create_from_dict(app_state)
   except Exception, e:
     return traceback.format_exc(100)
-
-  # winning
-  return None
 
 @login_required
 def uie_state(request, app_id):

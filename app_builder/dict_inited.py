@@ -2,14 +2,6 @@
 
 from copy import deepcopy
 
-def validate_app_state(app_state):
-    pass
-    """
-    assert 'Homepage' in [ p['name'] for p in app_state['pages'] ]
-    assert 'Registration Page' in [ p['name'] for p in app_state['pages'] ]
-    return validate_dict(app_state, APP_SCHEMA)
-    """
-
 
 class DictInited(object):
     """Base class for dict_inited objects.

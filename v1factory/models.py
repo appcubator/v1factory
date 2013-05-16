@@ -126,11 +126,11 @@ class App(models.Model):
     return summary
 
   def write_to_tmpdir(self, d_user):
-    from app_builder.analyzer import AnalyzedApp
+    from app_builder.analyzer import App as AnalyzedApp
     from app_builder.django.coordinator import analyzed_app_to_app_components
     from app_builder.django.writer import DjangoAppWriter
 
-    a = AnalyzedApp(self.state)
+    a = AnalyzedApp.create_from_dict(self.state)
     dw = analyzed_app_to_app_components(a, d_user)
     tmp_project_dir = DjangoAppWriter(dw, self.css()).write_to_fs()
 
@@ -189,7 +189,7 @@ class App(models.Model):
 
   def deploy_test(self):
     return "do the funky chicken"
-    analyzed_app = AnalyzedApp(self.state, self.name)
+    analyzed_app = AnalyzedApp.create_from_dict(self.state, self.name)
     django_writer = DjangoWriter(analyzed_app)
 
     ### Also want to print:
