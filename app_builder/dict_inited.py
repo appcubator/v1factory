@@ -93,8 +93,8 @@ class DictInited(object):
             return o
 
         else:
-            return errors
-            raise Exception("Errors while creating %s" % cls.__name__)
+            separator = "\n============================================================\n"
+            raise Exception("Errors while creating %s: \n%s" % (cls.__name__, separator.join(errors)))
 
     @classmethod
     def validate_dict(cls, thing, schema):

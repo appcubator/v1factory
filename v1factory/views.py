@@ -95,7 +95,7 @@ def app_get_state(request, app):
 
 @require_POST
 @login_required
-def app_save_state(request, app):
+def app_save_state(request, app, require_valid=True):
   old_state = app.state
   app._state_json = request.body
   app.state['name'] = app.name
@@ -103,13 +103,19 @@ def app_save_state(request, app):
     app.full_clean()
   except Exception, e:
     return (400, str(e))
-  #app.save()
-  state_err = validate_state(app.state)
-  if state_err is not None:
-    return (400, state_err)
+
+  if not require_valid:
+      app.save()
+      return (200, "ok")
+
   else:
-    app.save()
-    return (200, "ok")
+    state_err = validate_state(app.state)
+    if state_err is not None:
+      import django.utils.html
+      return (400, django.utils.html.escape(state_err))
+    else:
+      app.save()
+      return (200, "ok")
 
 def validate_state(app_state):
 
