@@ -34,7 +34,7 @@ require.config({
 });
 
 require([
-  'app/views/SimpleModalView',
+  'mixins/SimpleModalView',
   'app/views/LoginModalView'
 ],
 function(SimpleModalView, LoginModalView) {
