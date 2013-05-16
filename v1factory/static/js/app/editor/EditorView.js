@@ -9,6 +9,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
+  'editor/GuideView',
   'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
   'app/editor/editor-templates'
@@ -23,6 +24,7 @@ function( PageModel,
           EditorGalleryView,
           PageStylePicker,
           NavbarEditorView,
+          GuideView,
           TutorialView) {
 
   var EditorView = Backbone.View.extend({
@@ -69,6 +71,7 @@ function( PageModel,
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
+      this.guides           = new GuideView(this.widgetsCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
@@ -105,6 +108,7 @@ function( PageModel,
       this.galleryEditor.render();
       this.widgetsManager.render();
       this.navbarEditor.render();
+      this.guides.setElement($('#elements-container')).render();
 
       this.setupPageWrapper();
       this.setupPageHeight();

@@ -3738,3 +3738,29 @@ overflow: hidden;
   margin-right: 4px;
   z-index: 2000;
 }
+
+
+.guide-line-horizontal {
+  display: none;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  border: 1px dashed #ccc;
+}
+.guide-line-horizontal.show {
+  display: inline-block;
+}
+
+.guide-line-vertical {
+  display: none;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  border: 1px dashed #ccc;
+}
+
+.guide-line-vertical.show {
+  display: inline-block;
+}
