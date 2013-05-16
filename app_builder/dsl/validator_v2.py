@@ -58,7 +58,8 @@ class DictInited(object):
 
         elif type(thing) == type({}):
 
-            assert('_mapping' in schema)
+            if '_mapping' not in schema:
+                return thing
 
             for key, value in thing.items():
                 if key not in schema['_mapping']:
@@ -110,13 +111,21 @@ class DictInited(object):
         errors = []
 
         if '_one_of' in schema:
+            min_num_err = None
+            min_err_err = None
             for validation_schema in schema['_one_of']:
-                # try all the schemas until one works. if none work, throw an error and quit.
                 new_errs = cls.validate_dict(thing, validation_schema)
                 if len(new_errs) == 0:
                     return errors # no point in extending new_errors since it's blank
+                if min_num_err is None:
+                    min_num_err = len(new_errs)
+                    min_err_err = new_errs
+                    continue
+                if len(new_errs) < min_num_err:
+                    min_err_err = new_errs
+                    min_num_err = len(new_errs)
             # if you get to this point, none of the "one of" things were valid.
-            errors.append("None of the _one_of things matched.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
+            errors.append("None of the _one_of things matched.\n\nthing: {}\n\nschema:{}.\n\nMost likely errors: {}".format(repr(thing), schema, str(min_err_err)))
             return errors
         assert '_one_of' not in schema
 
@@ -147,8 +156,8 @@ class DictInited(object):
 
         elif type(thing) == type({}):
 
-            try: assert('_mapping' in schema)
-            except Exception: raise Exception('found {} with no _mapping')
+            if '_mapping' not in schema:
+                return errors
 
             for key in schema['_mapping']:
                 try: assert(key in thing)
