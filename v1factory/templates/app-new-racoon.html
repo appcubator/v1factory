@@ -3,32 +3,46 @@
 {% block css %}
 <link type="text/css" href="{{ STATIC_URL }}css/racoon.css" id="css-racoon" rel="stylesheet"/>
 <link type="text/css" href="{{ STATIC_URL }}css/prettyCheckable.css" id="css-prettycheckable" rel="stylesheet"/>
-
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 {% endblock %}
 
 {% block topbar %}
 {% endblock %}
 
 {% block page %}
-<div class="container hoff4">
-  <ul class="span52 racoon offset6">
+<div class="container hoff2">
+  <div class="top-panel">
+    <div id="container">
+      <div id="cube" class="animate">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <div class="logo-text">Appcubator</div>
+    <div class="banner">Getting Started</div>
+  </div>
+  <ul class="span52 racoon offset6 hoff1">
     <li class="intro">
       Welcome! Here are few questions for you before we make the magic happen.
     </li>
     <li class="question" id="q-1">
-      What platform would you like to develop for?<br>
+      <span class="q-sent">What platform would you like to develop for?</span>
       <div class="a-platform web"><input type="radio" name="platform" value="web" id="web" data-label="Web"></div>
       <div class="a-platform mobile"><input type="radio" name="platform" value="mobile" id="mobile" data-label="Mobile"></div>
       <div class="a-platform web-mobile"><input type="radio" name="platform" value="web+mobile" id="web+mobile" data-label="Web + Mobile"></div>
     </li>
     <li class="question" id="q-1">
-      What data do you want to store about your users? (e.g. Age, Address, Company...)
+      <span class="q-sent">What data do you want to store about your users? (e.g. Age, Address, Company...)</span>
     </li>
     <li class="question" id="q-2">
-      How would you like your users to login?
+      <span class="q-sent">How would you like your users to login?</span>
     </li>
     <li class="question" id="q-2">
-      What other tables would you like to store? (e.g. Photos, Documents, Track Records...)
+      <span class="q-sent">What other tables would you like to store? (e.g. Photos, Documents, Track Records...)</span>
     </li>
     <li class="end">
       "DONE"

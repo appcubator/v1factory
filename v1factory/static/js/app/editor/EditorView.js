@@ -9,6 +9,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarEditorView',
+  'editor/GuideView',
   'app/tutorial/TutorialView',
   'mixins/BackboneNameBox',
   'app/editor/editor-templates'
@@ -23,7 +24,8 @@ function( PageModel,
           EditorGalleryView,
           PageStylePicker,
           NavbarEditorView,
-          TutorialView ) {
+          GuideView,
+          TutorialView) {
 
   var EditorView = Backbone.View.extend({
     className : 'editor-page',
@@ -50,7 +52,9 @@ function( PageModel,
                       'save',
                       'deploy',
                       'renderDeployResponse',
-                      'clickedGoToPage');
+                      'clickedGoToPage',
+                      'setupPageHeight',
+                      'setupPageWrapper');
 
       if(pId) pageId = pId;
 
@@ -67,6 +71,7 @@ function( PageModel,
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
+      this.guides           = new GuideView(this.widgetsCollection);
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
@@ -103,8 +108,11 @@ function( PageModel,
       this.galleryEditor.render();
       this.widgetsManager.render();
       this.navbarEditor.render();
+      this.guides.setElement($('#elements-container')).render();
 
       this.setupPageWrapper();
+      this.setupPageHeight();
+      window.onresize = this.setupPageWrapper;
 
       $('#loading-gif').fadeOut().remove();
     },
@@ -248,6 +256,12 @@ function( PageModel,
     setupPageWrapper: function() {
       var height = window.innerHeight - 10;
       iui.get('page-wrapper').style.height = height+ 'px';
+      this.$el.find('.page.full').css('height', height - 46);
+    },
+
+    setupPageHeight: function() {
+      var height = (this.model.getHeight() + 4) * 15;
+      this.$el.find('#elements-container').css('height', height);
     }
 
   });

@@ -76,7 +76,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView) {
     },
 
     renderStyleEditing: function(e) {
-      var li       = document.createElement('ul');
+      var li       = document.createElement('div');
+      li.className = 'style-editor';
       li.innerHTML += '<span id="pick-style" class="option-button tt" style="width:194px; display: inline-block;"><strong>Pick Style</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:34px; margin-left:1px; display: inline-block;"></span>';
       return li;
     },
