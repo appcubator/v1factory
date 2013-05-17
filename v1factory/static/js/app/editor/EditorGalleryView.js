@@ -3,7 +3,8 @@ define([
   'app/models/ContainerWidgetModel',
   'app/models/WidgetModel',
   'dicts/default-uielements',
-  'dicts/constant-containers'
+  'dicts/constant-containers',
+  'list'
 ],
 function(ElementCollection,
          ContainerWidgetModel,
@@ -59,6 +60,8 @@ function(ElementCollection,
         stop: self.dropped
       });
       this.$el.find('li').on('click', self.dropped);
+
+      var list = new List('top-panel-bb', { valueNames: ['name']});
       return this;
     },
 
@@ -67,7 +70,7 @@ function(ElementCollection,
       var collection = new ElementCollection(defaultElements);
 
       var li = document.createElement('li');
-      li.className = 'gallery-header';
+      li.className = 'gallery-header ui-draggable';
       li.innerHTML = 'Design Elements';
       $(this.allList).append(li);
 
@@ -105,7 +108,7 @@ function(ElementCollection,
 
     renderAuthenticationForms: function() {
       var li = document.createElement('li');
-      li.className = 'gallery-header';
+      li.className = 'gallery-header ui-draggable';
       li.innerHTML = 'Authentication';
       $(this.allList).append(li);
 
@@ -140,7 +143,7 @@ function(ElementCollection,
 
     renderCurrentUserElements: function() {
       var li = document.createElement('li');
-      li.className = 'gallery-header';
+      li.className = 'gallery-header ui-draggable';
       li.innerHTML = 'Current User';
       $(this.allList).append(li);
 
@@ -159,7 +162,7 @@ function(ElementCollection,
     renderEntitiyFormsTablesLists: function() {
 
       var li = document.createElement('li');
-      li.className = 'gallery-header';
+      li.className = 'gallery-header ui-draggable';
       li.innerHTML = 'Table Data';
       $(this.allList).append(li);
 
@@ -193,7 +196,7 @@ function(ElementCollection,
 
       if(g_contextCollection.models.length > 0) {
         var li = document.createElement('li');
-        li.className = 'gallery-header';
+        li.className = 'gallery-header ui-draggable';
         li.innerHTML = 'Page Context Data';
         $(this.allList).append(li);
       }
