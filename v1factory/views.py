@@ -69,6 +69,18 @@ def app_page(request, app_id):
   add_statics_to_context(page_context, app)
   return render(request, 'app-show.html', page_context)
 
+@require_GET
+@login_required
+def app_json_editor(request, app_id):
+  app_id = long(app_id)
+  app = get_object_or_404(App, id=app_id, owner=request.user)
+
+  page_context = {'app'    : app,
+                  'app_id' : long(app_id),
+                 }
+  add_statics_to_context(page_context, app)
+  return render(request, 'app-json-editor.html', page_context)
+
 @require_POST
 @login_required
 def app_delete(request, app_id):
