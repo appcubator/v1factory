@@ -145,7 +145,7 @@ function( PageModel,
         error: function(data, t) {
           var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
           if(DEBUG) {
-            content = { text: "LULZ  <br  />" + data.responseText };
+            content = { text: "<br />Error saving app state<br />" + data.responseText };
           }
           //new ErrorModalView(content);
           new DebugOverlay(content);
