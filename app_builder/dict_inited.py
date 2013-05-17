@@ -87,14 +87,40 @@ class DictInited(object):
         """
         assert isinstance(data, dict), "Input to \"created_from_dict\" must be a dict"
         errors = cls.validate_dict(data, {"_type":cls})
-        if len(errors) == 0:
-            data = deepcopy(data)
-            o = cls._recursively_create(data, {"_type":cls}) # helper function needed for schema based recursion
-            return o
-
-        else:
+        if len(errors) != 0:
             separator = "\n============================================================\n"
             raise Exception("Errors while creating %s: \n%s" % (cls.__name__, separator.join(errors)))
+
+        data = deepcopy(data)
+        o = cls._recursively_create(data, {"_type":cls}) # helper function needed for schema based recursion
+        #o._process_lang_strings(cls._schema)
+        return o
+
+    def _process_lang_strings(self, schema):
+        for k in schema:
+            if '_one_of' in schema:
+                min_num_err = None
+                min_err_err = None
+                for validation_schema in schema['_one_of']:
+                    new_errs = self.__class__.validate_dict(thing, validation_schema)
+                    if len(new_errs) == 0:
+                        return self._process_lang_strings(validation_schema)
+                    if min_num_err is None:
+                        min_num_err = len(new_errs)
+                        min_err_err = new_errs
+                        continue
+                    if len(new_errs) < min_num_err:
+                        min_err_err = new_errs
+                        min_num_err = len(new_errs)
+                # if you get to this point, none of the "one of" things were valid.
+                raise Exception("Invalid schema")
+            elif type(schema['_type']) in [str, unicode]:
+                pass
+                # string replace the right thing
+            elif type(schema['_type']) == dict:
+                pass
+                # recurse
+
 
     @classmethod
     def validate_dict(cls, thing, schema):

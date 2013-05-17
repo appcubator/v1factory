@@ -4,6 +4,7 @@ define([
   'app/views/UrlView',
   'mixins/SimpleModalView',
   'mixins/ErrorModalView',
+  'mixins/DebugOverlay',
   'editor/WidgetsManagerView',
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
@@ -19,6 +20,7 @@ function( PageModel,
           UrlView,
           SimpleModalView,
           ErrorModalView,
+          DebugOverlay,
           WidgetsManagerView,
           WidgetEditorView,
           EditorGalleryView,
@@ -145,7 +147,8 @@ function( PageModel,
           if(DEBUG) {
             content = { text: "LULZ  <br  />" + data.responseText };
           }
-          new ErrorModalView(content);
+          //new ErrorModalView(content);
+          new DebugOverlay(content);
         }
       });
 
@@ -202,7 +205,8 @@ function( PageModel,
       }
       else
       {
-        new ErrorModalView({ text: responseData.errors });
+        //new ErrorModalView({ text: responseData.errors });
+        new DebugOverlay({ text: responseData.errors });
       }
     },
 
