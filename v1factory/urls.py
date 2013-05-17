@@ -59,6 +59,9 @@ urlpatterns += patterns('v1factory.views',
     url(r'^subdomains/(.*)/available_check/$', 'sub_check_availability'),
     url(r'^app/(\d+)/subdomain/(.*)/$', 'sub_register_domain'),
 
+    # special json editor route
+    url(r'^app/(\d+)/editor/\d+/debug/$', 'app_json_editor'), # this serves all the app pages
+
     # the rest
     url(r'^app/(\d+)/', 'app_page'), # this serves all the app pages
 
