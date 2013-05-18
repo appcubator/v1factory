@@ -39,12 +39,12 @@ class Layout(DictInited):
         "height": { "_type": 0, "_min": 1 },
         "top": { "_type": 0, "_min": 0 },
         "left": { "_type": 0, "_min": 0, "_max": 64 },
-       # "t_padding": { "_type": 0, "_min": 0, "_max": 64 },
-       # "b_padding": { "_type": 0, "_min": 0, "_max": 64 },
-       # "l_padding": { "_type": 0, "_min": 0, "_max": 64 },
-       # "r_padding": { "_type": 0, "_min": 0, "_max": 64 },
-       # "alignment": { "_type": "" },
-       # "font-size": { "_type": 0, "_min": 0 }, # FIXME
+        "t_padding": { "_type": "", "_default": ""},
+        "b_padding": { "_type": "", "_default": ""},
+        "l_padding": { "_type": "", "_default": ""},
+        "r_padding": { "_type": "", "_default": ""},
+        "alignment": { "_type": "", "_default": "left" },
+        "font-size": { "_type": "", "_default": "" },
     }
 
 

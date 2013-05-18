@@ -113,8 +113,8 @@ function(Backbone) {
       }
 
       if(text) {
-        text = text.replace('\n', '<p></p>');
-        text = text.replace(' ', '&nbsp;');
+        text = text.replace(/\n/g, '</p><p>');
+        text = text.replace(/ /g, '&nbsp;');
         this.el.innerHTML += '<p>'+text+'</p>';
       }
       return this;

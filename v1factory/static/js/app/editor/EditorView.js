@@ -145,7 +145,10 @@ function( PageModel,
         error: function(data, t) {
           var content = { text: "There has been a problem. Please refresh your page. We're really sorry for the inconvenience and will be fixing it very soon." };
           if(DEBUG) {
-            content = { text: "<br />Error saving app state<br />" + data.responseText };
+            var rData = JSON.parse(data.responseText);
+            var max_length = 500;
+            rData = _.map(rData, function(s) { if(s.length > max_length ) return s.substring(0, max_length); else return s; });
+            content = { text: "<br />Error saving app state<br />" + rData.join('<br />\n') };
           }
           //new ErrorModalView(content);
           new DebugOverlay(content);

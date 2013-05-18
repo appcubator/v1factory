@@ -95,8 +95,8 @@ def app_state(request, app_id):
     state = app_get_state(request, app)
     return JSONResponse(state)
   elif request.method == 'POST':
-    status, message = app_save_state(request, app)
-    return HttpResponse(message, status=status)
+    status, data = app_save_state(request, app)
+    return JSONResponse(data, status=status)
   else:
     return HttpResponse("GET or POST only", status=405)
 
@@ -121,21 +121,16 @@ def app_save_state(request, app, require_valid=True):
       return (200, "ok")
 
   else:
-    state_err = validate_state(app.state)
-    if state_err is not None:
+    try:
+      a = AnalyzedApp.create_from_dict(app.state)
+    except Exception, e:
       import django.utils.html
-      return (400, django.utils.html.escape(state_err))
+      errors = [ django.utils.html.escape(s) for s in e.message ]
+      return (400, errors)
     else:
       app.save()
       return (200, "ok")
 
-def validate_state(app_state):
-
-  # other checks
-  try:
-    a = AnalyzedApp.create_from_dict(app_state)
-  except Exception, e:
-    return traceback.format_exc(100)
 
 @login_required
 def uie_state(request, app_id):

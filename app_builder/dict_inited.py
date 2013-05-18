@@ -2,6 +2,19 @@
 
 from copy import deepcopy
 
+class ValidationError(object):
+    """Represents a validation error"""
+
+    def __init__(self, msg, thing, schema, ancestor_list):
+        self.msg = msg
+        self.thing = thing
+        self.schema = schema
+        self.path = '/'.join([str(i) for i in ancestor_list])
+
+    def __unicode__(self):
+        return u"Error found in %r: %r\n(Thing, Schema) = %r" % (self.path, self.msg, (self.thing, self.schema))
+
+
 
 class DictInited(object):
     """Base class for dict_inited objects.
@@ -24,7 +37,7 @@ class DictInited(object):
         if '_one_of' in schema:
             for validation_schema in schema['_one_of']: # FIXME there might be more than 1 correct schema, then it's ambiguous
                 # try all the schemas until one works. if none work, throw an error and quit.
-                new_errs = cls.validate_dict(thing, validation_schema)
+                new_errs = cls.validate_dict(thing, validation_schema, [])
                 if len(new_errs) == 0:
                     return cls._recursively_create(thing, validation_schema)
             # if you get to this point, none of the "one of" things were valid.
@@ -86,10 +99,9 @@ class DictInited(object):
           then inits the object recursively.
         """
         assert isinstance(data, dict), "Input to \"created_from_dict\" must be a dict"
-        errors = cls.validate_dict(data, {"_type":cls})
+        errors = cls.validate_dict(data, {"_type":cls}, [])
         if len(errors) != 0:
-            separator = "\n============================================================\n"
-            raise Exception("Errors while creating %s: \n%s" % (cls.__name__, separator.join(errors)))
+            raise Exception(errors)
 
         data = deepcopy(data)
         o = cls._recursively_create(data, {"_type":cls}) # helper function needed for schema based recursion
@@ -102,7 +114,8 @@ class DictInited(object):
                 min_num_err = None
                 min_err_err = None
                 for validation_schema in schema['_one_of']:
-                    new_errs = self.__class__.validate_dict(thing, validation_schema)
+                    #new_errs = self.__class__.validate_dict({}, validation_schema, [])
+                    new_errs = [] # FIXME
                     if len(new_errs) == 0:
                         return self._process_lang_strings(validation_schema)
                     if min_num_err is None:
@@ -123,27 +136,21 @@ class DictInited(object):
 
 
     @classmethod
-    def validate_dict(cls, thing, schema):
+    def validate_dict(cls, thing, schema, ancestor_list):
         """Return a list of error messages. if there are no errors, the thing successfully validate_dict, no problemo."""
 
         errors = []
 
         if '_one_of' in schema:
-            min_num_err = None
-            min_err_err = None
+            sub_errors = []
             for validation_schema in schema['_one_of']:
-                new_errs = cls.validate_dict(thing, validation_schema)
+                new_errs = cls.validate_dict(thing, validation_schema, ancestor_list)
+                sub_errors.extend(new_errs)
                 if len(new_errs) == 0:
-                    return errors # no point in extending new_errors since it's blank
-                if min_num_err is None:
-                    min_num_err = len(new_errs)
-                    min_err_err = new_errs
-                    continue
-                if len(new_errs) < min_num_err:
-                    min_err_err = new_errs
-                    min_num_err = len(new_errs)
+                    return errors
             # if you get to this point, none of the "one of" things were valid.
-            errors.append("None of the _one_of things matched.\n\nthing: {}\n\nschema:{}.\n\nMost likely errors: {}".format(repr(thing), schema, str(min_err_err)))
+            errors.extend(sub_errors)
+            #errors.append(ValidationError("None of the _one_of things matched.", thing, schema, ancestor_list))
             return errors
         assert '_one_of' not in schema
 
@@ -154,7 +161,7 @@ class DictInited(object):
             raise Exception('schema structure doesn\'t begin with _type')
 
         if type(schema['_type']) == type(type):
-            return cls.validate_dict(thing, {"_type":{}, "_mapping":schema['_type']._schema})
+            return cls.validate_dict(thing, {"_type":{}, "_mapping":schema['_type']._schema}, ancestor_list)
 
 
         if type(thing) == type(""):
@@ -162,15 +169,16 @@ class DictInited(object):
 
         try:
             assert type(thing) == type(schema['_type']) or (type(thing) == type(u"") and type(schema['_type']) == type(""))
-        except Exception:
-            errors.append("type of this thing doesn't match schema.\n\n\nthing: {}\n\n\nschema:{}".format(repr(thing), schema))
+        except AssertionError:
+            errors.append(ValidationError("Type mismatch", thing, schema, ancestor_list))
             return errors
 
         if type(thing) == type([]):
-            try: assert('_each' in schema)
-            except Exception: raise Exception('found [] with no _each')
-            for minithing in thing:
-                errors.extend(cls.validate_dict(minithing, schema['_each']))
+            assert '_each' in schema, 'found [] with no _each'
+            for idx, minithing in enumerate(thing):
+                ancestor_list.append(idx)
+                errors.extend(cls.validate_dict(minithing, schema['_each'], ancestor_list))
+                ancestor_list.pop()
 
         elif type(thing) == type({}):
 
@@ -178,27 +186,30 @@ class DictInited(object):
                 return errors
 
             for key in schema['_mapping']:
-                try: assert(key in thing)
-                except Exception:
-                    errors.append('found a key in the schema which is not part of thing. "{}", {}'.format(key, thing))
+                if key not in thing and '_default' in schema['_mapping'][key]:
+                    thing[key] = schema['_mapping'][key]['_default']
+                if key not in thing:
+                    errors.append(ValidationError("Key not found: %r" % key, thing, schema, ancestor_list))
                 else:
-                    errors.extend(cls.validate_dict(thing[key], schema['_mapping'][key]))
+                    ancestor_list.append(key)
+                    errors.extend(cls.validate_dict(thing[key], schema['_mapping'][key], ancestor_list))
+                    ancestor_list.pop()
 
         elif type(thing) == type("") or type(thing) == type(u""):
             if "_minlength" in schema:
-                try: assert(len(thing) >= schema["_minlength"])
-                except Exception: errors.append('string length was less than minlength: \"{}\", minlength={}'.format(repr(thing), schema['_minlength']))
+                if not (len(thing) >= schema["_minlength"]):
+                    errors.append(ValidationError('String was shorter than _minlength', thing, schema, ancestor_list))
             if "_maxlength" in schema:
-                try: assert(len(thing) <= schema["_maxlength"])
-                except Exception: errors.append('string length was greater than maxlength: \"{}\", maxlength={}'.format(repr(thing), schema['_maxlength']))
+                if not (len(thing) <= schema["_maxlength"]):
+                    errors.append(ValidationError('String was longer than _maxlength', thing, schema, ancestor_list))
 
         elif type(thing) == type(0):
             if "_min" in schema:
-                try: assert(thing >= schema["_min"])
-                except Exception: errors.append('int was less than min: \"{}\", min={}'.format(repr(thing), schema['_min']))
+                if not (thing >= schema["_min"]):
+                    errors.append(ValidationError('int was less than min', thing, schema, ancestor_list))
             if "_max" in schema:
-                try: assert(thing <= schema["_max"])
-                except Exception: errors.append('int was greater than max: \"{}\", max={}'.format(repr(thing), schema['_max']))
+                if not (thing <= schema["_max"]):
+                    errors.append(ValidationError('int was greater than max', thing, schema))
 
         elif type(thing) == type(True):
             pass
