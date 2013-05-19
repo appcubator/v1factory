@@ -1,7 +1,8 @@
 define([
+  'mixins/SelectView',
   'backbone'
 ],
-function(WidgetClassPickerView) {
+function(SelectView) {
 
   var WidgetContentEditorView = Backbone.View.extend({
     el     : document.getElementById('content-editor'),
@@ -74,8 +75,10 @@ function(WidgetClassPickerView) {
                                         listOfPages: listOfPages,
                                         external: external});
 
-      this.hrefLi.appendChild(new comp().div('Target').classN('key').el);
-      this.hrefLi.innerHTML += html;
+
+      this.hrefLi.appendChild(new comp().div('Links To').classN('header-div').el);
+      var selecView = new SelectView(listOfPages, this.model.get('content_attribs').get('href'));
+      this.hrefLi.appendChild(selecView.el);
 
       return this.hrefLi;
     },
@@ -83,10 +86,25 @@ function(WidgetClassPickerView) {
     renderSrcInfo: function() {
       var li       = document.createElement('li');
       var hash     = 'content_attribs' + '-' + 'src';
-      temp         = Templates.tempSourceSelect;
-      html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
-      li.appendChild(new comp().div('Image Source').classN('key').el);
-      li.innerHTML += html;
+      //temp         = Templates.tempSourceSelect;
+      //html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
+
+      li.appendChild(new comp().div('Image Source').classN('header-div').el);
+
+      console.log(statics);
+
+      var statics_list = _.map(statics, function(obj) {
+        console.log(obj);
+        var newObj = {};
+        newObj.val = obj.url;
+        newObj.name = obj.name;
+        return newObj;
+      });
+
+      console.log(statics);
+
+      var selecView = new SelectView(statics_list, this.model.get('content_attribs').get('src'), true);
+      li.appendChild(selecView.el);
       return li;
     },
 
@@ -196,12 +214,9 @@ function(WidgetClassPickerView) {
       var self = this;
       var target = e.target.value;
 
-      console.log(self.hrefLi);
-      console.log(self);
-
       if(target == "external-link") {
         self.hrefLi.innerHTML = '<form id="external-link-form"><input id="external-link-input" type="text"></form>';
-        $('#external-link-input').focus();  
+        $('#external-link-input').focus();
       }
       else if(this.model.get('context')) {
         target += ('/' + this.model.get('context'));
