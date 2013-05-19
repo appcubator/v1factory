@@ -15,7 +15,8 @@ require.config({
     "mixins" : "../mixins",
     "key" : "../libs/keymaster/keymaster",
     "answer" : "../libs/answer/answer",
-    "prettyCheckable" : "../libs/jquery/prettyCheckable"
+    "prettyCheckable" : "../libs/jquery/prettyCheckable",
+    "list" : "../libs/list"
   },
 
   shim: {
@@ -266,6 +267,7 @@ function (AppModel,
   v1State.initialize(appState);
   v1 = new v1App();
 
+  g_guides = {};
   keyDispatcher  = new KeyDispatcher();
 
   Backbone.history.start({pushState: true});

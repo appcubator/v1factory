@@ -100,6 +100,9 @@ function(WidgetCollection,
         self.get('slides').push(new SlideModel());
         self.get('slides').push(new SlideModel());
       }
+      else if(action == "twitterfeed") {
+        self.set('username', "icanberk");
+      }
       else {
         alert('UFO!');
       }

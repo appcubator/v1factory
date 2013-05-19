@@ -401,7 +401,6 @@ h4 small {
 }
 
 
-
 ul.unstyled,
 ol.unstyled {
   margin-left: 0;
@@ -3584,9 +3583,6 @@ overflow: hidden;
   background-repeat: no-repeat;
 }
 
-.single-data, .entity {
-  background-color: #2b3545;
-}
 
 #brand-name-form {
   margin-bottom: 0;
@@ -3746,7 +3742,7 @@ overflow: hidden;
   left: 0;
   width: 100%;
   height: 1px;
-  border: 1px dashed #ccc;
+  border-top: 1px dashed #ccc;
 }
 .guide-line-horizontal.show {
   display: inline-block;
@@ -3758,7 +3754,7 @@ overflow: hidden;
   top: 0;
   height: 100%;
   width: 1px;
-  border: 1px dashed #ccc;
+  border-left: 1px dashed #ccc;
 }
 
 .guide-line-vertical.show {

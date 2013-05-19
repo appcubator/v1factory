@@ -194,3 +194,50 @@ h3.edit-url {
   font-weight: bold;
   border-radius: 4px;
 }
+
+.header-div {
+  height: 20px;
+  width: 100%;
+  font-size: 10px;
+  text-align: center;
+  font-weight: bold;
+  background-image: linear-gradient(to bottom, #2b3545, #232a3a);
+}
+
+.select-view {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  -webkit-transition: height linear 0.1s;
+}
+
+.select-view .updown-handle {
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  background-image: url('../img/updown-handle.png');
+  background-repeat: no-repeat;
+  background-position: right;
+  z-index: 1001;
+}
+.select-view ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.select-view ul li {
+  height: 40px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.select-view ul li:hover {
+  background-color: #3b4555;
+}
+

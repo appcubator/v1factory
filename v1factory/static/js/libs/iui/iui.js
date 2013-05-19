@@ -244,7 +244,6 @@ define(['jquery-ui'], function() {
     $(function () {
       /* prevents submitting twice */
       $('form').on('submit', function(e) {
-        console.log("prevent");
         $(e.target).on('submit', function(e) {
           e.preventDefault();
         });

@@ -14,7 +14,14 @@ function(WidgetModel) {
     show: false,
 
     initialize: function(widgetsCollection) {
-      _.bindAll(this, 'render', 'placeHorizontal', 'placeVertical', 'showAll', 'hideAll', 'toggleGuides');
+      _.bindAll(this, 'render',
+                      'placeHorizontal',
+                      'placeVertical',
+                      'showAll',
+                      'hideAll',
+                      'toggleGuides',
+                      'showVertical',
+                      'showHorizontal');
 
       var self = this;
 
@@ -84,6 +91,20 @@ function(WidgetModel) {
       else{
         this.showAll();
         this.show = true;
+      }
+    },
+
+    showVertical: function(coor) {
+      coor = Math.round(coor*10)/10;
+      if(this.verticalLinesDict[coor]) {
+        $(this.verticalLinesDict[coor]).addClass('show');
+      }
+    },
+
+    showHorizontal: function(coor) {
+      coor = Math.round(coor*10)/10;
+      if(this.horizontalLinesDict[coor]) {
+        $(this.horizontalLinesDict[coor]).addClass('show');
       }
     }
 

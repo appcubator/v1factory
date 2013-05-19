@@ -84,6 +84,10 @@ urlpatterns += patterns('v1factory.theme_views',
     url(r'^theme/(\d+)/static/$', 'themestaticfiles'), # a GET returns the apps statics, a POST creates a static file entry.
 )
 
+urlpatterns += patterns('',
+    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.ico'}),
+)
+
 # production (hosted) deployments
 if settings.PRODUCTION:
   urlpatterns += patterns('app_builder.deployment.views',
