@@ -85,13 +85,7 @@ function(SelectView) {
 
     renderSrcInfo: function() {
       var li       = document.createElement('li');
-      var hash     = 'content_attribs' + '-' + 'src';
-      //temp         = Templates.tempSourceSelect;
-      //html         = _.template(temp, {val : this.model.get('content_attribs').get('src'), hash: hash});
-
       li.appendChild(new comp().div('Image Source').classN('header-div').el);
-
-      console.log(statics);
 
       var statics_list = _.map(statics, function(obj) {
         console.log(obj);
@@ -100,8 +94,6 @@ function(SelectView) {
         newObj.name = obj.name;
         return newObj;
       });
-
-      console.log(statics);
 
       var selecView = new SelectView(statics_list, this.model.get('content_attribs').get('src'), true);
       li.appendChild(selecView.el);
