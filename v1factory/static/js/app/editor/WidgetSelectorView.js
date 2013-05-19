@@ -181,12 +181,20 @@ function(WidgetEditorView) {
       model = this.selectedEl;
       if(e.target.id == "hover-div") { model = this.hoveredEl; }
 
+      g_guides.hideAll();
+      g_guides.showVertical(ui.position.left / GRID_WIDTH);
+      g_guides.showVertical(ui.position.left / GRID_WIDTH + model.get('layout').get('width'));
+      g_guides.showHorizontal(ui.position.top / GRID_HEIGHT);
+      g_guides.showHorizontal(ui.position.top / GRID_HEIGHT + model.get('layout').get('height'));
+
       var elem = iui.get('widget-wrapper-' + model.cid);
       elem.style.top = ui.position.top + 'px';
       elem.style.left = ui.position.left+ 'px';
     },
 
     moved: function(e, ui) {
+      g_guides.hideAll();
+
       model = this.selectedEl;
       if(e.target.id == "hover-div") { model = this.hoveredEl; }
 

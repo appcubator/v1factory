@@ -57,9 +57,16 @@ var defaultElements = [
     className : "boxes",
     el : "<div style='background-color:#ccc;height:120px' class='span20'></div>"
   },
+
   {
     text: "Image Slider",
     className : "imageslider",
+    el : "<img class='span24' src='/static/img/placeholder.png'>"
+  },
+
+  {
+    text: "Twitter Feed",
+    className : "twitterfeed",
     el : "<img class='span24' src='/static/img/placeholder.png'>"
   }
 ];

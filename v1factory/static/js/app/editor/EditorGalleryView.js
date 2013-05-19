@@ -320,9 +320,16 @@ function(ElementCollection,
         var type    = id.replace('type-','');
 
         if(type == "imageslider") {
-          console.log("HEEEY");
           widget.container_info = {};
           widget.container_info.action = "imageslider";
+          var widgetContainerModel = new ContainerWidgetModel(widget, true);
+          this.widgetsCollection.push(widgetContainerModel);
+          return;
+        }
+
+        if(type == "twitterfeed") {
+          widget.container_info = {};
+          widget.container_info.action = "twitterfeed";
           var widgetContainerModel = new ContainerWidgetModel(widget, true);
           this.widgetsCollection.push(widgetContainerModel);
           return;

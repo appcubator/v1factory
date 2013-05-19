@@ -72,6 +72,7 @@ function( PageModel,
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
       this.guides           = new GuideView(this.widgetsCollection);
+      g_guides = this.guides;
 
       this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');

@@ -267,6 +267,7 @@ function (AppModel,
   v1State.initialize(appState);
   v1 = new v1App();
 
+  g_guides = {};
   keyDispatcher  = new KeyDispatcher();
 
   Backbone.history.start({pushState: true});

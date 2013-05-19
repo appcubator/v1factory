@@ -94,6 +94,12 @@ function( TableQueryView,
         this.el.appendChild(slideDiv);
       }
 
+      if(this.model.get('container_info').get('action') == "twitterfeed" ) {
+        var feedDiv = document.createElement('div');
+        feedDiv.innerHTML = _.template(Templates.twitterfeedTemp, {username: this.model.get('container_info').get('username') });
+        this.el.appendChild(feedDiv);
+      }
+
       if(this.model.get('container_info').has('form')) {
         self.form = document.createElement('form');
         self.el.appendChild(self.form);
