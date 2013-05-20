@@ -48,7 +48,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
                       'clickedFormRemove',
                       'clickedEditForm',
                       'changedRequiredField',
-                      'showData');
+                      'showData',
+                      'adjustTableWidth');
 
       this.model = item;
       this.model.bind('change:owns', this.ownsChangedOutside);
@@ -77,9 +78,9 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
       var template = _.template(EntitiesTemplates.Entity, page_context);
       $(this.el).append(template);
-      console.log(this.$el.find('input[type=checkbox]'));
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();
+      this.adjustTableWidth();
     },
 
 
@@ -142,6 +143,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       var template = _.template(EntitiesTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
+      this.adjustTableWidth();
     },
 
     appendForm: function(formModel) {
@@ -207,6 +209,18 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
         success: function(data) { new ShowDataView(data); },
         dataType: "JSON"
       });
+    },
+
+    adjustTableWidth: function() {
+      var width = (this.model.get('fields').length + 3) * 94;
+      this.width = width;
+      this.$el.find('.tbl').css('width', width);
+      if(width > 870 && !this.hasArrow) {
+        this.hasArrow = true;
+        var div = document.createElement('div');
+        div.className = 'right-arrow';
+        this.$el.find('.description').append(div);
+      }
     }
   });
 

@@ -11,7 +11,7 @@
 .property-list {
   list-style: circle;
   list-style: none;
-  float: left;
+  display: inline;
 }
 
 .add-entity {
@@ -130,11 +130,11 @@ input[type="checkbox"] {
 
 
 .tbl {
-  height: 137px;
 }
 
 .tbl-wrapper {
-  height: 137px;
+  position: relative;
+  height: 150px;
   overflow: hidden;
   overflow-x: scroll;
   background-color: #fff;
@@ -156,13 +156,12 @@ input[type="checkbox"] {
 }
 
 .tbl {
-  display: inline-block;
+  display: block;
   background-color: #fff;
 /*  border-top: 2px solid #AAA;
   border: 2px solid #333;*/
   overflow: hidden;
-  width: 3000px;
-  box-shadow: inset 0 0 4px 0px rgba(30, 30, 30, 0.4);
+  height: 150px;
 }
 
 .tbl .hdr {
@@ -381,6 +380,9 @@ table tr:hover td {
   min-width: 90px;
   float: left;
 }
+.column .prettycheckbox {
+  margin-top: -5px;
+}
 
 .full.title {
   height: 50px;
@@ -391,6 +393,7 @@ table tr:hover td {
 
 .description {
   display: inline-block;
+  position: relative;
 }
 
 .q-mark-circle {
@@ -452,3 +455,19 @@ table tr:hover td {
   width: 100%;
   text-align: center;
 }
+
+.property-name-input {
+  font-size: 12px !important;
+}
+
+.description .right-arrow {
+  position: absolute;
+  left: 850px;
+  top: 75px;
+  height: 150px;
+  width: 20px;
+  text-align: right;
+  display: inline-block;
+  background-image: url(../img/right-gradient.png);
+}
+

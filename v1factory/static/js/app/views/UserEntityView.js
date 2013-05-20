@@ -46,7 +46,8 @@ define([
                         'clickedDelete',
                         'clickedPropDelete',
                         'changedAttribs',
-                        'showTutorial');
+                        'showTutorial',
+                        'adjustTableWidth');
 
         this.el = document.getElementById('user-entity');
         this.model = v1State.get('users');
@@ -84,7 +85,7 @@ define([
 
         iui.loadCSS('prettyCheckable');
         this.$el.find('input[type=checkbox]').prettyCheckable();
-
+        this.adjustTableWidth();
         return this;
       },
 
@@ -107,6 +108,7 @@ define([
         var template = _.template(EntitiesTemplates.Property, page_context);
 
         $('.property-list', this.el).append(template);
+        this.adjustTableWidth();
       },
 
       formSubmitted: function(e) {
@@ -143,6 +145,19 @@ define([
 
       showTutorial: function() {
         new TutorialView([3, 1]);
+      },
+
+      adjustTableWidth: function() {
+        var width = (this.model.get('fields').length + 4 + 3) * 94;
+        this.width = width;
+        this.$el.find('.tbl').css('width', width);
+
+        if(width > 870 && !this.hasArrow) {
+          this.hasArrow = true;
+          var div = document.createElement('div');
+          div.className = 'right-arrow';
+          this.$el.find('.description').append(div);
+        }
       }
     });
 
