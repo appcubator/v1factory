@@ -88,7 +88,6 @@ function(SelectView) {
       li.appendChild(new comp().div('Image Source').classN('header-div').el);
 
       var statics_list = _.map(statics, function(obj) {
-        console.log(obj);
         var newObj = {};
         newObj.val = obj.url;
         newObj.name = obj.name;

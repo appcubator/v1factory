@@ -1,6 +1,5 @@
 define([
-  'backbone',
-  'jquery-ui'
+  'backbone'
 ],
 
 function(Backbone) {
@@ -10,11 +9,15 @@ function(Backbone) {
     className : 'select-view',
 
     events: {
-      'click' : 'expand'
+      'click' : 'expand',
+      'click li' : 'select'
     },
 
     initialize: function(list, currentVal, isNameVal) {
-      _.bindAll(this, 'render', 'expand');
+      _.bindAll(this, 'render',
+                      'expand',
+                      'shrink',
+                      'select');
 
       this.list = list;
       this.currentVal = currentVal;
@@ -56,6 +59,18 @@ function(Backbone) {
     expand: function(e) {
       this.el.style.height = this.list.length * 40 + 'px';
       e.stopPropagation();
+    },
+
+    shrink : function(e) {
+      this.el.style.height = 40 + 'px';
+      e.stopPropagation();
+    },
+
+    select: function(e) {
+      this.shrink(e);
+      if(e.target.className == "selected") return;
+      var ind = String(e.target.id).replace('li-' + this.cid + '-', '');
+      this.trigger('change', this.list[ind]);
     }
 
   });

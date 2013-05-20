@@ -69,6 +69,7 @@ function(WidgetClassPickerView, FormEditorView) {
 
     render: function() {
       var self = this;
+      this.el.appendChild(new comp().div('Layout').classN('header-div').el);
       this.el.appendChild(this.renderPaddingInfo());
       this.el.appendChild(this.renderLayoutInfo());
     },
@@ -78,20 +79,20 @@ function(WidgetClassPickerView, FormEditorView) {
       var aCenter = this.model.get('layout').get('alignment') == "center" ? " selected" : "";
       var aRight = this.model.get('layout').get('alignment') == "right" ? " selected" : "";
 
-      var ul = document.createElement('ul');
-      ul.className = "alignment-picker";
-      ul.innerHTML += '<li class="a-left a-pick tt'+ aLeft +'" id="a-left"></li><li class="a-center a-pick tt'+ aCenter +'" id="a-center"></li><li class="a-right a-pick tt'+ aRight +'" id="a-right"></li>';
-      return ul;
+      var div = document.createElement('div');
+      div.className = "alignment-picker";
+      div.innerHTML += '<div class="a-left a-pick tt'+ aLeft +'" id="a-left"></div><div class="a-center a-pick tt'+ aCenter +'" id="a-center"></div><div class="a-right a-pick tt'+ aRight +'" id="a-right"></div>';
+      return div;
     },
 
     renderPaddingInfo: function() {
       var paddingLR = this.model.get('layout').get('r_padding') > 0 ? "selected" : "";
       var paddingTB = this.model.get('layout').get('b_padding') > 0 ? "selected" : "";
 
-      var ul = document.createElement('ul');
-      ul.className = "padding-picker right";
-      ul.innerHTML += '<li class="padding tb tt '+ paddingTB +'" id="padding-tb"></li><li class="padding lr tt '+ paddingLR +'" id="padding-lr"></li>';
-      return ul;
+      var div = document.createElement('div');
+      div.className = "padding-picker right";
+      div.innerHTML += '<div class="padding tb tt '+ paddingTB +'" id="padding-tb"></div><div class="padding lr tt '+ paddingLR +'" id="padding-lr"></div>';
+      return div;
     },
 
     showToolTip: function(e) {

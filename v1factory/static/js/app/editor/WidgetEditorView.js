@@ -132,8 +132,6 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView) {
 
     openRowEditor: function() {
       //widgetModel, queryModel, rowModel
-      console.log(this.model);
-      console.log(this.model.get('container_info').get('query'));
       new ListEditorView(this.model,
                          this.model.get('container_info').get('query'),
                          this.model.get('container_info').get('row'));
