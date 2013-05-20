@@ -39,14 +39,13 @@ function(EntityCollection,
         var self = this;
         this.$el.html(_.template(iui.getHTML('entities-page'), {}));
         this.userEntityView.setElement(self.$('#user-entity')).render();
-        this.entityList.setElement(self.$('#entities')).render();
+        this.entityList.setElement(self.$('#tables')).render();
         return this;
       },
 
       clickedAdd: function(e) {
-        alert('he');
         var newForm = this.$el.find('#add-entity-form');
-        $(newForm).appendTo('#entities');
+        $(newForm).appendTo('#tables');
         $(newForm).fadeIn();
         $(this.addButton).hide();
         $('#entity-name-input').focus();

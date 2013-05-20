@@ -116,23 +116,35 @@
 <script type="text/template" id="entities-page">
 <div class="container" id="entities-page">
   <div class="span58">
-    <h2 class="hoff2">Entities</h2>
-    <hr class="span58 hoff2">
-  <div class="span58">
-    <div id="user-entity">
+    <h2 class="hoff2">User Tables</h2>
+    <div class="add-button right hoff2" id="add-role">
+      <span class="add-icon"></span><span>Add User Role</span>
     </div>
-    <div id="entities-container">
-      <ul id="entities" class="entity-list">
-      </ul>
-      <div id="add-entity-button" class="add-entity offset6 span58">
-      <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
-    </div>
-    <form id="add-entity-form" class="pane span58 hi10 entity hoff1" style="display:none;">
-      <span class="sub-title offset1 hoff2">
-        <input type="text" id="entity-name-input" placeholder="Entity Name">
-      </span>
-    </form>
+    <hr class="span58 hoff1">
   </div>
+  <div class="span58" id="user-tables">
+    <div id="user-entity"></div>
+    <div id="entities-container">
+      <ul id="entities" class="entity-list"></ul>
+    </div>
+  </div>
+  <div class="span58">
+    <h2 class="hoff2">Tables</h2>
+    <div class="add-button right hoff2" id="add-role">
+      <span class="add-icon"></span><span>Add Table</span>
+    </div>
+    <hr class="span58 hoff1">
+  </div>
+  <div class="span58" id="tables">
+  </div>
+  <div id="add-entity-button" class="add-entity offset6 span58">
+    <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
+  </div>
+  <form id="add-entity-form" class="pane span58 hi10 entity hoff1" style="display:none;">
+    <span class="sub-title offset1 hoff2">
+      <input type="text" id="entity-name-input" placeholder="Entity Name">
+    </span>
+  </form>
 </div>
 </script>
 
