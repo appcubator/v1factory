@@ -197,12 +197,13 @@ class App(DictInited):
         """
 
         # changing string refs to proper ref lang (in form: goto, belongsTo, entity)
-        for fii in filter(lambda n: isinstance(n, Form.FormInfo.FormInfoInfo), self.iternodes()):
-            fii.goto = 'pages/' + fii.goto # "Homepage" => "pages/Homepage"
+        for path, fii in filter(lambda n: isinstance(n[1], Form.FormInfo.FormInfoInfo), self.iternodes()):
             if fii.belongsTo is not None:
-                fii.belongsTo = 'entities/' + fii.goto # "Homepage" => "pages/Homepage"
+                fii.belongsTo = 'entities/' + fii.belongsTo
 
-        for fi in filter(lambda n: isinstance(n, Form.FormInfo), self.iternodes()):
+            fii.goto = 'pages/' + fii.goto # This is wrong. it's a link lang, bro.
+
+        for path, fi in filter(lambda n: isinstance(n[1], Form.FormInfo), self.iternodes()):
             fi.entity = 'entities/' + fi.entity # "Posts" => "entities/Posts"
 
         """
@@ -210,8 +211,10 @@ class App(DictInited):
             ni.link = 'pages/' + ni.link # FIXME this is actually wrong, it should be a link lang
         """
 
-        # resolve ref lang in every string!
-        """self.resolve_refs()"""
+        """
+        self.resolve_refs()
+        self.resolve_context_lang()
+        self.resolve_links()""" # NYI
         return self
 
 
