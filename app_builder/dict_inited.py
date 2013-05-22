@@ -198,7 +198,9 @@ class DictInited(object):
 
         return errors
 
-    def find(self, path_string):
+    def find(self, path_string, name_allowed=False):
+        """If name_allowed is true, then it will try to search an array by name first,
+           then resorting to search by index if name doesn't work"""
         if len(path_string) == 0:
             return self
 
@@ -207,10 +209,34 @@ class DictInited(object):
         for attr in path:
             # list, dict, or object
             if type(this_obj) == list:
-                attr = int(attr)
+
+                if name_allowed:
+                    try:
+                        name_matches = [i for i in this_obj if i.name == attr]
+                    except AttributeError:
+                        name_matches = [i for i in this_obj if i['name'] == attr]
+
+                    if len(name_matches) == 1:
+                        this_obj = name_matches[0]
+                        continue
+                    elif len(name_matches) > 1:
+                        raise Exception("Name not unique while searching for %r" % path_string)
+                    else:
+                        pass
+
+                try:
+                    attr = int(attr)
+                except Exception:
+                    if not name_allowed:
+                        raise Exception("Couldn't convert %r to an int. Maybe you meant to use name_allowed=True" % attr)
+                    else:
+                        raise Exception("Couldn't find thing with name=%r" % attr)
+
                 this_obj = this_obj[attr]
+
             elif type(this_obj) == dict:
                 this_obj = this_obj[attr]
+
             elif isinstance(this_obj, DictInited):
                 try:
                     this_obj = getattr(this_obj, attr)
