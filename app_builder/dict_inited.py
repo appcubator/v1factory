@@ -106,35 +106,7 @@ class DictInited(object):
 
         data = deepcopy(data)
         o = cls._recursively_create(data, {"_type":cls}) # helper function needed for schema based recursion
-        #o._process_lang_strings(cls._schema)
         return o
-
-    def _process_lang_strings(self, schema):
-        for k in schema:
-            if '_one_of' in schema:
-                min_num_err = None
-                min_err_err = None
-                for validation_schema in schema['_one_of']:
-                    #new_errs = self.__class__.validate_dict({}, validation_schema, [])
-                    new_errs = [] # FIXME
-                    if len(new_errs) == 0:
-                        return self._process_lang_strings(validation_schema)
-                    if min_num_err is None:
-                        min_num_err = len(new_errs)
-                        min_err_err = new_errs
-                        continue
-                    if len(new_errs) < min_num_err:
-                        min_err_err = new_errs
-                        min_num_err = len(new_errs)
-                # if you get to this point, none of the "one of" things were valid.
-                raise Exception("Invalid schema")
-            elif type(schema['_type']) in [str, unicode]:
-                pass
-                # string replace the right thing
-            elif type(schema['_type']) == dict:
-                pass
-                # recurse
-
 
     @classmethod
     def validate_dict(cls, thing, schema, ancestor_list):
@@ -227,8 +199,10 @@ class DictInited(object):
         return errors
 
     def find(self, path_string):
-        path = path_string.split('/')
+        if len(path_string) == 0:
+            return self
 
+        path = path_string.split('/')
         this_obj = self
         for attr in path:
             # list, dict, or object
@@ -238,14 +212,32 @@ class DictInited(object):
             elif type(this_obj) == dict:
                 this_obj = this_obj[attr]
             elif isinstance(this_obj, DictInited):
-                this_obj = getattr(this_obj, attr)
+                try:
+                    this_obj = getattr(this_obj, attr)
+                except Exception:
+                    import pdb; pdb.set_trace()
             else:
                 raise Exception("reached end of path")
         return this_obj
 
+    def set_by_path(self, path_string, value):
+        given_path = path_string.split('/')
+        assert len(given_path) > 0, "Can't call set on empty path"
+        path, attr_to_set = given_path[:-1], given_path[-1]
+        obj = self.find('/'.join(path))
+        if type(obj) == list:
+            attr_to_set = int(attr_to_set)
+            obj[attr_to_set] = value
+        elif type(obj) == dict:
+            obj[attr_to_set] = value
+        else:
+            # the object should be a subclass of dictinited since that's how all this is inited
+            assert isinstance(obj, DictInited), "Well this is unexpected"
+            setattr(obj, attr_to_set, value)
+
+
     def iternodes(self):
         thing = self
-        #node_stack = [(path, value),... ]
         node_stack = [ (attr, getattr(self, attr)) for attr in self.__class__._schema.keys() ]
 
         while len(node_stack) > 0:
@@ -264,17 +256,6 @@ class DictInited(object):
 
     def resolve_refs(self):
         # iterate over all the nodes in the tree and modify the string references
-        for path, node in self.iternodes():
-            if type(node) == {}:
-                for k, v in node.iteritems():
-                    if type(v) in [str, unicode]:
-                        node[k] = self.find(v)
-            elif type(node) == []:
-                for i, v in enumerate(node):
-                    if type(v) in [str, unicode]:
-                        node[i] = self.find(v)
-            elif isinstance(node, DictInited):
-                for k, v in node.__dict__.iteritems():
-                    if type(v) in [str, unicode]:
-                        setattr(node, k, self.find(v))
+        for path, node in filter(lambda t: isinstance(t[1], (str, unicode)), self.iternodes()):
+            self.set_by_path(path, "LOLSTRING") # for testing purposes
 
