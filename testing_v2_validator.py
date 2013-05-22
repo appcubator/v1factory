@@ -176,7 +176,7 @@ test_json = r"""{
                                 }
                             ],
                             "action": "login",
-                            "goto": "internal://Homepage",
+                            "goto": { "page_name":"Homepage", "urldata":{} },
                             "belongsTo": null
                         },
                         "entity": "User"
@@ -228,7 +228,7 @@ test_json = r"""{
                                 }
                             ],
                             "action": "facebook",
-                            "goto": "internal://Homepage/",
+                            "goto": { "page_name": "Homepage", "urldata":{}},
                             "belongsTo": null
                         },
                         "uielements": []
@@ -267,7 +267,7 @@ test_json = r"""{
                                 }
                             ],
                             "action": "twitter",
-                            "goto": "internal://Homepage/",
+                            "goto": { "page_name": "Homepage", "urldata":{}},
                             "belongsTo": null
                         },
                         "uielements": []
@@ -396,7 +396,7 @@ test_json = r"""{
                                 }
                             ],
                             "action": "signup",
-                            "goto": "internal://Homepage",
+                            "goto": { "page_name": "Homepage", "urldata":{}},
                             "belongsTo": null
                         },
                         "entity": "User"
@@ -686,7 +686,7 @@ test_json = r"""{
                                 }
                             ],
                             "action": "create",
-                            "goto": "internal://Homepage/",
+                            "goto": { "page_name": "Homepage", "urldata":{}},
                             "belongsTo": null
                         }
                     },

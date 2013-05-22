@@ -52,6 +52,13 @@ class Layout(DictInited):
     }
 
 
+class LinkLang(DictInited):
+    _schema = {
+        "page_name": { "_type": "" },
+        "urldata": { "_type": {} },
+    }
+
+
 class Form(DictInited):
 
     class FormInfo(DictInited):
@@ -72,7 +79,7 @@ class Form(DictInited):
                 "name": { "_type" : "" },
                 "action": { "_type":"" },
                 "fields": { "_type" : [], "_each": { "_type": FormField }},
-                "goto": { "_type": "" }, # TODO may have reference
+                "goto": { "_type": LinkLang },
                 "belongsTo": { "_one_of": [{ "_type": "" }, { "_type": None }] } # TODO may have reference
             }
 
@@ -188,20 +195,38 @@ class App(DictInited):
         self = super(App, cls).create_from_dict(data, *args, **kwargs)
 
         # create the user entity based on userconfig
-        """
-        userdict = { "name": "User" } # TODO Fill in with default values
+        userdict = {
+            "name": "User",
+            "fields": [
+                {
+                    "name": "First Name",
+                    "type": "text",
+                    "required": True
+                },
+                {
+                    "name": "Last Name",
+                    "type": "text",
+                    "required": True
+                },
+                {
+                    "name": "Email",
+                    "type": "text",
+                    "required": True
+                },
+            ]
+        }
         userentity = Entity.create_from_dict(userdict)
+        userentity.fields.extend(self.users.fields)
         userentity.is_user = True
         userentity.facebook = self.users.facebook # TODO finish this process
         self.entities.append(userentity)
-        """
 
         # changing string refs to proper ref lang (in form: goto, belongsTo, entity)
         for path, fii in filter(lambda n: isinstance(n[1], Form.FormInfo.FormInfoInfo), self.iternodes()):
             if fii.belongsTo is not None:
                 fii.belongsTo = 'entities/' + fii.belongsTo
-
-            fii.goto = 'pages/' + fii.goto # This is wrong. it's a link lang, bro.
+        for path, ll in filter(lambda n: isinstance(n[1], LinkLang), self.iternodes()):
+            ll.page_name = 'pages/' + ll.page_name
 
         for path, fi in filter(lambda n: isinstance(n[1], Form.FormInfo), self.iternodes()):
             fi.entity = 'entities/' + fi.entity # "Posts" => "entities/Posts"
