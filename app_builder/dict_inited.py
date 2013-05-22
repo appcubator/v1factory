@@ -1,6 +1,7 @@
 """ Really cool JSON schema validator """
 
 from copy import deepcopy
+import re
 
 class ValidationError(object):
     """Represents a validation error"""
@@ -224,4 +225,56 @@ class DictInited(object):
             raise Exception("type not recognized: {}".format(thing))
 
         return errors
+
+    def find(self, path_string):
+        path = path_string.split('/')
+
+        this_obj = self
+        for attr in path:
+            # list, dict, or object
+            if type(this_obj) == list:
+                attr = int(attr)
+                this_obj = this_obj[attr]
+            elif type(this_obj) == dict:
+                this_obj = this_obj[attr]
+            elif isinstance(this_obj, DictInited):
+                this_obj = getattr(this_obj, attr)
+            else:
+                raise Exception("reached end of path")
+        return this_obj
+
+    def iternodes(self):
+        thing = self
+        #node_stack = [(path, value),... ]
+        node_stack = [ (attr, getattr(self, attr)) for attr in self.__class__._schema.keys() ]
+
+        while len(node_stack) > 0:
+            path, obj = node_stack.pop()
+            if type(obj) == dict:
+                node_stack.extend([ (path + '/' + k, v) for k, v in obj.iteritems() ])
+            elif type(obj) == list:
+                node_stack.extend([ (path + '/' + str(i), v) for i, v in enumerate(obj) ])
+            elif isinstance(obj, DictInited):
+                node_stack.extend([ (path + '/' + attr, getattr(obj, attr)) for attr in obj.__class__._schema.keys() ])
+
+            yield (path, obj)
+
+    def search(self, regex_string):
+        return filter(lambda s: re.search(regex_string, s[0]), self.iternodes())
+
+    def resolve_refs(self):
+        # iterate over all the nodes in the tree and modify the string references
+        for path, node in self.iternodes():
+            if type(node) == {}:
+                for k, v in node.iteritems():
+                    if type(v) in [str, unicode]:
+                        node[k] = self.find(v)
+            elif type(node) == []:
+                for i, v in enumerate(node):
+                    if type(v) in [str, unicode]:
+                        node[i] = self.find(v)
+            elif isinstance(node, DictInited):
+                for k, v in node.__dict__.iteritems():
+                    if type(v) in [str, unicode]:
+                        setattr(node, k, self.find(v))
 

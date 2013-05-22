@@ -1,15 +1,27 @@
 # -*- coding: utf-8 -*-
 
 from dict_inited import DictInited
+import os, os.path
 
-# Users
-
+# Entities
 class EntityField(DictInited):
     _schema = {
         "name": { "_type" : "" },
         "required": { "_type": True },
         "type": { "_type" : "" }
     }
+
+
+class Entity(DictInited):
+    _schema = {
+        "name": { "_type" : "" },
+        "fields": { "_type": [], "_each": { "_type": EntityField }},
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(Entity, self).__init__(*args, **kwargs)
+        self.is_user = False
+
 
 class UserConfig(DictInited):
     _schema = {
@@ -21,14 +33,6 @@ class UserConfig(DictInited):
             "_type": [],
             "_each": { "_type": EntityField }
         }
-    }
-
-
-# Entities
-class Entity(DictInited):
-    _schema = {
-        "name": { "_type" : "" },
-        "fields": { "_type": [], "_each": { "_type": EntityField }},
     }
 
 
@@ -46,8 +50,6 @@ class Layout(DictInited):
         "alignment": { "_type": "", "_default": "left" },
         "font-size": { "_type": "", "_default": "" },
     }
-
-
 
 
 class Form(DictInited):
@@ -75,7 +77,7 @@ class Form(DictInited):
             }
 
         _schema = {
-            "entity": { "_type": "" }, # TODO may have reference
+            "entity": { "_type": "" },
             "action": { "_type": "" },
             "form": { "_type" : FormInfoInfo }
         }
@@ -91,7 +93,7 @@ class Node(DictInited): # a uielement with no container_info
     _schema = {
         "layout": { "_type": Layout },
         "content": { "_type": "" }, # TODO may have reference
-        # "isSingle": { "_type" : True },
+        # "isSingle": { "_type" : True }, # don't need this because it's implied from tagname
         "content_attribs": { "_type" : {} }, # TODO may have reference
         "class_name": { "_type" : "" },
         "tagName": { "_type" : "" },
@@ -176,12 +178,58 @@ class App(DictInited):
         "emails": { "_type": [], "_each": { "_type":Email }},
     }
 
+    def render(self, coder):
+        self.users.render(self, coder) # pass the app and the coder
+        self.entities.render(self, coder)
 
-# TODO lang
-# href
-# goto
-# name on the navbar items
+    @classmethod
+    def create_from_dict(cls, data, *args, **kwargs):
+        # preprocess data
+        self = super(App, cls).create_from_dict(data, *args, **kwargs)
+
+        # create the user entity based on userconfig
+        """
+        userdict = { "name": "User" } # TODO Fill in with default values
+        userentity = Entity.create_from_dict(userdict)
+        userentity.is_user = True
+        userentity.facebook = self.users.facebook # TODO finish this process
+        self.entities.append(userentity)
+        """
+
+        # changing string refs to proper ref lang (in form: goto, belongsTo, entity)
+        for fii in filter(lambda n: isinstance(n, Form.FormInfo.FormInfoInfo), self.iternodes()):
+            fii.goto = 'pages/' + fii.goto # "Homepage" => "pages/Homepage"
+            if fii.belongsTo is not None:
+                fii.belongsTo = 'entities/' + fii.goto # "Homepage" => "pages/Homepage"
+
+        for fi in filter(lambda n: isinstance(n, Form.FormInfo), self.iternodes()):
+            fi.entity = 'entities/' + fi.entity # "Posts" => "entities/Posts"
+
+        """
+        for ni in filter(lambda n: isinstance(n, NavbarItem), self.iternodes()):
+            ni.link = 'pages/' + ni.link # FIXME this is actually wrong, it should be a link lang
+        """
+
+        # resolve ref lang in every string!
+        """self.resolve_refs()"""
+        return self
 
 
+class Coder(object):
 
+    def __init__(self, app_dir):
+        self.app_dir = app_dir
+        self._codes = {}
 
+    def write_to_file(self, relative_path_to_file, content):
+
+        self._codes[relative_path_to_file] += content
+
+    def code(self):
+        for relative_path, code in self._codes.iteritems():
+            target_file_path = os.path.join(self.app_dir, relative_path)
+            os.makedirs(target_file_path)
+            f = open(target_file_path, "w")
+            f.write(code)
+            f.close()
+            self._codes[relative_path] = ""
