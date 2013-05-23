@@ -277,15 +277,3 @@ class DictInited(object):
     def search(self, regex_string):
         return filter(lambda s: re.search(regex_string, s[0]), self.iternodes())
 
-    def resolve_refs(self):
-        """
-        # iterate over all the nodes in the tree and modify the string references
-        for path, node in filter(lambda t: isinstance(t[1], (str, unicode)), self.iternodes()):
-            if node.startswith('{{') and node.endswith('}}'):
-                path_string = node[2:-2]
-                try:
-                    self.set_by_path(path, self.find(path_string, name_allowed=True)) # for testing purposes
-                except AttributeError:
-                    print "didn't work for %r" % path_string
-        """
-
