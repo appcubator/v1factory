@@ -238,10 +238,7 @@ class DictInited(object):
                 this_obj = this_obj[attr]
 
             elif isinstance(this_obj, DictInited):
-                try:
-                    this_obj = getattr(this_obj, attr)
-                except Exception:
-                    import pdb; pdb.set_trace()
+                this_obj = getattr(this_obj, attr)
             else:
                 raise Exception("reached end of path")
         return this_obj
@@ -281,7 +278,14 @@ class DictInited(object):
         return filter(lambda s: re.search(regex_string, s[0]), self.iternodes())
 
     def resolve_refs(self):
+        """
         # iterate over all the nodes in the tree and modify the string references
         for path, node in filter(lambda t: isinstance(t[1], (str, unicode)), self.iternodes()):
-            self.set_by_path(path, "LOLSTRING") # for testing purposes
+            if node.startswith('{{') and node.endswith('}}'):
+                path_string = node[2:-2]
+                try:
+                    self.set_by_path(path, self.find(path_string, name_allowed=True)) # for testing purposes
+                except AttributeError:
+                    print "didn't work for %r" % path_string
+        """
 

@@ -3,6 +3,13 @@
 from dict_inited import DictInited
 import os, os.path
 
+def encode_braces(s):
+    return '{{%s}}' % s.replace('{', '\{')
+
+def decode_braces(s):
+    assert s.startswith('{{') and s.endswith('}}'), "Not brace encoded"
+    return s[2:-2].replace('\{', '{')
+
 # Entities
 class EntityField(DictInited):
     _schema = {
@@ -52,16 +59,30 @@ class Layout(DictInited):
     }
 
 
-class LinkLang(DictInited):
+class Resolvable(object):
+    """
+    Mixin allowing you to specify attributes you want to resolve.
+    See _resolve_attrs in LinkLang for example.
+    """
+
+    def resolve(self):
+        for src_attr, dest_attr in self.__class__._resolve_attrs:
+            path_string = decode_braces(getattr(self, src_attr))
+            setattr(self, dest_attr,  self.app.find(path_string, name_allowed=True))
+
+class LinkLang(DictInited, Resolvable):
     _schema = {
         "page_name": { "_type": "" },
         "urldata": { "_type": {} },
+        # "page": { "_type": Page"} # DO NOT UNCOMMENT. this gets added after resolve.
     }
+
+    _resolve_attrs = (('page_name', 'page'),)
 
 
 class Form(DictInited):
 
-    class FormInfo(DictInited):
+    class FormInfo(DictInited, Resolvable):
 
         class FormInfoInfo(DictInited):
 
@@ -88,6 +109,8 @@ class Form(DictInited):
             "action": { "_type": "" },
             "form": { "_type" : FormInfoInfo }
         }
+
+        _resolve_attrs = (('entity', 'entity_resolved'),)
 
     _schema = {
         "layout": { "_type": Layout },
@@ -142,8 +165,8 @@ class Navbar(DictInited):
 
     class NavbarItem(DictInited):
         _schema = {
-            "name": { "_type": "" }, # TODO may have reference
-            #"link": { "_type": "" }
+            "name": { "_type": "" },
+            #"link": { "_type": "" } # TODO
         }
 
     _schema = {
@@ -221,25 +244,25 @@ class App(DictInited):
         userentity.facebook = self.users.facebook # TODO finish this process
         self.entities.append(userentity)
 
-        # changing string refs to proper ref lang (in form: goto, belongsTo, entity)
+        # HACK give everything a reference to the app
+        for path, obj in filter(lambda u: isinstance(u[1], DictInited), self.iternodes()):
+            obj.app = self
+
+        # Fix reflang namespaces
         for path, fii in filter(lambda n: isinstance(n[1], Form.FormInfo.FormInfoInfo), self.iternodes()):
             if fii.belongsTo is not None:
-                fii.belongsTo = 'entities/' + fii.belongsTo
+                fii.belongsTo = encode_braces('entities/%s' % fii.belongsTo)
         for path, ll in filter(lambda n: isinstance(n[1], LinkLang), self.iternodes()):
-            ll.page_name = 'pages/' + ll.page_name
+            ll.page_name = encode_braces('pages/%s' % ll.page_name)
 
         for path, fi in filter(lambda n: isinstance(n[1], Form.FormInfo), self.iternodes()):
-            fi.entity = 'entities/' + fi.entity # "Posts" => "entities/Posts"
+            fi.entity = encode_braces('entities/%s' % fi.entity) # "Posts" => "entities/Posts"
 
-        """
-        for ni in filter(lambda n: isinstance(n, NavbarItem), self.iternodes()):
-            ni.link = 'pages/' + ni.link # FIXME this is actually wrong, it should be a link lang
-        """
 
-        """
-        self.resolve_refs()
-        self.resolve_context_lang()
-        self.resolve_links()""" # NYI
+        # Resolve reflangs
+        for path, rl in filter(lambda n: isinstance(n[1], Resolvable), self.iternodes()):
+            rl.resolve()
+
         return self
 
 
