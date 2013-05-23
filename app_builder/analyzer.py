@@ -80,7 +80,18 @@ class LinkLang(DictInited, Resolvable):
     _resolve_attrs = (('page_name', 'page'),)
 
 
-class Form(DictInited):
+class UIElement(object):
+
+    def is_form(self):
+        return self.__class__.__name__ == 'Form'
+
+    def is_list(self):
+        return self.__class__.__name__ == 'Iterator'
+
+    def is_node(self):
+        return self.__class__.__name__ == 'Node'
+
+class Form(DictInited, UIElement):
 
     class FormInfo(DictInited, Resolvable):
 
@@ -119,7 +130,7 @@ class Form(DictInited):
     }
 
 
-class Node(DictInited): # a uielement with no container_info
+class Node(DictInited, UIElement): # a uielement with no container_info
     _schema = {
         "layout": { "_type": Layout },
         "content": { "_type": "" }, # TODO may have reference
@@ -129,9 +140,9 @@ class Node(DictInited): # a uielement with no container_info
         "tagName": { "_type" : "" },
     }
 
-class Iterator(DictInited):
+class Iterator(DictInited, UIElement):
 
-    class IteratorInfo(DictInited):
+    class IteratorInfo(DictInited, Resolvable):
 
         class Query(DictInited):
             _schema = {
@@ -155,6 +166,8 @@ class Iterator(DictInited):
             "row": { "_type": Row}
         }
 
+        _resolve_attrs = (("entity", "entity_resolved"),)
+
     _schema = {
         "layout": { "_type": Layout },
         "container_info": { "_type": IteratorInfo },
@@ -176,11 +189,15 @@ class Navbar(DictInited):
     }
 
 class Page(DictInited):
+
+    class URL(DictInited):
+        _schema = {
+            "urlparts": { "_type": [], "_each": { "_type" : "" }} # TODO might have a reference to an entity
+        }
+
     _schema = {
         "name": { "_type" : "" },
-        "url": { "_type": {}, "_mapping": {
-            "urlparts": { "_type": [], "_each": { "_type" : "" }} # TODO might have a reference to an entity
-        }},
+        "url": { "_type": URL },
         "navbar": { "_type": Navbar },
         "uielements": { "_type": [], "_each": { "_one_of": [{"_type": Iterator}, {"_type": Form}, {"_type": Node}]}},
         "access_level": { "_type" : "" }
@@ -258,10 +275,18 @@ class App(DictInited):
         for path, fi in filter(lambda n: isinstance(n[1], Form.FormInfo), self.iternodes()):
             fi.entity = encode_braces('entities/%s' % fi.entity) # "Posts" => "entities/Posts"
 
+        for path, ii in filter(lambda n: isinstance(n[1], Iterator.IteratorInfo), self.iternodes()):
+            ii.entity = encode_braces('entities/%s' % ii.entity) # "Posts" => "entities/Posts"
+
 
         # Resolve reflangs
         for path, rl in filter(lambda n: isinstance(n[1], Resolvable), self.iternodes()):
             rl.resolve()
+
+        # TODO
+#       inline references
+#       relational fields (im especially dreading this)
+#       code object stage
 
         return self
 

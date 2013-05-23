@@ -934,5 +934,8 @@ import simplejson
 test_dict = simplejson.loads(test_json)
 
 from app_builder.analyzer import App
-a = App.create_from_dict(test_dict)
+app = App.create_from_dict(test_dict)
+
+from app_builder.events import main
+main(app)
 
