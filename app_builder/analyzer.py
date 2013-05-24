@@ -291,21 +291,3 @@ class App(DictInited):
         return self
 
 
-class Coder(object):
-
-    def __init__(self, app_dir):
-        self.app_dir = app_dir
-        self._codes = {}
-
-    def write_to_file(self, relative_path_to_file, content):
-
-        self._codes[relative_path_to_file] += content
-
-    def code(self):
-        for relative_path, code in self._codes.iteritems():
-            target_file_path = os.path.join(self.app_dir, relative_path)
-            os.makedirs(target_file_path)
-            f = open(target_file_path, "w")
-            f.write(code)
-            f.close()
-            self._codes[relative_path] = ""

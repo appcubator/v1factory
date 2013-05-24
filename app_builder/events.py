@@ -2,17 +2,50 @@
 
 codes = []
 
+class Coder(object):
+
+    def __init__(self, app_dir):
+        self.app_dir = app_dir
+        self._codes = {}
+
+    def add_code(self, code_obj):
+
+        try:
+            self._codes[code_obj.code_path].append(code_obj)
+        except KeyError:
+            self._codes[code_obj.code_path] = [code_obj]
+
+
+    def code(self, test=False):
+        for relative_path, codes in self._codes.iteritems():
+            code = '\n\n'.join([ c.render() for c in codes ])
+            if test:
+                print (relative_path, code)
+            else:
+                target_file_path = os.path.join(self.app_dir, relative_path)
+                os.makedirs(target_file_path)
+                f = open(target_file_path, "w")
+                f.write(code)
+                f.close()
+                self._codes[relative_path] = ""
+
+
 class Code(object):
 
     def __init__(self, name, el):
         self.name = name
         self.el = el
+        self.code_path = "webapp/something"
 
     def render(self):
         return "%s for %d" % (self.name, id(self.el))
 
 
 class DjangoModel(Code):
+
+    def __init__(self, *args, **kwargs):
+        super(DjangoModel, self).__init__(*args, **kwargs)
+        self.code_path = "webapp/models.py"
 
     @classmethod
     def create_for_entity(cls, entity):
@@ -49,8 +82,10 @@ def main(app):
             else:
                 assert False
 
+    cc = Coder('/dev/null')
     for c in codes:
-        print c.render()
+        cc.add_code(c)
+    cc.code(test=True)
 
 
 
