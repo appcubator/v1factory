@@ -936,6 +936,6 @@ test_dict = simplejson.loads(test_json)
 from app_builder.analyzer import App
 app = App.create_from_dict(test_dict)
 
-from app_builder.events import main
+from app_builder.controller import main
 main(app)
 
