@@ -10,16 +10,7 @@ env = Environment(loader=PackageLoader('app_builder', 'code_templates'))
 codes = []
 
 
-class Code(object):
-
-    def __init__(self, name, el):
-        self.name = name
-        self.el = el
-        self.code_path = "webapp/something"
-
-    def render(self):
-        return "%s for %d" % (self.name, id(self.el))
-
+# Code classes
 
 class DjangoModel(object):
 
@@ -44,6 +35,22 @@ class DjangoModel(object):
         return env.get_template('model.py').render(**data)
 
 
+class Code(object):
+
+    def __init__(self, name, el):
+        self.name = name
+        self.el = el
+        self.code_path = "webapp/something"
+
+    def render(self):
+        return "%s for %d" % (self.name, id(self.el))
+
+
+
+
+
+# create with side effects
+
 def create(event_name, el, *args, **kwargs):
     create_map = { 'model': DjangoModel.create_for_entity }
     try:
@@ -54,6 +61,11 @@ def create(event_name, el, *args, **kwargs):
 
 
 
+
+
+
+
+# tha main, naw mean?
 
 def main(app):
     for ent in app.entities:
