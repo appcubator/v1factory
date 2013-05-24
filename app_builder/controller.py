@@ -1,8 +1,12 @@
 # traverse the tree and for each thing, call the code create function, which will return a Code object
 
-import objgraph
 from app_builder.coder import Coder
 
+from jinja2 import Environment, PackageLoader
+
+import objgraph
+
+env = Environment(loader=PackageLoader('app_builder', 'code_templates'))
 codes = []
 
 
@@ -30,7 +34,14 @@ class DjangoModel(object):
         return self
 
     def render(self):
-        return "class %s(models.Model):  pass" % self.el.name
+        data = {'identifier': self.el.name,
+                'fields': ({'identifier':'sample_field',
+                            'django_type': 'CharField',
+                            'args': [],
+                            'kwargs': {'max_length':50}
+                            },)
+                }
+        return env.get_template('model.py').render(**data)
 
 
 def create(event_name, el, *args, **kwargs):
