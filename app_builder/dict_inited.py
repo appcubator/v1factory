@@ -106,6 +106,12 @@ class DictInited(object):
 
         data = deepcopy(data)
         o = cls._recursively_create(data, {"_type":cls}) # helper function needed for schema based recursion
+        # set the path on each thing
+        for path, obj in o.iternodes():
+            try:
+                obj._path = path
+            except AttributeError:
+                pass
         return o
 
     @classmethod

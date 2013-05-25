@@ -1,18 +1,31 @@
-# traverse the tree and for each thing, call the code create function, which will return a Code object
-
 from app_builder.coder import Coder
+from app_builder import naming
 
 from jinja2 import Environment, PackageLoader
 
 import objgraph
+import re
 
-env = Environment(loader=PackageLoader('app_builder', 'code_templates'))
-codes = []
+env = Environment(trim_blocks = True, loader=PackageLoader('app_builder', 'code_templates'))
 
 
 # Code classes
 
 class DjangoModel(object):
+
+    _type_map = {'text' : 'TextField',
+                'number' : 'FloatField',
+                'date' : 'DateTimeField',
+                '_CREATED' : 'DateTimeField',
+                '_MODIFIED' : 'DateTimeField',
+                'email' : 'EmailField',
+                'fk' : 'ForeignKey',
+                'm2m' : 'ManyToManyField',
+                'image' : 'TextField',
+                'onetoone': 'OneToOneField',
+    }
+
+    field_namer = naming.FieldNamer()
 
     def __init__(self, name, el):
         self.name = name
@@ -25,15 +38,37 @@ class DjangoModel(object):
         return self
 
     def render(self):
-        data = {'identifier': self.el.name,
-                'fields': ({'identifier':'sample_field',
-                            'django_type': 'CharField',
-                            'args': [],
-                            'kwargs': {'max_length':50}
-                            },)
-                }
-        return env.get_template('model.py').render(**data)
+        fields = []
 
+        type_map = self.__class__._type_map
+        field_namer = self.__class__.field_namer
+
+        def kwargs(field):
+            kwargs = {}
+            if field.type == '_CREATED':
+                kwargs['auto_now_add'] = repr(True)
+            elif field.type == '_MODIFIED':
+                kwargs['auto_now'] = repr(True)
+            if field.required:
+                if field.type in ['text', 'email', 'image']:
+                    kwargs['default'] = repr("")
+                if field.type in ['float', 'date']:
+                    kwargs['default'] = repr(0)
+            if not field.required:
+                kwargs['blank'] = repr(True)
+            return kwargs
+
+        for f in self.el.fields:
+            d = {'identifier': field_namer.get_identifier(f),
+                  'django_type': type_map[f.type],
+                  'kwargs': kwargs(f),
+                  'args': [],
+                }
+            fields.append(d)
+
+        data = {'identifier': self.el.name,
+                'fields': fields }
+        return env.get_template('model.py').render(**data)
 
 class Code(object):
 
@@ -49,18 +84,6 @@ class Code(object):
 
 
 
-# create with side effects
-
-def create(event_name, el, *args, **kwargs):
-    create_map = { 'model': DjangoModel.create_for_entity }
-    try:
-        c = create_map[event_name](el)
-    except KeyError:
-        c = Code(event_name, el)
-    codes.append(c)
-
-
-
 
 
 
@@ -68,6 +91,16 @@ def create(event_name, el, *args, **kwargs):
 # tha main, naw mean?
 
 def main(app):
+    codes = []
+    def create(event_name, el, *args, **kwargs):
+        create_map = { 'model': DjangoModel.create_for_entity }
+        try:
+            c = create_map[event_name](el)
+        except KeyError:
+            c = Code(event_name, el)
+        codes.append(c)
+
+
     for ent in app.entities:
         create('model', ent)
     for p in app.pages:
@@ -88,7 +121,11 @@ def main(app):
     cc = Coder('/dev/null')
     for c in codes:
         cc.add_code(c)
-    cc.code(test=True)
+    for rel_path, code in cc.itercode():
+        if rel_path == 'webapp/models.py':
+            from pyflakes.api import check
+            print code
+            print check(code, 'models.py')
 
 
 

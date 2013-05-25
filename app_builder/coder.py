@@ -16,8 +16,7 @@ class Coder(object):
         except KeyError:
             self._codes[code_obj.code_path] = [code_obj]
 
-
-    def code(self, test=False):
+    def itercode(self):
         for relative_path, codes in self._codes.iteritems():
             code = '\n\n'.join([ c.render() for c in codes ])
 
@@ -27,15 +26,16 @@ class Coder(object):
                 # fix style
                 code = autopep8.fix_string(code)
 
-            if test:
-                print (relative_path, code)
+            yield (relative_path, code)
 
-            else:
-                target_file_path = os.path.join(self.app_dir, relative_path)
-                os.makedirs(target_file_path)
-                f = open(target_file_path, "w")
-                f.write(code)
-                f.close()
-                self._codes[relative_path] = ""
+
+    def code(self):
+        for relative_path, code in self.itercode():
+            target_file_path = os.path.join(self.app_dir, relative_path)
+            os.makedirs(target_file_path)
+            f = open(target_file_path, "w")
+            f.write(code)
+            f.close()
+            self._codes[relative_path] = ""
 
 
