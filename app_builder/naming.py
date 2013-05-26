@@ -47,14 +47,13 @@ def make_safe(s):
     return s
 
 
-class ModelNamer(object):
+class CWNamespace(object):
 
     def __init__(self):
         self.used_ids = []
-        self.id_field_map = {}
 
-    def get_identifier(self, model_name):
-        candidate = make_safe(model_name.replace(' ', '_').lower())
+    def new_identifier(self, name):
+        candidate = make_safe(name.replace(' ', '_').lower())
         candidate = us2cw(candidate) # use capwords for model names
         while candidate in self.used_ids:
             if re.search(r'[2-9]$', candidate):
@@ -65,15 +64,13 @@ class ModelNamer(object):
         return candidate
 
 
-class FieldNamer(object):
+class USNamespace(object):
 
-    def __init__(self, model):
-        self.model = model
+    def __init__(self):
         self.used_ids = []
-        self.id_field_map = {}
 
-    def get_identifier(self, field_name):
-        candidate = make_safe(field_name.replace(' ', '_').lower())
+    def new_identifier(self, name):
+        candidate = make_safe(name.replace(' ', '_').lower())
         while candidate in self.used_ids:
             if re.search(r'[2-9]$', candidate):
                 candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
@@ -81,4 +78,3 @@ class FieldNamer(object):
                 candidate += '2'
         self.used_ids.append(candidate)
         return candidate
-

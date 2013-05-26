@@ -7,32 +7,17 @@ env = Environment(trim_blocks=True, loader=PackageLoader(
 
 class DjangoPageView(object):
 
-    def __init__(self, name, el):
-        self.name = name
-        self.el = el  # the page
+    def __init__(self, identifier, page_context={}):
+        self.identifier = identifier
         self.code_path = "webapp/pages.py"
-        self.page_context = self.el.get_page_context()  # name, entity pairs
+        self.page_context = page_context
 
         # action is some kind of tree where the terminal nodes render
         # HTTPResponses.
         self.actions = None
 
-    @classmethod
-    def create_for_page(cls, page):
-        self = cls(page.name, page)
-        page._django_page_view = self
-        return self
-
-    def actionify(self, actions):
-        # initially, you're going to get some data
-        pass
-
     def render(self):
-        return "NYI"
-        data = {'identifier': self.name,
-                'page_context': self.page_context,  # the args refer to url data
-                }
-        return env.get_template('view.py').render(**data)
+        return env.get_template('view.py').render(view=self)
 
 
 class DjangoField(object):
@@ -79,11 +64,11 @@ class DjangoModel(object):
     def __init__(self, identifier):
         self.identifier = identifier
         self.code_path = "webapp/models.py"
-        self.field_namer = naming.FieldNamer(model=self)
+        self.field_namer = naming.USNamespace()
         self.fields = []
 
     def create_field(self, name, canonical_type, required):
-        identifier = self.field_namer.get_identifier(name)
+        identifier = self.field_namer.new_identifier(name)
         f = DjangoField(
             identifier, canonical_type, required=required, parent_model=self)
         self.fields.append(f)
