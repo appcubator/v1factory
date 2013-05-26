@@ -148,6 +148,10 @@ function( TableQueryView,
         new FormEditorView(this.formModel,
                            this.model.get('container_info').get('entity'));
       }
+    },
+
+    switchEditModeOn: function() {
+      // start editing code
     }
   });
 

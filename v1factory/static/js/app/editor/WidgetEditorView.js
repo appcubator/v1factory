@@ -2,10 +2,11 @@ define([
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
   'editor/ImageSliderEditorView',
+  'app/views/FormEditorView',
   'mixins/BackboneUI',
   'iui'
 ],
-function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView) {
+function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView, FormEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
     className : 'widget-editor fadeIn',
@@ -59,7 +60,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView) {
           this.el.appendChild(this.infoEditor.el);
         }
 
-        if(action == "show") {
+        if(action == "show" || action == "create") {
           this.el.appendChild(this.renderEditForm());
         }
 

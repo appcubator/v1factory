@@ -166,7 +166,7 @@ function(FormFieldModel, TutorialView) {
 
       this.$el.find('.selected').removeClass('selected');
       this.$el.find('#field-' + fieldModel.cid).addClass('selected');
-      this.$el.find('.details-panel').fadeIn();
+      this.$el.find('.details-panel').fadeIn().css('display', 'inline-block');
       this.$el.find('.drag-icon').css({opacity: 0}).animate({opacity: 1});
     },
 
