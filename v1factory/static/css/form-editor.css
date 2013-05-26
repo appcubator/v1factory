@@ -225,7 +225,7 @@ ul.action li:hover .add-to-list {
 }
 
 .action-panel {
-  position: fixed;
+  position: relative;
   margin-top: 0px;
   width: 240px;
   height: 530px;

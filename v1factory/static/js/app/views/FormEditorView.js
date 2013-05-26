@@ -32,7 +32,7 @@ function(FormFieldModel, TutorialView) {
       'click .done-btn'                  : 'closeModal',
       'click .delete-field'              : 'deleteField',
       'click .q-mark'                    : 'showTutorial',
-      'click li.page-redirect'           : 'changedGoto'
+      'click li.action'                  : 'actionAdded'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -56,7 +56,7 @@ function(FormFieldModel, TutorialView) {
                       'handleKey',
                       'addNewField',
                       'deleteField',
-                      'renderPossibleActions');
+                      'actionAdded');
 
       iui.loadCSS(this.css);
 
@@ -85,7 +85,8 @@ function(FormFieldModel, TutorialView) {
       var temp_context = {};
       temp_context.form = self.model;
       temp_context.entity = self.entity;
-      temp_context.pages = appState.pages;
+      console.log(v1State.get('pages'));
+      temp_context.pages = v1State.get('pages').models;
       temp_context.emails = ["Email 1", "Email 2"];
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
       //this.entity.getBelongsTo();
@@ -240,7 +241,6 @@ function(FormFieldModel, TutorialView) {
       var page_val = 'internal://' + page_name;
       this.model.set('goto', page_val);
       //$(e.target).remove();
-      this.renderPossibleActions();
       this.$el.find('#'+ page_name).remove();
       this.$el.find('.current-actions').html('');
       this.$el.find('.current-actions').append('<li id="'+page_id +'">Go to '+page_name+'<div class="remove-from-list"></div></li>');
@@ -331,13 +331,15 @@ function(FormFieldModel, TutorialView) {
       new TutorialView([6, 1]);
     },
 
-    renderPossibleActions: function() {
-      var page_context = {};
-      page_context.pages = appState.pages;
-      var html = _.template(FormEditorTemplates.possibleActions, page_context);
-      this.$el.find('.goto-list').html(html);
-      return this;
+    actionAdded: function(e) {
+      var target = e.target;
+      if($(target).hasClass('page-redirect')) {
+        var pageId = target.id.replace('page-','');
+        this.model.get('actions').removePageRedirect();
+        this.model.get('actions').addRedirect(v1State.get(pageId));
+      }
     }
+
   });
 
   return FormEditorView;
