@@ -3,7 +3,9 @@
 from copy import deepcopy
 import re
 
+
 class ValidationError(object):
+
     """Represents a validation error"""
 
     def __init__(self, msg, thing, schema, ancestor_list):
@@ -16,8 +18,8 @@ class ValidationError(object):
         return u"Error found in %r: %r\n(Thing, Schema) = %r" % (self.path, self.msg, (self.thing, self.schema))
 
 
-
 class DictInited(object):
+
     """Base class for dict_inited objects.
     Includes creation code and validation code"""
 
@@ -36,8 +38,9 @@ class DictInited(object):
              Does a recursive DFS, mutating as it goes"""
 
         if '_one_of' in schema:
-            for validation_schema in schema['_one_of']: # FIXME there might be more than 1 correct schema, then it's ambiguous
-                # try all the schemas until one works. if none work, throw an error and quit.
+            for validation_schema in schema['_one_of']:  # FIXME there might be more than 1 correct schema, then it's ambiguous
+                # try all the schemas until one works. if none work, throw an
+                # error and quit.
                 new_errs = cls.validate_dict(thing, validation_schema, [])
                 if len(new_errs) == 0:
                     return cls._recursively_create(thing, validation_schema)
@@ -50,17 +53,19 @@ class DictInited(object):
             raise Exception('schema structure doesn\'t begin with _type')
 
         if type(schema['_type']) == type(type):
-            data = schema['_type']._recursively_create(thing, {"_type":{}, "_mapping":schema['_type']._schema})
+            data = schema['_type']._recursively_create(thing, {
+                                                       "_type": {}, "_mapping": schema['_type']._schema})
             return schema['_type'](**data)
 
         if type(thing) == type(""):
             thing = unicode(thing)
 
-        assert type(thing) == type(schema['_type']) or (type(thing) == type(u"") and type(schema['_type']) == type("")), "thing does not ascribe to schema"
+        assert type(thing) == type(schema['_type']) or (type(thing) == type(
+            u"") and type(schema['_type']) == type("")), "thing does not ascribe to schema"
 
         if type(thing) == type([]):
             assert('_each' in schema)
-            return [ cls._recursively_create(minithing, schema['_each']) for minithing in thing ]
+            return [cls._recursively_create(minithing, schema['_each']) for minithing in thing]
 
         elif type(thing) == type({}):
 
@@ -71,7 +76,8 @@ class DictInited(object):
                 if key not in schema['_mapping']:
                     del thing[key]
                 else:
-                    thing[key] = cls._recursively_create(thing[key], schema['_mapping'][key])
+                    thing[key] = cls._recursively_create(
+                        thing[key], schema['_mapping'][key])
 
             return thing
 
@@ -99,13 +105,15 @@ class DictInited(object):
         Validates the data,
           then inits the object recursively.
         """
-        assert isinstance(data, dict), "Input to \"created_from_dict\" must be a dict"
-        errors = cls.validate_dict(data, {"_type":cls}, [])
+        assert isinstance(
+            data, dict), "Input to \"created_from_dict\" must be a dict"
+        errors = cls.validate_dict(data, {"_type": cls}, [])
         if len(errors) != 0:
             raise Exception(errors)
 
         data = deepcopy(data)
-        o = cls._recursively_create(data, {"_type":cls}) # helper function needed for schema based recursion
+        o = cls._recursively_create(data, {
+                                    "_type": cls})  # helper function needed for schema based recursion
         # set the path on each thing
         for path, obj in o.iternodes():
             try:
@@ -123,13 +131,15 @@ class DictInited(object):
         if '_one_of' in schema:
             sub_errors = []
             for validation_schema in schema['_one_of']:
-                new_errs = cls.validate_dict(thing, validation_schema, ancestor_list)
+                new_errs = cls.validate_dict(
+                    thing, validation_schema, ancestor_list)
                 sub_errors.extend(new_errs)
                 if len(new_errs) == 0:
                     return errors
             # if you get to this point, none of the "one of" things were valid.
             errors.extend(sub_errors)
-            #errors.append(ValidationError("None of the _one_of things matched.", thing, schema, ancestor_list))
+            # errors.append(ValidationError("None of the _one_of things
+            # matched.", thing, schema, ancestor_list))
             return errors
         assert '_one_of' not in schema
 
@@ -140,23 +150,25 @@ class DictInited(object):
             raise Exception('schema structure doesn\'t begin with _type')
 
         if type(schema['_type']) == type(type):
-            return cls.validate_dict(thing, {"_type":{}, "_mapping":schema['_type']._schema}, ancestor_list)
-
+            return cls.validate_dict(thing, {"_type": {}, "_mapping": schema['_type']._schema}, ancestor_list)
 
         if type(thing) == type(""):
             thing = unicode(thing)
 
         try:
-            assert type(thing) == type(schema['_type']) or (type(thing) == type(u"") and type(schema['_type']) == type(""))
+            assert type(thing) == type(schema['_type']) or (type(
+                thing) == type(u"") and type(schema['_type']) == type(""))
         except AssertionError:
-            errors.append(ValidationError("Type mismatch", thing, schema, ancestor_list))
+            errors.append(ValidationError(
+                "Type mismatch", thing, schema, ancestor_list))
             return errors
 
         if type(thing) == type([]):
             assert '_each' in schema, 'found [] with no _each'
             for idx, minithing in enumerate(thing):
                 ancestor_list.append(idx)
-                errors.extend(cls.validate_dict(minithing, schema['_each'], ancestor_list))
+                errors.extend(cls.validate_dict(
+                    minithing, schema['_each'], ancestor_list))
                 ancestor_list.pop()
 
         elif type(thing) == type({}):
@@ -168,36 +180,45 @@ class DictInited(object):
                 if key not in thing and '_default' in schema['_mapping'][key]:
                     thing[key] = schema['_mapping'][key]['_default']
                 if key not in thing:
-                    errors.append(ValidationError("Key not found: %r" % key, thing, schema, ancestor_list))
+                    errors.append(ValidationError(
+                        "Key not found: %r" % key, thing, schema, ancestor_list))
                 else:
                     ancestor_list.append(key)
-                    errors.extend(cls.validate_dict(thing[key], schema['_mapping'][key], ancestor_list))
+                    errors.extend(cls.validate_dict(thing[
+                                  key], schema['_mapping'][key], ancestor_list))
                     ancestor_list.pop()
 
         elif type(thing) == type("") or type(thing) == type(u""):
             if "_minlength" in schema:
                 if not (len(thing) >= schema["_minlength"]):
-                    errors.append(ValidationError('String was shorter than _minlength', thing, schema, ancestor_list))
+                    errors.append(ValidationError(
+                        'String was shorter than _minlength', thing, schema, ancestor_list))
             if "_maxlength" in schema:
                 if not (len(thing) <= schema["_maxlength"]):
-                    errors.append(ValidationError('String was longer than _maxlength', thing, schema, ancestor_list))
+                    errors.append(ValidationError(
+                        'String was longer than _maxlength', thing, schema, ancestor_list))
 
         elif type(thing) == type(0):
             if "_min" in schema:
                 if not (thing >= schema["_min"]):
-                    errors.append(ValidationError('int was less than min', thing, schema, ancestor_list))
+                    errors.append(ValidationError(
+                        'int was less than min', thing, schema, ancestor_list))
             if "_max" in schema:
                 if not (thing <= schema["_max"]):
-                    errors.append(ValidationError('int was greater than max', thing, schema))
+                    errors.append(ValidationError(
+                        'int was greater than max', thing, schema))
 
         elif type(thing) == type(True):
             pass
 
         elif thing is None:
-            try: assert(schema['_type'] is None)
-            except Exception: raise Exception("thing was null but wasn't supposed to be.\n\n\nschema:{}".format(repr(thing), schema))
-            else: return errors
-
+            try:
+                assert(schema['_type'] is None)
+            except Exception:
+                raise Exception("thing was null but wasn't supposed to be.\n\n\nschema:{}".format(
+                    repr(thing), schema))
+            else:
+                return errors
 
         else:
             raise Exception("type not recognized: {}".format(thing))
@@ -220,13 +241,15 @@ class DictInited(object):
                     try:
                         name_matches = [i for i in this_obj if i.name == attr]
                     except AttributeError:
-                        name_matches = [i for i in this_obj if i['name'] == attr]
+                        name_matches = [i for i in this_obj if i[
+                            'name'] == attr]
 
                     if len(name_matches) == 1:
                         this_obj = name_matches[0]
                         continue
                     elif len(name_matches) > 1:
-                        raise Exception("Name not unique while searching for %r" % path_string)
+                        raise Exception(
+                            "Name not unique while searching for %r" % path_string)
                     else:
                         pass
 
@@ -234,9 +257,11 @@ class DictInited(object):
                     attr = int(attr)
                 except Exception:
                     if not name_allowed:
-                        raise Exception("Couldn't convert %r to an int. Maybe you meant to use name_allowed=True" % attr)
+                        raise Exception(
+                            "Couldn't convert %r to an int. Maybe you meant to use name_allowed=True" % attr)
                     else:
-                        raise Exception("Couldn't find thing with name=%r" % attr)
+                        raise Exception(
+                            "Couldn't find thing with name=%r" % attr)
 
                 this_obj = this_obj[attr]
 
@@ -260,26 +285,29 @@ class DictInited(object):
         elif type(obj) == dict:
             obj[attr_to_set] = value
         else:
-            # the object should be a subclass of dictinited since that's how all this is inited
+            # the object should be a subclass of dictinited since that's how
+            # all this is inited
             assert isinstance(obj, DictInited), "Well this is unexpected"
             setattr(obj, attr_to_set, value)
 
-
     def iternodes(self):
         thing = self
-        node_stack = [ (attr, getattr(self, attr)) for attr in self.__class__._schema.keys() ]
+        node_stack = [(attr, getattr(self, attr))
+                      for attr in self.__class__._schema.keys()]
 
         while len(node_stack) > 0:
             path, obj = node_stack.pop()
             if type(obj) == dict:
-                node_stack.extend([ (path + '/' + k, v) for k, v in obj.iteritems() ])
+                node_stack.extend([(path + '/' + k, v)
+                                  for k, v in obj.iteritems()])
             elif type(obj) == list:
-                node_stack.extend([ (path + '/' + str(i), v) for i, v in enumerate(obj) ])
+                node_stack.extend([(path + '/' + str(i), v)
+                                  for i, v in enumerate(obj)])
             elif isinstance(obj, DictInited):
-                node_stack.extend([ (path + '/' + attr, getattr(obj, attr)) for attr in obj.__class__._schema.keys() ])
+                node_stack.extend([(path + '/' + attr, getattr(obj, attr))
+                                  for attr in obj.__class__._schema.keys()])
 
             yield (path, obj)
 
     def search(self, regex_string):
         return filter(lambda s: re.search(regex_string, s[0]), self.iternodes())
-

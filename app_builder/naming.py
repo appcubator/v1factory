@@ -24,6 +24,8 @@ def cw2us(x): # capwords to underscore notation
     return re.sub(r'(?<=[a-z])[A-Z]|(?<!^)[A-Z](?=[a-z])',
         r"_\g<0>", x).lower(  )
 
+def us2mc(x): # underscore to mixed case notation
+    return re.sub(r'_([a-z])', lambda m: (m.group(1).upper()), x)
 
 def us2cw(x): # underscore to capwords notation
     s = us2mc(x)
@@ -44,14 +46,34 @@ def make_safe(s):
         s += '_val'
     return s
 
-class FieldNamer(object):
 
-    def __init__(self, *args, **kwargs):
+class ModelNamer(object):
+
+    def __init__(self):
         self.used_ids = []
         self.id_field_map = {}
 
-    def get_identifier(self, field):
-        candidate = make_safe(field.name.replace(' ', '_').lower())
+    def get_identifier(self, model_name):
+        candidate = make_safe(model_name.replace(' ', '_').lower())
+        candidate = us2cw(candidate) # use capwords for model names
+        while candidate in self.used_ids:
+            if re.search(r'[2-9]$', candidate):
+                candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
+            else:
+                candidate += '2'
+        self.used_ids.append(candidate)
+        return candidate
+
+
+class FieldNamer(object):
+
+    def __init__(self, model):
+        self.model = model
+        self.used_ids = []
+        self.id_field_map = {}
+
+    def get_identifier(self, field_name):
+        candidate = make_safe(field_name.replace(' ', '_').lower())
         while candidate in self.used_ids:
             if re.search(r'[2-9]$', candidate):
                 candidate = candidate[:-1] + str(int(candidate[-1]) + 1)

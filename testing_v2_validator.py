@@ -476,7 +476,7 @@ test_json = r"""{
             "url": {
                 "urlparts": [
                     "Game_Page",
-                    "{{Game}}"
+                    {"name":"game", "entity_name":"{{entities/Game}}"}
                 ]
             },
             "access_level": "all",
@@ -937,5 +937,7 @@ from app_builder.analyzer import App
 app = App.create_from_dict(test_dict)
 
 from app_builder.controller import main
-main(app)
+
+def test():
+    return main(app)
 
