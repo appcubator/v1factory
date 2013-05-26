@@ -32,7 +32,8 @@ function(FormFieldModel, TutorialView) {
       'click .done-btn'                  : 'closeModal',
       'click .delete-field'              : 'deleteField',
       'click .q-mark'                    : 'showTutorial',
-      'click li.action'                  : 'actionAdded'
+      'click li.action'                  : 'actionClicked',
+      'click li.current-action'          : 'currentActionClicked'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -56,7 +57,10 @@ function(FormFieldModel, TutorialView) {
                       'handleKey',
                       'addNewField',
                       'deleteField',
-                      'actionAdded');
+                      'actionClicked',
+                      'currentActionClicked',
+                      'actionAdded',
+                      'actionRemoved');
 
       iui.loadCSS(this.css);
 
@@ -65,6 +69,8 @@ function(FormFieldModel, TutorialView) {
 
       this.model.get('fields').bind('add', this.fieldAdded);
       this.model.get('fields').bind('remove', this.fieldRemoved);
+      this.model.get('actions').bind('add', this.actionAdded);
+      this.model.get('actions').bind('remove', this.actionRemoved);
       this.model.bind('change:action', this.reRenderFields);
 
       this.render();
@@ -74,9 +80,6 @@ function(FormFieldModel, TutorialView) {
       }
 
       this.callback = callback;
-      //$(window).bind('keydown', this.handleKey);
-      //console.log($._data($(window)[0],"events").keydown);
-
     },
 
     render : function(text) {
@@ -85,7 +88,6 @@ function(FormFieldModel, TutorialView) {
       var temp_context = {};
       temp_context.form = self.model;
       temp_context.entity = self.entity;
-      console.log(v1State.get('pages'));
       temp_context.pages = v1State.get('pages').models;
       temp_context.emails = ["Email 1", "Email 2"];
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
@@ -94,10 +96,9 @@ function(FormFieldModel, TutorialView) {
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
 
-      if(this.model.has('goto')) {
-        var page_name = this.model.get('goto').replace('internal://','');
-        this.$el.find('.current-actions').append('<li id="'+page_name +'">Go to '+page_name+'<div class="remove-from-list"></div></li>');
-      }
+      _(this.model.get('actions').models).each(function(action) {
+        self.$el.find('.current-actions').append('<li id="action-'+action.cid +'" class="current-action">'+action.getNL()+'<div class="remove-from-list"></div></li>');
+      });
 
       $('.form-fields-list').sortable({
         stop: this.changedOrder,
@@ -235,7 +236,6 @@ function(FormFieldModel, TutorialView) {
     },
 
     changedGoto: function(e) {
-      console.log(e.target.id);
       var page_name = String(e.target.id||e.target.parentNode.id).replace('_', ' ');
       var page_id = String(e.target.id).replace(' ','_');
       var page_val = 'internal://' + page_name;
@@ -248,7 +248,6 @@ function(FormFieldModel, TutorialView) {
 
     changedFormAction: function(e) {
       alert("This should never have happened");
-      console.log(e.target.value);
       this.model.set('action', e.target.value);
     },
 
@@ -331,13 +330,26 @@ function(FormFieldModel, TutorialView) {
       new TutorialView([6, 1]);
     },
 
-    actionAdded: function(e) {
+    actionClicked: function(e) {
       var target = e.target;
       if($(target).hasClass('page-redirect')) {
         var pageId = target.id.replace('page-','');
         this.model.get('actions').removePageRedirect();
-        this.model.get('actions').addRedirect(v1State.get(pageId));
+        this.model.get('actions').addRedirect(v1State.get('pages').get(pageId));
       }
+    },
+
+    currentActionClicked: function(e) {
+      var actionCid = e.target.id.replace('action-','');
+      this.model.get('actions').remove(actionCid);
+    },
+
+    actionAdded: function(actionModel) {
+      this.$el.find('.current-actions').append('<li id="action-'+actionModel.cid +'" class="current-action">'+actionModel.getNL()+'<div class="remove-from-list"></div></li>');
+    },
+
+    actionRemoved: function(actionModel) {
+      this.$el.find('#action-' + actionModel.cid).remove();
     }
 
   });

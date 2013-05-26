@@ -41,7 +41,7 @@ FormEditorTemplates.field = [
 ].join('\n');
 
 FormEditorTemplates.possibleActions = [
-  '<% _(pages).each(function(page) {  console.log(page); %>',
+  '<% _(pages).each(function(page) {  %>',
     '<li class="action page-redirect" id="page-<%= page.cid %>">Go to <%= page.get("name") %><div class="add-to-list"></div></li>',
   '<% });%>'
 ].join('\n');

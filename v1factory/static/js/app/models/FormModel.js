@@ -1,8 +1,8 @@
 define([
-  'backbone',
-  'app/collections/FormFieldCollection'
+  'app/collections/FormFieldCollection',
+  'app/collections/ActionCollection'
 ],
-function(Backbone, FormFieldCollection) {
+function(FormFieldCollection, ActionCollection) {
 
   var FormModel = Backbone.Model.extend({
     initialize: function(bone, entity) {
@@ -11,7 +11,7 @@ function(Backbone, FormFieldCollection) {
       this.set('name', bone.name);
       this.set('fields', new FormFieldCollection());
       this.set('action', bone.action||"create");
-      this.set('actions', bone.actions||[]);
+      this.set('actions', new ActionCollection(bone.actions || []));
       this.set('belongsTo', bone.belongsTo||null);
 
       if(bone.fields) {
