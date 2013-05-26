@@ -23,10 +23,17 @@ function(PageModel) {
         if(_.contains(page.get('url').get('urlparts'), '{{' + entityName + '}}')) {
           pagesList.push(page.get('name'));
         }
-        
       });
 
       return pagesList;
+    },
+
+    isUnique: function(pageName) {
+      isUnique = true;
+      _(this.models).each(function(page) {
+        if(page.get('name') === pageName) isUnique = false;
+      });
+      return isUnique;
     }
   });
 
