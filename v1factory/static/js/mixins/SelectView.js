@@ -9,7 +9,7 @@ function(Backbone) {
     className : 'select-view',
 
     events: {
-      'click' : 'expand',
+      'click'    : 'expand',
       'click li' : 'select'
     },
 
@@ -58,7 +58,7 @@ function(Backbone) {
 
     expand: function(e) {
       this.el.style.height = this.list.length * 40 + 'px';
-      e.stopPropagation();
+      if(e) e.stopPropagation();
     },
 
     shrink : function(e) {

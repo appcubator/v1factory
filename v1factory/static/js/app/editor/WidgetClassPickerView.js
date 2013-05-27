@@ -1,24 +1,32 @@
 define([
-  'mixins/BackboneModal'
+  'mixins/SelectView'
 ],
-function() {
+function(SelectView) {
 
-  var WidgetClassPickerView = Backbone.ModalView.extend({
-    el     : document.getElementById('class-picker'),
-    className : 'modal class-picker fdededfcbcbcd',
-    width  : 800,
-    height: 800,
-    events : {
-      'click .class-name-item'   : 'classChanged'
+  var WidgetClassPickerView = SelectView.extend({
+    className : 'class-picker select-view',
+    id: 'class-editor',
+    tagName : 'div',
+    css : 'widget-editor',
+
+    events: {
+      'click li' : 'select',
+      'mouseover li' : 'hovered'
     },
 
     initialize: function(widgetModel){
       _.bindAll(this, 'render',
-                      'clear',
-                      'selectChanged',
-                      'classChanged');
+                      'expand',
+                      'shrink',
+                      'select',
+                      'show',
+                      'hide',
+                      'hovered');
 
       this.model = widgetModel;
+      console.log(widgetModel);
+      this.list = _.map(uieState[this.model.get('type')], function(obj) { return obj.class_name; });
+      this.currentVal = this.model.get('class_name');
       this.render();
     },
 
@@ -29,7 +37,6 @@ function() {
     },
 
     selectChanged : function(chg, ch2) {
-
       if(this.widgetsCollection.selectedEl === null) {
         this.model = null;
         //this.el.innerHTML = '';
@@ -42,43 +49,23 @@ function() {
     },
 
     render: function() {
-      var self = this;
-      this.list = document.createElement('ul');
-      this.list.className = "class-picker";
-      var type = this.model.get('type');
-
-      _(uieState[type]).each(function(uie){
-
-        var li = document.createElement('li');
-        li.className = 'class-name-item';
-        if(self.model.get('class_name') == uie.class_name) {
-          li.className +=' selected';
-        }
-
-        li.id = uie.class_name;
-
-        if(type == 'yolo') {
-         li.innerHTML = (uie.name||uie.class_name);
-        }
-        else {
-          li.innerHTML = '<div class="node" id="'+ uie.class_name+'">'+ self.renderNode(uie)+'</div>';
-        }
-
-        self.list.appendChild(li);
-      });
-
-      this.el.appendChild(this.list);
+      console.log(this.el);
+      console.log(this.list);
+      WidgetClassPickerView.__super__.render.call(this);
+      this.expand();
+      this.hide();
     },
 
-    renderNode: function(uie) {
-      var temp = Templates.tempNode;
-      var el = _.template(temp, { element: uie});
-      return el;
+    hovered: function() {
+      console.log("HOVERED");
     },
 
-    clear: function() {
-      this.el.innerHTML = '';
-      this.model = null;
+    show: function() {
+      this.$el.fadeIn();
+    },
+
+    hide: function() {
+      this.$el.hide();
     }
   });
 

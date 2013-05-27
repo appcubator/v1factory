@@ -2,11 +2,16 @@ define([
   'editor/WidgetContentEditorView',
   'editor/WidgetLayoutEditorView',
   'editor/ImageSliderEditorView',
+  'editor/WidgetClassPickerView',
   'app/views/FormEditorView',
   'mixins/BackboneUI',
   'iui'
 ],
-function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView, FormEditorView) {
+function(WidgetContentEditor,
+         WidgetLayoutEditor,
+         ImageSliderEditorView,
+         WidgetClassPickerView,
+         FormEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
     className : 'widget-editor fadeIn',
@@ -18,12 +23,15 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView, FormEdi
       'click .edit-slides-button' : 'openSlideEditor',
       'click .edit-query-button'  : 'openQueryEditor',
       'click .edit-row-button'    : 'openRowEditor',
-      'click #edit-form-btn'      : 'openFormEditor'
+      'click #edit-form-btn'      : 'openFormEditor',
+      'click #pick-style'         : 'openStylePicker',
+      'click'                     : 'clicked'
     },
 
     initialize: function(){
       _.bindAll(this, 'render',
                       'clear',
+                      'openStylePicker',
                       'openSlideEditor',
                       'openQueryEditor',
                       'openRowEditor',
@@ -66,6 +74,8 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView, FormEdi
 
       }
       else {
+        this.widgetClassPickerView = new WidgetClassPickerView(this.model);
+        this.el.appendChild(this.widgetClassPickerView.el);
         this.el.appendChild(this.renderStyleEditing());
         this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.el.appendChild(this.layoutEditor.el);
@@ -111,7 +121,7 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView, FormEdi
     },
 
     openStylePicker: function(e) {
-      new WidgetClassPickerView(this.model);
+      this.widgetClassPickerView.show();
     },
 
     openFormEditor: function() {
@@ -138,14 +148,18 @@ function(WidgetContentEditor, WidgetLayoutEditor, ImageSliderEditorView, FormEdi
                          this.model.get('container_info').get('row'));
     },
 
-
     clear: function() {
       if(this.contentEditor) this.contentEditor.clear();
       if(this.layoutEditor) this.layoutEditor.clear();
       if(this.infoEditor) this.infoEditor.clear();
       this.el.innerHTML = '';
       this.$el.hide();
+    },
+
+    clicked: function(e) {
+      e.stopPropagation();
     }
+
   });
 
   return WidgetEditorView;
