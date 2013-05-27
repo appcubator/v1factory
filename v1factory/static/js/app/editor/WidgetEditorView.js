@@ -36,7 +36,10 @@ function(WidgetContentEditor,
                       'openQueryEditor',
                       'openRowEditor',
                       'openFormEditor',
-                      'setModel');
+                      'setModel',
+                      'classChanged',
+                      'hideSubviews',
+                      'showSubviews');
 
       iui.loadCSS(this.css);
       var self = this;
@@ -75,11 +78,13 @@ function(WidgetContentEditor,
       }
       else {
         this.widgetClassPickerView = new WidgetClassPickerView(this.model);
+        this.layoutEditor = new WidgetLayoutEditor(this.model);
+        this.contentEditor = new WidgetContentEditor(this.model);
+        this.widgetClassPickerView.bind('change', this.classChanged);
+
         this.el.appendChild(this.widgetClassPickerView.el);
         this.el.appendChild(this.renderStyleEditing());
-        this.layoutEditor = new WidgetLayoutEditor(this.model);
         this.el.appendChild(this.layoutEditor.el);
-        this.contentEditor = new WidgetContentEditor(this.model);
         this.el.appendChild(this.contentEditor.el);
       }
 
@@ -121,7 +126,9 @@ function(WidgetContentEditor,
     },
 
     openStylePicker: function(e) {
+      this.hideSubviews();
       this.widgetClassPickerView.show();
+      this.widgetClassPickerView.expand();
     },
 
     openFormEditor: function() {
@@ -148,12 +155,33 @@ function(WidgetContentEditor,
                          this.model.get('container_info').get('row'));
     },
 
+    classChanged: function() {
+      this.showSubviews();
+      this.widgetClassPickerView.$el.hide();
+    },
+
     clear: function() {
       if(this.contentEditor) this.contentEditor.clear();
       if(this.layoutEditor) this.layoutEditor.clear();
       if(this.infoEditor) this.infoEditor.clear();
       this.el.innerHTML = '';
       this.$el.hide();
+    },
+
+    showSubviews: function() {
+      if(this.widgetClassPickerView) this.widgetClassPickerView.$el.fadeIn();
+      if(this.contentEditor) this.contentEditor.$el.fadeIn();
+      if(this.layoutEditor) this.layoutEditor.$el.fadeIn();
+      if(this.infoEditor) this.infoEditor.$el.fadeIn();
+      this.$el.find('.style-editor').fadeIn();
+    },
+
+    hideSubviews: function() {
+      if(this.widgetClassPickerView) this.widgetClassPickerView.$el.hide();
+      if(this.contentEditor) this.contentEditor.$el.hide();
+      if(this.layoutEditor) this.layoutEditor.$el.hide();
+      if(this.infoEditor) this.infoEditor.$el.hide();
+      this.$el.find('.style-editor').hide();
     },
 
     clicked: function(e) {
