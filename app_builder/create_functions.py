@@ -27,3 +27,17 @@ class AppComponentFactory(object):
         # the core of djangoview will be the actions.
         page._django_view = v
         return v
+
+    def find_or_create_query_for_view(self, uie):
+        def get_parent(obj):
+            # app/pages/0/uielements/3  => app/pages/0
+            parent_path = obj._path[:obj._path.rfind('/')]
+            parent_path = parent_path[:parent_path.rfind('/')]
+            return obj.app.find(parent_path)
+        page = get_parent(uie)
+        view = page._django_view
+        # TODO create the code object and add to the page
+
+    def create_html_node(uie):
+        pass # just create the node
+

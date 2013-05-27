@@ -5,6 +5,10 @@ env = Environment(trim_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'))
 
 
+class HTMLContainer(object):
+    pass
+
+
 class DjangoPageView(object):
 
     def __init__(self, identifier, page_context={}):

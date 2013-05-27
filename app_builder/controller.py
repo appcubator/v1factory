@@ -5,7 +5,8 @@ from pyflakes.api import check
 factory = AppComponentFactory()
 
 create_map = {'entity': factory.create_model,
-               'view for page': factory.create_view_for_page }
+              'view for page': factory.create_view_for_page,
+              'find or add the needed data to the view': factory.find_or_create_query_for_view }
 
 
 def create_codes(app):
@@ -17,25 +18,39 @@ def create_codes(app):
         except KeyError:
             print "NYI: %s" % event_name
         else:
-            codes.append(c)
+            if c is not None:
+                codes.append(c)
 
+    # setup models
     for ent in app.entities:
         create('entity', ent)
 
+    # routes and functions to serve pages
     for p in app.pages:
         create('view for page', p)
         create('url to serve page', p.url)
+
+    # adding data to the page-serve functions
+    for p in app.pages:
         for uie in p.uielements:
             if uie.is_form():
-                create('html form for uie', uie)
                 create('find or create form receiver', uie)
             elif uie.is_list():
                 create('find or add the needed data to the view', uie)
+
+    # create html nodes and structure for pages
+    for p in app.pages:
+        create('navbar for page', p)
+        for uie in p.uielements:
+            if uie.is_form():
+                create('html form for uie', uie)
+            elif uie.is_list():
                 create('html for-loop for list', uie)
             elif uie.is_node():
                 create('html node', uie)
             else:
                 assert False
+        create('structure for page uielements', p)
 
     return codes
 
