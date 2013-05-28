@@ -89,10 +89,8 @@ class Code(object):
         return "%s for %d" % (self.name, id(self.el))
 
 
-
-
-
 class Column(object):
+
     def __init__(self):
         self.uiels = []
         self.margin_left = 0
@@ -102,6 +100,7 @@ class Column(object):
 
 
 class Row(object):
+
     def __init__(self):
         self.uiels = []
         self.margin_top = 0
@@ -109,6 +108,7 @@ class Row(object):
 
 
 class DomTree(object):
+
     def __init__(self):
         self.rows = []
 
@@ -119,7 +119,6 @@ class DjangoTemplate(object):
         self.identifier = identifier
         self.filename = identifier + '.html'
         self.code_path = "webapp/templates/" + self.filename
-
 
     def split_to_cols(self, uiels, left_offset=0):
         """Given some uielements, separate them into non-overlapping columns"""
@@ -138,20 +137,22 @@ class DjangoTemplate(object):
 
         # iterate over the uiels left down
         for u in sorted_uiels:
-            current_right = current_block.layout.left + current_block.layout.width
+            current_right = current_block.layout.left + \
+                current_block.layout.width
             u_left = u.layout.left
             u_right = u_left + u.layout.width
 
-            #Two cases:
-            #1. this block is in the current row.
+            # Two cases:
+            # 1. this block is in the current row.
             if u_left < current_right:
                 current_col.uiels.append(u)
-                    #a. this block is extends longer than the current block
+                    # a. this block is extends longer than the current block
                 if u_right > current_right:
                     current_block = u
-            #2. this block must be the left-most block in a new row
+            # 2. this block must be the left-most block in a new row
             else:
-                current_col.width = current_right - current_col.uiels[0].layout.left
+                current_col.width = current_right - \
+                    current_col.uiels[0].layout.left
 
                 current_col = Column()
                 cols.append(current_col)
@@ -173,7 +174,8 @@ class DjangoTemplate(object):
         # start with an empty row, and include the top-most block
         # then see if there are other blocks which lie on top of this.bottom_boundary.
         # if there are, add it to this row. start with that block and try again
-        # if not, then end the row. create a new row and repeat if there are more blocks to place.
+        # if not, then end the row. create a new row and repeat if there are
+        # more blocks to place.
 
         rows = []
         if len(uiels) == 0:
@@ -190,18 +192,19 @@ class DjangoTemplate(object):
 
         # iterate over the uiels top down
         for u in sorted_uiels:
-            current_bottom = current_block.layout.top + current_block.layout.height
+            current_bottom = current_block.layout.top + \
+                current_block.layout.height
             u_top = u.layout.top
             u_bottom = u_top + u.layout.height
 
-            #Two cases:
-            #1. this block is in the current row.
+            # Two cases:
+            # 1. this block is in the current row.
             if u_top < current_bottom:
                 current_row.uiels.append(u)
-                    #a. this block is extends longer than the current block
+                    # a. this block is extends longer than the current block
                 if u_bottom > current_bottom:
                     current_block = u
-            #2. this block must be the top-most block in a new row
+            # 2. this block must be the top-most block in a new row
             else:
                 current_row = Row()
                 rows.append(current_row)
@@ -225,23 +228,24 @@ class DjangoTemplate(object):
             r.cols = self.split_to_cols(r.uiels, left_offset=left_offset)
             for c in r.cols:
                 if len(c.uiels) == 1:
-                    c.tree = None # termination of recursion
+                    c.tree = None  # termination of recursion
                 else:
-                    inner_top_offset=r.uiels[0].layout.top
-                    inner_left_offset=c.uiels[0].layout.left
+                    inner_top_offset = r.uiels[0].layout.top
+                    inner_left_offset = c.uiels[0].layout.left
                     if len(tree.rows) == 1 and len(r.cols) == 1:
                         # in this case, recursion will not terminate since input is not subdivided into smaller components
-                        # create a relative container and absolute position the contents.
+                        # create a relative container and absolute position the
+                        # contents.
 
                         min_top = c.uiels[0].top
                         max_bottom = c.uiels[0].top + c.uiels[0].height
                         for uie in c.uiels:
                             top_offset = uie.top - inner_top_offset
                             left_offset = uie.left - inner_left_offset
-                            overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
+                            uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (
+                                15 * uie.top_offset, 80 * uie.left_offset)
                             min_top = min(uie.top, min_top)
                             max_bottom = max(uie.top + uie.height, max_bottom)
-
 
                         c.has_overlapping_nodes = True
 
@@ -249,10 +253,9 @@ class DjangoTemplate(object):
 
                         c.tree = None
                     else:
-                        c.tree = self._create_tree(c.uiels, top_offset=inner_top_offset, left_offset=inner_left_offset, recursive_num = recursive_num + 1)
+                        c.tree = self._create_tree(
+                            c.uiels, top_offset=inner_top_offset, left_offset=inner_left_offset, recursive_num=recursive_num + 1)
         return tree
 
     def render(self):
         return env.get_template('htmlgen/djangotemplate.html').render(template=self)
-
-
