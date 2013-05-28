@@ -1,12 +1,8 @@
 from jinja2 import Environment, PackageLoader
 from app_builder import naming
 
-env = Environment(trim_blocks=True, loader=PackageLoader(
+env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'))
-
-
-class HTMLContainer(object):
-    pass
 
 
 class DjangoPageView(object):
@@ -98,7 +94,6 @@ class Code(object):
 
 class Column(object):
     def __init__(self):
-        # will either be a dictionary representing uielement, or a DomTree.
         self.uiels = []
         self.margin_left = 0
         self.width = 0
@@ -112,14 +107,19 @@ class Row(object):
         self.margin_top = 0
         self.cols = None
 
+
 class DomTree(object):
     def __init__(self):
         self.rows = []
 
+
 class DjangoTemplate(object):
-    def __init__(self, identifier, filename):
-        self.identifier = identfier
-        self.filename = filename
+
+    def __init__(self, identifier):
+        self.identifier = identifier
+        self.filename = identifier + '.html'
+        self.code_path = "webapp/templates/" + self.filename
+
 
     def split_to_cols(self, uiels, left_offset=0):
         """Given some uielements, separate them into non-overlapping columns"""
@@ -127,20 +127,20 @@ class DjangoTemplate(object):
         if len(uiels) == 0:
             return cols
 
-        sorted_uiels = sorted(uiels, key=lambda u: u.uie['layout']['left'])
+        sorted_uiels = sorted(uiels, key=lambda u: u.layout.left)
 
         # leftmost uiel must be in the row
         current_col = Column()
         cols.append(current_col)
         current_block = sorted_uiels.pop(0)
         current_col.uiels.append(current_block)
-        current_col.margin_left = current_block.uie['layout']['left'] - left_offset
+        current_col.margin_left = current_block.layout.left - left_offset
 
         # iterate over the uiels left down
         for u in sorted_uiels:
-            current_right = current_block.uie['layout']['left'] + current_block.uie['layout']['width']
-            u_left = u.uie['layout']['left']
-            u_right = u_left + u.uie['layout']['width']
+            current_right = current_block.layout.left + current_block.layout.width
+            u_left = u.layout.left
+            u_right = u_left + u.layout.width
 
             #Two cases:
             #1. this block is in the current row.
@@ -151,7 +151,7 @@ class DjangoTemplate(object):
                     current_block = u
             #2. this block must be the left-most block in a new row
             else:
-                current_col.width = current_right - current_col.uiels[0].uie['layout']['left']
+                current_col.width = current_right - current_col.uiels[0].layout.left
 
                 current_col = Column()
                 cols.append(current_col)
@@ -162,8 +162,8 @@ class DjangoTemplate(object):
                 current_block = u
 
         # set the width of the last column
-        current_right = current_block.uie['layout']['left'] + current_block.uie['layout']['width']
-        current_col.width = current_right - current_col.uiels[0].uie['layout']['left']
+        current_right = current_block.layout.left + current_block.layout.width
+        current_col.width = current_right - current_col.uiels[0].layout.left
 
         return cols
 
@@ -179,20 +179,20 @@ class DjangoTemplate(object):
         if len(uiels) == 0:
             return rows
 
-        sorted_uiels = sorted(uiels, key=lambda u: u.uie['layout']['top'])
+        sorted_uiels = sorted(uiels, key=lambda u: u.layout.top)
 
         # topmost uiel must be in the row
         current_row = Row()
         rows.append(current_row)
         current_block = sorted_uiels.pop(0)
         current_row.uiels.append(current_block)
-        current_row.margin_top = current_block.uie['layout']['top'] - top_offset
+        current_row.margin_top = current_block.layout.top - top_offset
 
         # iterate over the uiels top down
         for u in sorted_uiels:
-            current_bottom = current_block.uie['layout']['top'] + current_block.uie['layout']['height']
-            u_top = u.uie['layout']['top']
-            u_bottom = u_top + u.uie['layout']['height']
+            current_bottom = current_block.layout.top + current_block.layout.height
+            u_top = u.layout.top
+            u_bottom = u_top + u.layout.height
 
             #Two cases:
             #1. this block is in the current row.
@@ -214,7 +214,7 @@ class DjangoTemplate(object):
         return rows
 
     def create_tree(self, uiels):
-        self.dom_tree = self._create_tree(uiels)
+        self.tree = self._create_tree(uiels)
 
     def _create_tree(self, uiels, recursive_num=0, top_offset=0, left_offset=0):
         """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
@@ -227,8 +227,8 @@ class DjangoTemplate(object):
                 if len(c.uiels) == 1:
                     c.tree = None # termination of recursion
                 else:
-                    inner_top_offset=r.uiels[0].uie['layout']['top']
-                    inner_left_offset=c.uiels[0].uie['layout']['left']
+                    inner_top_offset=r.uiels[0].layout.top
+                    inner_left_offset=c.uiels[0].layout.left
                     if len(tree.rows) == 1 and len(r.cols) == 1:
                         # in this case, recursion will not terminate since input is not subdivided into smaller components
                         # create a relative container and absolute position the contents.
@@ -236,9 +236,9 @@ class DjangoTemplate(object):
                         min_top = c.uiels[0].top
                         max_bottom = c.uiels[0].top + c.uiels[0].height
                         for uie in c.uiels:
-                            uie.top_offset = uie.top - inner_top_offset
-                            uie.left_offset = uie.left - inner_left_offset
-                            uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
+                            top_offset = uie.top - inner_top_offset
+                            left_offset = uie.left - inner_left_offset
+                            overlap_styles = "position: absolute; top: %spx; left: %spx;" % (15* uie.top_offset, 80* uie.left_offset)
                             min_top = min(uie.top, min_top)
                             max_bottom = max(uie.top + uie.height, max_bottom)
 
@@ -251,4 +251,8 @@ class DjangoTemplate(object):
                     else:
                         c.tree = self._create_tree(c.uiels, top_offset=inner_top_offset, left_offset=inner_left_offset, recursive_num = recursive_num + 1)
         return tree
+
+    def render(self):
+        return env.get_template('htmlgen/djangotemplate.html').render(template=self)
+
 

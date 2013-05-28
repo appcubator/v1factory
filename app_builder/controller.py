@@ -6,7 +6,8 @@ factory = AppComponentFactory()
 
 create_map = {'entity': factory.create_model,
               'view for page': factory.create_view_for_page,
-              'find or add the needed data to the view': factory.find_or_create_query_for_view }
+              'find or add the needed data to the view': factory.find_or_create_query_for_view ,
+              'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes }
 
 
 def create_codes(app):
@@ -40,17 +41,7 @@ def create_codes(app):
 
     # create html nodes and structure for pages
     for p in app.pages:
-        create('navbar for page', p)
-        for uie in p.uielements:
-            if uie.is_form():
-                create('html form for uie', uie)
-            elif uie.is_list():
-                create('html for-loop for list', uie)
-            elif uie.is_node():
-                create('html node', uie)
-            else:
-                assert False
-        create('structure for page uielements', p)
+        create('create row/col structure for nodes', p)
 
     return codes
 
@@ -63,7 +54,8 @@ def main(app):
         cc.add_code(c)
     for rel_path, code in cc.itercode():
         print code
-        print check(code, 'test.py')
+        if rel_path.endswith('.py'):
+            print check(code, 'test.py')
 
 
 """

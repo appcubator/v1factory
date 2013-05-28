@@ -1,4 +1,4 @@
-from app_builder.codes import Code, DjangoModel, DjangoPageView, DjangoTemplate
+from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate
 from app_builder import naming
 
 
@@ -36,14 +36,19 @@ class AppComponentFactory(object):
             return obj.app.find(parent_path)
         page = get_parent(uie)
         view = page._django_view
-        # TODO create the code object and add to the page
+        # TODO create the code object and add to the view function
 
-    def create_html_node(self, uie):
-        pass # just create the node
+    def create_tree_structure_for_page_nodes(self, page):
+        """
+        Given a page, returns a django template which has references
+        to the page's uielements. The resulting tree uses the layout of
+        the uielements to create the layout of the page and
+        it positions the uielements relative to their containers.
 
-    def create_html_structure(self, page):
-
-        # TODO name the template html files
-        t = DjangoTemplate('dummy', 'dummy.html')
+        """
+        t = DjangoTemplate(page._django_view.identifier)
+                            # this is an underscore-name, so it should be good as a filename
         t.create_tree(page.uielements)
+        t.page = page
+        page._django_template = t
         return t

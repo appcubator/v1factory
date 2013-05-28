@@ -1,0 +1,53 @@
+{{ "{%" }} extends "base.html" {{ "%}" }}
+
+{{ "{% block title %}" }}{{ template.page.name }}{{ "{% endblock %}" }}
+
+{# TODO navbar
+{{ "{% block navbar %}" }}
+<div class="navbar navbar-fixed-top" id="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+    <a class="brand" href="/" id="brand-name">{{ self.page.navbar_brandname }}</a>
+    <ul class="nav" id="items">
+      {% for p in template.page.navbar_pages %}
+      <li><a href="{{ "{%" }} url {{ p._django_view.view_path() }} {{ "%}" }}">{{ p.name }}</a></li>
+      {% endfor %}
+    </ul>
+    <ul class="nav pull-right">
+      {{ '{% if user.is_authenticated %}' }}
+      <li><a href="/logout">Logout</a></li>
+      {{ '{% endif %}' }}
+    </ul>
+    </div>
+  </div>
+</div>
+{{ "{% endblock %}" }} #}
+
+
+
+{{ "{% block content %}" }}
+{% for row in template.tree.rows recursive %}
+    {% set row_loop = loop %}
+    {% if row.cols %}
+    <!-- row -->
+    <div class="row hoff{{row.margin_top}}">
+    {% for col in row.cols %}
+    {%- if col.tree == None %}
+        <!-- column terminal -->
+        <div class="span{{col.width}} offset{{col.margin_left}} {% if col.has_overlapping_nodes %}hi{{ col.container_height }}{% endif %}" {% if col.has_overlapping_nodes %}style="position:relative;"{% endif %}>
+        {% for element in col.uiels %}
+        {# element.render(env)|indent(2) #}
+        NODE GOES HERE
+        {% endfor %}
+        </div>
+    {% else %}
+        <!-- column -->
+        <div class="span{{col.width}} offset{{col.margin_left}}">
+            {{ row_loop(col.tree.rows)|indent(4 * row_loop.index) }}
+        </div>
+    {% endif %}
+    {% endfor %}
+    </div>
+    {% endif %}
+{% endfor %}
+{{ "{% endblock %}" }}
