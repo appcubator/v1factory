@@ -32,6 +32,8 @@ function(SimpleModalView) {
                       'checkForDomain');
 
       this.model = v1State.get('info');
+
+      this.title = "Domain & SEO";
     },
 
     render: function() {

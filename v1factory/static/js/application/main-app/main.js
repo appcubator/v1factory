@@ -130,6 +130,7 @@ function (AppModel,
       v1App.view = new OverviewPageView();
       v1App.view.setElement(cleanDiv).render();
       $('.active').removeClass('active');
+      this.changeTitle(v1App.view.title);
     },
 
     showInfoPage: function() {
@@ -142,6 +143,7 @@ function (AppModel,
       v1App.view.setElement(cleanDiv).render();
       $('.active').removeClass('active');
       $('.menu-app-info').addClass('active');
+      this.changeTitle(v1App.view.title);
     },
 
     showEntitiesPage: function() {
@@ -154,6 +156,7 @@ function (AppModel,
       v1App.view.setElement(cleanDiv).render();
       $('.active').removeClass('active');
       $('.menu-app-entities').addClass('active');
+      this.changeTitle(v1App.view.title);
     },
 
     showThemesPage: function() {
@@ -166,6 +169,7 @@ function (AppModel,
       v1App.view.setElement(cleanDiv).render();
       $('.active').removeClass('active');
       $('.menu-app-themes').addClass('active');
+      this.changeTitle(v1App.view.title);
     },
 
     showPagesPage: function() {
@@ -180,6 +184,7 @@ function (AppModel,
 
       $('.active').removeClass('active');
       $('.menu-app-pages').addClass('active');
+      this.changeTitle(v1App.view.title);
     },
 
     showEditor: function(appId, pageId) {
@@ -194,6 +199,7 @@ function (AppModel,
       v1App.view  = new EditorView({}, pageId);
       v1App.view.setElement(cleanDiv).render();
       olark('api.box.hide');
+      this.changeTitle(v1App.view.title);
     },
 
     deploy: function() {
@@ -263,6 +269,14 @@ function (AppModel,
       if(data.feedback === true) {
         $('#feedback-check').prop('checked', true);
       }
+    },
+
+    changeTitle: function(title) {
+      var newTitle = "";
+      if(title) {
+        newTitle = " | " + title;
+      }
+      document.title = "Appcubator" + newTitle;
     }
   });
 

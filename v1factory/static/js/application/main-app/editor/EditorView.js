@@ -89,6 +89,7 @@ function( PageModel,
       keyDispatcher.key('⌘+v, ctrl+v', this.paste);
       keyDispatcher.key('⌘+shift+d, ctrl+shift+d', function(){ self.deploy({local:true}); });
 
+      this.title = "Editor";
     },
 
     render: function() {

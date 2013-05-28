@@ -19,6 +19,7 @@ function(SimpleModalView) {
                       'showTutorial',
                       'showFeedback');
       iui.loadCSS(this.css);
+      this.title = "The Garage";
     },
 
     render: function() {
