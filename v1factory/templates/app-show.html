@@ -1,15 +1,13 @@
-  {% extends "infra-html.html" %}
+{% extends "infra-html.html" %}
+{% block css %}
+<link type="text/css" href="/app/{{ app_id}}/uiestate.less" rel="stylesheet"/>
+{% endblock %}
 
-  {% block css %}
-  <link type="text/css" href="/app/{{ app_id}}/uiestate.less" rel="stylesheet"/>
+{% block topbar %}
+{% include "infra-topbar-app.html" %}
+{% endblock %}
 
-  {% endblock %}
-
-  {% block topbar %}
-  {% include "infra-topbar-app.html" %}
-  {% endblock %}
-
-  {% block page %}
+{% block page %}
   <span class="span6 save-btn" id="save"></span>
   <span class="span6 qm-btn" id="tutorial">?</span>
 
@@ -30,4 +28,4 @@
   </script>
   <script data-main="{{ STATIC_URL }}js/application/main-app/main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 
-  {% endblock %}
+{% endblock %}

@@ -27,44 +27,26 @@
   </div>
   <ul class="span52 racoon offset6 hoff1">
     <li class="intro">
-      Welcome! Here are few questions for you before we make the magic happen.
+      Welcome! Here are few questions that will help you get started quickly.
     </li>
-    <li class="question" id="q-1">
-      <span class="q-sent">What platform would you like to develop for?</span>
-      <div class="a-platform web"><input type="radio" name="platform" value="web" id="web" data-label="Web"></div>
-      <div class="a-platform mobile"><input type="radio" name="platform" value="mobile" id="mobile" data-label="Mobile"></div>
-      <div class="a-platform web-mobile"><input type="radio" name="platform" value="web+mobile" id="web+mobile" data-label="Web + Mobile"></div>
-    </li>
-    <li class="question" id="q-1">
-      <span class="q-sent">What data do you want to store about your users? (e.g. Age, Address, Company...)</span>
-    </li>
-    <li class="question" id="q-2">
-      <span class="q-sent">How would you like your users to login?</span>
-    </li>
-    <li class="question" id="q-2">
-      <span class="q-sent">What other tables would you like to store? (e.g. Photos, Documents, Track Records...)</span>
-    </li>
-    <li class="end">
-      "DONE"
-    </li>
-
-
   </ul>
 </div>
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/prettyCheckable.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/underscore-amd/underscore.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/iui/iui-nonamd.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/backbone/backbone.js" ></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/backbone/backbone.js" ></script> -->
 <script>
-$().ready(function(){
+// $().ready(function(){
 
-  $('input[type=radio]').prettyCheckable();
+//   $('input[type=radio]').prettyCheckable();
 
-});
+// });
 </script>
+<script data-main="{{ STATIC_URL }}js/application/wizard/main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+
 
 {% endblock %}
