@@ -302,3 +302,5 @@ Templates.twitterfeedTemp = [
   '}',
 '}).render().setUser(\'<%= username %>\').start();',
 '</script>'].join('\n');
+
+Templates.facebookshareTemp = ['<img src="/static/img/fb-share-sample.png" width="300" >'].join('\n');

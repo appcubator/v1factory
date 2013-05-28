@@ -28,20 +28,6 @@
 {% block js %}
 <script src="{{ STATIC_URL }}js/libs/jquery/jquery.min.js"></script>
 <script src="{{ STATIC_URL }}js/libs/bootstrap/bootstrap.js"></script>
-<script>
-    $(function () {
-      $('form').on('submit', function(e) {
-        $(e.target).on('submit', function(e) {
-          e.preventDefault();
-        });
-      });
-    });
-
-    $('#guid-btn').hover(function() {
-      $('#mascot').addClass('happy');
-    }, function() {
-      $('#mascot').removeClass('happy');
-    })
-</script>
+<script data-main="{{ STATIC_URL }}js/application/external-pages/apps-new-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 
 {% endblock %}

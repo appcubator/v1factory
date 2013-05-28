@@ -42,7 +42,7 @@ function( PageModel,
       'click .go-to-page'    : 'clickedGoToPage'
     },
 
-    initialize: function(bone, pId) {
+    initialize: function(options) {
       _.bindAll(this, 'render',
                       'copy',
                       'paste',
@@ -58,7 +58,7 @@ function( PageModel,
                       'setupPageHeight',
                       'setupPageWrapper');
 
-      if(pId) pageId = pId;
+      if(options && options.pageId) pageId = options.pageId;
 
       iui.loadCSS(this.css);
       iui.loadCSS('jquery-ui');
@@ -89,6 +89,7 @@ function( PageModel,
       keyDispatcher.key('⌘+v, ctrl+v', this.paste);
       keyDispatcher.key('⌘+shift+d, ctrl+shift+d', function(){ self.deploy({local:true}); });
 
+      this.title = "Editor";
     },
 
     render: function() {

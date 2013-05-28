@@ -100,6 +100,12 @@ function( TableQueryView,
         this.el.appendChild(feedDiv);
       }
 
+      if(this.model.get('container_info').get('action') == "facebookshare" ) {
+        var feedDiv = document.createElement('div');
+        feedDiv.innerHTML = _.template(Templates.facebookshareTemp, {});
+        this.el.appendChild(feedDiv);
+      }
+
       if(this.model.get('container_info').has('form')) {
         self.form = document.createElement('form');
         self.el.appendChild(self.form);

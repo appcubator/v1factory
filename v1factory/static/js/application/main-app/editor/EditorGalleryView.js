@@ -335,6 +335,14 @@ function(ElementCollection,
           return;
         }
 
+        if(type == "facebookshare") {
+          widget.container_info = {};
+          widget.container_info.action="facebookshare";
+          var widgetContainerModel = new ContainerWidgetModel(widget, true);
+          this.widgetsCollection.push(widgetContainerModel);
+          return;
+        }
+
         widget      = _.extend(widget, uieState[type][0]);
         widget.type = type;
         if(this.entity) { widget.context = this.entity.get('name'); }

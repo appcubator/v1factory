@@ -18,6 +18,8 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
 
       this.collection = v1State.get('pages');
       this.collection.bind('add', this.appendPage, this);
+
+      this.title = "Pages";
     },
 
     render: function() {

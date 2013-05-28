@@ -13,6 +13,7 @@ function(ThemeDisplayView) {
 
     initialize: function() {
       iui.loadCSS(this.css);
+      this.title = "Themes";
     },
 
     render: function() {

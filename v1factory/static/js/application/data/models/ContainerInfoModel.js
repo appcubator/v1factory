@@ -103,6 +103,9 @@ function(WidgetCollection,
       else if(action == "twitterfeed") {
         self.set('username', "icanberk");
       }
+      else if(action == "facebookshare") {
+        //nothing to set as of now
+      }
       else {
         alert('UFO!');
       }

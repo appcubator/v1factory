@@ -135,7 +135,7 @@ Please email abuse@Appcubator.com to report any violations of these Terms.</p>
             {% endif %}
             <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
                 {% csrf_token %}
-       
+
                 <input id="id_username" type="text" name="username" placeholder="Username..." maxlength="30">
                 <br>
                 <input type="password" name="password" placeholder="Password..." id="id_password">
@@ -147,5 +147,5 @@ Please email abuse@Appcubator.com to report any violations of these Terms.</p>
   </div>
 </div>
 </script>
-<script data-main="{{ STATIC_URL }}js/app/pages/home-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/application/external-pages/home-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

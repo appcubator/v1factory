@@ -33,6 +33,8 @@ function(EntityCollection,
         // subviews
         this.entityList = new EntitiesListView(this.entitiesColl);
         this.userEntityView = new UserEntityView(this.userEntityModel, this.entitiesColl );
+
+        this.title = "Tables";
       },
 
       render : function() {
