@@ -1,4 +1,4 @@
-from app_builder.codes import Code, DjangoModel, DjangoPageView
+from app_builder.codes import Code, DjangoModel, DjangoPageView, DjangoTemplate
 from app_builder import naming
 
 
@@ -38,6 +38,12 @@ class AppComponentFactory(object):
         view = page._django_view
         # TODO create the code object and add to the page
 
-    def create_html_node(uie):
+    def create_html_node(self, uie):
         pass # just create the node
 
+    def create_html_structure(self, page):
+
+        # TODO name the template html files
+        t = DjangoTemplate('dummy', 'dummy.html')
+        t.create_tree(page.uielements)
+        return t

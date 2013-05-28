@@ -64,7 +64,9 @@ class DictInited(object):
             u"") and type(schema['_type']) == type("")), "thing does not ascribe to schema"
 
         if type(thing) == type([]):
-            assert('_each' in schema)
+            if '_each' not in schema:
+                return thing
+
             return [cls._recursively_create(minithing, schema['_each']) for minithing in thing]
 
         elif type(thing) == type({}):
@@ -81,13 +83,7 @@ class DictInited(object):
 
             return thing
 
-        elif type(thing) == type(u""):
-            return thing
-
-        elif type(thing) == type(0):
-            return thing
-
-        elif type(thing) == type(True):
+        elif type(thing) in [unicode, int, float, bool]:
             return thing
 
         elif thing is None:
@@ -164,12 +160,14 @@ class DictInited(object):
             return errors
 
         if type(thing) == type([]):
-            assert '_each' in schema, 'found [] with no _each'
-            for idx, minithing in enumerate(thing):
-                ancestor_list.append(idx)
-                errors.extend(cls.validate_dict(
-                    minithing, schema['_each'], ancestor_list))
-                ancestor_list.pop()
+            if '_each' not in schema:
+                pass
+            else:
+                for idx, minithing in enumerate(thing):
+                    ancestor_list.append(idx)
+                    errors.extend(cls.validate_dict(
+                        minithing, schema['_each'], ancestor_list))
+                    ancestor_list.pop()
 
         elif type(thing) == type({}):
 
@@ -198,15 +196,15 @@ class DictInited(object):
                     errors.append(ValidationError(
                         'String was longer than _maxlength', thing, schema, ancestor_list))
 
-        elif type(thing) == type(0):
+        elif type(thing) in [int, float]:
             if "_min" in schema:
                 if not (thing >= schema["_min"]):
                     errors.append(ValidationError(
-                        'int was less than min', thing, schema, ancestor_list))
+                        'int/float was less than min', thing, schema, ancestor_list))
             if "_max" in schema:
                 if not (thing <= schema["_max"]):
                     errors.append(ValidationError(
-                        'int was greater than max', thing, schema))
+                        'int/float was greater than max', thing, schema))
 
         elif type(thing) == type(True):
             pass
