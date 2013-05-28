@@ -104,7 +104,7 @@ function(WidgetCollection,
         self.set('username', "icanberk");
       }
       else if(action == "facebookshare") {
-        self.set('width', '300');
+        //nothing to set as of now
       }
       else {
         alert('UFO!');

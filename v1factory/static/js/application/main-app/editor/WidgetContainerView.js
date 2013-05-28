@@ -102,7 +102,7 @@ function( TableQueryView,
 
       if(this.model.get('container_info').get('action') == "facebookshare" ) {
         var feedDiv = document.createElement('div');
-        feedDiv.innerHTML = _.template(Templates.facebookshareTemp, {width: this.model.get('container_info').get('width') });
+        feedDiv.innerHTML = _.template(Templates.facebookshareTemp, {});
         this.el.appendChild(feedDiv);
       }
 

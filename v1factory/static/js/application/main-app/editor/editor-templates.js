@@ -303,12 +303,4 @@ Templates.twitterfeedTemp = [
 '}).render().setUser(\'<%= username %>\').start();',
 '</script>'].join('\n');
 
-Templates.facebookshareTemp = [
-  '<div class="fb-like" data-href="http://appcubator.com" data-send="false" data-width=<%= width %>" data-show-faces="false">',
-    '<script>',
-      'window.onload = function() {',
-        'document.getElementsByClassName("fb-like").dataset.href = window.location.origin;',
-      '};',
-    '</select>',
-  '</div>',
-].join('\n');
+Templates.facebookshareTemp = ['<img src="/static/img/fb-share-sample.png" width="300" >'].join('\n');
