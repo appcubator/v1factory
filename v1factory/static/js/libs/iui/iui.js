@@ -250,7 +250,7 @@ define(['jquery-ui'], function() {
       });
     });
 
-    document.addEventListener("touchstart", function(){}, true);
+    //document.addEventListener("touchstart", function(){}, true);
 
   window.iui = iui;
 
