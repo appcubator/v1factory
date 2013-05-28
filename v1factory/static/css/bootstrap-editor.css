@@ -3053,6 +3053,13 @@ a.badge:hover {
   border-radius: 3px;
   overflow: visible;
   background-color: rgba(124, 192, 213, 0.0);
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .widget-wrapper.textediting {
@@ -3715,5 +3722,5 @@ overflow: hidden;
 
 .marquee-view {
   position: absolute;
-  background-color: red;
+  border: 2px solid #bbb;
 }

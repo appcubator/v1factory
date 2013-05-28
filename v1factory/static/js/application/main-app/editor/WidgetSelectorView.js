@@ -50,7 +50,7 @@ function(WidgetEditorView) {
       this.doKeyBindings();
     },
 
-    mousedown: function(e) { e.stopImmediatePropagation(); },
+    mousedown: function(e) { },
 
     render: function() {
       var self = this;

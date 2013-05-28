@@ -28,14 +28,22 @@ function(WidgetEditorView) {
 
     mousedown: function(e) {
       this.isDrawing = true;
-      this.setTop(e.offsetY);
-      this.setLeft(e.offsetX);
 
-      this.setWidth(6);
-      this.setHeight(6);
+      var coorX = e.offsetX;
+      var coorY = e.offsetY;
 
-      this.origin.x = e.offsetX;
-      this.origin.y = e.offsetY;
+      if(e.target.id == 'marquee-view') {
+        coorX += document.getElementById('marquee-view').offsetLeft;
+        coorY += document.getElementById('marquee-view').offsetTop;
+      }
+
+      this.setTop(coorY);
+      this.setLeft(coorX);
+
+      this.origin.x = coorX;
+      this.origin.y = coorY;
+
+       e.stopImmediatePropagation();
     },
 
     mouseup: function(e) {
@@ -44,12 +52,22 @@ function(WidgetEditorView) {
     },
 
     mousemove: function(e) {
+      e.returnValue = false;
       if(!this.isDrawing) return;
 
-      var distWidth = this.origin.x - e.offsetX;
-      var distHeight = this.origin.y - e.offsetY;
-      var diffWidth = Math.abs(this.origin.x - e.offsetX);
-      var diffHeight = Math.abs(this.origin.y - e.offsetY);
+      var coorX = e.offsetX;
+      var coorY = e.offsetY;
+
+      if(e.target.id == 'marquee-view') {
+        coorX += document.getElementById('marquee-view').offsetLeft;
+        coorY += document.getElementById('marquee-view').offsetTop;
+      }
+
+      var distWidth = this.origin.x - coorX;
+      var distHeight = this.origin.y - coorY;
+      var diffWidth = Math.abs(this.origin.x - coorX);
+      var diffHeight = Math.abs(this.origin.y - coorY);
+
 
       this.setWidth(diffWidth);
       if(distWidth == diffWidth) {
@@ -67,8 +85,6 @@ function(WidgetEditorView) {
         this.setTop(this.origin.y);
       }
 
-      e.returnValue = false;
-
     },
 
     setZero: function() {
@@ -77,11 +93,11 @@ function(WidgetEditorView) {
     },
 
     render: function() {
-
-      document.getElementById('elements-container').addEventListener('mousedown', this.mousedown);
-      document.getElementById('elements-container').addEventListener('mouseup', this.mouseup);
-      document.getElementById('elements-container').addEventListener('mousemove', this.mousemove);
+      window.addEventListener('mousedown', this.mousedown);
+      window.addEventListener('mouseup', this.mouseup);
+      window.addEventListener('mousemove', this.mousemove);
       this.el.className = 'marquee-view';
+      this.el.id = 'marquee-view';
       this.setWidth(0);
       this.setHeight(0);
       return this;

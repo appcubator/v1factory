@@ -240,6 +240,9 @@ define([
       mouseX = e.pageX;
       mouseY = e.pageY;
       var div = $('#widget-wrapper-' + this.model.cid);
+
+      if(!div.offset()) return false;
+
       divTop = div.offset().top,
       divLeft = div.offset().left,
       divRight = divLeft + div.width(),
