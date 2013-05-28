@@ -67,16 +67,17 @@ function (QuestionView) {
       this.renderQuestion(questions['platform']);
     },
 
-    renderQuestion: function(qDict) {
-      var qView = new QuestionView(qDict);
+    renderQuestion: function(qDict, answer) {
+      var qView = new QuestionView(qDict, answer);
       qView.bind('next', this.next);
       $('.racoon').append(qView.el);
     },
 
-    next: function(inp) {
+    next: function(inp, answer) {
       if(!inp) return;
       var qDict = questions[inp];
-      this.renderQuestion(qDict);
+      this.renderQuestion(qDict, answer);
+      $("html, body").animate({ scrollTop: $(document).height() }, "slow");
     }
 
   });

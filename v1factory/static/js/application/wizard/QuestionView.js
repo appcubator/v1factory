@@ -10,17 +10,19 @@ function() {
 
     events: {
       'click .answer' : 'answerChanged',
-      'submit .answer' : 'answerSubmitted'
+      'submit .answer-form' : 'answerSubmitted'
     },
 
-    initialize: function(qDict) {
+    initialize: function(qDict, answer) {
+      console.log(answer);
       _.bindAll(this, 'render', 'renderAnswers', 'answerChanged');
       this.dict = qDict;
+      this.prevAnswer = answer;
       this.render();
     },
 
     render : function() {
-      this.$el.append('<span class="q-sent">' + this.dict.questionText +'</span>');
+      this.$el.append('<span class="q-sent">' + _.template(this.dict.questionText, {answer: this.prevAnswer })+'</span>');
       this.renderAnswers();
       return this;
     },
@@ -31,7 +33,7 @@ function() {
 
       if(this.dict.inputBox) {
         var form = document.createElement('form');
-        form.className ="answer";
+        form.className ="answer-form";
         $(form).append('<input type="text" class="answer-input" placeholder="'+this.dict.inputBox+'">');
         self.el.appendChild(form);
       }
@@ -62,11 +64,12 @@ function() {
       }
     },
 
-    answerSubmitted: function() {
+    answerSubmitted: function(e) {
+      e.preventDefault();
       this.answer = this.$el.find('.answer-input').val();
       if(!this.answered) {
         var next = this.dict.next.call(this, this.answer);
-        this.trigger('next', next);
+        this.trigger('next', next, this.answer);
         this.answered = true;
       }
       else {

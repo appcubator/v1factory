@@ -34,7 +34,8 @@ define([
       'click'         : 'select',
       'click .delete' : 'remove',
       'mouseover'     : 'hovered',
-      'mouseout'      : 'unhovered'
+      'mouseout'      : 'unhovered',
+      'mousedown'     : 'mousedown'
     },
 
     initialize: function(widgetModel){
@@ -54,6 +55,7 @@ define([
                       'toggleFull',
                       'staticsAdded',
                       'isMouseOn',
+                      'mousedown',
                       'switchEditModeOn',
                       'switchEditModeOff');
 
@@ -281,6 +283,10 @@ define([
       this.model.set('content', val);
       el.attr('contenteditable', 'false');
       keyDispatcher.textEditing = false;
+    },
+
+    mousedown: function(e) {
+      e.stopPropagation();
     }
 
   });

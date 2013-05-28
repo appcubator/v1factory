@@ -1,26 +1,16 @@
 body {
 }
 
-/*#cube { transform: translateZ( -100px ); }
-
-#cube.show-front  { transform: translateZ( -100px ) rotateY(    0deg ); }
-#cube.show-back   { transform: translateZ( -100px ) rotateX( -180deg ); }
-#cube.show-right  { transform: translateZ( -100px ) rotateY(  -90deg ); }
-#cube.show-left   { transform: translateZ( -100px ) rotateY(   90deg ); }
-#cube.show-top    { transform: translateZ( -100px ) rotateX(  -90deg ); }
-#cube.show-bottom { transform: translateZ( -100px ) rotateX(   90deg ); }
-
-#cube { transition: transform 1s; }*/
-
-
 
 span.q-sent {
-font-family: 'Roboto Slab', serif;
-display: block;
+  font-family: 'Roboto Slab', serif;
+  display: block;
+  margin-bottom: 20px;
 }
 
 .racoon {
   font-size: 16px;
+  margin-bottom: 240px;
 }
 
 .racoon label { 
@@ -99,6 +89,11 @@ display: block;
   color: #0f2d40;
   vertical-align: top;
   margin-top: 10px;
+}
+
+.question input[type="text"] {
+  margin-top: 10px;
+  min-width: 300px;
 }
 
 @-moz-keyframes spinningH {

@@ -10,8 +10,7 @@ function(WidgetEditorView) {
     tagName : 'div',
     selectedEl : null,
     events : {
-      'mousedown' : 'mousedown',
-      'click #hover-div' : 'hoverClicked',
+      'mousedown #hover-div'     : 'hoverClicked',
       'dblclick #select-div' : 'doubleClicked'
     },
 
@@ -50,7 +49,7 @@ function(WidgetEditorView) {
       this.doKeyBindings();
     },
 
-    mousedown: function(e) { },
+    mousedown: function(e) { e.stopPropagation(); },
 
     render: function() {
       var self = this;
@@ -254,7 +253,7 @@ function(WidgetEditorView) {
       keyDispatcher.key('backspace', this.deleteSelected);
     },
 
-    hoverClicked: function() {
+    hoverClicked: function(e) {
       if(this.hoveredEl) {
         this.hoveredEl.trigger('selected');
       }

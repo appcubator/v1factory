@@ -29,6 +29,13 @@ questions = {
 
   renting: {
     questionText : "What are you going to be renting? (e.g. House, car)",
-    inputBox: "Type your item type here..."
+    inputBox: "Type your item type here...",
+    next: function(answer) {
+      return "information";
+    }
+  },
+
+  information: {
+    questionText : "What information would you like to store about <%= answer %>?"
   }
 };
