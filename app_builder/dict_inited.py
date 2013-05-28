@@ -17,6 +17,9 @@ class ValidationError(object):
     def __unicode__(self):
         return u"Error found in %r: %r\n(Thing, Schema) = %r" % (self.path, self.msg, (self.thing, self.schema))
 
+    def __str__(self):
+        return self.__unicode__()
+
 
 class DictInited(object):
 
@@ -276,7 +279,7 @@ class DictInited(object):
         given_path = path_string.split('/')
         assert len(given_path) > 0, "Can't call set on empty path"
         path, attr_to_set = given_path[:-1], given_path[-1]
-        obj = self.find('/'.join(path))
+        obj = self.find('/'.join(path), name_allowed=True)
         if type(obj) == list:
             attr_to_set = int(attr_to_set)
             obj[attr_to_set] = value

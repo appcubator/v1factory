@@ -192,6 +192,11 @@ class ManipulateDictInitedTestCase(unittest.TestCase):
         self.assertEqual(self.obj.find('things/sup/things/howyou', name_allowed=True).val, "doin")
         self.assertEqual(self.obj.find('things/sup/things/im', name_allowed=True).val, "fineyou?")
 
+    def test_set_by_path(self):
+        b_thing = self.obj.find('things/sup/things/im', name_allowed=True)
+        self.obj.set_by_path('things/sup/things/im/val', 'APPCUBATOR')
+        self.assertEqual(b_thing.val, 'APPCUBATOR')
+
     def test_find_fails(self):
         self.assertRaises(Exception, self.obj.find, 'g/randomstring')
 
