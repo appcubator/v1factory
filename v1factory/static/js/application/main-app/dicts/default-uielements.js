@@ -68,5 +68,11 @@ var defaultElements = [
     text: "Twitter Feed",
     className : "twitterfeed",
     el : "<img class='span24' src='/static/img/placeholder.png'>"
+  },
+
+  {
+    text: "Facebook Share",
+    className : "facebookshare",
+    el : "<img src='/static/img/fb-share-sample.png'>"
   }
 ];
