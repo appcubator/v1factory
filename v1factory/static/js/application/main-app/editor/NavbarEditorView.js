@@ -4,7 +4,6 @@ define([
 function() {
 
   var NavbarEditorView = Backbone.View.extend({
-    el: $('#navbar'),
     entity: null,
     type: null,
     events: {
@@ -37,9 +36,19 @@ function() {
 
     render: function() {
       var self = this;
+      this.setElement(document.getElementById('navbar'));
 
+      var brandName = this.model.get('brandName') || "DERP";
+      console.log(brandName);
       if(this.model.get('brandName')) {
         this.$el.find('#brand-name').html(this.model.get('brandName'));
+      }
+
+      if(this.$el) {
+        console.log(this.$el);
+      }
+      else {
+        console.log("no el");
       }
 
       this.renderItems();
