@@ -255,7 +255,10 @@ class DjangoTemplate(object):
         self.tree = self._create_tree(uiels)
 
     def _create_tree(self, uiels, recursive_num=0, top_offset=0, left_offset=0):
-        """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
+        """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement.
+           It also detects the situation where splitting into row/column cannot be acheived.
+           For that, it makes the column position:relative, and the inner uiels position absolute.
+           In this case, it also sets an attribute on uie called "overlap_styles"."""
         tree = DomTree()
 
         tree.rows = self.split_to_rows(uiels, top_offset=top_offset)
