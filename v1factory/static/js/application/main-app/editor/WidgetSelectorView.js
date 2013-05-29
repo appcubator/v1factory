@@ -169,10 +169,12 @@ function(WidgetEditorView) {
       elem.style.width = ui.size.width + 'px';
       elem.style.height = ui.size.height + 'px';
       elem.style.left = ui.position.left + 'px';
+      elem.style.top  = ui.position.top + 'px';
     },
 
     resized: function(e, ui) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
+      var top  = Math.round((ui.position.top  / GRID_HEIGHT));
       var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
@@ -181,6 +183,7 @@ function(WidgetEditorView) {
       this.selectedEl.get('layout').set('width', deltaWidth);
       this.selectedEl.get('layout').set('height', deltaHeight);
       this.selectedEl.get('layout').set('left', left);
+      this.selectedEl.get('layout').set('top', top);
       this.setLayout(this.selectDiv, this.selectedEl);
     },
 
