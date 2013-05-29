@@ -28,7 +28,6 @@ function(WidgetEditorView) {
 
     mousedown: function(e) {
       if(mouseDispatcher.isMousedownActive) {
-        mouseDispatcher.isMousedownActive = false;
         return;
       }
 
@@ -99,9 +98,9 @@ function(WidgetEditorView) {
     },
 
     render: function() {
-      document.getElementById('elements-container').addEventListener('mousedown', this.mousedown);
-      document.getElementById('elements-container').addEventListener('mouseup', this.mouseup);
-      document.getElementById('elements-container').addEventListener('mousemove', this.mousemove);
+      document.getElementById('page').addEventListener('mousedown', this.mousedown);
+      document.getElementById('page').addEventListener('mouseup', this.mouseup);
+      document.getElementById('page').addEventListener('mousemove', this.mousemove);
       this.el.className = 'marquee-view';
       this.el.id = 'marquee-view';
       this.setZero();

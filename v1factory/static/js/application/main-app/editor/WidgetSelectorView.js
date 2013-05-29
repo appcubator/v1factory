@@ -13,7 +13,9 @@ function(WidgetEditorView) {
       'click #hover-div'     : 'hoverClicked',
       'dblclick #select-div' : 'doubleClicked',
       'mousedown #hover-div' : 'mousedown',
-      'mousedown #select-div': 'mousedown'
+      'mousedown #select-div': 'mousedown',
+      'mouseup #hover-div'   : 'mouseup',
+      'mouseup #select-div'  : 'mouseup'
     },
 
     initialize: function(widgetsCollection){
@@ -29,6 +31,7 @@ function(WidgetEditorView) {
                       'moved',
                       'bindWidget',
                       'mousedown',
+                      'mouseup',
                       'deselect',
                       'hideNode',
                       'doKeyBindings',
@@ -52,6 +55,7 @@ function(WidgetEditorView) {
     },
 
     mousedown: function(e) { mouseDispatcher.isMousedownActive = true; },
+    mouseup  : function(e) { mouseDispatcher.isMousedownActive = false; },
 
     render: function() {
       var self = this;
@@ -150,6 +154,8 @@ function(WidgetEditorView) {
       }
 
       this.deselect();
+      console.log("new model:");
+      console.log(widgetModel);
       this.selectedEl = widgetModel;
       widgetModel.get('layout').bind('change', function() {
         self.setLayout(self.selectDiv, widgetModel);
@@ -211,6 +217,8 @@ function(WidgetEditorView) {
         this.selectedEl.trigger('deselected');
       }
       this.widgetEditorView.clear();
+      console.log("SelectedEl null");
+      console.trace();
       this.selectedEl = null;
       this.hideNode(this.selectDiv);
     },
@@ -263,7 +271,7 @@ function(WidgetEditorView) {
     },
 
     clickedPage: function(e) {
-      if(this.selectedEl && !this.isMouseOn(e)) {
+      if(this.selectedEl && !this.isMouseOn(e) && !mouseDispatcher.isMousedownActive) {
         this.deselect();
       }
     },
