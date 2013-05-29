@@ -299,3 +299,16 @@ class DjangoTemplate(object):
         return env.get_template('htmlgen/djangotemplate.html').render(template=self)
 
 
+class DjangoURLs(object):
+    """
+    Represents a set of URL - function mappings.
+    """
+
+    def __init__(self, namespace):
+        self.namespace = namespace
+
+    def add_url_function_pair(self, url_regex, function):
+        pass
+
+    def render(self):
+        return "URLS go here"

@@ -52,3 +52,6 @@ class AppComponentFactory(object):
         t.page = page
         page._django_template = t
         return t
+
+    def create_url_bindings(self, things):
+        pass
