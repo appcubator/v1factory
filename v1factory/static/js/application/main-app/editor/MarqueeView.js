@@ -66,6 +66,10 @@ function(WidgetEditorView) {
       coorX -= dist.left;
       coorY -= dist.top;
 
+      if(coorX < 0 || coorY < 0) {
+        return;
+      }
+
       var distWidth = this.origin.x - coorX;
       var distHeight = this.origin.y - coorY;
       var diffWidth = Math.abs(this.origin.x - coorX);
@@ -97,8 +101,8 @@ function(WidgetEditorView) {
     },
 
     render: function() {
+      window.addEventListener('mouseup', this.mouseup);
       document.getElementById('page').addEventListener('mousedown', this.mousedown);
-      document.getElementById('page').addEventListener('mouseup', this.mouseup);
       document.getElementById('page').addEventListener('mousemove', this.mousemove);
       this.el.className = 'marquee-view';
       this.el.id = 'marquee-view';
