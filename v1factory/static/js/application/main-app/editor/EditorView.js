@@ -266,7 +266,6 @@ function( PageModel,
     clickedGoToPage: function(e) {
       e.preventDefault();
       var goToPageId = (e.target.id||e.target.parentNode.id).replace('page-','');
-      console.log(goToPageId);
       v1.navigate("app/"+ appId +"/editor/" + goToPageId +"/", {trigger: true});
     },
 

@@ -49,7 +49,6 @@ function(WidgetEditorView) {
       this.origin.x = coorX;
       this.origin.y = coorY;
 
-       e.stopImmediatePropagation();
     },
 
     mouseup: function(e) {

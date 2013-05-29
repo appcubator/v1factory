@@ -51,7 +51,7 @@ function(WidgetEditorView) {
       this.doKeyBindings();
     },
 
-    mousedown: function(e) { console.log('SelectorView - mousedown');  mouseDispatcher.isMousedownActive = true; },
+    mousedown: function(e) { mouseDispatcher.isMousedownActive = true; },
 
     render: function() {
       var self = this;
@@ -94,7 +94,7 @@ function(WidgetEditorView) {
       hoverDiv.style.position = "absolute";
       selectDiv.style.position = "absolute";
 
-      $('.page.full').on('click', this.clickedPage);
+      $('.page.full').on('mousedown', this.clickedPage);
 
       return this;
     },
@@ -256,14 +256,13 @@ function(WidgetEditorView) {
     },
 
     hoverClicked: function(e) {
-      console.log('SelectorView-hoverClicked');
       if(this.hoveredEl) {
         this.hoveredEl.trigger('selected');
       }
+      mouseDispatcher.isMousedownActive = false;
     },
 
     clickedPage: function(e) {
-      console.log('SelectorView-clickedPage');
       if(this.selectedEl && !this.isMouseOn(e)) {
         this.deselect();
       }
