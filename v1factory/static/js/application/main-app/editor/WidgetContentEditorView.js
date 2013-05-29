@@ -47,11 +47,11 @@ function(SelectView) {
         this.el.appendChild(this.renderTextEditing());
       }
 
-      if(this.model.get('content_attribs').has('href')) {
+      if(this.model.get('data').get('content_attribs').has('href')) {
         this.el.appendChild(this.renderHrefInfo());
       }
 
-      if(this.model.get('content_attribs').has('src')) {
+      if(this.model.get('data').get('content_attribs').has('src')) {
         this.el.appendChild(this.renderSrcInfo());
       }
     },
@@ -66,8 +66,8 @@ function(SelectView) {
       listOfPages  = this.model.getListOfPages();
 
       var external;
-      if(String(this.model.get('content_attribs').get('href')).indexOf('internal://') < 0) {
-        external = this.model.get('content_attribs').get('href');
+      if(String(this.model.get('data').get('content_attribs').get('href')).indexOf('internal://') < 0) {
+        external = this.model.get('data').get('content_attribs').get('href');
       }
 
       html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
@@ -94,7 +94,7 @@ function(SelectView) {
         return newObj;
       });
 
-      var selecView = new SelectView(statics_list, this.model.get('content_attribs').get('src'), true);
+      var selecView = new SelectView(statics_list, this.model.get('data').get('content_attribs').get('src'), true);
       li.appendChild(selecView.el);
       return li;
     },
@@ -102,13 +102,13 @@ function(SelectView) {
     renderTextEditing: function() {
       var li       = document.createElement('li');
       li.appendChild(new comp().div('Text').classN('key').el);
-      li.appendChild(new comp().textarea(this.model.get('content')).id('prop-content').el);
+      li.appendChild(new comp().textarea(this.model.get('data').get('content')).id('prop-content').el);
       return li;
     },
 
     renderFontPicker: function() {
       var li       = document.createElement('li');
-      var curStyle = (this.model.get('content_attribs').get('style')||'font-size:default;');
+      var curStyle = (this.model.get('data').get('content_attribs').get('style')||'font-size:default;');
 
       var currentFont;
       if(/font-size:([^]+);/g.exec(curStyle)) {
@@ -154,10 +154,10 @@ function(SelectView) {
     },
 
     changeFont: function(e) {
-      if(!this.model.get('content_attribs').has('style')) {
-        this.model.get('content_attribs').set('style', 'font-size:12px;');
+      if(!this.model.get('data').get('content_attribs').has('style')) {
+        this.model.get('data').get('content_attribs').set('style', 'font-size:12px;');
       }
-      var curStyle = this.model.get('content_attribs').get('style');
+      var curStyle = this.model.get('data').get('content_attribs').get('style');
 
       if(/font-size:([^]+);/g.exec(curStyle)) {
         curStyle = curStyle.replace(/(font-size:)(.*?)(;)/gi, "$1"+ e.target.value +"$3");
@@ -166,7 +166,7 @@ function(SelectView) {
         curStyle = curStyle + ' font-size:' + e.target.value +';';
       }
 
-      this.model.get('content_attribs').set('style', curStyle);
+      this.model.get('data').get('content_attribs').set('style', curStyle);
     },
 
     toggleBold: function(e) {

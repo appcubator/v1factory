@@ -10,8 +10,7 @@ function(WidgetEditorView) {
     tagName : 'div',
     isDrawing: false,
     origin: {
-      x: 0,
-      y: 0
+      x: 0, y: 0
     },
 
     events : {
@@ -23,28 +22,29 @@ function(WidgetEditorView) {
                       'mouseup',
                       'mousedown',
                       'mousemove',
-                      'setZero');
+                      'setZero',
+                      'getPageTopLeft');
     },
 
     mousedown: function(e) {
       if(mouseDispatcher.isMousedownActive) {
-        mouseDispatcher.isMousedownActive = false;
         return;
       }
 
       this.$el.show();
       this.isDrawing = true;
 
-      var coorX = e.offsetX;
-      var coorY = e.offsetY;
 
-      if(e.target.id == 'marquee-view') {
-        coorX += document.getElementById('marquee-view').offsetLeft;
-        coorY += document.getElementById('marquee-view').offsetTop;
-      }
+      var coorX = e.pageX;
+      var coorY = e.pageY;
+      var dist = this.getPageTopLeft();
+      coorX -= dist.left;
+      coorY -= dist.top;
 
       this.setTop(coorY);
       this.setLeft(coorX);
+      this.setWidth(6);
+      this.setHeight(6);
 
       this.origin.x = coorX;
       this.origin.y = coorY;
@@ -60,12 +60,14 @@ function(WidgetEditorView) {
       e.returnValue = false;
       if(!this.isDrawing) return;
 
-      var coorX = e.offsetX;
-      var coorY = e.offsetY;
+      var coorX = e.pageX;
+      var coorY = e.pageY;
+      var dist = this.getPageTopLeft();
+      coorX -= dist.left;
+      coorY -= dist.top;
 
-      if(e.target.id != 'elements-container') {
-        coorX += e.target.offsetLeft;
-        coorY += e.target.offsetTop;
+      if(coorX < 0 || coorY < 0) {
+        return;
       }
 
       var distWidth = this.origin.x - coorX;
@@ -99,13 +101,23 @@ function(WidgetEditorView) {
     },
 
     render: function() {
-      document.getElementById('elements-container').addEventListener('mousedown', this.mousedown);
-      document.getElementById('elements-container').addEventListener('mouseup', this.mouseup);
-      document.getElementById('elements-container').addEventListener('mousemove', this.mousemove);
+      window.addEventListener('mouseup', this.mouseup);
+      document.getElementById('page').addEventListener('mousedown', this.mousedown);
+      document.getElementById('page').addEventListener('mousemove', this.mousemove);
       this.el.className = 'marquee-view';
       this.el.id = 'marquee-view';
+      this.container = document.getElementById('elements-container');
       this.setZero();
       return this;
+    },
+
+    getPageTopLeft: function() {
+      var rect = this.container.getBoundingClientRect();
+      var docEl = document.documentElement;
+      return {
+          left: rect.left + (window.pageXOffset || docEl.scrollLeft || 0),
+          top: rect.top + (window.pageYOffset || docEl.scrollTop || 0)
+      };
     }
 
   });
