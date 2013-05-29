@@ -34,10 +34,8 @@ def create_codes(app):
     # adding data to the page-serve functions
     for p in app.pages:
         for uie in p.uielements:
-            if uie.is_form():
-                create('find or create form receiver', uie)
-            elif uie.is_list():
-                create('find or add the needed data to the view', uie)
+            # call add_to_view function of uie
+            pass
 
     # create html nodes and structure for pages
     for p in app.pages:
