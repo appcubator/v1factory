@@ -63,9 +63,9 @@ function(WidgetEditorView) {
       var coorX = e.offsetX;
       var coorY = e.offsetY;
 
-      if(e.target.id == 'marquee-view') {
-        coorX += document.getElementById('marquee-view').offsetLeft;
-        coorY += document.getElementById('marquee-view').offsetTop;
+      if(e.target.id != 'elements-container') {
+        coorX += e.target.offsetLeft;
+        coorY += e.target.offsetTop;
       }
 
       var distWidth = this.origin.x - coorX;
@@ -99,9 +99,9 @@ function(WidgetEditorView) {
     },
 
     render: function() {
-      window.addEventListener('mousedown', this.mousedown);
-      window.addEventListener('mouseup', this.mouseup);
-      window.addEventListener('mousemove', this.mousemove);
+      document.getElementById('elements-container').addEventListener('mousedown', this.mousedown);
+      document.getElementById('elements-container').addEventListener('mouseup', this.mouseup);
+      document.getElementById('elements-container').addEventListener('mousemove', this.mousemove);
       this.el.className = 'marquee-view';
       this.el.id = 'marquee-view';
       this.setZero();
