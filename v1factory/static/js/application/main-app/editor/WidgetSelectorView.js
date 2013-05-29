@@ -10,8 +10,10 @@ function(WidgetEditorView) {
     tagName : 'div',
     selectedEl : null,
     events : {
-      'mousedown #hover-div'     : 'hoverClicked',
-      'dblclick #select-div' : 'doubleClicked'
+      'click #hover-div'     : 'hoverClicked',
+      'dblclick #select-div' : 'doubleClicked',
+      'mousedown #hover-div' : 'mousedown',
+      'mousedown #select-div': 'mousedown'
     },
 
     initialize: function(widgetsCollection){
@@ -49,7 +51,7 @@ function(WidgetEditorView) {
       this.doKeyBindings();
     },
 
-    mousedown: function(e) { e.stopPropagation(); },
+    mousedown: function(e) { mouseDispatcher.isMousedownActive = true; },
 
     render: function() {
       var self = this;
@@ -92,7 +94,7 @@ function(WidgetEditorView) {
       hoverDiv.style.position = "absolute";
       selectDiv.style.position = "absolute";
 
-      $('.page.full').on('click', this.clickedPage);
+      $('.page.full').on('mousedown', this.clickedPage);
 
       return this;
     },
@@ -257,6 +259,7 @@ function(WidgetEditorView) {
       if(this.hoveredEl) {
         this.hoveredEl.trigger('selected');
       }
+      mouseDispatcher.isMousedownActive = false;
     },
 
     clickedPage: function(e) {

@@ -79,9 +79,3 @@ def validate(thing, schema):
     raise Exception("type not recognized: {}".format(thing))
 
   return errors
-
-from dsl.json_schema import APP_SCHEMA
-def validate_app_state(app_state):
-  assert 'Homepage' in [ p['name'] for p in app_state['pages'] ]
-  assert 'Registration Page' in [ p['name'] for p in app_state['pages'] ]
-  return validate(app_state, APP_SCHEMA)
