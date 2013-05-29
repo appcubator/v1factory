@@ -123,14 +123,6 @@ function (AppModel,
 
     index: function () {
       v1App.tutorialDirectory = [0];
-      /*if(v1App.view) v1App.view.remove();
-      var cleanDiv = document.createElement('div');
-      cleanDiv.className = "clean-div";
-      $('#main-container').append(cleanDiv);
-      v1App.view = new OverviewPageView();
-      v1App.view.setElement(cleanDiv).render();
-      $('.active').removeClass('active');
-      this.changeTitle(v1App.view.title);*/
       this.changePage(OverviewPageView, {}, function() {
         return;
       });
@@ -138,15 +130,6 @@ function (AppModel,
 
     showInfoPage: function() {
       v1App.tutorialDirectory = [2];
-      /*if(v1App.view) v1App.view.remove();
-      var cleanDiv = document.createElement('div');
-      cleanDiv.className = "clean-div";
-      $('#main-container').append(cleanDiv);
-      v1App.view = new InfoView();
-      v1App.view.setElement(cleanDiv).render();
-      $('.active').removeClass('active');
-      $('.menu-app-info').addClass('active');
-      this.changeTitle(v1App.view.title);*/
       this.changePage(InfoView, {}, function() {
         $('.menu-app-info').addClass('active');
       });
@@ -154,15 +137,6 @@ function (AppModel,
 
     showEntitiesPage: function() {
       v1App.tutorialDirectory = [3];
-      /*if(v1App.view) v1App.view.remove();
-      var cleanDiv = document.createElement('div');
-      cleanDiv.className = "clean-div";
-      $('#main-container').append(cleanDiv);
-      v1App.view    = new EntitiesView();
-      v1App.view.setElement(cleanDiv).render();
-      $('.active').removeClass('active');
-      $('.menu-app-entities').addClass('active');
-      this.changeTitle(v1App.view.title);*/
       this.changePage(EntitiesView, {}, function() {
         $('.menu-app-entities').addClass('active');
       });
@@ -170,15 +144,6 @@ function (AppModel,
 
     showThemesPage: function() {
       v1App.tutorialDirectory = [4];
-      /*if(v1App.view) v1App.view.remove();
-      var cleanDiv = document.createElement('div');
-      cleanDiv.className = "clean-div";
-      $('#main-container').append(cleanDiv);
-      v1App.view  = new ThemesGalleryView();
-      v1App.view.setElement(cleanDiv).render();
-      $('.active').removeClass('active');
-      $('.menu-app-themes').addClass('active');
-      this.changeTitle(v1App.view.title);*/
       this.changePage(ThemesGalleryView, {}, function() {
         $('.menu-app-themes').addClass('active');
       });
@@ -187,33 +152,23 @@ function (AppModel,
     showPagesPage: function() {
       $('.page').fadeIn();
       v1App.tutorialDirectory = [5];
-      /*if(v1App.view) v1App.view.remove();
-
-      var cleanDiv = document.createElement('div');
-      cleanDiv.className = "clean-div";
-      $('#main-container').append(cleanDiv);
-      v1App.view  = new PagesView();
-      v1App.view.setElement(cleanDiv).render();
-
-      $('.active').removeClass('active');
-      $('.menu-app-pages').addClass('active');
-      this.changeTitle(v1App.view.title);*/
       this.changePage(PagesView, {}, function() {
         $('.menu-app-pages').addClass('active');
       });
     },
 
     showEditor: function(appId, pageId) {
-      if(v1App.view) v1App.view.remove();
-      v1App.tutorialDirectory = [5];
       $('.page').fadeOut();
+      v1App.tutorialDirectory = [5];
 
-      pageId = pageId;
+      if(v1App.view) v1App.view.remove();
       var cleanDiv = document.createElement('div');
       cleanDiv.className = "clean-div editor-page";
       $(document.body).append(cleanDiv);
+
       v1App.view  = new EditorView({pageId: pageId});
       v1App.view.setElement(cleanDiv).render();
+
       olark('api.box.hide');
       this.changeTitle(v1App.view.title);
     },
