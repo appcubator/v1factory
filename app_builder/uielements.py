@@ -7,9 +7,9 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder.code_templates', 'htmlgen'))
 
 def get_uielement_by_type(type_string):
-    UIELEMENT_TYPE_MAP = {'Form': Form,
-                          'Iterator': Iterator,
-                          'Node': Node,
+    UIELEMENT_TYPE_MAP = {'form': Form,
+                          'loop': Iterator,
+                          'node': Node,
                          }
     subclass = UIELEMENT_TYPE_MAP[type_string]
     return subclass
