@@ -1,12 +1,9 @@
 define([
-  'models/WidgetModel',
-  'backbone'
+  'models/WidgetModel'
 ],
-function(WidgetModel,
-         Backbone) {
+function(WidgetModel) {
 
   var WidgetCollection = Backbone.Collection.extend({
-    model : WidgetModel
   });
 
   return WidgetCollection;

@@ -13,8 +13,6 @@ function(ElementCollection,
   var EditorGalleryView = Backbone.View.extend({
     el                  : iui.get('top-panel-bb'),
     allList             : iui.get('all-list'),
-    widgetsCollection   : null,
-    containersCollection: null,
     curId               : 'all-elements',
     dragActive          : false,
     css                 : 'editor-gallery',
@@ -241,6 +239,7 @@ function(ElementCollection,
 
       var widget = {};
       widget.layout = { top: top, left: left };
+      widget.data = {};
       widget.context = "";
 
       var targetEl = e.target;
@@ -258,10 +257,11 @@ function(ElementCollection,
         var formType = String(id).replace('entity-user-','');
         formType = formType.replace('_', ' '); // "Local_Login" => "Local Login"
         form = constantContainers[formType];
-        widget.container_info = {};
-        widget.container_info.entity = form.entity;
-        widget.container_info.action = form.action;
-        widget.container_info.form = form;
+
+        widget.data.container_info = {};
+        widget.data.container_info.entity = form.entity;
+        widget.data.container_info.action = form.action;
+        widget.data.container_info.form = form;
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);
 
@@ -276,8 +276,8 @@ function(ElementCollection,
 
         content =  '{{' + editorContext +'.'+ entity.get('name') +'.'+field.get('name')+'}}';
 
-        widget         = _.extend(widget, uieState[self.getFieldType(field)][0]);
-        widget.content =  content;
+        widget.data         = _.extend(widget, uieState[self.getFieldType(field)][0]);
+        widget.data.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
         widgetModel.select();
@@ -285,19 +285,19 @@ function(ElementCollection,
       else if(/(entity)/.exec(className)) {
         cid  = String(id).replace('entity-','');
 
-        widget.container_info = {};
-        widget.container_info.entity = v1State.get('entities').get(cid);
+        widget.data.container_info = {};
+        widget.data.container_info.entity = v1State.get('entities').get(cid);
         if(/(entity-create-form)/.exec(className)) {
-          widget.container_info.action = "create";
+          widget.data.container_info.action = "create";
         }
         if(/(entity-create-form)/.exec(className)) {
           //widget.container_info.action = "update";
         }
         if(/(entity-table)/.exec(className)) {
-          widget.container_info.action = "table";
+          widget.data.container_info.action = "table";
         }
         if(/(entity-list)/.exec(className)) {
-          widget.container_info.action = "show";
+          widget.data.container_info.action = "show";
         }
 
         var widgetContainerModel = new ContainerWidgetModel(widget, true);
@@ -310,43 +310,46 @@ function(ElementCollection,
         entity = v1State.get('users');
         content =  '{{CurrentUser.'+field.get('name')+'}}';
 
-        widget         = _.extend(widget, uieState[self.getFieldType(field)][0]);
-        widget.content =  content;
+        widget.data         = _.extend(widget, uieState[self.getFieldType(field)][0]);
+        widget.data.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
-        widgetModel.select();
       }
       else if (/(uielement)/.exec(className)){
         var type    = id.replace('type-','');
+        widget.data = {};
 
         if(type == "imageslider") {
-          widget.container_info = {};
-          widget.container_info.action = "imageslider";
+          widget.data.container_info = {};
+          widget.data.container_info.action = "imageslider";
           var widgetContainerModel = new ContainerWidgetModel(widget, true);
           this.widgetsCollection.push(widgetContainerModel);
           return;
         }
 
         if(type == "twitterfeed") {
-          widget.container_info = {};
-          widget.container_info.action = "twitterfeed";
+          widget.data.container_info = {};
+          widget.data.container_info.action = "twitterfeed";
           var widgetContainerModel = new ContainerWidgetModel(widget, true);
           this.widgetsCollection.push(widgetContainerModel);
           return;
         }
 
         if(type == "facebookshare") {
-          widget.container_info = {};
-          widget.container_info.action="facebookshare";
+          widget.data.container_info = {};
+          widget.data.container_info.action="facebookshare";
           var widgetContainerModel = new ContainerWidgetModel(widget, true);
           this.widgetsCollection.push(widgetContainerModel);
           return;
         }
 
-        widget      = _.extend(widget, uieState[type][0]);
+        widget.data = _.extend(widget.data, uieState[type][0]);
         widget.type = type;
+
         if(this.entity) { widget.context = this.entity.get('name'); }
-        this.widgetsCollection.push(widget);
+
+        var model = new WidgetModel(widget, true);
+        this.widgetsCollection.push(model);
       }
       else {
         alert('ufo:' + className);

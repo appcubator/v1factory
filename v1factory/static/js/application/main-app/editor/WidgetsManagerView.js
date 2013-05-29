@@ -47,10 +47,10 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetL
     placeUIElement: function(model) {
       var self = this;
 
-      if(model.has('container_info') && model.get('container_info').has('row')) {
+      if(model.get('data').has('container_info') && model.get('data').get('container_info').has('row')) {
         self.placeList(model);
       }
-      if(model.has('container_info')) {
+      if(model.get('data').has('container_info')) {
         self.placeContainer(model);
       }
       else {
