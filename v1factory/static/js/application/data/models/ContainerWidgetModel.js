@@ -19,16 +19,9 @@ function(WidgetModel) {
       var json = _.clone(this.attributes);
       json = _.omit(json, 'selected', 'deletable');
 
-      json.content_attribs = this.get('content_attribs').toJSON()|| {};
-      json.content = this.get('content')||'';
+      json.type = "form";
       json.layout  = this.get('layout').toJSON();
-      if(json.container_info) {
-        json.container_info = this.get('container_info').toJSON();
-      }
-
-      if(this.has('container_info')) {
-        json.container_info = this.get('container_info').toJSON();
-      }
+      json.data = this.get('data').toJSON();
 
       return json;
     }

@@ -66,7 +66,7 @@ class Form(DictInited):
                 "name": {"_type": ""},
                 "action": {"_type": ""},
                 "fields": {"_type": [], "_each": {"_type": FormField}},
-                "goto": {"_type": LinkLang},
+                #"goto": {"_type": LinkLang},
                 "belongsTo": {"_one_of": [{"_type": ""}, {"_type": None}]}  # TODO may have reference
             }
 
@@ -79,7 +79,6 @@ class Form(DictInited):
         _resolve_attrs = (('entity', 'entity_resolved'),)
 
     _schema = {
-        "content": {"_type": ""},  # TODO may have reference
         "container_info": {"_type": FormInfo}
     }
 
