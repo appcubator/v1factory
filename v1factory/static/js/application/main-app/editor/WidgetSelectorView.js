@@ -166,10 +166,10 @@ function(WidgetEditorView) {
 
     resizing: function(e, ui) {
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
-      elem.style.width = ui.size.width + 'px';
-      elem.style.height = ui.size.height + 'px';
-      elem.style.left = ui.position.left + 'px';
-      elem.style.top  = ui.position.top + 'px';
+      elem.style.width = ui.size.width - 4 + 'px';
+      elem.style.height = ui.size.height - 4 + 'px';
+      elem.style.left = ui.position.left + 2 + 'px';
+      elem.style.top  = ui.position.top + 2 + 'px';
     },
 
     resized: function(e, ui) {
@@ -198,8 +198,8 @@ function(WidgetEditorView) {
       g_guides.showHorizontal(ui.position.top / GRID_HEIGHT + model.get('layout').get('height'));
 
       var elem = iui.get('widget-wrapper-' + model.cid);
-      elem.style.top = ui.position.top + 'px';
-      elem.style.left = ui.position.left+ 'px';
+      elem.style.top = ui.position.top + 2 + 'px';
+      elem.style.left = ui.position.left + 2 + 'px';
     },
 
     moved: function(e, ui) {
