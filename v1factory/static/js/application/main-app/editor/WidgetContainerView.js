@@ -83,20 +83,20 @@ function( TableQueryView,
 
       if(this.model.get('data').get('container_info').get('action') == "table") {
         var tableDiv = document.createElement('div');
-        tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('container_info').get('data').get('query').attributes);
+        tableDiv.innerHTML = _.template(Templates.tableNode, this.model.get('data').get('container_info').get('query').attributes);
         this.el.appendChild(tableDiv);
       }
 
       if(this.model.get('data').get('container_info').get('action') == "imageslider" ) {
         var slideDiv = document.createElement('div');
-        slideDiv.innerHTML = _.template(Templates.sliderTemp, {slides: this.model.get('container_info').get('data').get('slides').toJSON() });
+        slideDiv.innerHTML = _.template(Templates.sliderTemp, {slides: this.model.get('data').get('container_info').get('slides').toJSON() });
         $(slideDiv).flexslider();
         this.el.appendChild(slideDiv);
       }
 
       if(this.model.get('data').get('container_info').get('action') == "twitterfeed" ) {
         var feedDiv = document.createElement('div');
-        feedDiv.innerHTML = _.template(Templates.twitterfeedTemp, {username: this.model.get('container_info').get('data').get('username') });
+        feedDiv.innerHTML = _.template(Templates.twitterfeedTemp, {username: this.model.get('data').get('container_info').get('username') });
         this.el.appendChild(feedDiv);
       }
 

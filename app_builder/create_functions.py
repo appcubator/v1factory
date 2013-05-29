@@ -53,5 +53,13 @@ class AppComponentFactory(object):
         page._django_template = t
         return t
 
-    def create_url_bindings(self, things):
+    def create_urls(self, app):
+        u = DjangoURLs('webapp.pages')
+        app._django_urls = u
+        return u
+
+    def add_page_to_urls(self, page):
+        url_obj = page.app._django_urls
+        route = some form of page.url
+        url_obj.add_route(route, page._django_view)
         pass
