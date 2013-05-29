@@ -1,27 +1,22 @@
 define(
 [
-  'models/ContentModel',
+  'models/DataModel',
   'models/LayoutModel',
-  'collections/PageCollection',
   'dicts/constant-containers'
 ],
-function(ContentModel, LayoutModel, PageCollection) {
+function(DataModel, LayoutModel) {
 
   var WidgetModel = Backbone.Model.extend({
     selected: false,
-
-    defaults: {
-      'container_info' : null,
-      'deletable' : true
-    },
 
     initialize: function(bone) {
       var self = this;
       _.bindAll(this, 'isFullWidth');
 
-      this.set('content_attribs', new ContentModel(this.get('content_attribs')));
+      this.set('type', bone.type||'');
       this.set('layout', new LayoutModel(this.get('layout')));
-      this.set('selected', false);
+      this.set('data', new DataModel(bone.data||{}));
+
       this.set('context', bone.context|| null);
     },
 

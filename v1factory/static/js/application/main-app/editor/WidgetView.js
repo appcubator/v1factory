@@ -63,8 +63,8 @@ define([
 
       this.render();
 
-      this.model.bind("change:type", this.changedType, this);
-      this.model.bind("change:class_name", this.changedType, this);
+      this.model.get('data').bind("change:type", this.changedType, this);
+      this.model.get('data').bind("change:class_name", this.changedType, this);
       this.model.bind("remove", this.remove, this);
 
       this.model.get('layout').bind("change:width", this.changedWidth, this);
@@ -76,9 +76,9 @@ define([
       this.model.get('layout').bind("change", this.changedPadding, this);
 
       this.model.bind("change:content", this.changedText, this);
-      this.model.get('content_attribs').bind("change:src", this.changedSource, this);
-      this.model.get('content_attribs').bind("change:value", this.changedValue, this);
-      this.model.get('content_attribs').bind("change:style", this.changedStyle, this);
+      this.model.get('data').get('content_attribs').bind("change:src", this.changedSource, this);
+      this.model.get('data').get('content_attribs').bind("change:value", this.changedValue, this);
+      this.model.get('data').get('content_attribs').bind("change:style", this.changedStyle, this);
 
       this.model.bind("startEditing", this.switchEditModeOn, this);
       this.model.bind("deselected",   this.switchEditModeOff, this);
@@ -124,11 +124,13 @@ define([
 
     renderElement: function() {
       var temp = Templates.tempNode;
-      var node_context = _.clone(this.model.attributes);
+      var node_context = _.clone(this.model.get('data').attributes);
       if(node_context.content) {
         node_context.content = node_context.content.replace(/\n\r?/g, '<br />');
       }
-      node_context.content_attribs = this.model.get('content_attribs').attributes;
+      if(this.model.get('data').get('content_attribs')) {
+        node_context.content_attribs = this.model.get('data').get('content_attribs').attributes;
+      }
       var el = _.template(temp, { element: node_context});
       return el;
     },
@@ -212,7 +214,7 @@ define([
     },
 
     changedStyle: function() {
-      this.el.firstChild.setAttribute('style', this.model.get('content_attribs').get('style'));
+      this.el.firstChild.setAttribute('style', this.model.get('data').get('content_attribs').get('style'));
       this.el.firstChild.style.lineHeight = '1em';
     },
 
@@ -221,7 +223,7 @@ define([
         file.name = file.filename;
         statics.push(file);
       });
-      this.model.get('content_attribs').set('src', _.last(files).url);
+      this.model.get('data').get('content_attribs').set('src', _.last(files).url);
       //this.show(this.model);
     },
 
@@ -280,7 +282,7 @@ define([
       this.$el.removeClass('textediting');
       var el = $(this.el.firstChild);
       val = el.html();
-      this.model.set('content', val);
+      this.model.get('data').set('content', val);
       el.attr('contenteditable', 'false');
       keyDispatcher.textEditing = false;
     },

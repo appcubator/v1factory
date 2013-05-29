@@ -1,9 +1,7 @@
 define([
-  'models/WidgetModel',
-  'models/ContainerInfoModel'
+  'models/WidgetModel'
 ],
-function(WidgetModel,
-         ContainerInfoModel) {
+function(WidgetModel) {
 
   var ContainerWidgetModel = WidgetModel.extend({
     selected: false,
@@ -15,7 +13,6 @@ function(WidgetModel,
 
     initialize: function(bone, isNew) {
       ContainerWidgetModel.__super__.initialize.call(this, bone);
-      this.set('container_info', new ContainerInfoModel(this.get('container_info'), isNew));
     },
 
     toJSON : function() {

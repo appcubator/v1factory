@@ -38,8 +38,8 @@ function(SelectView) {
 
     render: function() {
       var self = this;
-      if(this.model.has('content') && this.model.get('content') !== null &&
-        !this.model.get('content_attribs').has('src') &&
+      if(this.model.get('data').has('content') && this.model.get('data').get('content') !== null &&
+        !this.model.get('data').get('content_attribs').has('src') &&
         this.model.get('type') != "images" &&
         this.model.get('type') != "buttons") {
 
