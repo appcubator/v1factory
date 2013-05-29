@@ -9,6 +9,7 @@ define([
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
+  'editor/NavbarView',
   'editor/NavbarEditorView',
   'editor/GuideView',
   'editor/MarqueeView',
@@ -26,6 +27,7 @@ function( PageModel,
           WidgetEditorView,
           EditorGalleryView,
           PageStylePicker,
+          NavbarView,
           NavbarEditorView,
           GuideView,
           MarqueeView,
@@ -40,12 +42,14 @@ function( PageModel,
       'click #deploy'        : 'deploy',
       'click .menu-button.help' : 'help',
       'click .url-bar'       : 'clickedUrl',
+      'click #navbar'        : 'openNavbarEditor',
       'click .home'          : 'clickedHome',
       'click .go-to-page'    : 'clickedGoToPage'
     },
 
     initialize: function(options) {
       _.bindAll(this, 'render',
+                      'openNavbarEditor',
                       'copy',
                       'paste',
                       'help',
@@ -79,7 +83,7 @@ function( PageModel,
       this.guides           = new GuideView(this.widgetsCollection);
       g_guides = this.guides;
 
-      this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
+      this.navbar  = new NavbarView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
 
       var page = appState.pages[pageId];
@@ -117,7 +121,7 @@ function( PageModel,
       this.renderUrlBar();
       this.galleryEditor.render();
       this.widgetsManager.render();
-      this.navbarEditor.render();
+      this.navbar.render();
       this.guides.setElement($('#elements-container')).render();
 
       $('#elements-container').append(this.marqueeView.el);
@@ -127,6 +131,10 @@ function( PageModel,
       window.onresize = this.setupPageWrapper;
 
       $('#loading-gif').fadeOut().remove();
+    },
+
+    openNavbarEditor: function(e) {
+      new NavbarEditorView({model: this.model.get('navbar')});
     },
 
     renderUrlBar: function() {

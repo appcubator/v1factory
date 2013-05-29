@@ -1,131 +1,74 @@
 define([
-  'backbone'
+  'mixins/BackboneModal',
+  'iui'
 ],
 function() {
 
-  var NavbarEditorView = Backbone.View.extend({
-    el: $('#navbar'),
-    entity: null,
-    type: null,
+  var NavbarEditorView = Backbone.ModalView.extend({
+    className : 'navbar-editor-modal',
+    width: 400,
+    padding: 0,
     events: {
-      'click #hide-toggle'      : 'hideToggle',
-      'click .add-link'         : 'clickedAddLink',
-      'change #page-link-list'  : 'pageSelected',
-      'click #brand-name'       : 'clickedBrandName',
-      'submit #brand-name-form' : 'submittedBrandName',
-      'mouseover li.navbar-item-xcv': 'showDeleteButton',
-      'mouseout li.navbar-item-xcv': 'hideDeleteButton',
-      'click .menu-item'        : 'removeItem'
+      'click .done-btn'              : 'closeModal'
     },
+    initialize: function(options) {
+      var self = this;
 
-    initialize: function(navbarModel) {
       _.bindAll(this, 'render',
-                      'renderItems',
-                      'hideToggle',
-                      'hideChanged',
-                      'pageSelected',
-                      'clickedBrandName',
-                      'clickedAddLink',
-                      'submittedBrandName',
-                      'showDeleteButton',
-                      'hideDeleteButton',
-                      'removeItem');
+                      'resized',
+                      'resizing');
 
-      this.model = navbarModel;
-      this.model.bind('change:isHidden', this.hideChanged);
+      this.model  = options.model;
+
+      this.render();
     },
 
     render: function() {
       var self = this;
 
-      if(this.model.get('brandName')) {
-        this.$el.find('#brand-name').html(this.model.get('brandName'));
-      }
+      var brandName = this.model.get('brandName') || v1State.get('name');
+      var items = _.map(this.model.get('items'), function(item) {
+        return item.name.replace('internal://','').replace('/','');
+      });
 
-      this.renderItems();
-      this.hideChanged();
+      var editorDiv = document.createElement('div');
+      editorDiv.className = 'nav-editor-container';
+      editorDiv.style.padding = "20px";
+
+      editorDiv.innerHTML = _.template(Templates.NavbarEditor, {
+        brandName: brandName,
+        items: items
+      });
+
+      this.el.appendChild(editorDiv);
+      this.$el.append('<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>');
+      this.el.style.height = "600px";
 
       _(appState.pages).each(function(page) {
         self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'">' + page.name +'</option>');
       });
+
+      return this;
     },
 
-    renderItems: function() {
-      var self = this;
-      self.$el.find('#items').html('');
-      _(self.model.get('items')).each(function(item) {
-        var name = item.name.replace('internal://','').replace('/','');
-        var newli = document.createElement('li');
-        newli.innerHTML = '<a href="#" class="menu-item">'+ name +'</a>';
-        $(newli).hover(self.showDeleteButton, self.hideDeleteButton);
-        self.$el.find('#items').append(newli);
-      });
+    resized: function() {
+      this.rowWidget.style.width = '';
+      this.rowWidget.style.height ='';
+      this.rowWidget.className = 'editor-window container-wrapper ';
+      this.rowWidget.className += 'span' + this.rowModel.get('layout').get('width');
+      this.rowWidget.style.height = (this.rowModel.get('layout').get('height') * GRID_HEIGHT) + 'px';
+      this.rowWidget.style.position = "relative";
     },
 
-    hideToggle: function(e) {
-      this.model.set('isHidden', (!this.model.get('isHidden')));
-    },
+    resizing: function(e, ui) {
+      var dHeight = (ui.size.height + 2) / GRID_HEIGHT;
+      var dWidth = (ui.size.width + 2) / GRID_WIDTH;
 
-    hideChanged: function() {
-      if(this.model.get('isHidden')) {
-        this.$el.addClass('hidden');
-      }
-      else {
-        this.$el.removeClass('hidden');
-      }
-    },
+      var deltaHeight = Math.round((ui.size.height + 2) / GRID_HEIGHT);
+      var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
 
-    clickedAddLink: function() {
-      $('.add-link').hide();
-      $('.add-link-form').fadeIn();
-    },
-
-    pageSelected: function(e) {
-      var arr = this.model.get('items');
-      var obj = {name : e.target.value };
-      arr[arr.length] = obj;
-      this.model.set('items', arr);
-      this.renderItems();
-      iui.get('page-link-list').options[0].selected = true;
-      $('.add-link-form').hide();
-      $('.add-link').fadeIn();
-    },
-
-    clickedBrandName: function(e) {
-      this.$el.find('#brand-name').hide();
-      this.$el.find('#brand-name-form').fadeIn();
-      this.$el.find('#brand-name-input').focus();
-      this.$el.find('#brand-name-input').val(this.model.get('brandName'));
-    },
-
-    submittedBrandName: function(e) {
-      var brandName = this.$el.find('#brand-name-input').val();
-      this.$el.find('#brand-name').html(brandName);
-      this.model.set('brandName', brandName);
-      this.$el.find('#brand-name').fadeIn();
-      this.$el.find('#brand-name-form').hide();
-      this.$el.find('#brand-name-input').val('');
-
-      e.preventDefault();
-    },
-
-    showDeleteButton: function(e) {
-      $('#hide-toggle').hide();
-      $('#delete-button-xcv').fadeIn();
-    },
-
-    hideDeleteButton: function(e) {
-      $('#delete-button-xcv').hide();
-      $('#hide-toggle').fadeIn();
-    },
-
-    removeItem: function(e) {
-      var self = this;
-      var name = $(e.target).html();
-      name = "internal://" + name;
-      var newArr = _.reject(self.model.get('items'), function(item) { return item.name == name; });
-      self.model.set('items', newArr);
-      $(e.target).remove();
+      this.rowModel.get('layout').set('width', deltaWidth);
+      this.rowModel.get('layout').set('height', deltaHeight);
     }
   });
 

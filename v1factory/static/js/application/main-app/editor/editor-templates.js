@@ -21,6 +21,22 @@ Templates.tempNode = [
   '<% }; %>'
 ].join('\n');
 
+Templates.NavbarEditor = [
+  '<h3>Navbar Editor</h3>',
+  '<form>',
+    '<label>Brand Name</label>',
+    '<input type="text" id="editor-brandname" value="<%= brandName %>">',
+    '<label>Links</label>',
+    '<% _(items).each(function(item, index) { %>',
+      '<div>',
+        '<input type="text" id="editor-link-<%= index %>" value="<%= item %>">',
+        '<a id="remove-<%= index %>" href="#"><img src="/static/img/delete-small.png"></a>',
+      '</div>',
+    '<% }) %>',
+  '</form>',
+  '<button id="editor-add-link" type="submit">Add Link</button>'
+].join('\n');
+
 
 Templates.tempLi = [
   '<li id="entity-user-<%= attr %>" class="large single-data">',
@@ -202,9 +218,7 @@ Templates.listQueryView = [
 ].join('\n');
 
 Templates.listEditorView = [
-  // '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
-  '<div class="editor-window">',
-  '</div>'
+  '<span class="view-type-list type-pick"></span><span class="view-tyle-grid type-pick"></span>',
 ].join('\n');
 
 
