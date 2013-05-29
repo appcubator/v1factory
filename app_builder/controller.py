@@ -4,8 +4,10 @@ from pyflakes.api import check
 
 factory = AppComponentFactory()
 
-create_map = {'entity': factory.create_model,
+create_map = {'create model for entity': factory.create_model,
+              'create urls object for app': factory.create_urls,
               'view for page': factory.create_view_for_page,
+              'url to serve page': factory.add_page_to_urls,
               'find or add the needed data to the view': factory.find_or_create_query_for_view ,
               'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes }
 
@@ -24,12 +26,13 @@ def create_codes(app):
 
     # setup models
     for ent in app.entities:
-        create('entity', ent)
+        create('create model for entity', ent)
 
     # routes and functions to serve pages
+    create('create urls object for app', app)
     for p in app.pages:
         create('view for page', p)
-        create('url to serve page', p.url)
+        create('url to serve page', p)
 
     # adding data to the page-serve functions
     for p in app.pages:

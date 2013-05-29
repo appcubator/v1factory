@@ -275,15 +275,15 @@ class DjangoTemplate(object):
                         # create a relative container and absolute position the
                         # contents.
 
-                        min_top = c.uiels[0].top
-                        max_bottom = c.uiels[0].top + c.uiels[0].height
+                        min_top = c.uiels[0].layout.top
+                        max_bottom = c.uiels[0].layout.top + c.uiels[0].layout.height
                         for uie in c.uiels:
-                            top_offset = uie.top - inner_top_offset
-                            left_offset = uie.left - inner_left_offset
+                            top_offset = uie.layout.top - inner_top_offset
+                            left_offset = uie.layout.left - inner_left_offset
                             uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (
-                                15 * uie.top_offset, 80 * uie.left_offset)
-                            min_top = min(uie.top, min_top)
-                            max_bottom = max(uie.top + uie.height, max_bottom)
+                                15 * top_offset, 80 * left_offset)
+                            min_top = min(uie.layout.top, min_top)
+                            max_bottom = max(uie.layout.top + uie.layout.height, max_bottom)
 
                         c.has_overlapping_nodes = True
 
@@ -304,10 +304,11 @@ class DjangoURLs(object):
     Represents a set of URL - function mappings.
     """
 
-    def __init__(self, namespace):
-        self.namespace = namespace
+    def __init__(self, module_string):
+        self.module = module_string
+        self.routes = []
 
-    def add_url_function_pair(self, url_regex, function):
+    def add_route(self, url_regex, function):
         pass
 
     def render(self):
