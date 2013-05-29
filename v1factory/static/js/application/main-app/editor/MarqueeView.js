@@ -27,6 +27,12 @@ function(WidgetEditorView) {
     },
 
     mousedown: function(e) {
+      if(mouseDispatcher.isMousedownActive) {
+        mouseDispatcher.isMousedownActive = false;
+        return;
+      }
+
+      this.$el.show();
       this.isDrawing = true;
 
       var coorX = e.offsetX;
@@ -88,19 +94,19 @@ function(WidgetEditorView) {
     },
 
     setZero: function() {
+      this.$el.hide();
       this.setWidth(0);
       this.setHeight(0);
     },
 
     render: function() {
-      // window.addEventListener('mousedown', this.mousedown);
-      // window.addEventListener('mouseup', this.mouseup);
-      // window.addEventListener('mousemove', this.mousemove);
-      // this.el.className = 'marquee-view';
-      // this.el.id = 'marquee-view';
-      // this.setWidth(0);
-      // this.setHeight(0);
-      // return this;
+      window.addEventListener('mousedown', this.mousedown);
+      window.addEventListener('mouseup', this.mouseup);
+      window.addEventListener('mousemove', this.mousemove);
+      this.el.className = 'marquee-view';
+      this.el.id = 'marquee-view';
+      this.setZero();
+      return this;
     }
 
   });

@@ -286,7 +286,7 @@ define([
     },
 
     mousedown: function(e) {
-      e.stopPropagation();
+      //e.stopPropagation();
     }
 
   });

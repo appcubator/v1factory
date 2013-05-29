@@ -57,6 +57,7 @@ require([
   "app/OverviewPageView",
   "editor/EditorView",
   "editor/KeyDispatcher",
+  "editor/MouseDispatcher",
   "mixins/SimpleDialogueView",
   "mixins/ErrorDialogueView",
   "backbone",
@@ -75,6 +76,7 @@ function (AppModel,
           OverviewPageView,
           EditorView,
           KeyDispatcher,
+          MouseDispatcher,
           SimpleDialogueView,
           ErrorDialogueView) {
 
@@ -315,6 +317,8 @@ function (AppModel,
 
   g_guides = {};
   keyDispatcher  = new KeyDispatcher();
+  mouseDispatcher  = new MouseDispatcher();
+
 
   Backbone.history.start({pushState: true});
 

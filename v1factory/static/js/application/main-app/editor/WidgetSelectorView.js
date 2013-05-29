@@ -10,8 +10,10 @@ function(WidgetEditorView) {
     tagName : 'div',
     selectedEl : null,
     events : {
-      'mousedown #hover-div'     : 'hoverClicked',
-      'dblclick #select-div' : 'doubleClicked'
+      'click #hover-div'     : 'hoverClicked',
+      'dblclick #select-div' : 'doubleClicked',
+      'mousedown #hover-div' : 'mousedown',
+      'mousedown #select-div': 'mousedown'
     },
 
     initialize: function(widgetsCollection){
@@ -49,7 +51,7 @@ function(WidgetEditorView) {
       this.doKeyBindings();
     },
 
-    mousedown: function(e) { e.stopPropagation(); },
+    mousedown: function(e) { console.log('SelectorView - mousedown');  mouseDispatcher.isMousedownActive = true; },
 
     render: function() {
       var self = this;
@@ -254,12 +256,14 @@ function(WidgetEditorView) {
     },
 
     hoverClicked: function(e) {
+      console.log('SelectorView-hoverClicked');
       if(this.hoveredEl) {
         this.hoveredEl.trigger('selected');
       }
     },
 
     clickedPage: function(e) {
+      console.log('SelectorView-clickedPage');
       if(this.selectedEl && !this.isMouseOn(e)) {
         this.deselect();
       }
