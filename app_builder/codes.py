@@ -307,9 +307,8 @@ class DjangoURLs(object):
     def __init__(self, module_string):
         self.module = module_string
         self.routes = []
-
-    def add_route(self, url_regex, function):
-        pass
+        self.imports = ['from django.conf.urls import patterns, include, url']
+        self.code_path = "webapp/urls.py"
 
     def render(self):
-        return "URLS go here"
+        return env.get_template('urls.py').render(urls=self)

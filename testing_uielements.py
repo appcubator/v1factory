@@ -70,7 +70,7 @@ test_json = r"""{
                         "l_padding": 0,
                         "r_padding": 0
                     },
-                    "type":"Node",
+                    "type":"node",
                     "data": {
                         "style": "font-size: 32px;\nfont-weight: bold;",
                         "isSingle": false,
@@ -97,7 +97,7 @@ test_json = r"""{
                         "r_padding": 0,
                         "alignment": "left"
                     },
-                    "type": "Form",
+                    "type": "form",
                     "data": {
                         "content": "",
                         "container_info": {

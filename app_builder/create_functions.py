@@ -1,4 +1,4 @@
-from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate
+from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs
 from app_builder import naming
 
 
@@ -60,6 +60,8 @@ class AppComponentFactory(object):
 
     def add_page_to_urls(self, page):
         url_obj = page.app._django_urls
-        route = some form of page.url
-        url_obj.add_route(route, page._django_view)
-        pass
+        # TODO make the url more legit
+        route = ("r'^" + '/'.join(page.url.urlparts) + "/$'", page._django_view)
+        url_obj.routes.append(route)
+
+        return None
