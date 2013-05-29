@@ -129,7 +129,6 @@ class App(DictInited):
     _schema = {
         "name": {"_type": "", "_minlength": 2, "_maxlength": 255},
         "info": {"_type": {}, "_mapping": {
-            "domain": {"_type": ""},
             "description": {"_type": ""},
             "keywords": {"_type": ""},
         }},

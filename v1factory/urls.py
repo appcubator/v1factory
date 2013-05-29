@@ -42,6 +42,7 @@ urlpatterns += patterns('v1factory.views',
 
     # getting/setting state
     url(r'^app/(\d+)/state/$', 'app_state'),
+    url(r'^app/(\d+)/state/force/$', 'app_state', { "validate": False }),
 
     # getting/setting uie state
     url(r'^app/(\d+)/uiestate/$', 'uie_state'),

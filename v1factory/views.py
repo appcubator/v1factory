@@ -98,13 +98,13 @@ def app_delete(request, app_id):
 
 
 @login_required
-def app_state(request, app_id):
+def app_state(request, app_id, validate=True):
     app = get_object_or_404(App, id=app_id, owner=request.user)
     if request.method == 'GET':
         state = app_get_state(request, app)
         return JSONResponse(state)
     elif request.method == 'POST':
-        status, data = app_save_state(request, app)
+        status, data = app_save_state(request, app, require_valid=validate)
         return JSONResponse(data, status=status)
     else:
         return HttpResponse("GET or POST only", status=405)
