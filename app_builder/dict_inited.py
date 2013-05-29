@@ -149,6 +149,7 @@ class DictInited(object):
             raise Exception('schema structure doesn\'t begin with _type')
 
         if type(schema['_type']) == type(type):
+            assert issubclass(schema['_type'], DictInited)
             return cls.validate_dict(thing, {"_type": {}, "_mapping": schema['_type']._schema}, ancestor_list)
 
         if type(thing) == type(""):

@@ -30,19 +30,19 @@
     {% set row_loop = loop %}
     {% if row.cols %}
     <!-- row -->
-    <div class="row hoff{{row.margin_top}}">
+    <div class="{{ row.class_string }}">
     {% for col in row.cols %}
     {%- if col.tree == None %}
         <!-- column terminal -->
-        <div class="span{{col.width}} offset{{col.margin_left}} {% if col.has_overlapping_nodes %}hi{{ col.container_height }}{% endif %}" {% if col.has_overlapping_nodes %}style="position:relative;"{% endif %}>
+        <div class="{{ col.class_string }}" {% if col.style_string != "" %}style="{{ col.style_string }}"{% endif %}>
         {% for element in col.uiels %}
-        {# element.render(env)|indent(2) #}
-        NODE GOES HERE
+        {# Make a call to the instancemethod of DjangoTemplate, render_uielement #}
+            {{ element.render()|indent(8 + 4 * row_loop.index) }}
         {% endfor %}
         </div>
     {% else %}
         <!-- column -->
-        <div class="span{{col.width}} offset{{col.margin_left}}">
+        <div class="{{ col.class_string }}">
             {{ row_loop(col.tree.rows)|indent(4 * row_loop.index) }}
         </div>
     {% endif %}

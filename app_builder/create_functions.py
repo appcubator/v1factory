@@ -48,7 +48,7 @@ class AppComponentFactory(object):
         """
         t = DjangoTemplate(page._django_view.identifier)
                             # this is an underscore-name, so it should be good as a filename
-        t.create_tree(page.uielements)
+        t.create_tree([u.subclass for u in page.uielements]) # XXX HACK PLZ FIXME TODO
         t.page = page
         page._django_template = t
         return t

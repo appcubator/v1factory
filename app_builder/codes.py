@@ -98,6 +98,30 @@ class Column(object):
         self.tree = None
         self.has_overlapping_nodes = False
 
+    @property
+    def classes(self):
+        classes = ['span%d' % self.width]
+        if self.margin_left > 0:
+            classes.append('offset%d' % self.margin_left)
+        if self.has_overlapping_nodes:
+            classes.append('hi%d' % self.container_height)
+        return classes
+
+    @property
+    def class_string(self):
+        return ' '.join(self.classes)
+
+    @property
+    def styles(self):
+        styles = []
+        if self.has_overlapping_nodes:
+            styles.append('position:relative')
+        return styles
+
+    @property
+    def style_string(self):
+        return '; '.join(self.styles)
+
 
 class Row(object):
 
@@ -105,6 +129,17 @@ class Row(object):
         self.uiels = []
         self.margin_top = 0
         self.cols = None
+
+    @property
+    def classes(self):
+        classes = ['row']
+        if self.margin_top > 0:
+            classes.append('hoff%d' % self.margin_top)
+        return classes
+
+    @property
+    def class_string(self):
+        return ' '.join(self.classes)
 
 
 class DomTree(object):
@@ -220,7 +255,10 @@ class DjangoTemplate(object):
         self.tree = self._create_tree(uiels)
 
     def _create_tree(self, uiels, recursive_num=0, top_offset=0, left_offset=0):
-        """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement"""
+        """Given some uielements, create a nested row -> column -> row -> ... -> column -> uielement.
+           It also detects the situation where splitting into row/column cannot be acheived.
+           For that, it makes the column position:relative, and the inner uiels position absolute.
+           In this case, it also sets an attribute on uie called "overlap_styles"."""
         tree = DomTree()
 
         tree.rows = self.split_to_rows(uiels, top_offset=top_offset)
@@ -259,3 +297,5 @@ class DjangoTemplate(object):
 
     def render(self):
         return env.get_template('htmlgen/djangotemplate.html').render(template=self)
+
+

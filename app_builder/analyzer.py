@@ -13,6 +13,21 @@ def decode_braces(s):
     assert s.startswith('{{') and s.endswith('}}'), "Not brace encoded"
     return s[2:-2].replace('\{', '{')
 
+class Resolvable(object):
+
+    """
+    Mixin allowing you to specify attributes you want to resolve.
+    See _resolve_attrs in LinkLang for example.
+    """
+
+    def resolve(self):
+        assert hasattr(self, app), "You must have something at attribute \"app\""
+        for src_attr, dest_attr in self.__class__._resolve_attrs:
+            path_string = decode_braces(getattr(self, src_attr))
+            setattr(self, dest_attr,  self.app.find(
+                path_string, name_allowed=True))
+
+
 # Entities
 
 
@@ -49,35 +64,6 @@ class UserConfig(DictInited):
 
 
 # Pages
-class Layout(DictInited):
-    _schema = {
-        "width": {"_type": 0, "_min": 1, "_max": 64},
-        "height": {"_type": 0, "_min": 1},
-        "top": {"_type": 0, "_min": 0},
-        "left": {"_type": 0, "_min": 0, "_max": 64},
-        "t_padding": {"_type": "", "_default": ""},
-        "b_padding": {"_type": "", "_default": ""},
-        "l_padding": {"_type": "", "_default": ""},
-        "r_padding": {"_type": "", "_default": ""},
-        "alignment": {"_type": "", "_default": "left"},
-        "font-size": {"_type": "", "_default": ""},
-    }
-
-
-class Resolvable(object):
-
-    """
-    Mixin allowing you to specify attributes you want to resolve.
-    See _resolve_attrs in LinkLang for example.
-    """
-
-    def resolve(self):
-        for src_attr, dest_attr in self.__class__._resolve_attrs:
-            path_string = decode_braces(getattr(self, src_attr))
-            setattr(self, dest_attr,  self.app.find(
-                path_string, name_allowed=True))
-
-
 class LinkLang(DictInited, Resolvable):
     _schema = {
         "page_name": {"_type": ""},
@@ -86,102 +72,6 @@ class LinkLang(DictInited, Resolvable):
     }
 
     _resolve_attrs = (('page_name', 'page'),)
-
-
-class UIElement(object):
-
-    def is_form(self):
-        return self.__class__.__name__ == 'Form'
-
-    def is_list(self):
-        return self.__class__.__name__ == 'Iterator'
-
-    def is_node(self):
-        return self.__class__.__name__ == 'Node'
-
-
-class Form(DictInited, UIElement):
-
-    class FormInfo(DictInited, Resolvable):
-
-        class FormInfoInfo(DictInited):
-
-            class FormField(DictInited):
-                _schema = {
-                    "name": {"_type": ""},
-                    "placeholder": {"_type": ""},
-                    "label": {"_type": ""},
-                    "displayType": {"_type": ""},
-                    "type": {"_type": ""},  # FIXME what is the diff btwn this and the above
-                    "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this?
-                }
-
-            _schema = {
-                "name": {"_type": ""},
-                "action": {"_type": ""},
-                "fields": {"_type": [], "_each": {"_type": FormField}},
-                "goto": {"_type": LinkLang},
-                "belongsTo": {"_one_of": [{"_type": ""}, {"_type": None}]}  # TODO may have reference
-            }
-
-        _schema = {
-            "entity": {"_type": ""},
-            "action": {"_type": ""},
-            "form": {"_type": FormInfoInfo}
-        }
-
-        _resolve_attrs = (('entity', 'entity_resolved'),)
-
-    _schema = {
-        "layout": {"_type": Layout},
-        "content": {"_type": ""},  # TODO may have reference
-        "container_info": {"_type": FormInfo}
-    }
-
-
-class Node(DictInited, UIElement):  # a uielement with no container_info
-    _schema = {
-        "layout": {"_type": Layout},
-        "content": {"_type": ""},  # TODO may have reference
-        # "isSingle": { "_type" : True }, # don't need this because it's implied from tagname
-        "content_attribs": {"_type": {}},  # TODO may have reference
-        "class_name": {"_type": ""},
-        "tagName": {"_type": ""},
-    }
-
-
-class Iterator(DictInited, UIElement):
-
-    class IteratorInfo(DictInited, Resolvable):
-
-        class Query(DictInited):
-            _schema = {
-                "belongsToUser": {"_type": True},
-                "sortAccordingTo": {"_type": ""},
-                "numberOfRows": {"_type": 0}
-            }
-
-        class Row(DictInited):
-            _schema = {
-                "isListOrGrid": {"_type": ""},
-                "layout": {"_type": Layout},
-                "uielements": {"_type": [], "_each": {"_type": Node}},
-            }
-
-        _schema = {
-            "entity": {"_type": ""},  # TODO may have reference
-            "action": {"_type": ""},
-            "uielements": {"_type": [], "_each": {"_type": Node}},
-            "query": {"_type": Query},
-            "row": {"_type": Row}
-        }
-
-        _resolve_attrs = (("entity", "entity_resolved"),)
-
-    _schema = {
-        "layout": {"_type": Layout},
-        "container_info": {"_type": IteratorInfo},
-    }
 
 
 class Navbar(DictInited):
@@ -198,6 +88,7 @@ class Navbar(DictInited):
         "items": {"_type": [], "_each": {"_type": NavbarItem}}
     }
 
+from app_builder.uielements import UIElement
 
 class Page(DictInited):
 
@@ -215,7 +106,7 @@ class Page(DictInited):
         "name": {"_type": ""},
         "url": {"_type": URL},
         "navbar": {"_type": Navbar},
-        "uielements": {"_type": [], "_each": {"_one_of": [{"_type": Iterator}, {"_type": Form}, {"_type": Node}]}},
+        "uielements": {"_type": [], "_each": {"_type": UIElement}},
         "access_level": {"_type": ""}
     }
 
@@ -232,6 +123,7 @@ class Email(DictInited):
 
 # Put it all together, you get an App
 
+from app_builder.uielements import Form, Iterator
 
 class App(DictInited):
     _schema = {
