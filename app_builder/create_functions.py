@@ -62,7 +62,7 @@ class AppComponentFactory(object):
     def add_page_to_urls(self, page):
         url_obj = page.app._django_urls
         # TODO make the url more legit
-        route = ("r'^" + '/'.join(page.url.urlparts) + "/$'", page._django_view)
+        route = ("r'^" + ''.join([x + '/' for x in page.url.urlparts]) + "$'", page._django_view)
         url_obj.routes.append(route)
 
         return None

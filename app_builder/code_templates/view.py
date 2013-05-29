@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render, render_to_response, get_object_or
 
 @require_GET
 def {{ view.identifier }}(request{% for name, entity in view.page_context %}, {{ name }}{% endfor %}):
-    return render("{{ view._django_template.filename }}"){#
+    return render(request, "{{ view._django_template.filename }}"){#
 
 
 
