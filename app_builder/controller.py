@@ -46,10 +46,8 @@ def create_codes(app):
 def main(app):
 
     codes = create_codes(app)
-    cc = Coder('/dev/null')
+    cc = Coder.create_from_codes(codes)
 
-    for c in codes:
-        cc.add_code(c)
     for rel_path, code in cc.itercode():
         print code
         if rel_path.endswith('.py'):

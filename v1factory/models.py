@@ -136,12 +136,16 @@ class App(models.Model):
 
     def write_to_tmpdir(self, d_user):
         from app_builder.analyzer import App as AnalyzedApp
-        from app_builder.django.coordinator import analyzed_app_to_app_components
-        from app_builder.django.writer import DjangoAppWriter
+        from app_builder.controller import create_codes
+        from app_builder.coder import Coder, write_to_fs
 
-        a = AnalyzedApp.create_from_dict(self.state)
-        dw = analyzed_app_to_app_components(a, d_user)
-        tmp_project_dir = DjangoAppWriter(dw, self.css()).write_to_fs()
+
+        app = AnalyzedApp.create_from_dict(self.state)
+        codes = create_codes(app)
+        coder = Coder.create_from_codes(codes)
+
+        tmp_project_dir = write_to_fs(coder)
+        # TODO self.css()?
 
         return tmp_project_dir
 

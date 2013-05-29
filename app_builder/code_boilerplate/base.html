@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ STATIC_URL }}reset.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}style.css"/>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+      .list-container {
+        overflow-y: scroll;
+      }
+      .list-entry {
+        position: relative;
+      }
+      .list-container .list-entry .node-wrapper {
+        position: absolute;
+      }
+      .list-container .list-entry .node {
+        position: relative;
+      }
+      {% block css %}{% endblock %}
+    </style>
+</head>
+
+<body>
+    {% block navbar %}{% endblock %}
+    <div class="row">
+      <div class="container" style="position:relative; margin-top: 60px;">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jslibs/underscore.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jslibs/backbone.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jslibs/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}ajaxify.js"></script>
+</body>
+</html>
