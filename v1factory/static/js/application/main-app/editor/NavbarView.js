@@ -3,7 +3,7 @@ define([
 ],
 function() {
 
-  var NavbarEditorView = Backbone.View.extend({
+  var NavbarView = Backbone.View.extend({
     entity: null,
     type: null,
     events: {
@@ -138,5 +138,5 @@ function() {
     }
   });
 
-  return NavbarEditorView;
+  return NavbarView;
 });

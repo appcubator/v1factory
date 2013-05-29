@@ -8,7 +8,7 @@ define([
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
-  'editor/NavbarEditorView',
+  'editor/NavbarView',
   'editor/GuideView',
   'editor/MarqueeView',
   'tutorial/TutorialView',
@@ -24,7 +24,7 @@ function( PageModel,
           WidgetEditorView,
           EditorGalleryView,
           PageStylePicker,
-          NavbarEditorView,
+          NavbarView,
           GuideView,
           MarqueeView,
           TutorialView) {
@@ -77,7 +77,7 @@ function( PageModel,
       this.guides           = new GuideView(this.widgetsCollection);
       g_guides = this.guides;
 
-      this.navbarEditor  = new NavbarEditorView(this.model.get('navbar'));
+      this.navbar  = new NavbarView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
 
       var page = appState.pages[pageId];
@@ -115,7 +115,7 @@ function( PageModel,
       this.renderUrlBar();
       this.galleryEditor.render();
       this.widgetsManager.render();
-      this.navbarEditor.render();
+      this.navbar.render();
       this.guides.setElement($('#elements-container')).render();
 
       //$('#elements-container').append(this.marqueeView.el);
