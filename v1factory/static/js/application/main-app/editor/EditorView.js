@@ -9,6 +9,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarView',
+  'editor/NavbarEditorView',
   'editor/GuideView',
   'editor/MarqueeView',
   'tutorial/TutorialView',
@@ -25,6 +26,7 @@ function( PageModel,
           EditorGalleryView,
           PageStylePicker,
           NavbarView,
+          NavbarEditorView,
           GuideView,
           MarqueeView,
           TutorialView) {
@@ -38,12 +40,14 @@ function( PageModel,
       'click #deploy'        : 'deploy',
       'click .menu-button.help' : 'help',
       'click .url-bar'       : 'clickedUrl',
+      'click #navbar'        : 'openNavbarEditor',
       'click .home'          : 'clickedHome',
       'click .go-to-page'    : 'clickedGoToPage'
     },
 
     initialize: function(options) {
       _.bindAll(this, 'render',
+                      'openNavbarEditor',
                       'copy',
                       'paste',
                       'help',
@@ -125,6 +129,10 @@ function( PageModel,
       window.onresize = this.setupPageWrapper;
 
       $('#loading-gif').fadeOut().remove();
+    },
+
+    openNavbarEditor: function(e) {
+      new NavbarEditorView({model: this.model.get('navbar')});
     },
 
     renderUrlBar: function() {
