@@ -3,12 +3,14 @@ define([
   'models/UserEntityModel',
   'collections/EntityCollection',
   'collections/PageCollection',
+  'collections/MobilePageCollection',
   'collections/EmailCollection'
 ],
 function(AppInfoModel,
          UserEntityModel,
          EntityCollection,
          PageCollection,
+         MobilePageCollection,
          EmailCollection) {
 
   var AppModel = Backbone.Model.extend({
@@ -20,6 +22,7 @@ function(AppInfoModel,
       if(appState.users) this.set('users', new UserEntityModel(appState.users));
       if(appState.entities) this.set('entities', new EntityCollection(appState.entities));
       if(appState.pages) this.set('pages', new PageCollection(appState.pages));
+      this.set('mobilePages', new MobilePageCollection(appState.mobilePages||[]));
       if(appState.emails) this.set('emails', new EmailCollection(appState.emails));
     },
 

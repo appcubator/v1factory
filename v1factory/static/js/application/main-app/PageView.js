@@ -19,7 +19,7 @@ function(UrlView, SimpleModalView) {
       'click .edit'     : 'goToEditor'
     },
 
-    initialize: function(pageModel, ind) {
+    initialize: function(pageModel, ind, isMobile) {
       _.bindAll(this, 'render',
                       'renderMenu',
                       'renderUrl',
@@ -29,6 +29,7 @@ function(UrlView, SimpleModalView) {
 
       this.model = pageModel;
       this.ind = ind;
+      this.isMobile = isMobile;
 
       this.urlModel = pageModel.get('url');
       this.render();
@@ -80,7 +81,12 @@ function(UrlView, SimpleModalView) {
 
     goToEditor: function(e) {
       e.preventDefault();
-      v1.navigate("app/"+ appId +"/editor/" + this.ind + '/', {trigger: true});
+      if(this.isMobile) {
+        v1.navigate("app/"+ appId +"/mobile-editor/" + this.ind + '/', {trigger: true});
+      }
+      else {
+        v1.navigate("app/"+ appId +"/editor/" + this.ind + '/', {trigger: true});
+      }
     }
   });
 
