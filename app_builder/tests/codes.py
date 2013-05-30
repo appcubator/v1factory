@@ -186,5 +186,120 @@ class DjangoTemplateSplitToColsTestCase(unittest.TestCase):
         self.assertEqual(cols[1].margin_left, 15)
 
 
+class DjangoTemplateCreateTreeTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.template = DjangoTemplate("test_template")
+
+    def test_simple(self):
+        #**************************
+        #*   ********             *
+        #*   *      *             *
+        #*   *      *   ********* *
+        #*   *      *   *       * *
+        #*   ********   *       * *
+        #*              *       * *
+        #*              ********* *
+        #*                        *
+        #*   ********             *
+        #*   *      *   ********  *
+        #*   *      *   ********  *
+        #*   ********             *
+        #*                        *
+        #*         ******         *
+        #*         *    *         *
+        #*         *    *         *
+        #*         ******         *
+        #*                        *
+        #**************************
+        node11 = Node(layout=Layout(left=2, top=0, height=5, width=5), content="")
+        node12 = Node(layout=Layout(left=8, top=3, height=5, width=5), content="")
+
+        node21 = Node(layout=Layout(left=2, top=9, height=5, width=5), content="")
+        node22 = Node(layout=Layout(left=8, top=10, height=2, width=5), content="")
+
+        node3 = Node(layout=Layout(left=7, top=15, height=5, width=5), content="")
+
+        uiels = [node12, node22, node3, node11, node21] # order should not matter.
+
+        self.template.create_tree(uiels)
+
+        self.assertEqual(node11, self.template.tree.rows[0].cols[0].uiels[0])
+        self.assertEqual(node12, self.template.tree.rows[0].cols[1].uiels[0])
+        self.assertEqual(node21, self.template.tree.rows[1].cols[0].uiels[0])
+        self.assertEqual(node22, self.template.tree.rows[1].cols[1].uiels[0])
+        self.assertEqual(node3, self.template.tree.rows[2].cols[0].uiels[0])
+
+        self.assertEqual(self.template.tree.rows[0].margin_top, 0)
+        self.assertEqual(self.template.tree.rows[1].margin_top, 1)
+        self.assertEqual(self.template.tree.rows[2].margin_top, 1)
+
+        self.assertEqual(self.template.tree.rows[0].cols[0].margin_left, 2)
+        self.assertEqual(self.template.tree.rows[0].cols[1].margin_left, 1)
+
+        self.assertEqual(self.template.tree.rows[1].cols[0].margin_left, 2)
+        self.assertEqual(self.template.tree.rows[1].cols[1].margin_left, 1)
+
+        self.assertEqual(self.template.tree.rows[2].cols[0].margin_left, 7)
+
+    def test_recursive(self):
+        #**************************
+        #*   ********             *
+        #*   *      * *****  ***  *
+        #*   *      * *   *  * *  *
+        #*   ******** *   *  * *  *
+        #*            *****  * *  *
+        #*   *************   * *  *
+        #*   *           *   ***  *
+        #*   *           *        *
+        #*   *************        *
+        #**************************
+        node1 = Node(layout=Layout(left=2, top=9, height=5, width=5), content="")
+        node2 = Node(layout=Layout(left=8, top=10, height=5, width=3), content="")
+        node3 = Node(layout=Layout(left=12, top=10, height=8, width=5), content="")
+        node4 = Node(layout=Layout(left=2, top=16, height=2, width=8), content="")
+
+        uiels = [node2, node1, node4, node3] # order should not matter.
+
+        self.template.create_tree(uiels)
+
+        self.assertEqual(self.template.tree.rows[0].margin_top, 9)
+        self.assertEqual(node1, self.template.tree.rows[0].cols[0].tree.rows[0].cols[0].uiels[0])
+        self.assertEqual(node2, self.template.tree.rows[0].cols[0].tree.rows[0].cols[1].uiels[0])
+        self.assertEqual(node3, self.template.tree.rows[0].cols[1].uiels[0])
+        self.assertEqual(node4, self.template.tree.rows[0].cols[0].tree.rows[1].cols[0].uiels[0])
+
+    def test_not_splittable(self):
+        #*****************************
+        #*   ******  ***********     *
+        #*   *    *  *         *     *
+        #*   *    *  *         *     *
+        #*   *    *  ***********     *
+        #*   *    *                  *
+        #*   *    *       ******     *
+        #*   *    *       *    *     *
+        #*   ******       *    *     *
+        #*   ************ *    *     *
+        #*   *          * *    *     *
+        #*   *          * *    *     *
+        #*   *          * ******     *
+        #*   ************            *
+        #*****************************
+
+        node1 = Node(layout=Layout(left=2, top=2, height=7, width=3), content="")
+        node2 = Node(layout=Layout(left=6, top=2, height=3, width=7), content="")
+        node3 = Node(layout=Layout(left=2, top=10, height=3, width=7), content="")
+        node4 = Node(layout=Layout(left=10, top=6, height=7, width=3), content="")
+
+        uiels = [node2, node1, node4, node3] # order should not matter.
+
+        self.template.create_tree(uiels)
+        self.assertEqual(len(self.template.tree.rows), 1)
+        self.assertEqual(len(self.template.tree.rows[0].cols), 1)
+        self.assertTrue(self.template.tree.rows[0].cols[0].has_overlapping_nodes)
+        self.assertEqual(self.template.tree.rows[0].cols[0].container_height, 11)
+        for u in self.template.tree.rows[0].cols[0].uiels:
+            self.assertTrue(hasattr(u, 'overlap_styles'))
+
 if __name__ == '__main__':
     unittest.main()
