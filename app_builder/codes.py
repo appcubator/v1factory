@@ -312,3 +312,12 @@ class DjangoURLs(object):
 
     def render(self):
         return env.get_template('urls.py').render(urls=self)
+
+class DjangoStaticPagesTestCase(object):
+    def __init__(self, identifier_url_pairs):
+        self.imports = ['from django.test import TestCase']
+        self.identifier_url_pairs = identifier_url_pairs
+        self.code_path = "webapp/tests.py"
+
+    def render(self):
+        return env.get_template('tests.py').render(test=self)

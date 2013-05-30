@@ -10,7 +10,9 @@ def create_codes(app):
                   'view for page': factory.create_view_for_page,
                   'url to serve page': factory.add_page_to_urls,
                   'find or add the needed data to the view': factory.find_or_create_query_for_view ,
-                  'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes }
+                  'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes,
+                  'create tests for static pages': factory.create_tests_for_static_pages,
+                 }
 
 
     codes = []
@@ -43,6 +45,8 @@ def create_codes(app):
     # create html nodes and structure for pages
     for p in app.pages:
         create('create row/col structure for nodes', p)
+
+    create('create tests for static pages', app)
 
     return codes
 
