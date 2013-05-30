@@ -7,34 +7,32 @@ function(Backbone, LinkCollection) {
     defaults : {
       brandName : null,
       isHidden : false,
-      isFixed : true,
-      items : []
+      isFixed : true
     },
-    initialize: function() {
-    	//navbar will hold links for all internal pages by default
-			var internalPages = _(appState.pages).map(function(page) {
-				return {
-				  title: page.name,
-				  url: "internal://" + page.name
-				}
-			});
-    	this.items = new LinkCollection(internalPages);
+    initialize: function(options) {
+
+      //init items collection with links passed from appState
+      if(options.links) {
+        this.set('links', new LinkCollection(options.links));
+        this.links = this.get('links');
+      }
+
       _.bindAll(this);
     },
 
     getLinks: function() {
-      return this.items;
+      return this.get('links');
     },
 
     //create a duplicate of the first link
     createNewLink: function() {
-      var firstLink = this.items.at(0).toJSON();
+      var firstLink = this.links.at(0).toJSON();
       console.log(firstLink);
-      var newLink = new (this.items.model)({
+      var newLink = new (this.links.model)({
         title: firstLink.title,
         url: firstLink.url
       });
-      this.items.add(newLink);
+      this.links.add(newLink);
       console.log('new link created');
       console.log(newLink.toJSON());
       return newLink;

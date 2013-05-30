@@ -22,16 +22,13 @@ function(LinkEditorView) {
                       'resizing');
 
       this.model  = options.model;
-      this.links = this.model.getLinks();
+      this.links = this.model.get('links');
       this.render();
     },
 
     render: function() {
       var self = this;
       var brandName = this.model.get('brandName') || v1State.get('name');
-      var items = _.map(this.model.get('items'), function(item) {
-        return item.name.replace('internal://','').replace('/','');
-      });
 
       var editorDiv = document.createElement('div');
       editorDiv.className = 'nav-editor-container';
@@ -39,7 +36,7 @@ function(LinkEditorView) {
 
       editorDiv.innerHTML = _.template(Templates.NavbarEditor, {
         brandName: brandName,
-        items: items
+        items: this.model.get('links').toJSON()
       });
 
       this.el.appendChild(editorDiv);

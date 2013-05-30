@@ -76,19 +76,24 @@ define([
           console.log('selectedItem: ');
           console.log(selectedItem);
 
+          this.model.set({
+              url: selectedItem.url,
+              title: selectedItem.title
+          });
+
           // if non-internal link chosen,
           // replace select box with textfield
           if(selectedItem.url.indexOf('internal://') === -1) {
             // if 'External Link...' option is chosen
             // create a new link option
             if(selectedItem.url === 'external') {
-            var newLink = {
-              title: 'External Link',
-              url: 'http://'
-            }
-            this.model.set(newLink);
-            this.linkOptions.splice(this.linkOptions.length - 2, 0, newLink);
-            this.renderLinkOptions();
+              var newLink = {
+                title: 'External Link Title',
+                url: 'http://'
+              };
+              this.model.set(newLink);
+              this.linkOptions.push(newLink);
+              this.renderLinkOptions();
             }
             this.$select.hide();
             this.$urlContainer.show();
@@ -100,10 +105,7 @@ define([
           }
 
           else {
-            this.model.set({
-              url: selectedItem.url,
-              title: selectedItem.title
-            });
+
           }
         },
 
@@ -128,11 +130,13 @@ define([
 
         updateUrl: function(e) {
           this.model.set({url: e.target.value});
+          this.renderLinkOptions();
         },
 
         updateTitle: function(e) {
           if(e.keyCode !== 13) { return; }
           this.model.set({title: e.target.value});
+          this.renderLinkOptions();
         },
 
         removeLink: function(e) {
