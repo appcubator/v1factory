@@ -24,12 +24,12 @@ Templates.tempNode = [
 Templates.NavbarEditor = [
   '<h3>Navbar Editor</h3>',
   '<form>',
-    '<label>Main Title</label>',
+    '<legend>Main Title</legend>',
     '<input type="text" id="editor-brandname" value="<%= brandName %>">',
-    '<label>Links</label>',
+    '<legend>Links</legend>',
     '<ul id="link-editors"></ul>',
   '</form>',
-  '<button class="btn btn-primary add-link" type="submit">Add Link</button>'
+  '<button class="btn btn-primary btn-small add-link" type="submit">Add Link</button>'
 ].join('\n');
 
 Templates.LinkEditor = [

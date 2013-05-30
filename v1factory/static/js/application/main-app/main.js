@@ -56,6 +56,7 @@ require([
   "app/PagesView",
   "app/OverviewPageView",
   "editor/EditorView",
+  "mobile-editor/MobileEditorView",
   "editor/KeyDispatcher",
   "editor/MouseDispatcher",
   "mixins/SimpleDialogueView",
@@ -75,6 +76,7 @@ function (AppModel,
           PagesView,
           OverviewPageView,
           EditorView,
+          MobileEditorView,
           KeyDispatcher,
           MouseDispatcher,
           SimpleDialogueView,
@@ -88,7 +90,8 @@ function (AppModel,
       "app/:appid/entities/" : "showEntitiesPage",
       "app/:appid/gallery/"  : "showThemesPage",
       "app/:appid/pages/"    : "showPagesPage",
-      "app/:appid/editor/:pageid/" : "showEditor"
+      "app/:appid/editor/:pageid/" : "showEditor",
+      "app/:appid/mobile-editor/:pageid/" : "showMobileEditor"
     },
 
     tutorialDirectory: [0],
@@ -169,6 +172,22 @@ function (AppModel,
       $(document.body).append(cleanDiv);
 
       v1App.view  = new EditorView({pageId: pageId});
+      v1App.view.setElement(cleanDiv).render();
+
+      olark('api.box.hide');
+      this.changeTitle(v1App.view.title);
+    },
+
+    showMobileEditor: function(appId, pageId) {
+      $('.page').fadeOut();
+      v1App.tutorialDirectory = [5];
+
+      if(v1App.view) v1App.view.remove();
+      var cleanDiv = document.createElement('div');
+      cleanDiv.className = "clean-div editor-page";
+      $(document.body).append(cleanDiv);
+
+      v1App.view  = new MobileEditorView({pageId: pageId});
       v1App.view.setElement(cleanDiv).render();
 
       olark('api.box.hide');

@@ -27,14 +27,11 @@ function(Backbone, LinkCollection) {
     //create a duplicate of the first link
     createNewLink: function() {
       var firstLink = this.links.at(0).toJSON();
-      console.log(firstLink);
       var newLink = new (this.links.model)({
         title: firstLink.title,
         url: firstLink.url
       });
       this.links.add(newLink);
-      console.log('new link created');
-      console.log(newLink.toJSON());
       return newLink;
     }
   });

@@ -10,6 +10,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarView',
+  'editor/NavbarEditorView',
   'editor/GuideView',
   'editor/MarqueeView',
   'tutorial/TutorialView',
@@ -27,25 +28,28 @@ function( PageModel,
           EditorGalleryView,
           PageStylePicker,
           NavbarView,
+          NavbarEditorView,
           GuideView,
           MarqueeView,
           TutorialView) {
 
-  var EditorView = Backbone.View.extend({
+  var MobileEditorView = Backbone.View.extend({
     className : 'editor-page',
-    css: "bootstrap-editor",
+    css: "bootstrap-mobile-editor",
 
     events    : {
       'click #save'          : 'save',
       'click #deploy'        : 'deploy',
       'click .menu-button.help' : 'help',
       'click .url-bar'       : 'clickedUrl',
+      'click #navbar'        : 'openNavbarEditor',
       'click .home'          : 'clickedHome',
       'click .go-to-page'    : 'clickedGoToPage'
     },
 
     initialize: function(options) {
       _.bindAll(this, 'render',
+                      'openNavbarEditor',
                       'copy',
                       'paste',
                       'help',
@@ -57,12 +61,12 @@ function( PageModel,
                       'deploy',
                       'renderDeployResponse',
                       'clickedGoToPage',
-                      'setupPageHeight',
-                      'setupPageWrapper');
+                      'setupPageHeight');
 
       if(options && options.pageId) pageId = options.pageId;
 
       iui.loadCSS(this.css);
+      iui.loadCSS('bootstrap-editor');
       iui.loadCSS('jquery-ui');
 
       this.model             = v1State.get('pages').models[pageId];
@@ -73,16 +77,13 @@ function( PageModel,
 
       this.widgetsCollection    = this.model.get('uielements');
 
-      this.marqueeView      = new MarqueeView();
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
       this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
-      this.guides           = new GuideView(this.widgetsCollection);
-      g_guides = this.guides;
 
       this.navbar  = new NavbarView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');
 
-      var page = appState.pages[pageId];
+      var page = appState.mobilePages[pageId];
 
       var self = this; // for binding deploy to ctrlshiftd
       /* Bindings */
@@ -96,9 +97,9 @@ function( PageModel,
 
     render: function() {
 
-      if(!this.el.innerHTML) this.el.innerHTML = iui.getHTML('editor-page');
+      if(!this.el.innerHTML) this.el.innerHTML = iui.getHTML('mobile-editor-page');
 
-      iui.get('page-list').innerHTML += '<li>'+appState.pages[pageId].name+'</li>';
+      iui.get('page-list').innerHTML += '<li>'+appState.mobilePages[pageId].name+'</li>';
 
       _(appState.pages).each(function(page, ind) {
         if(pageId == ind) return;
@@ -112,21 +113,17 @@ function( PageModel,
       iui.get('page-list').appendChild(createBox.el);
 
 
-      this.marqueeView.render();
-
       this.renderUrlBar();
       this.galleryEditor.render();
       this.widgetsManager.render();
       this.navbar.render();
-      this.guides.setElement($('#elements-container')).render();
-
-      $('#elements-container').append(this.marqueeView.el);
-
-      this.setupPageWrapper();
       this.setupPageHeight();
-      window.onresize = this.setupPageWrapper;
 
       $('#loading-gif').fadeOut().remove();
+    },
+
+    openNavbarEditor: function(e) {
+      new NavbarEditorView({model: this.model.get('navbar')});
     },
 
     renderUrlBar: function() {
@@ -184,8 +181,8 @@ function( PageModel,
     },
 
     deploy: function(options) {
-      var url = '/app/'+appId+'/deploy/'
-      if(options.local) url = url + 'local/'
+      var url = '/app/'+appId+'/deploy/';
+      if(options.local) url = url + 'local/';
 
       var self = this;
       iui.get('deploy').innerHTML = '<span>Deploying...</span>';
@@ -245,7 +242,7 @@ function( PageModel,
       var pageUrl = { urlparts : [pageUrlPart] };
       var pageInd = appState.pages.length;
       var pageModel = new PageModel({ name: name, url: pageUrl});
-      v1State.get('pages').push(pageModel);
+      v1State.get('mobilePages').push(pageModel);
 
       $.ajax({
         type: "POST",
@@ -266,13 +263,7 @@ function( PageModel,
     clickedGoToPage: function(e) {
       e.preventDefault();
       var goToPageId = (e.target.id||e.target.parentNode.id).replace('page-','');
-      v1.navigate("app/"+ appId +"/editor/" + goToPageId +"/", {trigger: true});
-    },
-
-    setupPageWrapper: function() {
-      var height = window.innerHeight - 10;
-      iui.get('page-wrapper').style.height = height+ 'px';
-      this.$el.find('.page.full').css('height', height - 46);
+      v1.navigate("app/"+ appId +"/mobile-editor/" + goToPageId +"/", {trigger: true});
     },
 
     setupPageHeight: function() {
@@ -282,6 +273,6 @@ function( PageModel,
 
   });
 
-  return EditorView;
+  return MobileEditorView;
 });
 

@@ -4,7 +4,7 @@ define([
 
     var LinkEditorView = Backbone.View.extend({
         tagName: 'li',
-        className: 'well',
+        className: 'well well-small',
         events: {
           'change .link-options'  : 'pageSelected',
           'keypress input.url' : 'updateUrlOnEnter',
@@ -71,10 +71,6 @@ define([
             title: select[selectedIndex].innerText,
             url: select[selectedIndex].value
           };
-
-          console.log('selectedIndex: ' + selectedIndex);
-          console.log('selectedItem: ');
-          console.log(selectedItem);
 
           this.model.set({
               url: selectedItem.url,

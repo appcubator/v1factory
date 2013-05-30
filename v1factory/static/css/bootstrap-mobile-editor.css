@@ -1,0 +1,25 @@
+.mobile-page-wrapper {
+  width: 329px;
+  height: 667px;
+  background-image: url(../img/mobile-phone.png);
+  background-repeat: no-repeat;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mobile-page-wrapper .url-bar {
+  width: 100%;
+}
+
+.mobile-page-wrapper .page.full {
+  width: 267px;
+  margin-top: 80px;
+  height: 460px;
+  min-height: 0;
+}
+
+.mobile-page-wrapper #elements-container {
+  margin-left: 0;
+  width: 267px;
+  min-height: 460px;
+}

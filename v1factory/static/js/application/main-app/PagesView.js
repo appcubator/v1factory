@@ -14,10 +14,15 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
     initialize: function() {
       _.bindAll(this, 'render',
                       'createPage',
+                      'createMobilePage',
                       'appendPage');
 
+      var self = this;
       this.collection = v1State.get('pages');
-      this.collection.bind('add', this.appendPage, this);
+      this.collection.bind('add', function(model) { self.appendPage(model, false); });
+
+      this.mobileCollection = v1State.get('mobilePages');
+      this.mobileCollection.bind('add', function(model) { self.appendPage(model, true); });
 
       this.title = "Pages";
     },
@@ -27,13 +32,21 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
 
       self.$el.html(_.template(iui.getHTML('pages-page'), {}));
       this.listView = document.getElementById('list-pages');
+      this.mobileListView = document.getElementById('list-mobile-pages');
 
       _(this.collection.models).each(function(model) {
-        self.appendPage(model);
+        self.appendPage(model, false);
+      });
+
+      _(this.mobileCollection.models).each(function(model) {
+        self.appendPage(model, true);
       });
 
       var createBox = new Backbone.NameBox({el: document.getElementById('create-page-box')});
       createBox.on('submit', this.createPage);
+
+      var createMobileBox = new Backbone.NameBox({el: document.getElementById('create-mobile-page-box')});
+      createMobileBox.on('submit', this.createMobilePage);
     },
 
     createPage: function(name, b) {
@@ -48,10 +61,30 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
       v1.save();
     },
 
-    appendPage: function(model) {
-      var ind = _.indexOf(this.collection.models, model);
-      var pageView = new PageView(model, ind);
-      this.listView.appendChild(pageView.el);
+    createMobilePage: function(name, b) {
+      var pageUrlPart = name.replace(' ', '_');
+      var pageUrl = { urlparts : [pageUrlPart] };
+
+      if(!v1State.get('mobilePages').isUnique(name)) {
+        new ErrorDialogueView({text: 'Page name should be unique.'});
+        return;
+      }
+      this.mobileCollection.add({ name: name, url: pageUrl});
+      v1.save();
+    },
+
+    appendPage: function(model, isMobile) {
+      console.log(isMobile);
+      if(!isMobile) {
+        var ind = _.indexOf(this.collection.models, model);
+        var pageView = new PageView(model, ind, false);
+        this.listView.appendChild(pageView.el);
+      }
+      else {
+        var ind = _.indexOf(this.mobileCollection.models, model);
+        var mobilePageView = new PageView(model, ind, true);
+        this.mobileListView.appendChild(mobilePageView.el);
+      }
     }
 
   });
