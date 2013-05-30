@@ -58,6 +58,10 @@ class DjangoTemplateSplitToRowsTestCase(unittest.TestCase):
         rows = self.template.split_to_rows(uiels)
         self.assertEqual(len(rows), 3)
 
+        self.assertEqual(rows[0].margin_top, 0)
+        self.assertEqual(rows[1].margin_top, 1)
+        self.assertEqual(rows[2].margin_top, 1)
+
     def test_rows_are_divided_if_sep_but_touching(self):
         node1 = Node(layout=Layout(top=0, left=0, width=5, height=5), content="")
         node2 = Node(layout=Layout(top=5, left=0, width=5, height=5), content="")
@@ -67,6 +71,10 @@ class DjangoTemplateSplitToRowsTestCase(unittest.TestCase):
         rows = self.template.split_to_rows(uiels)
         self.assertEqual(len(rows), 3)
 
+        self.assertEqual(rows[0].margin_top, 0)
+        self.assertEqual(rows[1].margin_top, 0)
+        self.assertEqual(rows[2].margin_top, 0)
+
     def test_rows_are_not_divided_if_overlap(self):
         node1 = Node(layout=Layout(top=0, left=0, width=5, height=5), content="")
         node2 = Node(layout=Layout(top=4, left=0, width=5, height=5), content="")
@@ -75,6 +83,8 @@ class DjangoTemplateSplitToRowsTestCase(unittest.TestCase):
 
         rows = self.template.split_to_rows(uiels)
         self.assertEqual(len(rows), 1)
+
+        self.assertEqual(rows[0].margin_top, 0)
 
     def test_rows_are_not_divided_if_side_by_side(self):
         node1 = Node(layout=Layout(top=0, left=0, width=5, height=5), content="")
@@ -87,6 +97,93 @@ class DjangoTemplateSplitToRowsTestCase(unittest.TestCase):
         self.assertEqual(len(rows[0].uiels), 2)
         self.assertEqual(len(rows[1].uiels), 1)
 
+        self.assertEqual(rows[0].margin_top, 0)
+        self.assertEqual(rows[1].margin_top, 15)
+
+    def test_top_offset(self):
+        node1 = Node(layout=Layout(top=10, left=0, width=5, height=5), content="")
+        node2 = Node(layout=Layout(top=10, left=20, width=5, height=5), content="")
+        node3 = Node(layout=Layout(top=30, left=0, width=5, height=5), content="")
+        uiels = [node1, node2, node3]
+
+        rows = self.template.split_to_rows(uiels, top_offset=9)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(len(rows[0].uiels), 2)
+        self.assertEqual(len(rows[1].uiels), 1)
+
+        self.assertEqual(rows[0].margin_top, 1)
+        self.assertEqual(rows[1].margin_top, 15)
+
+
+class DjangoTemplateSplitToColsTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.template = DjangoTemplate("test_template")
+
+    def test_cols_are_divided_if_separated(self):
+        node1 = Node(layout=Layout(left=0, top=0, height=5, width=5), content="")
+        node2 = Node(layout=Layout(left=6, top=0, height=5, width=5), content="")
+        node3 = Node(layout=Layout(left=12, top=0, height=5, width=5), content="")
+        uiels = [node1, node2, node3]
+
+        cols = self.template.split_to_cols(uiels)
+        self.assertEqual(len(cols), 3)
+
+        self.assertEqual(cols[0].margin_left, 0)
+        self.assertEqual(cols[1].margin_left, 1)
+        self.assertEqual(cols[2].margin_left, 1)
+
+    def test_cols_are_divided_if_sep_but_touching(self):
+        node1 = Node(layout=Layout(left=0, top=0, height=5, width=5), content="")
+        node2 = Node(layout=Layout(left=5, top=0, height=5, width=5), content="")
+        node3 = Node(layout=Layout(left=10, top=0, height=5, width=5), content="")
+        uiels = [node1, node2, node3]
+
+        cols = self.template.split_to_cols(uiels)
+        self.assertEqual(len(cols), 3)
+
+        self.assertEqual(cols[0].margin_left, 0)
+        self.assertEqual(cols[1].margin_left, 0)
+        self.assertEqual(cols[2].margin_left, 0)
+
+    def test_cols_are_not_divided_if_overlap(self):
+        node1 = Node(layout=Layout(left=0, top=0, height=5, width=5), content="")
+        node2 = Node(layout=Layout(left=4, top=0, height=5, width=5), content="")
+        node3 = Node(layout=Layout(left=8, top=0, height=5, width=5), content="")
+        uiels = [node1, node2, node3]
+
+        cols = self.template.split_to_cols(uiels)
+        self.assertEqual(len(cols), 1)
+
+        self.assertEqual(cols[0].margin_left, 0)
+
+    def test_cols_are_not_divided_if_side_by_side(self):
+        node1 = Node(layout=Layout(left=0, top=0, height=5, width=5), content="")
+        node2 = Node(layout=Layout(left=0, top=20, height=5, width=5), content="")
+        node3 = Node(layout=Layout(left=20, top=0, height=5, width=5), content="")
+        uiels = [node1, node2, node3]
+
+        cols = self.template.split_to_cols(uiels)
+        self.assertEqual(len(cols), 2)
+        self.assertEqual(len(cols[0].uiels), 2)
+        self.assertEqual(len(cols[1].uiels), 1)
+
+        self.assertEqual(cols[0].margin_left, 0)
+        self.assertEqual(cols[1].margin_left, 15)
+
+    def test_left_offset(self):
+        node1 = Node(layout=Layout(left=10, top=0, height=5, width=5), content="")
+        node2 = Node(layout=Layout(left=10, top=20, height=5, width=5), content="")
+        node3 = Node(layout=Layout(left=30, top=0, height=5, width=5), content="")
+        uiels = [node1, node2, node3]
+
+        cols = self.template.split_to_cols(uiels, left_offset=9)
+        self.assertEqual(len(cols), 2)
+        self.assertEqual(len(cols[0].uiels), 2)
+        self.assertEqual(len(cols[1].uiels), 1)
+
+        self.assertEqual(cols[0].margin_left, 1)
+        self.assertEqual(cols[1].margin_left, 15)
 
 
 if __name__ == '__main__':
