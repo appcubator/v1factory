@@ -54,9 +54,7 @@ function() {
       this.renderItems();
       this.hideChanged();
 
-      _(appState.pages).each(function(page) {
-        self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'">' + page.name +'</option>');
-      });
+
     },
 
     renderItems: function() {
