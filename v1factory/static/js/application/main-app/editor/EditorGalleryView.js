@@ -262,6 +262,7 @@ function(ElementCollection,
         widget.data.container_info.entity = form.entity;
         widget.data.container_info.action = form.action;
         widget.data.container_info.form = form;
+        widget.type = 'form';
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);
 

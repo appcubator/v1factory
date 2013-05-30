@@ -1,4 +1,4 @@
-from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate
+from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase
 from app_builder import naming
 
 
@@ -51,6 +51,7 @@ class AppComponentFactory(object):
         t.create_tree([u.subclass for u in page.uielements]) # XXX HACK PLZ FIXME TODO
         t.page = page
         page._django_template = t
+        page._django_view._django_template = t
         return t
 
     def create_urls(self, app):
@@ -60,6 +61,15 @@ class AppComponentFactory(object):
 
     def add_page_to_urls(self, page):
         url_obj = page.app._django_urls
-        route = some form of page.url
-        url_obj.add_route(route, page._django_view)
-        pass
+        # TODO make the url more legit
+        route = ("r'^" + ''.join([x + '/' for x in page.url.urlparts]) + "$'", page._django_view)
+        url_obj.routes.append(route)
+
+        return None
+
+    def create_tests_for_static_pages(self, app):
+        ident_url_pairs = []
+        for p in app.pages:
+            ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
+        d = DjangoStaticPagesTestCase(ident_url_pairs)
+        return d

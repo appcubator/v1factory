@@ -2,17 +2,19 @@ from app_builder.coder import Coder
 from app_builder.create_functions import AppComponentFactory
 from pyflakes.api import check
 
-factory = AppComponentFactory()
-
-create_map = {'create model for entity': factory.create_model,
-              'create urls object for app': factory.create_urls,
-              'view for page': factory.create_view_for_page,
-              'url to serve page': factory.add_page_to_urls,
-              'find or add the needed data to the view': factory.find_or_create_query_for_view ,
-              'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes }
-
-
 def create_codes(app):
+    factory = AppComponentFactory()
+
+    create_map = {'create model for entity': factory.create_model,
+                  'create urls object for app': factory.create_urls,
+                  'view for page': factory.create_view_for_page,
+                  'url to serve page': factory.add_page_to_urls,
+                  'find or add the needed data to the view': factory.find_or_create_query_for_view ,
+                  'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes,
+                  'create tests for static pages': factory.create_tests_for_static_pages,
+                 }
+
+
     codes = []
 
     def create(event_name, el, *args, **kwargs):
@@ -43,6 +45,8 @@ def create_codes(app):
     # create html nodes and structure for pages
     for p in app.pages:
         create('create row/col structure for nodes', p)
+
+    create('create tests for static pages', app)
 
     return codes
 

@@ -307,9 +307,17 @@ class DjangoURLs(object):
     def __init__(self, module_string):
         self.module = module_string
         self.routes = []
-
-    def add_route(self, url_regex, function):
-        pass
+        self.imports = ['from django.conf.urls import patterns, include, url']
+        self.code_path = "webapp/urls.py"
 
     def render(self):
-        return "URLS go here"
+        return env.get_template('urls.py').render(urls=self)
+
+class DjangoStaticPagesTestCase(object):
+    def __init__(self, identifier_url_pairs):
+        self.imports = ['from django.test import TestCase']
+        self.identifier_url_pairs = identifier_url_pairs
+        self.code_path = "webapp/tests.py"
+
+    def render(self):
+        return env.get_template('tests.py').render(test=self)

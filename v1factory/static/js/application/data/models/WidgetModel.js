@@ -31,7 +31,6 @@ function(DataModel, LayoutModel) {
       var json = _.clone(this.attributes);
       json = _.omit(json, 'selected', 'deletable');
 
-      json.type = "node";
       json.data = this.get('data').toJSON();
       json.layout  = this.get('layout').toJSON();
 
