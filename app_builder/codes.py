@@ -78,17 +78,6 @@ class DjangoModel(object):
         return env.get_template('model.py').render(model=self)
 
 
-class Code(object):
-
-    def __init__(self, name, el):
-        self.name = name
-        self.el = el
-        self.code_path = "webapp/something"
-
-    def render(self):
-        return "%s for %d" % (self.name, id(self.el))
-
-
 class Column(object):
 
     def __init__(self):

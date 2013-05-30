@@ -1,5 +1,5 @@
 from dict_inited import DictInited
-from app_builder.analyzer import Resolvable, LinkLang
+from app_builder.resolving import Resolvable, LinkLang
 from jinja2 import Environment, PackageLoader
 
 
