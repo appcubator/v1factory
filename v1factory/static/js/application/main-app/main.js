@@ -11,6 +11,7 @@ require.config({
     "bootstrap" : "../../libs/bootstrap/bootstrap",
     "app" : "./",
     "editor" : "./editor",
+    "m-editor" : "./mobile-editor",
     "dicts" : "./dicts",
     "mixins" : "../../mixins",
     "key" : "../../libs/keymaster/keymaster",

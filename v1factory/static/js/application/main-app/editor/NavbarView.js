@@ -8,7 +8,7 @@ function(NavbarEditorView) {
     entity: null,
     type: null,
     events: {
-      'click .edit-navbar' : 'showNavbarEditor',
+      'mousedown .edit-navbar' : 'showNavbarEditor',
       'click #hide-toggle'      : 'hideToggle',
       'click .add-link'         : 'clickedAddLink',
       'change #page-link-list'  : 'pageSelected',
