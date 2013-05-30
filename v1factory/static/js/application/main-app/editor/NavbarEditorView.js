@@ -31,8 +31,7 @@ function(LinkEditorView) {
       var brandName = this.model.get('brandName') || v1State.get('name');
 
       var editorDiv = document.createElement('div');
-      editorDiv.className = 'nav-editor-container';
-      editorDiv.style.padding = "20px";
+      editorDiv.id = 'navbar-editor';
 
       editorDiv.innerHTML = _.template(Templates.NavbarEditor, {
         brandName: brandName,
@@ -41,7 +40,6 @@ function(LinkEditorView) {
 
       this.el.appendChild(editorDiv);
       this.$el.append('<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>');
-      this.el.style.height = "600px";
 
       this.renderLinkEditorViews();
 
