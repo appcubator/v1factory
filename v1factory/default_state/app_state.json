@@ -29,10 +29,12 @@
                 "isHidden": false,
                 "items": [
                     {
-                        "name": "internal://Homepage"
+                        "url": "internal://Homepage",
+                        "title": "Homepage",
                     },
                     {
-                        "name": "internal://Registration Page"
+                        "url": "internal://Registration Page",
+                        "title": "Registration Page"
                     }
                 ]
             },

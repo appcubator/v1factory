@@ -102,7 +102,7 @@
         <h3 class="span10">Keywords</h3>
         <textarea class="span26 hi6" id="app-keywords" placeholder="Keywords..."><%= keywords %></textarea>
       </div>
-      
+
       <hr class="span50">
       <div class="span50 hi10">
         <a class="btn hoff1 span8" id="delete">Delete App</a>
@@ -187,26 +187,17 @@
   <div class="page-container">
     <div class="page-wrapper" id="page-wrapper">
       <div class="url-bar">http://yourapp.com</div>
-      <div class="page full container fdededfcbcbcd" id="page"> 
+      <div class="page full container fdededfcbcbcd" id="page">
         <!-- Navbar -->
         <div class="navbar" id="navbar">
           <div class="navbar-inner">
             <div class="container">
               <a class="brand" href="#" id="brand-name">{{ app.name }}</a>
-              <form class="brand" id="brand-name-form" style="display:none"><input type="text" id="brand-name-input" placeholder="Brand Text"></form>  
-              <ul class="nav" id="items">              
+              <form class="brand" id="brand-name-form" style="display:none"><input type="text" id="brand-name-input" placeholder="Brand Text"></form>
+              <ul class="nav" id="items">
               </ul>
-              <form class="nav add-link-form" style="display:none;">
-                <li><select id="page-link-list"><option>Choose A Page</option></select></li>
-              </form>
-              <ul class="nav add-link">
-                <li><a href="#">+Add a Link</a></li>
-              </ul>
+              <button class="edit-navbar btn btn-small btn-inverse pull-right">Edit Navbar</button>
             </div>
-          </div>
-          <span class="right" id="delete-button-xcv">Click on item to remove</span>
-          <div class="right hide-btn btn" id="hide-toggle">
-            Hide the Navbar
           </div>
         </div>
         <!-- Navbar Ends-->
@@ -239,7 +230,7 @@
   <div class="expandible" id="basecss"><h2>Emails</h2></div>
     <span class="">
       <ul id="email-list">
-        
+
       </ul>
       <span id="create-email">
         + Create Email

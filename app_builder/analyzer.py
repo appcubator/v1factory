@@ -49,8 +49,8 @@ class Navbar(DictInited):
 
     class NavbarItem(DictInited):
         _schema = {
-            "name": {"_type": ""},
-            # "link": { "_type": "" } # TODO
+            "url": {"_type": ""},
+            "title": { "_type": "" }
         }
 
     _schema = {

@@ -24,17 +24,32 @@ Templates.tempNode = [
 Templates.NavbarEditor = [
   '<h3>Navbar Editor</h3>',
   '<form>',
-    '<label>Brand Name</label>',
+    '<label>Main Title</label>',
     '<input type="text" id="editor-brandname" value="<%= brandName %>">',
     '<label>Links</label>',
-    '<% _(items).each(function(item, index) { %>',
-      '<div>',
-        '<input type="text" id="editor-link-<%= index %>" value="<%= item %>">',
-        '<a id="remove-<%= index %>" href="#"><img src="/static/img/delete-small.png"></a>',
-      '</div>',
-    '<% }) %>',
+    '<ul id="link-editors"></ul>',
   '</form>',
-  '<button id="editor-add-link" type="submit">Add Link</button>'
+  '<button class="btn btn-primary add-link" type="submit">Add Link</button>'
+].join('\n');
+
+Templates.LinkEditor = [
+  '<div class="row">',
+    '<div class="span12">',
+      '<label>Link title</label>',
+      '<input class="link-title" type="text" value="<%= title %>"">',
+    '</div>',
+    '<div class="span20">',
+      '<div class="select-container">',
+        '<label>Location</label>',
+        '<select class="link-options"></select>',
+      '</div>',
+      '<div class="url-container" style="display: none">',
+        '<label>Url</label>',
+        '<input type="url" class="url" id="url" value="<%= url %>">',
+      '</div>',
+    '</div>',
+    '<a class="remove" style="float:right" href="#"><img src="/static/img/delete-small.png"></a>',
+  '</div>'
 ].join('\n');
 
 
