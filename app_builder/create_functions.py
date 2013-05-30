@@ -51,7 +51,7 @@ class AppComponentFactory(object):
         t.create_tree([u.subclass for u in page.uielements]) # XXX HACK PLZ FIXME TODO
         t.page = page
         page._django_template = t
-        page._django_view._django_template = t
+        page._django_view.template_code_path = t.filename
         return t
 
     def create_urls(self, app):
