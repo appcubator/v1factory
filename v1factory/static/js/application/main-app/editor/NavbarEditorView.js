@@ -1,35 +1,34 @@
 define([
+  'editor/LinkEditorView',
   'mixins/BackboneModal',
   'iui'
 ],
-function() {
+function(LinkEditorView) {
 
   var NavbarEditorView = Backbone.ModalView.extend({
     className : 'navbar-editor-modal',
-    width: 400,
+    width: 600,
     padding: 0,
     events: {
-      'click .done-btn'              : 'closeModal'
+      'click .done-btn' : 'closeModal',
+      'click .add-link' : 'addLinkEditorView'
     },
     initialize: function(options) {
       var self = this;
 
       _.bindAll(this, 'render',
+                      'renderLinkEditorViews',
                       'resized',
                       'resizing');
 
       this.model  = options.model;
-
+      this.links = this.model.get('links');
       this.render();
     },
 
     render: function() {
       var self = this;
-
       var brandName = this.model.get('brandName') || v1State.get('name');
-      var items = _.map(this.model.get('items'), function(item) {
-        return item.name.replace('internal://','').replace('/','');
-      });
 
       var editorDiv = document.createElement('div');
       editorDiv.className = 'nav-editor-container';
@@ -37,18 +36,32 @@ function() {
 
       editorDiv.innerHTML = _.template(Templates.NavbarEditor, {
         brandName: brandName,
-        items: items
+        items: this.model.get('links').toJSON()
       });
 
       this.el.appendChild(editorDiv);
       this.$el.append('<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>');
       this.el.style.height = "600px";
 
-      _(appState.pages).each(function(page) {
-        self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'">' + page.name +'</option>');
-      });
+      this.renderLinkEditorViews();
 
       return this;
+    },
+
+    renderLinkEditorViews: function() {
+      var self = this;
+      var linksList = this.$el.find('#link-editors');
+      this.links.each(function(link) {
+        var newView = new LinkEditorView({ model: link });
+        linksList.append(newView.render().el);
+      });
+    },
+
+    addLinkEditorView: function(e) {
+      // create new link (duplicate of homepage link)
+      var newLink = this.model.createNewLink();
+      var newLinkEditor = new LinkEditorView({ model: newLink});
+      this.$el.find('#link-editors').append(newLinkEditor.render().el);
     },
 
     resized: function() {

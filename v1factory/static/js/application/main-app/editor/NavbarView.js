@@ -1,12 +1,14 @@
 define([
+  'editor/NavbarEditorView',
   'backbone'
 ],
-function() {
+function(NavbarEditorView) {
 
   var NavbarView = Backbone.View.extend({
     entity: null,
     type: null,
     events: {
+      'click .edit-navbar' : 'showNavbarEditor',
       'click #hide-toggle'      : 'hideToggle',
       'click .add-link'         : 'clickedAddLink',
       'change #page-link-list'  : 'pageSelected',
@@ -32,43 +34,39 @@ function() {
 
       this.model = navbarModel;
       this.model.bind('change:isHidden', this.hideChanged);
+      this.listenTo(this.model, 'change', this.render);
+      console.log(this.model.toJSON());
+      this.listenTo(this.model.get('links'), 'all', this.render);
     },
 
     render: function() {
       var self = this;
       this.setElement(document.getElementById('navbar'));
 
-      var brandName = this.model.get('brandName') || "DERP";
-      console.log(brandName);
       if(this.model.get('brandName')) {
         this.$el.find('#brand-name').html(this.model.get('brandName'));
-      }
-
-      if(this.$el) {
-        console.log(this.$el);
-      }
-      else {
-        console.log("no el");
       }
 
       this.renderItems();
       this.hideChanged();
 
-      _(appState.pages).each(function(page) {
-        self.$el.find('#page-link-list').append('<option value="internal://'+ page.name +'">' + page.name +'</option>');
-      });
+
     },
 
     renderItems: function() {
       var self = this;
       self.$el.find('#items').html('');
-      _(self.model.get('items')).each(function(item) {
-        var name = item.name.replace('internal://','').replace('/','');
+      console.log(self.model.get('links').toJSON());
+      self.model.get('links').each(function(item) {
         var newli = document.createElement('li');
-        newli.innerHTML = '<a href="#" class="menu-item">'+ name +'</a>';
+        newli.innerHTML = '<a href="#" class="menu-item">'+ item.get('title') +'</a>';
         $(newli).hover(self.showDeleteButton, self.hideDeleteButton);
         self.$el.find('#items').append(newli);
       });
+    },
+
+    showNavbarEditor: function() {
+      new NavbarEditorView({ model: this.model })
     },
 
     hideToggle: function(e) {

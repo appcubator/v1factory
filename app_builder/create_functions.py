@@ -1,4 +1,4 @@
-from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs
+from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase
 from app_builder import naming
 
 
@@ -66,3 +66,10 @@ class AppComponentFactory(object):
         url_obj.routes.append(route)
 
         return None
+
+    def create_tests_for_static_pages(self, app):
+        ident_url_pairs = []
+        for p in app.pages:
+            ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
+        d = DjangoStaticPagesTestCase(ident_url_pairs)
+        return d

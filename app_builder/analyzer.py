@@ -4,28 +4,8 @@ from dict_inited import DictInited
 import os
 import os.path
 
-
-def encode_braces(s):
-    return '{{%s}}' % s.replace('{', '\{')
-
-
-def decode_braces(s):
-    assert s.startswith('{{') and s.endswith('}}'), "Not brace encoded"
-    return s[2:-2].replace('\{', '{')
-
-class Resolvable(object):
-
-    """
-    Mixin allowing you to specify attributes you want to resolve.
-    See _resolve_attrs in LinkLang for example.
-    """
-
-    def resolve(self):
-        assert hasattr(self, app), "You must have something at attribute \"app\""
-        for src_attr, dest_attr in self.__class__._resolve_attrs:
-            path_string = decode_braces(getattr(self, src_attr))
-            setattr(self, dest_attr,  self.app.find(
-                path_string, name_allowed=True))
+from app_builder.analyzer_utils import encode_braces, decode_braces
+from app_builder.resolving import Resolvable, LinkLang, EntityLang
 
 
 # Entities
@@ -64,22 +44,13 @@ class UserConfig(DictInited):
 
 
 # Pages
-class LinkLang(DictInited, Resolvable):
-    _schema = {
-        "page_name": {"_type": ""},
-        "urldata": {"_type": {}},
-        # "page": { "_type": Page"} # DO NOT UNCOMMENT. this gets added after resolve.
-    }
-
-    _resolve_attrs = (('page_name', 'page'),)
-
 
 class Navbar(DictInited):
 
     class NavbarItem(DictInited):
         _schema = {
-            "name": {"_type": ""},
-            # "link": { "_type": "" } # TODO
+            "url": {"_type": ""},
+            "title": { "_type": "" }
         }
 
     _schema = {
@@ -94,10 +65,6 @@ class Page(DictInited):
 
     class URL(DictInited):
 
-        class EntityLang(DictInited, Resolvable):
-            _schema = {"name": {"_type": ""}, "entity_name": {"_type": ""}}
-            _resolve_attrs = (('entity_name', 'entity'),)
-
         _schema = {
             "urlparts": {"_type": [], "_each": {"_one_of": [{"_type": ""}, {"_type": EntityLang}]}}  # TODO might have a reference to an entity
         }
@@ -111,7 +78,7 @@ class Page(DictInited):
     }
 
     def get_page_context(self):
-        return [(el.name, el.entity) for el in filter(lambda x: isinstance(x, Page.URL.EntityLang), self.url.urlparts)]
+        return [(el.name, el.entity) for el in filter(lambda x: isinstance(x, EntityLang), self.url.urlparts)]
 
 
 class Email(DictInited):

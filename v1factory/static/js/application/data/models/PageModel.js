@@ -18,6 +18,11 @@ function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollect
     initialize: function(bone) {
       bone = bone||{};
       this.set('url', new UrlModel(bone.url||{}));
+      console.log(bone.navbar);
+      if(bone.navbar.items) {
+        bone.navbar.links = _(bone.navbar.items).map(function(item) { return item; });
+        delete bone.navbar.items;
+      }
       this.set('navbar', new NavbarModel(bone.navbar||{}));
       this.set('uielements', new WidgetCollection());
       var self = this;
