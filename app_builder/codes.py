@@ -1,20 +1,29 @@
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, PackageLoader, StrictUndefined
 from app_builder import naming
 
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
-    'app_builder', 'code_templates'))
+    'app_builder', 'code_templates'), undefined=StrictUndefined)
 
 
 class DjangoPageView(object):
 
-    def __init__(self, identifier, page_context={}):
+    def __init__(self, identifier, args=[], template_code_path=""):
+        """
+        args is a list of tuples: (identifier, some_data_as_dict)
+        """
         self.identifier = identifier
         self.code_path = "webapp/pages.py"
-        self.page_context = page_context
+
+        # make args a safe namespace
+        self.namespace = naming.USNamespace()
+        self.namespace.new_identifier('request')
+        self.args = [ (self.namespace.new_identifier(arg), data) for arg, data in args ]
 
         # action is some kind of tree where the terminal nodes render
         # HTTPResponses.
         self.actions = None
+
+        self.template_code_path = template_code_path
 
     def render(self):
         return env.get_template('view.py').render(view=self)

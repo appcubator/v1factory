@@ -33,10 +33,9 @@ function(NavbarEditorView) {
                       'removeItem');
 
       this.model = navbarModel;
-      this.model.bind('change:isHidden', this.hideChanged);
+      this.listenTo(this.model, 'change:isHidden', this.hideChanged);
       this.listenTo(this.model, 'change', this.render);
-      console.log(this.model.toJSON());
-      this.listenTo(this.model.get('links'), 'all', this.render);
+      this.listenTo(this.model.get('links'), 'all', this.renderItems);
     },
 
     render: function() {
@@ -56,7 +55,6 @@ function(NavbarEditorView) {
     renderItems: function() {
       var self = this;
       self.$el.find('#items').html('');
-      console.log(self.model.get('links').toJSON());
       self.model.get('links').each(function(item) {
         var newli = document.createElement('li');
         newli.innerHTML = '<a href="#" class="menu-item">'+ item.get('title') +'</a>';
@@ -66,7 +64,7 @@ function(NavbarEditorView) {
     },
 
     showNavbarEditor: function() {
-      new NavbarEditorView({ model: this.model })
+      new NavbarEditorView({ model: this.model });
     },
 
     hideToggle: function(e) {

@@ -1,5 +1,6 @@
 import unittest
 from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase
+from app_builder import naming
 from app_builder.uielements import Node, Layout
 
 
@@ -43,6 +44,36 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
         self.assertEqual(len(self.model.fields), 3)
 
+
+class DjangoPageViewTestCase(unittest.TestCase):
+
+    def test_creation(self):
+        view = DjangoPageView("test_view")
+        self.assertEqual(view.code_path, 'webapp/pages.py')
+        self.assertIsInstance(view.namespace, naming.USNamespace)
+
+    def test_create_with_args(self):
+        d1, d2, d3 = ({'1':1}, {'2':2}, {'3':3})
+        view = DjangoPageView("test_view", args=[('user', d1), ('user2', d2), ('book', d3)])
+        self.assertEqual(view.args, [('user', d1), ('user2', d2), ('book', d3)])
+
+    def test_safety_of_args(self):
+        d1, d2, d3 = ({'1':1}, {'2':2}, {'3':3})
+        view = DjangoPageView("test_view", args=[('user', d1), ('user', d2), ('request', d3)])
+        self.assertEqual(len(view.args), 3)
+        self.assertNotIn('request', [a for a,d in view.args]) # request is not allowed to be an arg since it's the first fn arg.
+        self.assertNotEqual(view.args[0][0], view.args[1][0])
+
+    def test_render(self):
+        d1, d2, d3 = ({'template_id':'user', 'model_id':'User'},
+                      {'template_id':'user2', 'model_id': 'User'},
+                      {'template_id':'request2', 'model_id': 'Request'})
+        view = DjangoPageView("test_view", args=[('user_id', d1), ('user2_id', d2), ('request_id', d3)], template_code_path="wsup/test_path.html")
+        print view.render()
+
+
+    # ability to add things to page context
+    # ability to get the names of ceratin things in the page context
 
 class DjangoTemplateSplitToRowsTestCase(unittest.TestCase):
 

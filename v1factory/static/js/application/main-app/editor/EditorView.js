@@ -66,7 +66,6 @@ function( PageModel,
       iui.loadCSS('jquery-ui');
 
       this.model             = v1State.get('pages').models[pageId];
-      console.log(this.model.toJSON());
 
       /* Globals */
       g_contextCollection    = new EntityCollection();
