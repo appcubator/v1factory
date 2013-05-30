@@ -18,6 +18,7 @@ function(LinkEditorView) {
 
       _.bindAll(this, 'render',
                       'renderLinkEditorViews',
+                      'addLinkEditorView',
                       'resized',
                       'resizing');
 
@@ -38,6 +39,8 @@ function(LinkEditorView) {
         items: this.model.get('links').toJSON()
       });
 
+      this.$linksList = this.$el.find('#link-editors');
+
       this.el.appendChild(editorDiv);
       this.$el.append('<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>');
 
@@ -48,18 +51,16 @@ function(LinkEditorView) {
 
     renderLinkEditorViews: function() {
       var self = this;
-      var linksList = this.$el.find('#link-editors');
-      this.links.each(function(link) {
-        var newView = new LinkEditorView({ model: link });
-        linksList.append(newView.render().el);
-      });
+      this.$linksList = this.$el.find('#link-editors');
+      this.links.each(this.addLinkEditorView);
     },
 
-    addLinkEditorView: function(e) {
+    addLinkEditorView: function(linkModel) {
       // create new link (duplicate of homepage link)
-      var newLink = this.model.createNewLink();
+      var newLink = linkModel || this.model.createNewLink();
       var newLinkEditor = new LinkEditorView({ model: newLink});
-      this.$el.find('#link-editors').append(newLinkEditor.render().el);
+      console.log(this.$linksList);
+      this.$linksList.append(newLinkEditor.render().el);
     },
 
     resized: function() {

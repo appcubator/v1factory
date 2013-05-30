@@ -7,19 +7,15 @@ define([
         className: 'well well-small',
         events: {
           'change .link-options'  : 'pageSelected',
-          'keypress input.url' : 'updateUrlOnEnter',
-          'blur input.url' : 'updateUrl',
-          'keypress input.link-title' : 'updateTitleOnEnter',
-          'blur input.link-title' : 'updateTitle',
+          'keydown input.url' : 'updateUrl',
+          'keydown input.link-title' : 'updateTitle',
           'click .remove': 'removeLink'
         },
         initialize: function(options) {
+          _.bindAll(this);
           this.model = options.model;
-
           this.listenTo(this.model, 'change:title', this.renderTitle, this);
           this.listenTo(this.model, 'change:url', this.renderUrl, this);
-
-          _.bindAll(this);
 
           // generate list of link options
           this.linkOptions = _(appState.pages).map(function(page) {
@@ -29,7 +25,7 @@ define([
             }
           });
 
-          // if the link is an external link,
+          // if the current link is an external link,
           // we need to add it to the link options
           if(this.model.get('url').indexOf('internal://') === -1) {
             this.linkOptions.push(this.model.toJSON());
@@ -39,9 +35,10 @@ define([
         render: function() {
           var self = this;
           this.$el.html(_.template(Templates.LinkEditor, this.model.toJSON()));
+          this.renderLinkOptions();
 
           this.$urlContainer = this.$el.find('.url-container');
-          this.renderLinkOptions();
+          this.$select = this.$el.find('.select-container');
 
           return this;
         },
@@ -61,7 +58,6 @@ define([
             select.append('<option value="' + link.url + '">' + link.title +'</option>');
           });
           select.append('<option value="external">External Link...</option>');
-          this.$select = this.$el.find('.select-container');
         },
 
         pageSelected: function(e) {
@@ -100,37 +96,27 @@ define([
             return false;
           }
 
-          else {
-
-          }
+          else { }
         },
 
-        updateUrlOnEnter: function(e) {
-          if(e.keyCode !== 13) { return; }
-          //user can't modify internal urls
+        updateUrl: function(e) {
+          // user can't modify internal urls
           if(this.model.get('url').indexOf('internal://') > -1) {
             return false;
           }
 
-          this.updateUrl(e);
+          // if user hits enter, replace url field with dropdown
+          if(e.keyCode && e.keyCode === 13) {
+            //hide external url, show select box
+            this.$urlContainer.hide();
+            this.$select.show();
+          }
 
-          //hide external url, show select box
-          this.$urlContainer.hide();
-          this.$select.show();
-        },
-
-        updateTitleOnEnter: function(e) {
-          if(e.keyCode !== 13) { return; }
-          this.updateTitle(e);
-        },
-
-        updateUrl: function(e) {
           this.model.set({url: e.target.value});
           this.renderLinkOptions();
         },
 
         updateTitle: function(e) {
-          if(e.keyCode !== 13) { return; }
           this.model.set({title: e.target.value});
           this.renderLinkOptions();
         },

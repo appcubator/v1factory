@@ -24,9 +24,9 @@ Templates.tempNode = [
 Templates.NavbarEditor = [
   '<h3>Navbar Editor</h3>',
   '<form>',
-    '<legend>Main Title</legend>',
+    '<legend for="main-title">Main Title</legend>',
     '<input type="text" id="editor-brandname" value="<%= brandName %>">',
-    '<legend>Links</legend>',
+    '<legend for="links">Links</legend>',
     '<ul id="link-editors"></ul>',
   '</form>',
   '<button class="btn btn-primary btn-small add-link" type="submit">Add Link</button>'
@@ -48,7 +48,7 @@ Templates.LinkEditor = [
         '<input type="url" class="url" id="url" value="<%= url %>">',
       '</div>',
     '</div>',
-    '<a class="remove" style="float:right" href="#"><img src="/static/img/delete-small.png"></a>',
+    '<a class="remove" style="float:right" href="#">Delete Link</a>',
   '</div>'
 ].join('\n');
 
