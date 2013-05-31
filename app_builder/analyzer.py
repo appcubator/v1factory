@@ -60,6 +60,20 @@ class Navbar(DictInited):
         "items": {"_type": [], "_each": {"_type": NavbarItem}}
     }
 
+class Footer(DictInited):
+
+    class FooterItem(DictInited):
+        _schema = {
+            "url": {"_type": ""},
+            "title": { "_type": "" }
+        }
+
+    _schema = {
+        "brandName": {"_one_of": [{"_type": ""}, {"_type": None}]},
+        "isHidden": {"_type": True},
+        "items": {"_type": [], "_each": {"_type": FooterItem}}
+    }
+
 from app_builder.uielements import UIElement
 
 class Page(DictInited):
@@ -74,6 +88,7 @@ class Page(DictInited):
         "name": {"_type": ""},
         "url": {"_type": URL},
         "navbar": {"_type": Navbar},
+        "footer": {"_type": Footer},
         "uielements": {"_type": [], "_each": {"_type": UIElement}},
         "access_level": {"_type": ""}
     }
