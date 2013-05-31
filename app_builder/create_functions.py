@@ -36,6 +36,7 @@ class AppComponentFactory(object):
     def find_or_create_query_for_view(self, uie):
 
         entity = uie.container_info.entity_resolved
+        # TODO implement filtering of queries
         dq = DjangoQuery(entity._django_model.identifier)
 
         # TODO add to parent in a nicer way.
