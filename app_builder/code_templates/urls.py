@@ -7,8 +7,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('{{ urls.module }}',
     # Examples:
-    # url(r'^$', '{{ project_name }}.views.home', name='home'),
-    # url(r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
+    {{ "# url(r'^$', '{{ project_name }}.views.home', name='home')," }}
+    {{ "# url(r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')), " }}
 
     {% for url_string, function in urls.routes %}
     url({{ url_string }}, '{{ function.identifier }}'),

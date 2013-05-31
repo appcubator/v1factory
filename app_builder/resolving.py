@@ -27,6 +27,6 @@ class LinkLang(DictInited, Resolvable):
 
 
 class EntityLang(DictInited, Resolvable):
-    _schema = {"name": {"_type": ""}, "entity_name": {"_type": ""}}
+    _schema = {"entity_name": {"_type": ""}}
     _resolve_attrs = (('entity_name', 'entity'),)
 

@@ -12,7 +12,6 @@ def {{ view.identifier }}(request{% for arg, data in view.args %}, {{ arg }}{% e
     {% for arg, arg_data in view.args %}
     page_context['{{ arg_data.template_id }}'] = get_object_or_404({{ arg_data.model_id }}, pk={{ arg }})
     {% endfor %}
-    # here i have to get object or 404, and pass it to the page context
     # here i have to add queries
     return render(request, "{{ view.template_code_path }}", page_context){#
 

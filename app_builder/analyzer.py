@@ -6,6 +6,7 @@ import os.path
 
 from app_builder.analyzer_utils import encode_braces, decode_braces
 from app_builder.resolving import Resolvable, LinkLang, EntityLang
+from app_builder import naming
 
 
 # Entities
@@ -66,7 +67,7 @@ class Page(DictInited):
     class URL(DictInited):
 
         _schema = {
-            "urlparts": {"_type": [], "_each": {"_one_of": [{"_type": ""}, {"_type": EntityLang}]}}  # TODO might have a reference to an entity
+            "urlparts": {"_type": [], "_each": {"_one_of": [{"_type": ""}, {"_type": EntityLang}]}}
         }
 
     _schema = {
@@ -77,8 +78,23 @@ class Page(DictInited):
         "access_level": {"_type": ""}
     }
 
-    def get_page_context(self):
-        return [(el.name, el.entity) for el in filter(lambda x: isinstance(x, EntityLang), self.url.urlparts)]
+    @property
+    def url_regex(page):
+        url_regex = "r'^"
+        for x in page.url.urlparts:
+            try:
+                url_regex += naming.make_safe(x) + '/'
+            except TypeError:
+                url_regex += r'(\d+)/'
+        url_regex += "$'"
+        return url_regex
+
+    def is_static(self):
+        # returns true iff there are no entities in the url parts
+        return len(filter(lambda x: isinstance(x, EntityLang), self.url.urlparts)) == 0
+
+    def get_entities_from_url(self):
+        return [l.entity for l in filter(lambda x: isinstance(x, EntityLang), self.url.urlparts)]
 
 
 class Email(DictInited):
@@ -149,8 +165,12 @@ class App(DictInited):
         for path, fii in filter(lambda n: isinstance(n[1], Form.FormInfo.FormInfoInfo), self.iternodes()):
             if fii.belongsTo is not None:
                 fii.belongsTo = encode_braces('entities/%s' % fii.belongsTo)
+
         for path, ll in filter(lambda n: isinstance(n[1], LinkLang), self.iternodes()):
             ll.page_name = encode_braces('pages/%s' % ll.page_name)
+
+        for path, el in filter(lambda n: isinstance(n[1], EntityLang), self.iternodes()):
+            el.entity_name = encode_braces('entities/%s' % el.entity_name)
 
         for path, fi in filter(lambda n: isinstance(n[1], Form.FormInfo), self.iternodes()):
             fi.entity = encode_braces(
