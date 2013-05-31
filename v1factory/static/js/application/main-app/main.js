@@ -107,30 +107,6 @@ function (AppModel,
         $('#scrollUp').fadeIn('slow');
       });
       $('#scrollUp').on('click', this.scrollUp);
-      this.menuBindings();
-    },
-
-    start: function () {
-
-    },
-
-    menuBindings: function() {
-      var self = this;
-      $('#main-menu').on('click', function() {
-        self.navigate("app/"+ appId +"/", {trigger: true});
-      });
-      $('.menu-app-info').on('click', function() {
-        self.navigate("app/"+ appId +"/info/", {trigger: true});
-      });
-      $('.menu-app-entities').on('click', function() {
-        self.navigate("app/"+ appId +"/entities/", {trigger: true});
-      });
-      $('.menu-app-themes').on('click', function() {
-        self.navigate("app/"+ appId +"/gallery/", {trigger: true});
-      });
-      $('.menu-app-pages').on('click', function() {
-        self.navigate("app/"+ appId +"/pages/", {trigger: true});
-      });
     },
 
     index: function () {
@@ -308,5 +284,10 @@ function (AppModel,
 
 
   Backbone.history.start({pushState: true});
+  //$(document).on('click', "a[href^='/app']", function(e) {
+  $(document).on('click', 'a[rel!="external"]', function(e) {
+    v1.navigate(e.currentTarget.getAttribute('href'), {trigger: true});
+    return false;
+  })
 
 });
