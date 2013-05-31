@@ -92,7 +92,9 @@ class Form(DictInited, Hooked):
     }
 
     def render(self):
-        return "THIS IS FORM"
+        self.method = 'POST'
+        self.action = '(url to form receiver)' # TODO '{%  url %s %}' % context.form_receiver.view_path()
+        return env.get_template('form.html').render(form=self)
 
 
 class Node(DictInited, Hooked):  # a uielement with no container_info

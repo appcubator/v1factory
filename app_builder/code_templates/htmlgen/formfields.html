@@ -1,6 +1,4 @@
-{{ "{% csrf_token %}" }}
-{% for field in context.ui_fields %}
-{% if field.label != None %} <label for="id-{{ field.post_name }}">{{ field.label }}</label>{% endif %}
+{% if field.label != None %}<label for="id-{{ field.post_name }}">{{ field.label }}</label>{% endif %}
   {% if field.display_type == "single-line-text" %}
   <input type="text" name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% elif field.display_type == "paragraph-text" %}
@@ -36,5 +34,3 @@
 {% endfor %}
 {% for field in context.foreign_key_fields %}
 <input type="hidden" style="display:none" name="{{ field.identifier() }}" value="{{ "{{" }} {{ field.model.identifier().lower() }}.id {{ "}}" }}">
-{% endfor %}
-<div class="form-error field-all"></div>
