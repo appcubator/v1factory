@@ -33,7 +33,17 @@ function(Backbone, LinkCollection) {
       });
       this.links.add(newLink);
       return newLink;
+    },
+
+    toJSON : function() {
+      var json = _.clone(this.attributes);
+      json = _.omit(json, 'selected', 'deletable');
+
+      json.links = this.get('links').toJSON();
+
+      return json;
     }
+
   });
 
   return NavbarModel;

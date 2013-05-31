@@ -19,12 +19,6 @@ function(UrlModel, NavbarModel, FooterModel, ContainerWidgetModel, WidgetModel, 
     initialize: function(bone) {
       bone = bone||{};
 
-      // rename 'items' as 'links' in JSON
-      bone.navbar.links = _.clone(bone.navbar.items);
-      delete bone.navbar.items;
-      bone.footer.links = _.clone(bone.footer.items);
-      delete bone.footer.items;
-
       this.set('url', new UrlModel(bone.url||{}));
       this.set('navbar', new NavbarModel(bone.navbar||{}));
       this.set('footer', new FooterModel(bone.footer||{}));
@@ -56,7 +50,7 @@ function(UrlModel, NavbarModel, FooterModel, ContainerWidgetModel, WidgetModel, 
       var json = _.clone(this.attributes);
       json.url = this.get('url').toJSON();
       json.navbar = this.get('navbar').toJSON();
-      json.navbar = this.get('footer').toJSON();
+      json.footer = this.get('footer').toJSON();
       json.uielements = this.get('uielements').toJSON();
       return json;
     }

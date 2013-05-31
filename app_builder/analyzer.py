@@ -57,7 +57,7 @@ class Navbar(DictInited):
     _schema = {
         "brandName": {"_one_of": [{"_type": ""}, {"_type": None}]},
         "isHidden": {"_type": True},
-        "items": {"_type": [], "_each": {"_type": NavbarItem}}
+        "links": {"_type": [], "_each": {"_type": NavbarItem}}
     }
 
 class Footer(DictInited):
@@ -71,7 +71,7 @@ class Footer(DictInited):
     _schema = {
         "brandName": {"_one_of": [{"_type": ""}, {"_type": None}]},
         "isHidden": {"_type": True},
-        "items": {"_type": [], "_each": {"_type": FooterItem}}
+        "links": {"_type": [], "_each": {"_type": FooterItem}}
     }
 
 from app_builder.uielements import UIElement

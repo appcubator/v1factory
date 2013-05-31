@@ -27,7 +27,7 @@
                 "isFixed": true,
                 "brandName": null,
                 "isHidden": false,
-                "items": [
+                "links": [
                     {
                         "url": "internal://Homepage",
                         "title": "Homepage"
@@ -42,7 +42,7 @@
                 "isFixed": true,
                 "brandName": null,
                 "isHidden": false,
-                "items": [
+                "links": [
                     {
                         "url": "internal://Homepage",
                         "title": "Homepage"
@@ -62,7 +62,7 @@
                 "isFixed": true,
                 "brandName": null,
                 "isHidden": false,
-                "items": [
+                "links": [
                     {
                         "url": "internal://Homepage",
                         "title": "Homepage"
@@ -77,7 +77,7 @@
                 "isFixed": true,
                 "brandName": null,
                 "isHidden": false,
-                "items": [
+                "links": [
                     {
                         "url": "internal://Homepage",
                         "title": "Homepage"
