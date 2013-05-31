@@ -63,6 +63,9 @@ urlpatterns += patterns('v1factory.views',
     # special json editor route
     url(r'^app/(\d+)/editor/\d+/debug/$', 'app_json_editor'), # this serves all the app pages
 
+    # route logging
+    url(r'^app/(\d+)/log/routes/', 'log_route'),
+
     # the rest
     url(r'^app/(\d+)/', 'app_page'), # this serves all the app pages
 

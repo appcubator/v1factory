@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render, render_to_response, get_object_or
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts, TutorialLog
+from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts, RouteLog, TutorialLog
 from v1factory.email.sendgrid_email import send_email
 from v1factory.models import DomainRegistration
 
@@ -458,6 +458,18 @@ def sub_register_domain(request, app_id, subdomain):
     }
     app.deploy(d_user)
     return HttpResponse("ok")
+
+@require_POST
+@login_required
+@csrf_exempt
+def log_route(request, app_id):
+    user_id = request.user.id
+    page_name = request.POST['page_name']
+    app_id = long(app_id)
+    log = RouteLog(user_id=user_id, page_name=page_name, app_id=app_id)
+    log.full_clean()
+    log.save()
+    return HttpResponse("saved route")
 
 
 @require_POST
