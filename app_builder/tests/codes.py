@@ -47,6 +47,12 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
 class DjangoPageViewTestCase(unittest.TestCase):
 
+    def tearDown(self):
+        try:
+            del view
+        except:
+            pass
+
     def test_creation(self):
         view = DjangoPageView("test_view")
         self.assertEqual(view.code_path, 'webapp/pages.py')

@@ -34,6 +34,11 @@ class AppComponentFactory(object):
         return v
 
     def find_or_create_query_for_view(self, uie):
+
+        entity = uie.container_info.entity_resolved
+        dq = DjangoQuery(entity._django_model.identifier)
+
+        # TODO add to parent in a nicer way.
         def get_parent(obj):
             # app/pages/0/uielements/3  => app/pages/0
             parent_path = obj._path[:obj._path.rfind('/')]
@@ -41,7 +46,9 @@ class AppComponentFactory(object):
             return obj.app.find(parent_path)
         page = get_parent(uie)
         view = page._django_view
-        # TODO create the code object and add to the view function
+        view.add_query(dq)
+
+        return dq
 
     def create_tree_structure_for_page_nodes(self, page):
         """

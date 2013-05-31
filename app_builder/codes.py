@@ -5,32 +5,46 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
 
 
+class DjangoQuery(object):
+
+    def __init__(self, model_id):
+        self.model_id = model_id
+
+    def render(self):
+        return "%s.objects.all()" % self.model_id
+
 class DjangoPageView(object):
 
-    def __init__(self, identifier, args=[], template_code_path=""):
+    def __init__(self, identifier, args=None, template_code_path="", queries=None):
         """
         args is a list of tuples: (identifier, some_data_as_dict)
         """
         self.identifier = identifier
         self.code_path = "webapp/pages.py"
 
-        # make args a safe namespace
+        # args, make a namespace for the function
         self.namespace = naming.USNamespace()
         self.namespace.new_identifier('request')
+        if args is None:
+            args = []
         self.args = [ (self.namespace.new_identifier(arg), data) for arg, data in args ]
 
-        # make a namespace for page context
+        # continuing args, make a namespace for page context
         self.pc_namespace = naming.USNamespace()
         for arg, data in self.args:
             name_attempt = data.get('template_id', 'BADNAME') # helps a test pass
             data['template_id'] = self.pc_namespace.new_identifier(name_attempt)
 
-
-        # action is some kind of tree where the terminal nodes render
-        # HTTPResponses.
-        self.actions = None
+        # queries
+        if queries is None:
+            queries = []
+        self.queries = queries
 
         self.template_code_path = template_code_path
+
+    def add_query(self, dq_obj):
+        template_id = self.pc_namespace.new_identifier(dq_obj.model_id + 's') # very crude pluralize
+        self.queries.append((template_id, dq_obj.render()))
 
     def render(self):
         return env.get_template('view.py').render(view=self)
