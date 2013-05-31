@@ -2,7 +2,7 @@ from copy import deepcopy
 from jinja2 import Environment, PackageLoader, StrictUndefined
 
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
-    'app_builder.code_templates', 'htmlgen'), undefined=StrictUndefined)
+    'app_builder.code_templates', 'htmlgen'), undefined=StrictUndefined, autoescape=True)
 
 valid_tags = ('a', 'abbr', 'address', 'area', 'article',
               'aside', 'audio', 'b', 'base', 'bdi',

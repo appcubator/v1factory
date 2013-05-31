@@ -38,18 +38,18 @@ class HtmlGenBasicTestCase(unittest.TestCase):
         atag = Tag('a', { 'href': 'http://google.com/' }, content="Google")
         self.assertEqual(atag.render(), '<a href="http://google.com/">Google</a>')
 
-    def test_id(self):
-        div_id = "container"
-        div = Tag('div', {'id': div_id}, content="Test")
-        self.assertEqual(div.render(), "<div id=\"container\">Test</div>")
+    def test_id_class_style_attrib_order(self):
+        kwargs = { 'id': "container",
+                  'class': "some classes here",
+                  'style': "position:absolute",
+                  'alt': "This is after the others" }
+        div = Tag('div', kwargs, content="Test")
+        print div.render()
+        self.assertEqual(div.render(), '<div id="container" class="some classes here" style="position:absolute" alt="This is after the others">Test</div>')
 
-        pass
-
-    def test_class(self):
-        pass
-
-    def test_style(self):
-        pass
+    def test_html_escape(self):
+        atag = Tag('a', { 'href': 'http:"><script' }, content="Google")
+        self.assertEqual(atag.render(), '<a href="http:&#34;&gt;&lt;script">Google</a>')
 
 if __name__ == "__main__":
     unittest.main()
