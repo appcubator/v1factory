@@ -38,11 +38,6 @@ function(SimpleModalView) {
         success: function(data) {
           v1.betaCheck(data);
         },
-        error: function() {
-          setTimeout(function() {
-            self.checkTutorialProgress();
-          }, 400);
-        },
         dataType: "JSON"
       });
     },
