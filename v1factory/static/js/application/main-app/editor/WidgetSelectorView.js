@@ -154,8 +154,6 @@ function(WidgetEditorView) {
       }
 
       this.deselect();
-      console.log("new model:");
-      console.log(widgetModel);
       this.selectedEl = widgetModel;
       widgetModel.get('layout').bind('change', function() {
         self.setLayout(self.selectDiv, widgetModel);
@@ -167,7 +165,7 @@ function(WidgetEditorView) {
     resizing: function(e, ui) {
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
       elem.style.width = ui.size.width - 4 + 'px';
-      elem.style.height = ui.size.height - 4 + 'px';
+      elem.style.height = (ui.size.height - 4) + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
       elem.style.top  = ui.position.top + 2 + 'px';
     },
@@ -220,8 +218,6 @@ function(WidgetEditorView) {
         this.selectedEl.trigger('deselected');
       }
       this.widgetEditorView.clear();
-      console.log("SelectedEl null");
-      console.trace();
       this.selectedEl = null;
       this.hideNode(this.selectDiv);
     },

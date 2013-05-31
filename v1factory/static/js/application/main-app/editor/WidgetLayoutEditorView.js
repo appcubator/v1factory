@@ -41,9 +41,9 @@ function(WidgetClassPickerView, FormEditorView) {
     },
 
     changePadding: function(e) {
-      //this.$el.find('.selected').removeClass('selected');
       var padding = (e.target.id).replace('padding-', '');
       $(e.target).toggleClass('selected');
+
 
       if(padding == "tb") {
         if($(e.target).hasClass('selected')) {
@@ -57,10 +57,12 @@ function(WidgetClassPickerView, FormEditorView) {
       }
       else {
         if($(e.target).hasClass('selected')) {
+          console.log('fifteen!');
           this.model.get('layout').set('r_padding', 15);
           this.model.get('layout').set('l_padding', 15);
         }
         else {
+          console.log('zero!');
           this.model.get('layout').set('r_padding', 0);
           this.model.get('layout').set('l_padding', 0);
         }

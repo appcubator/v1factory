@@ -70,14 +70,14 @@ function(SelectView) {
         external = this.model.get('data').get('content_attribs').get('href');
       }
 
-      html         = _.template(temp, { val : this.model.get('content_attribs').get('href'),
+      html         = _.template(temp, { val : this.model.get('data').get('content_attribs').get('href'),
                                         hash: hash,
                                         listOfPages: listOfPages,
                                         external: external});
 
 
       this.hrefLi.appendChild(new comp().div('Links To').classN('header-div').el);
-      var selecView = new SelectView(listOfPages, this.model.get('content_attribs').get('href'));
+      var selecView = new SelectView(listOfPages, this.model.get('data').get('content_attribs').get('href'));
       this.hrefLi.appendChild(selecView.el);
 
       return this.hrefLi;
@@ -170,14 +170,16 @@ function(SelectView) {
     },
 
     toggleBold: function(e) {
-      var curStyle = (this.model.get('content_attribs').get('style')||'');
+      var curStyle = (this.model.get('data').get('content_attribs').get('style')||'');
       if(curStyle.indexOf('font-weight:bold;') < 0) {
+        $('#toggle-bold').addClass('selected');
         curStyle += 'font-weight:bold;';
-        this.model.get('content_attribs').set('style', curStyle);
+        this.model.get('data').get('content_attribs').set('style', curStyle);
       }
       else {
+        $('#toggle-bold').removeClass('selected');
         curStyle = curStyle.replace('font-weight:bold;', '');
-        this.model.get('content_attribs').set('style', curStyle);
+        this.model.get('data').get('content_attribs').set('style', curStyle);
       }
     },
 
@@ -186,8 +188,8 @@ function(SelectView) {
         file.name = file.filename;
         statics.push(file);
       });
-      self.model.get('content_attribs').set('src', _.last(files).url);
-      self.model.set('content', _.last(files).url);
+      self.model.get('data').get('content_attribs').set('src', _.last(files).url);
+      self.model.get('data').set('content', _.last(files).url);
     },
 
     changeSrc: function(e) {
@@ -196,8 +198,8 @@ function(SelectView) {
         iui.openFilePick(self.staticsAdded, self, appId);
       }
       else {
-        this.model.get('content_attribs').set('src', e.target.value);
-        this.model.set('content', e.target.value);
+        this.model.get('data').get('content_attribs').set('src', e.target.value);
+        this.model.get('data').set('content', e.target.value);
       }
     },
 
@@ -209,10 +211,10 @@ function(SelectView) {
         self.hrefLi.innerHTML = '<form id="external-link-form"><input id="external-link-input" type="text"></form>';
         $('#external-link-input').focus();
       }
-      else if(this.model.get('context')) {
-        target += ('/' + this.model.get('context'));
+      else if(this.model.get('data').get('context')) {
+        target += ('/' + this.model.get('data').get('context'));
       }
-      this.model.get('content_attribs').set('href', target);
+      this.model.get('data').get('content_attribs').set('href', target);
     },
 
     addExternalLink: function(e) {

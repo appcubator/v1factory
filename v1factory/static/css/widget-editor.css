@@ -44,9 +44,16 @@
   border-bottom: 1px solid #1b2535;
   border-top: 1px solid #3b4555;
 }
-.content-editor ul li.selected, .class-picker  ul li.selected{
+
+.layout-editor ul li.selected,
+.content-editor ul li.selected,
+.padding-picker .selected,
+.alignment-picker .selected,
+.option-button.selected
+{
   background-color: #1b2535;
 }
+
 
 .layout-editor {
   top: 0;

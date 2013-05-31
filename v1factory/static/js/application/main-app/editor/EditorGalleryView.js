@@ -344,6 +344,7 @@ function(ElementCollection,
           return;
         }
 
+        widget.data.nodeType = type;
         widget.data = _.extend(widget.data, uieState[type][0]);
         widget.type = type;
 

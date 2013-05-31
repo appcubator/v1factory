@@ -25,6 +25,7 @@ function(WidgetContentEditor,
       'click .edit-row-button'    : 'openRowEditor',
       'click #edit-form-btn'      : 'openFormEditor',
       'click #pick-style'         : 'openStylePicker',
+      'click .delete-button'      : 'clickedDelete',
       'click'                     : 'clicked'
     },
 
@@ -37,6 +38,7 @@ function(WidgetContentEditor,
                       'openRowEditor',
                       'openFormEditor',
                       'setModel',
+                      'clickedDelete',
                       'classChanged',
                       'hideSubviews',
                       'showSubviews');
@@ -54,7 +56,7 @@ function(WidgetContentEditor,
     render: function() {
       this.$el.fadeIn();
 
-      if(this.model.has('container_info')) {
+      if(this.model.get('data').has('container_info')) {
         var action = this.model.get('container_info').get('action');
 
         if(action == "authentication") {
@@ -182,6 +184,10 @@ function(WidgetContentEditor,
       if(this.layoutEditor) this.layoutEditor.$el.hide();
       if(this.infoEditor) this.infoEditor.$el.hide();
       this.$el.find('.style-editor').hide();
+    },
+
+    clickedDelete: function() {
+      if(this.model) this.model.remove();
     },
 
     clicked: function(e) {
