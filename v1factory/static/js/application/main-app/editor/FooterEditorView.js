@@ -12,7 +12,7 @@ function(LinkEditorView) {
     events: {
       'click .done-btn' : 'closeModal',
       'click .add-link' : 'addLinkEditorClicked',
-      'keyup #edit-brandname' : 'updateBrandName'
+      'keyup #edit-customText' : 'updateCustomText'
     },
     initialize: function(options) {
       var self = this;
@@ -26,14 +26,13 @@ function(LinkEditorView) {
 
     render: function() {
       var self = this;
-      var brandName = this.model.get('brandName') || v1State.get('name');
+      var customText = this.model.get('customText');
 
       var editorDiv = document.createElement('div');
       editorDiv.id = 'footer-editor';
 
       editorDiv.innerHTML = _.template(Templates.FooterEditor, {
-        brandName: brandName,
-        items: this.model.get('links').toJSON()
+        customText: customText
       });
 
       this.$linksList = this.$el.find('#link-editors');
@@ -73,10 +72,10 @@ function(LinkEditorView) {
       this.rowWidget.style.position = "relative";
     },
 
-    updateBrandName: function(e) {
-      var newBrandName = e.target.value;
-      if(newBrandName) {
-        this.model.set('brandName', newBrandName);
+    updateCustomText: function(e) {
+      var newCustomText = e.target.value;
+      if(newCustomText) {
+        this.model.set('customText', newCustomText);
       }
     },
 

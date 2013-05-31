@@ -3786,10 +3786,12 @@ overflow: hidden;
 #footer {
   margin-bottom: 49px;
 }
+
 #footer .container {
   padding: 15px;
   background-color: #f5f5f5;
 }
+
 #footer li {
   float: left;
 }
@@ -3797,4 +3799,9 @@ overflow: hidden;
 #footer li a {
   color: #0088cc;
   text-shadow: none;
+}
+
+#footer p {
+  display: inline-block;
+  margin-top: 10px;
 }
