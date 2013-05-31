@@ -44,12 +44,12 @@ class HtmlGenBasicTestCase(unittest.TestCase):
                   'style': "position:absolute",
                   'alt': "This is after the others" }
         div = Tag('div', kwargs, content="Test")
-        print div.render()
         self.assertEqual(div.render(), '<div id="container" class="some classes here" style="position:absolute" alt="This is after the others">Test</div>')
 
     def test_html_escape(self):
         atag = Tag('a', { 'href': 'http:"><script' }, content="Google")
-        self.assertEqual(atag.render(), '<a href="http:&#34;&gt;&lt;script">Google</a>')
+        wrapper = Tag('div', {}, content=atag)
+        self.assertEqual(wrapper.render(), '<div><a href="http:&#34;&gt;&lt;script">Google</a></div>')
 
 if __name__ == "__main__":
     unittest.main()
