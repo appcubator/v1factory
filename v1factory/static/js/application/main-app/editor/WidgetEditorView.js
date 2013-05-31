@@ -55,6 +55,7 @@ function(WidgetContentEditor,
 
     render: function() {
       this.$el.fadeIn();
+      this.$el.append('<div class="top-arrow"></div>');
 
       if(this.model.get('data').has('container_info')) {
         var action = this.model.get('container_info').get('action');

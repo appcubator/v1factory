@@ -93,6 +93,7 @@ function(SelectView) {
         newObj.name = obj.name;
         return newObj;
       });
+      statics_list.push({val: "new-image", name: "Upload New Image"});
 
       var selecView = new SelectView(statics_list, this.model.get('data').get('content_attribs').get('src'), true);
       li.appendChild(selecView.el);
