@@ -78,12 +78,16 @@ class Deployment(models.Model):
 
   def write_to_tmpdir(self, d_user):
     from app_builder.analyzer import App as AnalyzedApp
-    from app_builder.django.coordinator import analyzed_app_to_app_components
-    from app_builder.django.writer import DjangoAppWriter
+    from app_builder.controller import create_codes
+    from app_builder.coder import Coder, write_to_fs
 
-    a = AnalyzedApp.create_from_dict(simplejson.loads(self.app_state_json))
-    dw = analyzed_app_to_app_components(a, d_user)
-    tmp_project_dir = DjangoAppWriter(dw, self.css).write_to_fs()
+
+    app = AnalyzedApp.create_from_dict(simplejson.loads(self.app_state_json))
+    codes = create_codes(app)
+    coder = Coder.create_from_codes(codes)
+
+    tmp_project_dir = write_to_fs(coder)
+    # TODO self.css()?
 
     return tmp_project_dir
 
@@ -96,10 +100,6 @@ class Deployment(models.Model):
     return self
 
   def deploy(self, d_user):
-    from app_builder.analyzer import App as AnalyzedApp
-    from app_builder.django.coordinator import analyzed_app_to_app_components
-    from app_builder.django.writer import DjangoAppWriter
-
     logger.info("Writing config files and making sure hosting folder exists.")
     self.initialize()
 
@@ -188,7 +188,7 @@ APACHE_CONFIG_TMPL = """
 	</Files>
 	</Directory>
 
-	Alias /static/ {app_dir}/static/
+	Alias /static/ {app_dir}/webapp/static/
 	<Directory {app_dir}/static/>
 	Order deny,allow
 	Allow from all
