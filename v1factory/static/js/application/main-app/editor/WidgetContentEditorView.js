@@ -143,15 +143,16 @@ function(SelectView) {
     },
 
     inputChanged: function(e) {
+      console.log("HEY");
       e.stopPropagation();
       var hash = e.target.id.replace('prop-', '');
       var info = hash.split('-');
 
       if(info.length == 2) {
-        this.model.get(info[0]).set(info[1], e.target.value);
+        this.model.get('data').get(info[0]).set(info[1], e.target.value);
       }
       else if(info.length == 1) {
-        this.model.set(info[0], e.target.value);
+        this.model.get('data').set(info[0], e.target.value);
       }
     },
 

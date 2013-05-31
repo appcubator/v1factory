@@ -226,7 +226,6 @@ function(WidgetEditorView) {
       if(!this.selectedEl) return;
       if(keyDispatcher.textEditing === true) return;
       this.selectedEl.moveDown();
-      e.preventDefault();
     },
 
     moveSelectedUp: function() {
@@ -251,7 +250,6 @@ function(WidgetEditorView) {
       if(!this.selectedEl) return;
       if(keyDispatcher.textEditing === true) return;
       this.selectedEl.remove();
-      e.preventDefault();
     },
 
     doKeyBindings: function() {
@@ -276,9 +274,9 @@ function(WidgetEditorView) {
     },
 
     doubleClicked: function(e) {
-      this.selectedEl.trigger('startEditing');
-      this.selectedEl.bind('stopEditing', this.stoppedEditing);
-      this.hideNode(this.selectDiv);
+      // this.selectedEl.trigger('startEditing');
+      // this.selectedEl.bind('stopEditing', this.stoppedEditing);
+      // this.hideNode(this.selectDiv);
     },
 
     stoppedEditing: function() {
