@@ -26,10 +26,11 @@ function(FooterEditorView) {
     render: function() {
       var self = this;
       this.setElement(document.getElementById('footer'));
-
+      /*
       if(this.model.get('brandName')) {
         this.$el.find('#brand-name').html(this.model.get('brandName'));
       }
+      */
 
       this.renderLinks();
       return this;

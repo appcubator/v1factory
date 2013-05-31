@@ -284,9 +284,9 @@ function (AppModel,
 
 
   Backbone.history.start({pushState: true});
-  //$(document).on('click', "a[href^='/app']", function(e) {
   $(document).on('click', 'a[rel!="external"]', function(e) {
     v1.navigate(e.currentTarget.getAttribute('href'), {trigger: true});
+    //e.preventDefault();
     return false;
   })
 
