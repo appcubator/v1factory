@@ -46,7 +46,16 @@ class UIElement(DictInited):
         self.subclass.layout = self.layout
 
 
-class Form(DictInited):
+class Hooked(object):
+
+    @property
+    def hooks(self):
+        try:
+            return self.__class__._hooks
+        except AttributeError:
+            return []
+
+class Form(DictInited, Hooked):
 
     class FormInfo(DictInited, Resolvable):
 
@@ -86,7 +95,7 @@ class Form(DictInited):
         return "THIS IS FORM"
 
 
-class Node(DictInited):  # a uielement with no container_info
+class Node(DictInited, Hooked):  # a uielement with no container_info
     _schema = {
         "content": {"_type": ""},  # TODO may have reference
         # "isSingle": { "_type" : True }, # don't need this because it's implied from tagname
@@ -111,7 +120,9 @@ class Node(DictInited):  # a uielement with no container_info
         return env.get_template('node.html').render(node=self)
 
 
-class Iterator(DictInited):
+class Iterator(DictInited, Hooked):
+
+    _hooks = ['find or add the needed data to the view']
 
     class IteratorInfo(DictInited, Resolvable):
 

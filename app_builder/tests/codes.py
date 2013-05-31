@@ -1,5 +1,5 @@
 import unittest
-from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase
+from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
 from app_builder import naming
 from app_builder.uielements import Node, Layout
 
@@ -47,6 +47,12 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
 class DjangoPageViewTestCase(unittest.TestCase):
 
+    def tearDown(self):
+        try:
+            del view
+        except:
+            pass
+
     def test_creation(self):
         view = DjangoPageView("test_view")
         self.assertEqual(view.code_path, 'webapp/pages.py')
@@ -64,11 +70,33 @@ class DjangoPageViewTestCase(unittest.TestCase):
         self.assertNotIn('request', [a for a,d in view.args]) # request is not allowed to be an arg since it's the first fn arg.
         self.assertNotEqual(view.args[0][0], view.args[1][0])
 
+    def test_add_query(self):
+        dq = DjangoQuery('User')
+        dq2 = DjangoQuery('User')
+        dq3 = DjangoQuery('Book')
+
+        d1, d2, d3 = ({'1':1}, {'2':2}, {'3':3})
+        view = DjangoPageView("test_view", args=[])
+
+        view.add_query(dq)
+        view.add_query(dq2)
+        view.add_query(dq3)
+
+        for q in view.queries:
+            self.assertIn(q[0], view.pc_namespace.used_ids)
+            self.assertIsInstance(q[1], str)
+            self.assertEqual(len(q), 2)
+
+
     def test_render(self):
         d1, d2, d3 = ({'template_id':'user', 'model_id':'User'},
                       {'template_id':'user2', 'model_id': 'User'},
                       {'template_id':'request2', 'model_id': 'Request'})
-        view = DjangoPageView("test_view", args=[('user_id', d1), ('user2_id', d2), ('request_id', d3)], template_code_path="wsup/test_path.html")
+        dq = DjangoQuery('User')
+        dq2 = DjangoQuery('User')
+        dq3 = DjangoQuery('Book')
+
+        view = DjangoPageView("test_view", args=[('user_id', d1), ('user2_id', d2), ('request_id', d3)], template_code_path="wsup/test_path.html", queries=(dq, dq2, dq3))
         print view.render()
 
 

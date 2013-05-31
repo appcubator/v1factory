@@ -36,11 +36,12 @@ def create_codes(app):
         create('view for page', p)
         create('url to serve page', p)
 
-    # adding data to the page-serve functions
+    # UIELEMENT HOOKS
     for p in app.pages:
         for uie in p.uielements:
-            # call add_to_view function of uie
-            pass
+            uie = uie.subclass # downcast
+            for hook_name in uie.hooks:
+                create(hook_name, uie)
 
     # create html nodes and structure for pages
     for p in app.pages:
