@@ -5,7 +5,7 @@ define([
 function(Backbone, LinkCollection) {
   var FooterModel = Backbone.Model.extend({
     defaults : {
-      brandName : null,
+      customText : "Add custom footer text here",
       isHidden : false,
       isFixed : true
     },

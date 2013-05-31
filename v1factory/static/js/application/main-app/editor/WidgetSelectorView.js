@@ -249,6 +249,7 @@ function(WidgetEditorView) {
     deleteSelected: function(e) {
       if(!this.selectedEl) return;
       if(keyDispatcher.textEditing === true) return;
+      e.preventDefault();
       this.selectedEl.remove();
     },
 

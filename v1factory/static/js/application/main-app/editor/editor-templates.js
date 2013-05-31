@@ -35,8 +35,8 @@ Templates.NavbarEditor = [
 Templates.FooterEditor = [
   '<h3>Footer Editor</h3>',
   '<form>',
-    '<legend for="main-title">Main Title</legend>',
-    '<input type="text" id="edit-brandname" value="<%= brandName %>">',
+    '<legend for="customText">Custom Footer Text</legend>',
+    '<input type="text" id="edit-customText" value="<%= customText %>">',
     '<legend for="links">Links</legend>',
     '<ul id="link-editors"></ul>',
   '</form>',

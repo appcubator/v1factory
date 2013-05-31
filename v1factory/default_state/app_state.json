@@ -40,7 +40,7 @@
             },
             "footer": {
                 "isFixed": true,
-                "brandName": null,
+                "customText": "Add custom footer text here",
                 "isHidden": false,
                 "links": [
                     {
@@ -75,7 +75,7 @@
             },
             "footer": {
                 "isFixed": true,
-                "brandName": null,
+                "customText": "Add custom footer text here",
                 "isHidden": false,
                 "links": [
                     {

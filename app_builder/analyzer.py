@@ -69,7 +69,7 @@ class Footer(DictInited):
         }
 
     _schema = {
-        "brandName": {"_one_of": [{"_type": ""}, {"_type": None}]},
+        "customText": {"_type": ""},
         "isHidden": {"_type": True},
         "links": {"_type": [], "_each": {"_type": FooterItem}}
     }

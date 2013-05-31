@@ -9,15 +9,12 @@ function(SelectView) {
     className : 'content-editor',
     tagName : 'ul',
     events : {
-      'keyup input'                 : 'inputChanged',
-      'keyup textarea'              : 'inputChanged',
-      'keydown input'               : 'inputChanged',
-      'keydown textarea'            : 'inputChanged',
-      'click #toggle-bold'          : 'toggleBold',
-      'change .font-picker'         : 'changeFont',
-      'change .statics'             : 'changeSrc',
-      'change .select-href'         : 'changeHref',
-      'submit #external-link-form'  : 'addExternalLink'
+      'keyup .content-editor'      : 'changedContent',
+      'click #toggle-bold'         : 'toggleBold',
+      'change .font-picker'        : 'changeFont',
+      'change .statics'            : 'changeSrc',
+      'change .select-href'        : 'changeHref',
+      'submit #external-link-form' : 'addExternalLink'
     },
 
     initialize: function(widgetModel){
@@ -28,6 +25,7 @@ function(SelectView) {
                       'changeFont',
                       'changeSrc',
                       'changeHref',
+                      'changedContent',
                       'renderFontPicker',
                       'renderTextEditing',
                       'addExternalLink');
@@ -104,7 +102,7 @@ function(SelectView) {
     renderTextEditing: function() {
       var li       = document.createElement('li');
       li.appendChild(new comp().div('Text').classN('key').el);
-      li.appendChild(new comp().textarea(this.model.get('data').get('content')).id('prop-content').el);
+      li.appendChild(new comp().textarea(this.model.get('data').get('content')).id('prop-content').classN('content-editor').el);
       return li;
     },
 
@@ -143,7 +141,6 @@ function(SelectView) {
     },
 
     inputChanged: function(e) {
-      console.log("HEY");
       e.stopPropagation();
       var hash = e.target.id.replace('prop-', '');
       var info = hash.split('-');
@@ -154,6 +151,10 @@ function(SelectView) {
       else if(info.length == 1) {
         this.model.get('data').set(info[0], e.target.value);
       }
+    },
+
+    changedContent: function(e) {
+      this.model.get('data').set("content", e.target.value);
     },
 
     changeFont: function(e) {
