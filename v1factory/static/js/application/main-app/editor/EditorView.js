@@ -10,6 +10,7 @@ define([
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
   'editor/NavbarView',
+  'editor/FooterView',
   'editor/GuideView',
   'editor/MarqueeView',
   'tutorial/TutorialView',
@@ -27,6 +28,7 @@ function( PageModel,
           EditorGalleryView,
           PageStylePicker,
           NavbarView,
+          FooterView,
           GuideView,
           MarqueeView,
           TutorialView) {
@@ -80,6 +82,7 @@ function( PageModel,
       g_guides = this.guides;
 
       this.navbar  = new NavbarView(this.model.get('navbar'));
+      this.footer  = new FooterView(this.model.get('footer'));
       this.urlModel      = this.model.get('url');
 
       var page = appState.pages[pageId];
@@ -118,6 +121,7 @@ function( PageModel,
       this.galleryEditor.render();
       this.widgetsManager.render();
       this.navbar.render();
+      this.footer.render();
       this.guides.setElement($('#elements-container')).render();
 
       $('#elements-container').append(this.marqueeView.el);

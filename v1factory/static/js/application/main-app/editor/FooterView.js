@@ -1,31 +1,31 @@
 define([
-  'editor/NavbarEditorView',
+  'editor/FooterEditorView',
   'backbone'
 ],
-function(NavbarEditorView) {
+function(FooterEditorView) {
 
-  var NavbarView = Backbone.View.extend({
+  var FooterView = Backbone.View.extend({
     entity: null,
     type: null,
     events: {
-      'mousedown' : 'showNavbarEditor'
+      'mousedown' : 'showFooterEditor'
     },
 
-    initialize: function(navbarModel) {
+    initialize: function(footerModel) {
       _.bindAll(this);
 
-      this.model = navbarModel;
+      this.model = footerModel;
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model.get('links'), 'all', this.renderLinks);
     },
 
-    showNavbarEditor: function() {
-      new NavbarEditorView({ model: this.model });
+    showFooterEditor: function() {
+      new FooterEditorView({ model: this.model });
     },
 
     render: function() {
       var self = this;
-      this.setElement(document.getElementById('navbar'));
+      this.setElement(document.getElementById('footer'));
 
       if(this.model.get('brandName')) {
         this.$el.find('#brand-name').html(this.model.get('brandName'));
@@ -44,5 +44,5 @@ function(NavbarEditorView) {
     }
   });
 
-  return NavbarView;
+  return FooterView;
 });

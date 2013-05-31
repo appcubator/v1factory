@@ -101,6 +101,10 @@ function (AppModel,
       var self = this;
       $('#save').on('click', this.save);
       $('#tutorial').on('click', this.showTutorial);
+      $(document).on('scroll', function() {
+        $('#scrollUp').fadeIn('slow');
+      });
+      $('#scrollUp').on('click', this.scrollUp);
       this.menuBindings();
     },
 
@@ -260,6 +264,10 @@ function (AppModel,
     showTutorial: function(e, inp) {
       if(!inp) inp = v1App.tutorialDirectory;
       tutorial = new TutorialView(inp);
+    },
+
+    scrollUp: function() {
+      $('html,body').animate({scrollTop:0},100, "linear");
     },
 
     betaCheck: function(data) {

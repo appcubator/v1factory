@@ -5,8 +5,8 @@ define([
 ],
 function(LinkEditorView) {
 
-  var NavbarEditorView = Backbone.ModalView.extend({
-    className : 'navbar-editor-modal',
+  var FooterEditorView = Backbone.ModalView.extend({
+    className : 'footer-editor-modal',
     width: 600,
     padding: 0,
     events: {
@@ -29,9 +29,9 @@ function(LinkEditorView) {
       var brandName = this.model.get('brandName') || v1State.get('name');
 
       var editorDiv = document.createElement('div');
-      editorDiv.id = 'navbar-editor';
+      editorDiv.id = 'footer-editor';
 
-      editorDiv.innerHTML = _.template(Templates.NavbarEditor, {
+      editorDiv.innerHTML = _.template(Templates.FooterEditor, {
         brandName: brandName,
         items: this.model.get('links').toJSON()
       });
@@ -92,5 +92,5 @@ function(LinkEditorView) {
     }
   });
 
-  return NavbarEditorView;
+  return FooterEditorView;
 });

@@ -30,7 +30,22 @@
                 "items": [
                     {
                         "url": "internal://Homepage",
-                        "title": "Homepage",
+                        "title": "Homepage"
+                    },
+                    {
+                        "url": "internal://Registration Page",
+                        "title": "Registration Page"
+                    }
+                ]
+            },
+            "footer": {
+                "isFixed": true,
+                "brandName": null,
+                "isHidden": false,
+                "items": [
+                    {
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
                     },
                     {
                         "url": "internal://Registration Page",
@@ -49,10 +64,27 @@
                 "isHidden": false,
                 "items": [
                     {
-                        "name": "internal://Homepage"
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
                     },
                     {
-                        "name": "internal://Registration Page"
+                        "url": "internal://Registration Page",
+                        "title": "Registration Page"
+                    }
+                ]
+            },
+            "footer": {
+                "isFixed": true,
+                "brandName": null,
+                "isHidden": false,
+                "items": [
+                    {
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
+                    },
+                    {
+                        "url": "internal://Registration Page",
+                        "title": "Registration Page"
                     }
                 ]
             },
@@ -66,5 +98,6 @@
             "access_level": "all"
         }
     ],
+    "mobilePages" : [],
     "name": "thisisirrelevant"
 }
