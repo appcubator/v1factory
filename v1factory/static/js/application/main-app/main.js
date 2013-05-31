@@ -87,7 +87,7 @@ function (AppModel,
 
     routes: {
       "app/:appid/"          : "index",
-      "app/:appid/info/"     : "showInfoPage",
+      "app/:appid/info"     : "showInfoPage",
       "app/:appid/entities/" : "showEntitiesPage",
       "app/:appid/gallery/"  : "showThemesPage",
       "app/:appid/pages/"    : "showPagesPage",
@@ -302,7 +302,41 @@ function (AppModel,
   keyDispatcher  = new KeyDispatcher();
   mouseDispatcher  = new MouseDispatcher();
 
+  var RouteLogger = (function() {
+      _.extend(this, Backbone.Events);
+      this.router = v1;
 
+      this.router.on('route', function(router, route, params) {
+        var appID = route[0];
+        if(route.length > 1) {
+          var pageId = route[1];
+        }
+
+        var pageNames = {
+          'index': 'App Page',
+          'showInfoPage': 'Domain&SEO',
+          'showEntitiesPage': 'Tables',
+          'showThemesPage' : 'Themes',
+          'showPagesPage' : 'Pages',
+          'showEditor' : 'Editor',
+        };
+
+        var pageName = pageNames[route];
+
+        $.ajax({
+          type: 'POST',
+          url: '/log/route/',
+          data: {
+            route: pageName || 'unknown'
+          },
+          dataType: 'JSON'
+        });
+      });
+
+  })();
+
+
+  $('.clean-div').append('<div class="row span58"><a href="/app/2/info">Info</a></div>');
   Backbone.history.start({pushState: true});
 
 });
