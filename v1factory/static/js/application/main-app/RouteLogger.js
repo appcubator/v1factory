@@ -20,15 +20,16 @@ function() {
   RouteLogger.prototype.logRoute = function(router, route, params) {
     var appID = route[0];
     var pageName = this.pageNames[router];
-
-    $.ajax({
-      type: 'POST',
-      url: '/app/'+appID+'/log/routes/',
-      data: {
-        "page_name": pageName || 'unknown'
-      },
-      dataType: 'JSON'
-    });
+    if(pageName) {
+      $.ajax({
+        type: 'POST',
+        url: '/app/'+appID+'/log/routes/',
+        data: {
+          "page_name": pageName || 'unknown'
+        },
+        dataType: 'JSON'
+      });
+    }
   };
 
   return RouteLogger;

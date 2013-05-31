@@ -281,13 +281,14 @@ function (AppModel,
   mouseDispatcher  = new MouseDispatcher();
   routeLogger = new RouteLogger({router: v1});
 
-
-
   Backbone.history.start({pushState: true});
   $(document).on('click', 'a[rel!="external"]', function(e) {
-    v1.navigate(e.currentTarget.getAttribute('href'), {trigger: true});
-    //e.preventDefault();
-    return false;
-  })
+    var href = e.currentTarget.getAttribute('href');
+    // if internal link, navigate with router
+    if(href.indexOf('/app/'+appId+'/') == 0) {
+      v1.navigate(href, {trigger: true});
+      return false;
+    }
+  });
 
 });
