@@ -1,21 +1,19 @@
 define([
-	'backbone',
-	'collections/LinkCollection'
+  'collections/LinkCollection'
 ],
-function(Backbone, LinkCollection) {
+function(LinkCollection) {
+
   var NavbarModel = Backbone.Model.extend({
     defaults : {
       brandName : null,
       isHidden : false,
       isFixed : true
     },
-    initialize: function(options) {
+    initialize: function(bone) {
 
       //init items collection with links passed from appState
-      if(options.links) {
-        this.set('links', new LinkCollection(options.links));
-        this.links = this.get('links');
-      }
+      this.set('links', new LinkCollection(bone.links));
+      this.links = this.get('links');
 
       _.bindAll(this);
     },
@@ -37,8 +35,6 @@ function(Backbone, LinkCollection) {
 
     toJSON : function() {
       var json = _.clone(this.attributes);
-      json = _.omit(json, 'selected', 'deletable');
-
       json.links = this.get('links').toJSON();
 
       return json;
