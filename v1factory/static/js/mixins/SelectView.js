@@ -7,16 +7,19 @@ function(Backbone) {
   SelectView = Backbone.View.extend({
     tagName: 'div',
     className : 'select-view',
+    expanded: false,
 
     events: {
-      'click'    : 'expand',
-      'click li' : 'select'
+      'click'                : 'expand',
+      'click li'             : 'select',
+      'click .updown-handle' : 'toggle'
     },
 
     initialize: function(list, currentVal, isNameVal) {
       _.bindAll(this, 'render',
                       'expand',
                       'shrink',
+                      'toggle',
                       'select');
 
       this.list = list;
@@ -58,11 +61,13 @@ function(Backbone) {
 
     expand: function(e) {
       this.el.style.height = (this.list.length + 1) * 40 + 'px';
+      this.expanded = true;
       if(e) e.stopPropagation();
     },
 
     shrink : function(e) {
       this.el.style.height = 40 + 'px';
+      this.expanded = false;
       e.stopPropagation();
     },
 
@@ -71,6 +76,11 @@ function(Backbone) {
       if(e.target.className == "selected") return;
       var ind = String(e.target.id).replace('li-' + this.cid + '-', '');
       this.trigger('change', this.list[ind]);
+    },
+
+    toggle: function(e) {
+      if(this.expanded) this.shrink(e);
+      else this.expand(e);
     }
 
   });

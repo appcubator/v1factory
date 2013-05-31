@@ -26,7 +26,6 @@ function(SimpleModalView) {
       var page_context = {};
       this.el.innerHTML = _.template(iui.getHTML('app-main-page'), page_context);
       this.checkTutorialProgress();
-      v1.menuBindings();
     },
 
     checkTutorialProgress: function() {

@@ -96,6 +96,7 @@ function(SelectView) {
       statics_list.push({val: "new-image", name: "Upload New Image"});
 
       var selecView = new SelectView(statics_list, this.model.get('data').get('content_attribs').get('src'), true);
+      selecView.bind('change', this.changeSrc);
       li.appendChild(selecView.el);
       return li;
     },
@@ -142,15 +143,16 @@ function(SelectView) {
     },
 
     inputChanged: function(e) {
+      console.log("HEY");
       e.stopPropagation();
       var hash = e.target.id.replace('prop-', '');
       var info = hash.split('-');
 
       if(info.length == 2) {
-        this.model.get(info[0]).set(info[1], e.target.value);
+        this.model.get('data').get(info[0]).set(info[1], e.target.value);
       }
       else if(info.length == 1) {
-        this.model.set(info[0], e.target.value);
+        this.model.get('data').set(info[0], e.target.value);
       }
     },
 
@@ -193,20 +195,22 @@ function(SelectView) {
       self.model.get('data').set('content', _.last(files).url);
     },
 
-    changeSrc: function(e) {
+    changeSrc: function(inp) {
       var self = this;
-      if(e.target.value == 'upload-image') {
+      console.log(inp);
+
+      if(inp.val == 'new-image') {
         iui.openFilePick(self.staticsAdded, self, appId);
       }
       else {
-        this.model.get('data').get('content_attribs').set('src', e.target.value);
-        this.model.get('data').set('content', e.target.value);
+        this.model.get('data').get('content_attribs').set('src', inp.val);
+        this.model.get('data').set('content', inp.val);
       }
     },
 
-    changeHref: function(e) {
+    changeHref: function(inp) {
       var self = this;
-      var target = e.target.value;
+      console.log(inp);
 
       if(target == "external-link") {
         self.hrefLi.innerHTML = '<form id="external-link-form"><input id="external-link-input" type="text"></form>';

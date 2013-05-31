@@ -188,8 +188,8 @@ function( PageModel,
     },
 
     deploy: function(options) {
-      var url = '/app/'+appId+'/deploy/'
-      if(options.local) url = url + 'local/'
+      var url = '/app/'+appId+'/deploy/';
+      if(options.local) url = url + 'local/';
 
       var self = this;
       iui.get('deploy').innerHTML = '<span>Deploying...</span>';
@@ -263,12 +263,10 @@ function( PageModel,
     },
 
     clickedHome: function(e) {
-      e.preventDefault();
       v1.navigate("app/"+ appId +"/pages/", {trigger: true});
     },
 
     clickedGoToPage: function(e) {
-      e.preventDefault();
       var goToPageId = (e.target.id||e.target.parentNode.id).replace('page-','');
       v1.navigate("app/"+ appId +"/editor/" + goToPageId +"/", {trigger: true});
     },

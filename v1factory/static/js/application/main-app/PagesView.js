@@ -74,7 +74,6 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
     },
 
     appendPage: function(model, isMobile) {
-      console.log(isMobile);
       if(!isMobile) {
         var ind = _.indexOf(this.collection.models, model);
         var pageView = new PageView(model, ind, false);

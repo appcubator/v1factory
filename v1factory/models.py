@@ -464,6 +464,12 @@ class TutorialLog(models.Model):
         return percentage
 
 
+class RouteLog(models.Model):
+    user_id = models.IntegerField()
+    opened_on = models.DateTimeField(auto_now_add=True)
+    app_id = models.IntegerField()
+    page_name = models.TextField()
+
 def temp_fix_hr():
     """hr may have a span12 class in the uiestate. this fixes that
     May 10, 2013"""
