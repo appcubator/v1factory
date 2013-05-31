@@ -22,9 +22,14 @@ class AppComponentFactory(object):
 
     def create_view_for_page(self, page):
         identifier = self.view_namer.new_identifier(page.name)
-        page_context = page.get_page_context()  # name, entity pairs
-        v = DjangoPageView(identifier, page_context=page_context)
-        # the core of djangoview will be the actions.
+
+        args = []
+        for e in page.get_entities_from_url():
+            model_id = e._django_model.identifier
+            template_id = model_id
+            args.append((e.name.lower()+'_id', {"model_id": model_id, "template_id": template_id}))
+
+        v = DjangoPageView(identifier, args=args)
         page._django_view = v
         return v
 
@@ -51,7 +56,7 @@ class AppComponentFactory(object):
         t.create_tree([u.subclass for u in page.uielements]) # XXX HACK PLZ FIXME TODO
         t.page = page
         page._django_template = t
-        page._django_view._django_template = t
+        page._django_view.template_code_path = t.filename
         return t
 
     def create_urls(self, app):
@@ -61,8 +66,8 @@ class AppComponentFactory(object):
 
     def add_page_to_urls(self, page):
         url_obj = page.app._django_urls
-        # TODO make the url more legit
-        route = ("r'^" + ''.join([x + '/' for x in page.url.urlparts]) + "$'", page._django_view)
+
+        route = (page.url_regex, page._django_view)
         url_obj.routes.append(route)
 
         return None
@@ -70,6 +75,7 @@ class AppComponentFactory(object):
     def create_tests_for_static_pages(self, app):
         ident_url_pairs = []
         for p in app.pages:
-            ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
+            if p.is_static():
+                ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
         d = DjangoStaticPagesTestCase(ident_url_pairs)
         return d

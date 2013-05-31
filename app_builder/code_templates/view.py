@@ -7,8 +7,13 @@ from django.shortcuts import redirect, render, render_to_response, get_object_or
 
 
 @require_GET
-def {{ view.identifier }}(request{% for name, entity in view.page_context %}, {{ name }}{% endfor %}):
-    return render(request, "{{ view._django_template.filename }}"){#
+def {{ view.identifier }}(request{% for arg, data in view.args %}, {{ arg }}{% endfor %}):
+    page_context = {}
+    {% for arg, arg_data in view.args %}
+    page_context['{{ arg_data.template_id }}'] = get_object_or_404({{ arg_data.model_id }}, pk={{ arg }})
+    {% endfor %}
+    # here i have to add queries
+    return render(request, "{{ view.template_code_path }}", page_context){#
 
 
 
@@ -18,10 +23,6 @@ def {{ view.identifier }}(request{% for name, entity in view.page_context %}, {{
 
 @require_GET
 def {{ identifier }}(request{% for u in page_context %}, {{ u.arg_name }}{% endfor %}):
-  page_context = {}
-  {% for ud in url_data %}
-  page_context['{{ ud. }}'] = get_object_or_404({{ m.identifier() }}, pk={{ m.foreign_key_name() }})
-  {% endfor %}
 {% for q in view.queries.each() %}
   page_context['{{ q.identifier() }}'] = {{ q.render() }}
 {% endfor %}

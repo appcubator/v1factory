@@ -5,7 +5,7 @@ define([
   'mixins/SimpleModalView',
   'mixins/ErrorModalView',
   'mixins/DebugOverlay',
-  'editor/WidgetsManagerView',
+  'm-editor/MobileWidgetsManagerView',
   'editor/WidgetEditorView',
   'editor/EditorGalleryView',
   'editor/PageStylePicker',
@@ -23,7 +23,7 @@ function( PageModel,
           SimpleModalView,
           ErrorModalView,
           DebugOverlay,
-          WidgetsManagerView,
+          MobileWidgetsManagerView,
           WidgetEditorView,
           EditorGalleryView,
           PageStylePicker,
@@ -78,7 +78,7 @@ function( PageModel,
       this.widgetsCollection    = this.model.get('uielements');
 
       this.galleryEditor    = new EditorGalleryView(this.widgetsCollection);
-      this.widgetsManager   = new WidgetsManagerView(this.widgetsCollection);
+      this.widgetsManager   = new MobileWidgetsManagerView(this.widgetsCollection);
 
       this.navbar  = new NavbarView(this.model.get('navbar'));
       this.urlModel      = this.model.get('url');

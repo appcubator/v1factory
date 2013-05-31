@@ -53,7 +53,8 @@ test_json = r"""{
                 "isHidden": false,
                 "items": [
                     {
-                        "name": "internal://Homepage"
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
                     }
                 ]
             },
@@ -145,6 +146,52 @@ test_json = r"""{
             "access_level": "all",
             "page_name": "Homepage",
             "ind": 0
+        },
+        {
+            "url": {
+                "urlparts": ["game", {"entity_name":"Game"}]
+            },
+            "navbar": {
+                "isFixed": true,
+                "brandName": "AlperGamez",
+                "isHidden": false,
+                "items": [
+                    {
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
+                    }
+                ]
+            },
+            "uielements": [
+                {
+                    "layout": {
+                        "top": 0,
+                        "height": 9,
+                        "width": 12,
+                        "alignment": "center",
+                        "left": 0,
+                        "t_padding": 15,
+                        "b_padding": 15,
+                        "l_padding": 0,
+                        "r_padding": 0
+                    },
+                    "type":"node",
+                    "data": {
+                        "style": "font-size: 32px;\nfont-weight: bold;",
+                        "isSingle": false,
+                        "content_attribs": {},
+                        "hoverStyle": "",
+                        "class_name": "header-1",
+                        "container_info": null,
+                        "content": "Welcome to Alper Games<br>",
+                        "tagName": "h1",
+                        "type": "headerTexts",
+                        "activeStyle": "",
+                        "context": null
+                    }
+                }],
+            "name": "game page",
+            "access_level": "all"
         }],
     "emails": [
         {
