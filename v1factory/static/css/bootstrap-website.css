@@ -868,7 +868,7 @@ textarea {
   line-height: 20px;
 }
 
-button, .btn { 
+button, .btn {
   font-weight: bold;
 }
 
@@ -2948,7 +2948,7 @@ input[type="submit"].btn.btn-mini {
 
 .navbar-fixed-bottom {
   bottom: 0;
-} 
+}
 
 .navbar-fixed-bottom .navbar-inner {
   -webkit-box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
@@ -4579,7 +4579,7 @@ input[type="submit"] {
   line-height: 40px;
 }
 
-.mtxt { 
+.mtxt {
   font-family: 'verb_regularbold';
   font-size: 18px;
 }
@@ -4770,7 +4770,7 @@ hr.vert {
   color:#fff;
   font-size: 14px;
   padding: 14px 20px;
-  font-family: 'verb_regularregular'; 
+  font-family: 'verb_regularregular';
   background-image: none !important;
   text-shadow: none;
   line-height: 18px;
@@ -4851,7 +4851,7 @@ hr.vert {
     cursor: pointer;
   }
 
-  .qm-btn, .qm-btn-nofix { 
+  .qm-btn, .qm-btn-nofix {
     position: fixed;
     top: 164px;
     left: 50%;
@@ -4889,7 +4889,7 @@ hr.vert {
   }
 
 
-  .save-btn, .save-btn-nofix { 
+  .save-btn, .save-btn-nofix {
     position: fixed;
     top: 105px;
     left: 50%;
@@ -4926,7 +4926,7 @@ hr.vert {
     margin-left: 0;
   }
 
-  .delete-btn, .delete-btn-nofix { 
+  .delete-btn, .delete-btn-nofix {
     position: fixed;
     top: 150px;
     left: 50%;
@@ -4960,6 +4960,45 @@ hr.vert {
     margin-right: 0;
     margin-left: 0;
   }
+
+  .scrollUp-btn, .scrollUp-btn-nofix {
+    position: fixed;
+    top: 223px;
+    left: 50%;
+    margin-left: 420px;
+    height: 52px;
+    width: 52px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-image: none;
+    background-color: #000;
+    opacity: 0.6;
+    text-shadow: none;
+    background-image: url(../img/scroll-up-arrow.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: none;
+    transition: opacity 0.6s;
+    -moz-transition: opacity 0.6s; /* Firefox 4 */
+    -webkit-transition: opacity 0.6s; /* Safari and Chrome */
+    -o-transition: opacity 0.6s; /* Opera */
+    background-size: 44% auto;
+    margin-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .scrollUp-btn:hover, .scrollUp-btn-nofix:hover {
+    background-color: #000;
+    opacity: 0.8;
+  }
+
+  .scrollUp-btn-nofix {
+    position: static;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
 
   .add-txt {
     color: #aaa;
@@ -5019,7 +5058,7 @@ hr.vert {
   }
 
   .footer .links {
-    background-color: #0f2d40;  
+    background-color: #0f2d40;
   }
 
   .footer .links {
@@ -5160,7 +5199,7 @@ hr.vert {
     padding: 0;
     padding-left: 6px;
   }
-  
+
   .v1nav .nav li.dropd .dropdown-menu li {
     padding: 0;
     height: 48px;
@@ -5359,7 +5398,7 @@ hr.vert {
   padding: 40px;
 }
 
-.login-modal input[type="text"], 
+.login-modal input[type="text"],
 .login-modal input[type="password"] {
   width: 200px;
   margin-top: 8px;
@@ -5394,7 +5433,7 @@ hr.vert {
 .sign-up-container a {
   font-weight: bold;
 }
-.sign-up-container h4 { 
+.sign-up-container h4 {
   margin:0;
 }
 
@@ -5575,7 +5614,7 @@ i.icon-url {
 .v1nav .navigation-menu .entities-icon,
 .v1nav .navigation-menu .gallery-icon,
 .v1nav .navigation-menu .pages-icon {
-  background-image: url(../img/navbar_sprite.png); 
+  background-image: url(../img/navbar_sprite.png);
   width: 30px;
   height: 30px;
   background-repeat: no-repeat;
