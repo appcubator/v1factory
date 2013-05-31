@@ -36,9 +36,11 @@ class DjangoPageView(object):
             data['template_id'] = self.pc_namespace.new_identifier(name_attempt)
 
         # queries
+        self.queries = []
         if queries is None:
             queries = []
-        self.queries = queries
+        for q_obj in queries:
+            self.add_query(q_obj)
 
         self.template_code_path = template_code_path
 
