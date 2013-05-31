@@ -75,7 +75,7 @@ define([
       this.model.get('layout').bind("change:alignment", this.changedAlignment, this);
       this.model.get('layout').bind("change", this.changedPadding, this);
 
-      this.model.bind("change:content", this.changedText, this);
+      this.model.get('data').bind("change:content", this.changedText, this);
       this.model.get('data').get('content_attribs').bind("change:src", this.changedSource, this);
       this.model.get('data').get('content_attribs').bind("change:value", this.changedValue, this);
       this.model.get('data').get('content_attribs').bind("change:style", this.changedStyle, this);
@@ -155,8 +155,6 @@ define([
     },
 
     changedPadding: function() {
-      console.trace();
-      console.log(this.model.get('layout').get('r_padding'));
       this.el.style.paddingTop    = this.model.get('layout').get('t_padding') + 'px';
       this.el.style.paddingBottom = this.model.get('layout').get('b_padding') + 'px';
       this.el.style.paddingLeft   = this.model.get('layout').get('l_padding') + 'px';

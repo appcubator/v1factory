@@ -346,7 +346,7 @@ function(ElementCollection,
 
         widget.data.nodeType = type;
         widget.data = _.extend(widget.data, uieState[type][0]);
-        widget.type = type;
+        widget.type = "node";
 
         if(this.entity) { widget.context = this.entity.get('name'); }
 

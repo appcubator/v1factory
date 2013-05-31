@@ -170,8 +170,6 @@ function( WidgetSelectorView,
         this.selectedEl.trigger('deselected');
       }
       this.widgetEditorView.clear();
-      console.log("SelectedEl null");
-      console.trace();
       this.selectedEl = null;
       this.hideNode(this.selectDiv);
     },
