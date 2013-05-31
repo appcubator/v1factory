@@ -199,20 +199,20 @@ define([
     },
 
     changedText: function(a) {
-      var content = this.model.get('content').replace(/\n\r?/g, '<br />');
+      var content = this.model.get('data').get('content').replace(/\n\r?/g, '<br />');
       this.el.firstChild.innerHTML = content;
     },
 
     changedValue: function(a) {
-      this.el.firstChild.value = this.model.get('content_attribs').get('value');
+      this.el.firstChild.value = this.model.get('data').get('content_attribs').get('value');
     },
 
     changedType: function(a) {
-      this.el.firstChild.className = this.model.get('class_name');
+      this.el.firstChild.className = this.model.get('data').get('class_name');
     },
 
     changedSource: function(a) {
-      this.el.firstChild.src = this.model.get('content_attribs').get('src');
+      this.el.firstChild.src = this.model.get('data').get('content_attribs').get('src');
     },
 
     changedStyle: function() {
