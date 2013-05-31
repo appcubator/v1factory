@@ -188,7 +188,7 @@ APACHE_CONFIG_TMPL = """
 	</Files>
 	</Directory>
 
-	Alias /static/ {app_dir}/static/
+	Alias /static/ {app_dir}/webapp/static/
 	<Directory {app_dir}/static/>
 	Order deny,allow
 	Allow from all
