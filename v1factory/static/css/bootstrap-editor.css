@@ -513,7 +513,7 @@ textarea {
   line-height: 20px;
 }
 
-button, .btn { 
+button, .btn {
   font-weight: bold;
 }
 
@@ -3185,7 +3185,7 @@ a.badge:hover {
 }
 
 
-/* Info Section */ 
+/* Info Section */
 
 .item-info li input.context-text {
   margin-top: 2px;
@@ -3526,7 +3526,7 @@ overflow: hidden;
 }
 
 
-.modal.class-picker .node { 
+.modal.class-picker .node {
   display: inline-block;
   min-height: 74px;
   max-height: 200px;
@@ -3660,7 +3660,7 @@ overflow: hidden;
   padding: 10px;
 }
 
-.image-slider-editor img { 
+.image-slider-editor img {
   height: 140px;
   display: inline-block;
 }
@@ -3725,4 +3725,82 @@ overflow: hidden;
 .marquee-view {
   position: absolute;
   border: 2px solid #bbb;
+}
+
+
+/* Navbar, Footer */
+#navbar .edit-navbar, #footer .edit-navbar {
+  margin-top: 6px;
+}
+#navbar-editor, #footer-editor {
+  padding: 20px;
+  width: 600px;
+  height: 600px;
+}
+
+#navbar-editor legend[for=links], #footer-editor legend[for=links] {
+  margin-bottom: 0px;
+}
+
+#link-editors {
+  overflow: scroll;
+  height: 250px;
+}
+
+#link-editors li.well-small {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+#link-editors li .remove {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-image: url(../img/delete-small.png);
+  background-repeat: no-repeat;
+  background-position: 3px 50%;
+  float: right;
+  color: transparent;
+  padding: 1px 6px;
+  padding-left: 20px;
+  font-size: 10px;
+  text-align: center;
+  border-radius: 4px;
+  text-decoration: none;
+  -webkit-transition: width 25ms ease-out;
+  -moz-transition: width 25ms ease-out;
+  -o-transition: width 25ms ease-out;
+  -ms-transition: width 25ms ease-out;
+  transition: width 25ms ease-out;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+
+#link-editors li .remove:hover {
+  width: 80px;
+  color: #fff;
+  background-color: #ec6a5f;
+}
+
+/* Footer */
+#footer {
+  position: absolute;
+  //margin-top: 55px;
+  margin-bottom: 0px;
+  width: 100%;
+  top: 100%;
+  bottom: 5px;
+
+}
+#footer .container {
+  padding: 15px;
+  background-color: #f5f5f5;
+}
+#footer li {
+  float: left;
+}
+
+#footer li a {
+  color: #0088cc;
 }
