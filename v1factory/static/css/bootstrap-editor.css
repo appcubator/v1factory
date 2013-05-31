@@ -2906,7 +2906,7 @@ a.badge:hover {
 
 
 #full-container {
-  position: absolute;
+  //position: absolute;
   margin-top: 60px;
   width: 100%;
   height: 100%;
@@ -2994,7 +2994,6 @@ a.badge:hover {
   border-color: rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.30) rgba(0, 0, 0, 0.45);
   overflow-y: scroll;
   overflow-x: visible;
-
   transition: width 0.2s;
   -moz-transition: width 0.2s;
   -webkit-transition: width 0.2s;
@@ -3008,7 +3007,7 @@ a.badge:hover {
 .container.editing *[class*="span"] {
   padding: 0;
   margin: 0;
-  display: inline-block;
+  display: block;
   height: 100%;
 }
 
@@ -3785,13 +3784,7 @@ overflow: hidden;
 
 /* Footer */
 #footer {
-  position: absolute;
-  //margin-top: 55px;
-  margin-bottom: 0px;
-  width: 100%;
-  top: 100%;
-  bottom: 5px;
-
+  margin-bottom: 49px;
 }
 #footer .container {
   padding: 15px;
@@ -3803,4 +3796,5 @@ overflow: hidden;
 
 #footer li a {
   color: #0088cc;
+  text-shadow: none;
 }
