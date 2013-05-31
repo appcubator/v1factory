@@ -448,23 +448,26 @@
   border: none;
 }
 
-/* Navbar */
-#navbar-editor {
+/* Navbar, Footer */
+#navbar .edit-navbar, #footer .edit-navbar {
+  margin-top: 6px;
+}
+#navbar-editor, #footer-editor {
   padding: 20px;
   width: 600px;
   height: 600px;
 }
 
-#navbar-editor legend[for=links] {
+#navbar-editor legend[for=links], #footer-editor legend[for=links] {
   margin-bottom: 0px;
 }
 
-#navbar-editor #link-editors {
+#link-editors {
   overflow: scroll;
   height: 250px;
 }
 
-#navbar-editor #link-editors li.well-small {
+#link-editors li.well-small {
   margin-bottom: 10px;
   position: relative;
 }
@@ -498,5 +501,15 @@
   width: 80px;
   color: #fff;
   background-color: #ec6a5f;
+}
+
+/* Footer */
+#footer.navbar {
+  position: absolute;
+  margin-top: 32px;
+  margin-bottom: 0px;
+  width: 100%;
+  top: 100%;
+  bottom: 5px;
 }
 

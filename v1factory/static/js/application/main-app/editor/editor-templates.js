@@ -32,6 +32,17 @@ Templates.NavbarEditor = [
   '<button class="btn btn-primary btn-small add-link" type="submit">Add Link</button>'
 ].join('\n');
 
+Templates.FooterEditor = [
+  '<h3>Footer Editor</h3>',
+  '<form>',
+    '<legend for="main-title">Main Title</legend>',
+    '<input type="text" id="edit-brandname" value="<%= brandName %>">',
+    '<legend for="links">Links</legend>',
+    '<ul id="link-editors"></ul>',
+  '</form>',
+  '<button class="btn btn-primary btn-small add-link" type="submit">Add Link</button>'
+].join('\n');
+
 Templates.LinkEditor = [
   '<div class="row">',
     '<div class="span12">',

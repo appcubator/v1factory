@@ -1,12 +1,13 @@
 define([
   'models/UrlModel',
   'models/NavbarModel',
+  'models/FooterModel',
   'models/ContainerWidgetModel',
   'models/WidgetModel',
   'collections/WidgetCollection',
   'backbone'
 ],
-function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollection) {
+function(UrlModel, NavbarModel, FooterModel, ContainerWidgetModel, WidgetModel, WidgetCollection) {
 
   var PageModel = Backbone.Model.extend({
     defaults : {
@@ -17,13 +18,16 @@ function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollect
 
     initialize: function(bone) {
       bone = bone||{};
+
+      // rename 'items' as 'links' in JSON
+      bone.navbar.links = _.clone(bone.navbar.items);
+      delete bone.navbar.items;
+      bone.footer.links = _.clone(bone.footer.items);
+      delete bone.footer.items;
+
       this.set('url', new UrlModel(bone.url||{}));
-      console.log(bone.navbar);
-      if(bone.navbar.items) {
-        bone.navbar.links = _(bone.navbar.items).map(function(item) { return item; });
-        delete bone.navbar.items;
-      }
       this.set('navbar', new NavbarModel(bone.navbar||{}));
+      this.set('footer', new FooterModel(bone.footer||{}));
       this.set('uielements', new WidgetCollection());
       var self = this;
       _(bone.uielements).each(function(uielement) {
@@ -52,6 +56,7 @@ function(UrlModel, NavbarModel, ContainerWidgetModel, WidgetModel, WidgetCollect
       var json = _.clone(this.attributes);
       json.url = this.get('url').toJSON();
       json.navbar = this.get('navbar').toJSON();
+      json.navbar = this.get('footer').toJSON();
       json.uielements = this.get('uielements').toJSON();
       return json;
     }
