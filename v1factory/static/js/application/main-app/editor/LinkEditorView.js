@@ -7,8 +7,8 @@ define([
         className: 'well well-small',
         events: {
           'change .link-options'  : 'pageSelected',
-          'keydown input.url' : 'updateUrl',
-          'keydown input.link-title' : 'updateTitle',
+          'keyup input.url' : 'updateUrl',
+          'keyup input.link-title' : 'updateTitle',
           'click .remove': 'removeLink'
         },
         initialize: function(options) {
@@ -20,8 +20,8 @@ define([
           // generate list of link options
           this.linkOptions = _(appState.pages).map(function(page) {
             return {
-              title: page.name,
-              url: 'internal://' + page.name
+              url: 'internal://' + page.name,
+              title: page.name
             }
           });
 
@@ -88,7 +88,7 @@ define([
               this.renderLinkOptions();
             }
             this.$select.hide();
-            this.$urlContainer.show();
+            this.$urlContainer.show().find('input').focus();
           }
 
           // cancel if they chose the first option ('choose an option')
@@ -112,13 +112,30 @@ define([
             this.$select.show();
           }
 
-          this.model.set({url: e.target.value});
-          this.renderLinkOptions();
+          var newUrl = e.target.value;
+          var oldAttrs = this.model.toJSON();
+          this.model.set({url: newUrl});
+          var newAttrs = _.clone(oldAttrs);
+          newAttrs.url = newUrl;
+          this.updateLinkOptions(oldAttrs, newAttrs);
         },
 
         updateTitle: function(e) {
-          this.model.set({title: e.target.value});
-          this.renderLinkOptions();
+          var newTitle = e.target.value;
+          var oldAttrs = this.model.toJSON();
+          this.model.set({title: newTitle});
+          var newAttrs = _.clone(oldAttrs);
+          newAttrs.title = newTitle;
+          this.updateLinkOptions(oldAttrs, newAttrs);
+        },
+
+        updateLinkOptions: function(oldAttrs, newAttrs) {
+          for(var i = 0; i < this.linkOptions.length; i++) {
+            if(_.isEqual(oldAttrs, this.linkOptions[i])) {
+              this.linkOptions[i] = newAttrs;
+              this.renderLinkOptions();
+            }
+          }
         },
 
         removeLink: function(e) {

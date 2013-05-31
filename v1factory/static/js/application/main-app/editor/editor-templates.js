@@ -25,7 +25,7 @@ Templates.NavbarEditor = [
   '<h3>Navbar Editor</h3>',
   '<form>',
     '<legend for="main-title">Main Title</legend>',
-    '<input type="text" id="editor-brandname" value="<%= brandName %>">',
+    '<input type="text" id="edit-brandname" value="<%= brandName %>">',
     '<legend for="links">Links</legend>',
     '<ul id="link-editors"></ul>',
   '</form>',

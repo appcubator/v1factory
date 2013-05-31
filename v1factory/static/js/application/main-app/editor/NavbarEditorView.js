@@ -11,16 +11,13 @@ function(LinkEditorView) {
     padding: 0,
     events: {
       'click .done-btn' : 'closeModal',
-      'click .add-link' : 'addLinkEditorView'
+      'click .add-link' : 'addLinkEditorClicked',
+      'keyup #edit-brandname' : 'updateBrandName'
     },
     initialize: function(options) {
       var self = this;
 
-      _.bindAll(this, 'render',
-                      'renderLinkEditorViews',
-                      'addLinkEditorView',
-                      'resized',
-                      'resizing');
+      _.bindAll(this);
 
       this.model  = options.model;
       this.links = this.model.get('links');
@@ -55,11 +52,15 @@ function(LinkEditorView) {
       this.links.each(this.addLinkEditorView);
     },
 
+    addLinkEditorClicked: function(e) {
+      var newLink = this.model.createNewLink();
+      this.addLinkEditorView(newLink)
+    },
+
     addLinkEditorView: function(linkModel) {
       // create new link (duplicate of homepage link)
-      var newLink = linkModel || this.model.createNewLink();
+      var newLink = linkModel;
       var newLinkEditor = new LinkEditorView({ model: newLink});
-      console.log(this.$linksList);
       this.$linksList.append(newLinkEditor.render().el);
     },
 
@@ -70,6 +71,13 @@ function(LinkEditorView) {
       this.rowWidget.className += 'span' + this.rowModel.get('layout').get('width');
       this.rowWidget.style.height = (this.rowModel.get('layout').get('height') * GRID_HEIGHT) + 'px';
       this.rowWidget.style.position = "relative";
+    },
+
+    updateBrandName: function(e) {
+      var newBrandName = e.target.value;
+      if(newBrandName) {
+        this.model.set('brandName', newBrandName);
+      }
     },
 
     resizing: function(e, ui) {
