@@ -154,13 +154,12 @@ class Column(object):
                 html.style_string += el.overlap_styles
                 return html
             htmls = [ absolutify(el, html) for el, html in zip(self.uiels, htmls) ]
-        else:
-            # add the span and hi classes for layout
-            def layoutify(el, html):
-                html.class_string += ' hi%d span%d' % (el.layout.height, el.layout.width)
-                return html
-            htmls = [ layoutify(el, html) for el, html in zip(self.uiels, htmls) ]
 
+        # add the span and hi classes for layout
+        def layoutify(el, html):
+            html.class_string += ' hi%d span%d' % (el.layout.height, el.layout.width)
+            return html
+        htmls = [ layoutify(el, html) for el, html in zip(self.uiels, htmls) ]
 
         # add padding
         def add_padding(el, html):
