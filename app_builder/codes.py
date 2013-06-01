@@ -178,6 +178,7 @@ class Column(object):
             el = self.uiels[0]
             html = el.html()
             column_element = add_padding(el, layoutify(el, add_text_align(el, html)))
+            column_element.class_string += ' ' + self.class_string
 
         return column_element.render()
 
