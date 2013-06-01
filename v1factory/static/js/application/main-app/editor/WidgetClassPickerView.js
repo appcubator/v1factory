@@ -26,13 +26,13 @@ function(SelectView) {
 
       this.model = widgetModel;
       this.list = _.map(uieState[this.model.get('data').get('nodeType')], function(obj) { return obj.class_name; });
-      this.currentVal = this.model.get('class_name');
+      this.currentVal = this.model.get('data').get('class_name');
       this.render();
     },
 
     classChanged: function(e) {
       var newClass = (e.target.id||e.target.parentNode.id);
-      this.model.set('class_name', newClass);
+      this.model.get('data').set('class_name', newClass);
       this.closeModal();
     },
 
@@ -44,11 +44,11 @@ function(SelectView) {
 
     hovered: function(e) {
       if(e.target.className == "updown-handle")  {
-        this.model.set('class_name', this.currentVal);
+        this.model.get('data').set('class_name', this.currentVal);
         return;
       }
       var ind = String(e.target.id).replace('li-' + this.cid + '-', '');
-      this.model.set('class_name', this.list[ind]);
+      this.model.get('data').set('class_name', this.list[ind]);
     },
 
     show: function() {
