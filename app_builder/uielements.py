@@ -77,8 +77,9 @@ class Form(DictInited, Hooked):
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this?
                 }
 
-                def html(field):
-                    return Tag('input', {'type':'text', 'placeholder':'lolol'})
+                def htmls(field):
+                    return (Tag('label', {}, content=field.label),
+                            Tag('input', {'type':'text', 'placeholder':'lolol'}))
 
             _schema = {
                 "name": {"_type": ""},
@@ -103,7 +104,7 @@ class Form(DictInited, Hooked):
     def html(self):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
-            fields.append(f.html())
+            fields.extend(f.htmls())
         attribs = {'method': 'POST',
                   'action': '/' } # TODO fix this.
         # TODO overlap styles here? maybe need a better solution
