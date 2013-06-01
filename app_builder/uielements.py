@@ -132,7 +132,7 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
     def kwargs(self):
         kw = {}
         kw = deepcopy(self.content_attribs)
-        kw['class'] = 'node ' + self.class_name
+        kw['class'] = 'node ' + self.class_name + ' hi%d' % self.layout.height
         return kw
 
     def create_tag(self):

@@ -121,7 +121,7 @@ class Column(object):
 
     @property
     def classes(self):
-        classes = ['span%d' % self.width, 'hi%d' % self.height]
+        classes = ['span%d' % self.width]
         if self.margin_left > 0:
             classes.append('offset%d' % self.margin_left)
         if self.has_overlapping_nodes:
