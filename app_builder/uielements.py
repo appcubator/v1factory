@@ -125,9 +125,9 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         return kw
 
     def render(self):
-        wrapper_style = 'text-align:%s' % self.layout.alignment
+        wrapper_style = 'text-align:%s; ' % self.layout.alignment
         try:
-            wrapper_style += self.overlap_styles
+            wrapper_style += self.overlap_styles + '; '
         except AttributeError:
             pass
         wrapper_style += self.padding_string()
