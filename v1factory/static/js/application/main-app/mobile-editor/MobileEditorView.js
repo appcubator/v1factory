@@ -15,7 +15,8 @@ define([
   'editor/MarqueeView',
   'tutorial/TutorialView',
   'mixins/BackboneNameBox',
-  'editor/editor-templates'
+  'editor/editor-templates',
+  'jquery-ui'
 ],
 function( PageModel,
           EntityCollection,
@@ -69,7 +70,7 @@ function( PageModel,
       iui.loadCSS('bootstrap-editor');
       iui.loadCSS('jquery-ui');
 
-      this.model             = v1State.get('pages').models[pageId];
+      this.model             = v1State.get('mobilePages').models[pageId];
 
       /* Globals */
       g_contextCollection    = new EntityCollection();

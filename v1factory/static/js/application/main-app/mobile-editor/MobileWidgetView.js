@@ -25,7 +25,7 @@ function(WidgetView) {
   var MobileWidgetView = WidgetView.extend({
     el: null,
     className: 'm-widget-wrapper',
-    tagName : 'div',
+    tagName : 'li',
     widgetsContainer :null,
     selected : false,
     editable : false,

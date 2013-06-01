@@ -32,6 +32,7 @@ function(AppInfoModel,
       json.users = json.users.toJSON();
       json.entities = json.entities.toJSON();
       json.pages = json.pages.toJSON();
+      json.mobilePages = json.mobilePages.toJSON();
       json.emails = json.emails.toJSON();
 
       return json;
