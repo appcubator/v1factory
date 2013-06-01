@@ -112,7 +112,7 @@ class Form(DictInited, Hooked):
 
 class Node(DictInited, Hooked):  # a uielement with no container_info
     _schema = {
-        "content": {"_type": ""},  # TODO may have reference
+        "content": {"_type": "", "_default": ""},  # TODO may have reference
         # "isSingle": { "_type" : True }, # don't need this because it's implied from tagname
         "content_attribs": {"_type": {}},  # TODO may have reference
         "class_name": {"_type": ""},
