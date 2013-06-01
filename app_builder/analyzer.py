@@ -7,6 +7,10 @@ import os.path
 from app_builder.analyzer_utils import encode_braces, decode_braces
 from app_builder.resolving import Resolvable, LinkLang, EntityLang
 from app_builder import naming
+from jinja2 import Environment, PackageLoader
+
+env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
+    'app_builder.code_templates', 'htmlgen'))
 
 
 # Entities
@@ -59,6 +63,9 @@ class Navbar(DictInited):
         "isHidden": {"_type": True},
         "links": {"_type": [], "_each": {"_type": NavbarItem}}
     }
+
+    def render(self):
+        env.get_template('navbar.html').render(navbar=self)
 
 class Footer(DictInited):
 
