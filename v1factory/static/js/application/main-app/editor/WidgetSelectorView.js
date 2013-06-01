@@ -214,6 +214,7 @@ function(WidgetEditorView) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
       model.get('layout').set('top', top);
       model.get('layout').set('left', left);
+      this.newSelected(model);
       this.setLayout(e.target, model);
     },
 
