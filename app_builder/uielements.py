@@ -135,7 +135,7 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
                            'style': wrapper_style
                            }
         wrapper = Tag('div', wrapper_kwargs, content=Tag(
-            self.tagName, self.kwargs(), content=self.content))
+            self.tagName, self.kwargs(), content=self.content()))
         return wrapper.render()
 
 
