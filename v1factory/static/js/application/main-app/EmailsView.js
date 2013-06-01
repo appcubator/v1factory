@@ -5,13 +5,12 @@ define([
 function(EmailCollection, EmailModel) {
 
   var EmailsView = Backbone.View.extend({
-    el: document.body,
     events: {
       'click #create-email' : 'createEmail',
       'click .email-display' : 'clickedEmail',
       'keyup .email-name-input' : 'emailNameChanged',
       'keyup .email-subject-input' : 'emailSubjectChanged',
-      'keyup .email-content-input' : 'emailContentChanged' 
+      'keyup .email-content-input' : 'emailContentChanged'
     },
 
     initialize: function() {
@@ -25,10 +24,9 @@ function(EmailCollection, EmailModel) {
                       'emailContentChanged',
                       'saveEmails');
 
-      
+
       this.collection = new EmailCollection(appState.emails||[]);
       this.collection.bind('add', this.appendEmail, this);
-      this.listView = document.getElementById('email-list');
 
       this.render();
       this.collection.bind('add', this.displayEmail);
@@ -38,7 +36,9 @@ function(EmailCollection, EmailModel) {
 
     render: function() {
       var self = this;
-      
+
+      this.el.innerHTML = _.template(iui.getHTML('emails-page'), {});
+      this.listView = this.$el.find('#email-list');
       _(self.collection.models).each(function(email){
         self.appendEmail(email);
       });
@@ -64,7 +64,7 @@ function(EmailCollection, EmailModel) {
     },
 
     appendEmail: function(emailModel) {
-      this.listView.innerHTML += '<li id="email-'+emailModel.cid+'" class="email-display"><h3>' + emailModel.get('name') + '</h3></li>';
+      this.listView.append('<li id="email-'+emailModel.cid+'" class="email-display">' + emailModel.get('name') + '</li>');
     },
 
     emailNameChanged: function(e) {

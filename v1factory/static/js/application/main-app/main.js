@@ -58,6 +58,7 @@ require([
   "app/OverviewPageView",
   "editor/EditorView",
   "mobile-editor/MobileEditorView",
+  "app/EmailsView",
   "app/RouteLogger",
   "editor/KeyDispatcher",
   "editor/MouseDispatcher",
@@ -79,6 +80,7 @@ function (AppModel,
           OverviewPageView,
           EditorView,
           MobileEditorView,
+          EmailsView,
           RouteLogger,
           KeyDispatcher,
           MouseDispatcher,
@@ -94,7 +96,8 @@ function (AppModel,
       "app/:appid/gallery/"  : "showThemesPage",
       "app/:appid/pages/"    : "showPagesPage",
       "app/:appid/editor/:pageid/" : "showEditor",
-      "app/:appid/mobile-editor/:pageid/" : "showMobileEditor"
+      "app/:appid/mobile-editor/:pageid/" : "showMobileEditor",
+      "app/:appid/emails/"    : "showEmailsPage"
     },
 
     tutorialDirectory: [0],
@@ -172,6 +175,14 @@ function (AppModel,
       olark('api.box.hide');
       this.changeTitle(v1App.view.title);
     },
+
+    showEmailsPage: function() {
+      v1App.tutorialDirectory = [6];
+      this.changePage(EmailsView, {}, function() {
+        $('.menu-app-emails').addClass('active');
+      });
+    },
+
 
     changePage: function(newView, viewOptions, post_render) {
       if(v1App.view) v1App.view.remove();
