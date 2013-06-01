@@ -164,7 +164,7 @@ class Column(object):
 
         def add_text_align(el, html):
             if el.layout.alignment != 'left':
-                wrapper = Tag('div', { 'style': 'text-align:%s' % el.layout.alignment }, content=el)
+                wrapper = Tag('div', { 'style': 'text-align:%s' % el.layout.alignment }, content=html)
                 return wrapper
             else:
                 return html
