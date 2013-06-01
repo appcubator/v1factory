@@ -1,5 +1,6 @@
 from jinja2 import Environment, PackageLoader, StrictUndefined
 from app_builder import naming
+from app_builder.htmlgen import Tag
 
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
@@ -142,6 +143,45 @@ class Column(object):
     @property
     def style_string(self):
         return '; '.join(self.styles)
+
+    def render(self):
+        htmls = [ el.html() for el in self.uiels ]
+
+        # add layout
+        if self.has_overlapping_nodes:
+            # set position absolute, with pixel dimensions, all in the style attribute
+            def absolutify(el, html):
+                html.style_string += el.overlap_styles
+                return html
+            htmls = [ absolutify(el, html) for el, html in zip(self.uiels, htmls) ]
+        else:
+            # add the span and hi classes for layout
+            def layoutify(el, html):
+                html.class_string += ' hi%d span%d' % (el.layout.height, el.layout.width)
+                return html
+            htmls = [ layoutify(el, html) for el, html in zip(self.uiels, htmls) ]
+
+
+        # add padding
+        def add_padding(el, html):
+            if el.layout.has_padding():
+                html.style_string += "; padding: %dpx %dpx %dpx %dpx" % (
+                    el.layout.t_padding, el.layout.r_padding, el.layout.b_padding, el.layout.l_padding)
+            return html
+        htmls = [ add_padding(el, html) for el, html in zip(self.uiels, htmls) ]
+
+        # add text align
+        def add_text_align(el, html):
+            if el.layout.alignment != 'left':
+                wrapper = Tag('div', { 'style': 'text-align:%s' % el.layout.alignment }, content=el)
+                return wrapper
+            else:
+                return html
+        htmls = [ add_text_align(el, html) for el, html in zip(self.uiels, htmls) ]
+
+        col_wrapper = Tag('div', { 'class': self.class_string,
+                                   'style': self.style_string }, content=htmls)
+        return col_wrapper.render()
 
 
 class Row(object):
@@ -287,7 +327,7 @@ class DjangoTemplate(object):
             r.cols = self.split_to_cols(r.uiels, left_offset=left_offset)
             for c in r.cols:
                 if len(c.uiels) == 1:
-                    c.tree = None  # termination of recursion
+                    c.tree = None # termination of recursion
                 else:
                     inner_top_offset = r.uiels[0].layout.top
                     inner_left_offset = c.uiels[0].layout.left
@@ -301,7 +341,7 @@ class DjangoTemplate(object):
                         for uie in c.uiels:
                             top_offset = uie.layout.top - inner_top_offset
                             left_offset = uie.layout.left - inner_left_offset
-                            uie.overlap_styles = "position: absolute; top: %spx; left: %spx;" % (
+                            uie.overlap_styles = "; position: absolute; top: %spx; left: %spx;" % (
                                 15 * top_offset, 80 * left_offset)
                             min_top = min(uie.layout.top, min_top)
                             max_bottom = max(uie.layout.top + uie.layout.height, max_bottom)
@@ -334,14 +374,6 @@ class DjangoURLs(object):
     def render(self):
         return env.get_template('urls.py').render(urls=self)
 
-class DjangoStaticPagesTestCase(object):
-    def __init__(self, identifier_url_pairs):
-        self.imports = ['from django.test import TestCase']
-        self.identifier_url_pairs = identifier_url_pairs
-        self.code_path = "webapp/tests.py"
-
-    def render(self):
-        return env.get_template('tests.py').render(test=self)
 
 class DjangoStaticPagesTestCase(object):
     def __init__(self, identifier_url_pairs):

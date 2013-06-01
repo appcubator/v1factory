@@ -34,12 +34,7 @@
     {% for col in row.cols %}
     {%- if col.tree == None %}
         <!-- column terminal -->
-        <div class="{{ col.class_string }}" {% if col.style_string != "" %}style="{{ col.style_string }}"{% endif %}>
-        {% for element in col.uiels %}
-        {# Make a call to the instancemethod of DjangoTemplate, render_uielement #}
-            {{ element.render()|indent(8 + 4 * row_loop.index) }}
-        {% endfor %}
-        </div>
+        {{ col.render()|indent(4 + 4 * row_loop.index) }}
     {% else %}
         <!-- column -->
         <div class="{{ col.class_string }}">

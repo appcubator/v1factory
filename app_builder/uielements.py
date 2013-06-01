@@ -31,6 +31,9 @@ class Layout(DictInited):
         "font-size": {"_type": "", "_default": ""}, #TODO
     }
 
+    def has_padding(self):
+        return self.t_padding > 0 or self.b_padding > 0 or self.l_padding > 0 or self.r_padding > 0
+
 
 class UIElement(DictInited):
     _schema = {"layout": {"_type": Layout},
@@ -57,6 +60,7 @@ class Hooked(object):
         except AttributeError:
             return []
 
+
 class Form(DictInited, Hooked):
 
     class FormInfo(DictInited, Resolvable):
@@ -73,7 +77,7 @@ class Form(DictInited, Hooked):
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this?
                 }
 
-                def create_html(field):
+                def html(field):
                     return Tag('input', {'type':'text', 'placeholder':'lolol'})
 
             _schema = {
@@ -96,19 +100,15 @@ class Form(DictInited, Hooked):
         "container_info": {"_type": FormInfo}
     }
 
-    def create_html(self):
+    def html(self):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
-            fields.append(f.create_html())
+            fields.append(f.html())
         attribs = {'method': 'POST',
                   'action': '/' } # TODO fix this.
         # TODO overlap styles here? maybe need a better solution
         form = Tag('form', attribs, content=fields)
         return form
-
-    def render(self):
-        html = self.create_html()
-        return html.render()
 
 class Node(DictInited, Hooked):  # a uielement with no container_info
     _schema = {
@@ -124,35 +124,15 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         content = self.content
         self.content = lambda: content
 
-
-    def padding_string(self):
-        return "padding: %dpx %dpx %dpx %dpx;" % (
-            self.layout.t_padding, self.layout.r_padding, self.layout.b_padding, self.layout.l_padding)
-
     def kwargs(self):
         kw = {}
         kw = deepcopy(self.content_attribs)
-        kw['class'] = 'node ' + self.class_name + ' hi%d' % self.layout.height
+        kw['class'] = 'node ' + self.class_name
         return kw
 
-    def create_tag(self):
-        wrapper_style = 'text-align:%s; ' % self.layout.alignment
-        try:
-            wrapper_style += self.overlap_styles + '; '
-        except AttributeError:
-            pass
-        wrapper_style += self.padding_string()
-        wrapper_kwargs = { 'class': 'node-wrapper',
-                           'style': wrapper_style
-                           }
-        wrapper = Tag('div', wrapper_kwargs, content=Tag(
-            self.tagName, self.kwargs(), content=self.content()))
-        return wrapper
-
-    def render(self):
-        html = self.create_tag()
-        return html.render()
-
+    def html(self):
+        tag = Tag(self.tagName, self.kwargs(), content=self.content())
+        return tag
 
 class Iterator(DictInited, Hooked):
 
