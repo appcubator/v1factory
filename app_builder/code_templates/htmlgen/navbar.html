@@ -1,0 +1,17 @@
+<div class="navbar navbar-fixed-top" id="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+    <a class="brand" href="/" id="brand-name">{{ navbar.brandName }}</a>
+    <ul class="nav" id="items">
+      {% for l in navbar.links %}
+      <li><a href="{{ l.url }}">{{ l.title }}</a></li>
+      {% endfor %}
+    </ul>
+    <ul class="nav pull-right">
+      {{ '{% if user.is_authenticated %}' }}
+      <li><a href="/logout">Logout</a></li>
+      {{ '{% endif %}' }}
+    </ul>
+    </div>
+  </div>
+</div>
