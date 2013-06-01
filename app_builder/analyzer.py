@@ -65,7 +65,7 @@ class Navbar(DictInited):
     }
 
     def render(self):
-        env.get_template('navbar.html').render(navbar=self)
+        return env.get_template('navbar.html').render(navbar=self)
 
 class Footer(DictInited):
 
