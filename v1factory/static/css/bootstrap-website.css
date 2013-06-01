@@ -4977,15 +4977,20 @@ hr.vert {
     background-image: url(../img/scroll-up-arrow.png);
     background-repeat: no-repeat;
     background-position: center;
-    display: none;
-    transition: opacity 0.6s;
-    -moz-transition: opacity 0.6s; /* Firefox 4 */
-    -webkit-transition: opacity 0.6s; /* Safari and Chrome */
-    -o-transition: opacity 0.6s; /* Opera */
+    display: inline-block;
+    transition: all 0.6s;
+    -moz-transition: all 0.6s; /* Firefox 4 */
+    -webkit-transition: all 0.6s; /* Safari and Chrome */
+    -o-transition: all 0.6s; /* Opera */
     background-size: 44% auto;
     margin-top: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .hidden {
+    top: 250px;
+    opacity: 0;
   }
 
   .scrollUp-btn:hover, .scrollUp-btn-nofix:hover {

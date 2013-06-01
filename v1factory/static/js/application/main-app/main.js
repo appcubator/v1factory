@@ -103,10 +103,6 @@ function (AppModel,
       var self = this;
       $('#save').on('click', this.save);
       $('#tutorial').on('click', this.showTutorial);
-      $(document).on('scroll', function() {
-        $('#scrollUp').fadeIn('slow');
-      });
-      $('#scrollUp').on('click', this.scrollUp);
     },
 
     index: function () {
@@ -282,6 +278,8 @@ function (AppModel,
   routeLogger = new RouteLogger({router: v1});
 
   Backbone.history.start({pushState: true});
+
+  // handle all click events for routing
   $(document).on('click', 'a[rel!="external"]', function(e) {
     var href = e.currentTarget.getAttribute('href');
     // if internal link, navigate with router
@@ -291,4 +289,21 @@ function (AppModel,
     }
   });
 
+  // scroll to top button animations
+  var prevScrollPos = 0
+  var $scrollBtn = $('#scrollUp');
+  $(document).on('scroll', function() {
+    var $doc = $(this);
+    var scrollTop = parseInt($doc.scrollTop());
+    var screenHeight = parseInt($doc.height());
+    var isHidden = $scrollBtn.hasClass('hidden');
+    if(scrollTop > (screenHeight/4) && isHidden) {
+      $('#scrollUp').removeClass('hidden');
+    }
+    else if(scrollTop <= (screenHeight/4) && !isHidden) {
+      $('#scrollUp').addClass('hidden');
+    }
+    prevScrollPos = scrollTop;
+  });
+    $scrollBtn.on('click', this.scrollUp);
 });
