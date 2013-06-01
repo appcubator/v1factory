@@ -52,12 +52,23 @@ define([
         },
 
         renderLinkOptions: function() {
-          var select = this.$el.find('.link-options').empty();
-          select.append('<option>Choose a Page</option>');
+          var self = this;
+          var select = this.$el.find('.link-options');
+          var prevSelected = select[0].selectedIndex;
+          var htmlString = '<option>Choose a Page</option>';
           _(this.linkOptions).each(function(link) {
-            select.append('<option value="' + link.url + '">' + link.title +'</option>');
+            if(self.isInternalLink(link.url)) {
+              var pageName = link.url.replace('internal://', '');
+              htmlString += '<option value="' + link.url + '">' + pageName + '</option>';
+            }
+            else {
+              htmlString += '<option value="' + link.url + '">' + link.title +'</option>';
+            }
+
           });
-          select.append('<option value="external">External Link...</option>');
+          htmlString += '<option value="external">External Link...</option>';
+          select.html(htmlString);
+          select[0].selectedIndex = prevSelected;
         },
 
         pageSelected: function(e) {
@@ -141,6 +152,11 @@ define([
         removeLink: function(e) {
           this.model.destroy();
           this.$el.remove();
+        },
+
+        isInternalLink: function(url) {
+          url = url || this.model.get('url');
+          return (url.indexOf('internal://') == 0);
         }
     });
 
