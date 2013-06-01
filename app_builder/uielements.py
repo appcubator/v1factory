@@ -78,8 +78,23 @@ class Form(DictInited, Hooked):
                 }
 
                 def htmls(field):
-                    return (Tag('label', {}, content=field.label),
-                            Tag('input', {'type':'text', 'placeholder':'lolol'}))
+                    label = Tag('label', {}, content=field.label)
+                    if field.displayType == 'single-line-text':
+                        f = Tag('input', {'type':'text', 'placeholder':field.placeholder})
+                    elif field.displayType == 'paragraph-text':
+                        f = Tag('textarea', {}, content=field.placeholder)
+                    elif field.displayType == 'password-text':
+                        f = Tag('input', {'type':'password', 'placeholder':field.placeholder})
+                    elif field.displayType == 'email-text':
+                        f = Tag('div', {'class': 'input-prepend'}, content=(
+                                Tag('span', {'class':'add-on'}, content="@"),
+                                Tag('input', {'type': 'text'})))
+                    elif field.displayType == 'button':
+                        f = Tag('input', {'type': 'submit', 'value': field.placeholder, 'class': "btn" })
+                    else:
+                        raise Exception("Formfield NYI")
+
+                    return (label, f)
 
             _schema = {
                 "name": {"_type": ""},

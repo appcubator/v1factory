@@ -1,30 +1,31 @@
-{% if field.label != None %}<label for="id-{{ field.post_name }}">{{ field.label }}</label>{% endif %}
-  {% if field.display_type == "single-line-text" %}
-  <input type="text" name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
-  {% elif field.display_type == "paragraph-text" %}
-  <textarea name="{{ field.post_name }}" id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></textarea>
-  {% elif field.display_type == "password-text" %}
-  <input type="password" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
-  {% elif field.display_type == "email-text" %}
-  <div class="input-prepend"><span class="add-on">@</span><input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}></div>
-  {% elif field.display_type == "button" %}
-  <input type="submit" value="{{ field.kwargs.placeholder }}" class="btn" />
   {% elif field.display_type == "dropdown" %}
   <select class="dropdown">
-{% for option in field.options %}
-    <option>{{ option }}</option>
-{% endfor %}
+            {% for option in field.options %}
+                <option>{{ option }}</option>
+            {% endfor %}
   </select>
+
+
+
+
   {% elif field.display_type == "option-boxes" %}
   <span class="option-boxes">
-{% for option in field.options %}
-    <label for="opt-{{ loop.index }}"></label>
-    <input id="opt-{{ loop.index }}" class="field-type" type="radio" name="types" value="single-line-text">{{ option }}
-{% endfor %}
+            {% for option in field.options %}
+                <label for="opt-{{ loop.index }}"></label>
+                <input id="opt-{{ loop.index }}" class="field-type" type="radio" name="types" value="single-line-text">{{ option }}
+            {% endfor %}
   </span>
+
+
+
+
   {% elif field.display_type == "image-uploader" %}
   <input id="button-id-{{ field.post_name }}" type="button" value="{{ field.kwargs.placeholder }}" class="btn upload" />
   <input id="id-{{ field.post_name }}" type="hidden" name="{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
+
+
+
+
   {% elif field.display_type == "date-picker" %}
   date picker will be here<input type="text" name="{{ field.post_name }}"  id="id-{{ field.post_name }}" {% for attrib in field.kwargs %}{{ attrib }}="{{ field.kwargs[attrib] }}" {% endfor %}>
   {% else %}
