@@ -11,6 +11,8 @@ function( WidgetSelectorView,
     className : 'editor-page',
     tagName : 'div',
     selectedEl : null,
+    isMobile : true,
+
     events : {
       'click #hover-div'     : 'hoverClicked',
       'dblclick #select-div' : 'doubleClicked',
@@ -84,7 +86,7 @@ function( WidgetSelectorView,
     widgetHover: function(widgetModel) {
       if(this.selectedEl && widgetModel.cid === this.selectedEl.cid) return;
       this.hoveredEl = widgetModel;
-      this.setLayout(this.hoverDiv, widgetModel);
+      //this.setLayout(this.hoverDiv, widgetModel);
     },
 
     widgetUnhover: function(widgetModel) {
@@ -98,7 +100,7 @@ function( WidgetSelectorView,
       if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
 
       if(this.selectedEl) {
-        widgetModel.get('layout').unbind('change', self.setLayout);
+        //widgetModel.get('layout').unbind('change', self.setLayout);
       }
 
       this.deselect();
@@ -108,7 +110,7 @@ function( WidgetSelectorView,
       widgetModel.get('layout').bind('change', function() {
         self.setLayout(self.selectDiv, widgetModel);
       });
-      this.setLayout(this.selectDiv, widgetModel);
+      //this.setLayout(this.selectDiv, widgetModel);
 
       document.getElementById('page-wrapper').appendChild(this.widgetEditorView.setModel(widgetModel).render().el);
       //this.widgetEditorView.el.style.top = 

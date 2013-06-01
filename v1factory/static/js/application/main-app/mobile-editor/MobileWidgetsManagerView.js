@@ -7,7 +7,7 @@ define([
   'editor/WidgetEditorView',
   'editor/WidgetListView',
   'm-editor/MobileWidgetSelectorView',
-  'backbone'
+  'jquery-ui'
 ],
 function(WidgetsManagerView,
          WidgetView,
@@ -40,6 +40,13 @@ function(WidgetsManagerView,
 
       this.widgetsCollection.bind('change', function() { iui.askBeforeLeave(); });
       this.widgetsCollection.bind('add',  function() { iui.askBeforeLeave(); });
+    },
+
+    render: function() {
+      MobileWidgetManagerView.__super__.render.call(this);
+      $( "#elements-container" ).sortable({
+        placeholder: "ui-state-highlight"
+      });
     },
 
     placeWidget: function(widgetModel) {

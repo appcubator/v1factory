@@ -18,6 +18,7 @@ function(WidgetContentEditor,
     id: 'widget-editor',
     tagName : 'div',
     css : 'widget-editor',
+    isMobile: false,
 
     events : {
       'click .edit-slides-button' : 'openSlideEditor',
@@ -55,7 +56,12 @@ function(WidgetContentEditor,
 
     render: function() {
       this.$el.fadeIn();
-      this.$el.append('<div class="top-arrow"></div>');
+      if(this.isMobile) {
+        this.$el.append('<div class="left-arrow"></div>');
+      }
+      else {
+        this.$el.append('<div class="top-arrow"></div>');
+      }
 
       if(this.model.get('data').has('container_info')) {
         var action = this.model.get('container_info').get('action');

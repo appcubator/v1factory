@@ -9,6 +9,8 @@ function(WidgetEditorView) {
     className : 'editor-page',
     tagName : 'div',
     selectedEl : null,
+    isMobile : false,
+
     events : {
       'click #hover-div'     : 'hoverClicked',
       'dblclick #select-div' : 'doubleClicked',
@@ -45,11 +47,13 @@ function(WidgetEditorView) {
                       'isMouseOn',
                       'stoppedEditing');
 
+      var self = this;
+
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
       this.widgetEditorView = new WidgetEditorView();
+      this.widgetEditorView.isMobile = self.isMobile;
 
-      var self = this;
       _(this.widgetsCollection.models).each(self.bindWidget);
       this.doKeyBindings();
     },
@@ -210,6 +214,7 @@ function(WidgetEditorView) {
       var left = Math.round((ui.position.left / GRID_WIDTH));
       model.get('layout').set('top', top);
       model.get('layout').set('left', left);
+      this.newSelected(model);
       this.setLayout(e.target, model);
     },
 
