@@ -60,7 +60,12 @@ function(Backbone) {
     },
 
     expand: function(e) {
-      this.el.style.height = (this.list.length + 1) * 40 + 'px';
+      if(_.contains(this.list, this.currentVal)) {
+        this.el.style.height = (this.list.length) * 40 + 'px';
+      }
+      else {
+        this.el.style.height = (this.list.length + 1) * 40 + 'px';
+      }
       this.expanded = true;
       if(e) e.stopPropagation();
     },

@@ -1,6 +1,8 @@
 from dict_inited import DictInited
 from app_builder.resolving import Resolvable, LinkLang
 from jinja2 import Environment, PackageLoader
+from app_builder.htmlgen import Tag
+from copy import deepcopy
 
 
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
@@ -112,14 +114,29 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         self.content = lambda: content
 
 
-    @property
     def padding_string(self):
         return "padding: %dpx %dpx %dpx %dpx;" % (
             self.layout.t_padding, self.layout.r_padding, self.layout.b_padding, self.layout.l_padding)
 
+    def kwargs(self):
+        kw = {}
+        kw = deepcopy(self.content_attribs)
+        kw['class'] = 'node ' + self.class_name
+        return kw
 
     def render(self):
-        return env.get_template('node.html').render(node=self)
+        wrapper_style = 'text-align:%s; ' % self.layout.alignment
+        try:
+            wrapper_style += self.overlap_styles + '; '
+        except AttributeError:
+            pass
+        wrapper_style += self.padding_string()
+        wrapper_kwargs = { 'class': 'node-wrapper',
+                           'style': wrapper_style
+                           }
+        wrapper = Tag('div', wrapper_kwargs, content=Tag(
+            self.tagName, self.kwargs(), content=self.content()))
+        return wrapper.render()
 
 
 class Iterator(DictInited, Hooked):

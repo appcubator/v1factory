@@ -300,22 +300,28 @@
 
 <script type="text/template" id="emails-page">
 <div class="container hoff6 ">
-  <div class="span16 left-bar">
-  <div class="expandible" id="basecss"><h2>Emails</h2></div>
-    <span class="">
-      <ul id="email-list">
-
+  <div class="left-bar span12">
+    <h2>Emails</h2>
+    <hr>
+      <ul id="email-list" class="nav nav-tabs nav-stacked">
       </ul>
-      <span id="create-email">
-        + Create Email
-      </span>
-    </span>
+      <a id="create-email" class="btn btn-primary">+ Create Email</a>
   </div>
-  <div class="right-bar offset2 span46">
-    <input type="text" class="email-name-input span26 hoff1">
-    <input type="text" class="email-subject-input span26 hoff1">
-    <textarea class="email-content-input span26 hi30 hoff1">
-    </textarea>
+  <div class="right-bar span40 offset4">
+    <form>
+      <div class="control-group">
+      <label class="control-label">Email Name</label>
+        <input type="text" class="email-name-input input-block-level">
+      </div>
+      <div class="control-group">
+        <label class="control-label">Subject</label>
+        <input type="text" class="email-subject-input input-block-level">
+      </div>
+      <div class="control-group">
+        <label class="control-label">Message</label>
+        <textarea class="email-content-input input-block-level"></textarea>
+      </div>
+    </form>
   </div>
 </div>
 </script>
