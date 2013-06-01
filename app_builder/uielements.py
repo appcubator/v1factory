@@ -73,6 +73,9 @@ class Form(DictInited, Hooked):
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this?
                 }
 
+                def create_html(field):
+                    return Tag('input', {'type':'text', 'placeholder':'lolol'})
+
             _schema = {
                 "name": {"_type": ""},
                 "action": {"_type": ""},
@@ -93,11 +96,19 @@ class Form(DictInited, Hooked):
         "container_info": {"_type": FormInfo}
     }
 
-    def render(self):
-        self.method = 'POST'
-        self.action = '(url to form receiver)' # TODO '{%  url %s %}' % context.form_receiver.view_path()
-        return env.get_template('form.html').render(form=self)
+    def create_html(self):
+        fields = ['{% csrf_token %}']
+        for f in self.container_info.form.fields:
+            fields.append(f.create_html())
+        attribs = {'method': 'POST',
+                  'action': '/' } # TODO fix this.
+        # TODO overlap styles here? maybe need a better solution
+        form = Tag('form', attribs, content=fields)
+        return form
 
+    def render(self):
+        html = self.create_html()
+        return html.render()
 
 class Node(DictInited, Hooked):  # a uielement with no container_info
     _schema = {
@@ -124,7 +135,7 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         kw['class'] = 'node ' + self.class_name
         return kw
 
-    def render(self):
+    def create_tag(self):
         wrapper_style = 'text-align:%s; ' % self.layout.alignment
         try:
             wrapper_style += self.overlap_styles + '; '
@@ -136,7 +147,11 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
                            }
         wrapper = Tag('div', wrapper_kwargs, content=Tag(
             self.tagName, self.kwargs(), content=self.content()))
-        return wrapper.render()
+        return wrapper
+
+    def render(self):
+        html = self.create_tag()
+        return html.render()
 
 
 class Iterator(DictInited, Hooked):
