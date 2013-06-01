@@ -1,37 +1,35 @@
 define([
   'collections/EmailCollection',
-  'models/EmailModel'
+  'models/EmailModel',
+  'app/EmailView'
 ],
-function(EmailCollection, EmailModel) {
+function(EmailCollection, EmailModel, EmailView) {
 
   var EmailsView = Backbone.View.extend({
     events: {
       'click #create-email' : 'createEmail',
-      'click .email-display' : 'clickedEmail',
-      'keyup .email-name-input' : 'emailNameChanged',
-      'keyup .email-subject-input' : 'emailSubjectChanged',
-      'keyup .email-content-input' : 'emailContentChanged'
+      'click #email-list li' : 'clickedEmail',
+      'click #save-emails'          : 'saveEmails'
     },
 
     initialize: function() {
-      _.bindAll(this, 'render',
-                      'appendEmail',
-                      'clickedEmail',
-                      'displayEmail',
-                      'createEmail',
-                      'emailNameChanged',
-                      'emailSubjectChanged',
-                      'emailContentChanged',
-                      'saveEmails');
-
+      _.bindAll(this);
 
       this.collection = new EmailCollection(appState.emails||[]);
       this.collection.bind('add', this.appendEmail, this);
 
-      this.render();
-      this.collection.bind('add', this.displayEmail);
+      //setup emailView, populate with first email (new email if none)
+      var firstEmail;
+      if(this.collection.length > 0) {
+        firstEmail = this.collection.at(0);
+      }
+      else {
+        firstEmail = this.collection.create({});
+      }
+      console.log(firstEmail.toJSON());
+      this.emailView = new EmailView({ model: firstEmail });
 
-      $("#save-emails").on('click', this.saveEmails);
+      this.render();
     },
 
     render: function() {
@@ -43,45 +41,26 @@ function(EmailCollection, EmailModel) {
         self.appendEmail(email);
       });
 
+      this.emailView.setElement(this.$el.find('form')).render();
+      console.log(this.$el.find('input#email-content').html());
       return this;
     },
 
     clickedEmail: function(e) {
-      var cid = (e.target.id||e.target.parentNode.id).replace('email-','');
+      var cid = e.currentTarget.dataset.cid;
       var emailModel = this.collection.get(cid);
-      this.displayEmail(emailModel);
-    },
-
-    displayEmail: function (emailModel) {
-      this.$el.find('.email-name-input').val(emailModel.get('name')).attr('id', 'email-inp-'+ emailModel.cid);
-      this.$el.find('.email-subject-input').val(emailModel.get('subject')).attr('id', 'email-inp-'+ emailModel.cid);
-      this.$el.find('.email-content-input').val(emailModel.get('content')).attr('id', 'email-inp-'+ emailModel.cid);
+      this.emailView.model = emailModel;
+      this.emailView.render();
     },
 
     createEmail: function(e) {
-      var email = new EmailModel();
-      this.collection.push(email);
+      var email = this.collection.create({});
+      this.emailView.model = email;
+      this.emailView.render();
     },
 
-    appendEmail: function(emailModel) {
-      this.listView.append('<li id="email-'+emailModel.cid+'" class="email-display">' + emailModel.get('name') + '</li>');
-    },
-
-    emailNameChanged: function(e) {
-      var cid = e.target.id.replace('email-inp-', '');
-      this.collection.get(cid).set('name', e.target.value);
-      $('#email-' + cid).html('<h3>' + e.target.value + '</h3>');
-    },
-
-    emailSubjectChanged: function(e) {
-      var cid = e.target.id.replace('email-inp-', '');
-      this.collection.get(cid).set('subject', e.target.value);
-
-    },
-
-    emailContentChanged: function(e) {
-      var cid = e.target.id.replace('email-inp-', '');
-      this.collection.get(cid).set('content', e.target.value);
+    appendEmail: function(email) {
+      this.listView.append('<li data-cid="' + email.cid + '">' + email.get('name') + '</li>');
     },
 
     saveEmails: function(e) {
@@ -90,7 +69,7 @@ function(EmailCollection, EmailModel) {
       $.ajax({
         type: "POST",
         url: '/app/'+appId+'/state/',
-        data: JSON.stringify(appState),
+        data: JSON.stringify(v1State),
         success: function() {},
         dataType: "JSON"
       });
