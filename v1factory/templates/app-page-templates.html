@@ -294,24 +294,24 @@
 <div class="container hoff6 ">
   <div class="left-bar span12">
     <h2>Emails</h2>
-    <hr>
-      <ul id="email-list" class="nav nav-tabs nav-stacked">
-      </ul>
-      <a id="create-email" class="btn btn-primary">+ Create Email</a>
+    <ul id="email-list" class="nav nav-stacked"></ul>
+    <a id="create-email" class="btn btn-primary btn-small">
+      <span style="font-size: 14px">+</span> Create Email
+    </a>
   </div>
   <div class="right-bar span40 offset4">
     <form>
       <div class="control-group">
       <label class="control-label">Email Name</label>
-        <input type="text" class="email-name-input input-block-level">
+        <input type="text" id="edit-name" class="name input-block-level">
       </div>
       <div class="control-group">
         <label class="control-label">Subject</label>
-        <input type="text" class="email-subject-input input-block-level">
+        <input type="text" id="edit-subject" class="subject input-block-level">
       </div>
       <div class="control-group">
         <label class="control-label">Message</label>
-        <textarea class="email-content-input input-block-level"></textarea>
+        <textarea class="content input-block-level" id="edit-content" style="height: 300px; overflow: scroll"></textarea>
       </div>
     </form>
   </div>
