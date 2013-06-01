@@ -25,7 +25,7 @@ function(SelectView) {
                       'hovered');
 
       this.model = widgetModel;
-      this.list = _.map(uieState[this.model.get('type')], function(obj) { return obj.class_name; });
+      this.list = _.map(uieState[this.model.get('data').get('nodeType')], function(obj) { return obj.class_name; });
       this.currentVal = this.model.get('class_name');
       this.render();
     },
