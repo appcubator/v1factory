@@ -65,6 +65,8 @@ class Navbar(DictInited):
     }
 
     def render(self):
+        if self.brandName = None:
+            self.brandName = self.app.name
         return env.get_template('navbar.html').render(navbar=self)
 
 class Footer(DictInited):
