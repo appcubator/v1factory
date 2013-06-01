@@ -122,7 +122,7 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         kw = {}
         kw = deepcopy(self.content_attribs)
         kw['class'] = 'node ' + self.class_name
-
+        return kw
 
     def render(self):
         wrapper_style = 'text-align:%s' % self.layout.alignment
