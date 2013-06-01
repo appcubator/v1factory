@@ -64,7 +64,7 @@ function(WidgetContentEditor,
       }
 
       if(this.model.get('data').has('container_info')) {
-        var action = this.model.get('container_info').get('action');
+        var action = this.model.get('data').get('container_info').get('action');
 
         if(action == "authentication") {
           this.layoutEditor = new WidgetLayoutEditor(this.model);
@@ -141,7 +141,7 @@ function(WidgetContentEditor,
     },
 
     openFormEditor: function() {
-      new FormEditorView(this.model.get('container_info').get('form'), this.model.get('container_info').get('entity'));
+      new FormEditorView(this.model.get('data').get('container_info').get('form'), this.model.get('data').get('container_info').get('entity'));
     },
 
     openSlideEditor: function() {
@@ -150,7 +150,7 @@ function(WidgetContentEditor,
 
     openQueryEditor: function() {
       var type = 'table';
-      if(this.model.get('container_info').has('row')) {
+      if(this.model.get('data').get('container_info').has('row')) {
         type = 'list';
       }
 
@@ -160,8 +160,8 @@ function(WidgetContentEditor,
     openRowEditor: function() {
       //widgetModel, queryModel, rowModel
       new ListEditorView(this.model,
-                         this.model.get('container_info').get('query'),
-                         this.model.get('container_info').get('row'));
+                         this.model.get('data').get('container_info').get('query'),
+                         this.model.get('data').get('container_info').get('row'));
     },
 
     classChanged: function() {

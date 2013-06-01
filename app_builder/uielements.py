@@ -116,6 +116,9 @@ class Form(DictInited, Hooked):
         "container_info": {"_type": FormInfo}
     }
 
+    def post_receiver(self):
+        return
+
     def html(self):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
@@ -128,7 +131,7 @@ class Form(DictInited, Hooked):
 
 class Node(DictInited, Hooked):  # a uielement with no container_info
     _schema = {
-        "content": {"_type": "", "_default": ""},  # TODO may have reference
+        "content": {"_default": None, "_one_of": [{"_type": None}, {"_type": "", "_default": ""}]},  # TODO may have reference
         # "isSingle": { "_type" : True }, # don't need this because it's implied from tagname
         "content_attribs": {"_type": {}},  # TODO may have reference
         "class_name": {"_type": ""},
@@ -137,6 +140,8 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
 
     def __init__(self, *args, **kwargs):
         super(Node, self).__init__(*args, **kwargs)
+        if self.content is None:
+            self.content = ""
         content = self.content
         self.content = lambda: content
 

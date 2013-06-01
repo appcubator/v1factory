@@ -107,6 +107,10 @@ class DjangoModel(object):
         self.fields.append(f)
         return f
 
+    def create_query(self): # will add more options for query later
+        q = DjangoQuery(self.identifier)
+        return q
+
     def render(self):
         return env.get_template('model.py').render(model=self)
 
