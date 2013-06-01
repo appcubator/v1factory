@@ -116,6 +116,7 @@ class Column(object):
     def __init__(self):
         self.uiels = []
         self.margin_left = 0
+        self.margin_top = 0
         self.width = 0
         self.tree = None
         self.has_overlapping_nodes = False
@@ -125,6 +126,8 @@ class Column(object):
         classes = ['span%d' % self.width]
         if self.margin_left > 0:
             classes.append('offset%d' % self.margin_left)
+        if self.margin_top > 0:
+            classes.append('hoff%d' % self.margin_top)
         if self.has_overlapping_nodes:
             classes.append('hi%d' % self.container_height)
         return classes
@@ -323,13 +326,14 @@ class DjangoTemplate(object):
 
         tree.rows = self.split_to_rows(uiels, top_offset=top_offset)
         for i, r in enumerate(tree.rows):
+            inner_top_offset = r.uiels[0].layout.top
             r.cols = self.split_to_cols(r.uiels, left_offset=left_offset)
             for c in r.cols:
+                inner_left_offset = c.uiels[0].layout.left
                 if len(c.uiels) == 1:
+                    c.margin_top = c.uiels[0].layout.top - inner_top_offset
                     c.tree = None # termination of recursion
                 else:
-                    inner_top_offset = r.uiels[0].layout.top
-                    inner_left_offset = c.uiels[0].layout.left
                     if len(tree.rows) == 1 and len(r.cols) == 1:
                         # in this case, recursion will not terminate since input is not subdivided into smaller components
                         # create a relative container and absolute position the
