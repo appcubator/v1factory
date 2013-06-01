@@ -31,6 +31,8 @@ function(SelectView) {
                       'addExternalLink');
 
       this.model = widgetModel;
+      this.hrefOptions = this.model.getListOfPages();
+      this.hrefOptions.push("External Link");
       this.render();
     },
 
@@ -60,22 +62,24 @@ function(SelectView) {
       }
 
       var hash     = 'content_attribs' + '-' + 'href';
-      temp         = Templates.tempHrefSelect;
-      listOfPages  = this.model.getListOfPages();
+      var temp         = Templates.tempHrefSelect;
+      var listOfPages  = this.hrefOptions;
+      var href = this.model.get('data').get('content_attribs').get('href');
 
       var external;
-      if(String(this.model.get('data').get('content_attribs').get('href')).indexOf('internal://') < 0) {
-        external = this.model.get('data').get('content_attribs').get('href');
+      if(String(href).indexOf('internal://') < 0) {
+        external = href;
       }
 
-      html         = _.template(temp, { val : this.model.get('data').get('content_attribs').get('href'),
+      html         = _.template(temp, { val : href,
                                         hash: hash,
                                         listOfPages: listOfPages,
                                         external: external});
 
-
+      this.hrefLi.innerHTML = '';
       this.hrefLi.appendChild(new comp().div('Links To').classN('header-div').el);
-      var selecView = new SelectView(listOfPages, this.model.get('data').get('content_attribs').get('href'));
+      var selecView = new SelectView(listOfPages, href);
+      selecView.bind('change', this.changeHref, this);
       this.hrefLi.appendChild(selecView.el);
 
       return this.hrefLi;
@@ -212,22 +216,25 @@ function(SelectView) {
     changeHref: function(inp) {
       var self = this;
       console.log(inp);
-
-      if(target == "external-link") {
-        self.hrefLi.innerHTML = '<form id="external-link-form"><input id="external-link-input" type="text"></form>';
+      var target = inp;
+      if(target == "External Link") {
+        self.hrefLi.innerHTML = '<form id="external-link-form"><input id="external-link-input" type="text" placeholder="http://"></form>';
         $('#external-link-input').focus();
+        return;
       }
       else if(this.model.get('data').get('context')) {
         target += ('/' + this.model.get('data').get('context'));
       }
       this.model.get('data').get('content_attribs').set('href', target);
+      this.renderHrefInfo();
     },
 
     addExternalLink: function(e) {
       e.preventDefault();
       var page_link = iui.get('external-link-input').value;
-      this.model.get('content_attribs').set('href', page_link);
+      this.model.get('data').get('content_attribs').set('href', page_link);
       $('#external-link-form').remove();
+      this.hrefOptions.unshift(page_link);
       this.renderHrefInfo();
     },
 
