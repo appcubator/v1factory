@@ -75,7 +75,7 @@ class Coder(object):
                 bootstrap.min.js
 """
 
-def write_to_fs(coder, dest=None):
+def write_to_fs(coder, css="", dest=None):
     logger.info("Writing app to temporary directory.")
 
     if dest is None:
@@ -134,7 +134,7 @@ def write_to_fs(coder, dest=None):
     copy_file('ajaxify.js', 'webapp/static/ajaxify.js')
     copy_file('css/bootstrap.css', 'webapp/static/bootstrap.css')
     copy_file('css/reset.css', 'webapp/static/reset.css')
-    write_string("CSS GOES HERE", 'webapp/static/style.css') # TODO write css
+    write_string(css, 'webapp/static/style.css') # TODO write css
 
     logger.info("Finished writing django app.")
 

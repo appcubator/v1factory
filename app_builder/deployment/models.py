@@ -86,8 +86,7 @@ class Deployment(models.Model):
     codes = create_codes(app)
     coder = Coder.create_from_codes(codes)
 
-    tmp_project_dir = write_to_fs(coder)
-    # TODO self.css()?
+    tmp_project_dir = write_to_fs(coder, css=self.css)
 
     return tmp_project_dir
 
