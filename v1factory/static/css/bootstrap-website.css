@@ -5627,7 +5627,8 @@ i.icon-url {
 .v1nav .navigation-menu .info-icon,
 .v1nav .navigation-menu .entities-icon,
 .v1nav .navigation-menu .gallery-icon,
-.v1nav .navigation-menu .pages-icon {
+.v1nav .navigation-menu .pages-icon,
+.v1nav .navigation-menu .emails-icon {
   background-image: url(../img/navbar_sprite.png);
   width: 30px;
   height: 30px;
@@ -5651,6 +5652,10 @@ i.icon-url {
 
 .navigation-menu .pages-icon {
   background-position: -160px -15px;
+}
+
+.navigation-menu .emails-icon {
+  background-position: -210px -15px;
 }
 
 
@@ -5845,6 +5850,22 @@ i.icon-url {
 
 .left-nav li:hover {
   color: #fff;
+}
+
+.mw {
+  background-image: url(../img/mobile-web.png);
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 150px;
+  background-size: auto 100%;
+}
+
+.mw.mobile-image {
+  background-position: -300px -15px;
+}
+
+.mw.web-image {
+  background-position: -10px -15px;
 }
 
 /* Email Page */

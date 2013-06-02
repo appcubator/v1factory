@@ -13,6 +13,8 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
 
     initialize: function() {
       _.bindAll(this, 'render',
+                      'renderAddMobile',
+                      'renderAddWeb',
                       'createPage',
                       'createMobilePage',
                       'appendPage');
@@ -34,19 +36,39 @@ function(PageModel, PageCollection, UrlView, PageView, ErrorDialogueView) {
       this.listView = document.getElementById('list-pages');
       this.mobileListView = document.getElementById('list-mobile-pages');
 
-      _(this.collection.models).each(function(model) {
-        self.appendPage(model, false);
-      });
+      if(this.collection.length === 0) {
+        //$("#web-section").hide();
+        //this.renderAddWeb();
+      }
+      else {
+        _(this.collection.models).each(function(model) {
+          self.appendPage(model, false);
+        });
+      }
 
-      _(this.mobileCollection.models).each(function(model) {
-        self.appendPage(model, true);
-      });
+      if(this.mobileCollection.length === 0) {
+        //$("#mobile-section").hide();
+        //this.renderAddMobile();
+      }
+      else {
+        _(this.mobileCollection.models).each(function(model) {
+          self.appendPage(model, true);
+        });
+      }
 
       var createBox = new Backbone.NameBox({el: document.getElementById('create-page-box')});
       createBox.on('submit', this.createPage);
 
       var createMobileBox = new Backbone.NameBox({el: document.getElementById('create-mobile-page-box')});
       createMobileBox.on('submit', this.createMobilePage);
+    },
+
+    renderAddMobile: function() {
+      //this.$el.append('<div class="add-mobile-section pane span40 offset10 hi6"><span class="mw mobile-image"></span><span>Add Mobile Functionality</span></div>');
+    },
+
+    renderAddWeb: function() {
+      //this.$el.append('<div class="add-web-section pane span40 offset10 hi6"><span class="mw web-image"></span><span>Add Web Functionality</span></div>');
     },
 
     createPage: function(name, b) {
