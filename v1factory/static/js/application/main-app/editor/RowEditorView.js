@@ -1,9 +1,10 @@
 define([
   'editor/WidgetView',
-  'editor/WidgetEditorView',
+  'editor/WidgetSelectorView',
   'mixins/BackboneModal'
 ],
-function(WidgetView, WidgetEditorView) {
+function(WidgetView,
+         WidgetSelectorView) {
 
   var RowEditorView = Backbone.View.extend({
     el     : null,
@@ -28,12 +29,12 @@ function(WidgetView, WidgetEditorView) {
 
       this.render();
 
+      this.widgetSelectorView = new WidgetSelectorView(this.widgetsCollection);
+
       _(self.widgetsCollection.models).each(function(widgetModel) {
         widgetModel.set('context', self.entity.get('name'));
         self.placeWidget(widgetModel);
       });
-
-      //this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, null);
     },
 
     render: function() {
@@ -63,7 +64,7 @@ function(WidgetView, WidgetEditorView) {
     placeWidget: function(widgetModel) {
       var curWidget = new WidgetView(widgetModel);
       if(!widgetModel.isFullWidth()) this.rowWidget.appendChild(curWidget.el);
-      curWidget.resizableAndDraggable();
+      //curWidget.resizableAndDraggable();
     },
 
     removedWidget: function(fieldId) {

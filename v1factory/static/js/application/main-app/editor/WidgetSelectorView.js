@@ -1,9 +1,8 @@
 define([
-  'editor/WidgetEditorView',
   'mixins/BackboneUI',
   'iui'
 ],
-function(WidgetEditorView) {
+function() {
 
   var WidgetSelectorView = Backbone.UIView.extend({
     className : 'editor-page',
@@ -51,6 +50,7 @@ function(WidgetEditorView) {
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
+      var WidgetEditorView = require('editor/WidgetEditorView');
       this.widgetEditorView = new WidgetEditorView();
       this.widgetEditorView.isMobile = self.isMobile;
 
@@ -129,6 +129,7 @@ function(WidgetEditorView) {
     },
 
     setLayout: function(node, widgetModel) {
+      console.trace();
       $(node).show();
       node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
       node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
