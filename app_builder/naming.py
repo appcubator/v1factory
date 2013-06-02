@@ -52,37 +52,69 @@ class Identifier(object):
     def __str__(self):
         return self.identifier
 
-    def __init__(self, identifier, ref):
+    def __init__(self, identifier, ref, ns):
         self.identifier = identifier
         self.ref = ref
+        self.ns = ns # this is a namespace
+
+    def fix_identifier(self):
+        self.identifier = self.ns.make_name_safe_and_unique(self.identifier)
 
 
 class Namespace(object):
 
-    def __init__(self, identifers=None, parent_namespace=None, child_namespaces=None):
+    def __init__(self, identifiers=None, parent_namespace=None, child_namespaces=None):
         self.identifiers = [] if identifiers is None else identifiers
-
-        self.parent_namespace = [] if parent_namespace is None else parent_namespace
-
+        self.parent_namespace = parent_namespace
         self.child_namespaces = [] if child_namespaces is None else child_namespaces
 
-        self.assert_identifiers_safe() # safe = they are valid names and they don't override a builtin
-        self.assert_identifiers_unique() # no two identifiers can be the same
-        self.fix_conflicts_with_parent()
-        self.fix_conflicts_with_children()
+        for i in self.child_identifiers():
+            i.fix_identifier()
+
+        """
+        self.assert_identifiers_safe_and_unique() # safe = they are valid names and they don't override a builtin
+        """
+
+    def used_ids(self):
+        """
+        Yields this namespaces identifiers first,
+           then the parents', inductively
+        """
+        for i in self.identifiers:
+            yield i
+        if self.parent_namespace is not None:
+            for i in self.parent_namespace.used_ids():
+                yield i
+
+    def child_identifiers(self):
+        """
+        Useful for fixing the identifiers of the children
+        """
+        for c_n in self.child_namespaces:
+            for i in c_n.identifiers:
+                yield i
+            for i in c_n.child_identifiers():
+                yield i
 
     def new_identifier(self, name, ref):
         candidate = self.make_first_candidate(name)
-        while candidate in self.used_ids:
+        candidate = self.make_name_safe_and_unique(candidate)
+        new_ident = Identifier(candidate, ref, self)
+        self.identifiers.append(new_ident)
+        return new_ident
+
+    def make_name_safe_and_unique(self, name):
+        candidate = name
+        while candidate in (i.identifier for i in self.used_ids):
+            # exit condition: candidate is not a used identifier
             if re.search(r'[2-9]$', candidate):
                 candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
             else:
                 candidate += '2'
-        new_ident = Identifier(candidate, ref)
-        self.identifiers.append(new_ident)
-        return new_ident
+        return candidate
 
     def make_first_candidate(self, name):
+        """Overridable function"""
         return name
 
 
