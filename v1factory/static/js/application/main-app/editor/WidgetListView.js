@@ -28,12 +28,12 @@ function( ListEditorView,
                       'renderElements',
                       'showDetails');
 
-      this.model.get('container_info').get('uielements').bind("add", this.placeWidget);
+      this.model.get('data').get('container_info').get('uielements').bind("add", this.placeWidget);
 
-      var action = this.model.get('container_info').get('action');
+      var action = this.model.get('data').get('container_info').get('action');
 
-      this.model.get('container_info').get('query').bind('change', this.reRender); 
-      this.model.get('container_info').get('row').get('layout').bind('change', this.reRender);
+      this.model.get('data').get('container_info').get('query').bind('change', this.reRender);
+      this.model.get('data').get('container_info').get('row').get('layout').bind('change', this.reRender);
       //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
       this.rowBindings();
       this.render();
@@ -43,9 +43,9 @@ function( ListEditorView,
 
     rowBindings: function() {
       var self = this;
-      self.model.get('container_info').get('row').get('uielements').bind('add', self.reRender);
-      self.model.get('container_info').get('row').get('uielements').bind('remove', self.reRender);
-      _(self.model.get('container_info').get('row').get('uielements').models).each(function(element) {
+      self.model.get('data').get('container_info').get('row').get('uielements').bind('add', self.reRender);
+      self.model.get('data').get('container_info').get('row').get('uielements').bind('remove', self.reRender);
+      _(self.model.get('data').get('container_info').get('row').get('uielements').models).each(function(element) {
         element.off();
         element.get('layout').off("change", self.reRender);
         element.bind('change', self.reRender);
@@ -71,7 +71,7 @@ function( ListEditorView,
 
 
       var listDiv = document.createElement('div');
-      var row = this.model.get('container_info').get('row');
+      var row = this.model.get('data').get('container_info').get('row');
       listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'),
                                                           uielements: row.get('uielements').models,
                                                           isListOrGrid: row.get('isListOrGrid')});
@@ -86,7 +86,7 @@ function( ListEditorView,
       $( this.el ).resizable( "destroy" );
       $( this.el ).draggable( "destroy" );
 
-      if(this.model.get('container_info').has('row')) {
+      if(this.model.get('data').get('container_info').has('row')) {
         this.rowBindings();
       }
       this.render();
@@ -97,11 +97,11 @@ function( ListEditorView,
 
     renderElements : function() {
       var self  =this;
-      _(this.model.get('container_info').get('row').get('uielements').models).each(function(widgetModel) {
+      _(this.model.get('data').get('container_info').get('row').get('uielements').models).each(function(widgetModel) {
         //self.placeWidget(widgetModel);
       });
 
-      if(this.model.get('container_info').has('form')) {
+      if(this.model.get('data').get('container_info').has('form')) {
         _(this.formModel.get('fields').models).each(function(field) {
           self.placeFormElement(field);
         });
@@ -110,8 +110,8 @@ function( ListEditorView,
 
     showDetails: function() {
       new ListEditorView( this.model,
-                          this.model.get('container_info').get('query'),
-                          this.model.get('container_info').get('row'));
+                          this.model.get('data').get('container_info').get('query'),
+                          this.model.get('data').get('container_info').get('row'));
     }
   });
 

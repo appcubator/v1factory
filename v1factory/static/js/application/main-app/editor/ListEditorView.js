@@ -44,7 +44,7 @@ function( WidgetCollection,
       this.rowModel    = rowModel;
       this.widgetsCollection = rowModel.get('uielements');
 
-      this.entity = widgetModel.get('container_info').get('entity');
+      this.entity = widgetModel.get('data').get('container_info').get('entity');
 
 
       this.render();
@@ -57,6 +57,8 @@ function( WidgetCollection,
       editorDiv.className = 'list-editor-container';
 
       var RowEditorView = require('editor/RowEditorView');
+      console.log(this.rowModel);
+      console.log(this.entity);
       var rowView = new RowEditorView(this.rowModel, this.entity);
 
       this.rowEditorView = rowView;

@@ -33,7 +33,7 @@ function(WidgetView, WidgetEditorView) {
         self.placeWidget(widgetModel);
       });
 
-      this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, null);
+      //this.widgetEditorView = new WidgetEditorView(this.widgetsCollection, null);
     },
 
     render: function() {

@@ -3438,19 +3438,21 @@ ul.list {
 }
 
 .list-editor-modal h3 {
-padding-top: 16px;
-padding-bottom: 20px;
-padding-left: 10px;
-border-top: 1px solid #ccc;
-border-bottom: 1px solid #ccc;
-text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-color: #666;
-text-align: center;
-height: 52px;
-background-image: linear-gradient(to bottom, #fdfdfd, #eaeaea);
-background-color: #fcfcfc;
-vertical-align: top;
-overflow: hidden;
+  width: 100%;
+  display: block;
+  padding-top: 16px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  color: #666;
+  text-align: center;
+  height: 52px;
+  background-image: linear-gradient(to bottom, #fdfdfd, #eaeaea);
+  background-color: #fcfcfc;
+  vertical-align: top;
+  overflow: hidden;
 }
 
 .modal .list-query-view .sect {

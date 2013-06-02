@@ -3,6 +3,7 @@ define([
   'editor/WidgetLayoutEditorView',
   'editor/ImageSliderEditorView',
   'editor/WidgetClassPickerView',
+  'editor/ListEditorView',
   'app/FormEditorView',
   'mixins/BackboneUI',
   'iui'
@@ -11,6 +12,7 @@ function(WidgetContentEditor,
          WidgetLayoutEditor,
          ImageSliderEditorView,
          WidgetClassPickerView,
+         ListEditorView,
          FormEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
@@ -23,7 +25,7 @@ function(WidgetContentEditor,
     events : {
       'click .edit-slides-button' : 'openSlideEditor',
       'click .edit-query-button'  : 'openQueryEditor',
-      'click .edit-row-button'    : 'openRowEditor',
+      'click #edit-row-btn'       : 'openRowEditor',
       'click #edit-form-btn'      : 'openFormEditor',
       'click #pick-style'         : 'openStylePicker',
       'click .delete-button'      : 'clickedDelete',
@@ -66,6 +68,8 @@ function(WidgetContentEditor,
       if(this.model.get('data').has('container_info')) {
         var action = this.model.get('data').get('container_info').get('action');
 
+        console.log(action);
+
         if(action == "authentication") {
           this.layoutEditor = new WidgetLayoutEditor(this.model);
           this.el.appendChild(this.layoutEditor.el);
@@ -80,7 +84,11 @@ function(WidgetContentEditor,
           this.el.appendChild(this.infoEditor.el);
         }
 
-        if(action == "show" || action == "create") {
+        if(action == "show" || action == "loop") {
+          this.el.appendChild(this.renderRowButton());
+        }
+
+        if(action == "create") {
           this.el.appendChild(this.renderEditForm());
         }
 
@@ -121,9 +129,8 @@ function(WidgetContentEditor,
     },
 
     renderRowButton: function() {
-      var li       = document.createElement('li');
-      li.className = 'option-button edit-row-button';
-      li.innerHTML = 'Edit Row View';
+      var li       = document.createElement('ul');
+      li.innerHTML += '<span id="edit-row-btn" class="option-button tt" style="width:194px; display: inline-block;"><strong>Edit Row</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:34px; margin-left:1px; display: inline-block;"></span>';
       return li;
     },
 
