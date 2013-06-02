@@ -6,6 +6,23 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
 
 
+class DjangoFormReceiver(object):
+    pass
+
+class DjangoForm(object):
+
+    def __init__(self, identifier, model_fields):
+        """
+        For now it'll only work with fields that are directly associate with the model
+        """
+        self.identifier = identifier
+        self.code_path = 'webapp/forms.py'
+        self.fields = fields
+
+    def render(self):
+        return env.get_template('form.py').render(form=self)
+
+
 class DjangoQuery(object):
 
     def __init__(self, model_id):
