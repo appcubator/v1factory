@@ -1802,7 +1802,7 @@ table th[class*="span"],
   margin-left: 2px;
 }
 
-.dropdown-menu {
+.v1.dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;
@@ -1830,12 +1830,12 @@ table th[class*="span"],
   background-clip: padding-box;
 }
 
-.dropdown-menu.pull-right {
+.v1.dropdown-menu.pull-right {
   right: 0;
   left: auto;
 }
 
-.dropdown-menu .divider {
+.v1.dropdown-menu .divider {
   *width: 100%;
   height: 2px;
   margin: 9px 0px;
@@ -1844,7 +1844,7 @@ table th[class*="span"],
   background-color: #e5e5e5;
 }
 
-.dropdown-menu li a:hover {
+.v1.dropdown-menu li a:hover {
   color: #ffffff;
   text-decoration: none;
   background-color: #0081c2;

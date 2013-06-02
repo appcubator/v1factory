@@ -40,6 +40,10 @@
   cursor: pointer;
 }
 
+.elements-list ul li:hover {
+  margin-right: 17px;
+}
+
 .elements-list ul li:active {
   border: 1px solid #3b4555;
   border-top: 1px solid #3b4555;
