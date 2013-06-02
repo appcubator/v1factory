@@ -115,8 +115,6 @@ function( TableQueryView,
     },
 
     reRender: function() {
-      $( this.el ).resizable( "destroy" );
-      $( this.el ).draggable( "destroy" );
       this.render();
       this.renderElements();
     },
