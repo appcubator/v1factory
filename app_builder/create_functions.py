@@ -121,6 +121,8 @@ class AppComponentFactory(object):
 
     def create_django_form_for_entity_based_form(self, uie):
         form_model = uie.container_info.form # bind to this name to save me some typing
+        if form_model.action not in ['create', 'edit']:
+            return None
         prim_name = form_model.action + '_' + form_model.entity
         form_id = self.form_namer.new_identifier(prim_name)
         model_id = form_model.entity_resolved._django_model.identifier

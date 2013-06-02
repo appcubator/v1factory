@@ -1,6 +1,7 @@
 from app_builder.coder import Coder
 from app_builder.create_functions import AppComponentFactory
 from pyflakes.api import check
+import traceback
 
 def create_codes(app):
     factory = AppComponentFactory()
@@ -49,9 +50,13 @@ def create_codes(app):
     # UIELEMENT HOOKS
     for p in app.pages:
         for uie in p.uielements:
-            #uie = uie.subclass # downcast
             for hook_name in uie.hooks:
-                create(hook_name, uie)
+                try:
+                    create(hook_name, uie)
+                except Exception, e:
+                    print "Failed to call hook %r on %r instance" % (hook_name, uie.__class__.__name__)
+                    traceback.print_exc()
+
 
     # create html nodes and structure for pages
     for p in app.pages:
