@@ -265,18 +265,18 @@ Templates.tempUIElement = [
 
 
 Templates.tempUIElementSized = [
-  '<div style="position:absolute; left: <% print(element.get(\'layout\').get(\'left\')*GRID_WIDTH) %>px; top:<% print(element.get(\'layout\').get(\'top\')*GRID_HEIGHT) %>px;" class="span<%=element.get(\'layout\').get(\'width\')%> hi<%=element.get(\'layout\').get(\'height\')%>">',
-  '<<%= element.get(\'tagName\') %>',
-  'class = "<%= element.get(\'class_name\') %>"',
-  '<% if(element.get(\'cons_attribs\')) { %>',
-  '<% _(element.get(\'cons_attribs\').attributes).each(function(val, key) { %>',
+  '<div style="position:absolute; left: <% console.log(element); print(element.layout.get(\'left\')*GRID_WIDTH) %>px; top:<% print(element.layout.get(\'top\')*GRID_HEIGHT) %>px;" class="span<%=element.layout.get(\'width\')%> hi<%=element.layout.get(\'height\')%>">',
+  '<<%= element.data.get(\'tagName\') %>',
+  'class = "<%= element.data.get(\'class_name\') %>"',
+  '<% if(element.data.get(\'cons_attribs\')) { %>',
+  '<% _(element.data.get(\'cons_attribs\').attributes).each(function(val, key) { %>',
   '<%=key%> = "<%=val%>"<% }); %>',
   '<% } %>',
-  '<% _(element.get(\'content_attribs\').attributes).each(function(val, key) { %>',
+  '<% _(element.data.get(\'content_attribs\').attributes).each(function(val, key) { %>',
   '<%=key%> = "<%=val%>"<% }); %> style="">',
-  '<% if(!element.get(\'isSingle\')) { %>',
-  '<%= element.get(\'content\') %>',
-  '</<%= element.get(\'tagName\') %>>',
+  '<% if(!element.data.get(\'isSingle\')) { %>',
+  '<%= element.data.get(\'content\') %>',
+  '</<%= element.data.get(\'tagName\') %>>',
   '<% }; %>',
   '</div>'
 ].join('\n');

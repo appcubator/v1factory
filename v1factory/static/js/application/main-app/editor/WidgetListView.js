@@ -72,8 +72,10 @@ function( ListEditorView,
 
       var listDiv = document.createElement('div');
       var row = this.model.get('data').get('container_info').get('row');
+      console.log(row);
+      var uielements = _.map(row.get('uielements').models, function(obj) { return obj.attributes; });
       listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'),
-                                                          uielements: row.get('uielements').models,
+                                                          uielements: uielements,
                                                           isListOrGrid: row.get('isListOrGrid')});
       this.el.appendChild(listDiv);
 
