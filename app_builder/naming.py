@@ -66,14 +66,22 @@ class Namespace(object):
     def __init__(self, identifiers=None, parent_namespace=None, child_namespaces=None):
         self.identifiers = [] if identifiers is None else identifiers
         self.parent_namespace = parent_namespace
-        self.child_namespaces = [] if child_namespaces is None else child_namespaces
+        self.child_namespaces = []
+        if self.parent_namespace is not None:
+            self.parent_namespace.add_child_namespace(self)
+
+        if child_namespaces is not None:
+            for c_n in child_namespaces:
+                self.add_child_namespace(c_n)
+
+        # self.assert_identifiers_safe_and_unique() # safe = they are valid names and they don't override a builtin
+
+    def add_child_namespace(self, c_n):
+        c_n.parent_namespace == self
+        self.child_namespaces.append(c_n)
 
         for i in self.child_identifiers():
             i.fix_identifier()
-
-        """
-        self.assert_identifiers_safe_and_unique() # safe = they are valid names and they don't override a builtin
-        """
 
     def used_ids(self):
         """
@@ -105,7 +113,7 @@ class Namespace(object):
 
     def make_name_safe_and_unique(self, name):
         candidate = name
-        while candidate in (i.identifier for i in self.used_ids):
+        while candidate in (i.identifier for i in self.used_ids()):
             # exit condition: candidate is not a used identifier
             if re.search(r'[2-9]$', candidate):
                 candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
