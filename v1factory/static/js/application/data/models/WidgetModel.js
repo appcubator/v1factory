@@ -9,13 +9,13 @@ function(DataModel, LayoutModel) {
   var WidgetModel = Backbone.Model.extend({
     selected: false,
 
-    initialize: function(bone) {
+    initialize: function(bone, isNew) {
       var self = this;
       _.bindAll(this, 'isFullWidth');
 
       this.set('type', bone.type||'');
       this.set('layout', new LayoutModel(this.get('layout')));
-      this.set('data', new DataModel(bone.data||{}));
+      this.set('data', new DataModel(bone.data||{}, isNew));
 
       this.set('context', bone.context|| null);
     },

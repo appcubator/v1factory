@@ -12,7 +12,7 @@ function(WidgetModel) {
     },
 
     initialize: function(bone, isNew) {
-      ContainerWidgetModel.__super__.initialize.call(this, bone);
+      ContainerWidgetModel.__super__.initialize.call(this, bone, isNew);
     },
 
     toJSON : function() {

@@ -51,7 +51,7 @@ function( TableQueryView,
            form.get('action') != "facebook"     &&
            form.get('action') != "twitter"      &&
            form.get('action') != "linkedin") {
-          new FormEditorView(form, this.model.get('container_info').get('entity'));
+          new FormEditorView(form, this.model.get('data').get('container_info').get('entity'));
         }
 
         this.formModel = form;

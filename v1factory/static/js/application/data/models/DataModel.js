@@ -8,7 +8,6 @@ function(ContentModel,
   var DataModel = Backbone.Model.extend({
 
     initialize: function(bone, isNew) {
-
       this.set('content_attribs', new ContentModel(bone.content_attribs||{}));
 
       if(bone.container_info) {
