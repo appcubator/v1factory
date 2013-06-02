@@ -11,6 +11,9 @@ class AppComponentFactory(object):
         self.fr_namer = naming.USNamespace()
         self.fr_url_namespace = naming.USNamespace()
 
+
+    # MODELS
+
     def create_model(self, entity):
         identifier = self.model_namer.new_identifier(entity.name)
         m = DjangoModel(identifier)
@@ -24,6 +27,9 @@ class AppComponentFactory(object):
         entity._django_model = m
         return m
 
+
+    # VIEWS
+
     def create_view_for_page(self, page):
         identifier = self.view_namer.new_identifier(page.name)
 
@@ -36,6 +42,7 @@ class AppComponentFactory(object):
         v = DjangoPageView(identifier, args=args)
         page._django_view = v
         return v
+
 
     def find_or_create_query_for_view(self, uie):
 
@@ -55,6 +62,9 @@ class AppComponentFactory(object):
 
         return dq
 
+
+    # HTML GEN
+
     def create_tree_structure_for_page_nodes(self, page):
         """
         Given a page, returns a django template which has references
@@ -71,6 +81,9 @@ class AppComponentFactory(object):
         page._django_view.template_code_path = t.filename
         return t
 
+
+    # URL NAMESPACES
+
     def create_urls(self, app):
         u = DjangoURLs('webapp.pages')
         app._django_page_urls = u
@@ -81,6 +94,9 @@ class AppComponentFactory(object):
         app._django_fr_urls = u
         return u
 
+
+    # ADDING ROUTES
+
     def add_page_to_urls(self, page):
         url_obj = page.app._django_page_urls
 
@@ -89,13 +105,19 @@ class AppComponentFactory(object):
 
         return None
 
-    def create_tests_for_static_pages(self, app):
-        ident_url_pairs = []
-        for p in app.pages:
-            if p.is_static():
-                ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
-        d = DjangoStaticPagesTestCase(ident_url_pairs)
-        return d
+    def create_url_for_form_receiver(self, uie):
+        url_obj = uie.app._django_fr_urls
+
+        url = self.fr_url_namespace.new_identifier(uie._django_form.identifier)
+        route = (url, uie._django_form_receiver)
+        url_obj.routes.append(route)
+
+        self._url = url
+
+        return None
+
+
+    # FORMS
 
     def create_django_form_for_entity_based_form(self, uie):
         form_model = uie.container_info.form # bind to this name to save me some typing
@@ -118,13 +140,13 @@ class AppComponentFactory(object):
         uie._django_form_receiver = fr
         return fr
 
-    def create_url_for_form_receiver(self, uie):
-        url_obj = uie.app._django_fr_urls
 
-        url = self.fr_url_namespace.new_identifier(uie._django_form.identifier)
-        route = (url, uie._django_form_receiver)
-        url_obj.routes.append(route)
+    # TESTS
 
-        self._url = url
-
-        return None
+    def create_tests_for_static_pages(self, app):
+        ident_url_pairs = []
+        for p in app.pages:
+            if p.is_static():
+                ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
+        d = DjangoStaticPagesTestCase(ident_url_pairs)
+        return d
