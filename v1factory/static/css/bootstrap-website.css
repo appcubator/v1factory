@@ -5824,6 +5824,29 @@ i.icon-url {
   }
 }
 
+
+.left-nav {
+  background-color: rgba(51, 51, 51, 0.8);
+  padding: 0px;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.065);
+  font-weight: bold;
+  color: #c3c3c1;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.left-nav li {
+  cursor: pointer;
+  line-height: 30px;
+  border-bottom: 1px solid #999;
+  padding: 10px;
+}
+
+.left-nav li:hover {
+  color: #fff;
+}
+
 /* Email Page */
 #email-list {
   background-color: #fff;
