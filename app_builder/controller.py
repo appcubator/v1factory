@@ -6,12 +6,21 @@ def create_codes(app):
     factory = AppComponentFactory()
 
     create_map = {'create model for entity': factory.create_model,
+
                   'create urls object for app': factory.create_urls,
+                  'create urls object for app form receivers': factory.create_fr_urls,
+
                   'view for page': factory.create_view_for_page,
                   'url to serve page': factory.add_page_to_urls,
+
                   'find or add the needed data to the view': factory.find_or_create_query_for_view ,
                   'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes,
                   'create tests for static pages': factory.create_tests_for_static_pages,
+
+                  'create form object': factory.create_django_form_for_entity_based_form,
+                  'create form receiver': factory.create_form_receiver_for_form_object,
+                  'create url for form receiver': factory.create_url_for_form_receiver,
+
                  }
 
 
@@ -32,6 +41,7 @@ def create_codes(app):
 
     # routes and functions to serve pages
     create('create urls object for app', app)
+    create('create urls object for app form receivers', app)
     for p in app.pages:
         create('view for page', p)
         create('url to serve page', p)
@@ -39,7 +49,7 @@ def create_codes(app):
     # UIELEMENT HOOKS
     for p in app.pages:
         for uie in p.uielements:
-            uie = uie.subclass # downcast
+            #uie = uie.subclass # downcast
             for hook_name in uie.hooks:
                 create(hook_name, uie)
 

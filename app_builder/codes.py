@@ -7,19 +7,35 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
 
 
 class DjangoFormReceiver(object):
-    pass
 
-class DjangoForm(object):
-
-    def __init__(self, identifier, model_fields):
+    def __init__(self, identifier, form_identifier):
         """
         For now it'll only work with fields that are directly associate with the model
         """
         self.identifier = identifier
-        self.code_path = 'webapp/forms.py'
-        self.fields = fields
+        self.form_identifier = form_identifier
+        self.code_path = 'webapp/form_receivers.py'
 
     def render(self):
+        return env.get_template('form_receiver.py').render(fr=self)
+
+
+class DjangoForm(object):
+
+    def __init__(self, identifier, model_id, field_identifiers):
+        """
+        For now it'll only work with model fields
+        """
+        self.identifier = identifier
+        self.model_id = model_id
+        self.code_path = 'webapp/forms.py'
+        self.field_identifiers = field_identifiers
+
+    def render(self):
+        if len(self.field_identifiers) == 1:
+            self.included_field_string = repr(self.field_identifiers[0]) + ','
+        else:
+            self.included_field_string = ', '.join([repr(i) for i in self.field_identifiers])
         return env.get_template('form.py').render(form=self)
 
 

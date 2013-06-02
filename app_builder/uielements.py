@@ -1,5 +1,6 @@
 from dict_inited import DictInited
 from app_builder.resolving import Resolvable, LinkLang
+from app_builder.analyzer_utils import encode_braces, decode_braces
 from jinja2 import Environment, PackageLoader
 from app_builder.htmlgen import Tag
 from copy import deepcopy
@@ -63,22 +64,16 @@ class Hooked(object):
 
 class Form(DictInited, Hooked):
 
-    class FormInfo(DictInited, Resolvable):
+    # these two are tightly coupled and serial for now.
+    _hooks = ['create form object', 'create form receiver', 'create url for form receiver']
 
-        class FormInfoInfo(DictInited):
+    class FormInfo(DictInited):
 
-            class FormField(DictInited):
-                _schema = {
-                    "name": {"_type": ""},
-                    "placeholder": {"_type": ""},
-                    "label": {"_type": ""},
-                    "displayType": {"_type": ""},
-                    "type": {"_type": ""},  # FIXME what is the diff btwn this and the above
-                    "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this?
-                }
+        class FormInfoInfo(DictInited, Resolvable):
+
+            class FormField(object):
 
                 def htmls(field):
-                    label = Tag('label', {}, content=field.label)
                     if field.displayType == 'single-line-text':
                         f = Tag('input', {'type':'text', 'placeholder':field.placeholder})
                     elif field.displayType == 'paragraph-text':
@@ -94,30 +89,75 @@ class Form(DictInited, Hooked):
                     else:
                         raise Exception("Formfield NYI")
 
-                    return (label, f)
+                    try:
+                        if field.label is not None:
+                            label = Tag('label', {}, content=field.label)
+                            return (label, f)
+                    except AttributeError:
+                        pass
+                    return (f,)
+
+            class FormModelField(FormField, DictInited, Resolvable):
+                _schema = {
+                    "field_name": {"_type": ""},
+                    "placeholder": {"_type": ""},
+                    "label": {"_type": ""},
+                    "displayType": {"_type": ""},
+                    "type": {"_type": ""},  # FIXME what is the diff btwn this and the above
+                    "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this, in more detail?
+                }
+
+                _resolve_attrs = (('field_name', 'model_field'),)
+
+                def __init__(self, *args, **kwargs):
+                    super(Form.FormInfo.FormInfoInfo.FormModelField, self).__init__(*args, **kwargs)
+                    self.name = self.field_name
+
+            class FormNormalField(FormField, DictInited, Resolvable):
+                _schema = {
+                    "name": {"_type": ""},
+                    "placeholder": {"_type": ""},
+                    "label": {"_type": ""},
+                    "displayType": {"_type": ""},
+                    "type": {"_type": ""},  # FIXME what is the diff btwn this and the above
+                    "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this, in more detail?
+                }
+                _resolve_attrs = (('field_name', 'model_field'),)
+
+            class ButtonField(FormField, DictInited):
+                _schema = {
+                    # HACK - if you leave out the name attribute, it automatically becomes a button
+                    "placeholder": {"_type": ""},
+                }
+
+                def __init__(self, *args, **kwargs):
+                    super(Form.FormInfo.FormInfoInfo.ButtonField, self).__init__(*args, **kwargs)
+                    self.displayType = 'button'
+
+
+            def __init__(self, *args, **kwargs):
+                super(Form.FormInfo.FormInfoInfo, self).__init__(*args, **kwargs)
+                # this is to make a proper path for resolving the field name later
+                for f in filter(lambda x: isinstance(x, Form.FormInfo.FormInfoInfo.FormModelField), self.fields):
+                    f.field_name = encode_braces('entities/%s/fields/%s' % (self.entity, f.field_name))
 
             _schema = {
-                "name": {"_type": ""},
+                "entity": {"_type": ""},
                 "action": {"_type": ""},
-                "fields": {"_type": [], "_each": {"_type": FormField}},
+                "fields": {"_type": [], "_each": {"_one_of": [{"_type": FormModelField},{"_type": ButtonField}]}},
                 #"goto": {"_type": LinkLang},
                 "belongsTo": {"_one_of": [{"_type": ""}, {"_type": None}]}  # TODO may have reference
             }
 
+            _resolve_attrs = (('entity', 'entity_resolved'),)
+
         _schema = {
-            "entity": {"_type": ""},
-            "action": {"_type": ""},
             "form": {"_type": FormInfoInfo}
         }
-
-        _resolve_attrs = (('entity', 'entity_resolved'),)
 
     _schema = {
         "container_info": {"_type": FormInfo}
     }
-
-    def post_receiver(self):
-        return
 
     def html(self):
         fields = ['{% csrf_token %}']
@@ -188,26 +228,3 @@ class Iterator(DictInited, Hooked):
     _schema = {
         "container_info": {"_type": IteratorInfo},
     }
-
-
-"""
-        # on init, this object should get a reference to namespaces so that it can
-        # reference built in models, views, and form receivers (ie, create user side effects)
-
-        def render(self):
-            # this is where the HTML generation code goes
-            pass
-
-        def add_to_view(self):
-            # this is where you figure out what you need to add the the view function which creates the page context
-            pass
-
-        def create_form_receivers(self):
-            # make some form receivers here if you need to communicate with the server.
-            pass
-
-        def javascript(self):
-            # generate some javascript here if you need to add javascript to the page
-            pass
-
-"""
