@@ -73,8 +73,8 @@ def main(app):
 
     for rel_path, code in cc.itercode():
         print code
-        if rel_path.endswith('.py'):
-            print check(code, 'test.py')
+        #if rel_path.endswith('.py'):
+        #    print check(code, 'test.py')
 
 
 """

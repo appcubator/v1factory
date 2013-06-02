@@ -47,34 +47,56 @@ def make_safe(s):
     return s
 
 
-class CWNamespace(object):
+class Identifier(object):
 
-    def __init__(self):
-        self.used_ids = []
+    def __str__(self):
+        return self.identifier
 
-    def new_identifier(self, name):
+    def __init__(self, identifier, ref):
+        self.identifier = identifier
+        self.ref = ref
+
+
+class Namespace(object):
+
+    def __init__(self, identifers=None, parent_namespace=None, child_namespaces=None):
+        self.identifiers = [] if identifiers is None else identifiers
+
+        self.parent_namespace = [] if parent_namespace is None else parent_namespace
+
+        self.child_namespaces = [] if child_namespaces is None else child_namespaces
+
+        self.assert_identifiers_safe() # safe = they are valid names and they don't override a builtin
+        self.assert_identifiers_unique() # no two identifiers can be the same
+        self.fix_conflicts_with_parent()
+        self.fix_conflicts_with_children()
+
+    def new_identifier(self, name, ref):
+        candidate = self.make_first_candidate(name)
+        while candidate in self.used_ids:
+            if re.search(r'[2-9]$', candidate):
+                candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
+            else:
+                candidate += '2'
+        new_ident = Identifier(candidate, ref)
+        self.identifiers.append(new_ident)
+        return new_ident
+
+    def make_first_candidate(self, name):
+        return name
+
+
+class CWNamespace(Namespace):
+
+    def make_first_candidate(self, name):
         candidate = make_safe(name.replace(' ', '_').lower())
         candidate = us2cw(candidate) # use capwords for model names
-        while candidate in self.used_ids:
-            if re.search(r'[2-9]$', candidate):
-                candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
-            else:
-                candidate += '2'
-        self.used_ids.append(candidate)
         return candidate
 
 
-class USNamespace(object):
+class USNamespace(Namespace):
 
-    def __init__(self):
-        self.used_ids = []
-
-    def new_identifier(self, name):
+    def make_first_candidate(self, name):
         candidate = make_safe(name.replace(' ', '_').lower())
-        while candidate in self.used_ids:
-            if re.search(r'[2-9]$', candidate):
-                candidate = candidate[:-1] + str(int(candidate[-1]) + 1)
-            else:
-                candidate += '2'
-        self.used_ids.append(candidate)
         return candidate
+

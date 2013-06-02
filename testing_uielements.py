@@ -234,3 +234,4 @@ from app_builder.controller import main
 def test():
     return main(app)
 
+test()

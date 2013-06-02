@@ -35,9 +35,13 @@ class Coder(object):
             if relative_path.endswith('.py'):
                 # try to compile the code to prevent syntax errors
                 # TODO Fix the modules
-                compile(code + "\n", relative_path, "exec")
-                # fix style
-                code = autopep8.fix_string(code)
+                try:
+                    compile(code + "\n", relative_path, "exec")
+                except SyntaxError:
+                    traceback.print_exc()
+                    continue
+                else:
+                    code = autopep8.fix_string(code)
 
             yield (relative_path, code)
 
