@@ -44,9 +44,13 @@ function() {
                       'hoverClicked',
                       'clickedPage',
                       'isMouseOn',
-                      'stoppedEditing');
+                      'stoppedEditing',
+                      'unbindAll');
 
       var self = this;
+
+      console.log("INIT SELECTOR");
+      console.log(widgetsCollection);
 
       this.widgetsCollection    = widgetsCollection;
       this.widgetsCollection.bind('add', this.bindWidget);
@@ -115,6 +119,7 @@ function() {
       });
 
       widget.bind('hovered', function() {
+        console.log("HOVERED SELECTO!!!");
         self.widgetHover(widget);
       });
 
@@ -126,6 +131,30 @@ function() {
         self.widgetUnhover(widget);
         self.newSelected(widget);
       });
+
+      widget.on('deselect', function() {
+        self.deselect();
+      });
+
+      widget.on('editModeOn', function() {
+        self.unbindAll();
+      });
+    },
+
+    unbindAll: function() {
+      var widget = this.selectedEl;
+      widget.on('editModeOff', function() {
+        self.bindWidget(widget);
+      });
+
+      widget.unbind('hovered');
+      widget.unbind('unhovered');
+      widget.unbind('selected');
+      console.log('hide');
+      //this.hideNode(this.selectDiv);
+      this.selectDiv.style.height = 0;
+      this.selectDiv.style.width = 0;
+      this.selectDiv.style.left = ((widget.get('layout').get('width') * 80) + 4) + 'px';
     },
 
     setLayout: function(node, widgetModel) {
