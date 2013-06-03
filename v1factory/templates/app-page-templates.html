@@ -305,30 +305,31 @@
 </script>
 
 <script type="text/template" id="emails-page">
-<div class="container hoff6 ">
-  <div class="left-bar span12">
-    <h2>Emails</h2>
-    <ul id="email-list" class="nav nav-stacked"></ul>
-    <a id="create-email" class="btn btn-primary btn-small">
-      <span style="font-size: 14px">+</span> Create Email
-    </a>
+  <div class="span58">
+    <h2 class="hoff1">Emails</h2>
+    <hr class="hoff2">
+    <div class="left-bar span12">
+      <ul id="email-list" class="left-nav"></ul>
+      <!--<a id="create-email" class="btn btn-primary btn-small">
+        <span style="font-size: 14px">+</span> Create Email
+      </a>-->
+    </div>
+    <div class="right-bar span40 offset4">
+      <form>
+        <div class="control-group">
+        <label class="control-label">Email Name</label>
+          <input type="text" id="edit-name" class="name input-block-level">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Subject</label>
+          <input type="text" id="edit-subject" class="subject input-block-level">
+        </div>
+        <div class="control-group">
+          <label class="control-label">Message</label>
+          <textarea class="content input-block-level" id="edit-content" style="height: 300px; overflow: scroll"></textarea>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="right-bar span40 offset4">
-    <form>
-      <div class="control-group">
-      <label class="control-label">Email Name</label>
-        <input type="text" id="edit-name" class="name input-block-level">
-      </div>
-      <div class="control-group">
-        <label class="control-label">Subject</label>
-        <input type="text" id="edit-subject" class="subject input-block-level">
-      </div>
-      <div class="control-group">
-        <label class="control-label">Message</label>
-        <textarea class="content input-block-level" id="edit-content" style="height: 300px; overflow: scroll"></textarea>
-      </div>
-    </form>
-  </div>
-</div>
 </script>
 

@@ -4,11 +4,12 @@ define([
 ], function(EmailModel) {
 	var EmailView = Backbone.View.extend({
 		events: {
-			'keydown input': 'saveChange'
+			'keyup input': 'saveChange'
 		},
 		initialize: function(options) {
 			_.bindAll(this);
 			this.model = options.model;
+			this.trigger('change:model', this.model);
 		},
 		render: function() {
 			this.$el.find('input#edit-name').val(this.model.get('name'));
@@ -22,10 +23,12 @@ define([
 			if(!value) {
 				return;
 			}
-			if(attribute != "name" || attribute != "subject" || attribute != "content") {
-				console.error("invalid attribute");
-			}
 			this.model.set(attribute, value);
+		},
+		setModel: function(model) {
+			this.model = model;
+			this.trigger('change:model', this.model);
+			this.render();
 		}
 	});
 
