@@ -120,7 +120,7 @@ class AppComponentFactory(object):
         url_obj = uie.app._django_fr_urls
 
         url = self.fr_url_namespace.new_identifier(uie._django_form.identifier)
-        route = (repr(url), uie._django_form_receiver)
+        route = (repr(str(url)), uie._django_form_receiver)
         url_obj.routes.append(route)
 
         self._url = url
@@ -135,7 +135,7 @@ class AppComponentFactory(object):
         if form_model.action not in ['create', 'edit']:
             return None
         prim_name = form_model.action + '_' + form_model.entity
-        form_id = self.form_namespace.new_identifier(prim_name)
+        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
         model_id = form_model.entity_resolved._django_model.identifier
         field_ids = []
         for f in form_model.fields:
