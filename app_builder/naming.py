@@ -2,34 +2,38 @@ import re
 import keyword
 
 built_in_functions = ('abs', 'divmod', 'input', 'open', 'staticmethod',
-                    'all', 'enumerate', 'int', 'ord', 'str',
-                    'any', 'eval', 'isinstance', 'pow', 'sum',
-                    'basestring', 'execfile', 'issubclass', 'print', 'super',
-                    'bin', 'file', 'iter', 'property', 'tuple',
-                    'bool', 'filter', 'len', 'range', 'type',
-                    'bytearray', 'float', 'list', 'raw_input', 'unichr',
-                    'callable', 'format', 'locals', 'reduce', 'unicode',
-                    'chr', 'frozenset', 'long', 'reload', 'vars',
-                    'classmethod', 'getattr', 'map', 'repr', 'xrange',
-                    'cmp', 'globals', 'max', 'reversed', 'zip',
-                    'compile', 'hasattr', 'memoryview', 'round', '__import__',
-                    'complex', 'hash', 'min', 'set', 'apply',
-                    'delattr', 'help', 'next', 'setattr', 'buffer',
-                    'dict', 'hex', 'object', 'slice', 'coerce',
-                    'dir', 'id', 'oct', 'sorted', 'intern')
+                      'all', 'enumerate', 'int', 'ord', 'str',
+                      'any', 'eval', 'isinstance', 'pow', 'sum',
+                      'basestring', 'execfile', 'issubclass', 'print', 'super',
+                      'bin', 'file', 'iter', 'property', 'tuple',
+                      'bool', 'filter', 'len', 'range', 'type',
+                      'bytearray', 'float', 'list', 'raw_input', 'unichr',
+                      'callable', 'format', 'locals', 'reduce', 'unicode',
+                      'chr', 'frozenset', 'long', 'reload', 'vars',
+                      'classmethod', 'getattr', 'map', 'repr', 'xrange',
+                      'cmp', 'globals', 'max', 'reversed', 'zip',
+                      'compile', 'hasattr', 'memoryview', 'round', '__import__',
+                      'complex', 'hash', 'min', 'set', 'apply',
+                      'delattr', 'help', 'next', 'setattr', 'buffer',
+                      'dict', 'hex', 'object', 'slice', 'coerce',
+                      'dir', 'id', 'oct', 'sorted', 'intern')
 
 django_keywords = ('',)
 
-def cw2us(x): # capwords to underscore notation
-    return re.sub(r'(?<=[a-z])[A-Z]|(?<!^)[A-Z](?=[a-z])',
-        r"_\g<0>", x).lower(  )
 
-def us2mc(x): # underscore to mixed case notation
+def cw2us(x):  # capwords to underscore notation
+    return re.sub(r'(?<=[a-z])[A-Z]|(?<!^)[A-Z](?=[a-z])',
+                  r"_\g<0>", x).lower()
+
+
+def us2mc(x):  # underscore to mixed case notation
     return re.sub(r'_([a-z])', lambda m: (m.group(1).upper()), x)
 
-def us2cw(x): # underscore to capwords notation
+
+def us2cw(x):  # underscore to capwords notation
     s = us2mc(x)
-    return s[0].upper(  )+s[1:]
+    return s[0].upper() + s[1:]
+
 
 def make_safe(s):
     s = re.sub(r'[^a-zA-Z0-9_]', '', s)
@@ -58,7 +62,7 @@ class Identifier(object):
     def __init__(self, identifier, ref, ns):
         self.identifier = identifier
         self.ref = ref
-        self.ns = ns # this is a namespace
+        self.ns = ns  # this is a namespace
 
     def fix_identifier(self):
         self.identifier = self.ns.make_name_safe_and_unique(self.identifier)
@@ -77,10 +81,11 @@ class Namespace(object):
             for c_n in child_namespaces:
                 self.add_child_namespace(c_n)
 
-        # self.assert_identifiers_safe_and_unique() # safe = they are valid names and they don't override a builtin
+        # self.assert_identifiers_safe_and_unique() # safe = they are valid
+        # names and they don't override a builtin
 
     def add_child_namespace(self, c_n):
-        c_n.parent_namespace == self
+        c_n.parent_namespace = self
         self.child_namespaces.append(c_n)
 
         for i in self.child_identifiers():
@@ -133,13 +138,13 @@ class CWNamespace(Namespace):
 
     def make_first_candidate(self, name):
         candidate = make_safe(name.replace(' ', '_').lower())
-        candidate = us2cw(candidate) # use capwords for model names
+        candidate = us2cw(candidate)  # use capwords for model names
         return candidate
 
 
 class USNamespace(Namespace):
 
     def make_first_candidate(self, name):
-        candidate = make_safe(name.replace(' ', '_').lower())
+        candidate = cw2us(name)
+        candidate = make_safe(candidate.replace(' ', '_').lower())
         return candidate
-

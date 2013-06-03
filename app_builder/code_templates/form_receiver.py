@@ -11,7 +11,7 @@ def JSONResponse(serializable_obj, **kwargs):
 
 @require_POST
 def {{ fr.identifier }}(request):
-    form = {{ fr.form_identifier }}(request.POST)
+    form = {{ fr.form_id }}(request.POST)
     if form.is_valid():
         # do some stuff
         obj = form.save()

@@ -8,12 +8,12 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
 
 class DjangoFormReceiver(object):
 
-    def __init__(self, identifier, form_identifier):
+    def __init__(self, identifier, form_id):
         """
         For now it'll only work with fields that are directly associate with the model
         """
         self.identifier = identifier
-        self.form_identifier = form_identifier
+        self.form_id = form_id
         self.code_path = 'webapp/form_receivers.py'
 
     def render(self):
@@ -22,20 +22,20 @@ class DjangoFormReceiver(object):
 
 class DjangoForm(object):
 
-    def __init__(self, identifier, model_id, field_identifiers):
+    def __init__(self, identifier, model_id, field_ids):
         """
         For now it'll only work with model fields
         """
         self.identifier = identifier
         self.model_id = model_id
         self.code_path = 'webapp/forms.py'
-        self.field_identifiers = field_identifiers
+        self.field_ids = field_ids
 
     def render(self):
-        if len(self.field_identifiers) == 1:
-            self.included_field_string = repr(str(self.field_identifiers[0])) + ','
+        if len(self.field_ids) == 1:
+            self.included_field_string = repr(str(self.field_ids[0])) + ','
         else:
-            self.included_field_string = ', '.join([repr(str(i)) for i in self.field_identifiers])
+            self.included_field_string = ', '.join([repr(str(i)) for i in self.field_ids])
         return env.get_template('form.py').render(form=self)
 
 
@@ -67,7 +67,7 @@ class DjangoPageView(object):
         self.pc_namespace = naming.USNamespace()
         for arg, data in self.args:
             name_attempt = data.get('template_id', 'BADNAME') # helps a test pass
-            data['template_id'] = self.pc_namespace.new_identifier(name_attempt)
+            data['template_id'] = self.pc_namespace.new_identifier(str(name_attempt))
 
         # queries
         self.queries = []
@@ -405,11 +405,12 @@ class DjangoURLs(object):
     Represents a set of URL - function mappings.
     """
 
-    def __init__(self, module_string):
+    def __init__(self, module_string, first_time=False):
         self.module = module_string
         self.routes = []
         self.imports = ['from django.conf.urls import patterns, include, url']
         self.code_path = "webapp/urls.py"
+        self.first_time = first_time
 
     def render(self):
         return env.get_template('urls.py').render(urls=self)
