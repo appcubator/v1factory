@@ -1,11 +1,11 @@
 import unittest
-from app_builder.naming import USNamespace, Identifier
+from app_builder.naming import Namespace, Identifier
 
 
 class NewIdentifierTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.n = USNamespace()
+        self.n = Namespace()
 
     def test_basics(self):
         i = self.n.new_identifier('test')
@@ -19,15 +19,15 @@ class NestingTestCase(unittest.TestCase):
 
         #       n3    >>    (n1 >> n2)
 
-        n1 = USNamespace()
+        n1 = Namespace()
         i1 = n1.new_identifier('simplejson')
 
         # example of building from parents down
-        n2 = USNamespace(parent_namespace=n1)
+        n2 = Namespace(parent_namespace=n1)
         i2 = n2.new_identifier('simplejson')
 
         # example from building parent afterward and adding children
-        n3 = USNamespace()
+        n3 = Namespace()
         i3 = n3.new_identifier('simplejson')
         n3.add_child_namespace(n1)
 
@@ -53,15 +53,15 @@ class NestingTestCase(unittest.TestCase):
 class NewIdentifierTestCase(unittest.TestCase):
 
     def setUp(self):
-        n1 = USNamespace()
+        n1 = Namespace()
         i1 = n1.new_identifier('simplejson')
 
         # example of building from parents down
-        n2 = USNamespace(parent_namespace=n1)
+        n2 = Namespace(parent_namespace=n1)
         i2 = n2.new_identifier('simplejson')
 
         # example from building parent afterward and adding children
-        n3 = USNamespace()
+        n3 = Namespace()
         i3 = n3.new_identifier('simplejson')
         n3.add_child_namespace(n1)
 

@@ -1,16 +1,29 @@
-from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver
+from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver, BASE_IMPORTS
 from app_builder import naming
 
 
 class AppComponentFactory(object):
 
     def __init__(self):
-        self.model_namespace = naming.CWNamespace()
-        self.form_namespace = naming.CWNamespace()
-        self.view_namespace = naming.USNamespace()
-        self.fr_namespace = naming.USNamespace()
-        self.fr_url_namespace = naming.USNamespace()
 
+        self.model_namespace = naming.Namespace()
+        self.form_namespace = naming.Namespace()
+        self.view_namespace = naming.Namespace()
+        self.fr_namespace = naming.Namespace()
+        self.fr_url_namespace = naming.Namespace()
+
+        def add_imports_to_ns(ns, imp_strings):
+            imports = [i.split('import ')[1].replace(',','').split() for i in imp_strings]
+            imports = [item for sublist in imports for item in sublist]
+            for i in imports:
+                h = ns.new_identifier(i, ref=i)
+
+                print "Hello: %s" % h
+
+        add_imports_to_ns(self.model_namespace, BASE_IMPORTS['webapp/models.py'])
+        add_imports_to_ns(self.view_namespace, BASE_IMPORTS['webapp/pages.py'])
+        add_imports_to_ns(self.form_namespace, BASE_IMPORTS['webapp/forms.py'])
+        add_imports_to_ns(self.fr_namespace, BASE_IMPORTS['webapp/form_receivers.py'])
 
     # MODELS
 

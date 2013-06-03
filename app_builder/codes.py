@@ -6,15 +6,13 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
 
 BASE_IMPORTS = { 'webapp/models.py': ('from django.db import models',),
-                 'webapp/pages.py': ('from django.db import models',
-                                    'from django.http import HttpResponse',
+                 'webapp/pages.py': ('from django.http import HttpResponse',
                                     'from django.contrib.auth.decorators import login_required',
                                     'from django.views.decorators.http import require_GET, require_POST',
                                     'from django.views.decorators.csrf import csrf_exempt',
                                     'from django.utils import simplejson',
                                     'from django.shortcuts import redirect, render, render_to_response, get_object_or_404'),
-                 'webapp/form_receiver.py': ('from django.db import models',
-                                            'from django.http import HttpResponse',
+                 'webapp/form_receivers.py': ('from django.http import HttpResponse',
                                             'from django.contrib.auth.decorators import login_required',
                                             'from django.views.decorators.http import require_GET, require_POST',
                                             'from django.views.decorators.csrf import csrf_exempt',
@@ -98,7 +96,7 @@ class DjangoPageView(object):
         self.args = [ (self.namespace.new_identifier(arg, ref=data), data) for arg, data in args ]
 
         # continuing args, make a namespace for page context
-        self.pc_namespace = naming.USNamespace()
+        self.pc_namespace = naming.Namespace()
         for arg, data in self.args:
             name_attempt = data.get('template_id', 'BADNAME') # helps a test pass
             data['template_id'] = self.pc_namespace.new_identifier(str(name_attempt))
@@ -164,11 +162,11 @@ class DjangoModel(object):
     def __init__(self, identifier):
         self.identifier = identifier
         self.code_path = "webapp/models.py"
-        self.field_namer = naming.USNamespace(parent_namespace=self.identifier.ns)
+        self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
         self.fields = []
 
     def create_field(self, name, canonical_type, required):
-        identifier = self.field_namer.new_identifier(name)
+        identifier = self.namespace.new_identifier(name)
         f = DjangoField(
             identifier, canonical_type, required=required, parent_model=self)
         self.fields.append(f)

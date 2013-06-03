@@ -59,6 +59,9 @@ class Identifier(object):
     def __unicode__(self):
         return self.identifier
 
+    def __eq__(self, other):
+        return str(self) == other
+
     def __init__(self, identifier, ref, ns):
         self.identifier = identifier
         self.ref = ref
@@ -87,9 +90,16 @@ class Namespace(object):
     def add_child_namespace(self, c_n):
         c_n.parent_namespace = self
         self.child_namespaces.append(c_n)
+        self.fix_children()
 
+    def fix_children(self):
         for i in self.child_identifiers():
-            i.fix_identifier()
+            """for x in self.used_ids():
+                if i.identifier == x.identifier:
+                    """
+            if i in self.used_ids():
+                i.fix_identifier()
+                i.ns.fix_children()
 
     def used_ids(self):
         """
@@ -112,15 +122,17 @@ class Namespace(object):
             for i in c_n.child_identifiers():
                 yield i
 
-    def new_identifier(self, name, ref=None):
-        candidate = self.make_first_candidate(name)
+    def new_identifier(self, name, ref=None, cap_words=False):
+        candidate = name
+        if cap_words:
+            candidate = us2cw(candidate)
         candidate = self.make_name_safe_and_unique(candidate)
         new_ident = Identifier(candidate, ref, self)
         self.identifiers.append(new_ident)
         return new_ident
 
     def make_name_safe_and_unique(self, name):
-        candidate = name
+        candidate = make_safe(name.replace(' ', '_').lower())
         while candidate in (i.identifier for i in self.used_ids()):
             # exit condition: candidate is not a used identifier
             if re.search(r'[2-9]$', candidate):
@@ -129,22 +141,3 @@ class Namespace(object):
                 candidate += '2'
         return candidate
 
-    def make_first_candidate(self, name):
-        """Overridable function"""
-        return name
-
-
-class CWNamespace(Namespace):
-
-    def make_first_candidate(self, name):
-        candidate = make_safe(name.replace(' ', '_').lower())
-        candidate = us2cw(candidate)  # use capwords for model names
-        return candidate
-
-
-class USNamespace(Namespace):
-
-    def make_first_candidate(self, name):
-        candidate = cw2us(name)
-        candidate = make_safe(candidate.replace(' ', '_').lower())
-        return candidate

@@ -37,6 +37,11 @@ test_json = r"""{
                     "name": "Picture",
                     "type": "image",
                     "required": false
+                },
+                {
+                    "name": "models",
+                    "type": "image",
+                    "required": false
                 }
             ],
             "forms": []

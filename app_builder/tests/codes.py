@@ -1,13 +1,13 @@
 import unittest
 from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver, Import
-from app_builder.naming import USNamespace
+from app_builder.naming import Namespace
 from app_builder.uielements import Node, Layout
 
 
 class ImportTestCase(unittest.TestCase):
 
     def setUp(self):
-        ns = USNamespace()
+        ns = Namespace()
 
         # say you wanted to import both the simplejson and django.utils.simplejson:
         id1 = ns.new_identifier('simplejson')
@@ -31,7 +31,7 @@ class ImportTestCase(unittest.TestCase):
         # some dumbo make a variable called re
         # but now you want to import re!
         # so whad'you do?
-        ns = USNamespace()
+        ns = Namespace()
         ns.new_identifier('re')
         i = Import('re', ns.new_identifier('re'))
         self.assertEqual(i.render(), 'import re as re2')
@@ -40,7 +40,7 @@ class ImportTestCase(unittest.TestCase):
 class DjangoFormCreationTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = USNamespace()
+        self.ns = Namespace()
         x = self.ns.new_identifier
         form_id = self.ns.new_identifier('test_form')
         model_id = x('test_model')
@@ -54,7 +54,7 @@ class DjangoFormCreationTestCase(unittest.TestCase):
 class DjangoFormReceiverCreationTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = USNamespace()
+        self.ns = Namespace()
         x = self.ns.new_identifier
         form_rec_id = self.ns.new_identifier('test_form_receiver')
         form_id = x('test_form')
@@ -96,7 +96,7 @@ class DjangoFieldKwargsTestCase(unittest.TestCase):
 class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = USNamespace()
+        self.ns = Namespace()
         self.model = DjangoModel(self.ns.new_identifier("test_model"))
 
     def test_create_field(self):
@@ -110,7 +110,7 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
 class DjangoModelTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = USNamespace()
+        self.ns = Namespace()
         self.model = DjangoModel(self.ns.new_identifier("test_model"))
 
         self.model.create_field("idk", "text", True)
@@ -124,12 +124,12 @@ class DjangoModelTestCase(unittest.TestCase):
 class DjangoPageViewTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = USNamespace()
+        self.ns = Namespace()
 
     def test_creation(self):
         view = DjangoPageView(self.ns.new_identifier("test_view"))
         self.assertEqual(view.code_path, 'webapp/pages.py')
-        self.assertIsInstance(view.namespace, USNamespace)
+        self.assertIsInstance(view.namespace, Namespace)
 
     def test_create_with_args(self):
         d1, d2, d3 = ({'1': 1}, {'2': 2}, {'3': 3})
@@ -181,7 +181,7 @@ class DjangoURLTestCase(unittest.TestCase):
 
     def setUp(self):
         self.url = DjangoURLs('test.module.name', first_time=False)
-        self.ns = USNamespace()
+        self.ns = Namespace()
         f_id = self.ns.new_identifier('random function')
         self.url.routes.append(('\'randomstringgoeshere\'', f_id))
 

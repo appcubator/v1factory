@@ -4,6 +4,9 @@ import autopep8
 import shutil
 import tempfile
 import logging
+
+from codes import BASE_IMPORTS
+
 logger = logging.getLogger("app_builder")
 
 from os.path import join
@@ -33,6 +36,12 @@ class Coder(object):
             code = '\n\n'.join([ c.render() for c in codes ])
 
             if relative_path.endswith('.py'):
+                try:
+                    import_code = '\n'.join(BASE_IMPORTS[relative_path])
+                    code = import_code + '\n\n' + code
+                except KeyError:
+                    pass
+
                 # try to compile the code to prevent syntax errors
                 # TODO Fix the modules
                 try:
