@@ -33,9 +33,9 @@ class DjangoForm(object):
 
     def render(self):
         if len(self.field_identifiers) == 1:
-            self.included_field_string = repr(self.field_identifiers[0]) + ','
+            self.included_field_string = repr(str(self.field_identifiers[0])) + ','
         else:
-            self.included_field_string = ', '.join([repr(i) for i in self.field_identifiers])
+            self.included_field_string = ', '.join([repr(str(i)) for i in self.field_identifiers])
         return env.get_template('form.py').render(form=self)
 
 
@@ -57,11 +57,11 @@ class DjangoPageView(object):
         self.code_path = "webapp/pages.py"
 
         # args, make a namespace for the function
-        self.namespace = naming.USNamespace()
+        self.namespace = self.identifier.ns
         self.namespace.new_identifier('request')
         if args is None:
             args = []
-        self.args = [ (self.namespace.new_identifier(arg), data) for arg, data in args ]
+        self.args = [ (self.namespace.new_identifier(arg, ref=data), data) for arg, data in args ]
 
         # continuing args, make a namespace for page context
         self.pc_namespace = naming.USNamespace()
@@ -130,7 +130,7 @@ class DjangoModel(object):
     def __init__(self, identifier):
         self.identifier = identifier
         self.code_path = "webapp/models.py"
-        self.field_namer = naming.USNamespace()
+        self.field_namer = naming.USNamespace(parent_namespace=self.identifier.ns)
         self.fields = []
 
     def create_field(self, name, canonical_type, required):
@@ -252,7 +252,7 @@ class DjangoTemplate(object):
 
     def __init__(self, identifier):
         self.identifier = identifier
-        self.filename = identifier + '.html'
+        self.filename = '%s.html' % identifier
         self.code_path = "webapp/templates/" + self.filename
 
     def split_to_cols(self, uiels, left_offset=0):

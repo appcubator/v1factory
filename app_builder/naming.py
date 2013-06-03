@@ -52,6 +52,9 @@ class Identifier(object):
     def __str__(self):
         return self.identifier
 
+    def __unicode__(self):
+        return self.identifier
+
     def __init__(self, identifier, ref, ns):
         self.identifier = identifier
         self.ref = ref
@@ -104,7 +107,7 @@ class Namespace(object):
             for i in c_n.child_identifiers():
                 yield i
 
-    def new_identifier(self, name, ref):
+    def new_identifier(self, name, ref=None):
         candidate = self.make_first_candidate(name)
         candidate = self.make_name_safe_and_unique(candidate)
         new_ident = Identifier(candidate, ref, self)

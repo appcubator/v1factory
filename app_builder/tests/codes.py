@@ -1,6 +1,6 @@
 import unittest
 from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
-from app_builder import naming
+from app_builder.naming import USNamespace
 from app_builder.uielements import Node, Layout
 
 
@@ -35,7 +35,8 @@ class DjangoFieldKwargsTestCase(unittest.TestCase):
 class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.model = DjangoModel("test_model")
+        self.ns = USNamespace()
+        self.model = DjangoModel(self.ns.new_identifier("test_model"))
 
     def test_create_field(self):
         self.model.create_field("idk", "text", True)
@@ -47,25 +48,22 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
 class DjangoPageViewTestCase(unittest.TestCase):
 
-    def tearDown(self):
-        try:
-            del view
-        except:
-            pass
+    def setUp(self):
+        self.ns = USNamespace()
 
     def test_creation(self):
-        view = DjangoPageView("test_view")
+        view = DjangoPageView(self.ns.new_identifier("test_view"))
         self.assertEqual(view.code_path, 'webapp/pages.py')
-        self.assertIsInstance(view.namespace, naming.USNamespace)
+        self.assertIsInstance(view.namespace, USNamespace)
 
     def test_create_with_args(self):
         d1, d2, d3 = ({'1':1}, {'2':2}, {'3':3})
-        view = DjangoPageView("test_view", args=[('user', d1), ('user2', d2), ('book', d3)])
-        self.assertEqual(view.args, [('user', d1), ('user2', d2), ('book', d3)])
+        view = DjangoPageView(self.ns.new_identifier("test_view"), args=[('user', d1), ('user2', d2), ('book', d3)])
+        self.assertEqual([ (str(i),b) for i,b in view.args ], [('user', d1), ('user2', d2), ('book', d3)])
 
     def test_safety_of_args(self):
         d1, d2, d3 = ({'1':1}, {'2':2}, {'3':3})
-        view = DjangoPageView("test_view", args=[('user', d1), ('user', d2), ('request', d3)])
+        view = DjangoPageView(self.ns.new_identifier("test_view"), args=[('user', d1), ('user', d2), ('request', d3)])
         self.assertEqual(len(view.args), 3)
         self.assertNotIn('request', [a for a,d in view.args]) # request is not allowed to be an arg since it's the first fn arg.
         self.assertNotEqual(view.args[0][0], view.args[1][0])
@@ -76,14 +74,14 @@ class DjangoPageViewTestCase(unittest.TestCase):
         dq3 = DjangoQuery('Book')
 
         d1, d2, d3 = ({'1':1}, {'2':2}, {'3':3})
-        view = DjangoPageView("test_view", args=[])
+        view = DjangoPageView(self.ns.new_identifier("test_view"), args=[])
 
         view.add_query(dq)
         view.add_query(dq2)
         view.add_query(dq3)
 
         for q in view.queries:
-            self.assertIn(q[0], view.pc_namespace.used_ids)
+            self.assertIn(q[0], view.pc_namespace.used_ids())
             self.assertIsInstance(q[1], str)
             self.assertEqual(len(q), 2)
 
@@ -96,7 +94,7 @@ class DjangoPageViewTestCase(unittest.TestCase):
         dq2 = DjangoQuery('User')
         dq3 = DjangoQuery('Book')
 
-        view = DjangoPageView("test_view", args=[('user_id', d1), ('user2_id', d2), ('request_id', d3)], template_code_path="wsup/test_path.html", queries=(dq, dq2, dq3))
+        view = DjangoPageView(self.ns.new_identifier("test_view"), args=[('user_id', d1), ('user2_id', d2), ('request_id', d3)], template_code_path="wsup/test_path.html", queries=(dq, dq2, dq3))
         print view.render()
 
 

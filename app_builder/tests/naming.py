@@ -14,6 +14,9 @@ class NewIdentifierTestCase(unittest.TestCase):
 class NestingTestCase(unittest.TestCase):
 
     def setUp(self):
+
+        #       n3    >>    (n1 >> n2)
+
         n1 = USNamespace()
         i1 = n1.new_identifier('simplejson', None)
 

@@ -5,17 +5,17 @@ from app_builder import naming
 class AppComponentFactory(object):
 
     def __init__(self):
-        self.model_namer = naming.CWNamespace()
-        self.form_namer = naming.CWNamespace()
-        self.view_namer = naming.USNamespace()
-        self.fr_namer = naming.USNamespace()
+        self.model_namespace = naming.CWNamespace()
+        self.form_namespace = naming.CWNamespace()
+        self.view_namespace = naming.USNamespace()
+        self.fr_namespace = naming.USNamespace()
         self.fr_url_namespace = naming.USNamespace()
 
 
     # MODELS
 
     def create_model(self, entity):
-        identifier = self.model_namer.new_identifier(entity.name)
+        identifier = self.model_namespace.new_identifier(entity.name)
         m = DjangoModel(identifier)
 
         for f in entity.fields:
@@ -31,7 +31,7 @@ class AppComponentFactory(object):
     # VIEWS
 
     def create_view_for_page(self, page):
-        identifier = self.view_namer.new_identifier(page.name)
+        identifier = self.view_namespace.new_identifier(page.name)
 
         args = []
         for e in page.get_entities_from_url():
@@ -124,7 +124,7 @@ class AppComponentFactory(object):
         if form_model.action not in ['create', 'edit']:
             return None
         prim_name = form_model.action + '_' + form_model.entity
-        form_id = self.form_namer.new_identifier(prim_name)
+        form_id = self.form_namespace.new_identifier(prim_name)
         model_id = form_model.entity_resolved._django_model.identifier
         field_ids = []
         for f in form_model.fields:
@@ -137,7 +137,7 @@ class AppComponentFactory(object):
         return form_obj
 
     def create_form_receiver_for_form_object(self, uie):
-        fr_id = self.fr_namer.new_identifier(uie._django_form.identifier)
+        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
