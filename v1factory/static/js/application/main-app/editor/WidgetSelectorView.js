@@ -129,7 +129,6 @@ function() {
     },
 
     setLayout: function(node, widgetModel) {
-      console.trace();
       $(node).show();
       node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
       node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';

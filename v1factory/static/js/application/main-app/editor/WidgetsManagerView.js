@@ -50,7 +50,7 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetL
       if(model.get('data').has('container_info') && model.get('data').get('container_info').has('row')) {
         self.placeList(model);
       }
-      if(model.get('data').has('container_info')) {
+      else if(model.get('data').has('container_info')) {
         self.placeContainer(model);
       }
       else {
@@ -62,20 +62,20 @@ function(WidgetView, WidgetContainerView, WidgetModel, WidgetEditorView, WidgetL
     placeWidget: function(widgetModel) {
       var curWidget = new WidgetView(widgetModel);
 
-      if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
-      else iui.get('full-container').appendChild(curWidget.el);
+      if(!widgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.render().el);
+      else iui.get('full-container').appendChild(curWidget.render().el);
     },
 
     placeContainer: function(containerWidgetModel) {
-      var curWidget= new WidgetContainerView(containerWidgetModel);
-      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
-      else iui.get('full-container').appendChild(curWidget.el);
+      var curWidget = new WidgetContainerView(containerWidgetModel);
+      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.render().el);
+      else iui.get('full-container').appendChild(curWidget.render().el);
     },
 
     placeList: function(containerWidgetModel) {
       var curWidget= new WidgetListView(containerWidgetModel);
-      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
-      else iui.get('full-container').appendChild(curWidget.el);
+      if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.render().el);
+      else iui.get('full-container').appendChild(curWidget.render().el);
     }
   });
 

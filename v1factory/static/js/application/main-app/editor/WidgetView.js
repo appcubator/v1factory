@@ -61,8 +61,6 @@ define([
 
       this.model = widgetModel;
 
-      this.render();
-
       this.model.get('data').bind("change:type", this.changedType, this);
       this.model.get('data').bind("change:class_name", this.changedType, this);
       this.model.bind("remove", this.remove, this);
@@ -87,7 +85,6 @@ define([
     },
 
     render: function() {
-
       var width = this.model.get('layout').get('width');
       var height = this.model.get('layout').get('height');
 
@@ -136,7 +133,7 @@ define([
     },
 
     select: function(e) {
-        if(!this.editMode) {
+      if(!this.editMode) {
         this.model.trigger('selected');
         this.el.style.zIndex = 2003;
         e.stopPropagation();
@@ -228,6 +225,8 @@ define([
     },
 
     hovered: function() {
+      console.log("HOVERED:" + this.model.cid);
+      console.log(this.model);
       if(this.editMode) return;
       this.hovered = true;
       this.model.trigger('hovered');

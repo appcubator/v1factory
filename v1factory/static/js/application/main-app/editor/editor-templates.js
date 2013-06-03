@@ -282,7 +282,7 @@ Templates.tempUIElementSized = [
 ].join('\n');
 
 Templates.rowNode = [
-  '<div <% if(isListOrGrid == "list") { %> class="hi<%= layout.get(\'height\')%> block" <% } else { %> class="span<%= layout.get(\'width\') %> hi<%= layout.get(\'height\') %>" <% } %> style="position:relative;">',
+  '<div <% if(isListOrGrid == "list") { %> class="row hi<%= layout.get(\'height\')%> block" <% } else { %> class="row span<%= layout.get(\'width\') %> hi<%= layout.get(\'height\') %>" <% } %> style="position:relative;">',
     '<% _(uielements).each(function(element){ %>',
       Templates.tempUIElementSized,
     '<% }); %>',

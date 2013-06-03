@@ -12,6 +12,15 @@
   border-radius: 4px;
   margin-top: 12px;
   font: normal 16px/20px "proxima-nova", Arial, sans-serif;
+  overflow: visible;
+  overflow-y: scroll;
+  max-height: 400px;
+}
+
+#widget-editor.right {
+  top: 0;
+  left: 100%;
+  margin-left: 10px;
 }
 
 #widget-editor .top-arrow {
@@ -31,6 +40,7 @@
   width: 12px;
   position: absolute;
   left: 0;
+  top: 0;
   margin-left: -12px;
   background-image: url(../img/left-blue-arrow.png);
   background-repeat: no-repeat;

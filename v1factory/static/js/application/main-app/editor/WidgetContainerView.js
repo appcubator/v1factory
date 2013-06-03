@@ -60,9 +60,6 @@ function( TableQueryView,
         this.formModel.get('fields').bind('add', this.reRender);
         _(this.formModel.get('fields').models).each(function(model){ model.bind('change', self.reRender); });
       }
-
-      this.render();
-      this.renderElements();
     },
 
     render: function() {
@@ -110,6 +107,8 @@ function( TableQueryView,
         self.form = document.createElement('form');
         self.el.appendChild(self.form);
       }
+
+      this.renderElements();
 
       return this;
     },

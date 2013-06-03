@@ -1,11 +1,13 @@
 define([
   'editor/ListEditorView',
   'editor/WidgetContainerView',
+  'editor/WidgetView',
   'dicts/constant-containers',
   'editor/editor-templates'
 ],
 function( ListEditorView,
-          WidgetContainerView) {
+          WidgetContainerView,
+          WidgetView ) {
 
   var WidgetListView = WidgetContainerView.extend({
     el: null,
@@ -26,7 +28,9 @@ function( ListEditorView,
                       'reRender',
                       'placeWidget',
                       'renderElements',
-                      'showDetails');
+                      'showDetails',
+                      'highlightFirstRow',
+                      'hovered');
 
       this.model.get('data').get('container_info').get('uielements').bind("add", this.placeWidget);
 
@@ -35,10 +39,9 @@ function( ListEditorView,
       this.model.get('data').get('container_info').get('query').bind('change', this.reRender);
       this.model.get('data').get('container_info').get('row').get('layout').bind('change', this.reRender);
       //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
+      this.model.bind('highlight', this.highlightFirstRow);
+
       this.rowBindings();
-      this.render();
-      this.resizableAndDraggable();
-      this.renderElements();
     },
 
     rowBindings: function() {
@@ -69,31 +72,37 @@ function( ListEditorView,
       this.el.className += ' widget-wrapper span'+width;
       this.el.id = 'widget-wrapper-' + this.model.cid;
 
+      var row = this.model.get('data').get('container_info').get('row');
+
+
+      var editorRow = document.createElement('div');
+      editorRow.className = "row block hi" + row.get('layout').get('height');
+      row.get('uielements').map(function(widgetModel) {
+        var widgetView = new WidgetView(widgetModel);
+        editorRow.appendChild(widgetView.render().el);
+      });
+      this.el.appendChild(editorRow);
+
 
       var listDiv = document.createElement('div');
-      var row = this.model.get('data').get('container_info').get('row');
-      console.log(row);
       var uielements = _.map(row.get('uielements').models, function(obj) { return obj.attributes; });
       listDiv.innerHTML = _.template(Templates.listNode, {layout: row.get('layout'),
                                                           uielements: uielements,
                                                           isListOrGrid: row.get('isListOrGrid')});
       this.el.appendChild(listDiv);
 
-      this.delegateEvents();
+      this.renderElements();
 
       return this;
     },
 
     reRender: function() {
-      $( this.el ).resizable( "destroy" );
-      $( this.el ).draggable( "destroy" );
-
       if(this.model.get('data').get('container_info').has('row')) {
         this.rowBindings();
       }
       this.render();
-      this.resizableAndDraggable();
-      this.renderElements();
+      //this.resizableAndDraggable();
+      //this.renderElements();
     },
 
 
@@ -114,7 +123,12 @@ function( ListEditorView,
       new ListEditorView( this.model,
                           this.model.get('data').get('container_info').get('query'),
                           this.model.get('data').get('container_info').get('row'));
+    },
+
+    highlightFirstRow: function() {
+      this.$el.find('.row').first().addClass('highlighted');
     }
+
   });
 
   return WidgetListView;

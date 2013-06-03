@@ -4,6 +4,7 @@ define([
   'editor/ImageSliderEditorView',
   'editor/WidgetClassPickerView',
   'editor/ListEditorView',
+  'editor/RowGalleryView',
   'app/FormEditorView',
   'mixins/BackboneUI',
   'iui'
@@ -13,6 +14,7 @@ function(WidgetContentEditor,
          ImageSliderEditorView,
          WidgetClassPickerView,
          ListEditorView,
+         RowGalleryView,
          FormEditorView) {
 
   var WidgetEditorView = Backbone.UIView.extend({
@@ -20,7 +22,7 @@ function(WidgetContentEditor,
     id: 'widget-editor',
     tagName : 'div',
     css : 'widget-editor',
-    isMobile: false,
+    location: "bottom",
 
     events : {
       'click .edit-slides-button' : 'openSlideEditor',
@@ -58,17 +60,11 @@ function(WidgetContentEditor,
 
     render: function() {
       this.$el.fadeIn();
-      if(this.isMobile) {
-        this.$el.append('<div class="left-arrow"></div>');
-      }
-      else {
-        this.$el.append('<div class="top-arrow"></div>');
-      }
+
+      var action = "";
 
       if(this.model.get('data').has('container_info')) {
-        var action = this.model.get('data').get('container_info').get('action');
-
-        console.log(action);
+        action = this.model.get('data').get('container_info').get('action');
 
         if(action == "authentication") {
           this.layoutEditor = new WidgetLayoutEditor(this.model);
@@ -86,12 +82,12 @@ function(WidgetContentEditor,
 
         if(action == "show" || action == "loop") {
           this.el.appendChild(this.renderRowButton());
+          this.el.appendChild(this.renderQueryButton());
         }
 
         if(action == "create") {
           this.el.appendChild(this.renderEditForm());
         }
-
       }
       else {
         this.widgetClassPickerView = new WidgetClassPickerView(this.model);
@@ -103,6 +99,18 @@ function(WidgetContentEditor,
         this.el.appendChild(this.renderStyleEditing());
         this.el.appendChild(this.layoutEditor.el);
         this.el.appendChild(this.contentEditor.el);
+      }
+
+      if(action == "show" || action == "loop") {
+        this.location = 'right';
+        this.el.className += ' right';
+      }
+
+      if(this.location == "right") {
+        this.$el.append('<div class="left-arrow"></div>');
+      }
+      else {
+        this.$el.append('<div class="top-arrow"></div>');
       }
 
       return this;
@@ -117,19 +125,21 @@ function(WidgetContentEditor,
 
     renderEditForm: function(e) {
       var li       = document.createElement('ul');
+      li.className = 'form-editor-btn';
       li.innerHTML += '<span id="edit-form-btn" class="option-button tt" style="width:194px; display: inline-block;"><strong>Edit Form</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:34px; margin-left:1px; display: inline-block;"></span>';
       return li;
     },
 
     renderQueryButton: function() {
-      var li       = document.createElement('li');
-      li.className = 'option-button edit-query-button';
-      li.innerHTML = 'Edit Query';
+      var li       = document.createElement('ul');
+      li.className = 'query-editor-btn';
+      li.innerHTML += '<span id="edit-query-btn" class="option-button tt" style="width:230px; display: inline-block;"><strong>Edit Query</strong></span>';
       return li;
     },
 
     renderRowButton: function() {
       var li       = document.createElement('ul');
+      li.className = 'row-editor-btn';
       li.innerHTML += '<span id="edit-row-btn" class="option-button tt" style="width:194px; display: inline-block;"><strong>Edit Row</strong></span><span id="delete-widget" class="option-button delete-button tt" style="width:34px; margin-left:1px; display: inline-block;"></span>';
       return li;
     },
@@ -166,9 +176,18 @@ function(WidgetContentEditor,
 
     openRowEditor: function() {
       //widgetModel, queryModel, rowModel
-      new ListEditorView(this.model,
-                         this.model.get('data').get('container_info').get('query'),
-                         this.model.get('data').get('container_info').get('row'));
+      this.hideSubviews();
+
+      var row = this.model.get('data').get('container_info').get('row');
+      var entity = this.model.get('data').get('container_info').get('entity');
+      this.listGalleryView = document.createElement('div');
+      this.listGalleryView.className = 'elements-list';
+
+      var galleryView = new RowGalleryView(row, entity);
+      this.listGalleryView.appendChild(galleryView.render().el);
+      this.el.appendChild(this.listGalleryView);
+
+      this.model.trigger('highlight');
     },
 
     classChanged: function() {
@@ -198,6 +217,11 @@ function(WidgetContentEditor,
       if(this.layoutEditor) this.layoutEditor.$el.hide();
       if(this.infoEditor) this.infoEditor.$el.hide();
       this.$el.find('.style-editor').hide();
+      this.$el.find('.form-editor-btn').hide();
+      this.$el.find('.query-editor-btn').hide();
+      this.$el.find('.edit-query-btn').hide();
+      this.$el.find('.row-editor-btn').hide();
+
     },
 
     clickedDelete: function() {
