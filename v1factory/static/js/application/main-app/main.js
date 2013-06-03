@@ -63,8 +63,7 @@ function (AppModel,
           KeyDispatcher,
           MouseDispatcher) {
 
-  v1State = new AppModel();
-  v1State.initialize(appState);
+  v1State = new AppModel(appState);
   v1 = new AppRouter();
 
   g_guides = {};
