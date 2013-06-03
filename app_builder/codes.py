@@ -5,6 +5,26 @@ from app_builder.htmlgen import Tag
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
 
+BASE_IMPORTS = { 'webapp/models.py': ('from django.db import models',),
+                 'webapp/pages.py': ('from django.db import models',
+                                    'from django.http import HttpResponse',
+                                    'from django.contrib.auth.decorators import login_required',
+                                    'from django.views.decorators.http import require_GET, require_POST',
+                                    'from django.views.decorators.csrf import csrf_exempt',
+                                    'from django.utils import simplejson',
+                                    'from django.shortcuts import redirect, render, render_to_response, get_object_or_404'),
+                 'webapp/form_receiver.py': ('from django.db import models',
+                                            'from django.http import HttpResponse',
+                                            'from django.contrib.auth.decorators import login_required',
+                                            'from django.views.decorators.http import require_GET, require_POST',
+                                            'from django.views.decorators.csrf import csrf_exempt',
+                                            'from django.utils import simplejson',
+                                            'from django.shortcuts import redirect, render, render_to_response, get_object_or_404'),
+                 'webapp/forms.py': ('from django import forms',),
+                 'webapp/urls.py': ('from django.conf.urls import patterns, include, url',),
+                 }
+
+
 
 class Import(object):
 

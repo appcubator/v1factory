@@ -48,7 +48,7 @@ class DjangoFormCreationTestCase(unittest.TestCase):
         self.form = DjangoForm(form_id, model_id, field_ids)
 
     def test_render(self):
-        self.form.render()
+        self.assertNotIn('import', self.form.render())
 
 
 class DjangoFormReceiverCreationTestCase(unittest.TestCase):
@@ -61,7 +61,7 @@ class DjangoFormReceiverCreationTestCase(unittest.TestCase):
         self.fr = DjangoFormReceiver(form_rec_id, form_id)
 
     def test_render(self):
-        self.fr.render()
+        self.assertNotIn('import', self.fr.render())
 
 
 class DjangoFieldCreationTestCase(unittest.TestCase):
@@ -118,7 +118,7 @@ class DjangoModelTestCase(unittest.TestCase):
         self.model.create_field("idk2", "date", True)
 
     def test_render(self):
-        self.model.render()
+        self.assertNotIn('import', self.model.render())
 
 
 class DjangoPageViewTestCase(unittest.TestCase):
@@ -174,7 +174,7 @@ class DjangoPageViewTestCase(unittest.TestCase):
 
         view = DjangoPageView(self.ns.new_identifier("test_view"), args=[('user_id', d1), ('user2_id', d2), (
             'request_id', d3)], template_code_path="wsup/test_path.html", queries=(dq, dq2, dq3))
-        view.render()
+        self.assertNotIn('import', view.render())
 
 
 class DjangoURLTestCase(unittest.TestCase):
@@ -186,7 +186,7 @@ class DjangoURLTestCase(unittest.TestCase):
         self.url.routes.append(('\'randomstringgoeshere\'', f_id))
 
     def test_render(self):
-        self.url.render()
+        self.assertNotIn('import', self.url.render())
 
     def test_first_time(self):
         with_plus_sign = self.url.render()
