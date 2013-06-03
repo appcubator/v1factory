@@ -1,7 +1,5 @@
-define([
-  'models/WidgetModel'
-],
-function(WidgetModel) {
+define(["backbone"],
+function() {
 
   var WidgetCollection = Backbone.Collection.extend({
   });

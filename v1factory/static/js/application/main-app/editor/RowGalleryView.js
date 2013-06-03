@@ -12,7 +12,13 @@ function(EditorGalleryView, ElementCollection) {
     events : {
     },
 
-    initialize: function(rowModel, entityModel){
+    initialize: function(widgetModel){
+
+      this.model = widgetModel;
+
+      var rowModel = this.model.get('data').get('container_info').get('row');
+      var entityModel = this.model.get('data').get('container_info').get('entity');
+
       this.entity = entityModel;
       this.row = rowModel;
       this.widgetsCollection = this.row.get('uielements');
@@ -44,6 +50,7 @@ function(EditorGalleryView, ElementCollection) {
         stop: self.dropped
       });
       this.$el.find('li').on('click', self.dropped);
+      this.switchEditingModeOn();
       return this;
     },
 
@@ -66,6 +73,31 @@ function(EditorGalleryView, ElementCollection) {
                         field_id : field.cid, field_name: field.get('name') };
         $(self.allList).append(_.template(tempLi, context));
       });
+    },
+
+    switchEditingModeOn: function() {
+      this.model.trigger('highlight');
+      this.model.trigger('unhover');
+      this.model.trigger('editModeOn');
+    },
+
+    findLeft: function(e, ui) {
+      console.log($('.highlighted').offset().left);
+      var offsetLeft = $('.highlighted').offset().left;
+      var left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
+      if(left < 0) left = 0;
+      if(left + 4 > 12) left = 8;
+
+      return left;
+    },
+
+    findTop: function(e, ui) {
+      console.log($('.highlight'));
+      var offsetScrolledTop = $('.highlighted').offset().top;
+      var top  = Math.round((e.pageY - offsetScrolledTop)/GRID_HEIGHT);
+      if(top < 0) top = 0;
+
+      return top;
     }
   });
 

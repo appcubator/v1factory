@@ -178,16 +178,14 @@ function(WidgetContentEditor,
       //widgetModel, queryModel, rowModel
       this.hideSubviews();
 
-      var row = this.model.get('data').get('container_info').get('row');
+      //var row = this.model.get('data').get('container_info').get('row');
       var entity = this.model.get('data').get('container_info').get('entity');
       this.listGalleryView = document.createElement('div');
       this.listGalleryView.className = 'elements-list';
 
-      var galleryView = new RowGalleryView(row, entity);
+      var galleryView = new RowGalleryView(this.model);
       this.listGalleryView.appendChild(galleryView.render().el);
       this.el.appendChild(this.listGalleryView);
-
-      this.model.trigger('highlight');
     },
 
     classChanged: function() {
