@@ -6,6 +6,20 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
 
 
+class Import(object):
+
+    def __init__(self, import_symbol, identifier, from_string=''):
+        self.import_symbol = import_symbol
+        self.identifier = identifier
+        self.use_as = False
+        if import_symbol != str(identifier):
+            self.use_as = True
+        self.from_string = from_string
+
+    def render(self):
+        return env.get_template('import.py').render(imp=self)
+
+
 class DjangoFormReceiver(object):
 
     def __init__(self, identifier, form_id):

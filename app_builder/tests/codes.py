@@ -1,7 +1,40 @@
 import unittest
-from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver
+from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver, Import
 from app_builder.naming import USNamespace
 from app_builder.uielements import Node, Layout
+
+
+class ImportTestCase(unittest.TestCase):
+
+    def setUp(self):
+        ns = USNamespace()
+
+        # say you wanted to import both the simplejson and django.utils.simplejson:
+        id1 = ns.new_identifier('simplejson')
+        imp1 = Import('simplejson', id1)
+
+        id2 = ns.new_identifier('simplejson')
+        imp2 = Import('simplejson', id2, from_string='django.utils')
+
+        # now, just a normal from import
+        imp3 = Import('checker', ns.new_identifier('checker'), from_string='pyflakes.api')
+
+        self.imp1, self.imp2 = (imp1, imp2)
+        self.imp3 = imp3
+
+    def test_it_works(self):
+        self.assertEqual(self.imp1.render(), 'import simplejson')
+        self.assertEqual(self.imp2.render(), 'from django.utils import simplejson as simplejson2')
+        self.assertEqual(self.imp3.render(), 'from pyflakes.api import checker')
+
+    def test_pollute_ns(self):
+        # some dumbo make a variable called re
+        # but now you want to import re!
+        # so whad'you do?
+        ns = USNamespace()
+        ns.new_identifier('re')
+        i = Import('re', ns.new_identifier('re'))
+        self.assertEqual(i.render(), 'import re as re2')
 
 
 class DjangoFormCreationTestCase(unittest.TestCase):
