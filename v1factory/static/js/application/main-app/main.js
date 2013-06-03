@@ -48,6 +48,8 @@ require.config({
 //libs
 require([
   "models/AppModel",
+  "collections/PageCollection",
+  "collections/MobilePageCollection",
   "app/AppRouter",
   "app/RouteLogger",
   "editor/KeyDispatcher",
@@ -58,12 +60,19 @@ require([
   "comp"
 ],
 function (AppModel,
+          PageCollection,
+          MobilePageCollection,
           AppRouter,
           RouteLogger,
           KeyDispatcher,
           MouseDispatcher) {
 
+  v1State = new Backbone.Model();
   v1State = new AppModel(appState);
+  v1State.set('pages', new PageCollection(appState.pages||[]));
+  v1State.set('mobilePages', new MobilePageCollection(appState.mobilePages||[]));
+
+  v1 = {};
   v1 = new AppRouter();
 
   g_guides = {};

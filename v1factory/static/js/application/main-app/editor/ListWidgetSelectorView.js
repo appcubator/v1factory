@@ -4,7 +4,7 @@ define([
 ],
 function() {
 
-  var WidgetSelectorView = Backbone.UIView.extend({
+  var ListWidgetSelectorView = Backbone.UIView.extend({
     className : 'editor-page',
     tagName : 'div',
     selectedEl : null,
@@ -66,13 +66,13 @@ function() {
       var self = this;
 
       var hoverDiv = document.createElement('div');
-      hoverDiv.id = "hover-div";
+      hoverDiv.id = "list-hover-div";
       this.hoverDiv = hoverDiv;
       this.hideNode(hoverDiv);
       this.el.appendChild(hoverDiv);
 
       var selectDiv = document.createElement('div');
-      selectDiv.id = "select-div";
+      selectDiv.id = "list-select-div";
       this.selectDiv = selectDiv;
       this.hideNode(selectDiv);
       this.el.appendChild(selectDiv);
@@ -138,6 +138,7 @@ function() {
     },
 
     unbindAll: function() {
+      alert('unbind');
       var widget = this.selectedEl;
       widget.on('editModeOff', function() {
         self.bindWidget(widget);
@@ -162,6 +163,7 @@ function() {
     },
 
     widgetHover: function(widgetModel) {
+      alert('hover');
       if(this.selectedEl && widgetModel.cid === this.selectedEl.cid) return;
       this.hoveredEl = widgetModel;
       this.setLayout(this.hoverDiv, widgetModel);
@@ -339,6 +341,6 @@ function() {
 
   });
 
-  return WidgetSelectorView;
+  return ListWidgetSelectorView;
 
 });

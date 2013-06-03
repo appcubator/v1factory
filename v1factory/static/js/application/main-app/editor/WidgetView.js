@@ -225,8 +225,6 @@ define([
     },
 
     hovered: function() {
-      console.log("HOVERED:" + this.model.cid);
-      console.log(this.model);
       if(this.editMode) return;
       this.hovered = true;
       this.model.trigger('hovered');
