@@ -26,7 +26,6 @@ function(WidgetCollection,
 
       if(bone.entity) {
         if(!bone.entity.attributes) {
-
           if(bone.entity == "User") {
             this.set('entity', v1State.get('users'));
           }

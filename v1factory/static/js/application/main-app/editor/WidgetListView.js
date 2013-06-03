@@ -2,14 +2,14 @@ define([
   'editor/ListEditorView',
   'editor/WidgetContainerView',
   'editor/WidgetView',
-  'editor/WidgetSelectorView',
+  'editor/ListWidgetSelectorView',
   'dicts/constant-containers',
   'editor/editor-templates'
 ],
 function( ListEditorView,
           WidgetContainerView,
           WidgetView,
-          WidgetSelectorView ) {
+          ListWidgetSelectorView ) {
 
   var WidgetListView = WidgetContainerView.extend({
     el: null,
@@ -42,14 +42,13 @@ function( ListEditorView,
       //this.model.get('data').get('container_info').get('row').get('layout').bind('change', this.reRender);
       //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
       this.model.bind('highlight', this.highlightFirstRow);
-      this.widgetSelectorView = new WidgetSelectorView(this.model.get('data').get('container_info').get('row').get('uielements'));
+      this.widgetSelectorView = new ListWidgetSelectorView(this.model.get('data').get('container_info').get('row').get('uielements'));
       this.rowBindings();
     },
 
     rowBindings: function() {
       var self = this;
       _(self.model.get('data').get('container_info').get('row').get('uielements').models).each(function(element) {
-        console.log(element);
         element.unbind();
         element.get('layout').unbind("change", self.reRender);
         element.bind('change', self.reRender);

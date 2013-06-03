@@ -82,7 +82,6 @@ function(EditorGalleryView, ElementCollection) {
     },
 
     findLeft: function(e, ui) {
-      console.log($('.highlighted').offset().left);
       var offsetLeft = $('.highlighted').offset().left;
       var left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
       if(left < 0) left = 0;
@@ -92,7 +91,6 @@ function(EditorGalleryView, ElementCollection) {
     },
 
     findTop: function(e, ui) {
-      console.log($('.highlight'));
       var offsetScrolledTop = $('.highlighted').offset().top;
       var top  = Math.round((e.pageY - offsetScrolledTop)/GRID_HEIGHT);
       if(top < 0) top = 0;
