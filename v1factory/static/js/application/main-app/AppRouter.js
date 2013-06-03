@@ -194,10 +194,6 @@ define([
 			tutorial = new TutorialView(inp);
 		},
 
-		scrollUp: function() {
-			$('html,body').animate({scrollTop:0},100, "linear");
-		},
-
 		betaCheck: function(data) {
 			if(data.percentage > 30 && data.feedback === true) {
 				$('.notice').css('height', '118px');

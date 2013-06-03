@@ -5006,6 +5006,10 @@ hr.vert {
     background-color: #000;
     opacity: 0.8;
   }
+  .scrollUp-btn.hidden:hover, .scrollUp-btn-nofix.hidden:hover {
+    background-color: #000;
+    opacity: 0;
+  }
 
   .scrollUp-btn-nofix {
     position: static;

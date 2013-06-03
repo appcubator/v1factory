@@ -99,5 +99,8 @@ function (AppModel,
     }
     prevScrollPos = scrollTop;
   });
-    $scrollBtn.on('click', this.scrollUp);
+
+    $scrollBtn.on('click', function() {
+      $('html,body').animate({scrollTop:0},100, "linear");
+    });
 });
