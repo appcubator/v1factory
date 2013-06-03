@@ -124,9 +124,9 @@ class Namespace(object):
 
     def new_identifier(self, name, ref=None, cap_words=False):
         candidate = name
+        candidate = self.make_name_safe_and_unique(candidate)
         if cap_words:
             candidate = us2cw(candidate)
-        candidate = self.make_name_safe_and_unique(candidate)
         new_ident = Identifier(candidate, ref, self)
         self.identifiers.append(new_ident)
         return new_ident

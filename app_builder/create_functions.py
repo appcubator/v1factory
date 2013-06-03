@@ -26,7 +26,7 @@ class AppComponentFactory(object):
     # MODELS
 
     def create_model(self, entity):
-        identifier = self.model_namespace.new_identifier(entity.name)
+        identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
         m = DjangoModel(identifier)
 
         for f in entity.fields:
