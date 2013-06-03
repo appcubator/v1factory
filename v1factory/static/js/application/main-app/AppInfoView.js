@@ -43,6 +43,20 @@ function(SimpleModalView) {
       page_context.description = this.model.get('description');
 
       this.el.innerHTML = _.template(iui.getHTML('app-info-page'), page_context);
+
+      this.$nav = $('.navigator .left-nav');
+      $('body').scrollspy('refresh');
+
+      // make left nav links scroll page
+      this.$nav.find('a').click(function() {
+        var elem = this.getAttribute('href');
+        var topPos = $(elem).offset().top - 75;
+        $('html,body').animate({scrollTop: topPos});
+        return false;
+      });
+      this.$nav.find('li').click(function() {
+        this.children[0].click()
+      });
     },
 
     changeName : function(e) {

@@ -60,14 +60,16 @@
       <h2 class="hoff1">Domain & SEO</h2>
       <hr class="hoff2">
       <div class="hoff2 span12">
-        <ul class="navigator left-nav">
-          <li>Domain Settings</li>
-          <li>SEO Optimizations</li>
-          <li>Danger Zone</li>
-        </ul>
+        <div class="navigator">
+          <ul class="left-nav" data-spy="affix" data-offset-top="150">
+            <li><a href="#domain-settings">Domain Settings</a></li>
+            <li><a href="#seo-optimizations">SEO Optimizations</a></li>
+            <li><a href="#danger-zone">Danger Zone</a></li>
+          </ul>
+        </div>
       </div>
       <div class="hoff2 span40 offset2">
-        <div class="span40 domains w-pane pb2">
+        <div class="span40 domains w-pane pb2" id="domain-settings">
           <h3 class="span36 offset2 hoff1">Domain Settings</h3>
           <hr class="span40">
           <div class="span36 offset2 hi6">
@@ -93,8 +95,8 @@
             </form>
           </div>
         </div>
-      
-        <div class="w-pane span40 hoff4 pb2">
+
+        <div class="w-pane span40 hoff4 pb2" id="seo-optimizations">
           <h3 class="span36 offset2 hoff1">SEO Optimizations</h3>
           <hr class="span40">
           <div class="hoff2 span36 offset2">
@@ -108,7 +110,7 @@
           </div>
         </div>
 
-        <div class="w-pane span40 hoff4 pb2">
+        <div class="w-pane span40 hoff4 pb2" id="danger-zone">
           <h3 class="span36 offset2 hoff1">Danger Zone</h3>
           <hr class="span40">
           <a class="btn hoff1 span8 offset2" id="delete">Delete App</a>
