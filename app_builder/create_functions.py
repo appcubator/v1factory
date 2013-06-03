@@ -18,8 +18,6 @@ class AppComponentFactory(object):
             for i in imports:
                 h = ns.new_identifier(i, ref=i)
 
-                print "Hello: %s" % h
-
         add_imports_to_ns(self.model_namespace, BASE_IMPORTS['webapp/models.py'])
         add_imports_to_ns(self.view_namespace, BASE_IMPORTS['webapp/pages.py'])
         add_imports_to_ns(self.form_namespace, BASE_IMPORTS['webapp/forms.py'])
@@ -122,7 +120,7 @@ class AppComponentFactory(object):
         url_obj = uie.app._django_fr_urls
 
         url = self.fr_url_namespace.new_identifier(uie._django_form.identifier)
-        route = (url, uie._django_form_receiver)
+        route = (repr(url), uie._django_form_receiver)
         url_obj.routes.append(route)
 
         self._url = url

@@ -132,6 +132,7 @@ class Namespace(object):
         return new_ident
 
     def make_name_safe_and_unique(self, name):
+        name = str(name) # in case it's identifier type
         candidate = make_safe(name.replace(' ', '_').lower())
         while candidate in (i.identifier for i in self.used_ids()):
             # exit condition: candidate is not a used identifier

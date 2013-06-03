@@ -123,6 +123,54 @@ test_json = r"""{
                             "form": {
                                 "fields": [
                                     {
+                                        "field_name": "Name",
+                                        "placeholder": "Name",
+                                        "label": "Name",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "options": []
+                                    },
+                                    {
+                                        "field_name": "Description",
+                                        "placeholder": "Description",
+                                        "label": "Desc",
+                                        "displayType": "paragraph-text",
+                                        "type": "password",
+                                        "options": []
+                                    },
+                                    {
+                                        "placeholder": "Submit"
+                                    }
+                                ],
+                                "entity": "Game",
+                                "action": "create",
+                                "goto": { "page_name":"Homepage", "urldata":{} },
+                                "belongsTo": null
+                            }
+                        },
+                        "content_attribs": {},
+                        "context": null
+                    }
+                },{
+                    "layout": {
+                        "width": 4,
+                        "top": 12,
+                        "height": 15,
+                        "left": 7,
+                        "t_padding": 0,
+                        "b_padding": 0,
+                        "l_padding": 0,
+                        "r_padding": 0,
+                        "alignment": "left"
+                    },
+                    "type": "form",
+                    "data": {
+                        "content": "",
+                        "container_info": {
+                            "uielements": [],
+                            "form": {
+                                "fields": [
+                                    {
                                         "field_name": "username",
                                         "placeholder": "Username",
                                         "label": "Username",
