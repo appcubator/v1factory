@@ -106,9 +106,9 @@ class Page(DictInited):
     def url_regex(page):
         url_regex = "r'^"
         for x in page.url.urlparts:
-            try:
+            if isinstance(x, basestring):
                 url_regex += naming.make_safe(x) + '/'
-            except TypeError:
+            else:
                 url_regex += r'(\d+)/'
         url_regex += "$'"
         return url_regex

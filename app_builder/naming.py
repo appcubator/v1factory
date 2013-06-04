@@ -36,6 +36,7 @@ def us2cw(x):  # underscore to capwords notation
 
 
 def make_safe(s):
+    s = s.replace(' ', '_')
     s = re.sub(r'[^a-zA-Z0-9_]', '', s)
     s = re.sub(r'^[^a-zA-Z]+', '', s)
     if len(s) == 0:
@@ -122,18 +123,22 @@ class Namespace(object):
             for i in c_n.child_identifiers():
                 yield i
 
-    def new_identifier(self, name, ref=None, cap_words=False):
+    def new_identifier(self, name, ref=None, cap_words=False, ignore_case=False):
         candidate = name
-        candidate = self.make_name_safe_and_unique(candidate)
+        candidate = self.make_name_safe_and_unique(candidate, ignore_case=ignore_case)
         if cap_words:
             candidate = us2cw(candidate)
         new_ident = Identifier(candidate, ref, self)
         self.identifiers.append(new_ident)
         return new_ident
 
-    def make_name_safe_and_unique(self, name):
+    def make_name_safe_and_unique(self, name, ignore_case=False):
         name = str(name) # in case it's identifier type
-        candidate = make_safe(name.replace(' ', '_').lower())
+        candidate = make_safe(name)
+
+        if not ignore_case:
+            candidate = candidate.lower()
+
         while candidate in (i.identifier for i in self.used_ids()):
             # exit condition: candidate is not a used identifier
             if re.search(r'[2-9]$', candidate):
@@ -144,13 +149,13 @@ class Namespace(object):
 
     def get_by_ref(self, ref):
         for i in self.used_ids():
-            if i == ref:
+            if i.ref == ref:
                 return i
-        raise KeyError
+        assert False, "Thing with this ref not found: %r" % ref
 
     # HACK used to tag certain identifiers as being imports
     def add_import(self, import_symbol, proposed_id):
-        return self.new_identifier(proposed_id, ref='IMPORTS.%s' % import_symbol)
+        return self.new_identifier(proposed_id, ref='IMPORTS.%s' % import_symbol, ignore_case=True)
     # the dictionary produced is a symbol -> identifier map.
     # symbol meaning the unique internal name used to refer to the import
     def imports(self):

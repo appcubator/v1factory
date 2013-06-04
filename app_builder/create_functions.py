@@ -17,7 +17,7 @@ class AppComponentFactory(object):
 
         self.fr_url_namespace = naming.Namespace()
 
-        
+
     # MODELS
 
     def create_model(self, entity):
@@ -110,12 +110,15 @@ class AppComponentFactory(object):
     # URL NAMESPACES
 
     def create_urls(self, app):
-        u = DjangoURLs('webapp.pages', self.urls_namespace, first_time=True)
+        url_patterns_id = self.urls_namespace.new_identifier('urlpatterns', ref='MISC.urlpatterns')
+        import pdb; pdb.set_trace()
+        u = DjangoURLs('webapp.pages', self.urls_namespace, url_patterns_id, first_time=True)
         app._django_page_urls = u
         return u
 
     def create_fr_urls(self, app):
-        u = DjangoURLs('webapp.form_receivers', self.urls_namespace, first_time=False)
+        url_patterns_id = self.urls_namespace.get_by_ref('MISC.urlpatterns')
+        u = DjangoURLs('webapp.form_receivers', self.urls_namespace, url_patterns_id, first_time=False)
         app._django_fr_urls = u
         return u
 
@@ -172,7 +175,7 @@ class AppComponentFactory(object):
     def import_form_receiver_into_url(self,uie):
         fr = uie._django_form_receiver
         import_symbol = 'webapp.form_receivers.%s' % fr.identifier
-        self.fr_namespace.add_import(import_symbol, fr.identifier)
+        self.urls_namespace.add_import(import_symbol, fr.identifier)
 
 
     # TESTS

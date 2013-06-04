@@ -1,9 +1,6 @@
-{#{% set patterns = imports['django.patterns'] %}
+{% set patterns = imports['django.patterns'] %}
 {% set url = imports['django.url'] %}
-{% set urlpatterns = locals['urlpatterns'] %}#}
-{% set patterns = 'PATTERNS' %}
-{% set url = 'URL' %}
-{% set urlpatterns = 'urlpatterns' %}
+{% set urlpatterns = locals['urlpatterns'] %}
 
 {{urlpatterns}} {% if not urls.first_time %}{{ '+' }}{% endif %}= {{patterns}}('{{ urls.module }}',
     {% for url_string, function in urls.routes %}

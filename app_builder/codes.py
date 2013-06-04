@@ -480,7 +480,7 @@ class DjangoURLs(object):
     Represents a set of URL - function mappings.
     """
 
-    def __init__(self, module_string, outer_namespace, first_time=False):
+    def __init__(self, module_string, outer_namespace, urlpatterns_id, first_time=False):
         """
         Module string = the string ref to the module that these URLs will belong to.
         Module namespace = the namespace this code will be dropped into
@@ -488,6 +488,7 @@ class DjangoURLs(object):
         """
         self.module = module_string
         self.outer_namespace = outer_namespace
+        self.urlpatterns_id = urlpatterns_id
 
         self.routes = []
         self.imports = ['from django.conf.urls import patterns, include, url']
@@ -495,7 +496,7 @@ class DjangoURLs(object):
         self.first_time = first_time
 
     def render(self):
-        return env.get_template('urls.py').render(urls=self, imports=self.outer_namespace.imports(), locals={})
+        return env.get_template('urls.py').render(urls=self, imports=self.outer_namespace.imports(), locals={'urlpatterns': self.urlpatterns_id})
 
 
 class DjangoStaticPagesTestCase(object):
