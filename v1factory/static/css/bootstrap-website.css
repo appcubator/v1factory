@@ -5886,5 +5886,71 @@ i.icon-url {
   background-position: -10px -15px;
 }
 
-/* Email Page */
+/* New Homepage */
 
+.left-panel {
+  position: fixed;
+  height: 100%;
+  width: 340px;
+  background-color: rgba(245, 245, 245, 0.7);
+  float: left;
+  display: inline-block;
+  left: 0px;
+  bottom: 0px;
+  height: 100%;
+  border-right: 1px solid #f0f0f0;
+  z-index: 2;
+}
+
+.left-panel h1 {
+  font-size: 32px;
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+  font-family: 'verb_regularregular';
+}
+
+.left-panel h1 img {
+  margin-right: 6px;
+}
+
+.left-panel .buttons {
+  position: absolute;
+  bottom: 0;
+  height: 120px;
+  width: 100%;
+  text-align: center;
+}
+
+.sliding-panel {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: url(../img/bg2.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  vertical-align: middle;
+}
+
+.sliding-panel .large-text {
+  display: inline-block;
+  width: 560px;
+  height: 300px;
+  color: #fff;
+  font-size: 48px;
+  line-height: 52px;
+  margin-top: 180px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.container1 {
+  margin-left: 340px;
+  min-height: 100%;
+  vertical-align: middle;
+  text-align: center;
+}
