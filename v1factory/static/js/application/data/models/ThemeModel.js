@@ -1,9 +1,8 @@
 define([
-  'backbone',
   'collections/UIElementCollection',
   'models/PageDesignModel'
 ],
-function(Backbone, UIElementCollection, PageDesignModel) {
+function(UIElementCollection, PageDesignModel) {
 
   var PageDesignCollection = Backbone.Collection.extend({
     model : PageDesignModel

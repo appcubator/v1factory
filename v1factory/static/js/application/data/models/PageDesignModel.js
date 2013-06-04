@@ -1,5 +1,5 @@
 define([
-  'app/collections/UIElementCollection',
+  'collections/UIElementCollection',
   'backbone'
 ],
 function(UIElementCollection, Backbone) {

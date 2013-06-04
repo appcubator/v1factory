@@ -1,9 +1,9 @@
 define([
-  'app/designer-app/UIElementView',
-  'app/models/UIElementModel',
+  'designer-app/UIElementView',
+  'models/UIElementModel',
   'iui',
-  'app/designer-app/base-tags',
-  '../templates/ThemeTemplates'
+  'designer-app/base-tags',
+  'designer-app/ThemeTemplates'
 ],
 function(UIElementView, UIElementModel) {
 

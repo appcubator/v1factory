@@ -1,8 +1,8 @@
 define([
-  'app/designer-app/UIElementListView',
-  'app/models/PageDesignModel',
+  'designer-app/UIElementListView',
+  'models/PageDesignModel',
   'iui',
-  '../templates/ThemeTemplates'
+  'designer-app/ThemeTemplates'
 ],function(UIElementListView,
            PageDesignModel) {
 
@@ -142,7 +142,7 @@ define([
 
     expandSection: function(e) {
       $('.expanded').removeClass('expanded');
-      $('#' + e.target.parentNode.id + "-cont").addClass('expanded');
+      $('#' + e.target.id + "-cont").addClass('expanded');
     },
 
     pageCreateClicked: function(e) {
