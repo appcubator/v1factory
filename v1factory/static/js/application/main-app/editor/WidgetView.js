@@ -136,7 +136,6 @@ define([
       if(!this.editMode) {
         this.model.trigger('selected');
         this.el.style.zIndex = 2003;
-        e.stopPropagation();
       }
     },
 
@@ -241,7 +240,6 @@ define([
       mouseX = e.pageX;
       mouseY = e.pageY;
       var div = $('#widget-wrapper-' + this.model.cid);
-
       if(!div.offset()) return false;
 
       divTop = div.offset().top,

@@ -3,7 +3,6 @@ define([
   'editor/WidgetLayoutEditorView',
   'editor/ImageSliderEditorView',
   'editor/WidgetClassPickerView',
-  'editor/ListEditorView',
   'editor/RowGalleryView',
   'app/FormEditorView',
   'mixins/BackboneUI',
@@ -13,7 +12,6 @@ function(WidgetContentEditor,
          WidgetLayoutEditor,
          ImageSliderEditorView,
          WidgetClassPickerView,
-         ListEditorView,
          RowGalleryView,
          FormEditorView) {
 

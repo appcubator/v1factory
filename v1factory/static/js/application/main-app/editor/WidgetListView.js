@@ -1,13 +1,11 @@
 define([
-  'editor/ListEditorView',
   'editor/WidgetContainerView',
   'editor/WidgetView',
   'editor/ListWidgetSelectorView',
   'dicts/constant-containers',
   'editor/editor-templates'
 ],
-function( ListEditorView,
-          WidgetContainerView,
+function( WidgetContainerView,
           WidgetView,
           ListWidgetSelectorView ) {
 
@@ -49,7 +47,7 @@ function( ListEditorView,
     rowBindings: function() {
       var self = this;
       _(self.model.get('data').get('container_info').get('row').get('uielements').models).each(function(element) {
-        element.unbind();
+        element.unbind('change', self.reRender);
         element.get('layout').unbind("change", self.reRender);
         element.bind('change', self.reRender);
         element.get('layout').bind('change', self.reRender);
@@ -116,9 +114,7 @@ function( ListEditorView,
     },
 
     showDetails: function() {
-      new ListEditorView( this.model,
-                          this.model.get('data').get('container_info').get('query'),
-                          this.model.get('data').get('container_info').get('row'));
+
     },
 
     highlightFirstRow: function() {

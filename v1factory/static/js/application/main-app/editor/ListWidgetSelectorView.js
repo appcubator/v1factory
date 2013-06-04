@@ -5,18 +5,18 @@ define([
 function() {
 
   var ListWidgetSelectorView = Backbone.UIView.extend({
-    className : 'editor-page',
+    className : 'editor-list',
     tagName : 'div',
     selectedEl : null,
     isMobile : false,
 
     events : {
-      'click #hover-div'     : 'hoverClicked',
-      'dblclick #select-div' : 'doubleClicked',
-      'mousedown #hover-div' : 'mousedown',
-      'mousedown #select-div': 'mousedown',
-      'mouseup #hover-div'   : 'mouseup',
-      'mouseup #select-div'  : 'mouseup'
+      'click #list-hover-div'     : 'hoverClicked',
+      'dblclick #list-select-div' : 'doubleClicked',
+      'mousedown #list-hover-div' : 'mousedown',
+      'mousedown #list-select-div': 'mousedown',
+      'mouseup #list-hover-div'   : 'mouseup',
+      'mouseup #list-select-div'  : 'mouseup'
     },
 
     initialize: function(widgetsCollection){
@@ -103,8 +103,6 @@ function() {
       hoverDiv.style.position = "absolute";
       selectDiv.style.position = "absolute";
 
-      $('.page.full').on('mousedown', this.clickedPage);
-
       return this;
     },
 
@@ -138,7 +136,6 @@ function() {
     },
 
     unbindAll: function() {
-      alert('unbind');
       var widget = this.selectedEl;
       widget.on('editModeOff', function() {
         self.bindWidget(widget);
@@ -150,7 +147,7 @@ function() {
       //this.hideNode(this.selectDiv);
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
-      this.selectDiv.style.left = ((widget.get('layout').get('width') * 80) + 4) + 'px';
+      this.selectDiv.style.left = (((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4) + 'px';
     },
 
     setLayout: function(node, widgetModel) {
@@ -163,7 +160,6 @@ function() {
     },
 
     widgetHover: function(widgetModel) {
-      alert('hover');
       if(this.selectedEl && widgetModel.cid === this.selectedEl.cid) return;
       this.hoveredEl = widgetModel;
       this.setLayout(this.hoverDiv, widgetModel);
@@ -218,13 +214,6 @@ function() {
     moving: function(e, ui) {
       model = this.selectedEl;
       if(e.target.id == "hover-div") { model = this.hoveredEl; }
-
-      g_guides.hideAll();
-      g_guides.showVertical(ui.position.left / GRID_WIDTH);
-      g_guides.showVertical(ui.position.left / GRID_WIDTH + model.get('layout').get('width'));
-      g_guides.showHorizontal(ui.position.top / GRID_HEIGHT);
-      g_guides.showHorizontal(ui.position.top / GRID_HEIGHT + model.get('layout').get('height'));
-
       var elem = iui.get('widget-wrapper-' + model.cid);
       elem.style.top = ui.position.top + 2 + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
