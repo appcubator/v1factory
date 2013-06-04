@@ -2,8 +2,122 @@ from jinja2 import Environment, PackageLoader, StrictUndefined
 from app_builder import naming
 from app_builder.htmlgen import Tag
 
+
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
+
+
+# map from internal identifier to what it actually is
+IMPORTS = { 'django.models':            'from django.db import models',
+            'django.forms':             'from django import forms',
+            'django.HttpResponse':      'from django.http import HttpResponse',
+            'django.login_required':    'from django.contrib.auth.decorators import login_required',
+            'django.require_GET':       'from django.views.decorators.http import require_GET',
+            'django.require_POST':      'from django.views.decorators.http import require_POST',
+            'django.csrf_exempt':       'from django.views.decorators.csrf import csrf_exempt',
+            'django.simplejson':        'from django.utils import simplejson',
+            'django.redirect':          'from django.shortcuts import redirect',
+            'django.render':            'from django.shortcuts import render',
+            'django.render_to_response':'from django.shortcuts import render_to_response',
+            'django.get_object_or_404': 'from django.shortcuts import get_object_or_404',
+            'django.patterns':'from django.conf.urls import patterns',
+            'django.include':'from django.conf.urls import include',
+            'django.url':'from django.conf.urls import url',
+
+}
+
+
+
+FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
+                 'webapp/pages.py': ('django.HttpResponse',
+                                    'django.login_required',
+                                    'django.require_GET',
+                                    'django.require_POST',
+                                    'django.csrf_exempt',
+                                    'django.simplejson',
+                                    'django.redirect',
+                                    'django.render',
+                                    'django.render_to_response',
+                                    'django.get_object_or_404'),
+                 'webapp/form_receivers.py': ('django.HttpResponse',
+                                            'django.login_required',
+                                            'django.require_GET',
+                                            'django.require_POST',
+                                            'django.csrf_exempt',
+                                            'django.simplejson',
+                                            'django.redirect',
+                                            'django.render',
+                                            'django.render_to_response',
+                                            'django.get_object_or_404'),
+                 'webapp/forms.py': ('django.forms',),
+                 'webapp/urls.py': ('django.patterns', 'django.include', 'django.url',),
+}
+
+
+def create_import_namespace(file_path):
+    def add_imports_to_ns(ns, import_lines):
+        for i in import_lines:
+            prim_name = IMPORTS[i].split('import')[1].strip()
+            ns.add_import(i, prim_name) # adds to the import namespace ;)
+
+    ns = naming.Namespace()
+    add_imports_to_ns(ns, FILE_IMPORT_MAP[file_path])
+    return ns
+
+class Import(object):
+
+    def __init__(self, import_symbol, identifier, from_string=''):
+        self.import_symbol = import_symbol
+        self.identifier = identifier
+        self.use_as = False
+        if import_symbol != str(identifier):
+            self.use_as = True
+        self.from_string = from_string
+
+    def render(self):
+        return env.get_template('import.py').render(imp=self)
+
+    @classmethod
+    def render_concatted_imports(self, imports):
+        assert len(set([i.from_string for i in imports])) == 1, "These from strings ain't the same."
+        from_string = imports[0].from_string
+        return env.get_template('imports_concatted.py').render(from_string=from_string, imports=imports)
+
+
+class DjangoFormReceiver(object):
+
+    def __init__(self, identifier, form_id):
+        """
+        For now it'll only work with fields that are directly associate with the model
+        """
+        self.identifier = identifier
+        self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
+        self.locals = {'request':self.namespace.new_identifier('request')}
+        self.form_id = form_id
+        self.code_path = 'webapp/form_receivers.py'
+
+    def render(self):
+        return env.get_template('form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
+
+
+class DjangoForm(object):
+
+    def __init__(self, identifier, model_id, field_ids):
+        """
+        For now it'll only work with model fields
+        """
+        self.identifier = identifier
+        self.namespace = naming.Namespace(parent_namespace=identifier.ns)
+        self.model_id = model_id
+        self.code_path = 'webapp/forms.py'
+        self.field_ids = field_ids
+
+    def render(self):
+        if len(self.field_ids) == 1:
+            self.included_field_string = repr(str(self.field_ids[0])) + ','
+        else:
+            self.included_field_string = ', '.join([repr(str(i)) for i in self.field_ids])
+        return env.get_template('form.py').render(form=self, imports=self.namespace.imports(), locals={})
 
 
 class DjangoQuery(object):
@@ -23,18 +137,20 @@ class DjangoPageView(object):
         self.identifier = identifier
         self.code_path = "webapp/pages.py"
 
+        self.locals = {}
         # args, make a namespace for the function
-        self.namespace = naming.USNamespace()
-        self.namespace.new_identifier('request')
+        self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
+        self.locals['request'] = self.namespace.new_identifier('request')
+        self.locals['page_context'] = self.namespace.new_identifier('page_context')
         if args is None:
             args = []
-        self.args = [ (self.namespace.new_identifier(arg), data) for arg, data in args ]
+        self.args = [ (self.namespace.new_identifier(arg, ref=data), data) for arg, data in args ]
 
         # continuing args, make a namespace for page context
-        self.pc_namespace = naming.USNamespace()
+        self.pc_namespace = naming.Namespace()
         for arg, data in self.args:
             name_attempt = data.get('template_id', 'BADNAME') # helps a test pass
-            data['template_id'] = self.pc_namespace.new_identifier(name_attempt)
+            data['template_id'] = self.pc_namespace.new_identifier(str(name_attempt))
 
         # queries
         self.queries = []
@@ -50,7 +166,7 @@ class DjangoPageView(object):
         self.queries.append((template_id, dq_obj.render()))
 
     def render(self):
-        return env.get_template('view.py').render(view=self)
+        return env.get_template('view.py').render(view=self, imports=self.namespace.imports(), locals=self.locals)
 
 
 class DjangoField(object):
@@ -97,11 +213,11 @@ class DjangoModel(object):
     def __init__(self, identifier):
         self.identifier = identifier
         self.code_path = "webapp/models.py"
-        self.field_namer = naming.USNamespace()
+        self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
         self.fields = []
 
     def create_field(self, name, canonical_type, required):
-        identifier = self.field_namer.new_identifier(name)
+        identifier = self.namespace.new_identifier(name)
         f = DjangoField(
             identifier, canonical_type, required=required, parent_model=self)
         self.fields.append(f)
@@ -112,7 +228,7 @@ class DjangoModel(object):
         return q
 
     def render(self):
-        return env.get_template('model.py').render(model=self)
+        return env.get_template('model.py').render(model=self, imports=self.namespace.imports(), locals={})
 
 
 class Column(object):
@@ -219,7 +335,7 @@ class DjangoTemplate(object):
 
     def __init__(self, identifier):
         self.identifier = identifier
-        self.filename = identifier + '.html'
+        self.filename = '%s.html' % identifier
         self.code_path = "webapp/templates/" + self.filename
 
     def split_to_cols(self, uiels, left_offset=0):
@@ -372,19 +488,31 @@ class DjangoURLs(object):
     Represents a set of URL - function mappings.
     """
 
-    def __init__(self, module_string):
+    def __init__(self, module_string, outer_namespace, urlpatterns_id, first_time=False):
+        """
+        Module string = the string ref to the module that these URLs will belong to.
+        Module namespace = the namespace this code will be dropped into
+
+        """
         self.module = module_string
+        self.outer_namespace = outer_namespace
+        self.urlpatterns_id = urlpatterns_id
+
         self.routes = []
-        self.imports = ['from django.conf.urls import patterns, include, url']
         self.code_path = "webapp/urls.py"
+        self.first_time = first_time
+
+    @property
+    def namespace(self):
+        # created to keep coder happy, since coder looks for a namespace to find imports in.
+        return self.outer_namespace
 
     def render(self):
-        return env.get_template('urls.py').render(urls=self)
+        return env.get_template('urls.py').render(urls=self, imports=self.outer_namespace.imports(), locals={'urlpatterns': self.urlpatterns_id})
 
 
 class DjangoStaticPagesTestCase(object):
     def __init__(self, identifier_url_pairs):
-        self.imports = ['from django.test import TestCase']
         self.identifier_url_pairs = identifier_url_pairs
         self.code_path = "webapp/tests.py"
 
