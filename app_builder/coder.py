@@ -63,7 +63,15 @@ class Coder(object):
                         i = Import(real_import_name, identifier, from_string=from_string)
                         import_codes.append(i)
 
-                    code = '\n'.join([ i.render() for i in import_codes ]) + '\n\n' + code
+                    imports_by_from_string = { fs: [i for i in import_codes if i.from_string == fs] for fs in set([i.from_string for i in import_codes])}
+                    normal_imports = '\n'.join([i.render() for i in imports_by_from_string.get('',[])])
+                    try:
+                        del imports_by_from_string['']
+                    except KeyError:
+                        pass
+                    from_string_imports = '\n'.join(sorted([Import.render_concatted_imports(imps) for imps in imports_by_from_string.values()]))
+
+                    code = normal_imports + '\n\n' + from_string_imports + '\n\n' + code
                     compile(code + "\n", relative_path, "exec")
 
                 except SyntaxError:

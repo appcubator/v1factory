@@ -15,7 +15,6 @@ def create_codes(app):
                   'create urls object for app form receivers': factory.create_fr_urls,
 
                   'view for page': factory.create_view_for_page,
-                  'import view into urls': factory.import_view_into_urls,
                   'url to serve page': factory.add_page_to_urls,
 
                   'find or add the needed data to the view': factory.find_or_create_query_for_view ,
@@ -28,7 +27,6 @@ def create_codes(app):
 
 
                   'import form into form receivers': factory.import_form_into_form_receivers,
-                  'import form receiver into url': factory.import_form_receiver_into_url,
     }
 
 
@@ -56,7 +54,6 @@ def create_codes(app):
     create('create urls object for app form receivers', app)
     for p in app.pages:
         create('view for page', p)
-        create('import view into urls', p)
         create('url to serve page', p)
 
 
@@ -85,7 +82,7 @@ def main(app):
     cc = Coder.create_from_codes(codes)
 
     for rel_path, code in cc.itercode():
-        print code
+        print "\n\n============ %s ============\n" % rel_path, code
         #if rel_path.endswith('.py'):
         #    print check(code, 'test.py')
 

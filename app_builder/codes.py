@@ -77,6 +77,12 @@ class Import(object):
     def render(self):
         return env.get_template('import.py').render(imp=self)
 
+    @classmethod
+    def render_concatted_imports(self, imports):
+        assert len(set([i.from_string for i in imports])) == 1, "These from strings ain't the same."
+        from_string = imports[0].from_string
+        return env.get_template('imports_concatted.py').render(from_string=from_string, imports=imports)
+
 
 class DjangoFormReceiver(object):
 
@@ -85,7 +91,7 @@ class DjangoFormReceiver(object):
         For now it'll only work with fields that are directly associate with the model
         """
         self.identifier = identifier
-        self.namespace = self.identifier.ns
+        self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
         self.locals = {'request':self.namespace.new_identifier('request')}
         self.form_id = form_id
         self.code_path = 'webapp/form_receivers.py'
@@ -101,7 +107,7 @@ class DjangoForm(object):
         For now it'll only work with model fields
         """
         self.identifier = identifier
-        self.namespace = identifier.ns
+        self.namespace = naming.Namespace(parent_namespace=identifier.ns)
         self.model_id = model_id
         self.code_path = 'webapp/forms.py'
         self.field_ids = field_ids
@@ -131,9 +137,11 @@ class DjangoPageView(object):
         self.identifier = identifier
         self.code_path = "webapp/pages.py"
 
+        self.locals = {}
         # args, make a namespace for the function
-        self.namespace = self.identifier.ns
-        self.namespace.new_identifier('request')
+        self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
+        self.locals['request'] = self.namespace.new_identifier('request')
+        self.locals['page_context'] = self.namespace.new_identifier('page_context')
         if args is None:
             args = []
         self.args = [ (self.namespace.new_identifier(arg, ref=data), data) for arg, data in args ]
@@ -158,7 +166,7 @@ class DjangoPageView(object):
         self.queries.append((template_id, dq_obj.render()))
 
     def render(self):
-        return env.get_template('view.py').render(view=self, imports=self.namespace.imports(), locals={'request':'r11', 'page_context':'r2222'})
+        return env.get_template('view.py').render(view=self, imports=self.namespace.imports(), locals=self.locals)
 
 
 class DjangoField(object):
@@ -491,9 +499,13 @@ class DjangoURLs(object):
         self.urlpatterns_id = urlpatterns_id
 
         self.routes = []
-        self.imports = ['from django.conf.urls import patterns, include, url']
         self.code_path = "webapp/urls.py"
         self.first_time = first_time
+
+    @property
+    def namespace(self):
+        # created to keep coder happy, since coder looks for a namespace to find imports in.
+        return self.outer_namespace
 
     def render(self):
         return env.get_template('urls.py').render(urls=self, imports=self.outer_namespace.imports(), locals={'urlpatterns': self.urlpatterns_id})
@@ -501,7 +513,6 @@ class DjangoURLs(object):
 
 class DjangoStaticPagesTestCase(object):
     def __init__(self, identifier_url_pairs):
-        self.imports = ['from django.test import TestCase']
         self.identifier_url_pairs = identifier_url_pairs
         self.code_path = "webapp/tests.py"
 

@@ -63,12 +63,6 @@ class AppComponentFactory(object):
         page._django_view = v
         return v
 
-    def import_view_into_urls(self, page):
-        v = page._django_view
-        import_symbol = 'webapp.pages.%s' % v.identifier
-        self.urls_namespace.add_import(import_symbol, v.identifier)
-
-
     def find_or_create_query_for_view(self, uie):
 
         entity = uie.container_info.entity_resolved
@@ -146,7 +140,7 @@ class AppComponentFactory(object):
         form_model = uie.container_info.form # bind to this name to save me some typing
         if form_model.action not in ['create', 'edit']:
             return None
-        prim_name = form_model.action + '_' + form_model.entity
+        prim_name = form_model.action + '_' + form_model.entity_resolved.name
         form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
         model_id = form_model.entity_resolved._django_model.identifier
         field_ids = []
@@ -170,11 +164,6 @@ class AppComponentFactory(object):
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
-
-    def import_form_receiver_into_url(self,uie):
-        fr = uie._django_form_receiver
-        import_symbol = 'webapp.form_receivers.%s' % fr.identifier
-        self.urls_namespace.add_import(import_symbol, fr.identifier)
 
 
     # TESTS

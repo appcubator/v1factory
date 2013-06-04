@@ -68,7 +68,6 @@ class Form(DictInited, Hooked):
     _hooks = ['create form object',
               'import form into form receivers',
               'create form receiver',
-              'import form receiver into url',
               'create url for form receiver']
 
     class FormInfo(DictInited):
