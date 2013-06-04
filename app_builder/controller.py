@@ -29,8 +29,7 @@ def create_codes(app):
 
                   'import form into form receivers': factory.import_form_into_form_receivers,
                   'import form receiver into url': factory.import_form_receiver_into_url,
-
-                 }
+    }
 
 
     codes = []

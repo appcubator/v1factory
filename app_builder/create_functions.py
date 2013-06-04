@@ -17,7 +17,7 @@ class AppComponentFactory(object):
 
         self.fr_url_namespace = naming.Namespace()
 
-
+        
     # MODELS
 
     def create_model(self, entity):

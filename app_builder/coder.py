@@ -5,8 +5,10 @@ import autopep8
 import shutil
 import tempfile
 import logging
+import re
 
-from codes import IMPORTS
+from codes import IMPORTS, Import
+
 
 logger = logging.getLogger("app_builder")
 
@@ -37,16 +39,33 @@ class Coder(object):
             code = '\n\n'.join([ c.render() for c in codes ])
 
             if relative_path.endswith('.py'):
-                try:
-                    import_code = '\n'.join(IMPORTS[relative_path])
-                    code = import_code + '\n\n' + code
-                except KeyError:
-                    pass
-
                 # try to compile the code to prevent syntax errors
                 # TODO Fix the modules
                 try:
+                    try:
+                        imports = codes[0].namespace.imports().items() # tuples (import symbol, identifier to use)
+                    except AttributeError:
+                        imports = []
+
+                    import_codes = []
+                    for import_symbol, identifier in imports:
+                        if import_symbol.startswith('django.'):
+                            import_string = IMPORTS[import_symbol]
+                            m = re.match(r'from (.*) import (.*)$', import_string)
+                            from_string, real_import_name = (m.group(1), m.group(2))
+                        elif import_symbol.startswith('webapp.'):
+                            # webapp.pages.testpage => from webapp.pages import testpage
+                            # TODO HACK XXX FIXME PLZ DEBUG THIS DOESN'T WORK BECAUSE THE IDENTIFIER MIGHT GET UPDATED AFTER IT GETS CONVERTED TO STRING. IT'LL WORK FOR NOW
+                            toks = import_symbol.split('.')
+                            from_string, real_import_name = ('.'.join(toks[:-1]), toks[-1]) 
+                        else:
+                            raise KeyError
+                        i = Import(real_import_name, identifier, from_string=from_string)
+                        import_codes.append(i)
+
+                    code = '\n'.join([ i.render() for i in import_codes ]) + '\n\n' + code
                     compile(code + "\n", relative_path, "exec")
+
                 except SyntaxError:
                     traceback.print_exc()
                     continue
