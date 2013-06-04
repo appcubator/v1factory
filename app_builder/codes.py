@@ -2,25 +2,56 @@ from jinja2 import Environment, PackageLoader, StrictUndefined
 from app_builder import naming
 from app_builder.htmlgen import Tag
 
+
 env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder', 'code_templates'), undefined=StrictUndefined)
 
-BASE_IMPORTS = { 'webapp/models.py': ('from django.db import models',),
-                 'webapp/pages.py': ('from django.http import HttpResponse',
-                                    'from django.contrib.auth.decorators import login_required',
-                                    'from django.views.decorators.http import require_GET, require_POST',
-                                    'from django.views.decorators.csrf import csrf_exempt',
-                                    'from django.utils import simplejson',
-                                    'from django.shortcuts import redirect, render, render_to_response, get_object_or_404'),
-                 'webapp/form_receivers.py': ('from django.http import HttpResponse',
-                                            'from django.contrib.auth.decorators import login_required',
-                                            'from django.views.decorators.http import require_GET, require_POST',
-                                            'from django.views.decorators.csrf import csrf_exempt',
-                                            'from django.utils import simplejson',
-                                            'from django.shortcuts import redirect, render, render_to_response, get_object_or_404'),
-                 'webapp/forms.py': ('from django import forms',),
-                 'webapp/urls.py': ('from django.conf.urls import patterns, include, url',),
-                 }
+
+# map from internal identifier to what it actually is
+IMPORTS = { 'django.models':            'from django.db import models',
+            'django.forms':             'from django import forms',
+            'django.HttpResponse':      'from django.http import HttpResponse',
+            'django.login_required':    'from django.contrib.auth.decorators import login_required',
+            'django.require_GET':       'from django.views.decorators.http import require_GET',
+            'django.require_POST':      'from django.views.decorators.http import require_POST',
+            'django.csrf_exempt':       'from django.views.decorators.csrf import csrf_exempt',
+            'django.simplejson':        'from django.utils import simplejson',
+            'django.redirect':          'from django.shortcuts import redirect',
+            'django.render':            'from django.shortcuts import render',
+            'django.render_to_response':'from django.shortcuts import render_to_response',
+            'django.get_object_or_404': 'from django.shortcuts import get_object_or_404',
+            'django.patterns':'from django.conf.urls import patterns',
+            'django.include':'from django.conf.urls import include',
+            'django.url':'from django.conf.urls import url',
+
+}
+
+
+
+FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
+                 'webapp/pages.py': ('django.HttpResponse',
+                                    'django.login_required',
+                                    'django.require_GET',
+                                    'django.require_POST',
+                                    'django.csrf_exempt',
+                                    'django.simplejson',
+                                    'django.redirect',
+                                    'django.render',
+                                    'django.render_to_response',
+                                    'django.get_object_or_404'),
+                 'webapp/form_receivers.py': ('django.HttpResponse',
+                                            'django.login_required',
+                                            'django.require_GET',
+                                            'django.require_POST',
+                                            'django.csrf_exempt',
+                                            'django.simplejson',
+                                            'django.redirect',
+                                            'django.render',
+                                            'django.render_to_response',
+                                            'django.get_object_or_404'),
+                 'webapp/forms.py': ('django.forms',),
+                 'webapp/urls.py': ('django.patterns', 'django.include', 'django.url',),
+}
 
 
 
@@ -45,11 +76,13 @@ class DjangoFormReceiver(object):
         For now it'll only work with fields that are directly associate with the model
         """
         self.identifier = identifier
+        self.namespace = self.identifier.ns
+        self.locals = {'request':self.namespace.new_identifier('request')}
         self.form_id = form_id
         self.code_path = 'webapp/form_receivers.py'
 
     def render(self):
-        return env.get_template('form_receiver.py').render(fr=self)
+        return env.get_template('form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
 
 
 class DjangoForm(object):
@@ -59,6 +92,7 @@ class DjangoForm(object):
         For now it'll only work with model fields
         """
         self.identifier = identifier
+        self.namespace = identifier.ns
         self.model_id = model_id
         self.code_path = 'webapp/forms.py'
         self.field_ids = field_ids
@@ -68,7 +102,7 @@ class DjangoForm(object):
             self.included_field_string = repr(str(self.field_ids[0])) + ','
         else:
             self.included_field_string = ', '.join([repr(str(i)) for i in self.field_ids])
-        return env.get_template('form.py').render(form=self)
+        return env.get_template('form.py').render(form=self, imports=self.namespace.imports(), locals={})
 
 
 class DjangoQuery(object):
@@ -115,7 +149,7 @@ class DjangoPageView(object):
         self.queries.append((template_id, dq_obj.render()))
 
     def render(self):
-        return env.get_template('view.py').render(view=self)
+        return env.get_template('view.py').render(view=self, imports=self.namespace.imports(), locals={'request':'r11', 'page_context':'r2222'})
 
 
 class DjangoField(object):
@@ -177,7 +211,7 @@ class DjangoModel(object):
         return q
 
     def render(self):
-        return env.get_template('model.py').render(model=self)
+        return env.get_template('model.py').render(model=self, imports=self.namespace.imports(), locals={})
 
 
 class Column(object):

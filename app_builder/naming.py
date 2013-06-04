@@ -142,3 +142,17 @@ class Namespace(object):
                 candidate += '2'
         return candidate
 
+    def get_by_ref(self, ref):
+        for i in self.used_ids():
+            if i == ref:
+                return i
+        raise KeyError
+
+    # HACK used to tag certain identifiers as being imports
+    def add_import(self, import_symbol, proposed_id):
+        return self.new_identifier(proposed_id, ref='IMPORTS.%s' % import_symbol)
+    # the dictionary produced is a symbol -> identifier map.
+    # symbol meaning the unique internal name used to refer to the import
+    def imports(self):
+        imports = { i.ref[8:]: i.identifier for i in self.used_ids() if str(i.ref).startswith('IMPORTS.') }
+        return imports

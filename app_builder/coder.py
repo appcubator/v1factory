@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import logging
 
-from codes import BASE_IMPORTS
+from codes import IMPORTS
 
 logger = logging.getLogger("app_builder")
 
@@ -38,7 +38,7 @@ class Coder(object):
 
             if relative_path.endswith('.py'):
                 try:
-                    import_code = '\n'.join(BASE_IMPORTS[relative_path])
+                    import_code = '\n'.join(IMPORTS[relative_path])
                     code = import_code + '\n\n' + code
                 except KeyError:
                     pass

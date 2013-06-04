@@ -1,4 +1,6 @@
-class {{ form.identifier }}(forms.ModelForm):
+{% set forms = imports['django.forms'] %}
+
+class {{ form.identifier }}({{forms}}.ModelForm):
     model = {{ form.model_id }}
 
     class Meta:
