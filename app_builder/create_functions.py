@@ -1,7 +1,7 @@
 
 
 from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver
-from app_builder.codes import IMPORTS, FILE_IMPORT_MAP
+from app_builder.codes import create_import_namespace
 from app_builder import naming
 
 
@@ -9,24 +9,14 @@ class AppComponentFactory(object):
 
     def __init__(self):
 
-        self.model_namespace = naming.Namespace()
-        self.form_namespace = naming.Namespace()
-        self.view_namespace = naming.Namespace()
-        self.fr_namespace = naming.Namespace()
-        self.urls_namespace = naming.Namespace()
+        self.model_namespace = create_import_namespace('webapp/models.py')
+        self.form_namespace = create_import_namespace('webapp/forms.py')
+        self.view_namespace = create_import_namespace('webapp/pages.py')
+        self.fr_namespace = create_import_namespace('webapp/form_receivers.py')
+        self.urls_namespace = create_import_namespace('webapp/urls.py')
 
         self.fr_url_namespace = naming.Namespace()
 
-        def add_imports_to_ns(ns, import_lines):
-            for i in import_lines:
-                prim_name = IMPORTS[i].split('import')[1].strip()
-                ns.add_import(i, prim_name) # adds to the import namespace ;)
-
-        add_imports_to_ns(self.model_namespace, FILE_IMPORT_MAP['webapp/models.py'])
-        add_imports_to_ns(self.view_namespace, FILE_IMPORT_MAP['webapp/pages.py'])
-        add_imports_to_ns(self.form_namespace, FILE_IMPORT_MAP['webapp/forms.py'])
-        add_imports_to_ns(self.fr_namespace, FILE_IMPORT_MAP['webapp/form_receivers.py'])
-        add_imports_to_ns(self.urls_namespace, FILE_IMPORT_MAP['webapp/urls.py'])
 
     # MODELS
 
@@ -43,6 +33,20 @@ class AppComponentFactory(object):
         entity._django_model = m
         return m
 
+    def import_model_into_namespace(self, entity, namespace):
+        if namespace == 'views':
+            ns = self.view_namespace
+        elif namespace == 'forms':
+            ns = self.form_namespace
+        elif namespace == 'form receivers':
+            ns = self.fr_namespace
+        else:
+            raise KeyError
+
+        m = entity._django_model
+        import_symbol = 'webapp.models.%s' % m.identifier
+        ns.add_import(import_symbol, m.identifier)
+
 
     # VIEWS
 
@@ -58,6 +62,11 @@ class AppComponentFactory(object):
         v = DjangoPageView(identifier, args=args)
         page._django_view = v
         return v
+
+    def import_view_into_urls(self, page):
+        v = page._django_view
+        import_symbol = 'webapp.pages.%s' % v.identifier
+        self.urls_namespace.add_import(import_symbol, v.identifier)
 
 
     def find_or_create_query_for_view(self, uie):
@@ -101,12 +110,12 @@ class AppComponentFactory(object):
     # URL NAMESPACES
 
     def create_urls(self, app):
-        u = DjangoURLs('webapp.pages')
+        u = DjangoURLs('webapp.pages', self.urls_namespace, first_time=True)
         app._django_page_urls = u
         return u
 
     def create_fr_urls(self, app):
-        u = DjangoURLs('webapp.form_receivers')
+        u = DjangoURLs('webapp.form_receivers', self.urls_namespace, first_time=False)
         app._django_fr_urls = u
         return u
 
@@ -119,8 +128,6 @@ class AppComponentFactory(object):
         route = (page.url_regex, page._django_view)
         url_obj.routes.append(route)
 
-        return None
-
     def create_url_for_form_receiver(self, uie):
         url_obj = uie.app._django_fr_urls
 
@@ -129,8 +136,6 @@ class AppComponentFactory(object):
         url_obj.routes.append(route)
 
         self._url = url
-
-        return None
 
 
     # FORMS
@@ -152,11 +157,22 @@ class AppComponentFactory(object):
         uie._django_form = form_obj
         return form_obj
 
+
+    def import_form_into_form_receivers(self, uie):
+        f = uie._django_form
+        import_symbol = 'webapp.forms.%s' % f.identifier
+        self.fr_namespace.add_import(import_symbol, f.identifier)
+
     def create_form_receiver_for_form_object(self, uie):
         fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
+
+    def import_form_receiver_into_url(self,uie):
+        fr = uie._django_form_receiver
+        import_symbol = 'webapp.form_receivers.%s' % fr.identifier
+        self.fr_namespace.add_import(import_symbol, fr.identifier)
 
 
     # TESTS

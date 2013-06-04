@@ -7,11 +7,15 @@ def create_codes(app):
     factory = AppComponentFactory()
 
     create_map = {'create model for entity': factory.create_model,
+                  'import model into views': lambda entity: factory.import_model_into_namespace(entity, 'views'),
+                  'import model into forms': lambda entity: factory.import_model_into_namespace(entity, 'forms'),
+                  'import model into form receivers': lambda entity: factory.import_model_into_namespace(entity, 'form receivers'),
 
                   'create urls object for app': factory.create_urls,
                   'create urls object for app form receivers': factory.create_fr_urls,
 
                   'view for page': factory.create_view_for_page,
+                  'import view into urls': factory.import_view_into_urls,
                   'url to serve page': factory.add_page_to_urls,
 
                   'find or add the needed data to the view': factory.find_or_create_query_for_view ,
@@ -21,6 +25,10 @@ def create_codes(app):
                   'create form object': factory.create_django_form_for_entity_based_form,
                   'create form receiver': factory.create_form_receiver_for_form_object,
                   'create url for form receiver': factory.create_url_for_form_receiver,
+
+
+                  'import form into form receivers': factory.import_form_into_form_receivers,
+                  'import form receiver into url': factory.import_form_receiver_into_url,
 
                  }
 
@@ -40,12 +48,18 @@ def create_codes(app):
     for ent in app.entities:
         create('create model for entity', ent)
 
+        create('import model into views', ent)
+        create('import model into forms', ent)
+        create('import model into form receivers', ent)
+
     # routes and functions to serve pages
     create('create urls object for app', app)
     create('create urls object for app form receivers', app)
     for p in app.pages:
         create('view for page', p)
+        create('import view into urls', p)
         create('url to serve page', p)
+
 
     # UIELEMENT HOOKS
     for p in app.pages:

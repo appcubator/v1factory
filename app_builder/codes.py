@@ -54,6 +54,15 @@ FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
 }
 
 
+def create_import_namespace(file_path):
+    def add_imports_to_ns(ns, import_lines):
+        for i in import_lines:
+            prim_name = IMPORTS[i].split('import')[1].strip()
+            ns.add_import(i, prim_name) # adds to the import namespace ;)
+
+    ns = naming.Namespace()
+    add_imports_to_ns(ns, FILE_IMPORT_MAP[file_path])
+    return ns
 
 class Import(object):
 
@@ -471,15 +480,22 @@ class DjangoURLs(object):
     Represents a set of URL - function mappings.
     """
 
-    def __init__(self, module_string, first_time=False):
+    def __init__(self, module_string, outer_namespace, first_time=False):
+        """
+        Module string = the string ref to the module that these URLs will belong to.
+        Module namespace = the namespace this code will be dropped into
+
+        """
         self.module = module_string
+        self.outer_namespace = outer_namespace
+
         self.routes = []
         self.imports = ['from django.conf.urls import patterns, include, url']
         self.code_path = "webapp/urls.py"
         self.first_time = first_time
 
     def render(self):
-        return env.get_template('urls.py').render(urls=self)
+        return env.get_template('urls.py').render(urls=self, imports=self.outer_namespace.imports(), locals={})
 
 
 class DjangoStaticPagesTestCase(object):

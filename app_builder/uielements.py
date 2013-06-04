@@ -64,8 +64,12 @@ class Hooked(object):
 
 class Form(DictInited, Hooked):
 
-    # these two are tightly coupled and serial for now.
-    _hooks = ['create form object', 'create form receiver', 'create url for form receiver']
+    # these are tightly coupled and serial for now.
+    _hooks = ['create form object',
+              'import form into form receivers',
+              'create form receiver',
+              'import form receiver into url',
+              'create url for form receiver']
 
     class FormInfo(DictInited):
 
