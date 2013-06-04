@@ -111,7 +111,6 @@ class AppComponentFactory(object):
 
     def create_urls(self, app):
         url_patterns_id = self.urls_namespace.new_identifier('urlpatterns', ref='MISC.urlpatterns')
-        import pdb; pdb.set_trace()
         u = DjangoURLs('webapp.pages', self.urls_namespace, url_patterns_id, first_time=True)
         app._django_page_urls = u
         return u
