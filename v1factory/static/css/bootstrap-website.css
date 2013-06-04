@@ -4844,7 +4844,7 @@ hr.vert {
   .well {
     position: relative;
     overflow: hidden;
-    border-radius: 0 !important;
+    border-radius: 0;
     border:none;
   }
 

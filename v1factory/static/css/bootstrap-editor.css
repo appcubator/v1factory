@@ -3740,23 +3740,57 @@ ul.list {
   margin-top: 6px;
 }
 #navbar-editor, #footer-editor {
-  padding: 20px;
   width: 600px;
   height: 600px;
+}
+
+#navbar-editor h3 {
+  display: block;
+  padding-left: 15px;
+  line-height: 60px;
+  border-bottom: 1px solid #ccc;
+}
+
+#navbar-editor .main-title {
+  padding: 10px;
+  padding-left: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+#navbar-editor h4 {
+  margin-right: 15px;
+}
+
+#navbar-editor .links-title {
+  padding: 10px;
+  padding-left: 15px;
+}
+
+.well-small.add-link {
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
 }
 
 #navbar-editor legend[for=links], #footer-editor legend[for=links] {
   margin-bottom: 0px;
 }
 
-#link-editors {
+
+#navbar-editor .links-section {
   overflow: scroll;
-  height: 250px;
+  height: 390px;
+}
+
+#link-editors {
+
+  padding: 15px;
 }
 
 #link-editors li.well-small {
   margin-bottom: 10px;
   position: relative;
+  border-radius: 4px;
 }
 
 #link-editors li .remove {
