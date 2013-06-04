@@ -5227,10 +5227,10 @@ hr.vert {
   }
 
   .v1nav .nav li.dropd .dropdown-menu li.header {
-    height: 20px;
-    line-height: 20px;
+    height: 24px;
+    line-height: 24px;
     background-color: #ccc;
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#efeff0));
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fafafa), to(#efeff0));
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eaeaea;
     color: #666;
@@ -5239,6 +5239,14 @@ hr.vert {
     padding-left: 4px;
   }
 
+  .v1nav .nav li.dropd .dropdown-menu li.header-panel {
+    height: 30px;
+    background-color: #fff;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1),0 2px 3px rgba(0,0,0,0.05);
+  }
+ 
   .dropdown-menu li.header.top {
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
