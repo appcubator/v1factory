@@ -1,6 +1,6 @@
 {% load less %}
 
-{{  app.uie_state.fonts|safe }}
+{{  uie_state.fonts|safe }}
 
 {% inlineless %}
 
@@ -13,7 +13,7 @@ body {
   /* * * * * * * * * * *
      Base CSS
   * * * * * * * * * * */
-  {{  app.uie_state.basecss|safe }}
+  {{  uie_state.basecss|safe }}
 
 
 
@@ -21,7 +21,7 @@ body {
      Buttons
   * * * * * * * * * * */
 
-  {% for b in  app.uie_state.buttons %}
+  {% for b in  uie_state.buttons %}
 
   {{b.tagName|safe}}.{{b.class_name|safe}} { 
   {{b.style|safe}}
@@ -33,7 +33,7 @@ body {
      Images
   * * * * * * * * * * */
 
-  {% for i in  app.uie_state.images %}
+  {% for i in  uie_state.images %}
 
   {{i.tagName|safe}}.{{i.class_name|safe}} { 
   {{i.style|safe}}
@@ -45,7 +45,7 @@ body {
      Headers
   * * * * * * * * * * */
 
-  {% for ht in  app.uie_state.headerTexts %}
+  {% for ht in  uie_state.headerTexts %}
 
   {{ht.tagName|safe}}.{{ht.class_name|safe}} { 
   {{ht.style|safe}}
@@ -57,7 +57,7 @@ body {
      Text
   * * * * * * * * * * */
 
-  {% for t in  app.uie_state.texts %}
+  {% for t in  uie_state.texts %}
 
   {{t.tagName|safe}}.{{t.class_name|safe}} { 
   {{t.style|safe}}
@@ -70,7 +70,7 @@ body {
      Links
   * * * * * * * * * * */
 
-  {% for l in  app.uie_state.links %}
+  {% for l in  uie_state.links %}
 
   {{l.tagName|safe}}.{{l.class_name|safe}} { 
   {{l.style|safe}}
@@ -82,7 +82,7 @@ body {
      Text Input
   * * * * * * * * * * */
 
-  {% for ti in  app.uie_state.textInputs %}
+  {% for ti in  uie_state.textInputs %}
 
   {{ti.tagName|safe}}.{{ti.class_name|safe}} { 
   {{ti.style|safe}}
@@ -94,7 +94,7 @@ body {
      Passwords
   * * * * * * * * * * */
 
-  {% for p in  app.uie_state.passwords %}
+  {% for p in  uie_state.passwords %}
 
   {{p.tagName|safe}}.{{p.class_name|safe}} { 
   {{p.style|safe}}
@@ -106,7 +106,7 @@ body {
      Text Areas
   * * * * * * * * * * */
 
-  {% for ta in  app.uie_state.textAreas %}
+  {% for ta in uie_state.textAreas %}
 
   {{ta.tagName|safe}}.{{ta.class_name|safe}} { 
   {{ta.style|safe}}
@@ -118,7 +118,7 @@ body {
      Lines
   * * * * * * * * * * */
 
-  {% for l in  app.uie_state.lines %}
+  {% for l in uie_state.lines %}
 
   {{l.tagName|safe}}.{{l.class_name|safe}} { 
   {{l.style|safe}}
@@ -130,7 +130,7 @@ body {
      Dropdowns
   * * * * * * * * * * */
 
-  {% for d in  app.uie_state.dropdowns %}
+  {% for d in uie_state.dropdowns %}
 
   {{d.tagName|safe}}.{{d.class_name|safe}} { 
   {{d.style|safe}}
@@ -142,7 +142,7 @@ body {
      Boxes
   * * * * * * * * * * */
 
-  {% for b in  app.uie_state.boxes %}
+  {% for b in uie_state.boxes %}
 
   {{b.tagName|safe}}.{{b.class_name|safe}} { 
   {{b.style|safe}}
