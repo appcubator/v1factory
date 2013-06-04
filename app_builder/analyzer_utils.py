@@ -4,6 +4,6 @@ def encode_braces(s):
 
 
 def decode_braces(s):
-    assert s.startswith('{{') and s.endswith('}}'), "Not brace encoded"
+    assert s.startswith('{{') and s.endswith('}}'), "Not brace encoded: %r" % s
     return s[2:-2].replace('\{', '{')
 

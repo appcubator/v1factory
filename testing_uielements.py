@@ -37,6 +37,11 @@ test_json = r"""{
                     "name": "Picture",
                     "type": "image",
                     "required": false
+                },
+                {
+                    "name": "models",
+                    "type": "image",
+                    "required": false
                 }
             ],
             "forms": []
@@ -51,7 +56,19 @@ test_json = r"""{
                 "isFixed": true,
                 "brandName": "AlperGamez",
                 "isHidden": false,
-                "items": [
+                "links": [
+                    {
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
+                    }
+                ]
+            },
+            "footer": {
+                "isFixed": true,
+                "customText": "",
+                "brandName": "AlperGamez",
+                "isHidden": false,
+                "links": [
                     {
                         "url": "internal://Homepage",
                         "title": "Homepage"
@@ -102,13 +119,59 @@ test_json = r"""{
                     "data": {
                         "content": "",
                         "container_info": {
-                            "action": "login",
                             "uielements": [],
                             "form": {
-                                "name": "Local Login",
                                 "fields": [
                                     {
-                                        "name": "username",
+                                        "field_name": "Name",
+                                        "placeholder": "Name",
+                                        "label": "Name",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "options": []
+                                    },
+                                    {
+                                        "field_name": "Description",
+                                        "placeholder": "Description",
+                                        "label": "Desc",
+                                        "displayType": "paragraph-text",
+                                        "type": "password",
+                                        "options": []
+                                    },
+                                    {
+                                        "placeholder": "Submit"
+                                    }
+                                ],
+                                "entity": "Game",
+                                "action": "create",
+                                "goto": { "page_name":"Homepage", "urldata":{} },
+                                "belongsTo": null
+                            }
+                        },
+                        "content_attribs": {},
+                        "context": null
+                    }
+                },{
+                    "layout": {
+                        "width": 4,
+                        "top": 12,
+                        "height": 15,
+                        "left": 7,
+                        "t_padding": 0,
+                        "b_padding": 0,
+                        "l_padding": 0,
+                        "r_padding": 0,
+                        "alignment": "left"
+                    },
+                    "type": "form",
+                    "data": {
+                        "content": "",
+                        "container_info": {
+                            "uielements": [],
+                            "form": {
+                                "fields": [
+                                    {
+                                        "field_name": "username",
                                         "placeholder": "Username",
                                         "label": "Username",
                                         "displayType": "single-line-text",
@@ -124,7 +187,6 @@ test_json = r"""{
                                         "options": []
                                     },
                                     {
-                                        "name": "Submit",
                                         "placeholder": "Login",
                                         "label": "Login",
                                         "displayType": "button",
@@ -132,11 +194,11 @@ test_json = r"""{
                                         "options": []
                                     }
                                 ],
+                                "entity": "User",
                                 "action": "login",
                                 "goto": { "page_name":"Homepage", "urldata":{} },
                                 "belongsTo": null
-                            },
-                            "entity": "User"
+                            }
                         },
                         "content_attribs": {},
                         "context": null
@@ -155,7 +217,19 @@ test_json = r"""{
                 "isFixed": true,
                 "brandName": "AlperGamez",
                 "isHidden": false,
-                "items": [
+                "links": [
+                    {
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
+                    }
+                ]
+            },
+            "footer": {
+                "customText": "",
+                "isFixed": true,
+                "brandName": "AlperGamez",
+                "isHidden": false,
+                "links": [
                     {
                         "url": "internal://Homepage",
                         "title": "Homepage"
@@ -213,3 +287,4 @@ from app_builder.controller import main
 def test():
     return main(app)
 
+test()

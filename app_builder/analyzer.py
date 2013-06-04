@@ -106,9 +106,9 @@ class Page(DictInited):
     def url_regex(page):
         url_regex = "r'^"
         for x in page.url.urlparts:
-            try:
+            if isinstance(x, basestring):
                 url_regex += naming.make_safe(x) + '/'
-            except TypeError:
+            else:
                 url_regex += r'(\d+)/'
         url_regex += "$'"
         return url_regex
@@ -159,6 +159,11 @@ class App(DictInited):
             "name": "User",
             "fields": [
                 {
+                    "name": "username",
+                    "type": "text",
+                    "required": True
+                },
+                {
                     "name": "First Name",
                     "type": "text",
                     "required": True
@@ -181,6 +186,10 @@ class App(DictInited):
         userentity.facebook = self.users.facebook  # TODO finish this process
         self.entities.append(userentity)
 
+        # HACK replace uielements with their subclass
+        for p in self.pages:
+            p.uielements = [u.subclass for u in p.uielements]
+
         # HACK give everything a reference to the app
         for path, obj in filter(lambda u: isinstance(u[1], DictInited), self.iternodes()):
             obj.app = self
@@ -189,16 +198,13 @@ class App(DictInited):
         for path, fii in filter(lambda n: isinstance(n[1], Form.FormInfo.FormInfoInfo), self.iternodes()):
             if fii.belongsTo is not None:
                 fii.belongsTo = encode_braces('entities/%s' % fii.belongsTo)
+            fii.entity = encode_braces('entities/%s' % fii.entity)
 
         for path, ll in filter(lambda n: isinstance(n[1], LinkLang), self.iternodes()):
             ll.page_name = encode_braces('pages/%s' % ll.page_name)
 
         for path, el in filter(lambda n: isinstance(n[1], EntityLang), self.iternodes()):
             el.entity_name = encode_braces('entities/%s' % el.entity_name)
-
-        for path, fi in filter(lambda n: isinstance(n[1], Form.FormInfo), self.iternodes()):
-            fi.entity = encode_braces(
-                'entities/%s' % fi.entity)  # "Posts" => "entities/Posts"
 
         for path, ii in filter(lambda n: isinstance(n[1], Iterator.IteratorInfo), self.iternodes()):
             ii.entity = encode_braces(

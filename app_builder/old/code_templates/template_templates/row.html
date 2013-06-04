@@ -1,9 +1,0 @@
-{% if context.cols %}
-<!-- row -->
-<div class="row hoff{{context.margin_top}}">
-{% for col in context.cols %}
-  {{ col.render(env)|indent(2) }}
-{% endfor %}
-</div>
-<!-- /row -->
-{% endif %}

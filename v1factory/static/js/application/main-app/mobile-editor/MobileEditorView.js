@@ -67,6 +67,8 @@ function( PageModel,
       if(options && options.pageId) pageId = options.pageId;
 
       iui.loadCSS(this.css);
+
+      iui.loadCSS('ratchet');
       iui.loadCSS('bootstrap-editor');
       iui.loadCSS('jquery-ui');
 

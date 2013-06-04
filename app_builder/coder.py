@@ -1,9 +1,15 @@
+import traceback
 import os
 import os.path
 import autopep8
 import shutil
 import tempfile
 import logging
+import re
+
+from codes import IMPORTS, Import
+
+
 logger = logging.getLogger("app_builder")
 
 from os.path import join
@@ -35,9 +41,44 @@ class Coder(object):
             if relative_path.endswith('.py'):
                 # try to compile the code to prevent syntax errors
                 # TODO Fix the modules
-                compile(code + "\n", relative_path, "exec")
-                # fix style
-                code = autopep8.fix_string(code)
+                try:
+                    try:
+                        imports = codes[0].namespace.imports().items() # tuples (import symbol, identifier to use)
+                    except AttributeError:
+                        imports = []
+
+                    import_codes = []
+                    for import_symbol, identifier in imports:
+                        if import_symbol.startswith('django.'):
+                            import_string = IMPORTS[import_symbol]
+                            m = re.match(r'from (.*) import (.*)$', import_string)
+                            from_string, real_import_name = (m.group(1), m.group(2))
+                        elif import_symbol.startswith('webapp.'):
+                            # webapp.pages.testpage => from webapp.pages import testpage
+                            # TODO HACK XXX FIXME PLZ DEBUG THIS DOESN'T WORK BECAUSE THE IDENTIFIER MIGHT GET UPDATED AFTER IT GETS CONVERTED TO STRING. IT'LL WORK FOR NOW
+                            toks = import_symbol.split('.')
+                            from_string, real_import_name = ('.'.join(toks[:-1]), toks[-1]) 
+                        else:
+                            raise KeyError
+                        i = Import(real_import_name, identifier, from_string=from_string)
+                        import_codes.append(i)
+
+                    imports_by_from_string = { fs: [i for i in import_codes if i.from_string == fs] for fs in set([i.from_string for i in import_codes])}
+                    normal_imports = '\n'.join([i.render() for i in imports_by_from_string.get('',[])])
+                    try:
+                        del imports_by_from_string['']
+                    except KeyError:
+                        pass
+                    from_string_imports = '\n'.join(sorted([Import.render_concatted_imports(imps) for imps in imports_by_from_string.values()]))
+
+                    code = normal_imports + '\n\n' + from_string_imports + '\n\n' + code
+                    compile(code + "\n", relative_path, "exec")
+
+                except SyntaxError:
+                    traceback.print_exc()
+                    continue
+                else:
+                    code = autopep8.fix_string(code)
 
             yield (relative_path, code)
 
