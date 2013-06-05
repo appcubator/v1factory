@@ -146,14 +146,12 @@ function() {
       widget.unbind('hovered');
       widget.unbind('unhovered');
       widget.unbind('selected');
-      //this.hideNode(this.selectDiv);
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
       this.selectDiv.style.left = ((widget.get('layout').get('width') * 80) + 4) + 'px';
     },
 
     setLayout: function(node, widgetModel) {
-      console.log("SETTING LAYOUT");
       $(node).show();
       node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
       node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
@@ -231,8 +229,6 @@ function() {
       var elem = iui.get('widget-wrapper-' + model.cid);
       elem.style.top = ui.position.top + 2 + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
-
-      console.log(ui.position.left + 2);
     },
 
     moved: function(e, ui) {
@@ -357,6 +353,7 @@ function() {
     clear: function() { },
 
     hideNode: function(node) {
+      console.log('hidin');
       node.style.height = 0;
       node.style.width = 0;
       $(node).hide();

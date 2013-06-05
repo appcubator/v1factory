@@ -136,6 +136,7 @@ function() {
     },
 
     unbindAll: function() {
+      alert('hey');
       var widget = this.selectedEl;
       widget.on('editModeOff', function() {
         self.bindWidget(widget);
@@ -145,13 +146,16 @@ function() {
       widget.unbind('unhovered');
       widget.unbind('selected');
       //this.hideNode(this.selectDiv);
+      alert('he');
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
+      console.log(((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4);
       this.selectDiv.style.left = (((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4) + 'px';
     },
 
     setLayout: function(node, widgetModel) {
       $(node).show();
+      consle.log(node);
       node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
       node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
       node.style.left   = ((widgetModel.get('layout').get('left') * 80) - 2) + 'px';
@@ -323,6 +327,7 @@ function() {
     clear: function() { },
 
     hideNode: function(node) {
+      console.log("HIDE");
       node.style.height = 0;
       node.style.width = 0;
       $(node).hide();
