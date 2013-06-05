@@ -42,23 +42,22 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
         this.setModel(options.model);
       }
 
-      this.entities = v1State.get('entities');
-      this.listenTo(this.entities, 'initialized', this.doBindings);
-      this.listenTo(this.entities, 'add', this.addedEntity);
 
       this.parentName = options.name || "Parent Name";
 
     },
 
     render: function() {
-      var self = this;
-      console.log(self.model);
-      var page_context = { name: self.model.get('name'),
-                           attribs: self.model.get('fields').models,
-                           entities: self.entities,
-                           forms: null };
 
-                           //forms: self.model.get('forms').models };
+      this.userRoles = v1State.get('users').map(function(obj) { return obj.get('role'); });
+      this.otherEntities = v1State.get('entities').map(function(obj) { return obj.get('name'); });
+      this.otherEntities = _.omit(this.otherEntities, this.model.get('name'));
+      this.otherEntities = _.union(this.userRoles, this.otherEntities);
+
+      var self = this;
+      var page_context = { name: self.model.get('name'),
+                           fields: self.model.get('fields').toJSON(),
+                           entities: this.otherEntities};
 
       var template = _.template(EntitiesTemplates.Entity, self.model.toJSON());
       $(this.el).html(template);
@@ -123,7 +122,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       page_context = _.clone(fieldModel.attributes);
       page_context.cid = fieldModel.cid;
       page_context.entityName = self.model.get('name');
-      page_context.entities = self.entities.models;
+      page_context.entities = this.otherEntities;
       var template = _.template(EntitiesTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
@@ -208,7 +207,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
     setModel: function(model) {
-      console.log(model);
       this.model = model;
       this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
       this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
