@@ -20,8 +20,8 @@ function(EntityCollection,
       css: 'entities',
 
       events : {
-        'click #users .nav a': 'clickedUserNavItem',
-        'click #tables .nav a': 'clickedTableNavItem',
+        'click #users-nav a': 'clickedUserNavItem',
+        'click #tables-nav a': 'clickedTableNavItem',
         'click #add-role' : 'clickedAddUserRole',
         'keyup #add-role-form'  : 'createUserRole',
         'click #add-entity' : 'clickedAddEntity',
@@ -75,19 +75,19 @@ function(EntityCollection,
       },
 
       renderUserRolesNav: function() {
-        var $nav = this.$('#users .nav');
+        var $nav = this.$('#users-nav');
         var htmlString = '';
         this.userRoles.each(function (role) {
-          htmlString += '<li class="btn btn-large"><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
+          htmlString += '<li class="button hoff2"><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
         });
         $nav.html(htmlString);
       },
 
       renderTablesNav: function() {
-        var $nav = this.$('#tables .nav');
+        var $nav = this.$('#tables-nav');
         var htmlString = '';
         this.tables.each(function (table) {
-          htmlString += '<li class="btn btn-large"><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
+          htmlString += '<li class="button hoff2"><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
         });
         $nav.html(htmlString);
       },
@@ -142,8 +142,8 @@ function(EntityCollection,
       },
 
       clickedAddEntity: function(e) {
-        $(e.currentTarget).hide();
-        $('#add-entity-form').fadeIn('fast').focus();
+        $(e.currentTarget).hide()
+        $('#add-entity-form').show().focus();
       },
 
       createEntity: function(e) {
@@ -161,8 +161,8 @@ function(EntityCollection,
         this.renderTableView();
 
         e.target.value = '';
-        $(this.addButton).fadeIn();
-        $(e.target).fadeOut();
+        $('.add-button').show();
+        $(e.target).hide();
       }
 
     });
