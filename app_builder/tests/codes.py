@@ -1,6 +1,7 @@
 import unittest
 from app_builder.codes import DjangoField, DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver, Import
 from app_builder.naming import Namespace
+from app_builder.codes import create_import_namespace
 from app_builder.uielements import Node, Layout
 
 
@@ -40,7 +41,7 @@ class ImportTestCase(unittest.TestCase):
 class DjangoFormCreationTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = Namespace()
+        self.ns = create_import_namespace('webapp/forms.py')
         x = self.ns.new_identifier
         form_id = self.ns.new_identifier('test_form')
         model_id = x('test_model')
@@ -54,7 +55,7 @@ class DjangoFormCreationTestCase(unittest.TestCase):
 class DjangoFormReceiverCreationTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = Namespace()
+        self.ns = create_import_namespace('webapp/form_receivers.py')
         x = self.ns.new_identifier
         form_rec_id = self.ns.new_identifier('test_form_receiver')
         form_id = x('test_form')
@@ -96,7 +97,7 @@ class DjangoFieldKwargsTestCase(unittest.TestCase):
 class DjangoModelCreateFieldTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = Namespace()
+        self.ns = create_import_namespace('webapp/models.py')
         self.model = DjangoModel(self.ns.new_identifier("test_model"))
 
     def test_create_field(self):
@@ -110,7 +111,7 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
 class DjangoModelTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = Namespace()
+        self.ns = create_import_namespace('webapp/models.py')
         self.model = DjangoModel(self.ns.new_identifier("test_model"))
 
         self.model.create_field("idk", "text", True)
@@ -124,7 +125,7 @@ class DjangoModelTestCase(unittest.TestCase):
 class DjangoPageViewTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.ns = Namespace()
+        self.ns = create_import_namespace('webapp/pages.py')
 
     def test_creation(self):
         view = DjangoPageView(self.ns.new_identifier("test_view"))
@@ -180,9 +181,10 @@ class DjangoPageViewTestCase(unittest.TestCase):
 class DjangoURLTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.url = DjangoURLs('test.module.name', first_time=False)
-        self.ns = Namespace()
-        f_id = self.ns.new_identifier('random function')
+        ns = create_import_namespace('webapp/urls.py')
+        urlpatterns_id = ns.new_identifier('urlpatterns')
+        self.url = DjangoURLs('test.module.name', ns, urlpatterns_id, first_time=False)
+        f_id = ns.new_identifier('random function')
         self.url.routes.append(('\'randomstringgoeshere\'', f_id))
 
     def test_render(self):
