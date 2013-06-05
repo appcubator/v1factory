@@ -3,6 +3,11 @@
   min-height: 160px;
 }
 
+.entity .pane hr {
+  margin: 0;
+  height: 2px;
+}
+
 .sub-title {
   font-size: 18px;
   font-weight: bold;
@@ -392,8 +397,32 @@ table tr:hover td {
 }
 
 .description {
+  vertical-align: top;
   display: inline-block;
   position: relative;
+}
+
+.entity-nav {
+  vertical-align: top;
+}
+
+.entity-nav .tab {
+  display: inline-block;
+  line-height: 40px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.entity-nav .tab:hover {
+  border-left: 1px solid transparent;
+  box-shadow: inset 0px 0px 4px 0 rgba(160, 160, 160, 0.4);
+  background-color: #f3f3f3;
+}
+
+.entity-nav .tab a {
+  padding-left: 16px;
+  padding-right: 16px;
+  font-weight: bold;
 }
 
 .q-mark-circle {

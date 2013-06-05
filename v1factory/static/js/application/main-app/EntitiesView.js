@@ -20,8 +20,8 @@ function(EntityCollection,
       css: 'entities',
 
       events : {
-        'click #users .nav a': 'clickedUserNavItem',
-        'click #tables .nav a': 'clickedTableNavItem',
+        'click #users .tab': 'clickedUserNavItem',
+        'click #tables .tab': 'clickedTableNavItem',
         'click #add-role' : 'clickedAddUserRole',
         'keyup #add-role-form'  : 'createUserRole',
         'click #add-entity' : 'clickedAddEntity',
@@ -75,10 +75,10 @@ function(EntityCollection,
       },
 
       renderUserRolesNav: function() {
-        var $nav = this.$('#users .nav');
+        var $nav = this.$('#user-entity .entity-nav');
         var htmlString = '';
         this.userRoles.each(function (role) {
-          htmlString += '<li class="btn btn-large"><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
+          htmlString += '<li class="tab" id="navtab-'+ role.cid +'"><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
         });
         $nav.html(htmlString);
       },
@@ -94,14 +94,15 @@ function(EntityCollection,
 
       clickedUserNavItem: function(e) {
         e.preventDefault();
-        var $clicked = $(e.target);
-        var cid = e.target.dataset.target;
+        var cid = (e.target.dataset.target||e.target.parentNode.dataset.target);
+        console.log(cid);
         var model = this.userRoles.get(cid);
-        console.log(model.toJSON());
+        console.log(model);
         this.userView.model = model;
         this.userView.render();
-
-        $clicked.addClass('active').siblings().removeClass('active');
+        this.renderUserRolesNav();
+        $(e.target).addClass('active');
+        //.siblings().removeClass('active');
         return false;
       },
 
@@ -110,7 +111,6 @@ function(EntityCollection,
         var $clicked = $(e.target);
         var cid = e.target.dataset.target;
         var model = this.tables.get(cid);
-        console.log(model.toJSON());
         this.tableView.setModel(model);
         this.tableView.render();
 

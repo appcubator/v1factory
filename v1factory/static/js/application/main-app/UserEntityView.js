@@ -77,11 +77,6 @@ define([
           self.$el.find('.property-list').append(template);
         });
 
-        document.getElementById('facebook').checked = this.model.get('facebook');
-        document.getElementById('twitter').checked = this.model.get('twitter');
-        document.getElementById('linkedin').checked = this.model.get('linkedin');
-        document.getElementById('local').checked = this.model.get('local');
-
         iui.loadCSS('prettyCheckable');
         this.$el.find('input[type=checkbox]').prettyCheckable();
         this.adjustTableWidth();
