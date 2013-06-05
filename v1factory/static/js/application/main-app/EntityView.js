@@ -18,14 +18,11 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
     events : {
       'click .tab'                 : 'clickedNavItem',
-      'click .add-property-button' : 'clickedAdd',
-      'click .add-form-button'     : 'clickedAddForm',
+      'click .add-property-button' : 'clickedAddProperty',
       'submit .add-property-form'  : 'formSubmitted',
-      'submit .add-form-form'      : 'formFormSubmitted',
       'change .attribs'            : 'changedAttribs',
       'click  .delete'             : 'clickedDelete',
       'click .prop-cross'          : 'clickedPropDelete',
-      'click .remove-form'         : 'clickedFormRemove',
       'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
       'click .edit-form'           : 'clickedEditForm',
@@ -37,35 +34,31 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     initialize: function(options){
       _.bindAll(this);
 
-      if(options.model) {
-        this.setModel(options.model);
-      }
-
-
       this.parentName = options.name || "Parent Name";
       this.entities = v1State.get('entities');
       this.listenTo(this.entities, 'add remove', this.renderNav);
+
+      if(options.model) {
+        this.setModel(options.model);
+      }
     },
 
     render: function() {
-
-      this.userRoles = v1State.get('users').map(function(obj) { return obj.get('role'); });
-      this.otherEntities = v1State.get('entities').map(function(obj) { return obj.get('name'); });
-      this.otherEntities = _.omit(this.otherEntities, this.model.get('name'));
-      this.otherEntities = _.union(this.userRoles, this.otherEntities);
-
       var self = this;
-      var page_context = { name: self.model.get('name'),
-                           fields: self.model.get('fields').toJSON(),
-                           entities: this.otherEntities};
-
       var template = _.template(EntitiesTemplates.Entity, self.model.toJSON());
       $(this.el).html(template);
+
+      this.renderProperties();
+      this.renderNav();
+
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();
       this.adjustTableWidth();
-      this.renderNav();
       return this;
+    },
+
+    renderProperties: function() {
+      this.model.get('fields').each(this.appendField);
     },
 
     renderNav: function() {
@@ -78,7 +71,10 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
         }
         htmlString += '<li class="tab'+active+'" id="navtab-'+ entity.cid +'"><a href="#">' + entity.get('name') + '</a></li>';
       });
-      $nav.html(htmlString);
+      $nav.html(htmlString)
+      if(this.model) {
+        $nav.find('#navtab-' + this.model.cid).addClass('active');
+      }
     },
 
     clickedNavItem: function(e) {
@@ -86,31 +82,22 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       var model = this.entities.get(cid);
       this.setModel(model);
       this.render();
-      $('#navtab-' + cid).addClass('active');
       return false;
     },
 
-    clickedAdd: function(e) {
+    clickedAddProperty: function(e) {
       $('.add-property-button', this.el).hide();
       $('.add-property-form', this.el).fadeIn();
       $('.property-name-input', this.el).focus();
-    },
-
-    clickedAddForm: function(e) {
-      $('.add-form-button', this.el).hide();
-      $('.add-form-form', this.el).fadeIn();
-      $('.form-name-input', this.el).focus();
+      return false;
     },
 
     formSubmitted: function(e) {
-      e.preventDefault();
       var name = $('.property-name-input', this.el).val();
 
       if(name.length !== 0) {
-
-        var curFields = this.model.get('fields') || [];
-
-        curFields.push(new FieldModel({
+        console.log(this.model);
+        this.model.get('fields').push(new FieldModel({
           name: name,
           type: 'text',
           required: false
@@ -123,39 +110,15 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       return false;
     },
 
-    formFormSubmitted: function(e) {
-      e.preventDefault();
-      var name = $('.form-name-input', this.el).val();
-
-      var curForm = {};
-      curForm.name = name;
-      var formModel = new FormModel(curForm, this.model);
-      this.model.get('forms').add(formModel);
-
-      $('.form-name-input', this.el).val('');
-      $('.add-form-form', this.el).hide();
-      $('.add-form-button', this.el).fadeIn();
-      return false;
-    },
-
     appendField: function (fieldModel) {
-      var self = this;
-
       var page_context = {};
       page_context = _.clone(fieldModel.attributes);
       page_context.cid = fieldModel.cid;
-      page_context.entityName = self.model.get('name');
-      page_context.entities = this.otherEntities;
+      page_context.entityName = this.model.get('name');
+      page_context.entities = this.userRoles.concat(this.otherEntities)
       var template = _.template(EntitiesTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
-      this.adjustTableWidth();
-    },
-
-    appendForm: function(formModel) {
-      var self = this;
-      var template = _.template(EntitiesTemplates.Form, { form: formModel});
-      self.$el.find('.form-list').append(template);
     },
 
     changedAttribs: function(e) {
@@ -180,13 +143,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       var cid = String(e.target.id||e.target.parentNode.id).replace('delete-','');
       this.model.get('fields').remove(cid);
       $('#column-' + cid).remove();
-    },
-
-    clickedFormRemove: function(e) {
-      e.preventDefault();
-      var cid = String(e.target.id||e.target.parentNode.id).replace('remove-', '');
-      this.model.get('forms').remove(cid);
-      $('#form-'+cid).remove();
     },
 
     clickedUploadExcel: function(e) {
@@ -233,8 +189,9 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       this.model = model;
       this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
       this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
-
-      this.listenTo(this.model.get('fields'), 'add', this.appendField);
+      this.listenTo(this.model.get('fields'), 'add remove', this.renderProperties);
+      this.userRoles = v1State.get('users').pluck('role');
+      this.otherEntities = _(this.entities.pluck('name')).without(this.model.get('name'));
       return this;
     }
   });
