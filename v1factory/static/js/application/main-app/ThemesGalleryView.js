@@ -39,6 +39,10 @@ function(ThemeDisplayView) {
         self.listView.innerHTML += _.template(template, theme);
       });
 
+      _(mobileThemes).each(function(theme) {
+        self.listView.innerHTML += _.template(template, theme);
+      });
+
       $(self.el).append(self.listView);
 
       return this;
@@ -50,7 +54,8 @@ function(ThemeDisplayView) {
         type: "POST",
         url: '/theme/'+themeId+'/info/',
         success: function(data) {
-          new ThemeDisplayView(data);
+          console.log(data);
+          new ThemeDisplayView(data, themeId);
         },
         dataType: "JSON"
       });

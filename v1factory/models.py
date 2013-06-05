@@ -95,11 +95,11 @@ class App(models.Model):
         return self._uie_state_json
 
     @property
-    def uie_state(self):
+    def mobile_uie_state(self):
         return simplejson.loads(self._mobile_uie_state_json)
 
     @property
-    def uie_state_json(self):
+    def mobile_uie_state_json(self):
         return self._mobile_uie_state_json
 
     @property
@@ -310,7 +310,8 @@ class UITheme(models.Model):
                 'designer': designer,
                 'image': self.image,
                 'statics': simplejson.dumps(list(self.statics.values())),
-                'uie_state': self.uie_state}
+                'uie_state': self.uie_state,
+                'web_or_mobile': self.web_or_mobile}
 
     def clone(self, user=None):
         new_self = UITheme(name=self.name,

@@ -67,13 +67,13 @@ def app_page(request, app_id):
     themes = UITheme.get_web_themes()
     themes = [t.to_dict() for t in themes]
     mobile_themes = UITheme.get_mobile_themes()
-    mobile_themes = [t.to_dict() for t in themes]
+    mobile_themes = [t.to_dict() for t in mobile_themes]
 
     page_context = {'app': app,
                     'app_id': long(app_id),
                     'title': 'The Garage',
                     'themes': simplejson.dumps(list(themes)),
-                    'mobile_themes': mobile_themes,
+                    'mobile_themes': simplejson.dumps(list(mobile_themes)),
                     'apps': request.user.apps.all(),
                     'user': request.user}
     add_statics_to_context(page_context, app)
@@ -160,6 +160,19 @@ def uie_state(request, app_id):
         return HttpResponse("GET or POST only", status=405)
 
 
+@login_required
+def mobile_uie_state(request, app_id):
+    app = get_object_or_404(App, id=app_id, owner=request.user)
+    if request.method == 'GET':
+        state = app_get_uie_state(request, app)
+        return JSONResponse(state)
+    elif request.method == 'POST':
+        status, message = app_save_mobile_uie_state(request, app)
+        return HttpResponse(message, status=status)
+    else:
+        return HttpResponse("GET or POST only", status=405)
+
+
 @csrf_exempt
 def less_sheet(request, app_id, isMobile=False):
     app_id = long(app_id)
@@ -206,6 +219,18 @@ def app_get_uie_state(request, app):
 @login_required
 def app_save_uie_state(request, app):
     app._uie_state_json = request.body
+    try:
+        app.full_clean()
+    except Exception, e:
+        return (400, str(e))
+    app.save()
+    return (200, 'ok')
+
+
+@require_POST
+@login_required
+def app_save_mobile_uie_state(request, app):
+    app._mobile_uie_state_json = request.body
     try:
         app.full_clean()
     except Exception, e:

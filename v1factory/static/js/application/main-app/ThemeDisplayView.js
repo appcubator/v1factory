@@ -9,11 +9,10 @@ function() {
     events: {
       'click #load-btn' : 'loadTheme'
     },
+    theme: null,
 
     initialize: function(data) {
       _.bindAll(this, 'render', 'loadTheme');
-
-      console.log(data);
 
       this.info  = data.themeInfo;
       this.theme = data.theme;
@@ -29,12 +28,20 @@ function() {
 
     loadTheme: function() {
       var self = this;
-      console.log(self.theme);
-      uieState = _.extend(uieState, self.theme);
+      var url = '/app/'+appId+'/uiestate/';
+      var newState = uieState;
+      if(self.info.web_or_mobile == "M") {
+        url = '/app/'+appId+'/mobile_uiestate/';
+        newState = _.extend(mobileUieState, self.theme);
+      }
+      else {
+        newState = _.extend(uieState, self.theme);
+      }
+
       $.ajax({
         type: "POST",
-        url: '/app/'+appId+'/uiestate/',
-        data: JSON.stringify(uieState),
+        url: url,
+        data: JSON.stringify(newState),
         success: function(data) {
           self.$el.find('.load').append('<div class="hoff2"><h3>Loaded!</h3></div>');
         }
@@ -43,7 +50,7 @@ function() {
       /* Load Statics */
       $.ajax({
         type: "GET",
-        url: '/theme/'+self.id+'/static/',
+        url: '/theme/'+self.info.id+'/static/',
         success: function(data) {
           _(data).each(function(static_file) {
             $.ajax({
