@@ -36,9 +36,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     initialize: function(options){
       _.bindAll(this);
 
-      console.log(options);
       if(options.model) {
-        console.log(options.model);
         this.setModel(options.model);
       }
 

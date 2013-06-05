@@ -27,7 +27,6 @@ function(AppInfoModel,
     },
 
     toJSON: function() {
-      console.log(this);
       var json = _.clone(this.attributes);
       json.info = json.info.toJSON();
       json.users = json.users.toJSON();
