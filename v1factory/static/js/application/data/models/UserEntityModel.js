@@ -36,7 +36,6 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
                     });
 
       this.set('fields', fieldCollection);
-      this.set('name', 'User');
     },
 
     toJSON: function () {
@@ -47,13 +46,8 @@ function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
       json.fields = _.filter(json.fields, function(val){ return (val.name != "First Name")&&(val.name != "Last Name");});
 
       return json;
-    },
-
-    getFormWithName: function(str) {
-      var formName = /\{\{([^\}]+)\}\}/g.exec(str)[1];
-      var formModel = this.get('forms').where({name : formName})[0];
-      return formModel;
     }
+
   });
 
   return UserEntityModel;

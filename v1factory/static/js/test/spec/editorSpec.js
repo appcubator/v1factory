@@ -6,19 +6,31 @@ var GRID_WIDTH = 80;
 var GRID_HEIGHT = 15;
 
 define([
-  "editor/EditorView",
-  '../../libs/keymaster/keymaster'
-], function(EditorView) {
+  "models/AppModel",
+  "models/UserEntityModel",
+  "collections/UserRolesCollection",
+  "backbone"
+],
+function( AppModel,
+          UserEntityModel,
+          UserRolesCollection) {
 
-  var editorView = new EditorView();
-  g_editorView = editorView;
-  g_appState = appState;
-  g_initial_appState = _.clone(appState);
 
-  describe( "appState model input-outputs", function () {  
-    it("doesnt fuck up", function () {
-      var curAppstate = editorView.amendAppState();
-      expect(appState).toEqual(curAppstate);  
+  describe( "appState model input-outputs", function () {
+
+    it("UserEntityModel", function () {
+      var newUserModel = new UserEntityModel(appState.users[0]);
+      expect(appState.users[0]).toEqual(newUserModel.toJSON());
+    });
+
+    it("UserRolesCollection", function () {
+      var newCollection = new UserRolesCollection(appState.users);
+      expect(appState.users).toEqual(newCollection.toJSON());
+    });
+
+    it("Whole thing works.", function () {
+      var curAppstate = new AppModel(appState);
+      expect(appState).toEqual(curAppstate.toJSON());
     });
   });
 });
