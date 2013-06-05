@@ -1,8 +1,9 @@
-
+import re
 
 from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver
 from app_builder.codes import create_import_namespace
 from app_builder import naming
+from app_builder.dynamicvars import Translator
 
 
 class AppComponentFactory(object):
@@ -111,8 +112,8 @@ class AppComponentFactory(object):
         from dynamicvars import Translator
 
         # find things in braces and replace them with this function:
-        translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1), page=page) 
-        translate_all = lambda x: re.sub(r'\{\{ ?([\}]*) ?\}\}', translate, x)
+        translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1).strip(), page=page) 
+        translate_all = lambda x: re.sub(r'\{\{ ?([^\}]*) ?\}\}', translate, x)
 
         for uie in page.uielements:
             uie.visit_strings(translate_all)
@@ -125,7 +126,7 @@ class AppComponentFactory(object):
         it positions the uielements relative to their containers.
 
         """
-        t = DjangoTemplate(page._django_view.identifier, translate_func=None)
+        t = DjangoTemplate(page._django_view.identifier)
                             # this is an underscore-name, so it should be good as a filename
         t.create_tree(page.uielements)
         t.page = page

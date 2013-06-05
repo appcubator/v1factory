@@ -150,7 +150,7 @@ class DjangoPageView(object):
         self.pc_namespace = naming.Namespace()
         for arg, data in self.args:
             name_attempt = data.get('template_id', 'BADNAME') # helps a test pass
-            data['template_id'] = self.pc_namespace.new_identifier(str(name_attempt))
+            data['template_id'] = self.pc_namespace.new_identifier(str(name_attempt), ref=data['ref'])
 
         # queries
         self.queries = []

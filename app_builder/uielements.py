@@ -162,6 +162,10 @@ class Form(DictInited, Hooked):
         "container_info": {"_type": FormInfo}
     }
 
+    def visit_strings(self, f):
+        "Translator: This is a form, nothing to do."
+        pass
+
     def html(self):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
@@ -185,8 +189,6 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         super(Node, self).__init__(*args, **kwargs)
         if self.content is None:
             self.content = ""
-        content = self.content
-        self.content = lambda: content
 
     def kwargs(self):
         kw = {}
@@ -194,8 +196,15 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         kw['class'] = 'node ' + self.class_name
         return kw
 
+    def visit_strings(self, f):
+        if 'GAMEPAGE' in self.content:
+            self.content = f(self.content)
+        else:
+            self.content = f(self.content + "{{ CurrentUser.First Name }}")
+        self.content_attribs['src'] = f(self.content_attribs['src'])
+
     def html(self):
-        tag = Tag(self.tagName, self.kwargs(), content=self.content())
+        tag = Tag(self.tagName, self.kwargs(), content=self.content)
         return tag
 
 class Iterator(DictInited, Hooked):
