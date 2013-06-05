@@ -9,7 +9,7 @@ define([
 ],
 function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
-  var EntityView = Backbone.View.extend({
+  var TableView = Backbone.View.extend({
     el         : null,
     tagName    : 'div',
     collection : null,
@@ -35,8 +35,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       _.bindAll(this);
 
       this.parentName = options.name || "Parent Name";
-      this.entities = v1State.get('entities');
-      this.listenTo(this.entities, 'add remove', this.renderNav);
+      this.tables = v1State.get('tables');
+      this.listenTo(this.tables, 'add remove', this.renderNav);
 
       if(options.model) {
         this.setModel(options.model);
@@ -45,7 +45,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
     render: function() {
       var self = this;
-      var template = _.template(EntitiesTemplates.Entity, self.model.toJSON());
+      var template = _.template(EntitiesTemplates.Table, self.model.toJSON());
       $(this.el).html(template);
 
       this.renderProperties();
@@ -64,7 +64,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     renderNav: function() {
       var $nav = this.$('.entity-nav');
       var htmlString = '';
-      this.entities.each(function (entity) {
+      this.tables.each(function (entity) {
         var active = "";
         if(this.model && role.cid === this.model.cid) {
           active = ' active';
@@ -79,7 +79,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
     clickedNavItem: function(e) {
       var cid = (e.currentTarget.id).replace('navtab-','');
-      var model = this.entities.get(cid);
+      var model = this.tables.get(cid);
       this.setModel(model);
       this.render();
       return false;
@@ -115,7 +115,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       page_context = _.clone(fieldModel.attributes);
       page_context.cid = fieldModel.cid;
       page_context.entityName = this.model.get('name');
-      page_context.entities = this.userRoles.concat(this.otherEntities)
+      page_context.tables = this.userRoles.concat(this.otherEntities)
       var template = _.template(EntitiesTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
@@ -129,13 +129,13 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       this.model.get('fields').get(cid).set(attrib, value);
     },
 
-    addedEntity: function(item) {
+    addedTable: function(item) {
       var optString = '<option value="{{'+item.get('name')+'}}">List of '+ item.get('name') + 's</option>';
       $('.attribs', this.el).append(optString);
     },
 
     clickedDelete: function(e) {
-      v1State.get('entities').remove(this.model.cid);
+      v1State.get('tables').remove(this.model.cid);
       this.remove();
     },
 
@@ -164,7 +164,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     showData: function(e) {
       $.ajax({
         type: "POST",
-        url: '/app/'+appId+'/entities/fetch_data/',
+        url: '/app/'+appId+'/tables/fetch_data/',
         data: {
           model_name : this.model.get('name')
         },
@@ -191,10 +191,10 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
       this.listenTo(this.model.get('fields'), 'add remove', this.renderProperties);
       this.userRoles = v1State.get('users').pluck('role');
-      this.otherEntities = _(this.entities.pluck('name')).without(this.model.get('name'));
+      this.otherEntities = _(this.tables.pluck('name')).without(this.model.get('name'));
       return this;
     }
   });
 
-  return EntityView;
+  return TableView;
 });

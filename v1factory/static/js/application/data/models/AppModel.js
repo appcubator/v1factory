@@ -19,7 +19,7 @@ function(AppInfoModel,
 
       this.set('info', new AppInfoModel(appState.info));
       this.set('users', new UserRolesCollection(appState.users||[]));
-      this.set('entities', new EntityCollection(appState.entities||[]));
+      this.set('tables', new TableCollection(appState.tables||[]));
       this.set('emails', new EmailCollection(appState.emails));
       this.set('pages', new PageCollection(appState.pages||[]));
       this.set('mobilePages', new MobilePageCollection(appState.mobilePages||[]));
@@ -30,7 +30,7 @@ function(AppInfoModel,
       var json = _.clone(this.attributes);
       json.info = json.info.toJSON();
       json.users = json.users.toJSON();
-      json.entities = json.entities.toJSON();
+      json.tables = json.tables.toJSON();
       json.pages = json.pages.toJSON();
       json.mobilePages = json.mobilePages.toJSON();
       json.emails = json.emails.toJSON();

@@ -9,9 +9,9 @@ define([
   var FormCollection   = require('collections/FormCollection');
   var Backbone         = require('backbone');
 
-  var EntityModel = Backbone.Model.extend({
+  var TableModel = Backbone.Model.extend({
       defaults: {
-        name: "New Entity",
+        name: "New Table",
         fields: new FieldsCollection()
       },
 
@@ -19,7 +19,7 @@ define([
 
         if(typeof bone === "string") {
           if(bone === "User") {
-            alert('EntityModel init isnt supposed to receive user');
+            alert('TableModel init isnt supposed to receive user');
             return;
           }
 
@@ -31,7 +31,7 @@ define([
         }
 
         else {
-          alert('Entity should have a name. Something is wrong.');
+          alert('Table should have a name. Something is wrong.');
         }
 
         this.set('fields', new FieldsCollection());
@@ -53,5 +53,5 @@ define([
       }
   });
 
-  return EntityModel;
+  return TableModel;
 });
