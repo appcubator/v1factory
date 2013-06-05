@@ -36,7 +36,9 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     initialize: function(options){
       _.bindAll(this);
 
+      console.log(options);
       if(options.model) {
+        console.log(options.model);
         this.setModel(options.model);
       }
 
@@ -50,6 +52,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
     render: function() {
       var self = this;
+      console.log(self.model);
       var page_context = { name: self.model.get('name'),
                            attribs: self.model.get('fields').models,
                            entities: self.entities,
@@ -57,7 +60,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
                            //forms: self.model.get('forms').models };
 
-      var template = _.template(EntitiesTemplates.Entity, page_context);
+      var template = _.template(EntitiesTemplates.Entity, self.model.toJSON());
       $(this.el).html(template);
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();

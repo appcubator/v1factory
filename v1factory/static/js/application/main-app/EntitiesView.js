@@ -40,13 +40,15 @@ function(EntityCollection,
         this.listenTo(this.userRoles, 'add remove', this.renderUserRolesNav);
 
         // subviews
+        var self = this;
         this.userView = new UserEntityView({
-          model: this.userRoles.get(0) || null,
-          entities: this.tables
+          model: self.userRoles.models[0] || null,
+          entities: self.tables
         });
+
         this.tableView = new EntityView({
-          model: this.tables.get(0) || null,
-          entities: this.tables
+          model: self.tables.models[0] || null,
+          entities: self.tables
         });
 
         this.title = "Tables";
@@ -78,16 +80,16 @@ function(EntityCollection,
         var $nav = this.$('#user-entity .entity-nav');
         var htmlString = '';
         this.userRoles.each(function (role) {
-          htmlString += '<li class="tab" id="navtab-'+ role.cid +'"><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
+          htmlString += '<li class="tab" id="navtab-'+ role.cid +'"><a href="#">' + role.get('role') + '</a></li>';
         });
         $nav.html(htmlString);
       },
 
       renderTablesNav: function() {
-        var $nav = this.$('#tables-nav');
+        var $nav = this.$('#entity-entity .entity-nav');
         var htmlString = '';
         this.tables.each(function (table) {
-          htmlString += '<li class="button hoff2"><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
+          htmlString += '<li class="tab" id="navtab-'+ table.cid +'"><a href="#">' + table.get('name') + '</a></li>';
         });
         $nav.html(htmlString);
       },
@@ -102,13 +104,12 @@ function(EntityCollection,
       },
 
       clickedTableNavItem: function(e) {
-        var $clicked = $(e.target);
-        var cid = e.target.dataset.target;
+        var cid = String(e.target.id||e.target.parentNode.id).replace('navtab-','');
         var model = this.tables.get(cid);
         this.tableView.setModel(model);
         this.tableView.render();
-
-        $clicked.addClass('active').siblings().removeClass('active');
+        this.renderTablesNav();
+        $('#navtab-' + cid).addClass('active');
       },
 
       clickedAddUserRole: function(e) {
@@ -122,9 +123,8 @@ function(EntityCollection,
         }
 
         var elem = new UserEntityModel({
-          role: e.target.value,
+          role: e.target.value
         });
-        console.log(elem.toJSON());
         this.userRoles.add(elem);
         this.userView.setModel(elem);
         this.renderUserView();
@@ -135,7 +135,7 @@ function(EntityCollection,
       },
 
       clickedAddEntity: function(e) {
-        $(e.currentTarget).hide()
+        $(e.currentTarget).hide();
         $('#add-entity-form').show().focus();
       },
 
@@ -148,7 +148,7 @@ function(EntityCollection,
           name: e.target.value,
           fields: []
         });
-        console.log(elem.toJSON());
+
         this.tables.add(elem);
         this.tableView.setModel(elem);
         this.renderTableView();
