@@ -35,7 +35,7 @@ define([
         'change .attrib-required-check' : 'changedRequiredField'
       },
 
-      initialize: function() {
+      initialize: function(options) {
         _.bindAll(this, 'render',
                         'appendField',
                         'clickedAdd',
@@ -50,16 +50,15 @@ define([
                         'adjustTableWidth');
 
         this.el = document.getElementById('user-entity');
-        this.model = v1State.get('users');
+        this.model = options.model || v1State.get('users').models[0];
         this.name = this.model.get('name');
         this.entitiesColl = v1State.get('entities');
-
         this.model.get('fields').bind('add', this.appendField);
       },
 
       render: function() {
         var self = this;
-        this.$el.html(_.template(EntitiesTemplates.UserEntity, {}));
+        this.$el.html(_.template(EntitiesTemplates.UserEntity, this.model.toJSON()));
 
         _(this.model.get('fields').models).each(function(fieldModel) {
           if(fieldModel.get('name') == 'First Name' ||
@@ -77,11 +76,6 @@ define([
           var template = _.template(EntitiesTemplates.Property, page_context);
           self.$el.find('.property-list').append(template);
         });
-
-        document.getElementById('facebook').checked = this.model.get('facebook');
-        document.getElementById('twitter').checked = this.model.get('twitter');
-        document.getElementById('linkedin').checked = this.model.get('linkedin');
-        document.getElementById('local').checked = this.model.get('local');
 
         iui.loadCSS('prettyCheckable');
         this.$el.find('input[type=checkbox]').prettyCheckable();

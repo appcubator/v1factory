@@ -139,6 +139,11 @@ def highland_view(request):
   page_context["title"] = "Homepage"
   return render(request, 'website-home2.html', page_context)
 
+def new_new_view(request):
+  page_context = {}
+  page_context["title"] = "Homepage"
+  return render(request, 'website-home3.html', page_context)
+
 def startx_video(request):
   return redirect('https://www.youtube.com/watch?v=9ECQ8ZIfJvQ')
 

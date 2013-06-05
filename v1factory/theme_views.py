@@ -65,10 +65,20 @@ def designer_page(request):
 
 @require_POST
 @login_required
-def theme_new(request):
+def theme_new_web(request):
   if request.method=="POST":
     name = request.POST['name']
-    theme = UITheme(name=name, designer=request.user)
+    theme = UITheme(name=name, designer=request.user, web_or_mobile='W')
+    theme.save()
+    return HttpResponse(simplejson.dumps(theme.to_dict()), mimetype="application/json")
+
+
+@require_POST
+@login_required
+def theme_new_mobile(request):
+  if request.method=="POST":
+    name = request.POST['name']
+    theme = UITheme(name=name, designer=request.user, web_or_mobile='M')
     theme.save()
     return HttpResponse(simplejson.dumps(theme.to_dict()), mimetype="application/json")
 

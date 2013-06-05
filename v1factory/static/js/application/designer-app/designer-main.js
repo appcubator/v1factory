@@ -9,7 +9,9 @@ require.config({
     "app" : "../",
     "editor" : "../editor",
     "dicts" : "../../dicts",
-    "mixins" : "../../mixins"
+    "mixins" : "../../mixins",
+    "models" : "../data/models",
+    "collections" : "../data/collections"
   },
 
   shim: {

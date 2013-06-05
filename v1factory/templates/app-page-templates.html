@@ -113,7 +113,7 @@
         <div class="w-pane span40 hoff4 pb2" id="danger-zone">
           <h3 class="span36 offset2 hoff1">Danger Zone</h3>
           <hr class="span40">
-          <a class="btn hoff1 span8 offset2" id="delete">Delete App</a>
+          <a class="btn btn-danger hoff1 span8 offset2" id="delete">Delete App</a>
         </div>
       </div>
       <div class="hi8 span40"></div>
@@ -127,34 +127,33 @@
 <div class="container" id="entities-page">
   <div class="span58">
     <h2 class="hoff2">User Tables</h2>
-    <div class="add-button right hoff2" id="add-role">
+    <input class="right hoff2" id="add-role-form" style="display: none; height: 45px" placeholder="User Role Name:">
+    <div class="button right hoff2" id="add-role">
       <span class="add-icon"></span><span>Add User Role</span>
     </div>
+    <ul class="nav right" id="users-nav"></ul>
     <hr class="span58 hoff1">
   </div>
-  <div class="span58" id="user-tables">
+  <div class="span58" id="users">
     <div id="user-entity"></div>
+
     <div id="entities-container">
       <ul id="entities" class="entity-list"></ul>
     </div>
   </div>
   <div class="span58">
     <h2 class="hoff2">Tables</h2>
-    <div class="add-button right hoff2" id="add-role">
+    <input class="right hoff2" id="add-entity-form" style="display: none; height: 45px" placeholder="Table Name:">
+    <div class="button right hoff2" id="add-entity">
       <span class="add-icon"></span><span>Add Table</span>
     </div>
+    <ul class="nav right" id="tables-nav"></ul>
     <hr class="span58 hoff1">
   </div>
   <div class="span58" id="tables">
+    <div class="table"></div>
   </div>
-  <div id="add-entity-button" class="add-entity offset6 span58">
-    <span class="hi10 hoff4"><img src="{{ STATIC_URL }}img/add.png" class="span3 add-img"> <p class="span16 hoff1 add-txt">Add New Entity</p></span>
-  </div>
-  <form id="add-entity-form" class="pane span58 hi10 entity hoff1" style="display:none;">
-    <span class="sub-title offset1 hoff2">
-      <input type="text" id="entity-name-input" placeholder="Entity Name">
-    </span>
-  </form>
+  <div class="span58" style="height: 50px;"></div>
 </div>
 </script>
 
@@ -282,12 +281,22 @@
     <div class="mobile-page-wrapper" id="page-wrapper">
       <div class="url-bar">http://yourapp.com</div>
       <div class="page full container fdededfcbcbcd" id="page">
+        <!-- Navbar -->
+        <header class="bar-title">
+          <a class="button" href="#">
+            Left
+          </a>
+          <h1 class="title">Title</h1>
+          <a class="button" href="#">
+            Right
+          </a>
+        </header>
+        <!-- Navbar Ends-->
         <ul class="editing" id="elements-container">
         </ul>
       </div>
     </div>
   </div>
-
 
   <!-- Right Gallery Panel -->
   <div id="top-panel-bb" class="right-panel">
@@ -306,29 +315,31 @@
 
 <script type="text/template" id="emails-page">
   <div class="span58">
-    <h2 class="hoff1">Emails</h2>
+    <h2 class="hoff2">Emails</h2>
     <hr class="hoff2">
-    <div class="left-bar span12">
-      <ul id="email-list" class="left-nav"></ul>
-      <!--<a id="create-email" class="btn btn-primary btn-small">
-        <span style="font-size: 14px">+</span> Create Email
-      </a>-->
-    </div>
-    <div class="right-bar span40 offset4">
-      <form>
-        <div class="control-group">
-        <label class="control-label">Email Name</label>
-          <input type="text" id="edit-name" class="name input-block-level">
-        </div>
-        <div class="control-group">
-          <label class="control-label">Subject</label>
-          <input type="text" id="edit-subject" class="subject input-block-level">
-        </div>
-        <div class="control-group">
-          <label class="control-label">Message</label>
-          <textarea class="content input-block-level" id="edit-content" style="height: 300px; overflow: scroll"></textarea>
-        </div>
-      </form>
+    <div class="span58 hoff1">
+      <div class="left-bar span12">
+        <ul id="email-list" class="left-nav"></ul>
+        <!--<a id="create-email" class="btn btn-primary btn-small">
+          <span style="font-size: 14px">+</span> Create Email
+        </a>-->
+      </div>
+      <div class="right-bar span40 offset4">
+        <form>
+          <div class="control-group">
+          <label class="control-label">Email Name</label>
+            <input type="text" id="edit-name" class="name input-block-level">
+          </div>
+          <div class="control-group">
+            <label class="control-label">Subject</label>
+            <input type="text" id="edit-subject" class="subject input-block-level">
+          </div>
+          <div class="control-group">
+            <label class="control-label">Message</label>
+            <textarea class="content input-block-level" id="edit-content" style="height: 300px; overflow: scroll"></textarea>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </script>

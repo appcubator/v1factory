@@ -10,55 +10,24 @@
 
 {% block page %}
 <a class="span6 save-btn" id="save"></a>
-<div class="container hoff4">
-  <div class="span12 left-bar">
-
-      <ul class="uie-gallery">
-        <li class="expandible" id="basecss">
-          <h3>Base CSS</h3>
-        </li>
-        <li class="expandible" id="fonts">
-          <h3>Fonts</h3>
-        </li>
-        <li class="expandible" id="button">
-          <h3>Buttons</h3>
-        </li>
-        <li class="expandible" id="image">
-          <h3>Images</h3>
-        </li>
-        <li class="expandible" id="header-text">
-          <h3>Headers</h3>
-        </li>
-        <li class="expandible" id="text">
-          <h3>Texts</h3>
-        </li>
-        <li class="expandible" id="link">
-          <h3>Links</h3>
-        </li>
-        <li class="expandible" id="text-input">
-          <h3>Inputs</h3>
-        </li>
-        <li class="expandible" id="password">
-          <h3>Password Fields</h3>
-        </li>
-        <li class="expandible" id="text-area">
-          <h3>Text Areas</h3>
-        </li>
-        <li class="expandible" id="line">
-          <h3>Lines</h3>
-        </li>
-        <li class="expandible" id="dropdown">
-          <h3>Dropdowns</h3>
-        </li>
-        <li class="expandible" id="box">
-          <h3>Boxes</h3>
-        </li>
-        <li class="expandible" id="pages">
-          <h3>Pages</h3>
-        </li>
-        <li class="expandible" id="statics">
-          <h3>Statics</h3>
-        </li>
+<div class="container hoff6">
+  <div class="span12">
+      <ul class="uie-gallery left-nav">
+        <li class="expandible" id="basecss">Base CSS</li>
+        <li class="expandible" id="fonts">Fonts</li>
+        <li class="expandible" id="button">Buttons</li>
+        <li class="expandible" id="image">Images</li>
+        <li class="expandible" id="header-text">Headers</li>
+        <li class="expandible" id="text">Texts</li>
+        <li class="expandible" id="link">Links</li>
+        <li class="expandible" id="text-input">Inputs</li>
+        <li class="expandible" id="password">Password Fields</li>
+        <li class="expandible" id="text-area">Text Areas</li>
+        <li class="expandible" id="line">Lines</li>
+        <li class="expandible" id="dropdown">Dropdowns</li>
+        <li class="expandible" id="box">Boxes</li>
+        <li class="expandible" id="pages">Pages</li>
+        <li class="expandible" id="statics">Statics</li>
       </ul>
     
   </div>
@@ -131,5 +100,5 @@ var themeState = {{ theme|safe }};
 var themeId = {{ themeId }};
 var statics = {{ statics|safe }};
 </script>
-<script data-main="{{ STATIC_URL }}js/app/designer-app/theme-show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/application/designer-app/theme-show-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

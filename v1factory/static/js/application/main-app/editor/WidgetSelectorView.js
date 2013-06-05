@@ -186,6 +186,7 @@ function() {
       widgetModel.get('layout').bind('change', function() {
         self.setLayout(self.selectDiv, widgetModel);
       });
+      this.hideNode(this.hoverDiv);
       this.setLayout(this.selectDiv, widgetModel);
       this.selectDiv.appendChild(this.widgetEditorView.setModel(widgetModel).render().el);
     },
@@ -239,7 +240,7 @@ function() {
       model.get('layout').set('top', top);
       model.get('layout').set('left', left);
       this.newSelected(model);
-      this.setLayout(e.target, model);
+      //this.setLayout(e.target, model);
     },
 
     deselect: function() {

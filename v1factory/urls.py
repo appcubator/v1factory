@@ -13,8 +13,8 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {"next_page":"/"}),
     url(r'^connect_with/$', 'v1factory.base_views.get_linkedin'),
     url(r'^signup/$', 'v1factory.base_views.signup'),
-    url(r'^startx/$', 'v1factory.base_views.highland_view'),
     url(r'^beta/$', 'v1factory.base_views.highland_view'),
+    url(r'^upcoming/$', 'v1factory.base_views.new_new_view'),
     url(r'^termsofservice/$', 'v1factory.base_views.terms_of_service'),
     url(r'^faq/$', 'v1factory.base_views.faq'),
     url(r'^account/$', 'v1factory.base_views.account'),
@@ -46,6 +46,8 @@ urlpatterns += patterns('v1factory.views',
 
     # getting/setting uie state
     url(r'^app/(\d+)/uiestate/$', 'uie_state'),
+    url(r'^app/(\d+)/mobile_uiestate/$', 'mobile_uie_state'),
+
     url(r'^app/(\d+)/uiestate.less$', 'less_sheet'),
     url(r'^app/(\d+)/uiestate.css$', 'css_sheet'),
 
@@ -78,7 +80,8 @@ urlpatterns += patterns('v1factory.views',
 
 urlpatterns += patterns('v1factory.theme_views',
     url(r'^designer/$', 'designer_page'),
-    url(r'^theme/new/$', 'theme_new'),
+    url(r'^theme/new/web/$', 'theme_new_web'),
+    url(r'^theme/new/mobile/$', 'theme_new_mobile'),
     url(r'^theme/(\d+)/$', 'theme_show'),
     url(r'^theme/(\d+)/info/$', 'theme_info'),
     url(r'^theme/(\d+)/edit/$', 'theme_edit'),

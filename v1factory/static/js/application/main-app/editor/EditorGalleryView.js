@@ -111,32 +111,25 @@ function(ElementCollection,
       $(this.allList).append(li);
 
       var self = this;
-      if(appState.users.local) {
         var tempLocalLogin = '<li id="entity-user-Local_Login" class="login authentication">'+
                      '<span class="name">Login Form</span></li>';
         var tempLocalSignup = '<li id="entity-user-Sign_Up" class="login authentication">'+
                      '<span class="name">Sign Up</span></li>';
         $(self.allList).append(tempLocalLogin);
         $(self.allList).append(tempLocalSignup);
-      }
 
-      if(appState.users.facebook) {
+
         var tempFb = '<li id="entity-user-facebook" class="facebook authentication">' +
                      '<span class="name">Facebook Login Button</span></li>';
         $(self.allList).append(tempFb);
-      }
 
-      if(appState.users.twitter) {
         var tempTw = '<li id="entity-user-twitter" class="twitter authentication">'+
                      '<span class="name"> Twitter Button</span></li>';
         $(self.allList).append(tempTw);
-      }
 
-      if(appState.users.linkedin) {
         var tempLi = '<li id="entity-user-linkedin" class="linkedin authentication">'+
                      '<span class="name">LinkedIn Login Button</span></li>';
         $(self.allList).append(tempLi);
-      }
     },
 
     renderCurrentUserElements: function() {
@@ -151,7 +144,7 @@ function(ElementCollection,
                       '<span class="wide-text">Current User <%= field_name %></span>',
                     '</li>'].join('\n');
 
-      _(v1State.get('users').get('fields').models).each(function(field) {
+      _(v1State.get('pages').models[pageId].getFields()).each(function(field) {
         var context = { id : field.cid, field_name : field.get('name') };
         $(self.allList).append(_.template(tempLi, context));
       });

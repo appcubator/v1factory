@@ -46,6 +46,15 @@ function(UrlModel, NavbarModel, FooterModel, ContainerWidgetModel, WidgetModel, 
       return height;
     },
 
+    getFields: function() {
+      var access = this.get('access_level');
+      if(access == "all") { return []; }
+      if(access == "all-users") { return v1State.get('users').getCommonProps(); }
+
+      var model = v1State.get('users').getUserEntityWithName(access);
+      return model.get('fields');
+    },
+
     toJSON: function() {
       var json = _.clone(this.attributes);
       json.url = this.get('url').toJSON();

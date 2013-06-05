@@ -29,7 +29,8 @@ function(WidgetsManagerView,
       _.bindAll(this, 'render',
                       'placeWidget',
                       'placeContainer',
-                      'placeUIElement');
+                      'placeUIElement',
+                      'positionChanged');
 
       var self = this;
 
@@ -43,9 +44,23 @@ function(WidgetsManagerView,
     },
 
     render: function() {
-      MobileWidgetManagerView.__super__.render.call(this);
+      var self = this;
+      this.widgetsContainer = document.getElementById('elements-container');
+      this.widgetsContainer.innerHTML = '';
+
+      var models = _(self.widgetsCollection.models).sortBy(function(widget) {
+        return widget.get('layout').get('order');
+      });
+
+      _(models).each(function(widget) {
+        self.placeUIElement(widget);
+      });
+
+      this.widgetSelectorView.setElement(this.widgetsContainer).render();
+
       $( "#elements-container" ).sortable({
-        placeholder: "ui-state-highlight"
+        placeholder: "ui-state-highlight",
+        stop: this.positionChanged
       });
     },
 
@@ -66,6 +81,16 @@ function(WidgetsManagerView,
       var curWidget= new WidgetListView(containerWidgetModel);
       if(!containerWidgetModel.isFullWidth()) this.widgetsContainer.appendChild(curWidget.el);
       else iui.get('full-container').appendChild(curWidget.el);
+    },
+
+    positionChanged: function(e, ui) {
+      var self = this;
+      var arr = $( "#elements-container" ).sortable("toArray");
+      arr = _.reject(arr, function(str) { return (str == "hover-div" || str == "select-div"); });
+      _.each(arr, function(val, ind) {
+        var cid = val.replace('widget-wrapper-','');
+        self.widgetsCollection.get(cid).get('layout').set('order', ind);
+      });
     }
   });
 

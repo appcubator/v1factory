@@ -10,6 +10,11 @@ define([
   var Backbone         = require('backbone');
 
   var EntityModel = Backbone.Model.extend({
+      defaults: {
+        name: "New Entity",
+        fields: new FieldsCollection()
+      },
+
       initialize: function(bone) {
 
         if(typeof bone === "string") {
@@ -33,18 +38,11 @@ define([
         if(bone.fields) {
           this.get('fields').add(bone.fields);
         }
-
-        this.set('forms', new FormCollection());
-        if(bone.forms) {
-          this.get('forms').add(bone.forms);
-        }
-
       },
       toJSON: function () {
         var json = {};
         json = _.clone(this.attributes);
         json.fields = this.get('fields').toJSON();
-        json.forms = this.get('forms').toJSON();
         return json;
       },
 

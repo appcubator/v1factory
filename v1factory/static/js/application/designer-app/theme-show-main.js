@@ -6,10 +6,18 @@ require.config({
     "backbone" : "../../libs/backbone-amd/backbone",
     "iui" : "../../libs/iui/iui",
     "bootstrap" : "../../libs/bootstrap/bootstrap",
-    "app" : "../",
-    "editor" : "../editor",
-    "dicts" : "../../dicts",
-    "mixins" : "../../mixins"
+    "designer-app" : "./",
+    "editor" : "./editor",
+    "m-editor" : "./mobile-editor",
+    "dicts" : "./dicts",
+    "mixins" : "../../mixins",
+    "key" : "../../libs/keymaster/keymaster",
+    "answer" : "../../libs/answer/answer",
+    "prettyCheckable" : "../../libs/jquery/prettyCheckable",
+    "list" : "../../libs/list",
+    "models" : "../data/models",
+    "collections" : "../data/collections",
+    "tutorial" : "../tutorial"
   },
 
   shim: {
@@ -32,8 +40,8 @@ require.config({
 });
 
 require([
-  "app/designer-app/ThemeEditView",
-  'app/models/ThemeModel',
+  "designer-app/ThemeEditView",
+  'models/ThemeModel',
   "bootstrap"
 ],
 function(ThemeEditView, ThemeModel) {

@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render, render_to_response, get_object_or
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-from v1factory.models import App, UIElement, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts, RouteLog, TutorialLog
+from v1factory.models import App, StaticFile, UITheme, ApiKeyUses, ApiKeyCounts, RouteLog, TutorialLog
 from v1factory.email.sendgrid_email import send_email
 from v1factory.models import DomainRegistration
 
@@ -64,12 +64,16 @@ def app_page(request, app_id):
     app_id = long(app_id)
     app = get_object_or_404(App, id=app_id, owner=request.user)
 
-    themes = UITheme.objects.all()
+    themes = UITheme.get_web_themes()
     themes = [t.to_dict() for t in themes]
+    mobile_themes = UITheme.get_mobile_themes()
+    mobile_themes = [t.to_dict() for t in mobile_themes]
+
     page_context = {'app': app,
                     'app_id': long(app_id),
                     'title': 'The Garage',
                     'themes': simplejson.dumps(list(themes)),
+                    'mobile_themes': simplejson.dumps(list(mobile_themes)),
                     'apps': request.user.apps.all(),
                     'user': request.user}
     add_statics_to_context(page_context, app)
@@ -156,36 +160,53 @@ def uie_state(request, app_id):
         return HttpResponse("GET or POST only", status=405)
 
 
+@login_required
+def mobile_uie_state(request, app_id):
+    app = get_object_or_404(App, id=app_id, owner=request.user)
+    if request.method == 'GET':
+        state = app_get_uie_state(request, app)
+        return JSONResponse(state)
+    elif request.method == 'POST':
+        status, message = app_save_mobile_uie_state(request, app)
+        return HttpResponse(message, status=status)
+    else:
+        return HttpResponse("GET or POST only", status=405)
+
+
 @csrf_exempt
-def less_sheet(request, app_id):
+def less_sheet(request, app_id, isMobile=False):
     app_id = long(app_id)
     app = get_object_or_404(App, id=app_id, owner=request.user)
-    els = UIElement.get_library().values()
-    my_els = els.filter(app=app)
-    page_context = {'app': app,
-                    'title': 'Editor',
-                    'gallery_elements': els,
-                    'elements': simplejson.dumps(list(els)),
-                    'myuielements': simplejson.dumps(list(my_els)),
+    uie_state = app.uie_state
+    if isMobile:
+        uie_state = app.mobile_uie.state
+    page_context = {'uie_state': uie_state,
+                    'isMobile': isMobile,
                     'app_id': app_id}
     add_statics_to_context(page_context, app)
     return render_to_response('app-editor-less-gen.html', page_context, mimetype='text/css')
 
+@csrf_exempt
+def mobile_less_sheet(request, app_id):
+    return less_sheet(request, app_id, True)
+
 
 @csrf_exempt
-def css_sheet(request, app_id):
+def css_sheet(request, app_id, isMobile=False):
     app_id = long(app_id)
     app = get_object_or_404(App, id=app_id, owner=request.user)
-    els = UIElement.get_library().values()
-    my_els = els.filter(app=app)
-    page_context = {'app': app,
+    uie_state = app.uie_state
+    if isMobile:
+        uie_state = app.mobile_uie.state
+    page_context = {'uie_state': uie_state,
                     'title': 'Editor',
-                    'gallery_elements': els,
-                    'elements': simplejson.dumps(list(els)),
-                    'myuielements': simplejson.dumps(list(my_els)),
                     'app_id': app_id}
     add_statics_to_context(page_context, app)
-    return render(request, 'app-editor-css-gen.html', page_context)
+    return render(request, 'app-editor-css-gen.html', page_context, mimetype='text/css')
+
+@csrf_exempt
+def mobile_css_sheet(request, app_id):
+    return css_sheet(request, app_id, True)
 
 
 @require_GET
@@ -198,6 +219,18 @@ def app_get_uie_state(request, app):
 @login_required
 def app_save_uie_state(request, app):
     app._uie_state_json = request.body
+    try:
+        app.full_clean()
+    except Exception, e:
+        return (400, str(e))
+    app.save()
+    return (200, 'ok')
+
+
+@require_POST
+@login_required
+def app_save_mobile_uie_state(request, app):
+    app._mobile_uie_state_json = request.body
     try:
         app.full_clean()
     except Exception, e:
@@ -311,25 +344,6 @@ def staticfiles(request, app_id):
                 return JSONResponse({})
             else:
                 return JSONResponse({"error": "One of the fields was not valid."})
-
-
-@require_GET
-@login_required
-def app_editor(request, app_id, page_id):
-    app_id = long(app_id)
-    app = get_object_or_404(App, id=app_id, owner=request.user)
-    els = UIElement.get_library().values()
-    my_els = els.filter(app=app)
-    page_context = {'app': app,
-                    'title': 'Editor',
-                    'gallery_elements': els,
-                    'elements': simplejson.dumps(list(els)),
-                    'myuielements': simplejson.dumps(list(my_els)),
-                    'page_id': page_id,
-                    'app_id': app_id}
-    add_statics_to_context(page_context, app)
-    return render(request, 'app-editor-main.html', page_context)
-
 
 @login_required
 @require_POST

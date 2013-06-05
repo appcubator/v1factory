@@ -46,8 +46,6 @@ function( WidgetContainerView,
       this.setLeft(0);
       this.setHeight(height * GRID_HEIGHT);
 
-      console.log(this.el);
-
       this.el.className += ' m-widget-wrapper';
       this.el.id = 'widget-wrapper-' + this.model.cid;
 

@@ -104,16 +104,12 @@ function( WidgetSelectorView,
       }
 
       this.deselect();
-      console.log("new model:");
-      console.log(widgetModel);
       this.selectedEl = widgetModel;
       widgetModel.get('layout').bind('change', function() {
         self.setLayout(self.selectDiv, widgetModel);
       });
-      //this.setLayout(this.selectDiv, widgetModel);
 
       document.getElementById('page-wrapper').appendChild(this.widgetEditorView.setModel(widgetModel).render().el);
-      //this.widgetEditorView.el.style.top = 
     },
 
     resizing: function(e, ui) {

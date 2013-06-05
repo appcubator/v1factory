@@ -35,10 +35,15 @@
       <div class="create-theme-text">+ Create a new theme</div>
       <form class="create-form hi3 hoff1 span36" style="display:none;"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form>
     </div>
+
+     <div class="hi5 hoff1 span40 pane border create-mobile-theme">
+      <div class="create-mobile-theme-text">+ Create a mobile theme</div>
+      <form class="create-mobile-form hi3 hoff1 span36" style="display:none;"><input type="text" placeholder="Name of the theme" class="theme-name"><input type="submit" class="btn" value="Create"></form>
+    </div>
   </div>
 
 </div>
 {% endblock %}
 {% block js %}
-<script data-main="{{ STATIC_URL }}js/app/designer-app/designer-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
+<script data-main="{{ STATIC_URL }}js/application/designer-app/designer-main" src="{{ STATIC_URL }}js/libs/require.js"></script>
 {% endblock %}

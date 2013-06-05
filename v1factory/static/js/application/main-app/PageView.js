@@ -55,6 +55,9 @@ function(UrlView, SimpleModalView) {
       page_context = this.model.attributes;
       page_context.page_name = this.model.get('name');
       page_context.ind = this.ind;
+      page_context.user_roles = v1State.get('users').map(function (userModel) {
+        return userModel.get('role');
+      });
 
       var page = _.template(PageTemplates.tempMenu, page_context);
       var span = document.createElement('span');

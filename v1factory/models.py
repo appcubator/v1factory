@@ -31,6 +31,12 @@ def get_default_uie_state():
     f.close()
     return s
 
+def get_default_mobile_uie_state():
+    f = open(os.path.join(DEFAULT_STATE_DIR, "mobile_uie_state.json"))
+    s = f.read()
+    simplejson.loads(s)  # makes sure it's actually valid
+    f.close()
+    return s
 
 def get_default_app_state():
     f = open(os.path.join(DEFAULT_STATE_DIR, "app_state.json"))
@@ -55,8 +61,8 @@ class App(models.Model):
     subdomain = models.CharField(max_length=50, blank=True)
 
     _state_json = models.TextField(blank=True, default=get_default_app_state)
-    _uie_state_json = models.TextField(
-        blank=True, default=get_default_uie_state)
+    _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
+    _mobile_uie_state_json = models.TextField(blank=True, default=get_default_mobile_uie_state)
 
     def save(self, *args, **kwargs):
         if self.subdomain == "":
@@ -89,11 +95,23 @@ class App(models.Model):
         return self._uie_state_json
 
     @property
+    def mobile_uie_state(self):
+        return simplejson.loads(self._mobile_uie_state_json)
+
+    @property
+    def mobile_uie_state_json(self):
+        return self._mobile_uie_state_json
+
+    @property
     def entities(self):
         return self.state['entities']
 
     @property
     def pages(self):
+        return self.state['pages']
+
+    @property
+    def mobile_pages(self):
         return self.state['pages']
 
     @property
@@ -255,44 +273,6 @@ class App(models.Model):
             super(App, self).delete(*args, **kwargs)
 
 
-class UIElement(models.Model):
-
-    """Describes the UIElement. If app is none, this belongs to the Library."""
-    app = models.ForeignKey(App, blank=True, null=True, default=None)
-    name = models.CharField(max_length=100)
-    class_name = models.CharField(max_length=100)
-    html = models.TextField()
-    css = models.TextField()
-    tagname = models.CharField(max_length=100)
-
-    @staticmethod
-    def get_login_form(twitter="", linkedin="", facebook=""):
-        """Create login, the strings passed in represent the auth url"""
-
-        def buttonify(provider_name):
-            social_login_btn = "<a href=\"{}\"><img src=\"{}\" /></a>"
-            if len(provider_name) > 0:
-                return social_login_btn.format(provider_name, "{{ STATIC_URL }}images/icon_%s.png" % provider_name)
-            else:
-                return ""
-
-        twitter = buttonify(twitter)
-        linkedin = buttonify(linkedin)
-        facebook = buttonify(facebook)
-
-        return _login_form_templ.format(facebook, twitter, linkedin)
-
-    @classmethod
-    def get_library(cls):
-        return cls.objects.filter(app=None)
-
-    context_regex = re.compile(r'<%= (.+) %>')
-
-    def get_required_context(self):
-        context_names = re.findall(context_regex, self.lib_el.html)
-        return context_names
-
-
 class UITheme(models.Model):
     name = models.CharField(max_length=255, blank=True)
     designer = models.ForeignKey(User, blank=True, null=True)
@@ -301,8 +281,11 @@ class UITheme(models.Model):
     image = models.URLField(
         blank=True, default="http://appcubator.com/static/img/theme4.png")
 
-    _uie_state_json = models.TextField(
-        blank=True, default=get_default_uie_state)
+    web_or_mobile = models.CharField(max_length=1,
+                                     choices=(('W', 'Web'), ('M', 'Mobile')),
+                                     default = 'W')
+
+    _uie_state_json = models.TextField(blank=True, default=get_default_uie_state)
 
     # Audit field
     created_on = models.DateTimeField(auto_now_add=True)
@@ -327,7 +310,8 @@ class UITheme(models.Model):
                 'designer': designer,
                 'image': self.image,
                 'statics': simplejson.dumps(list(self.statics.values())),
-                'uie_state': self.uie_state}
+                'uie_state': self.uie_state,
+                'web_or_mobile': self.web_or_mobile}
 
     def clone(self, user=None):
         new_self = UITheme(name=self.name,
@@ -336,6 +320,15 @@ class UITheme(models.Model):
                            designer=user)
         return new_self
 
+    @classmethod
+    def get_mobile_themes(cls):
+        themes = cls.objects.filter(web_or_mobile='M')
+        return themes
+
+    @classmethod
+    def get_web_themes(cls):
+        themes = cls.objects.filter(web_or_mobile='W')
+        return themes
 
 class StaticFile(models.Model):
     name = models.CharField(max_length=255)
