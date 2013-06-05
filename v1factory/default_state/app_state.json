@@ -3,13 +3,32 @@
         "keywords": "",
         "description": ""
     },
-    "users": {
-        "fields": [],
-        "twitter": false,
-        "linkedin": false,
-        "facebook": false,
-        "local": true
-    },
+    "users": [
+        {
+            "role": "Admin",
+            "fields": [],
+            "twitter": false,
+            "linkedin": false,
+            "facebook": false,
+            "local": true
+        },
+        {
+            "role": "Editor",
+            "fields": [],
+            "twitter": false,
+            "linkedin": false,
+            "facebook": false,
+            "local": true
+        },
+        {
+            "role": "Member",
+            "fields": [],
+            "twitter": false,
+            "linkedin": false,
+            "facebook": false,
+            "local": true
+        }
+    ],
     "emails": [
         {
             "content": "Dear {{User.First_Name}},\n\nThanks for signing up!\n\n- {{AppName}} Team",
