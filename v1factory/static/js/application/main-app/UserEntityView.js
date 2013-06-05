@@ -56,7 +56,6 @@ define([
       render: function() {
         var self = this;
         this.$el.html(_.template(EntitiesTemplates.UserEntity, this.model.toJSON()));
-        console.log(this.model);
         _(this.model.get('fields').models).each(function(fieldModel) {
           if(fieldModel.get('name') == 'First Name' ||
              fieldModel.get('name') == 'Last Name'  ||
@@ -87,22 +86,16 @@ define([
         var htmlString = '';
         this.userRoles.each(function (role) {
           var active = "";
-          console.log(role.get('role'));
-          console.log(self.model.get('role'));
           if(role.cid == self.model.cid) {
             active = ' active';
-            console.log('found active role');
           }
-          console.log(active);
           htmlString += '<li class="tab'+active+'" id="navtab-'+ role.cid +'"><a href="#">' + role.get('role') + '</a></li>';
         });
         $nav.html(htmlString);
       },
 
       clickedNavItem: function(e) {
-        console.log(e.currentTarget);
         var cid = (e.currentTarget.id).replace('navtab-','');
-        console.log(cid);
         var model = this.userRoles.get(cid);
         this.setModel(model);
         this.render();
