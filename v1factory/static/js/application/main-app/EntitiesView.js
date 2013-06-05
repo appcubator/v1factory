@@ -22,6 +22,8 @@ function(EntityCollection,
       events : {
         'click #users .nav a': 'clickedUserNavItem',
         'click #tables .nav a': 'clickedTableNavItem',
+        'click #add-role' : 'clickedAddUserRole',
+        'keyup #add-role-form'  : 'createUserRole',
         'click #add-entity' : 'clickedAddEntity',
         'keyup #add-entity-form'  : 'createEntity'
       },
@@ -76,7 +78,7 @@ function(EntityCollection,
         var $nav = this.$('#users .nav');
         var htmlString = '';
         this.userRoles.each(function (role) {
-          htmlString += '<li><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
+          htmlString += '<li class="btn btn-large"><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
         });
         $nav.html(htmlString);
       },
@@ -85,7 +87,7 @@ function(EntityCollection,
         var $nav = this.$('#tables .nav');
         var htmlString = '';
         this.tables.each(function (table) {
-          htmlString += '<li><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
+          htmlString += '<li class="btn btn-large"><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
         });
         $nav.html(htmlString);
       },
@@ -116,9 +118,32 @@ function(EntityCollection,
         return false;
       },
 
+      clickedAddUserRole: function(e) {
+        $(e.currentTarget).fadeOut();
+        $('#add-role-form').fadeIn().focus();
+      },
+
+      createUserRole: function(e) {
+        if(e.keyCode != 13) {
+          return;
+        }
+
+        var elem = new UserEntityModel({
+          role: e.target.value,
+        });
+        console.log(elem.toJSON());
+        this.userRoles.add(elem);
+        this.userView.setModel(elem);
+        this.renderUserView();
+
+        e.target.value = '';
+        $('#add-role').fadeIn();
+        $(e.target).fadeOut();
+      },
+
       clickedAddEntity: function(e) {
-        $(this.addButton).hide();
-        $('#add-entity-form').fadeIn().focus();
+        $(e.currentTarget).hide();
+        $('#add-entity-form').fadeIn('fast').focus();
       },
 
       createEntity: function(e) {

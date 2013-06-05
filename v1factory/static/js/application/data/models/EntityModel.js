@@ -10,6 +10,12 @@ define([
   var Backbone         = require('backbone');
 
   var EntityModel = Backbone.Model.extend({
+      defaults: {
+        name: "New Entity",
+        fields: new FieldsCollection(),
+        required: false,
+      },
+
       initialize: function(bone) {
 
         if(typeof bone === "string") {
