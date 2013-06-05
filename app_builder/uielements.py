@@ -29,7 +29,7 @@ class Layout(DictInited):
         "l_padding": {"_type": 0, "_default": 0},
         "r_padding": {"_type": 0, "_default": 0},
         "alignment": {"_type": "", "_default": "left"},
-        "font-size": {"_type": "", "_default": ""}, #TODO
+        "font-size": {"_type": "", "_default": ""},
     }
 
     def has_padding(self):

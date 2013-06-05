@@ -165,10 +165,6 @@ class App(DictInited):
         "emails": {"_type": [], "_each": {"_type": Email}},
     }
 
-    def render(self, coder):
-        self.users.render(self, coder)  # pass the app and the coder
-        self.entities.render(self, coder)
-
     @classmethod
     def create_from_dict(cls, data, *args, **kwargs):
         # preprocess data
@@ -234,9 +230,5 @@ class App(DictInited):
         for path, rl in filter(lambda n: isinstance(n[1], Resolvable), self.iternodes()):
             rl.resolve()
 
-        # TODO
-#       inline references
-#       relational fields (im especially dreading this)
-#       code object stage
 
         return self
