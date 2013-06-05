@@ -208,12 +208,12 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
     setModel: function(model) {
+      console.log(model);
       this.model = model;
       this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
       this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
 
       this.listenTo(this.model.get('fields'), 'add', this.appendField);
-      this.listenTo(this.model.get('forms'), 'add', this.appendForm);
       return this;
     }
   });
