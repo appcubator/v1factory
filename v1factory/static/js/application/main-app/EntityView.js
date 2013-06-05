@@ -26,7 +26,6 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
       'click .edit-form'           : 'clickedEditForm',
-      'blur  .property-name-input' : 'formSubmitted',
       'change .attrib-required-check' : 'changedRequiredField'
     },
 
@@ -62,6 +61,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
     renderNav: function() {
+      console.log('rendering nav');
       var $nav = this.$('.entity-nav');
       var htmlString = '';
       this.entities.each(function (entity) {
@@ -71,7 +71,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
         }
         htmlString += '<li class="tab'+active+'" id="navtab-'+ entity.cid +'"><a href="#">' + entity.get('name') + '</a></li>';
       });
-      $nav.html(htmlString)
+      $nav.html(htmlString);
       if(this.model) {
         $nav.find('#navtab-' + this.model.cid).addClass('active');
       }
@@ -82,17 +82,18 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       var model = this.entities.get(cid);
       this.setModel(model);
       this.render();
-      return false;
     },
 
     clickedAddProperty: function(e) {
       $('.add-property-button', this.el).hide();
       $('.add-property-form', this.el).fadeIn();
       $('.property-name-input', this.el).focus();
-      return false;
     },
 
     formSubmitted: function(e) {
+      console.log('form submitted');
+      console.trace();
+
       var name = $('.property-name-input', this.el).val();
 
       if(name.length !== 0) {
@@ -107,7 +108,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       $('.property-name-input', this.el).val('');
       $('.add-property-form', this.el).hide();
       $('.add-property-button', this.el).fadeIn();
-      return false;
+
+      e.preventDefault();
     },
 
     appendField: function (fieldModel) {
@@ -189,7 +191,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       this.model = model;
       this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
       this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
-      this.listenTo(this.model.get('fields'), 'add remove', this.renderProperties);
+      console.log("BIND:" + model.cid);
+      this.listenTo(this.model.get('fields'), 'add remove', this.appendField);
       this.userRoles = v1State.get('users').pluck('role');
       this.otherEntities = _(this.entities.pluck('name')).without(this.model.get('name'));
       return this;

@@ -1,6 +1,6 @@
 var EntitiesTemplates = {};
 
-EntitiesTemplates.Entity = [
+EntitiesTemplates.Table = [
 '<div class="row hoff1">',
   '<p class="lead" style="display:none">Click "Add Table" to create your first table</p>',
   '<div class="span58 entity-pane pane entity" id="entity-entity">',
@@ -41,12 +41,9 @@ EntitiesTemplates.Entity = [
           '</a>',
         '</span>',
       '</span>',
-    '</div><div class="span58 entity-nav">',
-      '<ul class="form-list offset1 hoff1">',
-      '</ul>',
-      '</div>',
     '</div>',
-  '</div>'
+  '</div>',
+'</div>'
 ].join('\n');
 
 
@@ -76,7 +73,7 @@ EntitiesTemplates.Property = [
 '</div>'
 ].join('\n');
 
-EntitiesTemplates.UserEntity = [
+EntitiesTemplates.UserTable = [
 '<div class="row hoff1">',
   '<div class="span58 entity-pane pane entity" id="user-entity">',
     '<div class="header">',
@@ -160,10 +157,14 @@ EntitiesTemplates.UserEntity = [
           '</a>',
         '</span>',
       '</span>',
-    '</div><div class="span58 entity-nav">',
-      '<ul class="form-list offset1 hoff1">',
-      '</ul>',
-      '</div>',
+    '</div>',
     '</div>',
   '</div>'
+].join('\n');
+
+EntitiesTemplates.Navbar = [
+'<div class="span58 entity-nav">',
+  '<ul class="form-list offset1 hoff1">',
+  '</ul>',
+'</div>'
 ].join('\n');
