@@ -21,10 +21,11 @@ class AppComponentFactory(object):
     # MODELS
 
     def create_model(self, entity):
+        """Creates DjangoModel and the non relational fields for it"""
         identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
         m = DjangoModel(identifier)
 
-        for f in entity.fields:
+        for f in filter(lambda x: not x.is_relational(), entity.fields):
             df = m.create_field(f.name, f.type, f.required)
                         # the django model will create an identifier based on
                         # the name
@@ -32,6 +33,22 @@ class AppComponentFactory(object):
 
         entity._django_model = m
         return m
+
+    def create_relational_fields_for_model(self, entity):
+        m = entity._django_model
+
+        for f in filter(lambda x: x.is_relational(), entity.fields):
+            # get the related django model's id (from the imports.)
+            rel_model = f.entity._django_model
+            rel_model_id = m.namespace.get_by_ref(rel_model)
+            # make an id for the related name in the related model's namespace
+            # TODO FIXME potential bugs with related name and field name since they are really injected into the model.Model instance namespace
+            rel_name_id = rel_model.namespace.new_identifier(f.related_name)
+
+            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
+                        # the django model will create an identifier based on
+                        # the name
+            f._django_field = df
 
     def import_model_into_namespace(self, entity, namespace):
         if namespace == 'views':
@@ -146,6 +163,7 @@ class AppComponentFactory(object):
         field_ids = []
         for f in form_model.fields:
             try:
+                assert not f.is_relational()
                 field_ids.append(f.model_field._django_field.identifier)
             except AttributeError:
                 pass

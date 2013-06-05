@@ -108,6 +108,29 @@ class DjangoModelCreateFieldTestCase(unittest.TestCase):
         self.assertEqual(len(self.model.fields), 3)
 
 
+class DjangoModelCreateRelatedFieldTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.ns = create_import_namespace('webapp/models.py')
+        self.model = DjangoModel(self.ns.new_identifier("test_model"))
+        self.rel_model = DjangoModel(self.ns.new_identifier("some other model"))
+
+    def test_create_field(self):
+        rel_name = self.rel_model.namespace.new_identifier('')
+        self.model.create_relational_field("fk test", "fk", self.rel_model.identifier, rel_name, False)
+
+        rel_name = self.rel_model.namespace.new_identifier('')
+        self.model.create_relational_field("121 test", "o2o", self.rel_model.identifier, rel_name, True)
+
+        rel_name = self.rel_model.namespace.new_identifier('')
+        self.model.create_relational_field("mm test", "m2m", self.rel_model.identifier, rel_name, True)
+
+        print self.model.render()
+        self.assertEqual(len(self.model.fields), 3)
+
+
+
+
 class DjangoModelTestCase(unittest.TestCase):
 
     def setUp(self):

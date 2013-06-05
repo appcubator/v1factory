@@ -1,9 +1,13 @@
 import unittest
-from app_builder.analyzer import App
+from app_builder import analyzer
 
 class RelatedEntitiesTestCase(unittest.TestCase):
     def setUp(self):
         app_dict = {
+            'info': {
+                'description':'',
+                'keywords':''
+            },
             'users': {
                 "facebook": False,
                 "linkedin": False,
@@ -68,4 +72,13 @@ class RelatedEntitiesTestCase(unittest.TestCase):
             "emails": []
         }
 
-        self.app = App.create_from_dict(app_dict)
+        self.app = analyzer.App.create_from_dict(app_dict)
+
+    def test_resolved(self):
+        self.assertIsInstance(self.app.entities[0].fields[2].entity, analyzer.Entity)
+
+    def test_is_relational(self):
+        self.assertTrue(self.app.entities[0].fields[2].is_relational())
+        self.assertFalse(self.app.entities[0].fields[1].is_relational())
+if __name__ == '__main__':
+    unittest.main()

@@ -177,10 +177,8 @@ class DjangoField(object):
                  '_CREATED': 'DateTimeField',
                  '_MODIFIED': 'DateTimeField',
                  'email': 'EmailField',
-                 'fk': 'ForeignKey',
-                 'm2m': 'ManyToManyField',
                  'image': 'TextField',
-                 'onetoone': 'OneToOneField',
+
                  }
 
     def __init__(self, identifier, canonical_type, required=False, parent_model=None):
@@ -203,8 +201,34 @@ class DjangoField(object):
                 kwargs['default'] = repr("")
             if field.canon_type in ['float', 'date']:
                 kwargs['default'] = repr(0)
+        else:
+            kwargs['blank'] = repr(True)
+        return kwargs
+
+class DjangoRelatedField(object):
+    """Should abide by the same interface as DjangoField"""
+    _type_map = {
+        'fk': 'ForeignKey',
+        'm2m': 'ManyToManyField',
+        'o2o': 'OneToOneField',
+    }
+
+    def __init__(self, identifier, relation_type, rel_model_id, rel_name_id, required=True, parent_model=None):
+        self.identifier = identifier
+        self.rel_type = relation_type
+        self.django_type = self.__class__._type_map[relation_type]
+        self.required = required
+        self.model = parent_model
+        self.rel_model_id = rel_model_id
+        self.rel_name_id = rel_name_id
+        self.args = [repr(str(rel_model_id))]
+
+    def kwargs(field):
+        kwargs = {}
+        kwargs['related_name'] = repr(str(field.rel_name_id))
         if not field.required:
             kwargs['blank'] = repr(True)
+            kwargs['null'] = repr(True)
         return kwargs
 
 
@@ -212,6 +236,7 @@ class DjangoModel(object):
 
     def __init__(self, identifier):
         self.identifier = identifier
+        identifier.ref = self
         self.code_path = "webapp/models.py"
         self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
         self.fields = []
@@ -220,6 +245,14 @@ class DjangoModel(object):
         identifier = self.namespace.new_identifier(name)
         f = DjangoField(
             identifier, canonical_type, required=required, parent_model=self)
+        self.fields.append(f)
+        return f
+
+    def create_relational_field(self, name, relation_type, rel_model_id, rel_name_id, required):
+        assert relation_type in ['o2o', 'm2m', 'fk']
+        identifier = self.namespace.new_identifier(name)
+        f = DjangoRelatedField(
+            identifier, relation_type, rel_model_id, rel_name_id, required=required, parent_model=self)
         self.fields.append(f)
         return f
 

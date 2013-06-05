@@ -7,6 +7,7 @@ def create_codes(app):
     factory = AppComponentFactory()
 
     create_map = {'create model for entity': factory.create_model,
+                  'create relational fields for entity': factory.create_relational_fields_for_model,
                   'import model into views': lambda entity: factory.import_model_into_namespace(entity, 'views'),
                   'import model into forms': lambda entity: factory.import_model_into_namespace(entity, 'forms'),
                   'import model into form receivers': lambda entity: factory.import_model_into_namespace(entity, 'form receivers'),
@@ -43,7 +44,9 @@ def create_codes(app):
 
     # setup models
     for ent in app.entities:
-        create('create model for entity', ent)
+        create('create model for entity', ent) # only creates primitive fields
+    for ent in app.entities: # doing relational fields after because all models need to be created for relations to work
+        create('create relational fields for entity', ent)
 
         create('import model into views', ent)
         create('import model into forms', ent)

@@ -22,6 +22,9 @@ class EntityField(DictInited):
         "type": {"_type": ""}
     }
 
+    def is_relational(self): 
+        return False
+
 
 class EntityRelatedField(DictInited, Resolvable):
     _schema = { 
@@ -33,11 +36,18 @@ class EntityRelatedField(DictInited, Resolvable):
     }
     _resolve_attrs = (('entity_name', 'entity'),)
 
+    def is_relational(self): 
+        return True
+
+    def __init__(self, *args, **kwargs):
+        super(EntityRelatedField, self).__init__(*args, **kwargs)
+        self.entity_name = encode_braces('entities/%s' % self.entity_name)
+
 
 class Entity(DictInited):
     _schema = {
         "name": {"_type": ""},
-        "fields": {"_type": [], "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}},
+        "fields": {"_type": [], "_each": {"_one_of":[{"_type": EntityRelatedField}, {"_type": EntityField}]}},
     }
 
     def __init__(self, *args, **kwargs):
