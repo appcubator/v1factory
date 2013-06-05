@@ -84,25 +84,22 @@ function(EntityCollection,
       },
 
       renderTablesNav: function() {
-        var $nav = this.$('#tables .nav');
+        var $nav = this.$('#tables-nav');
         var htmlString = '';
         this.tables.each(function (table) {
-          htmlString += '<li class="btn btn-large"><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
+          htmlString += '<li class="button hoff2"><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
         });
         $nav.html(htmlString);
       },
 
       clickedUserNavItem: function(e) {
         e.preventDefault();
-        var cid = (e.target.dataset.target||e.target.parentNode.dataset.target);
-        console.log(cid);
+        var cid = String(e.target.id||e.target.parentNode.id).replace('navtab-','');
         var model = this.userRoles.get(cid);
-        console.log(model);
         this.userView.model = model;
         this.userView.render();
         this.renderUserRolesNav();
         $(e.target).addClass('active');
-        //.siblings().removeClass('active');
         return false;
       },
 
@@ -142,8 +139,8 @@ function(EntityCollection,
       },
 
       clickedAddEntity: function(e) {
-        $(e.currentTarget).hide();
-        $('#add-entity-form').fadeIn('fast').focus();
+        $(e.currentTarget).hide()
+        $('#add-entity-form').show().focus();
       },
 
       createEntity: function(e) {
@@ -161,8 +158,8 @@ function(EntityCollection,
         this.renderTableView();
 
         e.target.value = '';
-        $(this.addButton).fadeIn();
-        $(e.target).fadeOut();
+        $('.add-button').show();
+        $(e.target).hide();
       }
 
     });
