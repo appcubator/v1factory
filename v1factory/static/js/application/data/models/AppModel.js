@@ -1,14 +1,14 @@
 define([
   'models/AppInfoModel',
   'collections/UserRolesCollection',
-  'collections/EntityCollection',
+  'collections/TableCollection',
   'collections/PageCollection',
   'collections/MobilePageCollection',
   'collections/EmailCollection'
 ],
 function(AppInfoModel,
          UserRolesCollection,
-         EntityCollection,
+         TableCollection,
          PageCollection,
          MobilePageCollection,
          EmailCollection) {

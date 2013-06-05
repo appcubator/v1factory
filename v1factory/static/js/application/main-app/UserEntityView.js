@@ -1,13 +1,13 @@
 define([
   'models/FieldModel',
-  'app/EntityView',
+  'app/TablesView',
   'app/FormEditorView',
   'app/UploadExcelView',
   'app/ShowDataView',
   'models/UserEntityModel',
-  'collections/EntityCollection',
+  'collections/TablesCollection',
   'tutorial/TutorialView',
-  'app/templates/EntitiesTemplates'
+  'app/templates/TableTemplates'
 ],
   function( FieldModel,
             EntityView,
@@ -15,7 +15,7 @@ define([
             UploadExcelView,
             ShowDataView,
             UserEntityModel,
-            EntityCollection,
+            TablesCollection,
             TutorialView) {
 
     var UserEntityView = EntityView.extend({

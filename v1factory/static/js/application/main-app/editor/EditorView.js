@@ -1,6 +1,6 @@
 define([
   'models/PageModel',
-  'collections/EntityCollection',
+  'collections/TableCollection',
   'app/UrlView',
   'mixins/SimpleModalView',
   'mixins/ErrorModalView',
@@ -18,7 +18,7 @@ define([
   'editor/editor-templates'
 ],
 function( PageModel,
-          EntityCollection,
+          TableCollection,
           UrlView,
           SimpleModalView,
           ErrorModalView,
@@ -70,7 +70,7 @@ function( PageModel,
       this.model             = v1State.get('pages').models[pageId];
 
       /* Globals */
-      g_contextCollection    = new EntityCollection();
+      g_contextCollection    = new TableCollection();
       this.getContextEntities();
 
       this.widgetsCollection    = this.model.get('uielements');
