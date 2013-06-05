@@ -15,7 +15,6 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
 
 # Entities
 
-
 class EntityField(DictInited):
     _schema = {
         "name": {"_type": ""},
@@ -24,10 +23,21 @@ class EntityField(DictInited):
     }
 
 
+class EntityRelatedField(DictInited, Resolvable):
+    _schema = { 
+        "name": {"_type": ""},
+        "required": {"_type": True},
+        "type": {"_type":""}, # one to one, many to one, many to many
+        "entity_name": {"_type" : ""},
+        'related_name': {"_type": ""}
+    }
+    _resolve_attrs = (('entity_name', 'entity'),)
+
+
 class Entity(DictInited):
     _schema = {
         "name": {"_type": ""},
-        "fields": {"_type": [], "_each": {"_type": EntityField}},
+        "fields": {"_type": [], "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}},
     }
 
     def __init__(self, *args, **kwargs):
@@ -37,13 +47,13 @@ class Entity(DictInited):
 
 class UserConfig(DictInited):
     _schema = {
-        "facebook": {"_type": True},
-        "linkedin": {"_type": True},
-        "twitter": {"_type": True},
+        "facebook": {"_type": False},
+        "linkedin": {"_type": False},
+        "twitter": {"_type": False},
         "local": {"_type": True},
         "fields": {
             "_type": [],
-            "_each": {"_type": EntityField}
+            "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}
         }
     }
 

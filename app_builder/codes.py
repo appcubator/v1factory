@@ -20,9 +20,9 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.render':            'from django.shortcuts import render',
             'django.render_to_response':'from django.shortcuts import render_to_response',
             'django.get_object_or_404': 'from django.shortcuts import get_object_or_404',
-            'django.patterns':'from django.conf.urls import patterns',
-            'django.include':'from django.conf.urls import include',
-            'django.url':'from django.conf.urls import url',
+            'django.patterns':          'from django.conf.urls import patterns',
+            'django.include':           'from django.conf.urls import include',
+            'django.url':               'from django.conf.urls import url',
 
 }
 
