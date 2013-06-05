@@ -77,6 +77,7 @@ function(EntityCollection,
       },
 
       renderUserRolesNav: function() {
+        console.log("RENDER");
         var $nav = this.$('#user-entity .entity-nav');
         var htmlString = '';
         this.userRoles.each(function (role) {
