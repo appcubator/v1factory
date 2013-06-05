@@ -45,7 +45,58 @@ test_json = r"""{
                 }
             ],
             "forms": []
-        }
+        },{
+                    "name":"Class",
+                    "fields": [{
+                            "name":"Name",
+                            "required":true,
+                            "type":"text"
+                        },{
+                            "name":"Description",
+                            "required":true,
+                            "type":"text"
+                        },{
+                            "name":"Professor",
+                            "required":true,
+                            "type": "fk",
+                            "entity_name": "Teacher",
+                            "related_name": "Classes"
+                        }]
+                },{
+                    "name":"Teacher",
+                    "fields": [{
+                            "name":"Name",
+                            "required":true,
+                            "type":"text"
+                        },{
+                            "name":"Bio",
+                            "required":true,
+                            "type":"text"
+                        },{
+                            "name":"Favorite student",
+                            "required":true,
+                            "type":"o2o",
+                            "entity_name": "Student",
+                            "related_name": "teacher"
+                        }]
+                },{
+                    "name":"Student",
+                    "fields": [{
+                            "name":"Name",
+                            "required":true,
+                            "type":"text"
+                        },{
+                            "name":"Bio",
+                            "required":true,
+                            "type":"text"
+                        },{
+                            "name": "Classes",
+                            "required":true,
+                            "entity_name":"Class",
+                            "type": "m2m",
+                            "related_name": "enrolled students"
+                        }]
+                }
     ],
     "pages": [
         {
@@ -211,7 +262,7 @@ test_json = r"""{
         },
         {
             "url": {
-                "urlparts": ["game", {"entity_name":"Game"}]
+                "urlparts": ["game", {"entity_name":"Game"}, {"entity_name":"Class"}]
             },
             "navbar": {
                 "isFixed": true,
@@ -257,7 +308,7 @@ test_json = r"""{
                         "hoverStyle": "",
                         "class_name": "header-1",
                         "container_info": null,
-                        "content": "Welcome to Alper Games<br>",
+                        "content": "GAMEPAGE<br> + "{{ CurrentUser.First Name }}{{ Page.Game.Description }}{{ Page.Class.Professor.Favorite student.teacher.Favorite student.Bio }}"",
                         "tagName": "h1",
                         "type": "headerTexts",
                         "activeStyle": "",
