@@ -4,7 +4,7 @@ define([
   'app/FormEditorView',
   'app/UploadExcelView',
   'app/ShowDataView',
-  'app/templates/EntitiesTemplates',
+  'app/templates/TableTemplates',
   'prettyCheckable'
 ],
 function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
