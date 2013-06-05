@@ -31,7 +31,10 @@ class AppComponentFactory(object):
                         # the name
             f._django_field = df
 
+        # set references to each other on both.
+        # entity reference used in v1script translation (dynamicvars.py)
         entity._django_model = m
+        m._entity = entity
         return m
 
     def create_relational_fields_for_model(self, entity):
@@ -43,7 +46,7 @@ class AppComponentFactory(object):
             rel_model_id = m.namespace.get_by_ref(rel_model)
             # make an id for the related name in the related model's namespace
             # TODO FIXME potential bugs with related name and field name since they are really injected into the model.Model instance namespace
-            rel_name_id = rel_model.namespace.new_identifier(f.related_name)
+            rel_name_id = rel_model.namespace.new_identifier(f.related_name, ref=rel_model)
 
             df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
                         # the django model will create an identifier based on
@@ -74,7 +77,7 @@ class AppComponentFactory(object):
         for e in page.get_entities_from_url():
             model_id = e._django_model.identifier
             template_id = model_id
-            args.append((e.name.lower()+'_id', {"model_id": model_id, "template_id": template_id}))
+            args.append((e.name.lower()+'_id', {"model_id": model_id, "template_id": template_id, "ref": e._django_model}))
 
         v = DjangoPageView(identifier, args=args)
         page._django_view = v
@@ -109,9 +112,9 @@ class AppComponentFactory(object):
         it positions the uielements relative to their containers.
 
         """
-        t = DjangoTemplate(page._django_view.identifier)
+        t = DjangoTemplate(page._django_view.identifier, translate_func=None)
                             # this is an underscore-name, so it should be good as a filename
-        t.create_tree([u for u in page.uielements]) # XXX HACK PLZ FIXME TODO
+        t.create_tree(page.uielements)
         t.page = page
         page._django_template = t
         page._django_view.template_code_path = t.filename
@@ -158,7 +161,7 @@ class AppComponentFactory(object):
         if form_model.action not in ['create', 'edit']:
             return None
         prim_name = form_model.action + '_' + form_model.entity_resolved.name
-        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
+        form_id = self.form_namespace.new_identifier(prim_name, ref=form_model, cap_words=True)
         model_id = form_model.entity_resolved._django_model.identifier
         field_ids = []
         for f in form_model.fields:
@@ -178,7 +181,7 @@ class AppComponentFactory(object):
         self.fr_namespace.add_import(import_symbol, f.identifier)
 
     def create_form_receiver_for_form_object(self, uie):
-        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
+        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier, ref=uie._django_form)
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr

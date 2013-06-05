@@ -54,6 +54,9 @@ class Entity(DictInited):
         super(Entity, self).__init__(*args, **kwargs)
         self.is_user = False
 
+    def relational_fields(self):
+        return filter(lambda x: x.is_relational(), self.fields)
+
 
 class UserConfig(DictInited):
     _schema = {

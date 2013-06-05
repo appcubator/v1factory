@@ -140,11 +140,11 @@ class DjangoPageView(object):
         self.locals = {}
         # args, make a namespace for the function
         self.namespace = naming.Namespace(parent_namespace=self.identifier.ns)
-        self.locals['request'] = self.namespace.new_identifier('request')
+        self.locals['request'] = self.namespace.new_identifier('request', ref="VIEW.REQUEST")
         self.locals['page_context'] = self.namespace.new_identifier('page_context')
         if args is None:
             args = []
-        self.args = [ (self.namespace.new_identifier(arg, ref=data), data) for arg, data in args ]
+        self.args = [ (self.namespace.new_identifier(arg, ref=data['ref']), data) for arg, data in args ]
 
         # continuing args, make a namespace for page context
         self.pc_namespace = naming.Namespace()
