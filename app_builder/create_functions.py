@@ -104,6 +104,19 @@ class AppComponentFactory(object):
 
     # HTML GEN
 
+    def init_translator(self, app):
+        self.v1_translator = Translator(app.entities)
+
+    def properly_name_variables_in_template(self, page):
+        from dynamicvars import Translator
+
+        # find things in braces and replace them with this function:
+        translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1), page=page) 
+        translate_all = lambda x: re.sub(r'\{\{ ?([\}]*) ?\}\}', translate, x)
+
+        for uie in page.uielements:
+            uie.visit_strings(translate_all)
+
     def create_tree_structure_for_page_nodes(self, page):
         """
         Given a page, returns a django template which has references

@@ -15,7 +15,7 @@ class Translator(object):
     def __init__(self, entities):
         self.entities = entities
 
-    def v1script_to_app_component(self, s, namespace, page=None):
+    def v1script_to_app_component(self, s, page=None):
         tokens = s.split('.')
         if tokens[0] == 'CurrentUser':
             ent = filter(lambda e: e.is_user, self.entities)

@@ -18,6 +18,8 @@ def create_codes(app):
                   'view for page': factory.create_view_for_page,
                   'url to serve page': factory.add_page_to_urls,
 
+                  'init template v1script translator': factory.init_translator,
+                  'translate strings in uielements': factory.properly_name_variables_in_template,
                   'find or add the needed data to the view': factory.find_or_create_query_for_view ,
                   'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes,
                   'create tests for static pages': factory.create_tests_for_static_pages,
@@ -61,6 +63,7 @@ def create_codes(app):
 
 
     # UIELEMENT HOOKS
+    create('init template v1script translator', app)
     for p in app.pages:
         for uie in p.uielements:
             for hook_name in uie.hooks:
@@ -70,6 +73,10 @@ def create_codes(app):
                     print "Failed to call hook %r on %r instance" % (hook_name, uie.__class__.__name__)
                     traceback.print_exc()
 
+
+    # translation of {{ page.book.name }} to proper django template code
+    for p in app.pages:
+        create('translate strings in uielements', p)
 
     # create html nodes and structure for pages
     for p in app.pages:
