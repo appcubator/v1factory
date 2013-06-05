@@ -1,5 +1,5 @@
 define([
-  'app/designer-app/UIElementModalView',
+  'designer-app/UIElementModalView',
   'backbone'
 ],
 function(UIElementModalView) {
