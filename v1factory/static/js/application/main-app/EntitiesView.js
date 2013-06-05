@@ -1,38 +1,51 @@
 define([
   'collections/EntityCollection',
   'models/UserEntityModel',
+  'models/EntityModel',
   'app/ShowDataView',
   'app/UserEntityView',
+  'app/EntityView',
   'app/EntitiesListView'
 ],
 
 function(EntityCollection,
          UserEntityModel,
+         EntityModel,
          ShowDataView,
          UserEntityView,
+         EntityView,
          EntitiesListView) {
 
     var EntitiesView = Backbone.View.extend({
       css: 'entities',
 
       events : {
-        'click #add-entity-button' : 'clickedAdd',
-        'submit #add-entity-form'  : 'formSubmitted'
+        'click #users .nav a': 'clickedUserNavItem',
+        'click #tables .nav a': 'clickedTableNavItem',
+        'click #add-entity' : 'clickedAddEntity',
+        'keyup #add-entity-form'  : 'createEntity'
       },
 
       initialize: function() {
-        _.bindAll(this, 'render',
-                        'clickedAdd',
-                        'formSubmitted');
+        _.bindAll(this);
 
         iui.loadCSS(this.css);
 
-        this.entitiesColl = v1State.get('entities');
-        this.userEntityModel = v1State.get('users');
+        this.tables = v1State.get('entities');
+        this.userRoles = v1State.get('users');
+
+        this.listenTo(this.tables, 'add remove', this.renderTablesNav);
+        this.listenTo(this.userRoles, 'add remove', this.renderUserRolesNav);
 
         // subviews
-        this.entityList = new EntitiesListView(this.entitiesColl);
-        this.userEntityView = new UserEntityView(this.userEntityModel, this.entitiesColl );
+        this.userView = new UserEntityView({
+          model: this.userRoles.get(0) || null,
+          entities: this.tables
+        });
+        this.tableView = new EntityView({
+          model: this.tables.get(0) || null,
+          entities: this.tables
+        });
 
         this.title = "Tables";
       },
@@ -40,30 +53,91 @@ function(EntityCollection,
       render : function() {
         var self = this;
         this.$el.html(_.template(iui.getHTML('entities-page'), {}));
-        this.userEntityView.setElement(self.$('#user-entity')).render();
-        this.entityList.setElement(self.$('#tables')).render();
+        this.renderUserView();
+        this.renderUserRolesNav();
+        this.renderTableView();
+        this.renderTablesNav();
         return this;
       },
 
-      clickedAdd: function(e) {
-        var newForm = this.$el.find('#add-entity-form');
-        $(newForm).appendTo('#tables');
-        $(newForm).fadeIn();
-        $(this.addButton).hide();
-        $('#entity-name-input').focus();
+      renderUserView: function() {
+        if(this.userRoles.length > 0) {
+          this.userView.setElement(self.$('#user-entity')).render();
+        }
       },
 
-      formSubmitted: function(e) {
+      renderTableView: function() {
+        if(this.tables.length > 0) {
+          this.tableView.setElement(self.$('.table')).render();
+        }
+      },
+
+      renderUserRolesNav: function() {
+        var $nav = this.$('#users .nav');
+        var htmlString = '';
+        this.userRoles.each(function (role) {
+          htmlString += '<li><a href="#" data-target="'+role.cid+'">' + role.get('role') + '</a></li>';
+        });
+        $nav.html(htmlString);
+      },
+
+      renderTablesNav: function() {
+        var $nav = this.$('#tables .nav');
+        var htmlString = '';
+        this.tables.each(function (table) {
+          htmlString += '<li><a href="#" data-target="'+table.cid+'">' + table.get('name') + '</a></li>';
+        });
+        $nav.html(htmlString);
+      },
+
+      clickedUserNavItem: function(e) {
         e.preventDefault();
+        var $clicked = $(e.target);
+        var cid = e.target.dataset.target;
+        var model = this.userRoles.get(cid);
+        console.log(model.toJSON());
+        this.userView.model = model;
+        this.userView.render();
 
-        var elem = {};
-        elem.name = $('#entity-name-input').val();
-        elem.fields = [];
-        this.entitiesColl.add(elem);
+        $clicked.addClass('active').siblings().removeClass('active');
+        return false;
+      },
 
-        $('#entity-name-input').val('');
+      clickedTableNavItem: function(e) {
+        e.preventDefault();
+        var $clicked = $(e.target);
+        var cid = e.target.dataset.target;
+        var model = this.tables.get(cid);
+        console.log(model.toJSON());
+        this.tableView.setModel(model);
+        this.tableView.render();
+
+        $clicked.addClass('active').siblings().removeClass('active');
+        return false;
+      },
+
+      clickedAddEntity: function(e) {
+        $(this.addButton).hide();
+        $('#add-entity-form').fadeIn().focus();
+      },
+
+      createEntity: function(e) {
+        if(e.keyCode != 13) {
+          return;
+        }
+
+        var elem = new EntityModel({
+          name: e.target.value,
+          fields: []
+        });
+        console.log(elem.toJSON());
+        this.tables.add(elem);
+        this.tableView.setModel(elem);
+        this.renderTableView();
+
+        e.target.value = '';
         $(this.addButton).fadeIn();
-        $(e.target).hide();
+        $(e.target).fadeOut();
       }
 
     });

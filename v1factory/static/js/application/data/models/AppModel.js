@@ -1,13 +1,13 @@
 define([
   'models/AppInfoModel',
-  'models/UserEntityModel',
+  'collections/UserRolesCollection',
   'collections/EntityCollection',
   'collections/PageCollection',
   'collections/MobilePageCollection',
   'collections/EmailCollection'
 ],
 function(AppInfoModel,
-         UserEntityModel,
+         UserRolesCollection,
          EntityCollection,
          PageCollection,
          MobilePageCollection,
@@ -19,7 +19,7 @@ function(AppInfoModel,
 
       this.set('name', appState.name || "");
       if(appState.info) this.set('info', new AppInfoModel(appState.info));
-      if(appState.users) this.set('users', new UserEntityModel(appState.users));
+      if(appState.users) this.set('users', new UserRolesCollection(appState.users));
       this.set('entities', new EntityCollection(appState.entities||[]));
       if(appState.emails) this.set('emails', new EmailCollection(appState.emails));
     },

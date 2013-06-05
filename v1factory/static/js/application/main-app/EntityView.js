@@ -11,7 +11,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
   var EntityView = Backbone.View.extend({
     el         : null,
-    tagName    : 'li',
+    tagName    : 'div',
     collection : null,
     parentName : "",
     className  : 'span64 entity',
@@ -33,51 +33,32 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
 
-    initialize: function(item, name, entitiesColl){
-      _.bindAll(this, 'render',
-                      'appendField',
-                      'appendForm',
-                      'clickedAdd',
-                      'formSubmitted',
-                      'formFormSubmitted',
-                      'changedAttribs',
-                      'addedEntity',
-                      'clickedDelete',
-                      'clickedPropDelete',
-                      'clickedUploadExcel',
-                      'clickedFormRemove',
-                      'clickedEditForm',
-                      'changedRequiredField',
-                      'showData',
-                      'adjustTableWidth');
+    initialize: function(options){
+      _.bindAll(this);
 
-      this.model = item;
-      this.model.bind('change:owns', this.ownsChangedOutside);
-      this.model.bind('change:belongsTo', this.belongsToChangedOutside);
+      if(options.model) {
+        this.setModel(options.model);
+      }
 
-      this.parentCollection = item.collection;
-      this.parentCollection.bind('initialized', this.doBindings);
-      this.parentCollection.bind('add', this.addedEntity);
+      this.entities = v1State.get('entities');
+      this.listenTo(this.entities, 'initialized', this.doBindings);
+      this.listenTo(this.entities, 'add', this.addedEntity);
 
-      this.name = item.get('name');
-      this.parentName = name;
+      this.parentName = options.name || "Parent Name";
 
-      this.model.get('fields').bind('add', this.appendField);
-      this.model.get('forms').bind('add', this.appendForm);
-      this.render();
     },
 
     render: function() {
       var self = this;
-      var page_context = { name: self.name,
+      var page_context = { name: self.model.get('name'),
                            attribs: self.model.get('fields').models,
-                           other_models: self.parentCollection.models,
+                           entities: self.entities,
                            forms: null };
 
                            //forms: self.model.get('forms').models };
 
       var template = _.template(EntitiesTemplates.Entity, page_context);
-      $(this.el).append(template);
+      $(this.el).html(template);
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();
       this.adjustTableWidth();
@@ -139,7 +120,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       page_context = _.clone(fieldModel.attributes);
       page_context.cid = fieldModel.cid;
       page_context.entityName = self.model.get('name');
-      page_context.other_models = self.parentCollection.models;
+      page_context.entities = self.entities.models;
       var template = _.template(EntitiesTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
@@ -221,6 +202,16 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
         div.className = 'right-arrow';
         this.$el.find('.description').append(div);
       }
+    },
+
+    setModel: function(model) {
+      this.model = model;
+      this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
+      this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
+
+      this.listenTo(this.model.get('fields'), 'add', this.appendField);
+      this.listenTo(this.model.get('forms'), 'add', this.appendForm);
+      return this;
     }
   });
 
