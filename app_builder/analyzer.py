@@ -15,7 +15,6 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
 
 # Entities
 
-
 class EntityField(DictInited):
     _schema = {
         "name": {"_type": ""},
@@ -23,27 +22,51 @@ class EntityField(DictInited):
         "type": {"_type": ""}
     }
 
+    def is_relational(self): 
+        return False
+
+
+class EntityRelatedField(DictInited, Resolvable):
+    _schema = { 
+        "name": {"_type": ""},
+        "required": {"_type": True},
+        "type": {"_type":""}, # one to one, many to one, many to many
+        "entity_name": {"_type" : ""},
+        'related_name': {"_type": ""}
+    }
+    _resolve_attrs = (('entity_name', 'entity'),)
+
+    def is_relational(self): 
+        return True
+
+    def __init__(self, *args, **kwargs):
+        super(EntityRelatedField, self).__init__(*args, **kwargs)
+        self.entity_name = encode_braces('entities/%s' % self.entity_name)
+
 
 class Entity(DictInited):
     _schema = {
         "name": {"_type": ""},
-        "fields": {"_type": [], "_each": {"_type": EntityField}},
+        "fields": {"_type": [], "_each": {"_one_of":[{"_type": EntityRelatedField}, {"_type": EntityField}]}},
     }
 
     def __init__(self, *args, **kwargs):
         super(Entity, self).__init__(*args, **kwargs)
         self.is_user = False
 
+    def relational_fields(self):
+        return filter(lambda x: x.is_relational(), self.fields)
+
 
 class UserConfig(DictInited):
     _schema = {
-        "facebook": {"_type": True},
-        "linkedin": {"_type": True},
-        "twitter": {"_type": True},
+        "facebook": {"_type": False},
+        "linkedin": {"_type": False},
+        "twitter": {"_type": False},
         "local": {"_type": True},
         "fields": {
             "_type": [],
-            "_each": {"_type": EntityField}
+            "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}
         }
     }
 
@@ -145,10 +168,6 @@ class App(DictInited):
         "emails": {"_type": [], "_each": {"_type": Email}},
     }
 
-    def render(self, coder):
-        self.users.render(self, coder)  # pass the app and the coder
-        self.entities.render(self, coder)
-
     @classmethod
     def create_from_dict(cls, data, *args, **kwargs):
         # preprocess data
@@ -214,9 +233,5 @@ class App(DictInited):
         for path, rl in filter(lambda n: isinstance(n[1], Resolvable), self.iternodes()):
             rl.resolve()
 
-        # TODO
-#       inline references
-#       relational fields (im especially dreading this)
-#       code object stage
 
         return self
