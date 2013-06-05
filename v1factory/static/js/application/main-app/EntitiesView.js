@@ -93,18 +93,15 @@ function(EntityCollection,
       },
 
       clickedUserNavItem: function(e) {
-        e.preventDefault();
         var cid = String(e.target.id||e.target.parentNode.id).replace('navtab-','');
         var model = this.userRoles.get(cid);
         this.userView.model = model;
         this.userView.render();
         this.renderUserRolesNav();
-        $(e.target).addClass('active');
-        return false;
+        $('#navtab-' + cid).addClass('active');
       },
 
       clickedTableNavItem: function(e) {
-        e.preventDefault();
         var $clicked = $(e.target);
         var cid = e.target.dataset.target;
         var model = this.tables.get(cid);
@@ -112,7 +109,6 @@ function(EntityCollection,
         this.tableView.render();
 
         $clicked.addClass('active').siblings().removeClass('active');
-        return false;
       },
 
       clickedAddUserRole: function(e) {
