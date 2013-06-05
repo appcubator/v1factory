@@ -2,7 +2,7 @@ define([
   'models/FieldModel',
   'app/UploadExcelView',
   'app/ShowDataView',
-  'app/templates/EntitiesTemplates',
+  'app/templates/TableTemplates',
   'prettyCheckable'
 ],
 function(FieldModel, UploadExcelView, ShowDataView) {

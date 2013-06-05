@@ -1,19 +1,19 @@
 define([
   'models/FieldModel',
   'models/FormModel',
+  'app/TableView',
   'app/FormEditorView',
   'app/UploadExcelView',
   'app/ShowDataView',
   'app/templates/TableTemplates',
   'prettyCheckable'
 ],
-function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
+function(FieldModel, FormModel, TableView, FormEditorView, UploadExcelView, ShowDataView) {
 
   var TableView = Backbone.View.extend({
     el         : null,
     tagName    : 'div',
     collection : null,
-    parentName : "",
     className  : 'span64 entity',
 
     events : {
@@ -30,38 +30,25 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
 
-    initialize: function(options){
+    initialize: function(){
       _.bindAll(this);
 
-      this.parentName = options.name || "Parent Name";
       this.tables = v1State.get('tables');
-      this.listenTo(this.tables, 'add remove', this.renderNav);
-
-      if(options.model) {
-        this.setModel(options.model);
+      this.listenTo(this.tables, 'add', this.appendTableNav);
+      this.tableView = new TableView();
+      if(this.tables.length > 0) {
+        this.tableView.model = this.tables.get(0);
       }
     },
 
     render: function() {
       var self = this;
-      var template = _.template(EntitiesTemplates.Table, self.model.toJSON());
-      $(this.el).html(template);
-
-      this.renderProperties();
+      this.tableView.setElement(this.$('.table')).render();
       this.renderNav();
-
-      iui.loadCSS('prettyCheckable');
-      this.$el.find('input[type=checkbox]').prettyCheckable();
-      this.adjustTableWidth();
       return this;
     },
 
-    renderProperties: function() {
-      this.model.get('fields').each(this.appendField);
-    },
-
     renderNav: function() {
-      console.log('rendering nav');
       var $nav = this.$('.entity-nav');
       var htmlString = '';
       this.tables.each(function (entity) {
@@ -188,13 +175,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     },
 
     setModel: function(model) {
-      this.model = model;
-      this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
-      this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
-      console.log("BIND:" + model.cid);
-      this.listenTo(this.model.get('fields'), 'add remove', this.appendField);
-      this.userRoles = v1State.get('users').pluck('role');
-      this.otherEntities = _(this.tables.pluck('name')).without(this.model.get('name'));
+
       return this;
     }
   });
