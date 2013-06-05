@@ -1,6 +1,6 @@
 define([
   'models/PageModel',
-  'collections/EntityCollection',
+  'collections/TableCollection',
   'app/UrlView',
   'mixins/SimpleModalView',
   'mixins/ErrorModalView',
@@ -19,7 +19,7 @@ define([
   'jquery-ui'
 ],
 function( PageModel,
-          EntityCollection,
+          TableCollection,
           UrlView,
           SimpleModalView,
           ErrorModalView,
@@ -75,7 +75,7 @@ function( PageModel,
       this.model             = v1State.get('mobilePages').models[pageId];
 
       /* Globals */
-      g_contextCollection    = new EntityCollection();
+      g_contextCollection    = new TableCollection();
       this.getContextEntities();
 
       this.widgetsCollection    = this.model.get('uielements');
