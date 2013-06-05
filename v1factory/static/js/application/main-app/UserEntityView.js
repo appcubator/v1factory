@@ -4,6 +4,7 @@ define([
   'app/FormEditorView',
   'app/UploadExcelView',
   'app/ShowDataView',
+  'models/UserEntityModel',
   'collections/EntityCollection',
   'tutorial/TutorialView',
   'app/templates/EntitiesTemplates'
@@ -13,12 +14,14 @@ define([
             FormEditorView,
             UploadExcelView,
             ShowDataView,
+            UserEntityModel,
             EntityCollection,
             TutorialView) {
 
     var UserEntityView = EntityView.extend({
 
       events: {
+        'click .tab'                 : 'clickedNavItem',
         'change .cb-login'           : 'checkedBox',
         'click .add-property-button' : 'clickedAdd',
         'submit .add-property-form'  : 'formSubmitted',
@@ -36,30 +39,24 @@ define([
       },
 
       initialize: function(options) {
-        _.bindAll(this, 'render',
-                        'appendField',
-                        'clickedAdd',
-                        'checkedBox',
-                        'formSubmitted',
-                        'changedAttribs',
-                        'addedEntity',
-                        'clickedDelete',
-                        'clickedPropDelete',
-                        'changedAttribs',
-                        'showTutorial',
-                        'adjustTableWidth');
-
+        _.bindAll(this);
         this.el = document.getElementById('user-entity');
-        this.model = options.model || v1State.get('users').models[0];
+
+        this.userRoles = v1State.get('users');
+        this.entities = v1State.get('entities');
+
+        this.model = options.model || this.userRoles.get(0) || new UserEntityModel({role: 'User'});
         this.name = this.model.get('name');
-        this.entitiesColl = v1State.get('entities');
-        this.model.get('fields').bind('add', this.appendField);
+
+        this.listenTo(this.model.get('fields'), 'add', this.appendField);
+        this.listenTo(this.userRoles, 'add remove', this.renderNav);
+
       },
 
       render: function() {
         var self = this;
         this.$el.html(_.template(EntitiesTemplates.UserEntity, this.model.toJSON()));
-
+        console.log(this.model);
         _(this.model.get('fields').models).each(function(fieldModel) {
           if(fieldModel.get('name') == 'First Name' ||
              fieldModel.get('name') == 'Last Name'  ||
@@ -80,7 +77,37 @@ define([
         iui.loadCSS('prettyCheckable');
         this.$el.find('input[type=checkbox]').prettyCheckable();
         this.adjustTableWidth();
+        this.renderNav();
         return this;
+      },
+
+      renderNav: function() {
+        var self = this;
+        var $nav = this.$('.entity-nav');
+        var htmlString = '';
+        this.userRoles.each(function (role) {
+          var active = "";
+          console.log(role.get('role'));
+          console.log(self.model.get('role'));
+          if(role.cid == self.model.cid) {
+            active = ' active';
+            console.log('found active role');
+          }
+          console.log(active);
+          htmlString += '<li class="tab'+active+'" id="navtab-'+ role.cid +'"><a href="#">' + role.get('role') + '</a></li>';
+        });
+        $nav.html(htmlString);
+      },
+
+      clickedNavItem: function(e) {
+        console.log(e.currentTarget);
+        var cid = (e.currentTarget.id).replace('navtab-','');
+        console.log(cid);
+        var model = this.userRoles.get(cid);
+        this.setModel(model);
+        this.render();
+        $('#navtab-' + cid).addClass('active');
+        return false;
       },
 
       checkedBox: function(e) {
@@ -88,7 +115,6 @@ define([
       },
 
       appendField: function(fieldModel) {
-
         if(fieldModel.get('name') == 'First Name' ||
            fieldModel.get('name') == 'Last Name'  ||
            fieldModel.get('name') =='Email') return;
@@ -97,7 +123,7 @@ define([
         page_context = _.clone(fieldModel.attributes);
         page_context.cid = fieldModel.cid;
         page_context.entityName = "User";
-        page_context.other_models = this.entitiesColl.models;
+        page_context.other_models = this.entities.models;
 
         var template = _.template(EntitiesTemplates.Property, page_context);
 

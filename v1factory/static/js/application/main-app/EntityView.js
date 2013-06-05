@@ -17,6 +17,7 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
     className  : 'span64 entity',
 
     events : {
+      'click .tab'                 : 'clickedNavItem',
       'click .add-property-button' : 'clickedAdd',
       'click .add-form-button'     : 'clickedAddForm',
       'submit .add-property-form'  : 'formSubmitted',
@@ -42,7 +43,8 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
 
 
       this.parentName = options.name || "Parent Name";
-
+      this.entities = v1State.get('entities');
+      this.listenTo(this.entities, 'add remove', this.renderNav);
     },
 
     render: function() {
@@ -62,8 +64,31 @@ function(FieldModel, FormModel, FormEditorView, UploadExcelView, ShowDataView) {
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();
       this.adjustTableWidth();
+      this.renderNav();
+      return this;
     },
 
+    renderNav: function() {
+      var $nav = this.$('.entity-nav');
+      var htmlString = '';
+      this.entities.each(function (entity) {
+        var active = "";
+        if(this.model && role.cid === this.model.cid) {
+          active = ' active';
+        }
+        htmlString += '<li class="tab'+active+'" id="navtab-'+ entity.cid +'"><a href="#">' + entity.get('name') + '</a></li>';
+      });
+      $nav.html(htmlString);
+    },
+
+    clickedNavItem: function(e) {
+      var cid = (e.currentTarget.id).replace('navtab-','');
+      var model = this.entities.get(cid);
+      this.setModel(model);
+      this.render();
+      $('#navtab-' + cid).addClass('active');
+      return false;
+    },
 
     clickedAdd: function(e) {
       $('.add-property-button', this.el).hide();
