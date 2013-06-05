@@ -101,6 +101,7 @@ function(EntityCollection,
         this.userView.render();
         this.renderUserRolesNav();
         $('#navtab-' + cid).addClass('active');
+        return false;
       },
 
       clickedTableNavItem: function(e) {
@@ -110,10 +111,11 @@ function(EntityCollection,
         this.tableView.render();
         this.renderTablesNav();
         $('#navtab-' + cid).addClass('active');
+        return false;
       },
 
       clickedAddUserRole: function(e) {
-        $(e.currentTarget).fadeOut();
+        $(e.currentTarget).hide();
         $('#add-role-form').fadeIn().focus();
       },
 
@@ -131,12 +133,12 @@ function(EntityCollection,
 
         e.target.value = '';
         $('#add-role').fadeIn();
-        $(e.target).fadeOut();
+        $(e.target).hide();
       },
 
       clickedAddEntity: function(e) {
         $(e.currentTarget).hide();
-        $('#add-entity-form').show().focus();
+        $('#add-entity-form').fadeIn().focus();
       },
 
       createEntity: function(e) {
@@ -154,7 +156,7 @@ function(EntityCollection,
         this.renderTableView();
 
         e.target.value = '';
-        $('.add-button').show();
+        $('.add-button').fadeIn();
         $(e.target).hide();
       }
 

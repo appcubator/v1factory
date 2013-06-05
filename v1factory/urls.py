@@ -93,6 +93,7 @@ urlpatterns += patterns('v1factory.theme_views',
 
 urlpatterns += patterns('',
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.ico'}),
+    url(r'^test/','django.views.static.serve', {'document_root': '/static/js/test/suits/editor-SpecRunner.html'}),
 )
 
 # production (hosted) deployments
