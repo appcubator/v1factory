@@ -143,7 +143,7 @@ define([
       this.el.style.width = '';
       this.el.className = 'selected widget-wrapper ';
       this.el.className += 'span' + this.model.get('layout').get('width');
-      this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
+      //this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
     },
 
     changedAlignment: function() {
@@ -189,6 +189,8 @@ define([
     },
 
     changedLeft: function(a) {
+      console.log("CHANGED LEFT!");
+      console.log('hey');
       this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
     },
 

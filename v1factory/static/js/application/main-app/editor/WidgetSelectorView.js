@@ -153,6 +153,7 @@ function() {
     },
 
     setLayout: function(node, widgetModel) {
+      console.log("SETTING LAYOUT");
       $(node).show();
       node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
       node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
@@ -175,7 +176,10 @@ function() {
 
     newSelected: function(widgetModel) {
       var self = this;
-      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) {
+        this.setLayout(this.selectDiv, widgetModel);
+        return;
+      }
 
       if(this.selectedEl) {
         widgetModel.get('layout').unbind('change', self.setLayout);
@@ -227,6 +231,8 @@ function() {
       var elem = iui.get('widget-wrapper-' + model.cid);
       elem.style.top = ui.position.top + 2 + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
+
+      console.log(ui.position.left + 2);
     },
 
     moved: function(e, ui) {
@@ -237,10 +243,28 @@ function() {
 
       var top = Math.round((ui.position.top / GRID_HEIGHT));
       var left = Math.round((ui.position.left / GRID_WIDTH));
-      model.get('layout').set('top', top);
-      model.get('layout').set('left', left);
+
+      if(model.get('layout').get('left') == left) {
+        model.get('layout').trigger('change:left');
+      }
+      else {
+        model.get('layout').set('left', left);
+      }
+
+      if(model.get('layout').get('top') == top) {
+        model.get('layout').trigger('change:top');
+      }
+      else {
+        model.get('layout').set('top', top);
+      }
+
       this.newSelected(model);
-      //this.setLayout(e.target, model);
+
+      // node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
+      // node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
+      // node.style.left   = ((widgetModel.get('layout').get('left') * 80) - 2) + 'px';
+      // node.style.top    = ((widgetModel.get('layout').get('top') * 15) - 2) + 'px';
+      ///bug:this.setLayout(e.target, model);
     },
 
     deselect: function() {
