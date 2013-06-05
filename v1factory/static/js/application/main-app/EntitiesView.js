@@ -73,7 +73,7 @@ function(TableCollection,
         if(e.keyCode != 13) {
           return;
         }
-        var elem = new UserEntityModel({
+        var elem = new UserTableModel({
           role: e.target.value
         });
         v1State.get('users').add(elem);
