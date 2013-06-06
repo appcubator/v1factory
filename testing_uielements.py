@@ -6,14 +6,10 @@ test_json = r"""{
         "description": "",
         "name": ""
     },
-    "users": {
+    "users": [
+        {
         "name": "User",
-        "fields": [],
-        "twitter": true,
-        "linkedin": true,
-        "facebook": true,
-        "local": true
-    },
+        "fields": []}],
     "entities": [
         {
             "name": "Game",
