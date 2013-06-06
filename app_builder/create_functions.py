@@ -4,6 +4,7 @@ from app_builder.codes import DjangoModel, DjangoUserModel
 from app_builder.codes import DjangoPageView, DjangoTemplate
 from app_builder.codes import DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
 from app_builder.codes import DjangoForm, DjangoFormReceiver
+from app_builder.codes import DjangoLoginForm, DjangoLoginFormReceiver, DjangoSignupForm, DjangoSignupFormReceiver
 from app_builder.codes import create_import_namespace
 from app_builder import naming
 from app_builder.dynamicvars import Translator
@@ -211,7 +212,7 @@ class AppComponentFactory(object):
     def create_login_form_if_not_exists(self, uie):
         if hasattr(uie, '_django_form'):
             return None
-        form_model = uie.container_info.form # bind to this name to save me some typing
+        # Turns out i don't even use this: form_model = uie.container_info.form # bind to this name to save me some typing
         prim_name = 'LoginForm'
         form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
         model_id = uie.app.userentity._django_model.identifier
@@ -223,12 +224,12 @@ class AppComponentFactory(object):
     def create_signup_form_if_not_exists(self, uie):
         if hasattr(uie, '_django_form'):
             return None
-        form_model = uie.container_info.form # bind to this name to save me some typing
+        # Turns out i don't even use this: form_model = uie.container_info.form # bind to this name to save me some typing
         prim_name = 'LoginForm'
         form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
         model_id = uie.app.userentity._django_model.identifier
         field_ids = ['username', 'password']
-        form_obj = DjangoLoginForm(form_id, model_id, field_ids)
+        form_obj = DjangoSignupForm(form_id, model_id, field_ids)
         uie._django_form = form_obj
         return form_obj
 

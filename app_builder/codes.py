@@ -574,3 +574,14 @@ class DjangoStaticPagesTestCase(object):
 
     def render(self):
         return env.get_template('tests/static_pages.py').render(test=self, imports=self.namespace.imports(), locals={})
+
+
+# HACK TO BE REFACTORED LATER
+class DjangoLoginForm(DjangoForm):
+    pass
+class DjangoSignupForm(DjangoForm):
+    pass
+class DjangoLoginFormReceiver(DjangoFormReceiver):
+    pass
+class DjangoSignupFormReceiver(DjangoFormReceiver):
+    pass
