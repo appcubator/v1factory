@@ -26,23 +26,20 @@ def create_codes(app):
                   'create tests for static pages': factory.create_tests_for_static_pages,
 
                   'create form object': factory.create_django_form_for_entity_based_form,
+                  'create form receiver': factory.create_form_receiver_for_form_object,
+                  'create url for form receiver': factory.create_url_for_form_receiver,
+                  'import form into form receivers': factory.import_form_into_form_receivers,
 
-                  # USER FORM RELATED HOOKS THAT NEED TO BE IMPLEMENTED
+
+                  # USER FORM RELATED HOOKS
                   'create login form if not exists': factory.create_login_form_if_not_exists,
                   'create signup form if not exists': factory.create_signup_form_if_not_exists,
                   'import login form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
                   'import signup form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
-
                   'create login form receiver if not created': factory.create_login_form_receiver_if_not_created,
                   'create signup form receiver if not created': factory.create_signup_form_receiver_if_not_created,
-
                   'create url for form receiver if not created': factory.create_url_for_form_receiver_if_not_created,
 
-                  'create form receiver': factory.create_form_receiver_for_form_object,
-                  'create url for form receiver': factory.create_url_for_form_receiver,
-
-
-                  'import form into form receivers': factory.import_form_into_form_receivers,
     }
 
 
