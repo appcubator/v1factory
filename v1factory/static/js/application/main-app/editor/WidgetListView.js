@@ -34,6 +34,7 @@ function( WidgetContainerView,
 
       this.model.get('data').get('container_info').get('row').get('uielements').bind("add", this.placeWidget);
       this.model.get('data').get('container_info').get('row').get('uielements').bind("add", this.renderShadowElements);
+      this.model.get('data').get('container_info').get('row').get('uielements').bind("remove", this.renderShadowElements);
 
       var action = this.model.get('data').get('container_info').get('action');
 
@@ -45,10 +46,7 @@ function( WidgetContainerView,
     rowBindings: function() {
       var self = this;
       self.model.get('data').get('container_info').get('row').get('uielements').each(function(element) {
-        // element.unbind('change', self.reRender);
-        // element.get('layout').unbind("change", self.reRender);
-        // element.bind('change', self.reRender);
-        // element.get('layout').bind('change', self.reRender);
+        element.get('layout').bind('change', self.renderShadowElements);
       });
     },
 
@@ -121,6 +119,7 @@ function( WidgetContainerView,
     placeWidget: function(widgetModel) {
       var widgetView = new WidgetView(widgetModel);
       this.editorRow.appendChild(widgetView.render().el);
+      widgetModel.get('layout').bind('change', this.renderShadowElements);
     }
 
   });

@@ -173,7 +173,10 @@ function() {
 
     newSelected: function(widgetModel) {
       var self = this;
-      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) {
+        this.setLayout(this.selectDiv, widgetModel);
+        return;
+      }
 
       if(this.selectedEl) {
         widgetModel.get('layout').unbind('change', self.setLayout);
@@ -215,7 +218,7 @@ function() {
       model = this.selectedEl;
       if(e.target.id == "list-hover-div") { model = this.hoveredEl; }
       var elem = iui.get('widget-wrapper-' + model.cid);
-      elem.style.top = ui.position.top + 'px';
+      elem.style.top = ui.position.top + 2 + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
     },
 
@@ -225,6 +228,10 @@ function() {
       var top = Math.round((ui.position.top / GRID_HEIGHT));
       var left = Math.round((ui.position.left / GRID_WIDTH));
       model.get('layout').set('top', top);
+
+      if(left == model.get('layout').get('left')) {
+        model.get('layout').trigger('change:left');
+      }
       model.get('layout').set('left', left);
       this.newSelected(model);
       this.setLayout(e.target, model);
