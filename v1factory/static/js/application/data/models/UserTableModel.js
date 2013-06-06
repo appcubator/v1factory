@@ -8,11 +8,6 @@ define([
 function(TableModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
   var UserTableModel = TableModel.extend({
-    defaults : {
-      facebook : false,
-      linkedin : false,
-      local : true
-    },
 
     initialize: function(bone) {
 

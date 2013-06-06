@@ -174,7 +174,7 @@ function(ElementCollection,
                               '<span class="wide-text"><%= entity_name %> List</span>',
                               '</li>'].join('\n');
 
-      _(v1State.get('entities').models).each(function(entityModel) {
+      _(v1State.get('tables').models).each(function(entityModel) {
         var context = { entity_id : entityModel.cid, entity_name : entityModel.get('name')};
         $(self.allList).append(_.template(tempCreateFormLi, context));
         $(self.allList).append(_.template(tempTableLi, context));

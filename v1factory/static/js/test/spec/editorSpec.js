@@ -7,7 +7,7 @@ var GRID_HEIGHT = 15;
 
 define([
   "models/AppModel",
-  "models/UserEntityModel",
+  "models/UserTableModel",
   "collections/UserRolesCollection",
   "backbone"
 ],
