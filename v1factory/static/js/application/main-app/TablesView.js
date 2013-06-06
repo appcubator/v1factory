@@ -75,7 +75,7 @@ function( FieldModel,
     },
 
     appendNavItem: function(tableModel) {
-      this.navBar.innerHTML += '<li class="tab" id="navtab-'+ tableModel.cid +'"><a href="#">' + (tableModel.get('name')||tableModel.get('role')) + '</a></li>';
+      this.navBar.innerHTML += '<li class="tab" id="navtab-'+ tableModel.cid +'"><a>' + (tableModel.get('name')||tableModel.get('role')) + '</a></li>';
     },
 
     activateTab: function(tableModel) {
@@ -84,7 +84,7 @@ function( FieldModel,
     },
 
     clickedNavItem: function(e) {
-      var cid = (e.target.id).replace('navtab-','');
+      var cid = (e.target.id||e.target.parentNode.id).replace('navtab-','');
       var newModel = this.collection.get(cid);
       this.currentTable.remove();
 

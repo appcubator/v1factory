@@ -46,6 +46,19 @@ function(FieldModel, TableView, UploadExcelView, ShowDataView) {
       var template = _.template(TableTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
+      this.adjustTableWidth();
+    },
+
+    adjustTableWidth: function() {
+      var width = (this.model.get('fields').length + 7) * 94;
+      this.width = width;
+      this.$el.find('.tbl').css('width', width);
+      if(width > 870 && !this.hasArrow) {
+        this.hasArrow = true;
+        var div = document.createElement('div');
+        div.className = 'right-arrow';
+        this.$el.find('.description').append(div);
+      }
     }
 
   });

@@ -31,7 +31,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       _.bindAll(this);
       this.model  = tableModel;
 
-      this.listenTo(this.model.get('fields'), 'add remove', this.appendField);
+      this.listenTo(this.model.get('fields'), 'add', this.appendField);
       this.userRoles = v1State.get('users').pluck('role');
       this.otherEntities = _(v1State.get('tables').pluck('name')).without(this.model.get('name'));
     },
@@ -53,8 +53,8 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     },
 
     clickedAddProperty: function(e) {
-      $('.add-property-button', this.el).hide();
-      $('.add-property-form', this.el).fadeIn();
+      this.$el.find('.add-property-button').hide();
+      this.$el.find('.add-property-form').fadeIn();
       $('.property-name-input', this.el).focus();
     },
 
@@ -67,7 +67,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       this.model.get('fields').push(newField);
 
       $('.property-name-input', e.target).val('');
-      $(e.target).hide();
+      $('.add-property-form').hide();
       this.$el.find('.add-property-button').fadeIn();
 
       e.preventDefault();
@@ -82,6 +82,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       var template = _.template(TableTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
+      this.adjustTableWidth();
     },
 
     changedAttribs: function(e) {
