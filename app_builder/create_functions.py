@@ -33,7 +33,7 @@ class AppComponentFactory(object):
         """
         if entity.is_user:
             user_identifier = self.model_namespace.imports()['django.models.User']
-            user_profile_identifier = self.model_namespace.new_identifier('UserProfile')
+            user_profile_identifier = self.model_namespace.new_identifier('UserProfile', cap_words=True)
             m = DjangoUserModel(user_identifier, user_profile_identifier)
             for f in filter(lambda x: not x.is_relational(), entity.user_profile_fields):
                 df = m.create_field(f.name, f.type, f.required)
@@ -86,7 +86,7 @@ class AppComponentFactory(object):
             raise KeyError
 
         m = entity._django_model
-        import_symbol = 'webapp.models.%s' % m.identifier
+        import_symbol = ('webapp.models', m.identifier)
         ns.add_import(import_symbol, m.identifier)
 
 
@@ -234,7 +234,7 @@ class AppComponentFactory(object):
         return form_obj
 
     def import_form_into_form_receivers_if_not_imported(self, uie):
-        if 'webapp.forms.%s' % uie._django_form.identifier in self.fr_namespace.imports():
+        if ('webapp.forms', uie._django_form.identifier) in self.fr_namespace.imports():
             return None
         return self.import_form_into_form_receivers(uie)
 
@@ -266,7 +266,7 @@ class AppComponentFactory(object):
 
     def import_form_into_form_receivers(self, uie):
         f = uie._django_form
-        import_symbol = 'webapp.forms.%s' % f.identifier
+        import_symbol = ('webapp.forms', f.identifier)
         self.fr_namespace.add_import(import_symbol, f.identifier)
 
     def create_form_receiver_for_form_object(self, uie):

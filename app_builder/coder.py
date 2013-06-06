@@ -49,15 +49,12 @@ class Coder(object):
 
                     import_codes = []
                     for import_symbol, identifier in imports:
-                        if import_symbol.startswith('django.'):
+                        if isinstance(import_symbol, basestring) and import_symbol.startswith('django.'):
                             import_string = IMPORTS[import_symbol]
                             m = re.match(r'from (.*) import (.*)$', import_string)
                             from_string, real_import_name = (m.group(1), m.group(2))
-                        elif import_symbol.startswith('webapp.'):
-                            # webapp.pages.testpage => from webapp.pages import testpage
-                            # TODO HACK XXX FIXME PLZ DEBUG THIS DOESN'T WORK BECAUSE THE IDENTIFIER MIGHT GET UPDATED AFTER IT GETS CONVERTED TO STRING. IT'LL WORK FOR NOW
-                            toks = import_symbol.split('.')
-                            from_string, real_import_name = ('.'.join(toks[:-1]), toks[-1]) 
+                        elif import_symbol[0].startswith('webapp.'):
+                            from_string, real_import_name = import_symbol[0], import_symbol[1] 
                         else:
                             raise KeyError
                         i = Import(real_import_name, identifier, from_string=from_string)

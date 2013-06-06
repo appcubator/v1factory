@@ -277,12 +277,15 @@ class DjangoUserModel(DjangoModel):
         """
         super(DjangoUserModel, self).__init__(user_identifier)
         self.user_profile_identifier = user_prof_identifier
+        self.namespace = user_prof_identifier.ns
+        self.locals = {}
+        self.locals['user o2o'] = self.namespace.new_identifier('user')
 
     def create_query(self):
         raise Exception("what up brah. this is not yet implemented")
 
     def render(self):
-        return env.get_template('usermodel.py').render(model=self, imports=self.namespace.imports(), locals={})
+        return env.get_template('usermodel.py').render(model=self, imports=self.namespace.imports(), locals=self.locals)
 
 
 class Column(object):

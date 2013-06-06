@@ -63,10 +63,13 @@ class Identifier(object):
     def __eq__(self, other):
         return str(self) == other
 
-    def __init__(self, identifier, ref, ns):
+    def __init__(self, identifier, ns, ref=None, import_symbol=None):
+        """Identifier represents the identifier string, the namespace it's in,
+            , and optionally: a reference to "the truth" and the import symbol."""
         self.identifier = identifier
         self.ref = ref
         self.ns = ns  # this is a namespace
+        self.import_symbol = import_symbol
 
     def fix_identifier(self):
         self.identifier = self.ns.make_name_safe_and_unique(self.identifier)
@@ -123,12 +126,12 @@ class Namespace(object):
             for i in c_n.child_identifiers():
                 yield i
 
-    def new_identifier(self, name, ref=None, cap_words=False, ignore_case=False):
+    def new_identifier(self, name, ref=None, cap_words=False, ignore_case=False, import_symbol=None):
         candidate = name
         candidate = self.make_name_safe_and_unique(candidate, ignore_case=ignore_case)
         if cap_words:
             candidate = us2cw(candidate)
-        new_ident = Identifier(candidate, ref, self)
+        new_ident = Identifier(candidate, self, ref=ref, import_symbol=import_symbol)
         self.identifiers.append(new_ident)
         return new_ident
 
@@ -153,11 +156,10 @@ class Namespace(object):
                 return i
         assert False, "Thing with this ref not found: %r" % ref
 
-    # HACK used to tag certain identifiers as being imports
     def add_import(self, import_symbol, proposed_id):
-        return self.new_identifier(proposed_id, ref='IMPORTS.%s' % import_symbol, ignore_case=True)
+        return self.new_identifier(proposed_id, import_symbol=import_symbol, ignore_case=True)
     # the dictionary produced is a symbol -> identifier map.
     # symbol meaning the unique internal name used to refer to the import
     def imports(self):
-        imports = { i.ref[8:]: i.identifier for i in self.used_ids() if str(i.ref).startswith('IMPORTS.') }
+        imports = { i.import_symbol: i for i in self.used_ids() if i.import_symbol is not None }
         return imports
