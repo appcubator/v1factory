@@ -58,12 +58,9 @@ class Entity(DictInited):
         return filter(lambda x: x.is_relational(), self.fields)
 
 
-class UserConfig(DictInited):
+class UserRole(DictInited):
     _schema = {
-        "facebook": {"_type": False},
-        "linkedin": {"_type": False},
-        "twitter": {"_type": False},
-        "local": {"_type": True},
+        "name": {"_type":""},
         "fields": {
             "_type": [],
             "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}
@@ -162,7 +159,7 @@ class App(DictInited):
             "description": {"_type": ""},
             "keywords": {"_type": ""},
         }},
-        "users": {"_type": UserConfig},
+        "users": {"_type": [], "_each": {"_type": UserRole}},
         "entities": {"_type": [], "_each": {"_type": Entity}},
         "pages": {"_type": [], "_each": {"_type": Page}},
         "emails": {"_type": [], "_each": {"_type": Email}},
@@ -200,9 +197,8 @@ class App(DictInited):
             ]
         }
         userentity = Entity.create_from_dict(userdict)
-        userentity.fields.extend(self.users.fields)
+        userentity.fields.extend(self.users[0].fields)
         userentity.is_user = True
-        userentity.facebook = self.users.facebook  # TODO finish this process
         self.entities.append(userentity)
 
         # HACK replace uielements with their subclass

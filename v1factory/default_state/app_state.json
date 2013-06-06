@@ -7,26 +7,16 @@
         {
             "role": "Admin",
             "fields": [],
-            "twitter": false,
-            "linkedin": false,
-            "facebook": false,
-            "local": true
+
         },
         {
             "role": "Editor",
             "fields": [],
-            "twitter": false,
-            "linkedin": false,
-            "facebook": false,
-            "local": true
+
         },
         {
             "role": "Member",
             "fields": [],
-            "twitter": false,
-            "linkedin": false,
-            "facebook": false,
-            "local": true
         }
     ],
     "emails": [
