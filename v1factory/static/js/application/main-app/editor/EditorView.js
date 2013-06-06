@@ -143,7 +143,7 @@ function( PageModel,
       var curAppState = v1State.toJSON();
       $.ajax({
         type: "POST",
-        url: '/app/'+appId+'/state/force/',
+        url: '/app/'+appId+'/state/',
         data: JSON.stringify(curAppState),
         complete: function() {
           iui.dontAskBeforeLeave();
@@ -178,7 +178,7 @@ function( PageModel,
     },
 
     copy: function(e) {
-      if(this.widgetsManager.copy()) { }
+      //if(this.widgetsManager.copy()) { }
     },
 
     paste: function(e) {

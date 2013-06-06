@@ -40,7 +40,7 @@ function(UrlModel, NavbarModel, FooterModel, ContainerWidgetModel, WidgetModel, 
       _(this.get('uielements').models).each(function(uielement) {
         var layout = uielement.get('layout');
         var bottom = layout.get('top') + layout.get('height');
-        if(bottom > height) { console.log(uielement); height = bottom; }
+        if(bottom > height) { height = bottom; }
       });
 
       return height;

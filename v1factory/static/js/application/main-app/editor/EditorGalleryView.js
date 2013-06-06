@@ -280,7 +280,7 @@ function(ElementCollection,
         cid  = String(id).replace('entity-','');
 
         widget.data.container_info = {};
-        widget.data.container_info.entity = v1State.get('entities').get(cid);
+        widget.data.container_info.entity = v1State.get('tables').get(cid);
         if(/(entity-create-form)/.exec(className)) {
           widget.data.container_info.action = "create";
         }

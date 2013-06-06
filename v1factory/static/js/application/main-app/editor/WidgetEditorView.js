@@ -74,8 +74,7 @@ function(WidgetContentEditor,
         }
 
         if(action == "table") {
-          this.infoEditor = new WidgetInfoEditorView(this.model);
-          this.el.appendChild(this.infoEditor.el);
+          this.el.appendChild(this.renderQueryButton());
         }
 
         if(action == "show" || action == "loop") {
