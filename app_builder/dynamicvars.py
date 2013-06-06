@@ -18,8 +18,17 @@ class Translator(object):
     def v1script_to_app_component(self, s, page=None):
         tokens = s.split('.')
         if tokens[0] == 'CurrentUser':
+            # hard coding some shit for users
+            if s == 'CurrentUser.First Name':
+                return 'user.first_name'
+            if s == 'CurrentUser.Last Name':
+                return 'user.last_name'
+            if s == 'CurrentUser.username':
+                return 'user.username'
+            if s == 'CurrentUser.Email':
+                return 'user.email'
             ent = filter(lambda e: e.is_user, self.tables)[0]
-            seed = 'user' # this is if we assume we're in a template!!
+            seed = 'user.get_profile' # this is only in template. in code, it's request.user.get_profile()
             tokens = tokens[1:]
         elif tokens[0] == 'Page':
             ent = self.tables[0].app.find('tables/%s' % tokens[1], name_allowed=True)

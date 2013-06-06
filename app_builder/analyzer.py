@@ -197,9 +197,12 @@ class App(DictInited):
             ]
         }
         userentity = Entity.create_from_dict(userdict)
+        userentity.user_fields = [f for f in userentity.fields] # create a new list, bc the old one is mutated later
+        userentity.user_profile_fields = [f for f in self.users[0].fields] # users[0] is the first user role. this is temp.
         userentity.fields.extend(self.users[0].fields)
         userentity.is_user = True
         self.tables.append(userentity)
+        self.userentity = userentity # just a convenience for the posterity
 
         # HACK replace uielements with their subclass
         for p in self.pages:

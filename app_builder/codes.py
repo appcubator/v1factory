@@ -25,12 +25,13 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.url':               'from django.conf.urls import url',
             'django.test.TestCase':     'from django.test import TestCase',
             'django.test.Client':       'from django.test.client import Client',
+            'django.models.User':       'from django.contrib.auth.models import User',
 
 }
 
 
 
-FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
+FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models', 'django.models.User'),
                  'webapp/pages.py': ('django.HttpResponse',
                                     'django.login_required',
                                     'django.require_GET',
@@ -265,6 +266,23 @@ class DjangoModel(object):
 
     def render(self):
         return env.get_template('model.py').render(model=self, imports=self.namespace.imports(), locals={})
+
+class DjangoUserModel(DjangoModel):
+
+    def __init__(self, user_identifier, user_prof_identifier):
+        """Provide:
+        1. the identifier for the user (imported from django.contrib.models...),
+        1. the identifier for the userprofile class (imported from django.contrib.models...),
+        
+        """
+        super(DjangoUserModel, self).__init__(user_identifier)
+        self.user_profile_identifier = user_prof_identifier
+
+    def create_query(self):
+        raise Exception("what up brah. this is not yet implemented")
+
+    def render(self):
+        return env.get_template('usermodel.py').render(model=self, imports=self.namespace.imports(), locals={})
 
 
 class Column(object):

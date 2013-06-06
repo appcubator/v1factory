@@ -11,6 +11,7 @@ def create_codes(app):
                   'import model into views': lambda entity: factory.import_model_into_namespace(entity, 'views'),
                   'import model into forms': lambda entity: factory.import_model_into_namespace(entity, 'forms'),
                   'import model into form receivers': lambda entity: factory.import_model_into_namespace(entity, 'form receivers'),
+                  'import model into tests': lambda entity: factory.import_model_into_namespace(entity, 'tests'),
 
                   'create urls object for app': factory.create_urls,
                   'create urls object for app form receivers': factory.create_fr_urls,
@@ -25,6 +26,18 @@ def create_codes(app):
                   'create tests for static pages': factory.create_tests_for_static_pages,
 
                   'create form object': factory.create_django_form_for_entity_based_form,
+
+                  # USER FORM RELATED HOOKS THAT NEED TO BE IMPLEMENTED
+                  'create login form if not exists': factory.create_login_form_if_not_exists,
+                  'create signup form if not exists': factory.create_signup_form_if_not_exists,
+                  'import login form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
+                  'import signup form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
+
+                  'create login form receiver if not created': factory.create_login_form_receiver_if_not_created,
+                  'create signup form receiver if not created': factory.create_signup_form_receiver_if_not_created,
+
+                  'create url for form receiver if not created': factory.create_url_for_form_receiver_if_not_created,
+
                   'create form receiver': factory.create_form_receiver_for_form_object,
                   'create url for form receiver': factory.create_url_for_form_receiver,
 
@@ -53,6 +66,7 @@ def create_codes(app):
         create('import model into views', ent)
         create('import model into forms', ent)
         create('import model into form receivers', ent)
+        create('import model into tests', ent)
 
     # routes and functions to serve pages
     create('create urls object for app', app)

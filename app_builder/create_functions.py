@@ -23,9 +23,20 @@ class AppComponentFactory(object):
     # MODELS
 
     def create_model(self, entity):
-        """Creates DjangoModel and the non relational fields for it"""
-        if False: #entity.is_user:
-            pass
+        """
+        Creates DjangoModel and the non relational fields for it.
+        Additionally, deals with User model separately.
+        """
+        if entity.is_user:
+            user_identifier = self.model_namespace.imports()['django.models.User']
+            user_profile_identifier = self.model_namespace.new_identifier('UserProfile')
+            m = DjangoUserModel(user_identifier, user_profile_identifier)
+            for f in filter(lambda x: not x.is_relational(), entity.user_profile_fields):
+                df = m.create_field(f.name, f.type, f.required)
+                            # the django model will create an identifier based on
+                            # the name
+                f._django_field = df
+
         else:
             identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
             m = DjangoModel(identifier)
@@ -36,11 +47,11 @@ class AppComponentFactory(object):
                             # the name
                 f._django_field = df
 
-            # set references to each other on both.
-            # entity reference used in v1script translation (dynamicvars.py)
-            entity._django_model = m
-            m._entity = entity
-            return m
+        # set references to each other on both.
+        # entity reference used in v1script translation (dynamicvars.py)
+        entity._django_model = m
+        m._entity = entity
+        return m
 
     def create_relational_fields_for_model(self, entity):
         m = entity._django_model
@@ -64,6 +75,8 @@ class AppComponentFactory(object):
         elif namespace == 'forms':
             ns = self.form_namespace
         elif namespace == 'form receivers':
+            ns = self.fr_namespace
+        elif namespace == 'tests':
             ns = self.fr_namespace
         else:
             raise KeyError
@@ -177,7 +190,7 @@ class AppComponentFactory(object):
         if form_model.action not in ['create', 'edit']:
             return None
         prim_name = form_model.action + '_' + form_model.entity_resolved.name
-        form_id = self.form_namespace.new_identifier(prim_name, ref=form_model, cap_words=True)
+        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
         model_id = form_model.entity_resolved._django_model.identifier
         field_ids = []
         for f in form_model.fields:
@@ -191,13 +204,69 @@ class AppComponentFactory(object):
         return form_obj
 
 
+## START HACKING
+    def create_login_form_if_not_exists(self, uie):
+        if hasattr(uie, '_django_form'):
+            return None
+        form_model = uie.container_info.form # bind to this name to save me some typing
+        prim_name = 'LoginForm'
+        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
+        model_id = uie.app.userentity._django_model.identifier
+        field_ids = ['username', 'password']
+        form_obj = DjangoLoginForm(form_id, model_id, field_ids)
+        uie._django_form = form_obj
+        return form_obj
+
+    def create_signup_form_if_not_exists(self, uie):
+        if hasattr(uie, '_django_form'):
+            return None
+        form_model = uie.container_info.form # bind to this name to save me some typing
+        prim_name = 'LoginForm'
+        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
+        model_id = uie.app.userentity._django_model.identifier
+        field_ids = ['username', 'password']
+        form_obj = DjangoLoginForm(form_id, model_id, field_ids)
+        uie._django_form = form_obj
+        return form_obj
+
+    def import_form_into_form_receivers_if_not_imported(self, uie):
+        if 'webapp.forms.%s' % uie._django_form.identifier in self.fr_namespace.imports():
+            return None
+        return self.import_form_into_form_receivers(uie)
+
+    def create_login_form_receiver_if_not_created(self, uie):
+        if hasattr(uie, '_django_form_receiver'):
+            return None
+        fr_id = self.fr_namespace.new_identifier('Login')
+        fr = DjangoLoginFormReceiver(fr_id, uie._django_form.identifier)
+        uie._django_form_receiver = fr
+        return fr
+
+    def create_signup_form_receiver_if_not_created(self, uie):
+        if hasattr(uie, '_django_form_receiver'):
+            return None
+        fr_id = self.fr_namespace.new_identifier('Sign Up')
+        fr = DjangoSignupFormReceiver(fr_id, uie._django_form.identifier)
+        uie._django_form_receiver = fr
+        return fr
+
+    def create_url_for_form_receiver_if_not_created(self, uie):
+        url_obj = uie.app._django_fr_urls
+        for url, ref in url_obj.routes:
+            if ref == uie._django_form_receiver:
+                return None
+        return self.create_url_for_form_receiver(uie)
+
+## END HACKING
+
+
     def import_form_into_form_receivers(self, uie):
         f = uie._django_form
         import_symbol = 'webapp.forms.%s' % f.identifier
         self.fr_namespace.add_import(import_symbol, f.identifier)
 
     def create_form_receiver_for_form_object(self, uie):
-        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier, ref=uie._django_form)
+        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr

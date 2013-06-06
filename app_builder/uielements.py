@@ -59,16 +59,34 @@ class Hooked(object):
         try:
             return self.__class__._hooks
         except AttributeError:
-            return []
+            return () # empty tuple
 
 
 class Form(DictInited, Hooked):
 
     # these are tightly coupled and serial for now.
-    _hooks = ['create form object',
+    _hooks = ('create form object',
               'import form into form receivers',
               'create form receiver',
-              'create url for form receiver']
+              'create url for form receiver')
+
+    @property
+    def hooks(self):
+        if self.container_info.form.action == 'login':
+            return ('create login form if not exists',
+                    'import login form into form receivers if not imported',
+                    'create login form receiver if not created',
+                    'create url for form receiver if not created',)
+
+        elif self.container_info.form.action == 'signup':
+            return ('create signup form if not exists',
+                    'import signup form into form receivers if not imported',
+                    'create signup form receiver if not created',
+                    'create url for form receiver if not created',)
+
+        else:
+            return super(Form, self).hooks
+
 
     class FormInfo(DictInited):
 
