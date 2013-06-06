@@ -216,33 +216,37 @@ test_json = r"""{
                         "container_info": {
                             "uielements": [],
                             "form": {
-                                "fields": [
-                                    {
-                                        "field_name": "username",
-                                        "placeholder": "Username",
-                                        "label": "Username",
-                                        "displayType": "single-line-text",
-                                        "type": "text",
-                                        "options": []
-                                    },
-                                    {
-                                        "name": "password",
-                                        "placeholder": "Password",
-                                        "label": "Password",
-                                        "displayType": "password-text",
-                                        "type": "password",
-                                        "options": []
-                                    },
-                                    {
-                                        "placeholder": "Login",
-                                        "label": "Login",
-                                        "displayType": "button",
-                                        "type": "button",
-                                        "options": []
-                                    }
-                                ],
+                                "fields": [],
                                 "entity": "User",
                                 "action": "login",
+                                "goto": { "page_name":"Homepage", "urldata":{} },
+                                "belongsTo": null
+                            }
+                        },
+                        "content_attribs": {},
+                        "context": null
+                    }
+                },{
+                    "layout": {
+                        "width": 4,
+                        "top": 12,
+                        "height": 15,
+                        "left": 7,
+                        "t_padding": 0,
+                        "b_padding": 0,
+                        "l_padding": 0,
+                        "r_padding": 0,
+                        "alignment": "left"
+                    },
+                    "type": "form",
+                    "data": {
+                        "content": "",
+                        "container_info": {
+                            "uielements": [],
+                            "form": {
+                                "fields": [],
+                                "entity": "User",
+                                "action": "signup",
                                 "goto": { "page_name":"Homepage", "urldata":{} },
                                 "belongsTo": null
                             }

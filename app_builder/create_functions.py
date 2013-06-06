@@ -214,10 +214,8 @@ class AppComponentFactory(object):
             return None
         # Turns out i don't even use this: form_model = uie.container_info.form # bind to this name to save me some typing
         prim_name = 'LoginForm'
-        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
-        model_id = uie.app.userentity._django_model.identifier
-        field_ids = ['username', 'password']
-        form_obj = DjangoLoginForm(form_id, model_id, field_ids)
+        form_id = self.form_namespace.add_import('django.forms.AuthForm', prim_name)
+        form_obj = DjangoLoginForm(form_id)
         uie._django_form = form_obj
         return form_obj
 
@@ -225,11 +223,9 @@ class AppComponentFactory(object):
         if hasattr(uie, '_django_form'):
             return None
         # Turns out i don't even use this: form_model = uie.container_info.form # bind to this name to save me some typing
-        prim_name = 'LoginForm'
-        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
-        model_id = uie.app.userentity._django_model.identifier
-        field_ids = ['username', 'password']
-        form_obj = DjangoSignupForm(form_id, model_id, field_ids)
+        prim_name = 'SignupForm'
+        form_id = self.form_namespace.add_import('django.forms.UserCreationForm', prim_name)
+        form_obj = DjangoSignupForm(form_id)
         uie._django_form = form_obj
         return form_obj
 

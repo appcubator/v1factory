@@ -27,6 +27,9 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.test.Client':       'from django.test.client import Client',
             'django.models.User':       'from django.contrib.auth.models import User',
 
+            'django.forms.AuthForm':    'from django.contrib.auth.forms import AuthenticationForm',
+            'django.forms.UserCreationForm':    'from django.contrib.auth.forms import UserCreationForm',
+
 }
 
 
@@ -74,7 +77,7 @@ class Import(object):
         self.import_symbol = import_symbol
         self.identifier = identifier
         self.use_as = False
-        if import_symbol != str(identifier):
+        if str(import_symbol) != str(identifier):
             self.use_as = True
         self.from_string = from_string
 
@@ -581,9 +584,25 @@ class DjangoStaticPagesTestCase(object):
 
 # HACK TO BE REFACTORED LATER
 class DjangoLoginForm(DjangoForm):
-    pass
+
+    def __init__(self, identifier):
+        self.identifier = identifier
+        self.namespace = identifier.ns
+        self.code_path = 'webapp/forms.py'
+
+    def render(self):
+        return ""
+
 class DjangoSignupForm(DjangoForm):
-    pass
+
+    def __init__(self, identifier):
+        self.identifier = identifier
+        self.namespace = identifier.ns
+        self.code_path = 'webapp/forms.py'
+
+    def render(self):
+        return ""
+
 class DjangoLoginFormReceiver(DjangoFormReceiver):
     pass
 class DjangoSignupFormReceiver(DjangoFormReceiver):
