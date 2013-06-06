@@ -256,12 +256,6 @@ function() {
       }
 
       this.newSelected(model);
-
-      // node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
-      // node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
-      // node.style.left   = ((widgetModel.get('layout').get('left') * 80) - 2) + 'px';
-      // node.style.top    = ((widgetModel.get('layout').get('top') * 15) - 2) + 'px';
-      ///bug:this.setLayout(e.target, model);
     },
 
     deselect: function() {

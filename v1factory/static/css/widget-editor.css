@@ -52,6 +52,7 @@
 }
 
 #widget-editor .style-editor {
+  width: 240px;
   padding: 4px;
 }
 
@@ -95,6 +96,7 @@
   background-color: #2b3545;
   font-size: 12px;
   line-height: 14px;
+  width: 240px;
 }
 
 .layout-editor div.padding, .layout-editor div.a-pick {
@@ -214,6 +216,7 @@ h3.edit-url {
   list-style: none;
   border-right: 1px solid #1b2535;
   border-left: 1px solid #3b4555;
+  width: 240px;
 }
 
 #content-editor select {
@@ -246,6 +249,7 @@ h3.edit-url {
 .select-view {
   position: relative;
   height: 40px;
+  min-width: 240px;
   width: 100%;
   overflow: hidden;
   font-size: 14px;

@@ -102,6 +102,10 @@ function(WidgetContentEditor,
         this.location = 'right';
         this.el.className += ' right';
       }
+      else {
+        this.location = 'bottom';
+        this.$el.removeClass('right');
+      }
 
       if(this.location == "right") {
         this.$el.append('<div class="left-arrow"></div>');

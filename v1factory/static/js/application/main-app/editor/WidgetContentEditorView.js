@@ -70,12 +70,16 @@ function(SelectView) {
       if(String(href).indexOf('internal://') < 0) {
         external = href;
       }
+      else {
+        href = href.replace('internal://', '');
+      }
 
-      html         = _.template(temp, { val : href,
-                                        hash: hash,
-                                        listOfPages: listOfPages,
-                                        external: external});
+      // html         = _.template(temp, { val : href,
+      //                                   hash: hash,
+      //                                   listOfPages: listOfPages,
+      //                                   external: external});
 
+      console.log(href);
       this.hrefLi.innerHTML = '';
       this.hrefLi.appendChild(new comp().div('Links To').classN('header-div').el);
       var selecView = new SelectView(listOfPages, href);
@@ -223,6 +227,7 @@ function(SelectView) {
         return;
       }
       else if(this.model.get('data').get('context')) {
+        target = 'internal://' + target;
         target += ('/' + this.model.get('data').get('context'));
       }
       this.model.get('data').get('content_attribs').set('href', target);
