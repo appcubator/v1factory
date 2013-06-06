@@ -29,14 +29,14 @@ function(TableCollection,
 
         iui.loadCSS(this.css);
 
-        this.tables = v1State.get('entities');
+        this.tables = v1State.get('tables');
         //this.userRoles = v1State.get('users');
 
         // subviews
         var self = this;/*
         this.userView = new UserTableView({
           model: self.userRoles.models[0] || null,
-          entities: self.tables
+          tables: self.tables
         });*/
 
         this.tablesView = new TablesView();

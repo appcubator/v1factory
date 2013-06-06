@@ -94,7 +94,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     },
 
     clickedDelete: function(e) {
-      v1State.get('entities').remove(this.model.cid);
+      v1State.get('tables').remove(this.model.cid);
       this.remove();
     },
 
