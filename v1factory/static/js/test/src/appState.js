@@ -5,31 +5,18 @@ var appState = {
     },
     "users": [
         {
-            "fields": [],
-            "twitter": false,
-            "linkedin": false,
-            "facebook": false,
             "role": "Admin",
-            "local": true
+            "fields": []
         },
         {
-            "fields": [],
-            "twitter": false,
-            "linkedin": false,
-            "facebook": false,
             "role": "Editor",
-            "local": true
+            "fields": []
         },
         {
-            "fields": [],
-            "twitter": false,
-            "linkedin": false,
-            "facebook": false,
             "role": "Member",
-            "local": true
+            "fields": []
         }
     ],
-    "mobilePages": [],
     "emails": [
         {
             "content": "Dear {{User.First_Name}},\n\nThanks for signing up!\n\n- {{AppName}} Team",
@@ -37,7 +24,7 @@ var appState = {
             "subject": "Thanks for Signing up!"
         }
     ],
-    "entities": [
+    "tables": [
         {
             "name": "Class",
             "fields": [
@@ -107,26 +94,9 @@ var appState = {
     ],
     "pages": [
         {
-            "name": "Homepage",
-            "access_level": "all",
             "url": {
                 "urlparts": []
             },
-            "footer": {
-                "isFixed": true,
-                "isHidden": false,
-                "links": [
-                    {
-                        "url": "internal://Homepage",
-                        "title": "Homepage"
-                    },
-                    {
-                        "url": "internal://Registration Page",
-                        "title": "Registration Page"
-                    }
-                ],
-                "customText": "Add custom footer text here"
-            },
             "navbar": {
                 "isFixed": true,
                 "brandName": null,
@@ -142,11 +112,26 @@ var appState = {
                     }
                 ]
             },
-            "uielements": []
+            "footer": {
+                "isFixed": true,
+                "customText": "Add custom footer text here",
+                "isHidden": false,
+                "links": [
+                    {
+                        "url": "internal://Homepage",
+                        "title": "Homepage"
+                    },
+                    {
+                        "url": "internal://Registration Page",
+                        "title": "Registration Page"
+                    }
+                ]
+            },
+            "uielements": [],
+            "name": "Homepage",
+            "access_level": "all"
         },
         {
-            "name": "Registration Page",
-            "access_level": "all",
             "navbar": {
                 "isFixed": true,
                 "brandName": null,
@@ -164,6 +149,7 @@ var appState = {
             },
             "footer": {
                 "isFixed": true,
+                "customText": "Add custom footer text here",
                 "isHidden": false,
                 "links": [
                     {
@@ -174,16 +160,18 @@ var appState = {
                         "url": "internal://Registration Page",
                         "title": "Registration Page"
                     }
-                ],
-                "customText": "Add custom footer text here"
+                ]
             },
             "url": {
                 "urlparts": [
                     "registration"
                 ]
             },
-            "uielements": []
+            "uielements": [],
+            "name": "Registration Page",
+            "access_level": "all"
         }
     ],
-    "name": "AllNigherz"
-}
+    "mobilePages" : [],
+    "name": "thisisirrelevant"
+};

@@ -11,7 +11,6 @@ define([
 
   var TableModel = Backbone.Model.extend({
       defaults: {
-        name: "New Table",
         fields: new FieldsCollection()
       },
 
@@ -22,12 +21,11 @@ define([
             alert('TableModel init isnt supposed to receive user');
             return;
           }
-
           bone = _.findWhere(appState.entities, {name : bone});
         }
 
         if(bone.name) {
-          this.set('name', bone.name);
+          this.set('name', bone.name||"New Table");
         }
 
         else {

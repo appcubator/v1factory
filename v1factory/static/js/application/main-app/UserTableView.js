@@ -1,32 +1,19 @@
 define([
   'models/FieldModel',
-  'app/TablesView',
+  'app/TableView',
   'app/UploadExcelView',
   'app/ShowDataView',
   'app/templates/TableTemplates',
   'prettyCheckable'
 ],
-function(FieldModel, TablesView, UploadExcelView, ShowDataView) {
+function(FieldModel, TableView, UploadExcelView, ShowDataView) {
 
-  var UserTableView = TablesView.extend({
+  var UserTableView = TableView.extend({
     el         : null,
     tagName    : 'div',
     collection : null,
     parentName : "",
-    className  : 'span64 entity',
-
-    events : {
-      'click .add-property-button' : 'clickedAddProperty',
-      'submit .add-property-form'  : 'propertyFormSubmitted',
-      'change .attribs'            : 'changedAttribs',
-      'click  .delete'             : 'clickedDelete',
-      'click .prop-cross'          : 'clickedPropDelete',
-      'click .excel'               : 'clickedUploadExcel',
-      'click .show-data'           : 'showData',
-      'click .edit-form'           : 'clickedEditForm',
-      'change .attrib-required-check' : 'changedRequiredField'
-    },
-
+    className  : 'span58',
 
     initialize: function(userTableModel){
       _.bindAll(this);
@@ -48,6 +35,30 @@ function(FieldModel, TablesView, UploadExcelView, ShowDataView) {
       this.$el.find('input[type=checkbox]').prettyCheckable();
       this.adjustTableWidth();
       return this;
+    },
+
+    appendField: function (fieldModel) {
+      var page_context = {};
+      page_context = _.clone(fieldModel.attributes);
+      page_context.cid = fieldModel.cid;
+      page_context.entityName = this.model.get('name');
+      page_context.entities = this.tables.concat(this.otherUserRoles);
+      var template = _.template(TableTemplates.Property, page_context);
+
+      this.$el.find('.property-list').append(template);
+      this.adjustTableWidth();
+    },
+
+    adjustTableWidth: function() {
+      var width = (this.model.get('fields').length + 7) * 94;
+      this.width = width;
+      this.$el.find('.tbl').css('width', width);
+      if(width > 870 && !this.hasArrow) {
+        this.hasArrow = true;
+        var div = document.createElement('div');
+        div.className = 'right-arrow';
+        this.$el.find('.description').append(div);
+      }
     }
 
   });

@@ -4,7 +4,7 @@ define([
   'models/TableModel',
   'app/ShowDataView',
   'app/UserTableView',
-  'app/TablesView',
+  'app/TablesView'
 ],
 
 function(TableCollection,
@@ -18,50 +18,30 @@ function(TableCollection,
       css: 'entities',
 
       events : {
-        'click #add-role' : 'clickedAddUserRole',
-        'keyup #add-role-form'  : 'createUserRole',
-        'click #add-entity' : 'clickedAddTable',
-        'keyup #add-entity-form'  : 'createTable'
+        'click #add-role'        : 'clickedAddUserRole',
+        'submit #add-role-form'  : 'createUserRole',
+        'click #add-entity'      : 'clickedAddTable',
+        'submit #add-entity-form': 'createTable'
       },
 
       initialize: function() {
         _.bindAll(this);
-
         iui.loadCSS(this.css);
-
-        this.tables = v1State.get('tables');
-        //this.userRoles = v1State.get('users');
-
-        // subviews
-        var self = this;/*
-        this.userView = new UserTableView({
-          model: self.userRoles.models[0] || null,
-          tables: self.tables
-        });*/
-
-        this.tablesView = new TablesView();
+        this.tablesView     = new TablesView(v1State.get('tables'), false);
+        this.userTablesView = new TablesView(v1State.get('users'), true);
         this.title = "Tables";
       },
 
       render : function() {
         var self = this;
         this.$el.html(_.template(iui.getHTML('entities-page'), {}));
-        //this.renderUserView();
-        this.renderTableView();
+        this.renderTables();
         return this;
       },
-/*
-      renderUserView: function() {
-        if(this.userRoles.length > 0) {
-          this.userView.setElement(self.$('#user-entity')).render();
-        }
-      },
-      */
 
-      renderTableView: function() {
-        if(this.tables.length > 0) {
-          this.tableView.setElement(self.$('#tables')).render();
-        }
+      renderTables: function() {
+        iui.get('tables').appendChild(this.tablesView.render().el);
+        iui.get('users').appendChild(this.userTablesView.render().el);
       },
 
       clickedAddUserRole: function(e) {
@@ -70,19 +50,18 @@ function(TableCollection,
       },
 
       createUserRole: function(e) {
-        if(e.keyCode != 13) {
-          return;
-        }
         var elem = new UserTableModel({
           role: e.target.value
         });
         v1State.get('users').add(elem);
         this.userView.setModel(elem);
         this.renderUserView();
-        // reset
+
         e.target.value = '';
         $('#add-role').fadeIn();
         $(e.target).hide();
+
+        e.preventDefault();
       },
 
       clickedAddTable: function(e) {
@@ -91,19 +70,17 @@ function(TableCollection,
       },
 
       createTable: function(e) {
-        if(e.keyCode != 13) {
-          return;
-        }
         var elem = new TableModel({
           name: e.target.value,
           fields: []
         });
         v1State.get('tables').add(elem);
 
-        // reset
         e.target.value = '';
         $('#add-entity').fadeIn();
         $(e.target).hide();
+
+        e.preventDefault();
       }
     });
 

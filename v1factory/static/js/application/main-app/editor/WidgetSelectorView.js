@@ -353,7 +353,6 @@ function() {
     clear: function() { },
 
     hideNode: function(node) {
-      console.log('hidin');
       node.style.height = 0;
       node.style.width = 0;
       $(node).hide();

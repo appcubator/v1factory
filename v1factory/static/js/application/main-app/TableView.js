@@ -12,7 +12,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     tagName    : 'div',
     collection : null,
     parentName : "",
-    className  : 'span64 entity',
+    className  : 'span58',
 
     events : {
       'click .add-property-button' : 'clickedAddProperty',
@@ -30,6 +30,10 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     initialize: function(tableModel){
       _.bindAll(this);
       this.model  = tableModel;
+
+      this.listenTo(this.model.get('fields'), 'add', this.appendField);
+      this.userRoles = v1State.get('users').pluck('role');
+      this.otherEntities = _(v1State.get('tables').pluck('name')).without(this.model.get('name'));
     },
 
     render: function() {
@@ -49,8 +53,8 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     },
 
     clickedAddProperty: function(e) {
-      $('.add-property-button', this.el).hide();
-      $('.add-property-form', this.el).fadeIn();
+      this.$el.find('.add-property-button').hide();
+      this.$el.find('.add-property-form').fadeIn();
       $('.property-name-input', this.el).focus();
     },
 
@@ -63,7 +67,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       this.model.get('fields').push(newField);
 
       $('.property-name-input', e.target).val('');
-      $(e.target).hide();
+      $('.add-property-form').hide();
       this.$el.find('.add-property-button').fadeIn();
 
       e.preventDefault();
@@ -78,6 +82,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       var template = _.template(TableTemplates.Property, page_context);
 
       this.$el.find('.property-list').append(template);
+      this.adjustTableWidth();
     },
 
     changedAttribs: function(e) {
@@ -142,18 +147,8 @@ function(FieldModel, UploadExcelView, ShowDataView) {
         div.className = 'right-arrow';
         this.$el.find('.description').append(div);
       }
-    },
-
-    setModel: function(model) {
-      this.model = model;
-      this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
-      this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
-      console.log("BIND:" + model.cid);
-      this.listenTo(this.model.get('fields'), 'add remove', this.appendField);
-      this.userRoles = v1State.get('users').pluck('role');
-      this.otherEntities = _(this.entities.pluck('name')).without(this.model.get('name'));
-      return this;
     }
+
   });
 
   return TableView;

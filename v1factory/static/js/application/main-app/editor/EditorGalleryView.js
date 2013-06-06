@@ -174,7 +174,7 @@ function(ElementCollection,
                               '<span class="wide-text"><%= entity_name %> List</span>',
                               '</li>'].join('\n');
 
-      _(v1State.get('entities').models).each(function(entityModel) {
+      _(v1State.get('tables').models).each(function(entityModel) {
         var context = { entity_id : entityModel.cid, entity_name : entityModel.get('name')};
         $(self.allList).append(_.template(tempCreateFormLi, context));
         $(self.allList).append(_.template(tempTableLi, context));
@@ -280,7 +280,7 @@ function(ElementCollection,
         cid  = String(id).replace('entity-','');
 
         widget.data.container_info = {};
-        widget.data.container_info.entity = v1State.get('entities').get(cid);
+        widget.data.container_info.entity = v1State.get('tables').get(cid);
         if(/(entity-create-form)/.exec(className)) {
           widget.data.container_info.action = "create";
         }

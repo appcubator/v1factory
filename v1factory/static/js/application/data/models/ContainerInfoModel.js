@@ -30,7 +30,7 @@ function(WidgetCollection,
             this.set('entity', v1State.get('users'));
           }
           else {
-            this.set('entity', v1State.get('tabls').getTableWithName(bone.entity));
+            this.set('entity', v1State.get('tables').getTableWithName(bone.entity));
           }
         }
         else {
@@ -81,7 +81,6 @@ function(WidgetCollection,
         this.set('form', form);
       }
       else if(action == 'table') {
-        alert('yo');
         this.set('query', new QueryModel({}, this.get('entity')));
       }
       else if(action == 'show') {
