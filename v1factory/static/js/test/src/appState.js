@@ -5,15 +5,15 @@ var appState = {
     },
     "users": [
         {
-            "role": "Admin",
+            "name": "Admin",
             "fields": []
         },
         {
-            "role": "Editor",
+            "name": "Editor",
             "fields": []
         },
         {
-            "role": "Member",
+            "name": "Member",
             "fields": []
         }
     ],

@@ -8,11 +8,15 @@ var GRID_HEIGHT = 15;
 define([
   "models/AppModel",
   "models/UserTableModel",
+  "collections/PageCollection",
+  "collections/MobilePageCollection",
   "collections/UserRolesCollection",
   "backbone"
 ],
 function( AppModel,
           UserEntityModel,
+          PageCollection,
+          MobilePageCollection,
           UserRolesCollection) {
 
 
@@ -30,6 +34,9 @@ function( AppModel,
 
     it("Whole thing works.", function () {
       var curAppstate = new AppModel(appState);
+      curAppstate.set('pages', new PageCollection(appState.pages||[]));
+      curAppstate.set('mobilePages', new MobilePageCollection(appState.mobilePages||[]));
+
       expect(appState).toEqual(curAppstate.toJSON());
     });
   });
