@@ -308,7 +308,7 @@ test_json = r"""{
                         "hoverStyle": "",
                         "class_name": "header-1",
                         "container_info": null,
-                        "content": "GAMEPAGE<br> + "{{ CurrentUser.First Name }}{{ Page.Game.Description }}{{ Page.Class.Professor.Favorite student.teacher.Favorite student.Bio }}"",
+                        "content": "GAMEPAGE<br> {{ CurrentUser.First Name }}{{ Page.Game.Description }}{{ Page.Class.Professor.Favorite student.teacher.Favorite student.Bio }},
                         "tagName": "h1",
                         "type": "headerTexts",
                         "activeStyle": "",
