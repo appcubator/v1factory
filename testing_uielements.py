@@ -10,7 +10,7 @@ test_json = r"""{
         {
         "name": "User",
         "fields": []}],
-    "entities": [
+    "tables": [
         {
             "name": "Game",
             "fields": [

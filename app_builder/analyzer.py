@@ -13,7 +13,7 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
     'app_builder.code_templates', 'htmlgen'))
 
 
-# Entities
+# tables
 
 class EntityField(DictInited):
     _schema = {
@@ -41,7 +41,7 @@ class EntityRelatedField(DictInited, Resolvable):
 
     def __init__(self, *args, **kwargs):
         super(EntityRelatedField, self).__init__(*args, **kwargs)
-        self.entity_name = encode_braces('entities/%s' % self.entity_name)
+        self.entity_name = encode_braces('tables/%s' % self.entity_name)
 
 
 class Entity(DictInited):
@@ -134,10 +134,10 @@ class Page(DictInited):
         return url_regex
 
     def is_static(self):
-        # returns true iff there are no entities in the url parts
+        # returns true iff there are no tables in the url parts
         return len(filter(lambda x: isinstance(x, EntityLang), self.url.urlparts)) == 0
 
-    def get_entities_from_url(self):
+    def get_tables_from_url(self):
         return [l.entity for l in filter(lambda x: isinstance(x, EntityLang), self.url.urlparts)]
 
 
@@ -160,7 +160,7 @@ class App(DictInited):
             "keywords": {"_type": ""},
         }},
         "users": {"_type": [], "_each": {"_type": UserRole}},
-        "entities": {"_type": [], "_each": {"_type": Entity}},
+        "tables": {"_type": [], "_each": {"_type": Entity}},
         "pages": {"_type": [], "_each": {"_type": Page}},
         "emails": {"_type": [], "_each": {"_type": Email}},
     }
@@ -199,7 +199,7 @@ class App(DictInited):
         userentity = Entity.create_from_dict(userdict)
         userentity.fields.extend(self.users[0].fields)
         userentity.is_user = True
-        self.entities.append(userentity)
+        self.tables.append(userentity)
 
         # HACK replace uielements with their subclass
         for p in self.pages:
@@ -212,18 +212,18 @@ class App(DictInited):
         # Fix reflang namespaces
         for path, fii in filter(lambda n: isinstance(n[1], Form.FormInfo.FormInfoInfo), self.iternodes()):
             if fii.belongsTo is not None:
-                fii.belongsTo = encode_braces('entities/%s' % fii.belongsTo)
-            fii.entity = encode_braces('entities/%s' % fii.entity)
+                fii.belongsTo = encode_braces('tables/%s' % fii.belongsTo)
+            fii.entity = encode_braces('tables/%s' % fii.entity)
 
         for path, ll in filter(lambda n: isinstance(n[1], LinkLang), self.iternodes()):
             ll.page_name = encode_braces('pages/%s' % ll.page_name)
 
         for path, el in filter(lambda n: isinstance(n[1], EntityLang), self.iternodes()):
-            el.entity_name = encode_braces('entities/%s' % el.entity_name)
+            el.entity_name = encode_braces('tables/%s' % el.entity_name)
 
         for path, ii in filter(lambda n: isinstance(n[1], Iterator.IteratorInfo), self.iternodes()):
             ii.entity = encode_braces(
-                'entities/%s' % ii.entity)  # "Posts" => "entities/Posts"
+                'tables/%s' % ii.entity)  # "Posts" => "tables/Posts"
 
         # Resolve reflangs
         for path, rl in filter(lambda n: isinstance(n[1], Resolvable), self.iternodes()):

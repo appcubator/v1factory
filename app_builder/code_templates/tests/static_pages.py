@@ -1,10 +1,10 @@
-from django.test import TestCase
-from django.test.client import Client
+{% set Client = imports['django.test.Client'] %}
+{% set TestCase = imports['django.test.TestCase'] %}
 
-class StaticPagesTestCase(TestCase):
+class StaticPagesTestCase({{TestCase}}):
 
     def setUp(self):
-        self.c = Client()
+        self.c = {{Client}}()
 
     {% for identifier, url in test.identifier_url_pairs %}
     def test_{{ identifier }}(self):

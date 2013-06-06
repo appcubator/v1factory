@@ -23,6 +23,8 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.patterns':          'from django.conf.urls import patterns',
             'django.include':           'from django.conf.urls import include',
             'django.url':               'from django.conf.urls import url',
+            'django.test.TestCase':     'from django.test import TestCase',
+            'django.test.Client':       'from django.test.client import Client',
 
 }
 
@@ -51,6 +53,7 @@ FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
                                             'django.get_object_or_404'),
                  'webapp/forms.py': ('django.forms',),
                  'webapp/urls.py': ('django.patterns', 'django.include', 'django.url',),
+                 'webapp/tests.py': ('django.test.TestCase', 'django.test.Client')
 }
 
 
@@ -545,9 +548,11 @@ class DjangoURLs(object):
 
 
 class DjangoStaticPagesTestCase(object):
-    def __init__(self, identifier_url_pairs):
+
+    def __init__(self, identifier_url_pairs, namespace):
         self.identifier_url_pairs = identifier_url_pairs
         self.code_path = "webapp/tests.py"
+        self.namespace = namespace
 
     def render(self):
-        return env.get_template('tests/static_pages.py').render(test=self)
+        return env.get_template('tests/static_pages.py').render(test=self, imports=self.namespace.imports(), locals={})

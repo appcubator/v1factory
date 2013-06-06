@@ -15,6 +15,7 @@ class AppComponentFactory(object):
         self.view_namespace = create_import_namespace('webapp/pages.py')
         self.fr_namespace = create_import_namespace('webapp/form_receivers.py')
         self.urls_namespace = create_import_namespace('webapp/urls.py')
+        self.tests_namespace = create_import_namespace('webapp/tests.py')
 
         self.fr_url_namespace = naming.Namespace()
 
@@ -23,20 +24,23 @@ class AppComponentFactory(object):
 
     def create_model(self, entity):
         """Creates DjangoModel and the non relational fields for it"""
-        identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
-        m = DjangoModel(identifier)
+        if False: #entity.is_user:
+            pass
+        else:
+            identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
+            m = DjangoModel(identifier)
 
-        for f in filter(lambda x: not x.is_relational(), entity.fields):
-            df = m.create_field(f.name, f.type, f.required)
-                        # the django model will create an identifier based on
-                        # the name
-            f._django_field = df
+            for f in filter(lambda x: not x.is_relational(), entity.fields):
+                df = m.create_field(f.name, f.type, f.required)
+                            # the django model will create an identifier based on
+                            # the name
+                f._django_field = df
 
-        # set references to each other on both.
-        # entity reference used in v1script translation (dynamicvars.py)
-        entity._django_model = m
-        m._entity = entity
-        return m
+            # set references to each other on both.
+            # entity reference used in v1script translation (dynamicvars.py)
+            entity._django_model = m
+            m._entity = entity
+            return m
 
     def create_relational_fields_for_model(self, entity):
         m = entity._django_model
@@ -75,7 +79,7 @@ class AppComponentFactory(object):
         identifier = self.view_namespace.new_identifier(page.name)
 
         args = []
-        for e in page.get_entities_from_url():
+        for e in page.get_tables_from_url():
             model_id = e._django_model.identifier
             template_id = model_id
             args.append((e.name.lower()+'_id', {"model_id": model_id, "template_id": template_id, "ref": e._django_model}))
@@ -106,11 +110,9 @@ class AppComponentFactory(object):
     # HTML GEN
 
     def init_translator(self, app):
-        self.v1_translator = Translator(app.entities)
+        self.v1_translator = Translator(app.tables)
 
     def properly_name_variables_in_template(self, page):
-        from dynamicvars import Translator
-
         # find things in braces and replace them with this function:
         translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1).strip(), page=page) 
         translate_all = lambda x: re.sub(r'\{\{ ?([^\}]*) ?\}\}', translate, x)
@@ -208,5 +210,5 @@ class AppComponentFactory(object):
         for p in app.pages:
             if p.is_static():
                 ident_url_pairs.append((p._django_view.identifier, '/' + ''.join([x + '/' for x in p.url.urlparts])))
-        d = DjangoStaticPagesTestCase(ident_url_pairs)
+        d = DjangoStaticPagesTestCase(ident_url_pairs, self.tests_namespace)
         return d

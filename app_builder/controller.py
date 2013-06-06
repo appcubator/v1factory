@@ -45,9 +45,9 @@ def create_codes(app):
                 codes.append(c)
 
     # setup models
-    for ent in app.entities:
+    for ent in app.tables:
         create('create model for entity', ent) # only creates primitive fields
-    for ent in app.entities: # doing relational fields after because all models need to be created for relations to work
+    for ent in app.tables: # doing relational fields after because all models need to be created for relations to work
         create('create relational fields for entity', ent)
 
         create('import model into views', ent)

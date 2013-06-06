@@ -141,7 +141,7 @@ class Form(DictInited, Hooked):
                 super(Form.FormInfo.FormInfoInfo, self).__init__(*args, **kwargs)
                 # this is to make a proper path for resolving the field name later
                 for f in filter(lambda x: isinstance(x, Form.FormInfo.FormInfoInfo.FormModelField), self.fields):
-                    f.field_name = encode_braces('entities/%s/fields/%s' % (self.entity, f.field_name))
+                    f.field_name = encode_braces('tables/%s/fields/%s' % (self.entity, f.field_name))
 
             _schema = {
                 "entity": {"_type": ""},
