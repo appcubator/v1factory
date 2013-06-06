@@ -22,13 +22,12 @@ function(FieldModel, TableView, UploadExcelView, ShowDataView) {
       this.listenTo(this.model.get('fields'), 'remove', this.removeField);
 
       this.tables= v1State.get('tables').pluck('name');
-      this.otherUserRoles = _(v1State.get('users').pluck('role')).without(this.model.get('role'));
+      this.otherUserRoles = _(v1State.get('users').pluck('name')).without(this.model.get('name'));
     },
 
     render: function() {
       var self = this;
       this.el.innerHTML= _.template(TableTemplates.UserTable, self.model.toJSON());
-
       this.renderProperties();
 
       iui.loadCSS('prettyCheckable');

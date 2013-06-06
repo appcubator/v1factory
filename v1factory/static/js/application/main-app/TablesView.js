@@ -35,12 +35,14 @@ function( FieldModel,
 
       this.collection = tablesCollection;
       this.isUsers = isUsers;
+
+      this.listenTo(this.collection, 'add', this.newTable);
     },
 
     render: function() {
       var self = this;
       this.renderNav();
-      this.renderFirstTable();
+      this.renderTable();
       return this;
     },
 
@@ -57,9 +59,19 @@ function( FieldModel,
       return this;
     },
 
-    renderFirstTable: function() {
-      if(this.collection.length === 0) this.renderEmptyTable();
-      var model = this.collection.models[0];
+    renderTable: function(newModel) {
+      if(this.currentTable) {
+        this.currentTable.remove();
+      }
+      if(this.collection.length === 0) {
+        this.renderEmptyTable();
+      }
+      if(newModel) {
+        var model = newModel;
+      }
+      else {
+        var model = this.collection.models[0];
+      }
 
       if(this.isUsers) this.currentTable = new UserTableView(model);
       else this.currentTable = new TableView(model);
@@ -99,11 +111,9 @@ function( FieldModel,
 
     newTable: function(newModel) {
       this.appendNavItem(newModel);
-      this.$nav.children().removeClass('active')
+      this.$('.tab').removeClass('active')
           .filter('#navtab-'+newModel.cid).addClass('active');
-      this.tableView.remove();
-      this.tableView = new TableView(newModel);
-      this.tableView.render();
+      this.renderTable(newModel);
     }
   });
 
