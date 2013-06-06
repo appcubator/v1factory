@@ -1,9 +1,9 @@
 var TableTemplates = {};
 
 TableTemplates.Table = [
-'<div class="row hoff1">',
+'<div class="row">',
   '<p class="lead" style="display:none">Click "Add Table" to create your first table</p>',
-  '<div class="span58 entity-pane pane entity" id="entity-entity">',
+  '<div class="span58 entity" id="entity-entity">',
     '<div class="header">',
       '<div class="offset2 hi4">',
         '<h2><%= name %></h2>',
@@ -74,8 +74,8 @@ TableTemplates.Property = [
 ].join('\n');
 
 TableTemplates.UserTable = [
-'<div class="row hoff1">',
-  '<div class="span58 entity-pane pane entity" id="user-entity">',
+'<div class="row">',
+  '<div class="span58" id="user-entity">',
     '<div class="header">',
       '<div class="offset2 hi4">',
         '<h2><%= role %></h2>',

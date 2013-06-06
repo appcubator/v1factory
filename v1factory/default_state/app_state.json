@@ -36,7 +36,74 @@
             "subject": "Thanks for Signing up!"
         }
     ],
-    "tables": [],
+    "tables": [
+        {
+            "name": "Class",
+            "fields": [
+                {
+                    "name": "Name",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "Description",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "Professor",
+                    "required": true,
+                    "type": "fk",
+                    "entity_name": "Teacher",
+                    "related_name": "Classes"
+                }
+            ]
+        },
+        {
+            "name": "Teacher",
+            "fields": [
+                {
+                    "name": "Name",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "Bio",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "Favorite student",
+                    "required": true,
+                    "type": "o2o",
+                    "entity_name": "Student",
+                    "related_name": "teacher"
+                }
+            ]
+        },
+        {
+            "name": "Student",
+            "fields": [
+                {
+                    "name": "Name",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "Bio",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "Classes",
+                    "required": true,
+                    "entity_name": "Class",
+                    "type": "m2m",
+                    "related_name": "enrolled students"
+                }
+            ]
+        }
+    ],
     "pages": [
         {
             "url": {

@@ -12,7 +12,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     tagName    : 'div',
     collection : null,
     parentName : "",
-    className  : 'span64 entity',
+    className  : 'span58',
 
     events : {
       'click .add-property-button' : 'clickedAddProperty',
@@ -30,6 +30,10 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     initialize: function(tableModel){
       _.bindAll(this);
       this.model  = tableModel;
+
+      this.listenTo(this.model.get('fields'), 'add remove', this.appendField);
+      this.userRoles = v1State.get('users').pluck('role');
+      this.otherEntities = _(v1State.get('tables').pluck('name')).without(this.model.get('name'));
     },
 
     render: function() {
@@ -142,18 +146,8 @@ function(FieldModel, UploadExcelView, ShowDataView) {
         div.className = 'right-arrow';
         this.$el.find('.description').append(div);
       }
-    },
-
-    setModel: function(model) {
-      this.model = model;
-      this.listenTo(this.model, 'change:owns', this.ownsChangedOutside);
-      this.listenTo(this.model, 'change:belongsTo', this.belongsToChangedOutside);
-      console.log("BIND:" + model.cid);
-      this.listenTo(this.model.get('fields'), 'add remove', this.appendField);
-      this.userRoles = v1State.get('users').pluck('role');
-      this.otherEntities = _(this.entities.pluck('name')).without(this.model.get('name'));
-      return this;
     }
+
   });
 
   return TableView;
