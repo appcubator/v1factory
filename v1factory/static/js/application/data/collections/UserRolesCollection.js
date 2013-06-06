@@ -1,12 +1,12 @@
 define([
-	'models/UserEntityModel'
-], function(UserEntityModel) {
+	'models/UserTableModel'
+], function(UserTableModel) {
 	var UserRolesCollection = Backbone.Collection.extend({
-		model: UserEntityModel,
+		model: UserTableModel,
 
-    getUserEntityWithName: function(entityNameStr) {
-      var entity = this.where({name : entityNameStr })[0];
-      return entity;
+    getUserTableWithName: function(tableNameStr) {
+      var table = this.where({name : tableNameStr })[0];
+      return table;
     },
 
     getCommonProps: function() {
