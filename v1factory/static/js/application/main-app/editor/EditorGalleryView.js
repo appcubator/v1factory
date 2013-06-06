@@ -255,6 +255,7 @@ function(ElementCollection,
         widget.data.container_info.entity = form.entity;
         widget.data.container_info.action = form.action;
         widget.data.container_info.form = form;
+        widget.data.container_info.form.entity = 'User';
         widget.type = 'form';
         var widgetContainerModel = new ContainerWidgetModel(widget);
         this.widgetsCollection.push(widgetContainerModel);
@@ -283,6 +284,8 @@ function(ElementCollection,
         widget.data.container_info.entity = v1State.get('tables').get(cid);
         if(/(entity-create-form)/.exec(className)) {
           widget.data.container_info.action = "create";
+          widget.data.container_info.form = {};
+          widget.data.container_info.form.entity = widget.data.container_info.entity;
         }
         if(/(entity-create-form)/.exec(className)) {
           //widget.container_info.action = "update";

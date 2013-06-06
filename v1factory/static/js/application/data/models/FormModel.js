@@ -5,8 +5,7 @@ define([
 function(FormFieldCollection, ActionCollection) {
 
   var FormModel = Backbone.Model.extend({
-    initialize: function(bone, entity) {
-
+    initialize: function(bone) {
 
       this.set('name', bone.name);
       this.set('fields', new FormFieldCollection());
@@ -31,7 +30,9 @@ function(FormFieldCollection, ActionCollection) {
       }
 
       // should not be an attribute
-      this.entity = entity;
+      this.entity = bone.entity;
+      console.log(bone);
+      console.trace();
     },
 
     fillWithProps: function(entity) {
@@ -59,6 +60,9 @@ function(FormFieldCollection, ActionCollection) {
       var json = _.clone(this.attributes);
       json.name = json.name || "";
       json.fields = this.get('fields').toJSON();
+      if(json.entity.attributes) {
+        json.entity = json.entity.get('name');
+      }
       return json;
     }
 

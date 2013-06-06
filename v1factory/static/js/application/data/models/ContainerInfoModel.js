@@ -52,7 +52,7 @@ function(WidgetCollection,
 
       if(bone.form) {
         if(!bone.form.attributes) {
-          this.set('form', new FormModel(bone.form, this.get('entity')));
+          this.set('form', new FormModel(bone.form));
         }
         else {
           this.set('form', bone.form);
@@ -76,9 +76,7 @@ function(WidgetCollection,
         });
       }
       else if(action == "create") {
-        var form = new FormModel({}, this.get('entity'));
-        form.fillWithProps(this.get('entity'));
-        this.set('form', form);
+        self.get('form').fillWithProps(this.get('entity'));
       }
       else if(action == 'table') {
         this.set('query', new QueryModel({}, this.get('entity')));
