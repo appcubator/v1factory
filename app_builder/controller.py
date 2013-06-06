@@ -7,6 +7,7 @@ def create_codes(app):
     factory = AppComponentFactory()
 
     create_map = {'create model for entity': factory.create_model,
+                  'create relational fields for entity': factory.create_relational_fields_for_model,
                   'import model into views': lambda entity: factory.import_model_into_namespace(entity, 'views'),
                   'import model into forms': lambda entity: factory.import_model_into_namespace(entity, 'forms'),
                   'import model into form receivers': lambda entity: factory.import_model_into_namespace(entity, 'form receivers'),
@@ -17,6 +18,8 @@ def create_codes(app):
                   'view for page': factory.create_view_for_page,
                   'url to serve page': factory.add_page_to_urls,
 
+                  'init template v1script translator': factory.init_translator,
+                  'translate strings in uielements': factory.properly_name_variables_in_template,
                   'find or add the needed data to the view': factory.find_or_create_query_for_view ,
                   'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes,
                   'create tests for static pages': factory.create_tests_for_static_pages,
@@ -43,7 +46,9 @@ def create_codes(app):
 
     # setup models
     for ent in app.entities:
-        create('create model for entity', ent)
+        create('create model for entity', ent) # only creates primitive fields
+    for ent in app.entities: # doing relational fields after because all models need to be created for relations to work
+        create('create relational fields for entity', ent)
 
         create('import model into views', ent)
         create('import model into forms', ent)
@@ -58,6 +63,7 @@ def create_codes(app):
 
 
     # UIELEMENT HOOKS
+    create('init template v1script translator', app)
     for p in app.pages:
         for uie in p.uielements:
             for hook_name in uie.hooks:
@@ -67,6 +73,10 @@ def create_codes(app):
                     print "Failed to call hook %r on %r instance" % (hook_name, uie.__class__.__name__)
                     traceback.print_exc()
 
+
+    # translation of {{ page.book.name }} to proper django template code
+    for p in app.pages:
+        create('translate strings in uielements', p)
 
     # create html nodes and structure for pages
     for p in app.pages:

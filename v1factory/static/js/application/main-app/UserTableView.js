@@ -1,13 +1,14 @@
 define([
   'models/FieldModel',
+  'app/TablesView',
   'app/UploadExcelView',
   'app/ShowDataView',
   'app/templates/TableTemplates',
   'prettyCheckable'
 ],
-function(FieldModel, UploadExcelView, ShowDataView) {
+function(FieldModel, TablesView, UploadExcelView, ShowDataView) {
 
-  var UserTableView = TableView.extend({
+  var UserTableView = TablesView.extend({
     el         : null,
     tagName    : 'div',
     collection : null,
@@ -39,7 +40,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
 
     render: function() {
       var self = this;
-      this.el.innerHTML= _.template(EntitiesTemplates.UserTable, self.model.toJSON());
+      this.el.innerHTML= _.template(TableTemplates.UserTable, self.model.toJSON());
 
       this.renderProperties();
 

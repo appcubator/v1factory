@@ -20,6 +20,11 @@ class ValidationError(object):
     def __str__(self):
         return self.__unicode__()
 
+class InvalidDict(Exception):
+    def __str__(self):
+        return '\n\n'.join([str(e) for e in self.message])
+    pass
+
 
 class DictInited(object):
 
@@ -108,7 +113,7 @@ class DictInited(object):
             data, dict), "Input to \"created_from_dict\" must be a dict"
         errors = cls.validate_dict(data, {"_type": cls}, [])
         if len(errors) != 0:
-            raise Exception(errors)
+            raise InvalidDict(errors)
 
         data = deepcopy(data)
         o = cls._recursively_create(data, {

@@ -1,8 +1,9 @@
-
+import re
 
 from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver
 from app_builder.codes import create_import_namespace
 from app_builder import naming
+from app_builder.dynamicvars import Translator
 
 
 class AppComponentFactory(object):
@@ -21,17 +22,37 @@ class AppComponentFactory(object):
     # MODELS
 
     def create_model(self, entity):
+        """Creates DjangoModel and the non relational fields for it"""
         identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
         m = DjangoModel(identifier)
 
-        for f in entity.fields:
+        for f in filter(lambda x: not x.is_relational(), entity.fields):
             df = m.create_field(f.name, f.type, f.required)
                         # the django model will create an identifier based on
                         # the name
             f._django_field = df
 
+        # set references to each other on both.
+        # entity reference used in v1script translation (dynamicvars.py)
         entity._django_model = m
+        m._entity = entity
         return m
+
+    def create_relational_fields_for_model(self, entity):
+        m = entity._django_model
+
+        for f in filter(lambda x: x.is_relational(), entity.fields):
+            # get the related django model's id (from the imports.)
+            rel_model = f.entity._django_model
+            rel_model_id = m.namespace.get_by_ref(rel_model)
+            # make an id for the related name in the related model's namespace
+            # TODO FIXME potential bugs with related name and field name since they are really injected into the model.Model instance namespace
+            rel_name_id = rel_model.namespace.new_identifier(f.related_name, ref=rel_model)
+
+            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
+                        # the django model will create an identifier based on
+                        # the name
+            f._django_field = df
 
     def import_model_into_namespace(self, entity, namespace):
         if namespace == 'views':
@@ -57,7 +78,7 @@ class AppComponentFactory(object):
         for e in page.get_entities_from_url():
             model_id = e._django_model.identifier
             template_id = model_id
-            args.append((e.name.lower()+'_id', {"model_id": model_id, "template_id": template_id}))
+            args.append((e.name.lower()+'_id', {"model_id": model_id, "template_id": template_id, "ref": e._django_model}))
 
         v = DjangoPageView(identifier, args=args)
         page._django_view = v
@@ -84,6 +105,19 @@ class AppComponentFactory(object):
 
     # HTML GEN
 
+    def init_translator(self, app):
+        self.v1_translator = Translator(app.entities)
+
+    def properly_name_variables_in_template(self, page):
+        from dynamicvars import Translator
+
+        # find things in braces and replace them with this function:
+        translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1).strip(), page=page) 
+        translate_all = lambda x: re.sub(r'\{\{ ?([^\}]*) ?\}\}', translate, x)
+
+        for uie in page.uielements:
+            uie.visit_strings(translate_all)
+
     def create_tree_structure_for_page_nodes(self, page):
         """
         Given a page, returns a django template which has references
@@ -94,7 +128,7 @@ class AppComponentFactory(object):
         """
         t = DjangoTemplate(page._django_view.identifier)
                             # this is an underscore-name, so it should be good as a filename
-        t.create_tree([u for u in page.uielements]) # XXX HACK PLZ FIXME TODO
+        t.create_tree(page.uielements)
         t.page = page
         page._django_template = t
         page._django_view.template_code_path = t.filename
@@ -141,11 +175,12 @@ class AppComponentFactory(object):
         if form_model.action not in ['create', 'edit']:
             return None
         prim_name = form_model.action + '_' + form_model.entity_resolved.name
-        form_id = self.form_namespace.new_identifier(prim_name, cap_words=True)
+        form_id = self.form_namespace.new_identifier(prim_name, ref=form_model, cap_words=True)
         model_id = form_model.entity_resolved._django_model.identifier
         field_ids = []
         for f in form_model.fields:
             try:
+                assert not f.is_relational()
                 field_ids.append(f.model_field._django_field.identifier)
             except AttributeError:
                 pass
@@ -160,7 +195,7 @@ class AppComponentFactory(object):
         self.fr_namespace.add_import(import_symbol, f.identifier)
 
     def create_form_receiver_for_form_object(self, uie):
-        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
+        fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier, ref=uie._django_form)
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
