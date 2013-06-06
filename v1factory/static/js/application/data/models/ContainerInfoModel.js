@@ -1,7 +1,7 @@
 define([
   'collections/WidgetCollection',
   'models/QueryModel',
-  'models/EntityModel',
+  'models/TableModel',
   'models/UserEntityModel',
   'models/FormModel',
   'models/RowModel',
@@ -11,7 +11,7 @@ define([
 ],
 function(WidgetCollection,
          QueryModel,
-         EntityModel,
+         TableModel,
          UserEntityModel,
          FormModel,
          RowModel,
@@ -30,7 +30,7 @@ function(WidgetCollection,
             this.set('entity', v1State.get('users'));
           }
           else {
-            this.set('entity', v1State.get('entities').getEntityWithName(bone.entity));
+            this.set('entity', v1State.get('tabls').getTableWithName(bone.entity));
           }
         }
         else {

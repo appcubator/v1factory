@@ -1,13 +1,13 @@
 define([
-  'models/EntityModel',
+  'models/TableModel',
   'models/FieldModel',
   'collections/FormCollection',
   'collections/FieldsCollection',
   'backbone'
 ],
-function(EntityModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
+function(TableModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
-  var UserEntityModel = EntityModel.extend({
+  var UserEntityModel = TableModel.extend({
     defaults : {
       facebook : false,
       linkedin : false,
