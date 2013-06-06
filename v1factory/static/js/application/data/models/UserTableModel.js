@@ -7,7 +7,7 @@ define([
 ],
 function(TableModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
-  var UserEntityModel = TableModel.extend({
+  var UserTableModel = TableModel.extend({
     defaults : {
       facebook : false,
       linkedin : false,
@@ -50,5 +50,5 @@ function(TableModel, FieldModel, FormCollection, FieldsCollection, Backbone) {
 
   });
 
-  return UserEntityModel;
+  return UserTableModel;
 });

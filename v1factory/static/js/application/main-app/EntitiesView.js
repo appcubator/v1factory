@@ -1,6 +1,6 @@
 define([
   'collections/TableCollection',
-  'models/UserEntityModel',
+  'models/UserTableModel',
   'models/TableModel',
   'app/ShowDataView',
   'app/UserTableView',
@@ -8,7 +8,7 @@ define([
 ],
 
 function(TableCollection,
-         UserEntityModel,
+         UserTableModel,
          TableModel,
          ShowDataView,
          UserTableView,
@@ -29,14 +29,14 @@ function(TableCollection,
 
         iui.loadCSS(this.css);
 
-        this.tables = v1State.get('entities');
+        this.tables = v1State.get('tables');
         //this.userRoles = v1State.get('users');
 
         // subviews
         var self = this;/*
-        this.userView = new UserEntityView({
+        this.userView = new UserTableView({
           model: self.userRoles.models[0] || null,
-          entities: self.tables
+          tables: self.tables
         });*/
 
         this.tablesView = new TablesView();
