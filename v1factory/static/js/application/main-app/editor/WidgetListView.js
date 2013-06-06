@@ -37,8 +37,6 @@ function( WidgetContainerView,
 
       var action = this.model.get('data').get('container_info').get('action');
 
-      //this.model.get('data').get('container_info').get('row').get('layout').bind('change', this.reRender);
-      //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
       this.model.bind('highlight', this.highlightFirstRow);
       this.widgetSelectorView = new ListWidgetSelectorView(this.model.get('data').get('container_info').get('row').get('uielements'));
       this.rowBindings();
@@ -46,11 +44,11 @@ function( WidgetContainerView,
 
     rowBindings: function() {
       var self = this;
-      _(self.model.get('data').get('container_info').get('row').get('uielements').models).each(function(element) {
-        element.unbind('change', self.reRender);
-        element.get('layout').unbind("change", self.reRender);
-        element.bind('change', self.reRender);
-        element.get('layout').bind('change', self.reRender);
+      self.model.get('data').get('container_info').get('row').get('uielements').each(function(element) {
+        // element.unbind('change', self.reRender);
+        // element.get('layout').unbind("change", self.reRender);
+        // element.bind('change', self.reRender);
+        // element.get('layout').bind('change', self.reRender);
       });
     },
 
@@ -79,14 +77,13 @@ function( WidgetContainerView,
       row.get('uielements').map(function(widgetModel) {
         self.placeWidget(widgetModel);
       });
+      this.widgetSelectorView.setElement(editorRow).render();
 
       this.el.appendChild(editorRow);
-
       var listDiv = document.createElement('div');
       this.listDiv = listDiv;
       this.el.appendChild(this.renderShadowElements());
 
-      this.el.appendChild(this.widgetSelectorView.render().el);
 
       return this;
     },

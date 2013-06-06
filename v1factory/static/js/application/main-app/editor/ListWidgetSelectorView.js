@@ -147,7 +147,6 @@ function() {
 
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
-      console.log(((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4);
       this.selectDiv.style.left = (((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4) + 'px';
     },
 
@@ -214,18 +213,15 @@ function() {
 
     moving: function(e, ui) {
       model = this.selectedEl;
-      if(e.target.id == "hover-div") { model = this.hoveredEl; }
+      if(e.target.id == "list-hover-div") { model = this.hoveredEl; }
       var elem = iui.get('widget-wrapper-' + model.cid);
-      elem.style.top = ui.position.top + 2 + 'px';
+      elem.style.top = ui.position.top + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
     },
 
     moved: function(e, ui) {
-      g_guides.hideAll();
-
       model = this.selectedEl;
-      if(e.target.id == "hover-div") { model = this.hoveredEl; }
-
+      if(e.target.id == "list-hover-div") { model = this.hoveredEl; }
       var top = Math.round((ui.position.top / GRID_HEIGHT));
       var left = Math.round((ui.position.left / GRID_WIDTH));
       model.get('layout').set('top', top);

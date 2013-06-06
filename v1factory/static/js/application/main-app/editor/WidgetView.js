@@ -189,6 +189,7 @@ define([
     },
 
     changedLeft: function(a) {
+      console.log("changedLEFT");
       this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
     },
 
