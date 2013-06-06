@@ -78,7 +78,7 @@ TableTemplates.UserTable = [
   '<div class="span58" id="user-entity">',
     '<div class="header">',
       '<div class="offset2 hi4">',
-        '<h2><%= role %></h2>',
+        '<h2><%= name %></h2>',
         '<div class="q-mark-circle"></div>',
       '</div>',
       '<span class="right">',

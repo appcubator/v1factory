@@ -19,9 +19,9 @@ function(TableCollection,
 
       events : {
         'click #add-role'        : 'clickedAddUserRole',
-        'submit #add-role-form'  : 'createUserRole',
+        'keypress #add-role-form'  : 'createUserRole',
         'click #add-entity'      : 'clickedAddTable',
-        'submit #add-entity-form': 'createTable'
+        'keypress #add-entity-form': 'createTable'
       },
 
       initialize: function() {
@@ -50,12 +50,13 @@ function(TableCollection,
       },
 
       createUserRole: function(e) {
+        if(e.keyCode !== 13) {
+          return;
+        }
         var elem = new UserTableModel({
-          role: e.target.value
+          name: e.target.value
         });
         v1State.get('users').add(elem);
-        this.userView.setModel(elem);
-        this.renderUserView();
 
         e.target.value = '';
         $('#add-role').fadeIn();
@@ -70,6 +71,9 @@ function(TableCollection,
       },
 
       createTable: function(e) {
+        if(e.keyCode !== 13) {
+          return;
+        }
         var elem = new TableModel({
           name: e.target.value,
           fields: []

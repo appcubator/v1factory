@@ -18,8 +18,17 @@ class Translator(object):
     def v1script_to_app_component(self, s, page=None):
         tokens = s.split('.')
         if tokens[0] == 'CurrentUser':
+            # hard coding some shit for users
+            if s == 'CurrentUser.First Name':
+                return 'user.first_name'
+            if s == 'CurrentUser.Last Name':
+                return 'user.last_name'
+            if s == 'CurrentUser.username':
+                return 'user.username'
+            if s == 'CurrentUser.Email':
+                return 'user.email'
             ent = filter(lambda e: e.is_user, self.tables)[0]
-            seed = 'user' # this is if we assume we're in a template!!
+            seed = 'user.get_profile' # this is only in template. in code, it's request.user.get_profile()
             tokens = tokens[1:]
         elif tokens[0] == 'Page':
             ent = self.tables[0].app.find('tables/%s' % tokens[1], name_allowed=True)
@@ -46,9 +55,9 @@ class Translator(object):
                     current_ent = f._django_field.rel_model_id.ref._entity
                 i = f._django_field.identifier
             except IndexError:
-                print "couldn't find a field with name %s. " % tok
-                print tokens
-                print current_ent.name
+                #print "couldn't find a field with name %s. " % tok
+                #print tokens
+                #print current_ent.name
                 # it couldn't find a field with this name, so let's try to find a related name.
                 field_candidates = [ f for path, f in current_ent.app.search(r'^tables/\d+/fields/\d+$') if f.is_relational() and f.related_name == tok and f.entity == current_ent]
                 assert len(field_candidates) <= 1, "Found more than one field with the related name: %r and the entity: %r" % (tok, current_ent.name)

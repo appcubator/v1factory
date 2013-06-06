@@ -6,30 +6,44 @@ import traceback
 def create_codes(app):
     factory = AppComponentFactory()
 
-    create_map = {'create model for entity': factory.create_model,
+    create_map = {# MODELS
+                  'create model for entity': factory.create_model,
                   'create relational fields for entity': factory.create_relational_fields_for_model,
                   'import model into views': lambda entity: factory.import_model_into_namespace(entity, 'views'),
                   'import model into forms': lambda entity: factory.import_model_into_namespace(entity, 'forms'),
                   'import model into form receivers': lambda entity: factory.import_model_into_namespace(entity, 'form receivers'),
+                  'import model into tests': lambda entity: factory.import_model_into_namespace(entity, 'tests'),
 
+                  # INITING FOR URLS
                   'create urls object for app': factory.create_urls,
                   'create urls object for app form receivers': factory.create_fr_urls,
 
+                  # GET REQUEST HANDLERS
                   'view for page': factory.create_view_for_page,
                   'url to serve page': factory.add_page_to_urls,
+                  'find or add the needed data to the view': factory.find_or_create_query_for_view ,
 
+                  # HTML GEN STUFF
                   'init template v1script translator': factory.init_translator,
                   'translate strings in uielements': factory.properly_name_variables_in_template,
-                  'find or add the needed data to the view': factory.find_or_create_query_for_view ,
                   'create row/col structure for nodes': factory.create_tree_structure_for_page_nodes,
                   'create tests for static pages': factory.create_tests_for_static_pages,
 
+                  # ENTITY FORM RELATED HOOKS
                   'create form object': factory.create_django_form_for_entity_based_form,
                   'create form receiver': factory.create_form_receiver_for_form_object,
                   'create url for form receiver': factory.create_url_for_form_receiver,
-
-
                   'import form into form receivers': factory.import_form_into_form_receivers,
+
+                  # USER FORM RELATED HOOKS
+                  'create login form if not exists': factory.create_login_form_if_not_exists,
+                  'create signup form if not exists': factory.create_signup_form_if_not_exists,
+                  'import login form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
+                  'import signup form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
+                  'create login form receiver if not created': factory.create_login_form_receiver_if_not_created,
+                  'create signup form receiver if not created': factory.create_signup_form_receiver_if_not_created,
+                  'create url for form receiver if not created': factory.create_url_for_form_receiver_if_not_created,
+
     }
 
 
@@ -39,6 +53,7 @@ def create_codes(app):
         try:
             c = create_map[event_name](el)
         except KeyError:
+            raise
             print "NYI: %s" % event_name
         else:
             if c is not None:
@@ -53,6 +68,7 @@ def create_codes(app):
         create('import model into views', ent)
         create('import model into forms', ent)
         create('import model into form receivers', ent)
+        create('import model into tests', ent)
 
     # routes and functions to serve pages
     create('create urls object for app', app)

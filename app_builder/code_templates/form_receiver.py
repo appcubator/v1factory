@@ -1,13 +1,7 @@
 
-{% set HttpResponse = imports['django.HttpResponse'] %}
+{% set JsonResponse = imports['django.JsonResponse'] %}
 {% set simplejson = imports['django.simplejson'] %}
 {% set request = locals['request'] %}
-
-
-
-def JSONResponse(serializable_obj, **kwargs):
-    return {{HttpResponse}}({{simplejson}}.dumps(serializable_obj), mimetype="application/json", **kwargs)
-
 
 @require_POST
 def {{ fr.identifier }}({{request}}):
@@ -15,7 +9,7 @@ def {{ fr.identifier }}({{request}}):
     if form.is_valid():
         # do some stuff
         obj = form.save()
-        return JSONResponse({})
+        return {{JsonResponse}}({})
 
-    return JSONResponse(form.errors)
+    return {{JsonResponse}}(form.errors)
 

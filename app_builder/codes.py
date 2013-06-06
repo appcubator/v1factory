@@ -16,6 +16,7 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.require_POST':      'from django.views.decorators.http import require_POST',
             'django.csrf_exempt':       'from django.views.decorators.csrf import csrf_exempt',
             'django.simplejson':        'from django.utils import simplejson',
+            'django.JsonResponse':      'from django_common.http import JsonResponse',
             'django.redirect':          'from django.shortcuts import redirect',
             'django.render':            'from django.shortcuts import render',
             'django.render_to_response':'from django.shortcuts import render_to_response',
@@ -25,12 +26,19 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.url':               'from django.conf.urls import url',
             'django.test.TestCase':     'from django.test import TestCase',
             'django.test.Client':       'from django.test.client import Client',
+            'django.models.User':       'from django.contrib.auth.models import User',
+
+            'django.forms.AuthForm':    'from django.contrib.auth.forms import AuthenticationForm',
+            'django.forms.UserCreationForm':    'from django.contrib.auth.forms import UserCreationForm',
+            'django.auth.login':        'from django.contrib.auth import login',
+            'django.auth.authenticate':        'from django.contrib.auth import authenticate',
+            'django.auth.logout':       'from django.contrib.auth import logout',
 
 }
 
 
 
-FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
+FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models', 'django.models.User'),
                  'webapp/pages.py': ('django.HttpResponse',
                                     'django.login_required',
                                     'django.require_GET',
@@ -47,6 +55,7 @@ FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models',),
                                             'django.require_POST',
                                             'django.csrf_exempt',
                                             'django.simplejson',
+                                            'django.JsonResponse',
                                             'django.redirect',
                                             'django.render',
                                             'django.render_to_response',
@@ -73,7 +82,7 @@ class Import(object):
         self.import_symbol = import_symbol
         self.identifier = identifier
         self.use_as = False
-        if import_symbol != str(identifier):
+        if str(import_symbol) != str(identifier):
             self.use_as = True
         self.from_string = from_string
 
@@ -265,6 +274,26 @@ class DjangoModel(object):
 
     def render(self):
         return env.get_template('model.py').render(model=self, imports=self.namespace.imports(), locals={})
+
+class DjangoUserModel(DjangoModel):
+
+    def __init__(self, user_identifier, user_prof_identifier):
+        """Provide:
+        1. the identifier for the user (imported from django.contrib.models...),
+        1. the identifier for the userprofile class (imported from django.contrib.models...),
+        
+        """
+        super(DjangoUserModel, self).__init__(user_identifier)
+        self.user_profile_identifier = user_prof_identifier
+        self.namespace = user_prof_identifier.ns
+        self.locals = {}
+        self.locals['user o2o'] = self.namespace.new_identifier('user')
+
+    def create_query(self):
+        raise Exception("what up brah. this is not yet implemented")
+
+    def render(self):
+        return env.get_template('usermodel.py').render(model=self, imports=self.namespace.imports(), locals=self.locals)
 
 
 class Column(object):
@@ -556,3 +585,32 @@ class DjangoStaticPagesTestCase(object):
 
     def render(self):
         return env.get_template('tests/static_pages.py').render(test=self, imports=self.namespace.imports(), locals={})
+
+
+# HACK TO BE REFACTORED LATER
+class DjangoLoginForm(DjangoForm):
+
+    def __init__(self, identifier):
+        self.identifier = identifier
+        self.code_path = 'webapp/forms.py'
+
+    def render(self):
+        return ""
+
+
+class DjangoLoginFormReceiver(DjangoFormReceiver):
+
+    def render(self):
+        return env.get_template('login_form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
+
+
+class DjangoSignupFormReceiver(DjangoFormReceiver):
+
+    """
+    def __init__(self, identifier, user_profile_form_id):
+        super(DjangoSignupFormReceiver, self).__init__(identifier)
+        #self.user_profile_form_id = user_profile_form_id
+        """
+
+    def render(self):
+        return env.get_template('signup_form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
