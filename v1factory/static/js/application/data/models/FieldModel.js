@@ -2,8 +2,8 @@ define(['backbone'], function() {
 
   var FieldModel = Backbone.Model.extend({
     defaults :{
-        "required" : false,
-        "type"     : "text"
+      "required" : false,
+      "type"     : "text"
     }
   });
 

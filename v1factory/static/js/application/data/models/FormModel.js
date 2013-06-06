@@ -12,6 +12,7 @@ function(FormFieldCollection, ActionCollection) {
       this.set('action', bone.action||"create");
       this.set('actions', new ActionCollection(bone.actions || []));
       this.set('belongsTo', bone.belongsTo||null);
+      this.set('entity', bone.entity);
 
       if(bone.fields) {
         this.get('fields').add(bone.fields);
@@ -28,11 +29,6 @@ function(FormFieldCollection, ActionCollection) {
 
         this.get('fields').push(field);
       }
-
-      // should not be an attribute
-      this.entity = bone.entity;
-      console.log(bone);
-      console.trace();
     },
 
     fillWithProps: function(entity) {

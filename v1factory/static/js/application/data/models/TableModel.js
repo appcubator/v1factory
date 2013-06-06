@@ -4,7 +4,7 @@ define([
   'collections/FormCollection',
   'backbone'
 ], function(require) {
-  //FieldsCollection, FormCollection
+
   var FieldsCollection = require('collections/FieldsCollection');
   var FormCollection   = require('collections/FormCollection');
   var Backbone         = require('backbone');

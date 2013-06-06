@@ -1,9 +1,7 @@
 define([
-  'backbone',
   'models/FieldModel'
 ],
-function(Backbone,
-         FieldModel) {
+function(FieldModel) {
 
   var FieldsCollection = Backbone.Collection.extend({
     model : FieldModel

@@ -26,37 +26,21 @@ function(WidgetCollection,
 
       if(bone.entity) {
         if(!bone.entity.attributes) {
-          if(bone.entity == "User") {
-            this.set('entity', v1State.get('users'));
-          }
-          else {
-            this.set('entity', v1State.get('tables').getTableWithName(bone.entity));
-          }
+          if(bone.entity == "User") this.set('entity', v1State.get('users'));
+          else this.set('entity', v1State.get('tables').getTableWithName(bone.entity));
         }
         else {
           this.set('entity', bone.entity);
         }
       }
 
-      if(bone.slides) {
-        this.set('slides', new SlideCollection());
-      }
-
-      if(bone.row) {
-        this.set('row', new RowModel(bone.row));
-      }
-
-      if(bone.query) {
-        this.set('query', new QueryModel(bone.query, this.get('entity')));
-      }
+      if(bone.slides) { this.set('slides', new SlideCollection()); }
+      if(bone.row) { this.set('row', new RowModel(bone.row)); }
+      if(bone.query) { this.set('query', new QueryModel(bone.query, this.get('entity'))); }
 
       if(bone.form) {
-        if(!bone.form.attributes) {
-          this.set('form', new FormModel(bone.form));
-        }
-        else {
-          this.set('form', bone.form);
-        }
+        if(!bone.form.attributes) { this.set('form', new FormModel(bone.form)); }
+        else { this.set('form', bone.form); }
       }
 
       if(isNew) this.setUpNew(bone);
@@ -114,13 +98,11 @@ function(WidgetCollection,
       if(json.form) json.form = json.form.toJSON();
       if(json.query) json.query = this.get('query').toJSON();
       if(this.has('row')) json.row = this.get('row').toJSON();
-
       if(this.has('entity')) {
         if(typeof json.entity !== "string") {
           json.entity = json.entity.get('name');
         }
       }
-
 
       return json;
     }

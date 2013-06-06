@@ -1,9 +1,7 @@
 define([
-  'backbone',
   'models/FormModel'
 ],
-function(Backbone,
-         FormModel) {
+function(FormModel) {
 
   var FormCollection = Backbone.Collection.extend({
     model : FormModel

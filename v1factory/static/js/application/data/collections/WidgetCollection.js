@@ -1,8 +1,7 @@
 define(["backbone"],
 function() {
 
-  var WidgetCollection = Backbone.Collection.extend({
-  });
+  var WidgetCollection = Backbone.Collection.extend({ });
 
   return WidgetCollection;
 });

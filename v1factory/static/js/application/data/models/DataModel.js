@@ -9,7 +9,6 @@ function(ContentModel,
 
     initialize: function(bone, isNew) {
       this.set('content_attribs', new ContentModel(bone.content_attribs||{}));
-
       if(bone.container_info) {
         this.set('container_info', new ContainerInfoModel(bone.container_info, isNew));
       }
@@ -25,10 +24,8 @@ function(ContentModel,
       if(json.container_info) {
         json.container_info = this.get('container_info').toJSON();
       }
-
       return json;
     }
-
   });
 
   return DataModel;
