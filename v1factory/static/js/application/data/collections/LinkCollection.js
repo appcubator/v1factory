@@ -1,9 +1,7 @@
 define([
-  'backbone',
   'models/LinkModel'
 ],
-function(Backbone,
-         LinkModel) {
+function(LinkModel) {
 
   var LinkCollection = Backbone.Collection.extend({
     model: LinkModel

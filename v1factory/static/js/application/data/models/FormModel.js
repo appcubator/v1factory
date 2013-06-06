@@ -5,14 +5,14 @@ define([
 function(FormFieldCollection, ActionCollection) {
 
   var FormModel = Backbone.Model.extend({
-    initialize: function(bone, entity) {
-
+    initialize: function(bone) {
 
       this.set('name', bone.name);
       this.set('fields', new FormFieldCollection());
       this.set('action', bone.action||"create");
       this.set('actions', new ActionCollection(bone.actions || []));
       this.set('belongsTo', bone.belongsTo||null);
+      this.set('entity', bone.entity);
 
       if(bone.fields) {
         this.get('fields').add(bone.fields);
@@ -29,9 +29,6 @@ function(FormFieldCollection, ActionCollection) {
 
         this.get('fields').push(field);
       }
-
-      // should not be an attribute
-      this.entity = entity;
     },
 
     fillWithProps: function(entity) {
@@ -59,6 +56,9 @@ function(FormFieldCollection, ActionCollection) {
       var json = _.clone(this.attributes);
       json.name = json.name || "";
       json.fields = this.get('fields').toJSON();
+      if(json.entity.attributes) {
+        json.entity = json.entity.get('name');
+      }
       return json;
     }
 

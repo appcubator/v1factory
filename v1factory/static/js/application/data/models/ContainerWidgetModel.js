@@ -4,11 +4,8 @@ define([
 function(WidgetModel) {
 
   var ContainerWidgetModel = WidgetModel.extend({
-    selected: false,
-
     defaults: {
-      'container_info' : null,
-      'deletable' : true
+      'container_info' : null
     },
 
     initialize: function(bone, isNew) {
@@ -17,11 +14,10 @@ function(WidgetModel) {
 
     toJSON : function() {
       var json = _.clone(this.attributes);
-      json = _.omit(json, 'selected', 'deletable');
 
-      json.type = "form";
-      json.layout  = this.get('layout').toJSON();
-      json.data = this.get('data').toJSON();
+      json.type   = "form";
+      json.layout = this.get('layout').toJSON();
+      json.data   = this.get('data').toJSON();
 
       return json;
     }

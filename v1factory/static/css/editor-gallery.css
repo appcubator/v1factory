@@ -447,3 +447,8 @@
 .elements-list .gallery-header:active {
   border: none;
 }
+
+ul.row-elements-list.elements-list {
+  height: 360px;
+  overflow-y: scroll;
+}

@@ -138,6 +138,7 @@ function() {
     },
 
     unbindAll: function() {
+      var self = this;
       var widget = this.selectedEl;
       widget.on('editModeOff', function() {
         self.bindWidget(widget);
@@ -148,7 +149,7 @@ function() {
       widget.unbind('selected');
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
-      this.selectDiv.style.left = ((widget.get('layout').get('width') * 80) + 4) + 'px';
+      this.selectDiv.style.left = (((widget.get('layout').get('width') + widget.get('layout').get('left')) * 80) + 4) + 'px';
     },
 
     setLayout: function(node, widgetModel) {
@@ -350,7 +351,7 @@ function() {
       return false;
     },
 
-    clear: function() { },
+    clear: function() { this.widgetEditorView.clear(); },
 
     hideNode: function(node) {
       node.style.height = 0;

@@ -1,5 +1,4 @@
 #widget-editor {
-  width: 240px;
   position: absolute;
   top: 100%;
   left: 0;
@@ -7,13 +6,13 @@
   background-color: #2b3545;
   text-align: left;
   padding: 0;
+  padding-top: 4px;
   padding-bottom: 4px;
   background-color: #2b3545;
   border-radius: 4px;
   margin-top: 12px;
   font: normal 16px/20px "proxima-nova", Arial, sans-serif;
   overflow: visible;
-  overflow-y: scroll;
   max-height: 400px;
 }
 

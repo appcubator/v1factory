@@ -1,12 +1,9 @@
 define([
-  'models/UIElementModel',
-  'backbone'
+  'models/UIElementModel'
 ],
-function(UIElementModel,
-        Backbone) {
+function(UIElementModel) {
 
   var UIElementCollection = Backbone.Collection.extend({
-
     model : UIElementModel,
 
     initialize: function (models, type) {

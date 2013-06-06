@@ -1,22 +1,21 @@
 define([
-	'backbone',
 	'collections/LinkCollection'
 ],
-function(Backbone, LinkCollection) {
+function(LinkCollection) {
+
   var FooterModel = Backbone.Model.extend({
+
     defaults : {
       customText : "Add custom footer text here",
       isHidden : false,
       isFixed : true
     },
-    initialize: function(options) {
+
+    initialize: function(bone) {
 
       //init items collection with links passed from appState
-      if(options.links) {
-        this.set('links', new LinkCollection(options.links));
-        this.links = this.get('links');
-      }
-
+      this.set('links', new LinkCollection(bone.links||[]));
+      this.links = this.get('links');
       _.bindAll(this);
     },
 
@@ -26,19 +25,13 @@ function(Backbone, LinkCollection) {
 
     //create a duplicate of the first link
     createNewLink: function() {
-      var firstLink = this.links.at(0).toJSON();
-      var newLink = new (this.links.model)({
-        title: firstLink.title,
-        url: firstLink.url
-      });
-      this.links.add(newLink);
-      return newLink;
+      var firstLink = this.models[0].toJSON();
+      this.push(firstLink);
     },
 
     toJSON: function() {
       var json = _.clone(this.attributes);
-      if(json.links) json.links = json.links.toJSON();
-
+      json.links = json.links.toJSON();
       return json;
     }
   });

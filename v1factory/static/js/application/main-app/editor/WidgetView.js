@@ -29,6 +29,8 @@ define([
     editable : false,
     editMode : false,
     shadowElem : null,
+    positionHorizontalGrid : null,
+    positionVerticalGrid : null,
 
     events: {
       'click'         : 'select',
@@ -38,7 +40,7 @@ define([
       'mousedown'     : 'mousedown'
     },
 
-    initialize: function(widgetModel){
+    initialize: function(widgetModel, isFreeMove){
       var self = this;
       _.bindAll(this, 'render',
                       'renderElement',
@@ -61,6 +63,7 @@ define([
 
       this.model = widgetModel;
 
+      if(isFreeMove) { this.positionVerticalGrid = 1; this.positionHorizontalGrid = 1; }
       this.model.get('data').bind("change:type", this.changedType, this);
       this.model.get('data').bind("change:class_name", this.changedType, this);
       this.model.bind("remove", this.remove, this);
@@ -89,8 +92,8 @@ define([
       var height = this.model.get('layout').get('height');
 
       // if(this.model.get('type') == 'box') {this.el.style.zIndex = 0;}
-      this.setTop(GRID_HEIGHT * (this.model.get('layout').get('top')));
-      this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
+      this.setTop((this.positionHorizontalGrid||GRID_HEIGHT) * (this.model.get('layout').get('top')));
+      this.setLeft((this.positionHorizontalGrid||GRID_WIDTH) * (this.model.get('layout').get('left')));
       this.setHeight(height * GRID_HEIGHT);
       this.el.className += " span" + width;
       this.el.style.textAlign = this.model.get('layout').get('alignment');
@@ -185,11 +188,12 @@ define([
     },
 
     changedTop: function(a) {
-      this.setTop(GRID_HEIGHT * (this.model.get('layout').get('top')));
+      console.log((this.positionVerticalGrid||GRID_HEIGHT));
+      this.setTop((this.positionVerticalGrid||GRID_HEIGHT) * (this.model.get('layout').get('top')));
     },
 
     changedLeft: function(a) {
-      this.setLeft(GRID_WIDTH * (this.model.get('layout').get('left')));
+      this.setLeft((this.positionHorizontalGrid||GRID_WIDTH) * (this.model.get('layout').get('left')));
     },
 
     changedText: function(a) {

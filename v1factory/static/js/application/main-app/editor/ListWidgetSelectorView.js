@@ -147,17 +147,15 @@ function() {
 
       this.selectDiv.style.height = 0;
       this.selectDiv.style.width = 0;
-      console.log(((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4);
-      this.selectDiv.style.left = (((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 80) + 4) + 'px';
+      this.selectDiv.style.left = (((widget.get('layout').get('width') + widget.get('layout').get('left') + 1) * 1) + 4) + 'px';
     },
 
     setLayout: function(node, widgetModel) {
       $(node).show();
-      consle.log(node);
       node.style.width  = ((widgetModel.get('layout').get('width') * 80) + 4) + 'px';
       node.style.height = ((widgetModel.get('layout').get('height') * 15) + 4) + 'px';
-      node.style.left   = ((widgetModel.get('layout').get('left') * 80) - 2) + 'px';
-      node.style.top    = ((widgetModel.get('layout').get('top') * 15) - 2) + 'px';
+      node.style.left   = ((widgetModel.get('layout').get('left') * 1) - 2) + 'px';
+      node.style.top    = ((widgetModel.get('layout').get('top') * 1) - 2) + 'px';
       return node;
     },
 
@@ -175,7 +173,10 @@ function() {
 
     newSelected: function(widgetModel) {
       var self = this;
-      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) return;
+      if(this.selectedEl && this.selectedEl.cid == widgetModel.cid) {
+        this.setLayout(this.selectDiv, widgetModel);
+        return;
+      }
 
       if(this.selectedEl) {
         widgetModel.get('layout').unbind('change', self.setLayout);
@@ -199,8 +200,8 @@ function() {
     },
 
     resized: function(e, ui) {
-      var left = Math.round((ui.position.left / GRID_WIDTH));
-      var top  = Math.round((ui.position.top  / GRID_HEIGHT));
+      var left = Math.round((ui.position.left / 1));
+      var top  = Math.round((ui.position.top  / 1));
       var deltaHeight = Math.round((ui.size.height + 6) / GRID_HEIGHT);
       var deltaWidth = Math.round((ui.size.width + 2) / GRID_WIDTH);
       var elem = iui.get('widget-wrapper-' + this.selectedEl.cid);
@@ -215,21 +216,22 @@ function() {
 
     moving: function(e, ui) {
       model = this.selectedEl;
-      if(e.target.id == "hover-div") { model = this.hoveredEl; }
+      if(e.target.id == "list-hover-div") { model = this.hoveredEl; }
       var elem = iui.get('widget-wrapper-' + model.cid);
       elem.style.top = ui.position.top + 2 + 'px';
       elem.style.left = ui.position.left + 2 + 'px';
     },
 
     moved: function(e, ui) {
-      g_guides.hideAll();
-
       model = this.selectedEl;
-      if(e.target.id == "hover-div") { model = this.hoveredEl; }
-
-      var top = Math.round((ui.position.top / GRID_HEIGHT));
-      var left = Math.round((ui.position.left / GRID_WIDTH));
+      if(e.target.id == "list-hover-div") { model = this.hoveredEl; }
+      var top = Math.round((ui.position.top / 1));
+      var left = Math.round((ui.position.left / 1));
       model.get('layout').set('top', top);
+
+      if(left == model.get('layout').get('left')) {
+        model.get('layout').trigger('change:left');
+      }
       model.get('layout').set('left', left);
       this.newSelected(model);
       this.setLayout(e.target, model);

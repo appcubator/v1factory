@@ -8,10 +8,8 @@ function(ActionModel) {
 
     removePageRedirect: function() {
       var self = this;
-      _(this.models).each(function(model) {
-        if(model.get('type') == "redirect") {
-          self.remove(model);
-        }
+      this.each(function(model) {
+        if(model.get('type') == "redirect") { self.remove(model); }
       });
     },
 
@@ -21,7 +19,6 @@ function(ActionModel) {
         pageName : pageModel.get('name')
       });
     }
-
   });
 
   return ActionCollection;

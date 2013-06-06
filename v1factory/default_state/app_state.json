@@ -5,18 +5,16 @@
     },
     "users": [
         {
-            "role": "Admin",
-            "fields": [],
-
+            "name": "Admin",
+            "fields": []
         },
         {
-            "role": "Editor",
-            "fields": [],
-
+            "name": "Editor",
+            "fields": []
         },
         {
-            "role": "Member",
-            "fields": [],
+            "name": "Member",
+            "fields": []
         }
     ],
     "emails": [

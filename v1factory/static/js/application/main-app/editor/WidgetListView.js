@@ -25,20 +25,15 @@ function( WidgetContainerView,
     initialize: function(widgetModel) {
 
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
-      _.bindAll(this, 'render',
-                      'renderShadowElements',
-                      'placeWidget',
-                      'renderElements',
-                      'showDetails',
-                      'highlightFirstRow');
+      _.bindAll(this);
 
       this.model.get('data').get('container_info').get('row').get('uielements').bind("add", this.placeWidget);
       this.model.get('data').get('container_info').get('row').get('uielements').bind("add", this.renderShadowElements);
+      this.model.get('data').get('container_info').get('row').get('uielements').bind("remove", this.renderShadowElements);
+      this.model.bind('deselected', this.deselected);
 
       var action = this.model.get('data').get('container_info').get('action');
 
-      //this.model.get('data').get('container_info').get('row').get('layout').bind('change', this.reRender);
-      //this.model.get('container_info').get('uielements').bind('change', this.rowBindings);
       this.model.bind('highlight', this.highlightFirstRow);
       this.widgetSelectorView = new ListWidgetSelectorView(this.model.get('data').get('container_info').get('row').get('uielements'));
       this.rowBindings();
@@ -46,11 +41,9 @@ function( WidgetContainerView,
 
     rowBindings: function() {
       var self = this;
-      _(self.model.get('data').get('container_info').get('row').get('uielements').models).each(function(element) {
-        element.unbind('change', self.reRender);
-        element.get('layout').unbind("change", self.reRender);
-        element.bind('change', self.reRender);
-        element.get('layout').bind('change', self.reRender);
+      self.model.get('data').get('container_info').get('row').get('uielements').each(function(element) {
+        element.get('layout').bind('change', self.renderShadowElements);
+        element.get('data').bind('change', self.renderShadowElements);
       });
     },
 
@@ -79,14 +72,12 @@ function( WidgetContainerView,
       row.get('uielements').map(function(widgetModel) {
         self.placeWidget(widgetModel);
       });
+      this.widgetSelectorView.setElement(this.el).render();
 
       this.el.appendChild(editorRow);
-
       var listDiv = document.createElement('div');
       this.listDiv = listDiv;
       this.el.appendChild(this.renderShadowElements());
-
-      this.el.appendChild(this.widgetSelectorView.render().el);
 
       return this;
     },
@@ -100,19 +91,6 @@ function( WidgetContainerView,
       return this.listDiv;
     },
 
-    renderElements : function() {
-      var self  =this;
-      _(this.model.get('data').get('container_info').get('row').get('uielements').models).each(function(widgetModel) {
-        //self.placeWidget(widgetModel);
-      });
-
-      if(this.model.get('data').get('container_info').has('form')) {
-        _(this.formModel.get('fields').models).each(function(field) {
-          self.placeFormElement(field);
-        });
-      }
-    },
-
     showDetails: function() {
 
     },
@@ -122,8 +100,16 @@ function( WidgetContainerView,
     },
 
     placeWidget: function(widgetModel) {
-      var widgetView = new WidgetView(widgetModel);
+      var widgetView = new WidgetView(widgetModel, true);
       this.editorRow.appendChild(widgetView.render().el);
+      widgetModel.get('layout').bind('change', this.renderShadowElements);
+    },
+
+    deselected: function() {
+      this.editMode = false;
+      this.$el.find('.row').first().removeClass('highlighted');
+      this.model.trigger('editModeOff');
+      this.widgetSelectorView.deselect();
     }
 
   });

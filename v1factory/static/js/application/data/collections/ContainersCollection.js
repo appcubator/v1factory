@@ -11,27 +11,12 @@ function(ContainerWidgetModel,
     selectedEl: null,
 
     initialize: function() {
-      _.bindAll(this, 'selectWidgetById',
-                      'select',
-                      'unselectAll');
-
-      this.model.bind('change:selected', this.selectedChanged);
+      _.bindAll(this);
     },
 
     unselectAll: function() {
-      _.each(this.models, function(model) {
-        model.set('selected', false);
-      });
+      this.each(function(model) { model.set('selected', false); });
       this.selectedEl = null;
-    },
-
-    selectWidgetById: function(id) {
-      this.collection.get(id).select();
-      this.selectedEl = this.get(id);
-    },
-
-    selectedChanged : function(model) {
-      this.trigger('selectedChanged');
     },
 
     select : function(model) {
