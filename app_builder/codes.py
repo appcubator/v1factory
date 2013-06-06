@@ -16,6 +16,7 @@ IMPORTS = { 'django.models':            'from django.db import models',
             'django.require_POST':      'from django.views.decorators.http import require_POST',
             'django.csrf_exempt':       'from django.views.decorators.csrf import csrf_exempt',
             'django.simplejson':        'from django.utils import simplejson',
+            'django.JsonResponse':      'from django_common.http import JsonResponse',
             'django.redirect':          'from django.shortcuts import redirect',
             'django.render':            'from django.shortcuts import render',
             'django.render_to_response':'from django.shortcuts import render_to_response',
@@ -29,6 +30,9 @@ IMPORTS = { 'django.models':            'from django.db import models',
 
             'django.forms.AuthForm':    'from django.contrib.auth.forms import AuthenticationForm',
             'django.forms.UserCreationForm':    'from django.contrib.auth.forms import UserCreationForm',
+            'django.auth.login':        'from django.contrib.auth import login',
+            'django.auth.authenticate':        'from django.contrib.auth import authenticate',
+            'django.auth.logout':       'from django.contrib.auth import logout',
 
 }
 
@@ -51,6 +55,7 @@ FILE_IMPORT_MAP = { 'webapp/models.py': ('django.models', 'django.models.User'),
                                             'django.require_POST',
                                             'django.csrf_exempt',
                                             'django.simplejson',
+                                            'django.JsonResponse',
                                             'django.redirect',
                                             'django.render',
                                             'django.render_to_response',
@@ -587,23 +592,25 @@ class DjangoLoginForm(DjangoForm):
 
     def __init__(self, identifier):
         self.identifier = identifier
-        self.namespace = identifier.ns
         self.code_path = 'webapp/forms.py'
 
     def render(self):
         return ""
 
-class DjangoSignupForm(DjangoForm):
-
-    def __init__(self, identifier):
-        self.identifier = identifier
-        self.namespace = identifier.ns
-        self.code_path = 'webapp/forms.py'
-
-    def render(self):
-        return ""
 
 class DjangoLoginFormReceiver(DjangoFormReceiver):
-    pass
+
+    def render(self):
+        return env.get_template('login_form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
+
+
 class DjangoSignupFormReceiver(DjangoFormReceiver):
-    pass
+
+    """
+    def __init__(self, identifier, user_profile_form_id):
+        super(DjangoSignupFormReceiver, self).__init__(identifier)
+        #self.user_profile_form_id = user_profile_form_id
+        """
+
+    def render(self):
+        return env.get_template('signup_form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)

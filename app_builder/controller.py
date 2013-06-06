@@ -53,6 +53,7 @@ def create_codes(app):
         try:
             c = create_map[event_name](el)
         except KeyError:
+            raise
             print "NYI: %s" % event_name
         else:
             if c is not None:

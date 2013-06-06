@@ -69,7 +69,11 @@ class Coder(object):
                     from_string_imports = '\n'.join(sorted([Import.render_concatted_imports(imps) for imps in imports_by_from_string.values()]))
 
                     code = normal_imports + '\n\n' + from_string_imports + '\n\n' + code
-                    compile(code + "\n", relative_path, "exec")
+                    try:
+                        compile(code + "\n", relative_path, "exec")
+                    except IndentationError:
+                        print code
+                        raise
 
                 except SyntaxError:
                     traceback.print_exc()

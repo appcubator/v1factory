@@ -4,7 +4,7 @@ from app_builder.codes import DjangoModel, DjangoUserModel
 from app_builder.codes import DjangoPageView, DjangoTemplate
 from app_builder.codes import DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
 from app_builder.codes import DjangoForm, DjangoFormReceiver
-from app_builder.codes import DjangoLoginForm, DjangoLoginFormReceiver, DjangoSignupForm, DjangoSignupFormReceiver
+from app_builder.codes import DjangoLoginForm, DjangoLoginFormReceiver, DjangoSignupFormReceiver
 from app_builder.codes import create_import_namespace
 from app_builder import naming
 from app_builder.dynamicvars import Translator
@@ -81,7 +81,7 @@ class AppComponentFactory(object):
         elif namespace == 'form receivers':
             ns = self.fr_namespace
         elif namespace == 'tests':
-            ns = self.fr_namespace
+            ns = self.tests_namespace
         else:
             raise KeyError
 
@@ -212,7 +212,6 @@ class AppComponentFactory(object):
     def create_login_form_if_not_exists(self, uie):
         if hasattr(uie, '_django_form'):
             return None
-        # Turns out i don't even use this: form_model = uie.container_info.form # bind to this name to save me some typing
         prim_name = 'LoginForm'
         form_id = self.form_namespace.add_import('django.forms.AuthForm', prim_name)
         form_obj = DjangoLoginForm(form_id)
@@ -222,10 +221,9 @@ class AppComponentFactory(object):
     def create_signup_form_if_not_exists(self, uie):
         if hasattr(uie, '_django_form'):
             return None
-        # Turns out i don't even use this: form_model = uie.container_info.form # bind to this name to save me some typing
         prim_name = 'SignupForm'
         form_id = self.form_namespace.add_import('django.forms.UserCreationForm', prim_name)
-        form_obj = DjangoSignupForm(form_id)
+        form_obj = DjangoLoginForm(form_id)
         uie._django_form = form_obj
         return form_obj
 
@@ -238,6 +236,8 @@ class AppComponentFactory(object):
         if hasattr(uie, '_django_form_receiver'):
             return None
         fr_id = self.fr_namespace.new_identifier('Login')
+        if 'django.auth.login' not in self.fr_namespace.imports():
+            self.fr_namespace.add_import('django.auth.login', 'auth_login')
         fr = DjangoLoginFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
@@ -246,6 +246,10 @@ class AppComponentFactory(object):
         if hasattr(uie, '_django_form_receiver'):
             return None
         fr_id = self.fr_namespace.new_identifier('Sign Up')
+        if 'django.auth.login' not in self.fr_namespace.imports():
+            self.fr_namespace.add_import('django.auth.login', 'auth_login')
+        if 'django.auth.authenticate' not in self.fr_namespace.imports():
+            self.fr_namespace.add_import('django.auth.authenticate', 'authenticate')
         fr = DjangoSignupFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr

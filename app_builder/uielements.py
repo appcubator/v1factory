@@ -218,7 +218,10 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
             self.content = f(self.content)
         else:
             self.content = f(self.content + "{{ CurrentUser.First Name }}")
-        self.content_attribs['src'] = f(self.content_attribs['src'])
+        try:
+            self.content_attribs['src'] = f(self.content_attribs['src'])
+        except KeyError:
+            pass
 
     def html(self):
         tag = Tag(self.tagName, self.kwargs(), content=self.content)
