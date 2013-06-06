@@ -19,15 +19,7 @@ function(ElementCollection,
     events : { },
 
     initialize   : function(widgetsCollection) {
-       _.bindAll(this, 'render',
-                       'dropped',
-                       'renderUIElementList',
-                       'renderAuthenticationForms',
-                       'renderCurrentUserElements',
-                       'renderEntitiyFormsTablesLists',
-                       'renderContextEntityForms',
-                       'getFieldType',
-                       'appendUIElement');
+       _.bindAll(this);
 
       this.widgetsCollection = widgetsCollection;
     },
@@ -264,7 +256,7 @@ function(ElementCollection,
       else if(/(context-entity)/.exec(className)) {
         hash = String(id).replace('context-field-','');
         hash = hash.split('-');
-        entity = v1State.get('entities').get(hash[0]);
+        entity = v1State.get('tables').get(hash[0]);
         field = entity.get('fields').get(hash[1]);
 
         var editorContext = this.editorContext ? this.editorContext : "page";
@@ -275,7 +267,6 @@ function(ElementCollection,
         widget.data.content =  content;
         var widgetModel = new WidgetModel(widget);
         this.widgetsCollection.push(widgetModel);
-        widgetModel.select();
       }
       else if(/(entity)/.exec(className)) {
         cid  = String(id).replace('entity-','');

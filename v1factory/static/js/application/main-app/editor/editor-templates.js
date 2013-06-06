@@ -265,7 +265,7 @@ Templates.tempUIElement = [
 
 
 Templates.tempUIElementSized = [
-  '<div style="position:absolute; left: <% console.log(element); print(element.layout.get(\'left\')*GRID_WIDTH) %>px; top:<% print(element.layout.get(\'top\')*GRID_HEIGHT) %>px;" class="span<%=element.layout.get(\'width\')%> hi<%=element.layout.get(\'height\')%>">',
+  '<div style="position:absolute; left: <% console.log(element); print(element.layout.get(\'left\')*1) %>px; top:<% print(element.layout.get(\'top\')*1) %>px;" class="span<%=element.layout.get(\'width\')%> hi<%=element.layout.get(\'height\')%>">',
   '<<%= element.data.get(\'tagName\') %>',
   'class = "<%= element.data.get(\'class_name\') %>"',
   '<% if(element.data.get(\'cons_attribs\')) { %>',

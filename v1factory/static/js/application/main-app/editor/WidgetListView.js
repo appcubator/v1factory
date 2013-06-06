@@ -43,6 +43,7 @@ function( WidgetContainerView,
       var self = this;
       self.model.get('data').get('container_info').get('row').get('uielements').each(function(element) {
         element.get('layout').bind('change', self.renderShadowElements);
+        element.get('data').bind('change', self.renderShadowElements);
       });
     },
 
@@ -71,13 +72,12 @@ function( WidgetContainerView,
       row.get('uielements').map(function(widgetModel) {
         self.placeWidget(widgetModel);
       });
-      this.widgetSelectorView.setElement(editorRow).render();
+      this.widgetSelectorView.setElement(this.el).render();
 
       this.el.appendChild(editorRow);
       var listDiv = document.createElement('div');
       this.listDiv = listDiv;
       this.el.appendChild(this.renderShadowElements());
-
 
       return this;
     },
@@ -91,19 +91,6 @@ function( WidgetContainerView,
       return this.listDiv;
     },
 
-    renderElements : function() {
-      var self  =this;
-      _(this.model.get('data').get('container_info').get('row').get('uielements').models).each(function(widgetModel) {
-        //self.placeWidget(widgetModel);
-      });
-
-      if(this.model.get('data').get('container_info').has('form')) {
-        _(this.formModel.get('fields').models).each(function(field) {
-          self.placeFormElement(field);
-        });
-      }
-    },
-
     showDetails: function() {
 
     },
@@ -113,7 +100,7 @@ function( WidgetContainerView,
     },
 
     placeWidget: function(widgetModel) {
-      var widgetView = new WidgetView(widgetModel);
+      var widgetView = new WidgetView(widgetModel, true);
       this.editorRow.appendChild(widgetView.render().el);
       widgetModel.get('layout').bind('change', this.renderShadowElements);
     },

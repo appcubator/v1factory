@@ -83,16 +83,16 @@ function(EditorGalleryView, ElementCollection) {
 
     findLeft: function(e, ui) {
       var offsetLeft = $('.highlighted').offset().left;
-      var left = Math.round((e.pageX - offsetLeft)/GRID_WIDTH);
+      var left = Math.round((e.pageX - offsetLeft)/1);
       if(left < 0) left = 0;
-      if(left + 4 > 12) left = 8;
+      //if(left + 4 > 12) left = 8;
 
       return left;
     },
 
     findTop: function(e, ui) {
       var offsetScrolledTop = $('.highlighted').offset().top;
-      var top  = Math.round((e.pageY - offsetScrolledTop)/GRID_HEIGHT);
+      var top  = Math.round((e.pageY - offsetScrolledTop)/1);
       if(top < 0) top = 0;
 
       return top;
