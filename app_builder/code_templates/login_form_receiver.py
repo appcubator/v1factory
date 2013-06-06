@@ -15,7 +15,7 @@ def {{ fr.identifier }}({{request}}):
     if form.is_valid():
 
         {{login_function}}({{request}}, form.get_user())
-        return {{JsonResponse}}({}) #ajax_redirect(request, redirect_to)
+        return {{JsonResponse}}() #ajax_redirect(request, redirect_to)
 
     else:
-        return {{JsonResponse}}(form.errors)
+        return {{JsonResponse}}(errors=form.errors)

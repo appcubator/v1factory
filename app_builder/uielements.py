@@ -68,7 +68,8 @@ class Form(DictInited, Hooked):
     _hooks = ('create form object',
               'import form into form receivers',
               'create form receiver',
-              'create url for form receiver')
+              'create url for form receiver',
+             )
 
     @property
     def hooks(self):
@@ -76,13 +77,15 @@ class Form(DictInited, Hooked):
             return ('create login form if not exists',
                     'import login form into form receivers if not imported',
                     'create login form receiver if not created',
-                    'create url for form receiver if not created',)
+                    'create url for form receiver if not created',
+                   )
 
         elif self.container_info.form.action == 'signup':
             return ('create signup form if not exists',
                     'import signup form into form receivers if not imported',
                     'create signup form receiver if not created',
-                    'create url for form receiver if not created',)
+                    'create url for form receiver if not created',
+                   )
 
         else:
             return super(Form, self).hooks
@@ -104,7 +107,7 @@ class Form(DictInited, Hooked):
                     elif field.displayType == 'email-text':
                         f = Tag('div', {'class': 'input-prepend'}, content=(
                                 Tag('span', {'class':'add-on'}, content="@"),
-                                Tag('input', {'type': 'text'})))
+                                Tag('input', {'type': 'text', 'placeholder': field.placeholder})))
                     elif field.displayType == 'button':
                         f = Tag('input', {'type': 'submit', 'value': field.placeholder, 'class': "btn" })
                     else:
@@ -134,7 +137,7 @@ class Form(DictInited, Hooked):
                     super(Form.FormInfo.FormInfoInfo.FormModelField, self).__init__(*args, **kwargs)
                     self.name = self.field_name
 
-            class FormNormalField(FormField, DictInited, Resolvable):
+            class FormNormalField(FormField, DictInited):
                 _schema = {
                     "name": {"_type": ""},
                     "placeholder": {"_type": ""},
@@ -142,7 +145,6 @@ class Form(DictInited, Hooked):
                     "displayType": {"_type": ""},
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this, in more detail?
                 }
-                _resolve_attrs = (('field_name', 'model_field'),)
 
             class ButtonField(FormField, DictInited):
                 _schema = {
@@ -164,7 +166,7 @@ class Form(DictInited, Hooked):
             _schema = {
                 "entity": {"_type": ""},
                 "action": {"_type": ""},
-                "fields": {"_type": [], "_each": {"_one_of": [{"_type": FormModelField},{"_type": ButtonField}]}},
+                "fields": {"_type": [], "_each": {"_one_of": [{"_type": FormModelField},{"_type": FormNormalField},{"_type": ButtonField}]}},
                 #"goto": {"_type": LinkLang},
                 "belongsTo": {"_one_of": [{"_type": ""}, {"_type": None}]}  # TODO may have reference
             }
@@ -183,12 +185,19 @@ class Form(DictInited, Hooked):
         "Translator: This is a form, nothing to do."
         pass
 
+    def set_post_url(self, url):
+        self.post_url = url
+
     def html(self):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
             fields.extend(f.htmls())
+        try:
+            post_url = self.post_url
+        except AttributeError:
+            post_url = "ASDFJKWTF"
         attribs = {'method': 'POST',
-                  'action': '/' } # TODO fix this.
+                  'action': post_url } # TODO fix this.
         # TODO overlap styles here? maybe need a better solution
         form = Tag('form', attribs, content=fields)
         return form
@@ -214,10 +223,8 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         return kw
 
     def visit_strings(self, f):
-        if 'GAMEPAGE' in self.content:
-            self.content = f(self.content)
-        else:
-            self.content = f(self.content + "{{ CurrentUser.First Name }}")
+        print self.content
+        self.content = f(self.content)
         try:
             self.content_attribs['src'] = f(self.content_attribs['src'])
         except KeyError:

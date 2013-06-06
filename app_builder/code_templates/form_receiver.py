@@ -9,7 +9,7 @@ def {{ fr.identifier }}({{request}}):
     if form.is_valid():
         # do some stuff
         obj = form.save()
-        return {{JsonResponse}}({})
+        return {{JsonResponse}}(data={})
 
-    return {{JsonResponse}}(form.errors)
+    return {{JsonResponse}}(errors=form.errors)
 
