@@ -1,6 +1,6 @@
 define([
   'collections/TableCollection',
-  'models/UserEntityModel',
+  'models/UserTableModel',
   'models/TableModel',
   'app/ShowDataView',
   'app/UserTableView',
@@ -8,7 +8,7 @@ define([
 ],
 
 function(TableCollection,
-         UserEntityModel,
+         UserTableModel,
          TableModel,
          ShowDataView,
          UserTableView,
@@ -34,7 +34,7 @@ function(TableCollection,
 
         // subviews
         var self = this;/*
-        this.userView = new UserEntityView({
+        this.userView = new UserTableView({
           model: self.userRoles.models[0] || null,
           entities: self.tables
         });*/
