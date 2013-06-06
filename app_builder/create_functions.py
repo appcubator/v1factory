@@ -1,6 +1,9 @@
 import re
 
-from app_builder.codes import DjangoModel, DjangoPageView, DjangoTemplate, DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery, DjangoForm, DjangoFormReceiver
+from app_builder.codes import DjangoModel, DjangoUserModel
+from app_builder.codes import DjangoPageView, DjangoTemplate
+from app_builder.codes import DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
+from app_builder.codes import DjangoForm, DjangoFormReceiver
 from app_builder.codes import create_import_namespace
 from app_builder import naming
 from app_builder.dynamicvars import Translator
