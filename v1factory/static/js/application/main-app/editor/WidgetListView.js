@@ -25,16 +25,12 @@ function( WidgetContainerView,
     initialize: function(widgetModel) {
 
       WidgetContainerView.__super__.initialize.call(this, widgetModel);
-      _.bindAll(this, 'render',
-                      'renderShadowElements',
-                      'placeWidget',
-                      'renderElements',
-                      'showDetails',
-                      'highlightFirstRow');
+      _.bindAll(this);
 
       this.model.get('data').get('container_info').get('row').get('uielements').bind("add", this.placeWidget);
       this.model.get('data').get('container_info').get('row').get('uielements').bind("add", this.renderShadowElements);
       this.model.get('data').get('container_info').get('row').get('uielements').bind("remove", this.renderShadowElements);
+      this.model.bind('deselected', this.deselected);
 
       var action = this.model.get('data').get('container_info').get('action');
 
@@ -120,6 +116,13 @@ function( WidgetContainerView,
       var widgetView = new WidgetView(widgetModel);
       this.editorRow.appendChild(widgetView.render().el);
       widgetModel.get('layout').bind('change', this.renderShadowElements);
+    },
+
+    deselected: function() {
+      this.editMode = false;
+      this.$el.find('.row').first().removeClass('highlighted');
+      this.model.trigger('editModeOff');
+      this.widgetSelectorView.deselect();
     }
 
   });

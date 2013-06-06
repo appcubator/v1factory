@@ -138,6 +138,7 @@ function() {
     },
 
     unbindAll: function() {
+      var self = this;
       var widget = this.selectedEl;
       widget.on('editModeOff', function() {
         self.bindWidget(widget);
@@ -350,7 +351,7 @@ function() {
       return false;
     },
 
-    clear: function() { },
+    clear: function() { this.widgetEditorView.clear(); },
 
     hideNode: function(node) {
       node.style.height = 0;

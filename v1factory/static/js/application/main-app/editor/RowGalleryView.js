@@ -7,8 +7,8 @@ function(EditorGalleryView, ElementCollection) {
   var RowGalleryView = EditorGalleryView.extend({
     el       : null,
     tagName  : 'ul',
-    className: 'elements-list',
-    // allList  : iui.get('elements-list item-gallery'),
+    className: 'elements-list row-elements-list',
+
     events : {
     },
 
