@@ -69,6 +69,8 @@ class Form(DictInited, Hooked):
               'import form into form receivers',
               'create form receiver',
               'create url for form receiver',
+              # add the url to the action attribute, this happens in the "create url" phase
+              # map the form object fields names to the html field's name
              )
 
     @property
@@ -191,6 +193,7 @@ class Form(DictInited, Hooked):
     def html(self):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
+            # here is a potentially nice place to put the django model name in.
             fields.extend(f.htmls())
         try:
             post_url = self.post_url
