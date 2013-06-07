@@ -42,6 +42,8 @@ function(SimpleModalView, LoginModalView) {
   var HomeMain = function() {
     var xTrans = -30;
     var yTrans = 45;
+    var pageHeight = $(window).height();
+    var bg = 1;
 
     $(window).on('scroll', function(e) {
       var newValue = $(window).scrollTop();
@@ -52,6 +54,17 @@ function(SimpleModalView, LoginModalView) {
           "webkitTransform":str,
           "MozTransform":str
       });
+
+      if(newValue > pageHeight && bg ==1) {
+        bg = 2;
+        $('#background-img').css('background-image', 'url(/static/img/bg3.jpg)');
+      }
+
+      if(newValue < pageHeight && bg == 2) {
+        bg = 1;
+        $('#background-img').css('background-image', 'url(/static/img/bg2.jpg)');
+      }
+
     });
 
 
