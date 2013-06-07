@@ -23,7 +23,6 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
       'click .edit-form'           : 'clickedEditForm',
-      'change .attrib-required-check' : 'changedRequiredField',
       'mouseover .right-arrow'     : 'slideRight',
       'mousemove .right-arrow'     : 'slideRight',
       'click     .right-arrow'     : 'slideRight'
@@ -35,10 +34,11 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       this.model  = tableModel;
 
       this.listenTo(this.model.get('fields'), 'add', this.appendField);
-      console.log(v1State.get('users'));
       this.userRoles = v1State.get('users').pluck('name');
       this.otherEntities = _(v1State.get('tables').pluck('name')).without(this.model.get('name'));
-      console.log(this.userRoles);
+
+      this.userRelations = v1State.get('users').getRelationsWithName(this.model.get('name'));
+      this.tableRelations = v1State.get('tables').getRelationsWithName(this.model.get('name'));
     },
 
     render: function() {
@@ -46,6 +46,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       this.el.innerHTML= _.template(TableTemplates.Table, self.model.toJSON());
 
       this.renderProperties();
+      this.renderRelations();
 
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();
@@ -124,10 +125,17 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       new FormEditorView(formModel, this.model);
     },
 
-    changedRequiredField: function(e) {
-      var fieldCid = String(e.target.id).replace('checkbox-field-','');
-      var isRequired = e.target.checked;
-      this.model.get('fields').get(fieldCid).set('required', isRequired);
+    renderRelations: function() {
+      var list = this.$el.find('.related-fields');
+      var arr = _.union(this.tableRelations, this.userRelations);
+      _(arr).each(function(relation) {
+        var suffix;
+        var text = 'Has ' + relation.related_name;
+        if(relation.type == "m2m" || relation.type == "fk") suffix = 'List of ' + relation.entity;
+        if(relation.type == "o2o") suffix = 'Single ' + relation.entity;
+
+        list.append('<div class="related-tag">' + text +' ('+ suffix +')</div>');
+      });
     },
 
     showData: function(e) {

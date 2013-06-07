@@ -149,15 +149,20 @@ input[type="checkbox"] {
 
 .tbl-wrapper .remove {
   font-size: 10px;
-  background-color: #c95446;
+  background-color: #eee;
+  color: #aaa;
   border: none;
-  color:#fff;
   border-radius: 10px;
   line-height: 10px;
   height: 20px;
   text-align: center;
   padding: 5px;
   cursor: pointer;
+}
+
+.tbl-wrapper .remove:hover {
+  background-color: #c95446;
+  color:#fff;
 }
 
 .tbl {
@@ -360,6 +365,7 @@ table tr:hover td {
 
 .header h2 {
   line-height: 60px;
+  float: left;
 }
 
 .header div {
@@ -553,4 +559,19 @@ table tr:hover td {
   background-image: url(../img/add.png);
   background-size: 100% 100%;
   margin-right: 8px;
+}
+
+.related-fields {
+  padding-left: 8px;
+  padding-top: 20px;
+}
+
+.related-fields .related-tag {
+  display: inline-block;
+  font-size: 12px;
+  background-color: rgba(30, 30, 30, 0.6);
+  color:#fff;
+  border-radius: 3px;
+  padding: 0 4px;
+  cursor: pointer;
 }

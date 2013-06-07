@@ -23,12 +23,17 @@ function(FieldModel, TableView, UploadExcelView, ShowDataView) {
 
       this.tables= v1State.get('tables').pluck('name');
       this.otherUserRoles = _(v1State.get('users').pluck('name')).without(this.model.get('name'));
+
+      this.userRelations = v1State.get('users').getRelationsWithName(this.model.get('name'));
+      this.tableRelations = v1State.get('tables').getRelationsWithName(this.model.get('name'));
     },
 
     render: function() {
       var self = this;
       this.el.innerHTML= _.template(TableTemplates.UserTable, self.model.toJSON());
+
       this.renderProperties();
+      this.renderRelations();
 
       iui.loadCSS('prettyCheckable');
       this.$el.find('input[type=checkbox]').prettyCheckable();
