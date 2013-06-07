@@ -3,6 +3,6 @@
     {%- if context.class_string %} class="{{ context.class_string }}"{% endif %}
     {%- if context.style_string %} style="{{ context.style_string }}"{% endif %}
     {%- for attrib in context.attribs %} {{ attrib }}="{{ context.attribs[attrib] }}"{% endfor %}
-    {%- if context.isSingle %}>{% else %}>
+    {%- if context.isSingle %}>{% else %}>{% if not context.has_content() %}</{{ context.tagName }}>{% else %}
   {{ context.content()|indent(2)|safe  }}
-</{{ context.tagName }}>{% endif %}
+</{{ context.tagName }}>{% endif %}{% endif %}

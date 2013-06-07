@@ -57,17 +57,20 @@ class Tag(object):
 
         self.isSingle = self.tagName in void_tags
 
+    def has_content(self):
+        return self._content is not None and self._content != ""
+
     def content(self):
         def handle_unknown_type(content):
             if content is None:
                 return ""
             assert not self.isSingle, "Content doesn't work for single tags"
             if isinstance(content, basestring):
-                return content
+                return content.strip()
             try:
-                return content.render()
+                return content.render().strip()
             except AttributeError:
-                return '\n'.join([handle_unknown_type(c) for c in content])
+                return '\n'.join([handle_unknown_type(c) for c in content]).strip()
         return handle_unknown_type(self._content)
 
     def render(self):

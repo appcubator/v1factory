@@ -105,28 +105,55 @@ class Form(DictInited, Hooked):
             class FormField(object):
 
                 def htmls(field):
-                    if field.displayType == 'single-line-text':
-                        f = Tag('input', {'type':'text', 'placeholder':field.placeholder})
-                    elif field.displayType == 'paragraph-text':
-                        f = Tag('textarea', {}, content=field.placeholder)
-                    elif field.displayType == 'password-text':
-                        f = Tag('input', {'type':'password', 'placeholder':field.placeholder})
-                    elif field.displayType == 'email-text':
-                        f = Tag('div', {'class': 'input-prepend'}, content=(
-                                Tag('span', {'class':'add-on'}, content="@"),
-                                Tag('input', {'type': 'text', 'placeholder': field.placeholder})))
-                    elif field.displayType == 'button':
-                        f = Tag('input', {'type': 'submit', 'value': field.placeholder, 'class': "btn" })
-                    else:
-                        raise Exception("Formfield NYI")
+                    base_attribs = {}
+                    tagname = 'input'
+                    content=None
 
+                    # logic to set up the html data
+                    if field.displayType.endswith('-text'):
+                        base_attribs = {'type': 'text',
+                                        'placeholder': field.placeholder,
+                                        'name': field.backend_field_name
+                                       }
+                        if field.displayType == 'password-text':
+                            base_attribs['type'] = 'password'
+
+                        if field.displayType == 'paragraph-text':
+                            del base_attribs['type']
+                            tagname = 'textarea'
+
+                    elif field.displayType == 'button':
+                        base_attribs['type'] = 'submit'
+                        base_attribs['value'] = field.placeholder
+                        base_attribs['class'] = 'btn'
+
+
+                    # create the html
+                    field_html = Tag(tagname, base_attribs, content=content)
+                    if field.displayType == 'email-text':
+                        decorating_wrapper = Tag('div', {'class': 'input-prepend'}, content=(
+                                Tag('span', {'class':'add-on'}, content="@"),
+                                field_html))
+                        field_html = decorating_wrapper
+
+                    htmls = []
+
+                    # add a label if possible
                     try:
                         if field.label is not None:
                             label = Tag('label', {}, content=field.label)
-                            return (label, f)
+                            htmls.append(label)
                     except AttributeError:
                         pass
-                    return (f,)
+
+                    htmls.append(field_html)
+                    try:
+                        error_div = Tag('div', {'class': 'form-error field-name-%s' % field.backend_field_name})
+                        htmls.append(error_div)
+                    except AttributeError:
+                        pass
+
+                    return htmls
 
             class FormModelField(FormField, DictInited, Resolvable):
                 _schema = {
@@ -144,6 +171,9 @@ class Form(DictInited, Hooked):
                     super(Form.FormInfo.FormInfoInfo.FormModelField, self).__init__(*args, **kwargs)
                     self.name = self.field_name
 
+                def set_backend_name(self):
+                    self.backend_field_name = self.model_field._django_field_identifier
+
             class FormNormalField(FormField, DictInited):
                 _schema = {
                     "name": {"_type": ""},
@@ -152,6 +182,10 @@ class Form(DictInited, Hooked):
                     "displayType": {"_type": ""},
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this, in more detail?
                 }
+
+                def set_backend_name(self):
+                    self.backend_field_name = self.name
+                    print "setting name to %s" % self.name
 
             class ButtonField(FormField, DictInited):
                 _schema = {
@@ -162,6 +196,10 @@ class Form(DictInited, Hooked):
                 def __init__(self, *args, **kwargs):
                     super(Form.FormInfo.FormInfoInfo.ButtonField, self).__init__(*args, **kwargs)
                     self.displayType = 'button'
+
+                def set_backend_name(self):
+                    """Just for consistency w other fields"""
+                    pass
 
 
             def __init__(self, *args, **kwargs):
@@ -199,6 +237,7 @@ class Form(DictInited, Hooked):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
             # here is a potentially nice place to put the django model name in.
+            f.set_backend_name()
             fields.extend(f.htmls())
         try:
             post_url = self.post_url

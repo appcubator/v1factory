@@ -37,7 +37,15 @@ class AppComponentFactory(object):
                 df = m.create_field(f.name, f.type, f.required)
                             # the django model will create an identifier based on
                             # the name
+                f._django_field_identifier = df.identifier
                 f._django_field = df
+            for f in entity.user_fields:
+                x = {'username': 'username',
+                     'First Name': 'first_name',
+                     'Last Name': 'last_name',
+                     'Email': 'email'
+                    }
+                f._django_field_identifier = x[f.name]
 
         else:
             identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
@@ -47,6 +55,7 @@ class AppComponentFactory(object):
                 df = m.create_field(f.name, f.type, f.required)
                             # the django model will create an identifier based on
                             # the name
+                f._django_field_identifier = df.identifier
                 f._django_field = df
 
         # set references to each other on both.
@@ -69,6 +78,7 @@ class AppComponentFactory(object):
             df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
                         # the django model will create an identifier based on
                         # the name
+            f._django_field_identifier = df.identifier
             f._django_field = df
 
     def import_model_into_namespace(self, entity, namespace):
@@ -199,7 +209,7 @@ class AppComponentFactory(object):
         for f in form_model.fields:
             try:
                 assert not f.is_relational()
-                field_ids.append(f.model_field._django_field.identifier)
+                field_ids.append(f.model_field._django_field_identifier)
             except AttributeError:
                 pass
         form_obj = DjangoForm(form_id, model_id, field_ids)
