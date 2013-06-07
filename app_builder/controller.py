@@ -34,6 +34,7 @@ def create_codes(app):
                   'create form receiver': factory.create_form_receiver_for_form_object,
                   'create url for form receiver': factory.create_url_for_form_receiver,
                   'import form into form receivers': factory.import_form_into_form_receivers,
+                  # I put this in import form into the create url step 'set post url for form': factory.set_post_url_for_form,
 
                   # USER FORM RELATED HOOKS
                   'create login form if not exists': factory.create_login_form_if_not_exists,
@@ -51,6 +52,7 @@ def create_codes(app):
 
     def create(event_name, el, *args, **kwargs):
         try:
+            print event_name
             c = create_map[event_name](el)
         except KeyError:
             raise
@@ -111,6 +113,7 @@ def main(app):
         print "\n\n============ %s ============\n" % rel_path, code
         #if rel_path.endswith('.py'):
         #    print check(code, 'test.py')
+    return (codes, cc)
 
 
 """

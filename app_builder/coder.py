@@ -176,6 +176,7 @@ def write_to_fs(coder, css="", dest=None):
     copy_file('ajaxify.js', 'webapp/static/ajaxify.js')
     copy_file('css/bootstrap.css', 'webapp/static/bootstrap.css')
     copy_file('css/reset.css', 'webapp/static/reset.css')
+    copy_file('utils.py', 'webapp/utils.py')
     write_string(css, 'webapp/static/style.css') # TODO write css
 
     logger.info("Finished writing django app.")

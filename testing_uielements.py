@@ -155,7 +155,7 @@ test_json = r"""{
                         "width": 4,
                         "top": 12,
                         "height": 15,
-                        "left": 7,
+                        "left": 0,
                         "t_padding": 0,
                         "b_padding": 0,
                         "l_padding": 0,
@@ -203,7 +203,7 @@ test_json = r"""{
                         "width": 4,
                         "top": 12,
                         "height": 15,
-                        "left": 7,
+                        "left": 4,
                         "t_padding": 0,
                         "b_padding": 0,
                         "l_padding": 0,
@@ -216,7 +216,27 @@ test_json = r"""{
                         "container_info": {
                             "uielements": [],
                             "form": {
-                                "fields": [],
+                                "fields": [
+                                    {
+                                        "field_name": "username",
+                                        "placeholder": "Username",
+                                        "label": "Username",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "options": []
+                                    },
+                                    {
+                                        "name": "password",
+                                        "placeholder": "Password",
+                                        "label": "Password",
+                                        "displayType": "password-text",
+                                        "type": "password",
+                                        "options": []
+                                    },
+                                    {
+                                        "placeholder": "Login"
+                                    }
+                                ],
                                 "entity": "User",
                                 "action": "login",
                                 "goto": { "page_name":"Homepage", "urldata":{} },
@@ -231,7 +251,7 @@ test_json = r"""{
                         "width": 4,
                         "top": 12,
                         "height": 15,
-                        "left": 7,
+                        "left": 8,
                         "t_padding": 0,
                         "b_padding": 0,
                         "l_padding": 0,
@@ -244,7 +264,47 @@ test_json = r"""{
                         "container_info": {
                             "uielements": [],
                             "form": {
-                                "fields": [],
+                                "fields":[
+                                    {
+                                        "name": "username",
+                                        "placeholder": "Username",
+                                        "label": "Username",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "options": []
+                                    },
+                                    {
+                                        "name": "password1",
+                                        "placeholder": "Password",
+                                        "label": "Password",
+                                        "displayType": "password-text",
+                                        "type": "password",
+                                        "options": []
+                                    },
+                                    {
+                                        "name": "password2",
+                                        "placeholder": "Confirm Password",
+                                        "label": "Confirm Password",
+                                        "displayType": "password-text",
+                                        "type": "password",
+                                        "options": []
+                                    },
+                                    {
+                                        "name": "email",
+                                        "placeholder": "Email Address",
+                                        "label": "Email Address",
+                                        "displayType": "email-text",
+                                        "type": "email",
+                                        "options": []
+                                    },
+                                    {
+                                        "name": "Sign Up",
+                                        "placeholder": "Sign Up",
+                                        "label": "Sign Up!",
+                                        "displayType": "button",
+                                        "type": "button",
+                                        "options": []
+                                    }],
                                 "entity": "User",
                                 "action": "signup",
                                 "goto": { "page_name":"Homepage", "urldata":{} },
@@ -336,6 +396,11 @@ app = App.create_from_dict(test_dict)
 from app_builder.controller import main
 
 def test():
-    return main(app)
+    codes, coder = main(app)
+    from app_builder.coder import write_to_fs
+    tmp_project_dir = write_to_fs(coder, css="")
+
+    print "Project written to: %s" % tmp_project_dir
+    return tmp_project_dir
 
 test()

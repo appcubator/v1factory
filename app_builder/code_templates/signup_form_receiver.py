@@ -20,7 +20,7 @@ def {{ fr.identifier }}({{request}}):
         new_user = {{authenticate_function}}(username={{request}}.POST['username'],
                                                         password={{request}}.POST['password1'])
         {{login_function}}({{request}}, new_user)
-        return {{JsonResponse}}({})
+        return {{JsonResponse}}(data={})
         {#ajax_redirect(request, "{{ form_receiver.goto_view.view_path() }}")
         #}
     else:
@@ -28,4 +28,4 @@ def {{ fr.identifier }}({{request}}):
         errors.update(uform.errors)
         {#errors.update(pform.errors)
         #}
-        return {{JsonResponse}}(simplejson.dumps(errors), mimetype="application/json")
+        return {{JsonResponse}}(errors=errors)

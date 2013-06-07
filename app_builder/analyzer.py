@@ -60,7 +60,7 @@ class Entity(DictInited):
 
 class UserRole(DictInited):
     _schema = {
-        "name": {"_type":""},
+        #"name": {"_type":""}, # TODO
         "fields": {
             "_type": [],
             "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}

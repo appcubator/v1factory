@@ -181,10 +181,11 @@ class AppComponentFactory(object):
         url_obj = uie.app._django_fr_urls
 
         url = self.fr_url_namespace.new_identifier(uie._django_form.identifier)
-        route = (repr(str(url)), uie._django_form_receiver)
+        route = (repr('^%s/$' % url), uie._django_form_receiver)
         url_obj.routes.append(route)
 
-        self._url = url
+        # this assumes the form receiver is the this module
+        uie.set_post_url('{%% url webapp.form_receivers.%s %%}' % uie._django_form_receiver.identifier)
 
 
     # FORMS
@@ -274,7 +275,6 @@ class AppComponentFactory(object):
         fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
-
 
     # TESTS
 
