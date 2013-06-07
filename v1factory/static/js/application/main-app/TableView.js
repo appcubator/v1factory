@@ -23,7 +23,10 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       'click .excel'               : 'clickedUploadExcel',
       'click .show-data'           : 'showData',
       'click .edit-form'           : 'clickedEditForm',
-      'change .attrib-required-check' : 'changedRequiredField'
+      'change .attrib-required-check' : 'changedRequiredField',
+      'mouseover .right-arrow'     : 'slideRight',
+      'mousemove .right-arrow'     : 'slideRight',
+      'click     .right-arrow'     : 'slideRight'
     },
 
 
@@ -32,8 +35,10 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       this.model  = tableModel;
 
       this.listenTo(this.model.get('fields'), 'add', this.appendField);
-      this.userRoles = v1State.get('users').pluck('role');
+      console.log(v1State.get('users'));
+      this.userRoles = v1State.get('users').pluck('name');
       this.otherEntities = _(v1State.get('tables').pluck('name')).without(this.model.get('name'));
+      console.log(this.userRoles);
     },
 
     render: function() {
@@ -147,6 +152,11 @@ function(FieldModel, UploadExcelView, ShowDataView) {
         div.className = 'right-arrow';
         this.$el.find('.description').append(div);
       }
+    },
+
+    slideRight: function() {
+      var left = this.$el.find('.tbl-wrapper').scrollLeft();
+      this.$el.find('.tbl-wrapper').scrollLeft(left + 6);
     }
 
   });
