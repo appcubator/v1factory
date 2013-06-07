@@ -40,6 +40,26 @@ require([
 function(SimpleModalView, LoginModalView) {
 
   var HomeMain = function() {
+    var xTrans = -30;
+    var yTrans = 45;
+
+    $(window).on('scroll', function(e) {
+      var newValue = $(window).scrollTop();
+      var newXtrans = xTrans + newValue;
+      var newYtrans = yTrans + newValue;
+      var str = 'rotateX('+ newXtrans +'deg) rotateY('+ newYtrans +'deg)';
+      $('#cube').css({
+          "webkitTransform":str,
+          "MozTransform":str
+      });
+    });
+
+
+    $('#member').on('click', function(e) {
+      $('#bottom-panel').css('marginTop', -332);
+      $('#id_username').focus();
+    });
+
     IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
 
     function onLinkedInLogin() {
