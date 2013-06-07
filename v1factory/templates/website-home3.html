@@ -2,8 +2,8 @@
 
 {% block css %}
 <script type="text/javascript" src="http://platform.linkedin.com/in.js">
-  api_key: t0q97cjtk5kf
-  scope: r_basicprofile r_emailaddress
+api_key: t0q97cjtk5kf
+scope: r_basicprofile r_emailaddress
 </script>
 <script type="text/javascript" src="//use.typekit.net/gyl1cyv.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
@@ -11,11 +11,39 @@
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/animate.css">
 {% endblock %}
 {% block page %}
+
 <div class="left-panel">
-  <img class="logo" src="{{ STATIC_URL }}img/logo.png">
+  <div id="box-container">
+    <div id="cube" class="">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <h1>Appcubator</h1>
-  <div class="buttons">
-    <div class="btn btn-green hoff1" id="request">Request a Beta Invite</div>
+  <div class="bottom-panel" id="bottom-panel">
+    <div class="buttons">
+      <div class="btn btn-blue hoff1" id="request">Join the Beta Program</div>
+      <div class="btn btn-green hoff1" id="member">Already a Member?</div>
+    </div>
+    <span class="login" id="login-form">
+      {% if form.errors %}
+      <p>Your username and password didn't match. Please try again.</p>
+      {% endif %}
+      <form class="" method="post" action="{% url django.contrib.auth.views.login %}">
+        {% csrf_token %}
+
+        <input id="id_username" type="text" name="username" placeholder="Username..." maxlength="30">
+        <br>
+        <input type="password" name="password" placeholder="Password..." id="id_password">
+        <br>
+        <input class="btn" type="submit" value="Login »"/>
+        <input type="hidden" name="next" value="{{ next|default:"/app" }}" />
+      </form>
+    </span>
   </div>
 </div>
 <div class="fixed-bg" id="background-img"></div>
@@ -25,7 +53,7 @@
       Easiest way to build web and mobile applications.
     </div>
     <div class="sub-text">
-      No code. No hassle. Just creativity.
+      No code. No hassle. Just your creativity.
     </div>
   </div>
   <div class="slide2 slide">
