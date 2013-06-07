@@ -75,22 +75,27 @@ class Form(DictInited, Hooked):
 
     @property
     def hooks(self):
-        if self.container_info.form.action == 'login':
+        action = self.container_info.form.action
+        if action not in ('login', 'signup'):
+            return super(Form, self).hooks
+
+        if action == 'login':
             return ('create login form if not exists',
-                    'import login form into form receivers if not imported',
-                    'create login form receiver if not created',
-                    'create url for form receiver if not created',
+                    'import form into form receivers',
+                    'create login form receiver if not exists',
+                    'create url for form receiver',
                    )
 
-        elif self.container_info.form.action == 'signup':
+        elif action == 'signup':
             return ('create signup form if not exists',
-                    'import signup form into form receivers if not imported',
-                    'create signup form receiver if not created',
-                    'create url for form receiver if not created',
+                    'import form into form receivers',
+                    'create signup form receiver if not exists',
+                    'create url for form receiver',
                    )
 
         else:
-            return super(Form, self).hooks
+            assert False, "Form action not recognized: %s" % action
+
 
 
     class FormInfo(DictInited):
@@ -226,7 +231,7 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         return kw
 
     def visit_strings(self, f):
-        print self.content
+        #print self.content
         self.content = f(self.content)
         try:
             self.content_attribs['src'] = f(self.content_attribs['src'])
