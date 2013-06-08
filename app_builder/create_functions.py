@@ -34,7 +34,8 @@ class AppComponentFactory(object):
             user_profile_identifier = self.model_namespace.new_identifier('UserProfile', cap_words=True)
             m = DjangoUserModel(user_identifier, user_profile_identifier)
             for f in filter(lambda x: not x.is_relational(), entity.user_profile_fields):
-                df = m.create_field(f.name, f.type, f.required)
+                #df = m.create_field(f.name, f.type, f.required)
+                df = m.create_field(f.name, f.type, False) # make all field not required by default.
                             # the django model will create an identifier based on
                             # the name
                 f._django_field_identifier = df.identifier
@@ -52,7 +53,8 @@ class AppComponentFactory(object):
             m = DjangoModel(identifier)
 
             for f in filter(lambda x: not x.is_relational(), entity.fields):
-                df = m.create_field(f.name, f.type, f.required)
+                #df = m.create_field(f.name, f.type, f.required)
+                df = m.create_field(f.name, f.type, False) # fields are not required by default.
                             # the django model will create an identifier based on
                             # the name
                 f._django_field_identifier = df.identifier
@@ -75,7 +77,8 @@ class AppComponentFactory(object):
             # TODO FIXME potential bugs with related name and field name since they are really injected into the model.Model instance namespace
             rel_name_id = rel_model.namespace.new_identifier(f.related_name, ref=rel_model)
 
-            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
+# TODO FIGURE THIS OUT (required)            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
+            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, False)
                         # the django model will create an identifier based on
                         # the name
             f._django_field_identifier = df.identifier

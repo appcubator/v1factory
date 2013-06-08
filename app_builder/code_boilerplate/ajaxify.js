@@ -14,30 +14,45 @@ $(document).ready(function() {
       });
   }
 
-  $('form').each(function(ind, node) {
+  $('form').each(function(ind, this_form) {
 
-    $(node).submit(function(e) {
+    $(this_form).submit(function(e) {
       var self = this;
       var ajax_info = {
-        type : $(node).attr('method'),
-        url  : $(node).attr('action'),
-        data : $(node).serialize(),
+        type : $(this_form).attr('method'),
+        url  : $(this_form).attr('action'),
+        data : $(this_form).serialize(),
+        complete : function(jqxhr, statusStr) {
+          // enable submit button 
+          $('input[type=submit]', self).removeAttr('disabled');
+        },
         success : function(data, statusStr, xhr) {
-          if (typeof(data.redirect_to) !== 'undefined') {
-            location.href = data.redirect_to;
-          } else {
-            _.each(data, function(val, key, ind) {
+          if (!data.success){
+            // RENDER ERRORS ON THE FORM
+            _.each(data.errors, function(val, key, ind) {
               if(key==='__all__') {
-                $(self).find('.form-error.field-all').html(val.join('<br />'));
+                $('.form-error.field-all', self).html(val.join('<br />'));
               } else {
-                $(self).find('.form-error.field-name-'+key).html(val.join('<br />'));
+                $('.form-error.field-name-'+key, self).html(val.join('<br />'));
               }
             });
+          } else {
+            // COMPLETE THE FRONTEND SUCCESS ACTIONS
+            if (typeof(data.redirect_to) !== 'undefined') {
+              location.href = data.redirect_to;
+            } else {
+              alert("Form submitted! But... now what do I do...")
+            }
           }
+        },
+        error: function(jqxhr, statusStr, errorThrown) {
+          alert('Form didn\'t submit properly... Well this is awkward.');
         }
       };
       $.ajax(ajax_info);
-      $(self).find('.form-error').html("");
+      // disable submit button 
+      $('input[type=submit]', this).attr('disabled', 'disabled');
+      $('.form-error', this).html("");
 
       return false;
 

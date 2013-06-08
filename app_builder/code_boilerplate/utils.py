@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.utils import simplejson
+from django.shortcuts import redirect as redirect
 
 
 def json_response(data={}, errors={}, success=True):
@@ -15,4 +16,4 @@ class JsonResponse(HttpResponse):
     def __init__(self, data={}, errors={}, success=True):
         json = json_response(data=data, errors=errors, success=success)
         super(JsonResponse, self).__init__(json, mimetype='application/json')
-        
+
