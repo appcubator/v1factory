@@ -3,6 +3,7 @@ define([
   'tutorial/TutorialView',
   'app/templates/FormEditorTemplates',
   'mixins/BackboneModal',
+  'mixins/SelectView',
   'jquery-ui'
 ],
 function(FormFieldModel, TutorialView) {
@@ -16,7 +17,6 @@ function(FormFieldModel, TutorialView) {
     css: 'form-editor',
 
     events: {
-      'change  .field-name-box'          : 'fieldBoxChanged',
       'click   .field-li-item'           : 'clickedField',
       'change  .field-type'              : 'changedFieldType',
       'keydown .field-placeholder-input' : 'changedPlaceholder',
@@ -26,14 +26,15 @@ function(FormFieldModel, TutorialView) {
       'keyup  .options-input'            : 'changedOptions',
       'change .form-type-select'         : 'changedFormAction',
       'change .belongs-to'               : 'changedBelongsTo',
-      'click  .new-field'                : 'clickedAddField',
       'change .field-connection'         : 'addField',
       'submit .new-value-form'           : 'addNewField',
       'click .done-btn'                  : 'closeModal',
       'click .delete-field'              : 'deleteField',
       'click .q-mark'                    : 'showTutorial',
       'click li.action'                  : 'actionClicked',
-      'click li.current-action'          : 'currentActionClicked'
+      'click li.current-action'          : 'currentActionClicked',
+      'click .add-field-button'          : 'clickedAddField',
+      'click .new-field-option'          : 'newFormField'
     },
 
     initialize: function(formModel, entityModel, callback) {
@@ -67,6 +68,7 @@ function(FormFieldModel, TutorialView) {
       temp_context.entity = self.entity;
       temp_context.pages = v1State.get('pages').models;
       temp_context.emails = ["Email 1", "Email 2"];
+      temp_context.possibleActions = this.model.getRelationalActions(v1State.getCurrentPage());
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
 
       var html = _.template(FormEditorTemplates.template, temp_context);
@@ -106,12 +108,14 @@ function(FormFieldModel, TutorialView) {
       this.renderFields();
     },
 
-    fieldBoxChanged: function(e) {
+    newFormField: function(e) {
       var self = this;
       if(e.target.checked) {
-        var cid = e.target.id.replace('field-', '');
+
+        var cid = e.target.id.replace('tablefield-', '');
         var fieldModel = self.entity.get('fields').get(cid);
-        var formFieldModel = new FormFieldModel({name: e.target.value, displayType: "single-line-text", type: fieldModel.get('type')});
+        var formFieldModel = new FormFieldModel({name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')});
+
 
         if(fieldModel.get('type') == "email") {
           formFieldModel.set('displayType', "email-text");
@@ -133,9 +137,12 @@ function(FormFieldModel, TutorialView) {
 
     fieldAdded: function(fieldModel) {
       var self = this;
-      var html = _.template(FormEditorTemplates.field, { field: fieldModel, form: self.model, entity: self.entity, sortable: ''});
+      var html = _.template(FormEditorTemplates.field, { field: fieldModel, value: ''});
       this.$el.find('.form-fields-list').append(html);
       this.selectedNew(fieldModel);
+      this.$el.find('.form-panel').animate({
+        scrollTop: this.$el.find('.form-panel')[0].scrollHeight
+      });
     },
 
     fieldRemoved: function(fieldModel) {
@@ -150,7 +157,6 @@ function(FormFieldModel, TutorialView) {
       this.selected.bind('change:placeholder', this.reRenderDisplayType);
       this.selected.bind('change:options', this.reRenderDisplayType);
       this.selected.bind('change:label', this.reRenderLabel);
-
 
       this.$el.find('.details-panel').hide();
 
@@ -186,7 +192,7 @@ function(FormFieldModel, TutorialView) {
     },
 
     changedFieldType: function(e) {
-      if(e.target.checked) {
+      if(e.target.checked && this.selected) {
         var newType = e.target.value;
         this.selected.set('displayType', newType);
 
@@ -198,6 +204,10 @@ function(FormFieldModel, TutorialView) {
           this.$el.find('.options-list').append('<b>Options</b><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="' + curOptions + '">');
           $('.options-input').focus();
         }
+      }
+
+      if(e.target.checked && !this.selected) {
+        this.$el.find('.details-panel').append('<div class="btn add-new-field-done">Add</div>');
       }
     },
 
@@ -250,11 +260,6 @@ function(FormFieldModel, TutorialView) {
 
     changedBelongsTo: function(e) {
       this.model.set('belongsTo', null);
-    },
-
-    clickedAddField: function(e) {
-      this.$el.find('.field-text').hide();
-      this.$el.find('.field-connection').fadeIn();
     },
 
     addField: function (e) {
@@ -347,6 +352,17 @@ function(FormFieldModel, TutorialView) {
 
     actionRemoved: function(actionModel) {
       this.$el.find('#action-' + actionModel.cid).remove();
+    },
+
+    clickedAddField: function(e) {
+      this.selected = null;
+      this.$el.find('.details-panel').html('Select the corresponding field.');
+      var html = '<ul class="table-fields-list" class="new-field-tablefields">';
+      this.entity.get('fields').each(function(field) {
+        html += '<li><input type="radio" class="new-field-option" name="tablefields" id="tablefield-'+field.cid+'"><label for="tablefield-'+field.cid+'">'+ field.get('name') +'</label></li>';
+      });
+      html += '</ul>';
+      this.$el.find('.details-panel').append(html);
     }
 
   });

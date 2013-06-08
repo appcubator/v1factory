@@ -35,26 +35,28 @@ function(FormFieldCollection, ActionCollection) {
       var self = this;
       _(entity.get('fields').models).each(function(fieldModel) {
 
-        var formFieldModel = {name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')};
         var type = fieldModel.get('type');
+        var formFieldModel = { name: fieldModel.get('name'),
+                               displayType: "single-line-text",
+                               type: type };
 
-        if(type == "fk"||type == "m2m"||type == "o2o") {
-          return;
-        }
-
-        if(fieldModel.get('type') == "email") {
-          formFieldModel.displayType = "email-text";
-        }
-        if(fieldModel.get('type') == "image") {
-          formFieldModel.displayType = "image-uploader";
-        }
-        if(fieldModel.get('type') == "date") {
-          formFieldModel.displayType = "date-picker";
-        }
+        if(type == "fk"||type == "m2m"||type == "o2o") { return; }
+        if(type == "email") { formFieldModel.displayType = "email-text"; }
+        if(type == "image") { formFieldModel.displayType = "image-uploader"; }
+        if(type == "date") { formFieldModel.displayType = "date-picker"; }
 
         var ind = self.get('fields').models.length - 1;
         self.get('fields').push(formFieldModel, {at: ind});
       });
+    },
+
+    getRelationalActions: function(pageModel) {
+      //var userFields = pageModel.getFields();
+      //_(userFields).each(function(field) {
+
+      //});
+
+      return [];
     },
 
     toJSON: function() {

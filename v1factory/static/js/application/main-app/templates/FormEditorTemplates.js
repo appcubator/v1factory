@@ -45,8 +45,14 @@ FormEditorTemplates.field = [
 '</span><span class="drag-icon"></span><span class="delete-field" id="delete-btn-field-<%= field.cid %>">Delete Field</span></li>'
 ].join('\n');
 
-FormEditorTemplates.possibleActions = [
+FormEditorTemplates.redirectActions = [
   '<% _(pages).each(function(page) {  %>',
+    '<li class="action page-redirect" id="page-<%= page.cid %>">Go to <%= page.get("name") %><div class="add-to-list"></div></li>',
+  '<% });%>'
+].join('\n');
+
+FormEditorTemplates.relationalActions = [
+  '<% _(possibleActions).each(function(action) {  %>',
     '<li class="action page-redirect" id="page-<%= page.cid %>">Go to <%= page.get("name") %><div class="add-to-list"></div></li>',
   '<% });%>'
 ].join('\n');
@@ -61,12 +67,17 @@ FormEditorTemplates.template = [
       '<% var field = _.last(form.get(\'fields\').models); var sortable = "not-sortable"; %>',
         FormEditorTemplates.field,
       '<% %>',
-  '</div><div class="action-panel panel">',
+  '</div>',
+  '<div class="add-field-panel"><div class="btn add-field-button"><span class="icon"></span>Add a New Field</div></div>',
+  '<div class="action-panel panel">',
     '<small>Choose options from the list below.</small>',
     '<ul class="current-actions"></ul>',
     '<div class="section-header">Options</div>',
     '<ul class="action goto-list">',
-      FormEditorTemplates.possibleActions,
+      FormEditorTemplates.redirectActions,
+    '</ul>',
+    '<ul class="action relational-list">',
+    FormEditorTemplates.relationalActions,
     '</ul>',
   '</div>',
   '<div class="bottom-sect"><div class="q-mark"></div><div class="btn done-btn">Done</div></div>'
@@ -141,6 +152,13 @@ var fieldTypesArr = {
 
 };
 
+
+FormEditorTemplates.displayTypes = [
+  '<% _(fieldTypesArr[field.get("type")]).each(function(fieldType) { %>',
+    '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { var checked = true; %>checked<% } %>><%= fieldType.text %></label></li>',
+  '<% }) %>'
+].join('\n');
+
 FormEditorTemplates.details = [
   '<label><b>Label</b><br>',
   '<input class="field-label-input" id="field-label-<%= field.cid %>" type="text" placeholder="Field Label..." value="<%= field.get(\'label\') %>">',
@@ -150,9 +168,8 @@ FormEditorTemplates.details = [
   '</label>',
   '<label><b>Display Type</b>',
     '<ul class="field-types">',
-    '<% _(fieldTypesArr[field.get("type")]).each(function(fieldType) { %>',
-      '<li><label><input class="field-type" type="radio" name="types" value="<%= fieldType.value %>" <% if(field.get(\'displayType\') == fieldType.value) { var checked = true; %>checked<% } %>><%= fieldType.text %></label></li>',
-    '<% }) %>',
-  '</ul></label>',
+    FormEditorTemplates.displayTypes,
+    '</ul>',
+  '</label>',
   '<label class="options-list"></label>'
 ].join('\n');

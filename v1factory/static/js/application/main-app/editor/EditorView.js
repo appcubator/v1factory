@@ -68,6 +68,7 @@ function( PageModel,
       iui.loadCSS('jquery-ui');
 
       this.model             = v1State.get('pages').models[pageId];
+      v1State.currentPage = this.model;
 
       /* Globals */
       g_contextCollection    = new TableCollection();
