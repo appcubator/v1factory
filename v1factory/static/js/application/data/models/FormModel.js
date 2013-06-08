@@ -36,6 +36,11 @@ function(FormFieldCollection, ActionCollection) {
       _(entity.get('fields').models).each(function(fieldModel) {
 
         var formFieldModel = {name: fieldModel.get('name'), displayType: "single-line-text", type: fieldModel.get('type')};
+        var type = fieldModel.get('type');
+
+        if(type == "fk"||type == "m2m"||type == "o2o") {
+          return;
+        }
 
         if(fieldModel.get('type') == "email") {
           formFieldModel.displayType = "email-text";
