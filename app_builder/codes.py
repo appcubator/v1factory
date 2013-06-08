@@ -43,6 +43,27 @@ class DjangoFormReceiver(object):
         return env.get_template('form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
 
 
+class DjangoCustomFormReceiver(object):
+
+    def __init__(self, *args, **kwargs):
+        super(DjangoCustomFormReceiver, self).__init__(*args, **kwargs)
+        self.args = []
+        self.relation_assignments = []
+        self.before_save_saves = []
+        self.after_save_saves = []
+
+    def add_args(self, args):
+        args = [ (self.namespace.new_identifier(arg, ref=data['ref']), data) for arg, data in args ]
+        for arg, data in args:
+            name_attempt = data.get('inst_id', 'BADNAME') # helps a test pass
+            data['inst_id'] = self.pc_namespace.new_identifier(str(name_attempt), ref=data['ref']) 
+        self.args.extend(args)
+
+
+    def render(self):
+        return env.get_template('form_receiver_custom_1.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
+
+
 class DjangoForm(object):
 
     def __init__(self, identifier, model_id, field_ids):

@@ -3,7 +3,7 @@ import re
 from app_builder.codes import DjangoModel, DjangoUserModel
 from app_builder.codes import DjangoPageView, DjangoTemplate
 from app_builder.codes import DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
-from app_builder.codes import DjangoForm, DjangoFormReceiver
+from app_builder.codes import DjangoForm, DjangoFormReceiver, DjangoCustomFormReceiver
 from app_builder.codes import DjangoLoginForm, DjangoLoginFormReceiver, DjangoSignupFormReceiver
 from app_builder.imports import create_import_namespace
 from app_builder import naming
@@ -142,7 +142,7 @@ class AppComponentFactory(object):
 
     def properly_name_variables_in_template(self, page):
         # find things in braces and replace them with this function:
-        translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1).strip(), page=page) 
+        translate = lambda m: "{{ %s }}" % self.v1_translator.v1script_to_app_component(m.group(1).strip(), page._django_view) 
         translate_all = lambda x: re.sub(r'\{\{ ?([^\}]*) ?\}\}', translate, x)
 
         for uie in page.uielements:
@@ -196,7 +196,10 @@ class AppComponentFactory(object):
         url_obj.routes.append(route)
 
         # this assumes the form receiver is the this module
-        uie.set_post_url('{%% url webapp.form_receivers.%s %%}' % uie._django_form_receiver.identifier)
+        data_string = ' '.join(['{{ Page.%s }}.id' % e.name for e in uie.get_needed_page_entities]) # result should be something like "{{ Page.Book }}.id {{ Page.Class }}.id"
+        if data_string != '':
+            data_string += ' ' # just for formatting.
+        uie.set_post_url('{%% url webapp.form_receivers.%s %s%%}' % (uie._django_form_receiver.identifier, data_string))
 
 
     # FORMS
@@ -218,6 +221,7 @@ class AppComponentFactory(object):
         form_obj = DjangoForm(form_id, model_id, field_ids)
         uie._django_form = form_obj
         return form_obj
+
 
 
 ## START HACKING
@@ -276,6 +280,7 @@ class AppComponentFactory(object):
 ## END HACKING
 
 
+
     def import_form_into_form_receivers(self, uie):
         f = uie._django_form
         import_symbol = ('webapp.forms', f.identifier)
@@ -283,9 +288,44 @@ class AppComponentFactory(object):
 
     def create_form_receiver_for_form_object(self, uie):
         fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
-        fr = DjangoFormReceiver(fr_id, uie._django_form.identifier)
+        fr = DjangoCustomFormReceiver(fr_id, uie._django_form.identifier)
+        args = []
+        for e in uie.get_needed_page_entities():
+            model_id = e._django_model.identifier
+            inst_id = str(model_id) # Book inst should just be called book. lower casing happens in naming module
+            args.append((e.name.lower()+'_id', {"model_id": model_id, "ref": e._django_model, "inst_id": inst_id})) 
+        fr.add_args(args)
         uie._django_form_receiver = fr
         return fr
+
+    def add_relation_assignments_to_form_receiver(self, uie):
+        translate = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True)  # it's going to utilize args and locals from here.
+        form_model = uie.container_info.form # bind to this name to save me some typing
+        if form_model.action not in ['create', 'edit']:
+            return None
+        form_obj = uie._django_form_receiver
+        for r in form_model.actions:
+            form_obj.relation_assignments.append((translate(r.set_fk), translate(r.to_fk)))
+
+    def add_saving_of_related_assignments(self, uie):
+        translate = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True)  # it's going to utilize args and locals from here.
+        form_model = uie.container_info.form # bind to this name to save me some typing
+        if form_model.action not in ['create', 'edit']:
+            return None
+        form_obj = uie._django_form_receiver
+        before_save_saves, after_save_saves = ([], [])
+        for l, r in form_model.get_actions_as_tuples():
+            future_l_identifier = translate(self.string_ref_to_inst_only(l))
+            if l.startswith('this'):
+                before_save_saves.add(future_l_identifier)
+            else:
+                after_save_saves.add(future_l_identifier)
+
+        form_obj.before_save_saves = before_save_saves
+        form_obj.after_save_saves = after_save_saves
+
+
+
 
     # TESTS
 

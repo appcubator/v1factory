@@ -80,7 +80,6 @@ def create_codes(app):
 
 
     # UIELEMENT HOOKS
-    create('init template v1script translator', app)
     for p in app.pages:
         for uie in p.uielements:
             for hook_name in uie.hooks:
@@ -91,6 +90,8 @@ def create_codes(app):
                     traceback.print_exc()
 
 
+    create('init template v1script translator', app)
+    
     # translation of {{ page.book.name }} to proper django template code
     for p in app.pages:
         create('translate strings in uielements', p)
