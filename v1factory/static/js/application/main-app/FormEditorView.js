@@ -37,30 +37,7 @@ function(FormFieldModel, TutorialView) {
     },
 
     initialize: function(formModel, entityModel, callback) {
-      _.bindAll(this, 'render',
-                      'fieldBoxChanged',
-                      'fieldAdded',
-                      'fieldRemoved',
-                      'changedGoto',
-                      'selectedNew',
-                      'changedFieldType',
-                      'renderField',
-                      'reRenderFields',
-                      'clickedField',
-                      'changedPlaceholder',
-                      'changedLabel',
-                      'changedOrder',
-                      'changedFormAction',
-                      'changedBelongsTo',
-                      'clickedAddField',
-                      'addField',
-                      'handleKey',
-                      'addNewField',
-                      'deleteField',
-                      'actionClicked',
-                      'currentActionClicked',
-                      'actionAdded',
-                      'actionRemoved');
+      _.bindAll(this);
 
       iui.loadCSS(this.css);
 
@@ -91,14 +68,13 @@ function(FormFieldModel, TutorialView) {
       temp_context.pages = v1State.get('pages').models;
       temp_context.emails = ["Email 1", "Email 2"];
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
-      //this.entity.getBelongsTo();
 
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
 
-      _(this.model.get('actions').models).each(function(action) {
-        self.$el.find('.current-actions').append('<li id="action-'+action.cid +'" class="current-action">'+action.getNL()+'<div class="remove-from-list"></div></li>');
-      });
+      this.renderFields();
+      this.renderActions();
+
 
       $('.form-fields-list').sortable({
         stop: this.changedOrder,
@@ -108,13 +84,26 @@ function(FormFieldModel, TutorialView) {
       return this;
     },
 
-    reRenderFields: function() {
+    renderActions: function() {
       var self = this;
-      _(self.model.get('fields').models).each(function(field) {
-        var value = "";
-        if(self.model.get('action') == "edit"){ value = "{{" + self.entity.get('name') + "_" + field.get('name') +"}}"; }
-        self.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field, value: value}) + '</label>');
+      _(this.model.get('actions').models).each(function(action) {
+        self.$el.find('.current-actions').append('<li id="action-'+action.cid +'" class="current-action">'+action.getNL()+'<div class="remove-from-list"></div></li>');
       });
+    },
+
+    renderFields: function() {
+      var self = this;
+      var length = this.model.get('fields').length;
+      this.model.get('fields').each(function(field, ind) {
+        if(ind == (length - 1)) return;
+        var html = _.template(FormEditorTemplates.field, { field: field, value : ''});
+        self.$el.find('.form-fields-list').append(html);
+      });
+    },
+
+    reRenderFields: function() {
+      self.$el.find('.form-fields-list').html('');
+      this.renderFields();
     },
 
     fieldBoxChanged: function(e) {
@@ -133,7 +122,6 @@ function(FormFieldModel, TutorialView) {
         if(fieldModel.get('type') == "date") {
           formFieldModel.set('displayType', "date-picker");
         }
-
 
         this.model.get('fields').add(formFieldModel);
       }
@@ -156,14 +144,20 @@ function(FormFieldModel, TutorialView) {
 
     selectedNew: function(fieldModel) {
       var html = _.template(FormEditorTemplates.details, {field : fieldModel});
+
       this.selected = fieldModel;
-      this.selected.bind('change', this.renderField);
+      this.selected.bind('change:displayType', this.reRenderDisplayType);
+      this.selected.bind('change:placeholder', this.reRenderDisplayType);
+      this.selected.bind('change:options', this.reRenderDisplayType);
+      this.selected.bind('change:label', this.reRenderLabel);
+
 
       this.$el.find('.details-panel').hide();
 
       this.$el.find('.details-panel').html(html);
       if(fieldModel.get('displayType') == "option-boxes") {
-        this.$el.find('.details-panel').append('<span class="options-input-area"><b>Options</b><br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="'+ fieldModel.get('options').join(',') +'"></span>');
+        curOptions = fieldModel.get('options');
+        this.$el.find('.options-list').append('<b>Options</b><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="' + curOptions + '">');
       }
 
       this.$el.find('.selected').removeClass('selected');
@@ -179,27 +173,30 @@ function(FormFieldModel, TutorialView) {
       this.selectedNew(fieldModel);
     },
 
-    renderField: function() {
+    reRenderDisplayType: function() {
       var self = this;
       var field = this.selected;
+      $('#field-'+ field.cid).find('.form-item').html(_.template(FieldTypes[field.get('displayType')], {field: field, value: ""}));
+      //this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field, value: ""}) + '</label>');
+    },
 
-      var value = "";
-      if(self.model.get('action') == "edit"){ value = "{{" + self.entity.get('name') + "_" + field.get('name') +"}}"; }
-
-      this.$el.find('#field-' + field.cid).html('<label>' + field.get('label') + '<br>' + _.template(FieldTypes[field.get('displayType')], {field: field, value: value}) + '</label>');
+    reRenderLabel: function() {
+      var field = this.selected;
+      $('#field-'+ field.cid).find('label').html(field.get('label'));
     },
 
     changedFieldType: function(e) {
-      e.preventDefault();
       if(e.target.checked) {
         var newType = e.target.value;
         this.selected.set('displayType', newType);
 
         var curOptions = (this.$el.find('.options-input').val() || '');
-        this.$el.find('.options-input-area').remove();
+        this.$el.find('.options-list').html('');
         if(newType == "option-boxes" || newType == "dropdown") {
+          $('.details-panel').animate({ scrollTop: $('.details-panel').height() }, "slow");
           this.selected.set('options', curOptions.split(','));
-          this.$el.find('.field-types').append('<span class="options-input-area">Options<br><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="' + curOptions + '"></span>');
+          this.$el.find('.options-list').append('<b>Options</b><input class="options-input" placeholder="E.g. Cars,Birds,Trains..." type="text" value="' + curOptions + '">');
+          $('.options-input').focus();
         }
       }
     },
