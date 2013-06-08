@@ -248,7 +248,7 @@ h3 {
 .left-panel {
   position: fixed;
   height: 100%;
-  width: 300px;
+  width: 280px;
   background-color: #fff;
   float: left;
   display: inline-block;
@@ -279,12 +279,12 @@ h3 {
 .bottom-panel {
   position: fixed;
   left: 0;
-  width:  300px;
-  top: 100%;
+  width:  280px;
+  bottom: -170px;
   padding-bottom: 20px;
   text-align: center;
-  margin-top: -160px;
-
+/*  margin-top: -160px;
+*/
 /*  -webkit-transition  : margin-top 0.2s ease-out;
   -moz-transition     : margin-top 0.2s ease-out;*/
 }
@@ -323,7 +323,7 @@ h3 {
   position: relative;
   height: 100%;
   top: 0;
-  padding-left: 300px;
+  padding-left: 280px;
   text-align: center;
 }
 
@@ -442,6 +442,7 @@ h3 {
 
 .slide-last {
   background-color: #fff;
+  background-image: url(../img/pw_pattern.png);
   height: 100%;
 }
 

@@ -45,6 +45,7 @@ function(FieldModel, TableView, UploadExcelView, ShowDataView) {
       var page_context = {};
       page_context = _.clone(fieldModel.attributes);
       page_context.cid = fieldModel.cid;
+      page_context.nlType = fieldModel.getNLType();
       page_context.entityName = this.model.get('name');
       page_context.entities = this.tables.concat(this.otherUserRoles);
       var template = _.template(TableTemplates.Property, page_context);

@@ -575,3 +575,22 @@ table tr:hover td {
   padding: 0 4px;
   cursor: pointer;
 }
+
+.tab .add-icon {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  background-image: url(../img/add.png);
+  background-size: 100% 100%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.property-list .attribs {
+/*  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  visibility:hidden;*/
+}

@@ -78,9 +78,21 @@ scope: r_basicprofile r_emailaddress
     </span>
   </div>
   <div class="slide-last">
-    <div class="large-text">
-      Easiest way to build web and mobile applications.
-    </div>
+    <form class="sign-up-form">
+      <div class="left-side">
+        <input type="text" placeholder="Full Name">
+        <input type="text" placeholder="Email">
+        <input type="text" placeholder="Company">
+        <div class="btn btn-blue">Fill With Facebook</div>
+        <div class="btn btn-blue">Fill With LinkedIn</div>
+      </div>
+      <div class="right-side">
+        <textarea placeholder="Technical Description of your project."></textarea>
+        <p>This is for us attain feasibility of the project and direct you well.</p>
+        <input type="checkbox" id="consulting-interest"><label for="consulting-interest">I'm interested in the consulting session.</label>
+        <div class="btn btn-blue">Sign Me Up</div>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}

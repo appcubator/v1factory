@@ -25,7 +25,8 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       'click .edit-form'           : 'clickedEditForm',
       'mouseover .right-arrow'     : 'slideRight',
       'mousemove .right-arrow'     : 'slideRight',
-      'click     .right-arrow'     : 'slideRight'
+      'click     .right-arrow'     : 'slideRight',
+      'click .type-field'          : 'typeClicked'
     },
 
 
@@ -83,6 +84,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
       var page_context = {};
       page_context = _.clone(fieldModel.attributes);
       page_context.cid = fieldModel.cid;
+      page_context.nlType = fieldModel.getNLType();
       page_context.entityName = this.model.get('name');
       page_context.entities = this.userRoles.concat(this.otherEntities);
       var template = _.template(TableTemplates.Property, page_context);
@@ -165,6 +167,15 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     slideRight: function() {
       var left = this.$el.find('.tbl-wrapper').scrollLeft();
       this.$el.find('.tbl-wrapper').scrollLeft(left + 6);
+    },
+
+    typeClicked: function(e) {
+      console.log(e.target.id);
+      var cid = e.target.id.replace('type-row-','');
+      console.log(cid);
+      console.log($('#type-' + cid));
+      $('#type-' + cid).click();
+      e.preventDefault();
     }
 
   });
