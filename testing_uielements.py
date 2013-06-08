@@ -298,12 +298,7 @@ test_json = r"""{
                                         "options": []
                                     },
                                     {
-                                        "name": "Sign Up",
-                                        "placeholder": "Sign Up",
-                                        "label": "Sign Up!",
-                                        "displayType": "button",
-                                        "type": "button",
-                                        "options": []
+                                        "placeholder": "Sign Up"
                                     }],
                                 "entity": "User",
                                 "action": "signup",

@@ -70,7 +70,6 @@ class Form(DictInited, Hooked):
               'create form receiver',
               'create url for form receiver',
               # add the url to the action attribute, this happens in the "create url" phase
-              # map the form object fields names to the html field's name
              )
 
     @property
@@ -170,6 +169,7 @@ class Form(DictInited, Hooked):
                 def __init__(self, *args, **kwargs):
                     super(Form.FormInfo.FormInfoInfo.FormModelField, self).__init__(*args, **kwargs)
                     self.name = self.field_name
+                    assert self.displayType != "button", "If this is a button, please remove the displayType, or the name, or options."
 
                 def set_backend_name(self):
                     self.backend_field_name = self.model_field._django_field_identifier
@@ -182,6 +182,10 @@ class Form(DictInited, Hooked):
                     "displayType": {"_type": ""},
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this, in more detail?
                 }
+
+                def __init__(self, *args, **kwargs):
+                    super(Form.FormInfo.FormInfoInfo.FormNormalField, self).__init__(*args, **kwargs)
+                    assert self.displayType != "button", "If this is a button, please remove the displayType, or the name, or options."
 
                 def set_backend_name(self):
                     self.backend_field_name = self.name
