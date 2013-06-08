@@ -26,7 +26,7 @@ function( FieldModel,
     tableDiv: null,
 
     events : {
-      'click .tab' : 'clickedNavItem'
+      'click .tab.nav-tab' : 'clickedNavItem'
     },
 
 
@@ -53,6 +53,7 @@ function( FieldModel,
       this.navBar.className = 'entity-nav span58';
       this.collection.each(this.appendNavItem);
 
+      $(this.navBar).append('<li class="tab" id="add-role"><a><span class="add-icon"></span>Add User Role</a></li>');
       this.el.appendChild(this.tableDiv);
       this.el.appendChild(this.navBar);
 
@@ -87,7 +88,7 @@ function( FieldModel,
     },
 
     appendNavItem: function(tableModel) {
-      this.navBar.innerHTML += '<li class="tab" id="navtab-'+ tableModel.cid +'"><a>' + (tableModel.get('name')||tableModel.get('role')) + '</a></li>';
+      this.navBar.innerHTML += '<li class="tab nav-tab" id="navtab-'+ tableModel.cid +'"><a>' + (tableModel.get('name')||tableModel.get('role')) + '</a></li>';
     },
 
     activateTab: function(tableModel) {

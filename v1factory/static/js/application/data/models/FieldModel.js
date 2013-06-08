@@ -4,6 +4,30 @@ define(['backbone'], function() {
     defaults :{
       "required" : false,
       "type"     : "text"
+    },
+
+    getNLType: function() {
+      var type = this.get('type');
+
+      if(type == "o2o" || type == "fk") {
+        return this.get('entity_name');
+      }
+      if(type == "m2m") {
+        return "List of " + this.get('entity_name');
+      }
+
+      var nlType = this.nlTable[type];
+
+      return nlType;
+    },
+
+    nlTable: {
+      "text"   : 'Text',
+      "number" : 'Number',
+      "email"  : 'Email',
+      "image"  : 'Image',
+      "date"   : 'Date',
+      "file"   : 'File'
     }
   });
 

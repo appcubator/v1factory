@@ -50,7 +50,7 @@ TableTemplates.Table = [
 TableTemplates.Property = [
 '<div class="column" id="column-<%- cid %>">',
   '<div class="hi3 hdr"><%- name %></div>',
-  '<div class="hi3">',
+  '<div class="hi3 type-field" id="type-row-<%- cid %>">',
     '<select class="attribs" id="type-<%- cid %>">',
       '<option value="text" <% if(type =="text") %> selected <% %>>Text</option>',
       '<option value="number" <% if(type =="number") %> selected <% %>>Number</option>',
