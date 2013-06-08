@@ -280,11 +280,11 @@ h3 {
   position: fixed;
   left: 0;
   width:  300px;
-  top: 100%;
+  bottom: -170px;
   padding-bottom: 20px;
   text-align: center;
-  margin-top: -160px;
-
+/*  margin-top: -160px;
+*/
 /*  -webkit-transition  : margin-top 0.2s ease-out;
   -moz-transition     : margin-top 0.2s ease-out;*/
 }
@@ -442,6 +442,7 @@ h3 {
 
 .slide-last {
   background-color: #fff;
+  background-image: url(../img/pw_pattern.png);
   height: 100%;
 }
 
