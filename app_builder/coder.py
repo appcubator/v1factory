@@ -7,7 +7,8 @@ import tempfile
 import logging
 import re
 
-from codes import IMPORTS, Import
+from imports import IMPORTS
+from codes import Import
 
 
 logger = logging.getLogger("app_builder")

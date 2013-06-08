@@ -70,27 +70,31 @@ class Form(DictInited, Hooked):
               'create form receiver',
               'create url for form receiver',
               # add the url to the action attribute, this happens in the "create url" phase
-              # map the form object fields names to the html field's name
              )
 
     @property
     def hooks(self):
-        if self.container_info.form.action == 'login':
+        action = self.container_info.form.action
+        if action not in ('login', 'signup'):
+            return super(Form, self).hooks
+
+        if action == 'login':
             return ('create login form if not exists',
-                    'import login form into form receivers if not imported',
-                    'create login form receiver if not created',
-                    'create url for form receiver if not created',
+                    'import form into form receivers',
+                    'create login form receiver if not exists',
+                    'create url for form receiver',
                    )
 
-        elif self.container_info.form.action == 'signup':
+        elif action == 'signup':
             return ('create signup form if not exists',
-                    'import signup form into form receivers if not imported',
-                    'create signup form receiver if not created',
-                    'create url for form receiver if not created',
+                    'import form into form receivers',
+                    'create signup form receiver if not exists',
+                    'create url for form receiver',
                    )
 
         else:
-            return super(Form, self).hooks
+            assert False, "Form action not recognized: %s" % action
+
 
 
     class FormInfo(DictInited):
@@ -100,28 +104,55 @@ class Form(DictInited, Hooked):
             class FormField(object):
 
                 def htmls(field):
-                    if field.displayType == 'single-line-text':
-                        f = Tag('input', {'type':'text', 'placeholder':field.placeholder})
-                    elif field.displayType == 'paragraph-text':
-                        f = Tag('textarea', {}, content=field.placeholder)
-                    elif field.displayType == 'password-text':
-                        f = Tag('input', {'type':'password', 'placeholder':field.placeholder})
-                    elif field.displayType == 'email-text':
-                        f = Tag('div', {'class': 'input-prepend'}, content=(
-                                Tag('span', {'class':'add-on'}, content="@"),
-                                Tag('input', {'type': 'text', 'placeholder': field.placeholder})))
-                    elif field.displayType == 'button':
-                        f = Tag('input', {'type': 'submit', 'value': field.placeholder, 'class': "btn" })
-                    else:
-                        raise Exception("Formfield NYI")
+                    base_attribs = {}
+                    tagname = 'input'
+                    content=None
 
+                    # logic to set up the html data
+                    if field.displayType.endswith('-text'):
+                        base_attribs = {'type': 'text',
+                                        'placeholder': field.placeholder,
+                                        'name': field.backend_field_name
+                                       }
+                        if field.displayType == 'password-text':
+                            base_attribs['type'] = 'password'
+
+                        if field.displayType == 'paragraph-text':
+                            del base_attribs['type']
+                            tagname = 'textarea'
+
+                    elif field.displayType == 'button':
+                        base_attribs['type'] = 'submit'
+                        base_attribs['value'] = field.placeholder
+                        base_attribs['class'] = 'btn'
+
+
+                    # create the html
+                    field_html = Tag(tagname, base_attribs, content=content)
+                    if field.displayType == 'email-text':
+                        decorating_wrapper = Tag('div', {'class': 'input-prepend'}, content=(
+                                Tag('span', {'class':'add-on'}, content="@"),
+                                field_html))
+                        field_html = decorating_wrapper
+
+                    htmls = []
+
+                    # add a label if possible
                     try:
                         if field.label is not None:
                             label = Tag('label', {}, content=field.label)
-                            return (label, f)
+                            htmls.append(label)
                     except AttributeError:
                         pass
-                    return (f,)
+
+                    htmls.append(field_html)
+                    try:
+                        error_div = Tag('div', {'class': 'form-error field-name-%s' % field.backend_field_name})
+                        htmls.append(error_div)
+                    except AttributeError:
+                        pass
+
+                    return htmls
 
             class FormModelField(FormField, DictInited, Resolvable):
                 _schema = {
@@ -138,6 +169,10 @@ class Form(DictInited, Hooked):
                 def __init__(self, *args, **kwargs):
                     super(Form.FormInfo.FormInfoInfo.FormModelField, self).__init__(*args, **kwargs)
                     self.name = self.field_name
+                    assert self.displayType != "button", "If this is a button, please remove the displayType, or the name, or options."
+
+                def set_backend_name(self):
+                    self.backend_field_name = self.model_field._django_field_identifier
 
             class FormNormalField(FormField, DictInited):
                 _schema = {
@@ -148,6 +183,14 @@ class Form(DictInited, Hooked):
                     "options": {"_type": [], "_each": {"_type": ""}}  # XXX what is this, in more detail?
                 }
 
+                def __init__(self, *args, **kwargs):
+                    super(Form.FormInfo.FormInfoInfo.FormNormalField, self).__init__(*args, **kwargs)
+                    assert self.displayType != "button", "If this is a button, please remove the displayType, or the name, or options."
+
+                def set_backend_name(self):
+                    self.backend_field_name = self.name
+                    print "setting name to %s" % self.name
+
             class ButtonField(FormField, DictInited):
                 _schema = {
                     # HACK - if you leave out the name attribute, it automatically becomes a button
@@ -157,6 +200,10 @@ class Form(DictInited, Hooked):
                 def __init__(self, *args, **kwargs):
                     super(Form.FormInfo.FormInfoInfo.ButtonField, self).__init__(*args, **kwargs)
                     self.displayType = 'button'
+
+                def set_backend_name(self):
+                    """Just for consistency w other fields"""
+                    pass
 
 
             def __init__(self, *args, **kwargs):
@@ -194,6 +241,7 @@ class Form(DictInited, Hooked):
         fields = ['{% csrf_token %}']
         for f in self.container_info.form.fields:
             # here is a potentially nice place to put the django model name in.
+            f.set_backend_name()
             fields.extend(f.htmls())
         try:
             post_url = self.post_url
@@ -226,7 +274,7 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
         return kw
 
     def visit_strings(self, f):
-        print self.content
+        #print self.content
         self.content = f(self.content)
         try:
             self.content_attribs['src'] = f(self.content_attribs['src'])

@@ -5,7 +5,7 @@ from app_builder.codes import DjangoPageView, DjangoTemplate
 from app_builder.codes import DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
 from app_builder.codes import DjangoForm, DjangoFormReceiver
 from app_builder.codes import DjangoLoginForm, DjangoLoginFormReceiver, DjangoSignupFormReceiver
-from app_builder.codes import create_import_namespace
+from app_builder.imports import create_import_namespace
 from app_builder import naming
 from app_builder.dynamicvars import Translator
 
@@ -21,8 +21,6 @@ class AppComponentFactory(object):
         self.urls_namespace = create_import_namespace('webapp/urls.py')
         self.tests_namespace = create_import_namespace('webapp/tests.py')
 
-        self.fr_url_namespace = naming.Namespace()
-
 
     # MODELS
 
@@ -32,14 +30,22 @@ class AppComponentFactory(object):
         Additionally, deals with User model separately.
         """
         if entity.is_user:
-            user_identifier = self.model_namespace.imports()['django.models.User']
+            user_identifier = self.model_namespace.get_by_import('django.models.User')
             user_profile_identifier = self.model_namespace.new_identifier('UserProfile', cap_words=True)
             m = DjangoUserModel(user_identifier, user_profile_identifier)
             for f in filter(lambda x: not x.is_relational(), entity.user_profile_fields):
                 df = m.create_field(f.name, f.type, f.required)
                             # the django model will create an identifier based on
                             # the name
+                f._django_field_identifier = df.identifier
                 f._django_field = df
+            for f in entity.user_fields:
+                x = {'username': 'username',
+                     'First Name': 'first_name',
+                     'Last Name': 'last_name',
+                     'Email': 'email'
+                    }
+                f._django_field_identifier = x[f.name]
 
         else:
             identifier = self.model_namespace.new_identifier(entity.name, cap_words=True)
@@ -49,6 +55,7 @@ class AppComponentFactory(object):
                 df = m.create_field(f.name, f.type, f.required)
                             # the django model will create an identifier based on
                             # the name
+                f._django_field_identifier = df.identifier
                 f._django_field = df
 
         # set references to each other on both.
@@ -71,6 +78,7 @@ class AppComponentFactory(object):
             df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
                         # the django model will create an identifier based on
                         # the name
+            f._django_field_identifier = df.identifier
             f._django_field = df
 
     def import_model_into_namespace(self, entity, namespace):
@@ -87,7 +95,7 @@ class AppComponentFactory(object):
 
         m = entity._django_model
         import_symbol = ('webapp.models', m.identifier)
-        ns.add_import(import_symbol, m.identifier)
+        ns.find_or_create_import(import_symbol, m.identifier)
 
 
     # VIEWS
@@ -180,7 +188,7 @@ class AppComponentFactory(object):
     def create_url_for_form_receiver(self, uie):
         url_obj = uie.app._django_fr_urls
 
-        url = self.fr_url_namespace.new_identifier(uie._django_form.identifier)
+        url = self.urls_namespace.new_identifier(uie._django_form.identifier)
         route = (repr('^%s/$' % url), uie._django_form_receiver)
         url_obj.routes.append(route)
 
@@ -201,7 +209,7 @@ class AppComponentFactory(object):
         for f in form_model.fields:
             try:
                 assert not f.is_relational()
-                field_ids.append(f.model_field._django_field.identifier)
+                field_ids.append(f.model_field._django_field_identifier)
             except AttributeError:
                 pass
         form_obj = DjangoForm(form_id, model_id, field_ids)
@@ -211,47 +219,47 @@ class AppComponentFactory(object):
 
 ## START HACKING
     def create_login_form_if_not_exists(self, uie):
-        if hasattr(uie, '_django_form'):
-            return None
-        prim_name = 'LoginForm'
-        form_id = self.form_namespace.add_import('django.forms.AuthForm', prim_name)
-        form_obj = DjangoLoginForm(form_id)
+        if hasattr(self, '_django_login_form'):
+            form_obj = self._django_login_form
+        else:
+            prim_name = 'LoginForm'
+            form_id = self.form_namespace.find_or_create_import('django.forms.AuthForm', prim_name)
+            form_obj = DjangoLoginForm(form_id)
+
         uie._django_form = form_obj
         return form_obj
 
     def create_signup_form_if_not_exists(self, uie):
-        if hasattr(uie, '_django_form'):
-            return None
-        prim_name = 'SignupForm'
-        form_id = self.form_namespace.add_import('django.forms.UserCreationForm', prim_name)
-        form_obj = DjangoLoginForm(form_id)
+        if hasattr(self, '_django_signup_form'):
+            form_obj = self._django_signup_form
+        else:
+            prim_name = 'SignupForm'
+            form_id = self.form_namespace.find_or_create_import('django.forms.UserCreationForm', prim_name)
+            form_obj = DjangoLoginForm(form_id)
         uie._django_form = form_obj
         return form_obj
 
-    def import_form_into_form_receivers_if_not_imported(self, uie):
-        if ('webapp.forms', uie._django_form.identifier) in self.fr_namespace.imports():
-            return None
-        return self.import_form_into_form_receivers(uie)
-
     def create_login_form_receiver_if_not_created(self, uie):
-        if hasattr(uie, '_django_form_receiver'):
-            return None
-        fr_id = self.fr_namespace.new_identifier('Login')
-        if 'django.auth.login' not in self.fr_namespace.imports():
-            self.fr_namespace.add_import('django.auth.login', 'auth_login')
-        fr = DjangoLoginFormReceiver(fr_id, uie._django_form.identifier)
+        if hasattr(self, '_django_login_form_receiver'):
+            fr = self._django_login_form_receiver
+        else:
+            fr_id = self.fr_namespace.new_identifier('Login')
+            if 'django.auth.login' not in self.fr_namespace.imports():
+                self.fr_namespace.find_or_create_import('django.auth.login', 'auth_login')
+            fr = DjangoLoginFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
 
     def create_signup_form_receiver_if_not_created(self, uie):
-        if hasattr(uie, '_django_form_receiver'):
-            return None
-        fr_id = self.fr_namespace.new_identifier('Sign Up')
-        if 'django.auth.login' not in self.fr_namespace.imports():
-            self.fr_namespace.add_import('django.auth.login', 'auth_login')
-        if 'django.auth.authenticate' not in self.fr_namespace.imports():
-            self.fr_namespace.add_import('django.auth.authenticate', 'authenticate')
-        fr = DjangoSignupFormReceiver(fr_id, uie._django_form.identifier)
+        if hasattr(self, '_django_signup_form_receiver'):
+            fr = self._django_signup_form_receiver
+        else:
+            fr_id = self.fr_namespace.new_identifier('Sign Up')
+            if 'django.auth.login' not in self.fr_namespace.imports():
+                self.fr_namespace.find_or_create_import('django.auth.login', 'auth_login')
+            if 'django.auth.authenticate' not in self.fr_namespace.imports():
+                self.fr_namespace.find_or_create_import('django.auth.authenticate', 'authenticate')
+            fr = DjangoSignupFormReceiver(fr_id, uie._django_form.identifier)
         uie._django_form_receiver = fr
         return fr
 
@@ -268,7 +276,7 @@ class AppComponentFactory(object):
     def import_form_into_form_receivers(self, uie):
         f = uie._django_form
         import_symbol = ('webapp.forms', f.identifier)
-        self.fr_namespace.add_import(import_symbol, f.identifier)
+        self.fr_namespace.find_or_create_import(import_symbol, f.identifier)
 
     def create_form_receiver_for_form_object(self, uie):
         fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)

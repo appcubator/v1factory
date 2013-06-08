@@ -1,6 +1,7 @@
 from app_builder.coder import Coder
 from app_builder.create_functions import AppComponentFactory
 from pyflakes.api import check
+
 import traceback
 
 def create_codes(app):
@@ -39,10 +40,8 @@ def create_codes(app):
                   # USER FORM RELATED HOOKS
                   'create login form if not exists': factory.create_login_form_if_not_exists,
                   'create signup form if not exists': factory.create_signup_form_if_not_exists,
-                  'import login form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
-                  'import signup form into form receivers if not imported': factory.import_form_into_form_receivers_if_not_imported,
-                  'create login form receiver if not created': factory.create_login_form_receiver_if_not_created,
-                  'create signup form receiver if not created': factory.create_signup_form_receiver_if_not_created,
+                  'create login form receiver if not exists': factory.create_login_form_receiver_if_not_created,
+                  'create signup form receiver if not exists': factory.create_signup_form_receiver_if_not_created,
                   'create url for form receiver if not created': factory.create_url_for_form_receiver_if_not_created,
 
     }

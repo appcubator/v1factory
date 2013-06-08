@@ -61,7 +61,10 @@ class Identifier(object):
         return self.identifier
 
     def __eq__(self, other):
-        return str(self) == other
+        if isinstance(other, basestring):
+            return self.identifier == other
+        else:
+            return NotImplemented
 
     def __init__(self, identifier, ns, ref=None, import_symbol=None):
         """Identifier represents the identifier string, the namespace it's in,
@@ -151,13 +154,31 @@ class Namespace(object):
         return candidate
 
     def get_by_ref(self, ref):
+        assert ref is not None
         for i in self.used_ids():
             if i.ref == ref:
                 return i
-        assert False, "Thing with this ref not found: %r" % ref
+        assert False, "Thing with this ref not found: %r" % (ref, )
 
-    def add_import(self, import_symbol, proposed_id):
-        return self.new_identifier(proposed_id, import_symbol=import_symbol, ignore_case=True)
+    def get_by_import(self, import_symbol):
+        assert import_symbol is not None
+        for i in self.used_ids():
+            if i.import_symbol == import_symbol:
+                return i
+        assert False, "Thing with this import not found: %r" % (import_symbol,)
+
+    def find_or_create_identifier(self, ref, proposed_id, **kwargs):
+        try:
+            return self.get_by_ref(ref)
+        except AssertionError:
+            return self.new_identifier(proposed_id, ref=ref, **kwargs)
+
+    def find_or_create_import(self, import_symbol, proposed_id, **kwargs):
+        try:
+            return self.get_by_import(import_symbol)
+        except AssertionError:
+            return self.new_identifier(proposed_id, import_symbol=import_symbol, ignore_case=True, **kwargs)
+
     # the dictionary produced is a symbol -> identifier map.
     # symbol meaning the unique internal name used to refer to the import
     def imports(self):
