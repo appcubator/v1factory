@@ -22,24 +22,37 @@ $(document).ready(function() {
         type : $(this_form).attr('method'),
         url  : $(this_form).attr('action'),
         data : $(this_form).serialize(),
+        complete : function(jqxhr, statusStr) {
+          // enable submit button 
+          $('input[type=submit]', self).removeAttr('disabled');
+        },
         success : function(data, statusStr, xhr) {
-          if (typeof(data.redirect_to) !== 'undefined') {
-            location.href = data.redirect_to;
+          if (!data.success){
+            // RENDER ERRORS ON THE FORM
+            _.each(data.errors, function(val, key, ind) {
+              if(key==='__all__') {
+                $('.form-error.field-all', self).html(val.join('<br />'));
+              } else {
+                $('.form-error.field-name-'+key, self).html(val.join('<br />'));
+              }
+            });
           } else {
-            if (!data.success){
-              _.each(data.errors, function(val, key, ind) {
-                if(key==='__all__') {
-                  $(self).find('.form-error.field-all').html(val.join('<br />'));
-                } else {
-                  $(self).find('.form-error.field-name-'+key).html(val.join('<br />'));
-                }
-              });
+            // COMPLETE THE FRONTEND SUCCESS ACTIONS
+            if (typeof(data.redirect_to) !== 'undefined') {
+              location.href = data.redirect_to;
+            } else {
+              alert("Form submitted! But... now what do I do...")
             }
           }
+        },
+        error: function(jqxhr, statusStr, errorThrown) {
+          alert('Form didn\'t submit properly... Well this is awkward.');
         }
       };
       $.ajax(ajax_info);
-      $(self).find('.form-error').html("");
+      // disable submit button 
+      $('input[type=submit]', this).attr('disabled', 'disabled');
+      $('.form-error', this).html("");
 
       return false;
 

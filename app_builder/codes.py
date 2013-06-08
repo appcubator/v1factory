@@ -137,16 +137,18 @@ class DjangoField(object):
     def kwargs(field):
         kwargs = {}
         if field.canon_type == '_CREATED':
-            kwargs['auto_now_add'] = repr(True)
+            kwargs['auto_now_add'] = True
         elif field.canon_type == '_MODIFIED':
-            kwargs['auto_now'] = repr(True)
+            kwargs['auto_now'] = True
         if field.required:
             if field.canon_type in ['text', 'email', 'image']:
                 kwargs['default'] = repr("")
             if field.canon_type in ['float', 'date']:
-                kwargs['default'] = repr(0)
+                kwargs['default'] = 0
         else:
-            kwargs['blank'] = repr(True)
+            kwargs['blank'] = True
+            if field.django_type not in ('TextField', 'CharField'):
+                kwargs['null'] = True
         return kwargs
 
 class DjangoRelatedField(object):
