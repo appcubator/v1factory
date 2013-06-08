@@ -40,7 +40,7 @@
 }
 
 .panel {
-  height: 540px;
+  height: 490px;
   display: inline-block;
   padding: 0px;
   vertical-align: top;
@@ -77,7 +77,7 @@
   display: inline-block;
   background-color: #fff;
   width: 260px;
-  height: 600px;
+  height: 490px;
   overflow-y: scroll;
 /*  border-right: 1px solid #C2D7EF;
 */ 
@@ -247,7 +247,8 @@ ul.action li:hover .add-to-list {
   background-repeat: no-repeat;
   background-size: 14px auto;
   background-position: 88% center;
-  border-bottom: 1px solid #f3f3f3;
+  border-bottom: 1px solid #cccccc;
+  border-top: 1px solid #efefef;
   position: relative;
 }
 
@@ -268,7 +269,7 @@ ul.action li:hover .add-to-list {
   display: none;
   width: 20px;
   height: 36px;
-  background-image: url(../img/right-arrow-gray.png);
+  background-image: url(../img/right-arrow-blue.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: left top;
@@ -319,14 +320,13 @@ ul.action li:hover .add-to-list {
 }
 
 .form-fields-list li:hover {
-/*  background-color: rgba(25, 142, 58, 0.3);
-*/
-  border: 1px dashed #000;
-}
+  background-color: rgba(25, 142, 58, 0.3);
+/*  border: 1px dashed #000;
+*/}
 
 .field-li-item:hover {
-  border: 1px dashed #000;
-}
+/*  border: 1px dashed #000;
+*/}
 
 h4 {
   font-weight: bold;
@@ -335,10 +335,6 @@ h4 {
 }
 
 .field-types {
-  background-color: #DFEFFF;
-  width: 220px;
-  margin-left: 20px;
-  margin-top: 10px;
 }
 
 .panel.details-panel .field-types label {
@@ -404,4 +400,17 @@ input[type="text"] {
 
 .form-editor .form-item {
   display: block;
+}
+
+.panel label.opt {
+  margin-bottom: 0;
+  padding: 4px;
+}
+
+input.field-type {
+  margin-top: 0;
+}
+
+label.header {
+  font-weight: bold;
 }

@@ -10,7 +10,12 @@ function() {
       if(bone.type) { this.set('type', bone.type); }
       this.set('label', (bone.label||bone.name));
       this.set('placeholder', (bone.placeholder||bone.name));
-      this.set('options', bone.options||[]);
+    },
+
+    toJSON: function() {
+      var json = _.clone(this.attributes);
+      if(json.displayType == "button") { json = _.omit(json, 'options'); }
+      return json;
     }
   });
 
