@@ -316,15 +316,19 @@ class AppComponentFactory(object):
         if form_model.action not in ['create', 'edit']:
             return None
         before_save_saves, after_save_saves = ([], [])
+        commit = True
         for l, r in form_model.get_actions_as_tuples():
             future_l_identifier = translate_io(l)
-            #future_l_identifier = translate(form_model.string_ref_to_inst_only(l))
+            # if the object created by the form is modified in relations, then commit=False
             if l.startswith('this.'):
-                before_save_saves.append(future_l_identifier)
+                commit = False
+            # if other objects are modified, then save them.
             else:
                 after_save_saves.append(future_l_identifier)
 
-        fr.before_save_saves = before_save_saves
+        if not commit:
+            fr.commit = False
+
         fr.after_save_saves = after_save_saves
 
 

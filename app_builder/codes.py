@@ -50,7 +50,7 @@ class DjangoCustomFormReceiver(DjangoFormReceiver):
         self.args = []
         self.locals['obj'] = self.namespace.new_identifier(saved_thing_id)
         self.relation_assignments = []
-        self.before_save_saves = []
+        self.commit = True
         self.after_save_saves = []
 
     def add_args(self, args):

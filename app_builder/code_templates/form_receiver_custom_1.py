@@ -17,14 +17,13 @@
     {% endblock %}
 
         {% block do_stuff_with_valid_form %}
-        {{obj}} = form.save(commit=False)
+        {{obj}} = form.save({% if not fr.commit %}commit=False{% endif %})
         {% for l,r in fr.relation_assignments %}
         {{ l() }} = {{ r() }}
         {% endfor %}
-        {% for l in fr.before_save_saves %}
-        {{ l() }}.save()
-        {% endfor %}
+        {% if not fr.commit %}
         {{obj}}.save()
+        {% endif %}
         {% for l in fr.after_save_saves %}
         {{ l() }}.save()
         {% endfor %}
