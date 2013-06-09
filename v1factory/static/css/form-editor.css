@@ -166,7 +166,7 @@ ul.action li:hover .add-to-list {
   border-left: 1px solid #C2D7EF;
   border-right: 1px solid #ddd;
   overflow-y: scroll;
-  padding-bottom: 60px;
+  padding-bottom: 50px;
   background-color: #fff;
 }
 
@@ -225,7 +225,7 @@ ul.action li:hover .add-to-list {
 }
 
 .action-panel {
-  position: relative;
+  position: absolute;
   margin-top: 0px;
   width: 240px;
   height: 530px;
@@ -233,6 +233,8 @@ ul.action li:hover .add-to-list {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
   overflow: hidden;
+  top: 64px;
+  left: 720px;
 }
 
 .field-li-item {
@@ -413,4 +415,57 @@ input.field-type {
 
 label.header {
   font-weight: bold;
+}
+
+.add-field-panel {
+  width: 458px;
+  position: absolute;
+  bottom: 50px;
+  left: 261px;
+  height: 50px;
+  padding: 10px;
+  background-color: #eee;
+  border-top: 1px solid #ccc;
+  text-align: right;
+}
+
+.add-field-panel .icon {
+  background-image: url(../img/add.png);
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+  background-size: 100% 100%;
+  margin-right: 6px;
+}
+
+.details-panel .table-fields-list {
+  width: 220px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #fff6bf;
+  border: 1px solid #f7da77;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.details-panel .table-fields-list li {
+  padding: 4px;
+}
+
+.details-panel .table-fields-list label {
+  width: auto;
+  background-color: transparent;
+  margin: 0;
+  margin-left: 4px;
+  display: inline-block;
+  padding: 6px;
+  border: none;
+}
+
+.details-panel .select-view .updown-handle {
+  display: none;
+}
+
+.details-panel .select-view ul {
+  width: 220px;
 }

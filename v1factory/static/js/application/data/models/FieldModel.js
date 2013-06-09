@@ -21,6 +21,23 @@ define(['backbone'], function() {
       return nlType;
     },
 
+    getNL: function() {
+      var type = this.get('type');
+
+      // if(type == "o2o"){
+      //   return 
+      // } || type == "fk") {
+      //   return this.get('entity_name');
+      // }
+      // if(type == "m2m") {
+      //   return "List of " + this.get('entity_name');
+      // }
+
+      // var nlType = this.nlTable[type];
+
+      // return nlType;
+    },
+
     nlTable: {
       "text"   : 'Text',
       "number" : 'Number',

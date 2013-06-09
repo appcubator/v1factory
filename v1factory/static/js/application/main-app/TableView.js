@@ -56,7 +56,10 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     },
 
     renderProperties: function() {
-      this.model.get('fields').each(this.appendField);
+      this.model.get('fields').each(function(fieldModel) {
+        if(fieldModel.has('related_name')) return;
+        this.appendField(fieldModel);
+      }, this);
     },
 
     clickedAddProperty: function(e) {

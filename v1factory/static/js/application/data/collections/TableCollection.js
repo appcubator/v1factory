@@ -26,6 +26,10 @@ function(TableModel) {
       });
 
       return arrFields;
+    },
+
+    getAllRelations: function() {
+      return this.reduce(function(memo, model) { return _.union(memo, model.getRelations()); }, []);
     }
   });
 

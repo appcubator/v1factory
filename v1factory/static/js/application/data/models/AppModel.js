@@ -23,6 +23,10 @@ function(AppInfoModel,
       this.set('emails', new EmailCollection(appState.emails));
     },
 
+    getCurrentPage: function() {
+      return this.currentPage;
+    },
+
     toJSON: function() {
       var json = _.clone(this.attributes);
       json.info = json.info.toJSON();

@@ -58,12 +58,6 @@ TableTemplates.Property = [
       '<option value="image" <% if(type =="image") %> selected <% %>>Image</option>',
       '<option value="date" <% if(type =="date") %> selected <% %>>Date</option>',
       '<option value="file" <% if(type =="file") %> selected <% %>>File</option>',
-      '<% _.each(entities, function(entity){ %>',
-        '<option value="single-<%- entity %>" <% if((type == "fk"||type == "o2o") && entity_name == entity) %> selected <% %>><%- entity %></option>',
-      '<% }); %>',
-      '<% _.each(entities, function(entity){ %>',
-        '<option value="m2m-<%- entity %>" <% if(type == "m2m" && entity_name == entity) %> selected <% %>>List of <%- entity %>s</option>',
-      '<% }); %>',
     '</select>',
   '</div>',
   '<div class="hi2 prop-cross" id="delete-<%- cid %>">',
@@ -162,4 +156,31 @@ TableTemplates.Navbar = [
   '<ul class="form-list offset1 hoff1">',
   '</ul>',
 '</div>'
+].join('\n');
+
+TableTemplates.NewRelationTemplate = [
+'<div class="new-relation"><%= table1.get(\'name\') %> has ',
+'<select id="relation-type-<%= table1.cid %>">',
+  '<option value="many">many <%= table2.get(\'name\') %>(s)</option>',
+  '<option value="one">a single <%= table2.get(\'name\') %></option>',
+'</select>',
+'called <input id="relation-name-<%= table1.cid %>" type="text">.',
+'</div>'
+].join('\n');
+
+TableTemplates.relationalNL = {};
+TableTemplates.relationalNL["o2o"] = [
+  "<%= owner_entity %> has a <%= entity_name %>, called <%= name %>,",
+  " and <%= entity_name %> has a <%= owner_entity %> called <%= related_name %>"
+].join('\n');
+
+TableTemplates.relationalNL["fk"] = [
+  "<%= owner_entity %> has a <%= entity_name %>, called <%= name %>,",
+  " and <%= entity_name %> has many <%= owner_entity %>(s) called <%= related_name %>"
+].join('\n');
+
+
+TableTemplates.relationalNL["m2m"] = [
+  "<%= owner_entity %> has many <%= entity_name %>(s), called <%= name %>,",
+  " and <%= entity_name %> has many <%= owner_entity %>(s) called <%= related_name %>"
 ].join('\n');

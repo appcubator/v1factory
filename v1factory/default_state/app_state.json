@@ -5,16 +5,9 @@
     },
     "users": [
         {
-            "name": "Admin",
-            "fields": []
-        },
-        {
-            "name": "Editor",
-            "fields": []
-        },
-        {
-            "name": "Member",
-            "fields": []
+            "name": "User",
+            "fields": [
+            ]
         }
     ],
     "emails": [
@@ -26,68 +19,18 @@
     ],
     "tables": [
         {
-            "name": "Class",
+            "name": "Tweet",
             "fields": [
                 {
-                    "name": "Name",
+                    "name": "Content",
                     "required": true,
                     "type": "text"
                 },
                 {
-                    "name": "Description",
-                    "required": true,
-                    "type": "text"
-                },
-                {
-                    "name": "Professor",
-                    "required": true,
+                    "name": "User",
                     "type": "fk",
-                    "entity_name": "Teacher",
-                    "related_name": "Classes"
-                }
-            ]
-        },
-        {
-            "name": "Teacher",
-            "fields": [
-                {
-                    "name": "Name",
-                    "required": true,
-                    "type": "text"
-                },
-                {
-                    "name": "Bio",
-                    "required": true,
-                    "type": "text"
-                },
-                {
-                    "name": "Favorite student",
-                    "required": true,
-                    "type": "o2o",
-                    "entity_name": "Student",
-                    "related_name": "teacher"
-                }
-            ]
-        },
-        {
-            "name": "Student",
-            "fields": [
-                {
-                    "name": "Name",
-                    "required": true,
-                    "type": "text"
-                },
-                {
-                    "name": "Bio",
-                    "required": true,
-                    "type": "text"
-                },
-                {
-                    "name": "Classes",
-                    "required": true,
-                    "entity_name": "Class",
-                    "type": "m2m",
-                    "related_name": "enrolled students"
+                    "entity_name": "User",
+                    "related_name": "Tweets"
                 }
             ]
         }

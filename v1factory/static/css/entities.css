@@ -594,3 +594,34 @@ table tr:hover td {
   border: none;
   visibility:hidden;*/
 }
+
+.relation-pane .edit-relation-div {
+  padding: 10px;
+}
+
+.relation-pane .edit-relation-div select {
+  width: 140px;
+}
+
+.relation-pane .select-view {
+  width: 100%;
+}
+
+.relation-pane .select-view li {
+  width: 100%;
+  font-size: 16px;
+  height: 40px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #fcfcfc;
+  line-height: 40px;
+  padding-left: 20px;
+  cursor: pointer;
+}
+
+.relation-pane .select-view li:hover {
+  background-color: #fcfcfc;
+}
+
+.relation-pane .select-view li:first-child {
+  border-top-color: transparent;
+}

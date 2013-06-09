@@ -4,7 +4,9 @@ define([
   'models/TableModel',
   'app/ShowDataView',
   'app/UserTableView',
-  'app/TablesView'
+  'app/TablesView',
+  'app/CreateRelationView',
+  'app/RelationsView'
 ],
 
 function(TableCollection,
@@ -12,7 +14,9 @@ function(TableCollection,
          TableModel,
          ShowDataView,
          UserTableView,
-         TablesView) {
+         TablesView,
+         CreateRelationView,
+         RelationsView) {
 
     var EntitiesView = Backbone.View.extend({
       css: 'entities',
@@ -29,6 +33,8 @@ function(TableCollection,
         iui.loadCSS(this.css);
         this.tablesView     = new TablesView(v1State.get('tables'), false);
         this.userTablesView = new TablesView(v1State.get('users'), true);
+        this.relationsView = new RelationsView();
+        this.createRelationView = new CreateRelationView();
         this.title = "Tables";
       },
 
@@ -36,12 +42,18 @@ function(TableCollection,
         var self = this;
         this.$el.html(_.template(iui.getHTML('entities-page'), {}));
         this.renderTables();
+        this.renderRelations();
         return this;
       },
 
       renderTables: function() {
         iui.get('tables').appendChild(this.tablesView.render().el);
         iui.get('users').appendChild(this.userTablesView.render().el);
+      },
+
+      renderRelations: function() {
+        iui.get('relations').appendChild(this.relationsView.render().el);
+        iui.get('relations').appendChild(this.createRelationView.render().el);
       },
 
       clickedAddUserRole: function(e) {

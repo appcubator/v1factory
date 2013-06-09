@@ -34,10 +34,12 @@ function(Backbone) {
       var self = this;
       var list = document.createElement('ul');
 
-      var currentLi = document.createElement('li');
-      currentLi.innerText = this.currentVal;
-      currentLi.className = 'selected';
-      list.appendChild(currentLi);
+      if(this.currentVal) {
+        var currentLi = document.createElement('li');
+        currentLi.innerText = this.currentVal;
+        currentLi.className = 'selected';
+        list.appendChild(currentLi);
+      }
 
       _(this.list).each(function(val, ind) {
         if(val == self.currentVal) return;
@@ -60,12 +62,13 @@ function(Backbone) {
     },
 
     expand: function(e) {
-      if(_.contains(this.list, this.currentVal)) {
-        this.el.style.height = (this.list.length) * 40 + 'px';
+      var length = this.list.length;
+
+      if(this.currentVal && !_.contains(this.list, this.currentVal)) {
+        length += 1;
       }
-      else {
-        this.el.style.height = (this.list.length + 1) * 40 + 'px';
-      }
+
+      this.el.style.height = length * 40 + 'px';
       this.expanded = true;
       if(e) e.stopPropagation();
     },
