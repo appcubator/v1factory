@@ -74,8 +74,10 @@ function(SimpleModalView, LoginModalView) {
       }, 200, function() {
         $('#id_username').focus();
       });
-      // $(window).scrollTop();
-      // 
+    });
+
+    $('#request').on('click', function(e) {
+      $('html, body').animate({ scrollTop: $(document).height()-$(window).height() }, 'slow');
     });
 
     IN.Event.on(IN, "auth", function(){ onLinkedInLogin(); });
