@@ -44,10 +44,16 @@ define([
         return json;
       },
 
-      getFormWithName: function(str) {
-        var formName = /\{\{([^\}]+)\}\}/g.exec(str)[1];
-        var formModel = this.get('forms').where({name : formName})[0];
-        return formModel;
+      getRelations: function() {
+        var relations = [];
+        this.get('fields').each(function(fieldModel) {
+          var type = fieldModel.get('type');
+          if(type == "o2o" || type == "fk" || type == "m2m") {
+            fieldModel.set('owner_entity', this.get('name'));
+            relations.push(fieldModel);
+          }
+        }, this);
+        return relations;
       }
   });
 

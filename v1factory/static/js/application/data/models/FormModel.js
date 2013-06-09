@@ -51,10 +51,19 @@ function(FormFieldCollection, ActionCollection) {
     },
 
     getRelationalActions: function(pageModel) {
-      //var userFields = pageModel.getFields();
-      //_(userFields).each(function(field) {
+      var entity = this.get('entity');
+      var possibleActions = [];
 
-      //});
+      var userFields = pageModel.getFields();
+      _(userFields).each(function(field) {
+        if(field.get('entity_name') == entity.get('name')) {
+          var action = { "set_fk": "this." + field.get('related_name'),
+                         "to_obj": "CurrentUser"};
+          possibleActions.push(action);
+        }
+      });
+
+      console.log(possibleActions);
 
       return [];
     },

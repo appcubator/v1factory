@@ -29,7 +29,6 @@ function( FieldModel,
       'click .tab.nav-tab' : 'clickedNavItem'
     },
 
-
     initialize: function(tablesCollection, isUsers){
       _.bindAll(this);
 
