@@ -69,6 +69,8 @@ class Form(DictInited, Hooked):
               'import form into form receivers',
               'create form receiver',
               'create url for form receiver',
+              'add the relation things to the form recevier',
+              'save the things that were modified in the relation step',
               # add the url to the action attribute, this happens in the "create url" phase
              )
 
@@ -212,7 +214,7 @@ class Form(DictInited, Hooked):
                 for f in filter(lambda x: isinstance(x, Form.FormInfo.FormInfoInfo.FormModelField), self.fields):
                     f.field_name = encode_braces('tables/%s/fields/%s' % (self.entity, f.field_name))
 
-            class RelationalAction(object):
+            class RelationalAction(DictInited):
                 _schema = {
                     "set_fk": {"_type": ""},
                     "to_object": {"_type": ""}
@@ -243,7 +245,7 @@ class Form(DictInited, Hooked):
 
             def get_needed_page_entities(self):
                 # collect all refs in actions
-                data_refs = ( item for item in tup for tup in self.get_actions_as_tuples() )
+                data_refs = ( item for tup in self.get_actions_as_tuples() for item in tup )
                 entities = []
 
                 for ref in data_refs:

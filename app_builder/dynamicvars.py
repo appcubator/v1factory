@@ -15,7 +15,7 @@ class Translator(object):
     def __init__(self, tables):
         self.tables = tables
 
-    def v1script_to_app_component(self, s, django_request_handler, py=False):
+    def v1script_to_app_component(self, s, django_request_handler, py=False, this_entity=None, inst_only=False):
         tokens = s.split('.')
         if tokens[0] == 'CurrentUser':
             # hard coding some shit for users
@@ -30,10 +30,12 @@ class Translator(object):
             ent = filter(lambda e: e.is_user, self.tables)[0]
             if py:
                 assert django_request_handler is not None, "Need to get the request id on the django_request_handler"
-                seed = '%s.user.get_profile()' % django_request_handler.locals['request']
+                seed = '%s.user' % django_request_handler.locals['request']
             else:
                 seed = 'user.get_profile' # this is only in template. in code, it's request.user.get_profile()
             tokens = tokens[1:]
+            if len(tokens) > 0:
+                seed += '.get_profile()'
         elif tokens[0] == 'Page':
             ent = self.tables[0].app.find('tables/%s' % tokens[1], name_allowed=True)
             assert django_request_handler is not None, "Plz provide a django_request_handler to the function for %r" % s
@@ -45,11 +47,19 @@ class Translator(object):
             seed = id_candidates[0]
             tokens = tokens[2:]
             # get the entity from the page which matches the type  
+
+        elif tokens[0] == 'this': # for forms
+            assert py, "this is a form in py code, so py must be true."
+            seed = this_entity
+            tokens = tokens[1:]
+            ent = this_entity.ref
             
         else:
             raise Exception("Not Yet Implemented: %r" % s)
 
         output_ids = [seed]
+        if inst_only:
+            tokens = []
 
         current_ent = ent
         for tok in tokens:

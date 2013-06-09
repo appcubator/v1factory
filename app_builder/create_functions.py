@@ -196,7 +196,7 @@ class AppComponentFactory(object):
         url_obj.routes.append(route)
 
         # this assumes the form receiver is the this module
-        data_string = ' '.join(['{{ Page.%s }}.id' % e.name for e in uie.get_needed_page_entities]) # result should be something like "{{ Page.Book }}.id {{ Page.Class }}.id"
+        data_string = ' '.join(['{{ Page.%s }}.id' % e.name for e in uie.container_info.form.get_needed_page_entities()]) # result should be something like "{{ Page.Book }}.id {{ Page.Class }}.id"
         if data_string != '':
             data_string += ' ' # just for formatting.
         uie.set_post_url('{%% url webapp.form_receivers.%s %s%%}' % (uie._django_form_receiver.identifier, data_string))
@@ -288,41 +288,44 @@ class AppComponentFactory(object):
 
     def create_form_receiver_for_form_object(self, uie):
         fr_id = self.fr_namespace.new_identifier(uie._django_form.identifier)
-        fr = DjangoCustomFormReceiver(fr_id, uie._django_form.identifier)
+        thing_id = uie.container_info.form.entity_resolved.name
+        fr = DjangoCustomFormReceiver(thing_id, fr_id, uie._django_form.identifier)
         args = []
-        for e in uie.get_needed_page_entities():
+        for e in uie.container_info.form.get_needed_page_entities():
             model_id = e._django_model.identifier
             inst_id = str(model_id) # Book inst should just be called book. lower casing happens in naming module
             args.append((e.name.lower()+'_id', {"model_id": model_id, "ref": e._django_model, "inst_id": inst_id})) 
+        fr.locals['obj'].ref = uie.container_info.form.entity_resolved
         fr.add_args(args)
         uie._django_form_receiver = fr
         return fr
 
     def add_relation_assignments_to_form_receiver(self, uie):
-        translate = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True)  # it's going to utilize args and locals from here.
         form_model = uie.container_info.form # bind to this name to save me some typing
+        fr = uie._django_form_receiver
+        translate = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True, this_entity=fr.locals['obj'])  # it's going to utilize args and locals from here.
         if form_model.action not in ['create', 'edit']:
             return None
-        form_obj = uie._django_form_receiver
         for r in form_model.actions:
-            form_obj.relation_assignments.append((translate(r.set_fk), translate(r.to_fk)))
+            fr.relation_assignments.append((translate(r.set_fk), translate(r.to_object)))
 
     def add_saving_of_related_assignments(self, uie):
-        translate = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True)  # it's going to utilize args and locals from here.
+        fr = uie._django_form_receiver
+        translate_io = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True, this_entity=fr.locals['obj'], inst_only=True)  # it's going to utilize args and locals from here.
         form_model = uie.container_info.form # bind to this name to save me some typing
         if form_model.action not in ['create', 'edit']:
             return None
-        form_obj = uie._django_form_receiver
         before_save_saves, after_save_saves = ([], [])
         for l, r in form_model.get_actions_as_tuples():
-            future_l_identifier = translate(self.string_ref_to_inst_only(l))
-            if l.startswith('this'):
-                before_save_saves.add(future_l_identifier)
+            future_l_identifier = translate_io(l)
+            #future_l_identifier = translate(form_model.string_ref_to_inst_only(l))
+            if l.startswith('this.'):
+                before_save_saves.append(future_l_identifier)
             else:
-                after_save_saves.add(future_l_identifier)
+                after_save_saves.append(future_l_identifier)
 
-        form_obj.before_save_saves = before_save_saves
-        form_obj.after_save_saves = after_save_saves
+        fr.before_save_saves = before_save_saves
+        fr.after_save_saves = after_save_saves
 
 
 

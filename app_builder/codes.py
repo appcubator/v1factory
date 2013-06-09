@@ -43,11 +43,12 @@ class DjangoFormReceiver(object):
         return env.get_template('form_receiver.py').render(fr=self, imports=self.namespace.imports(), locals=self.locals)
 
 
-class DjangoCustomFormReceiver(object):
+class DjangoCustomFormReceiver(DjangoFormReceiver):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, saved_thing_id, *args, **kwargs):
         super(DjangoCustomFormReceiver, self).__init__(*args, **kwargs)
         self.args = []
+        self.locals['obj'] = self.namespace.new_identifier(saved_thing_id)
         self.relation_assignments = []
         self.before_save_saves = []
         self.after_save_saves = []

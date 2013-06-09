@@ -1,4 +1,5 @@
-test_json = r"""{
+test_json = r"""
+{
     "name": "NewestApp",
     "info": {
         "keywords": "",
@@ -8,91 +9,46 @@ test_json = r"""{
     },
     "users": [
         {
-        "name": "User",
-        "fields": []}],
+            "name": "User",
+            "fields": [
+                {
+                    "name": "company",
+                    "type": "fk",
+                    "entity_name": "Company",
+                    "related_name": "members"
+                }
+            ]
+        }
+    ],
     "tables": [
         {
-            "name": "Game",
+            "name": "Company",
             "fields": [
                 {
                     "name": "Name",
-                    "type": "text",
-                    "required": true
+                    "type": "text"
                 },
                 {
                     "name": "Description",
-                    "type": "text",
-                    "required": false
-                },
-                {
-                    "name": "Rating",
-                    "type": "number",
-                    "required": false
-                },
-                {
-                    "name": "Picture",
-                    "type": "image",
-                    "required": false
-                },
-                {
-                    "name": "models",
-                    "type": "image",
-                    "required": false
+                    "type": "text"
                 }
-            ],
-            "forms": []
-        },{
-                    "name":"Class",
-                    "fields": [{
-                            "name":"Name",
-                            "required":true,
-                            "type":"text"
-                        },{
-                            "name":"Description",
-                            "required":true,
-                            "type":"text"
-                        },{
-                            "name":"Professor",
-                            "required":true,
-                            "type": "fk",
-                            "entity_name": "Teacher",
-                            "related_name": "Classes"
-                        }]
-                },{
-                    "name":"Teacher",
-                    "fields": [{
-                            "name":"Name",
-                            "required":true,
-                            "type":"text"
-                        },{
-                            "name":"Bio",
-                            "required":true,
-                            "type":"text"
-                        },{
-                            "name":"Favorite student",
-                            "required":true,
-                            "type":"o2o",
-                            "entity_name": "Student",
-                            "related_name": "teacher"
-                        }]
-                },{
-                    "name":"Student",
-                    "fields": [{
-                            "name":"Name",
-                            "required":true,
-                            "type":"text"
-                        },{
-                            "name":"Bio",
-                            "required":true,
-                            "type":"text"
-                        },{
-                            "name": "Classes",
-                            "required":true,
-                            "entity_name":"Class",
-                            "type": "m2m",
-                            "related_name": "enrolled students"
-                        }]
+            ]
+        },
+        {
+            "name": "Tweet",
+            "fields": [
+                {
+                    "name": "Content",
+                    "type": "text"
+                },
+                {
+                    "name": "tweeter",
+                    "type": "fk",
+                    "entity_name": "User",
+                    "related_name": "tweets"
                 }
+            ]
+        }
     ],
     "pages": [
         {
@@ -125,17 +81,17 @@ test_json = r"""{
             "uielements": [
                 {
                     "layout": {
-                        "top": 0,
-                        "height": 9,
-                        "width": 12,
+                        "top": 3,
+                        "height": 7,
+                        "width": 8,
                         "alignment": "center",
-                        "left": 0,
+                        "left": 2,
                         "t_padding": 15,
                         "b_padding": 15,
                         "l_padding": 0,
                         "r_padding": 0
                     },
-                    "type":"node",
+                    "type": "node",
                     "data": {
                         "style": "font-size: 32px;\nfont-weight: bold;",
                         "isSingle": false,
@@ -148,62 +104,15 @@ test_json = r"""{
                         "type": "headerTexts",
                         "activeStyle": "",
                         "context": null
-                    }
+                    },
+                    "context": null
                 },
                 {
                     "layout": {
-                        "width": 4,
-                        "top": 12,
-                        "height": 15,
-                        "left": 0,
-                        "t_padding": 0,
-                        "b_padding": 0,
-                        "l_padding": 0,
-                        "r_padding": 0,
-                        "alignment": "left"
-                    },
-                    "type": "form",
-                    "data": {
-                        "content": "",
-                        "container_info": {
-                            "uielements": [],
-                            "form": {
-                                "fields": [
-                                    {
-                                        "field_name": "Name",
-                                        "placeholder": "Name",
-                                        "label": "Name",
-                                        "displayType": "single-line-text",
-                                        "type": "text",
-                                        "options": []
-                                    },
-                                    {
-                                        "field_name": "Description",
-                                        "placeholder": "Description",
-                                        "label": "Desc",
-                                        "displayType": "paragraph-text",
-                                        "type": "password",
-                                        "options": []
-                                    },
-                                    {
-                                        "placeholder": "Submit"
-                                    }
-                                ],
-                                "entity": "Game",
-                                "action": "create",
-                                "goto": { "page_name":"Homepage", "urldata":{} },
-                                "belongsTo": null
-                            }
-                        },
-                        "content_attribs": {},
-                        "context": null
-                    }
-                },{
-                    "layout": {
-                        "width": 4,
-                        "top": 12,
-                        "height": 15,
-                        "left": 4,
+                        "width": 3,
+                        "top": 15,
+                        "height": 16,
+                        "left": 2,
                         "t_padding": 0,
                         "b_padding": 0,
                         "l_padding": 0,
@@ -239,19 +148,26 @@ test_json = r"""{
                                 ],
                                 "entity": "User",
                                 "action": "login",
-                                "goto": { "page_name":"Homepage", "urldata":{} },
-                                "belongsTo": null
+                                "goto": {
+                                    "page_name": "Homepage",
+                                    "urldata": {}
+                                },
+                                "belongsTo": null,
+                                "name": "",
+                                "actions": []
                             }
                         },
                         "content_attribs": {},
                         "context": null
-                    }
-                },{
+                    },
+                    "context": null
+                },
+                {
                     "layout": {
-                        "width": 4,
-                        "top": 12,
-                        "height": 15,
-                        "left": 8,
+                        "width": 3,
+                        "top": 15,
+                        "height": 27,
+                        "left": 7,
                         "t_padding": 0,
                         "b_padding": 0,
                         "l_padding": 0,
@@ -264,7 +180,7 @@ test_json = r"""{
                         "container_info": {
                             "uielements": [],
                             "form": {
-                                "fields":[
+                                "fields": [
                                     {
                                         "name": "username",
                                         "placeholder": "Username",
@@ -299,87 +215,234 @@ test_json = r"""{
                                     },
                                     {
                                         "placeholder": "Sign Up"
-                                    }],
+                                    }
+                                ],
                                 "entity": "User",
                                 "action": "signup",
-                                "goto": { "page_name":"Homepage", "urldata":{} },
-                                "belongsTo": null
+                                "goto": {
+                                    "page_name": "Homepage",
+                                    "urldata": {}
+                                },
+                                "belongsTo": null,
+                                "name": "",
+                                "actions": []
                             }
                         },
                         "content_attribs": {},
                         "context": null
-                    }
-                }],
+                    },
+                    "context": null
+                }
+            ],
             "name": "Homepage",
             "access_level": "all",
             "page_name": "Homepage",
-            "ind": 0
+            "ind": 0,
+            "user_roles": [
+                null
+            ]
         },
         {
+            "name": "create a company",
             "url": {
-                "urlparts": ["game", {"entity_name":"Game"}, {"entity_name":"Class"}]
-            },
-            "navbar": {
-                "isFixed": true,
-                "brandName": "AlperGamez",
-                "isHidden": false,
-                "links": [
-                    {
-                        "url": "internal://Homepage",
-                        "title": "Homepage"
-                    }
+                "urlparts": [
+                    "create_a company"
                 ]
             },
-            "footer": {
-                "customText": "",
-                "isFixed": true,
-                "brandName": "AlperGamez",
-                "isHidden": false,
-                "links": [
-                    {
-                        "url": "internal://Homepage",
-                        "title": "Homepage"
-                    }
-                ]
-            },
+            "access_level": "all",
             "uielements": [
                 {
                     "layout": {
-                        "top": 0,
-                        "height": 9,
-                        "width": 12,
-                        "alignment": "center",
-                        "left": 0,
-                        "t_padding": 15,
-                        "b_padding": 15,
+                        "top": 5,
+                        "left": 4,
+                        "height": 21,
+                        "width": 4,
+                        "t_padding": 0,
+                        "b_padding": 0,
                         "l_padding": 0,
-                        "r_padding": 0
+                        "r_padding": 0,
+                        "alignment": "left"
                     },
-                    "type":"node",
                     "data": {
-                        "style": "font-size: 32px;\nfont-weight: bold;",
+                        "container_info": {
+                            "entity": "Company",
+                            "action": "create",
+                            "form": {
+                                "entity": "Company",
+                                "name": "",
+                                "fields": [
+                                    {
+                                        "name": "Name",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "label": "Name",
+                                        "placeholder": "Name"
+                                    },
+                                    {
+                                        "name": "Description",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "label": "Description",
+                                        "placeholder": "Description"
+                                    },
+                                    {
+                                        "name": "Submit",
+                                        "type": "button",
+                                        "label": " ",
+                                        "displayType": "button",
+                                        "placeholder": "Submit"
+                                    }
+                                ],
+                                "action": "create",
+                                "actions": [
+                                    {
+                                        "set_fk": "CurrentUser.company",
+                                        "to_object": "this"
+                                    }
+                                ],
+                                "belongsTo": null
+                            },
+                            "uielements": []
+                        },
+                        "content_attribs": {}
+                    },
+                    "context": null,
+                    "container_info": null,
+                    "type": "form"
+                }
+            ],
+            "navbar": {
+                "brandName": null,
+                "isHidden": false,
+                "isFixed": true,
+                "links": []
+            },
+            "footer": {
+                "customText": "Add custom footer text here",
+                "isHidden": false,
+                "isFixed": true,
+                "links": []
+            },
+            "page_name": "create a company",
+            "ind": 1,
+            "user_roles": [
+                null
+            ]
+        },
+        {
+            "name": "create a tweet",
+            "url": {
+                "urlparts": [
+                    "create_a tweet"
+                ]
+            },
+            "access_level": "all",
+            "uielements": [
+                {
+                    "layout": {
+                        "top": 13,
+                        "left": 4,
+                        "height": 14,
+                        "width": 4,
+                        "t_padding": 0,
+                        "b_padding": 0,
+                        "l_padding": 0,
+                        "r_padding": 0,
+                        "alignment": "left"
+                    },
+                    "data": {
+                        "container_info": {
+                            "entity": "Tweet",
+                            "action": "create",
+                            "form": {
+                                "entity": "Tweet",
+                                "name": "",
+                                "fields": [
+                                    {
+                                        "name": "Content",
+                                        "displayType": "single-line-text",
+                                        "type": "text",
+                                        "label": "Content",
+                                        "placeholder": "Content"
+                                    },
+                                    {
+                                        "name": "Submit",
+                                        "type": "button",
+                                        "label": " ",
+                                        "displayType": "button",
+                                        "placeholder": "Submit"
+                                    }
+                                ],
+                                "action": "create",
+                                "actions": [
+                                    {
+                                        "set_fk": "this.tweeter",
+                                        "to_object": "CurrentUser"
+                                    }
+                                ],
+                                "belongsTo": null
+                            },
+                            "uielements": []
+                        },
+                        "content_attribs": {}
+                    },
+                    "context": null,
+                    "container_info": null,
+                    "type": "form"
+                },
+                {
+                    "layout": {
+                        "top": 0,
+                        "left": 2,
+                        "height": 9,
+                        "width": 9,
+                        "t_padding": 0,
+                        "b_padding": 0,
+                        "l_padding": 0,
+                        "r_padding": 0,
+                        "alignment": "left"
+                    },
+                    "data": {
+                        "nodeType": "headerTexts",
                         "isSingle": false,
                         "content_attribs": {},
                         "hoverStyle": "",
                         "class_name": "header-1",
-                        "container_info": null,
-                        "content": "GAMEPAGE<br> {{ CurrentUser.First Name }}{{ Page.Game.Description }}{{ Page.Class.Professor.Favorite student.teacher.Favorite student.Bio }}",
+                        "content": "Create a tweet and it will add it to your tweets automatically",
                         "tagName": "h1",
-                        "type": "headerTexts",
-                        "activeStyle": "",
-                        "context": null
-                    }
-                }],
-            "name": "game page",
-            "access_level": "all"
-        }],
+                        "activeStyle": ""
+                    },
+                    "context": null,
+                    "type": "node"
+                }
+            ],
+            "navbar": {
+                "brandName": null,
+                "isHidden": false,
+                "isFixed": true,
+                "links": []
+            },
+            "footer": {
+                "customText": "Add custom footer text here",
+                "isHidden": false,
+                "isFixed": true,
+                "links": []
+            },
+            "page_name": "create a tweet",
+            "ind": 2,
+            "user_roles": [
+                null
+            ]
+        }
+    ],
     "emails": [
         {
             "content": "Dear {{User.First_Name}},\n\nThanks for signing up!\n\n- {{AppName}} Team",
             "name": "Welcome Email",
             "subject": "Thanks for Signing up!"
         }
-    ]
+    ],
+    "mobilePages": []
 }"""
 
 import simplejson

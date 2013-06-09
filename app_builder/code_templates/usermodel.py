@@ -7,6 +7,6 @@
 {% block class_name %}{{model.user_profile_identifier}}{% endblock %}
 
     {% block fields %}
-    {{ super() }}
+{{ super() }}
     {{user}} = {{models}}.OneToOneField({{User}}, blank=True, null=True) # Application code will ensure this is not null.
     {% endblock %}
