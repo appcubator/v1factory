@@ -43,6 +43,7 @@ TableTemplates.Table = [
       '</span>',
     '</div>',
   '</div>',
+  '<div class="hi2 span58"></div>',
 '</div>'
 ].join('\n');
 
@@ -148,6 +149,7 @@ TableTemplates.UserTable = [
       '</span>',
     '</div>',
     '</div>',
+    '<div class="hi2 span58"></div>',
   '</div>'
 ].join('\n');
 

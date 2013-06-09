@@ -1,10 +1,10 @@
 <script type="text/template" id="app-main-page">
-    <div class="row hoff1 span58">
-      <h2 class="span48 hoff1">{{ app.name }}</h2>
+    <div class="row hoff2 span58">
+      <h2 class="span48 pheader">{{ app.name }}</h2>
       <div class="pane deploy-pane span10 hi3 right">
         <div class="hi3 span10 deploy" id="deploy"><h4 class="hoff1 offset3">Deploy</h4></div>
       </div>
-      <hr class="span58 hoff2">
+      <hr class="span58 pheader">
     </div>
     <div class="row hoff1 span58 notice">
       <h3 class="hoff1">Thank you for joining Appcubator Private Beta program!</h3>
@@ -57,7 +57,7 @@
 <div class="container">
   <div class="row hoff1">
     <div class="span58">
-      <h2 class="hoff1">Domain & SEO</h2>
+      <h2 class="pheader">Domain & SEO</h2>
       <hr class="hoff2">
       <div class="hoff2 span12">
         <div class="navigator">
@@ -124,31 +124,31 @@
 </script>
 
 <script type="text/template" id="entities-page">
-<div class="container hoff1" id="entities-page">
+<div class="container hoff2" id="entities-page">
   <div class="span58">
-    <h2>User Tables</h2>
+    <h2 class="pheader">User Tables</h2>
     <input class="right hoff2" id="add-role-form" style="display: none; height: 45px" placeholder="User Role Name:">
     <div class="button right" id="add-role">
       <span class="add-icon"></span><span>Add User Role</span>
     </div>
-    <hr class="span58 hoff1">
   </div>
-  <div class="span58" id="users">
+  <hr class="span58 pheader">
+  <div class="span58 hoff1" id="users">
     <div id="user-entity"></div>
   </div>
   <div class="span58" style="height: 45px;"></div>
-  <div class="span58">
-    <h2 class="hoff2">Tables</h2>
-    <input class="right hoff2" id="add-entity-form" style="display: none; height: 45px" placeholder="Table Name:">
-    <div class="button right hoff2" id="add-entity">
+  <div class="span58 hoff2">
+    <h2 class="pheader">Tables</h2>
+    <input class="right" id="add-entity-form" style="display: none; height: 45px" placeholder="Table Name:">
+    <div class="button right" id="add-entity">
       <span class="add-icon"></span><span>Add Table</span>
     </div>
     <hr class="span58 hoff1">
   </div>
   <div class="span58" id="tables"></div>
   <div class="span58" style="height: 50px;"></div>
-  <div class="span58">
-    <h2 class="hoff2">Relations</h2>
+  <div class="span58hoff2">
+    <h2 class="pheader">Relations</h2>
     <hr class="span58 hoff1">
   </div>
   <div class="span58" id="relations"></div>
@@ -157,18 +157,18 @@
 </script>
 
 <script type="text/template" id="pages-page">
-<div class="span58">
+<div class="span58 hoff2">
     <div id="web-section">
-      <h2 class="hoff2">Pages</h2>
-      <hr class="span58 hoff2">
+      <h2 class="pheader">Pages</h2>
+      <hr class="span58 pheader">
       <div class="" id="list-pages">
       </div>
-      <div class="add-box create-page" id="create-page-box">
-        <div class="box-button span62 hoff2">
+      <div class="add-box create-page span18 pane hi22" id="create-page-box">
+        <div class="box-button span18 hoff2">
           <img src="/static/img/add.png" class="span3 add-img">
           <h2 class="offset1">Create a New Page</h2>
         </div>
-        <form class="page-view span18 hi21 offsetr1 pane create-form" style="display:none;">
+        <form class="page-view span18 hi21 offsetr1 create-form" style="display:none;">
           <div class="hoff2">
             <input type="text" class="page-name span12 offset2" placeholder="Page Name">
           </div>
@@ -176,13 +176,13 @@
         </form>
       </div>
     </div>
-    <div id="mobile-section">
-      <h2 class="hoff2">Mobile Pages</h2>
-      <hr class="span58 hoff2">
+    <div id="mobile-section" class="hoff2 span58">
+      <h2 class="header">Mobile Pages</h2>
+      <hr class="span58">
       <div class="" id="list-mobile-pages">
       </div>
-      <div class="add-box create-page" id="create-mobile-page-box">
-        <div class="box-button span62 hoff2">
+      <div class="add-box create-page span18 pane hi22" id="create-mobile-page-box">
+        <div class="box-button span18 hoff2">
           <img src="/static/img/add.png" class="span3 add-img">
           <h2 class="offset1">Create a New Page</h2>
         </div>
@@ -313,9 +313,9 @@
 </script>
 
 <script type="text/template" id="emails-page">
-  <div class="span58">
-    <h2 class="hoff2">Emails</h2>
-    <hr class="hoff2">
+  <div class="span58 hoff2">
+    <h2 class="pheader">Emails</h2>
+    <hr class="pheader">
     <div class="span58 hoff1">
       <div class="left-bar span12">
         <ul id="email-list" class="left-nav"></ul>
@@ -342,4 +342,9 @@
     </div>
   </div>
 </script>
-
+<script type="text/template" id="themes-page">
+  <div class="span58 hoff1">
+    <h2 class="pheader">Themes</h2>
+    <hr class="span58 pheader">
+  </div>
+</script>

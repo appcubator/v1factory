@@ -22,7 +22,7 @@ function( FieldModel,
     tagName    : 'div',
     collection : null,
     currentTable : null,
-    className : 'pane entity-pane',
+    className : '',
     tableDiv: null,
 
     events : {
@@ -40,8 +40,8 @@ function( FieldModel,
 
     render: function() {
       var self = this;
-      this.renderNav();
-      this.renderTable();
+      //this.renderNav();
+      this.renderTables();
       return this;
     },
 
@@ -59,6 +59,10 @@ function( FieldModel,
       return this;
     },
 
+    renderTables: function() {
+      this.collection.each(this.renderTable);
+    },
+
     renderTable: function(newModel) {
       if(this.currentTable) {
         this.currentTable.remove();
@@ -73,11 +77,13 @@ function( FieldModel,
         var model = this.collection.models[0];
       }
 
-      if(this.isUsers) this.currentTable = new UserTableView(model);
-      else this.currentTable = new TableView(model);
+      var table;
 
-      this.tableDiv.appendChild(this.currentTable.render().el);
-      this.activateTab(model);
+      if(this.isUsers) table = new UserTableView(model);
+      else table = new TableView(model);
+
+      this.el.appendChild(table.render().el);
+      //this.activateTab(model);
 
       return this;
     },
@@ -110,9 +116,9 @@ function( FieldModel,
     },
 
     newTable: function(newModel) {
-      this.appendNavItem(newModel);
-      this.$('.tab').removeClass('active')
-          .filter('#navtab-'+newModel.cid).addClass('active');
+      //this.appendNavItem(newModel);
+      //this.$('.tab').removeClass('active')
+      //    .filter('#navtab-'+newModel.cid).addClass('active');
       this.renderTable(newModel);
     }
   });

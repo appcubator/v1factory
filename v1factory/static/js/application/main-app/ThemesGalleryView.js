@@ -18,9 +18,7 @@ function(ThemeDisplayView) {
 
     render: function() {
       var self = this;
-      self.el.innerHTML = ['<div class="span58">',
-                           '<h2 class="hi3">Themes</h2>',
-                           '<hr class="span58">'].join('\n');
+      this.$el.html(_.template(iui.getHTML('themes-page'), {}));
 
       self.listView = document.createElement('ul');
       self.listView.className = 'theme-gallery';

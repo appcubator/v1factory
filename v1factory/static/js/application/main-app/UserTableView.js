@@ -13,7 +13,6 @@ function(FieldModel, TableView, UploadExcelView, ShowDataView) {
     tagName    : 'div',
     collection : null,
     parentName : "",
-    className  : 'span58',
 
     initialize: function(userTableModel){
       _.bindAll(this);

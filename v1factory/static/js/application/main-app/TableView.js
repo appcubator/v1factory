@@ -12,7 +12,7 @@ function(FieldModel, UploadExcelView, ShowDataView) {
     tagName    : 'div',
     collection : null,
     parentName : "",
-    className  : 'span58',
+    className  : 'span58 pane entity-pane hboff3',
 
     events : {
       'click .add-property-button' : 'clickedAddProperty',
