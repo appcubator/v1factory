@@ -18,7 +18,6 @@ env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader(
 class EntityField(DictInited):
     _schema = {
         "name": {"_type": ""},
-        "required": {"_type": True},
         "type": {"_type": ""}
     }
 
@@ -29,7 +28,6 @@ class EntityField(DictInited):
 class EntityRelatedField(DictInited, Resolvable):
     _schema = { 
         "name": {"_type": ""},
-        "required": {"_type": True},
         "type": {"_type":""}, # one to one, many to one, many to many
         "entity_name": {"_type" : ""},
         'related_name': {"_type": ""}
@@ -63,7 +61,7 @@ class UserRole(DictInited):
         #"name": {"_type":""}, # TODO
         "fields": {
             "_type": [],
-            "_each": {"_one_of":[{"_type": EntityField}, {"_type": EntityRelatedField}]}
+            "_each": {"_one_of":[{"_type": EntityRelatedField}, {"_type": EntityField}]}
         }
     }
 

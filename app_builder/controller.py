@@ -36,6 +36,8 @@ def create_codes(app):
                   'create url for form receiver': factory.create_url_for_form_receiver,
                   'import form into form receivers': factory.import_form_into_form_receivers,
                   # I put this in import form into the create url step 'set post url for form': factory.set_post_url_for_form,
+                  'add the relation things to the form recevier': factory.add_relation_assignments_to_form_receiver,
+                  'save the things that were modified in the relation step': factory.add_saving_of_related_assignments,
 
                   # USER FORM RELATED HOOKS
                   'create login form if not exists': factory.create_login_form_if_not_exists,
@@ -78,9 +80,9 @@ def create_codes(app):
         create('view for page', p)
         create('url to serve page', p)
 
+    create('init template v1script translator', app)
 
     # UIELEMENT HOOKS
-    create('init template v1script translator', app)
     for p in app.pages:
         for uie in p.uielements:
             for hook_name in uie.hooks:
@@ -89,6 +91,8 @@ def create_codes(app):
                 except Exception, e:
                     print "Failed to call hook %r on %r instance" % (hook_name, uie.__class__.__name__)
                     traceback.print_exc()
+                    raise
+
 
 
     # translation of {{ page.book.name }} to proper django template code

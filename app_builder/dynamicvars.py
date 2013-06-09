@@ -15,34 +15,51 @@ class Translator(object):
     def __init__(self, tables):
         self.tables = tables
 
-    def v1script_to_app_component(self, s, page=None):
+    def v1script_to_app_component(self, s, django_request_handler, py=False, this_entity=None, inst_only=False):
         tokens = s.split('.')
         if tokens[0] == 'CurrentUser':
             # hard coding some shit for users
             if s == 'CurrentUser.First Name':
-                return 'user.first_name'
+                return lambda: 'user.first_name'
             if s == 'CurrentUser.Last Name':
-                return 'user.last_name'
+                return lambda: 'user.last_name'
             if s == 'CurrentUser.username':
-                return 'user.username'
+                return lambda: 'user.username'
             if s == 'CurrentUser.Email':
-                return 'user.email'
+                return lambda: 'user.email'
             ent = filter(lambda e: e.is_user, self.tables)[0]
-            seed = 'user.get_profile' # this is only in template. in code, it's request.user.get_profile()
+            if py:
+                assert django_request_handler is not None, "Need to get the request id on the django_request_handler"
+                seed = '%s.user' % django_request_handler.locals['request']
+            else:
+                seed = 'user.get_profile' # this is only in template. in code, it's request.user.get_profile()
             tokens = tokens[1:]
+            if len(tokens) > 0:
+                seed += '.get_profile()'
         elif tokens[0] == 'Page':
             ent = self.tables[0].app.find('tables/%s' % tokens[1], name_allowed=True)
-            assert page is not None, "Plz provide a page to the function for %r" % s
-            id_candidates = [ data['template_id'] for arg, data in page._django_view.args if data['template_id'].ref == ent._django_model ]
+            assert django_request_handler is not None, "Plz provide a django_request_handler to the function for %r" % s
+            if py:
+                id_candidates = [ data['inst_id'] for arg, data in django_request_handler.args if data['inst_id'].ref == ent._django_model ]
+            else:
+                id_candidates = [ data['template_id'] for arg, data in django_request_handler.args if data['template_id'].ref == ent._django_model ]
             assert len(id_candidates) == 1, 'Found %d arguments in the view function with the matching djangomodel.' % len(id_candidates)
             seed = id_candidates[0]
             tokens = tokens[2:]
             # get the entity from the page which matches the type  
+
+        elif tokens[0] == 'this': # for forms
+            assert py, "this is a form in py code, so py must be true."
+            seed = this_entity
+            tokens = tokens[1:]
+            ent = this_entity.ref
             
         else:
             raise Exception("Not Yet Implemented: %r" % s)
 
-        output_str = '' + str(seed)
+        output_ids = [seed]
+        if inst_only:
+            tokens = []
 
         current_ent = ent
         for tok in tokens:
@@ -68,6 +85,6 @@ class Translator(object):
                 except IndexError:
                     raise Exception("Couldn't find field with the name or related name: %r" % tok)
 
-            output_str += '.%s' % i
+            output_ids.append(i)
 
-        return output_str
+        return lambda: '.'.join([str(i) for i in output_ids])

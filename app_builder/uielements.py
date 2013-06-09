@@ -69,6 +69,8 @@ class Form(DictInited, Hooked):
               'import form into form receivers',
               'create form receiver',
               'create url for form receiver',
+              'add the relation things to the form recevier',
+              'save the things that were modified in the relation step',
               # add the url to the action attribute, this happens in the "create url" phase
              )
 
@@ -212,15 +214,48 @@ class Form(DictInited, Hooked):
                 for f in filter(lambda x: isinstance(x, Form.FormInfo.FormInfoInfo.FormModelField), self.fields):
                     f.field_name = encode_braces('tables/%s/fields/%s' % (self.entity, f.field_name))
 
+            class RelationalAction(DictInited):
+                _schema = {
+                    "set_fk": {"_type": ""},
+                    "to_object": {"_type": ""}
+                }
+                # in the strings, "this" will refer to the instance of the entity being created in the form
+                # set fk could be something like, "this.teacher" or "CurrentUser.mygroup".
+                # to object could be something like, "Page.Teacher" or "Page.Group"
+
             _schema = {
                 "entity": {"_type": ""},
                 "action": {"_type": ""},
                 "fields": {"_type": [], "_each": {"_one_of": [{"_type": FormModelField},{"_type": FormNormalField},{"_type": ButtonField}]}},
                 #"goto": {"_type": LinkLang},
-                "belongsTo": {"_one_of": [{"_type": ""}, {"_type": None}]}  # TODO may have reference
+                "belongsTo": {"_one_of": [{"_type": ""}, {"_type": None}]},  # TODO may have reference
+                "actions": {"_type": [], "_default": [], "_each": {"_type": RelationalAction}}
             }
 
             _resolve_attrs = (('entity', 'entity_resolved'),)
+
+            def get_actions_as_tuples(self):
+                return [(a.set_fk, a.to_object) for a in self.actions]
+
+            def string_ref_to_inst_only(self, s):
+                if s.startswith('Page') or s.startswith('Loop'):
+                    return ''.join(s.split('.')[:2])
+                return s.split('.')[0]
+
+
+            def get_needed_page_entities(self):
+                # collect all refs in actions
+                data_refs = ( item for tup in self.get_actions_as_tuples() for item in tup )
+                entities = []
+
+                for ref in data_refs:
+                    toks = ref.split('.')
+                    if toks[0] == 'Page':
+                        name_of_type_of_inst_needed_from_page = toks[1]
+                        entity = self.app.find('entities/%s' % name, name_allowed=True)
+                        entities.append(entity)
+                return entities
+
 
         _schema = {
             "form": {"_type": FormInfoInfo}
@@ -282,7 +317,11 @@ class Node(DictInited, Hooked):  # a uielement with no container_info
             pass
 
     def html(self):
-        tag = Tag(self.tagName, self.kwargs(), content=self.content)
+        try:
+            content = self.content()
+        except TypeError:
+            content = self.content
+        tag = Tag(self.tagName, self.kwargs(), content=content)
         return tag
 
 class Iterator(DictInited, Hooked):

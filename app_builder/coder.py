@@ -78,6 +78,7 @@ class Coder(object):
 
                 except SyntaxError:
                     traceback.print_exc()
+                    print code
                     continue
                 else:
                     code = autopep8.fix_string(code)
