@@ -13,6 +13,10 @@ function() {
         return "Go to " + this.get('pageName');
       }
 
+      if(this.get('type') == "relation") {
+        if(this.get('nl_description')) return this.get('nl_description');
+      }
+
       return this.get('type');
     }
   });

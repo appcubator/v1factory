@@ -51,12 +51,13 @@ function(FormFieldModel, TutorialView) {
       this.model.get('actions').bind('remove', this.actionRemoved);
       this.model.bind('change:action', this.reRenderFields);
 
+      this.possibleActions =  this.model.getRelationalActions(v1State.getCurrentPage());
+
       this.render();
 
       if(this.model.get('fields').models.length > 0) {
         this.selectedNew(_.first(this.model.get('fields').models));
       }
-
       this.callback = callback;
     },
 
@@ -68,9 +69,8 @@ function(FormFieldModel, TutorialView) {
       temp_context.entity = self.entity;
       temp_context.pages = v1State.get('pages').models;
       temp_context.emails = ["Email 1", "Email 2"];
-      temp_context.possibleActions = this.model.getRelationalActions(v1State.getCurrentPage());
       temp_context.possibleEntities = _.map(appState.users.fields, function(field) { return "CurrentUser." + field.name; });
-
+      temp_context.possibleActions =  this.possibleActions;
       var html = _.template(FormEditorTemplates.template, temp_context);
       this.el.innerHTML = html;
 
@@ -338,6 +338,11 @@ function(FormFieldModel, TutorialView) {
         var pageId = target.id.replace('page-','');
         this.model.get('actions').removePageRedirect();
         this.model.get('actions').addRedirect(v1State.get('pages').get(pageId));
+      }
+      else {
+        var ind = e.target.id.replace('action-','');
+        var action = _.clone(this.possibleActions[ind]);
+        this.model.get('actions').push(action);
       }
     },
 

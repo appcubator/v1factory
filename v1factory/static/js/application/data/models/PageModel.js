@@ -48,7 +48,7 @@ function(UrlModel, NavbarModel, FooterModel, ContainerWidgetModel, WidgetModel, 
 
     getFields: function() {
       var access = this.get('access_level');
-      if(access == "all") { return []; }
+      if(access == "all") { return v1State.get('users').getCommonProps(); }
       if(access == "all-users") { return v1State.get('users').getCommonProps(); }
 
       var model = v1State.get('users').getUserEntityWithName(access);
