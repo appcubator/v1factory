@@ -37,7 +37,6 @@ def create_codes(app):
                   'import form into form receivers': factory.import_form_into_form_receivers,
                   # I put this in import form into the create url step 'set post url for form': factory.set_post_url_for_form,
                   'add the relation things to the form recevier': factory.add_relation_assignments_to_form_receiver,
-                  'save the things that were modified in the relation step': factory.add_saving_of_related_assignments,
 
                   # USER FORM RELATED HOOKS
                   'create login form if not exists': factory.create_login_form_if_not_exists,

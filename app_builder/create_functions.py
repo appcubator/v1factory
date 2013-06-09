@@ -5,6 +5,7 @@ from app_builder.codes import DjangoPageView, DjangoTemplate
 from app_builder.codes import DjangoURLs, DjangoStaticPagesTestCase, DjangoQuery
 from app_builder.codes import DjangoForm, DjangoFormReceiver, DjangoCustomFormReceiver
 from app_builder.codes import DjangoLoginForm, DjangoLoginFormReceiver, DjangoSignupFormReceiver
+from app_builder.codes.utils import AssignStatement, FnCodeChunk
 from app_builder.imports import create_import_namespace
 from app_builder import naming
 from app_builder.dynamicvars import Translator
@@ -77,8 +78,8 @@ class AppComponentFactory(object):
             # TODO FIXME potential bugs with related name and field name since they are really injected into the model.Model instance namespace
             rel_name_id = rel_model.namespace.new_identifier(f.related_name, ref=rel_model)
 
-# TODO FIGURE THIS OUT (required)            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, f.required)
-            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, False)
+            quote = not f.entity.is_user
+            df = m.create_relational_field(f.name, f.type, rel_model_id, rel_name_id, False, quote=quote)
                         # the django model will create an identifier based on
                         # the name
             f._django_field_identifier = df.identifier
@@ -306,25 +307,32 @@ class AppComponentFactory(object):
         translate = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True, this_entity=fr.locals['obj'])  # it's going to utilize args and locals from here.
         if form_model.action not in ['create', 'edit']:
             return None
-        for r in form_model.actions:
-            fr.relation_assignments.append((translate(r.set_fk), translate(r.to_object)))
-
-    def add_saving_of_related_assignments(self, uie):
-        fr = uie._django_form_receiver
-        translate_io = lambda s: self.v1_translator.v1script_to_app_component(s, uie._django_form_receiver, py=True, this_entity=fr.locals['obj'], inst_only=True)  # it's going to utilize args and locals from here.
-        form_model = uie.container_info.form # bind to this name to save me some typing
-        if form_model.action not in ['create', 'edit']:
-            return None
-        before_save_saves, after_save_saves = ([], [])
+        # figure out which LHS things need to be bound to an identifier.
+        # more than 1 dot => needs binding!
+        new_var_map = {}
+        after_save_saves = []
         commit = True
         for l, r in form_model.get_actions_as_tuples():
-            future_l_identifier = translate_io(l)
+            # translate and evalute the left side for some analysis
+            translated_l = translate(l)() # translate returns a lambda
+            toks = translated_l.split('.')
+            if len(toks) > 2:
+                attr = toks[-1]
+                new_bind_name = fr.namespace.new_identifier('%s parent' % attr) # todo put type of obj
+                a = AssignStatement(new_bind_name, FnCodeChunk(lambda: '.'.join(str(translate(l)).split('.')[:-1])))
+                fr.pre_relation_assignments.append(a)
+                new_var_map[l] = FnCodeChunk(lambda: '%s.%s' % (new_bind_name, attr))
+
+            a = AssignStatement(new_var_map.get(l, translate(l)), translate(r))
+            fr.relation_assignments.append(a)
+
             # if the object created by the form is modified in relations, then commit=False
             if l.startswith('this.'):
                 commit = False
             # if other objects are modified, then save them.
             else:
-                after_save_saves.append(future_l_identifier)
+                after_save_saves.append(FnCodeChunk(lambda: '.'.join(str(new_var_map.get(l, translate(l))).split('.')[:-1])))
+
 
         if not commit:
             fr.commit = False

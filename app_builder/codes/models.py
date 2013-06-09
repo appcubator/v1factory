@@ -21,7 +21,6 @@ class DjangoField(object):
                  '_MODIFIED': 'DateTimeField',
                  'email': 'EmailField',
                  'image': 'TextField',
-
                  }
 
     def __init__(self, identifier, canonical_type, required=False, parent_model=None):
@@ -58,7 +57,7 @@ class DjangoRelatedField(object):
         'o2o': 'OneToOneField',
     }
 
-    def __init__(self, identifier, relation_type, rel_model_id, rel_name_id, required=True, parent_model=None):
+    def __init__(self, identifier, relation_type, rel_model_id, rel_name_id, required=True, parent_model=None, quote=True):
         self.identifier = identifier
         self.rel_type = relation_type
         self.django_type = self.__class__._type_map[relation_type]
@@ -66,7 +65,10 @@ class DjangoRelatedField(object):
         self.model = parent_model
         self.rel_model_id = rel_model_id
         self.rel_name_id = rel_name_id
-        self.args = [repr(str(rel_model_id))]
+        if quote:
+            self.args = [repr(str(rel_model_id))]
+        else:
+            self.args = [str(rel_model_id)]
 
     def kwargs(field):
         kwargs = {}
@@ -93,11 +95,11 @@ class DjangoModel(object):
         self.fields.append(f)
         return f
 
-    def create_relational_field(self, name, relation_type, rel_model_id, rel_name_id, required):
+    def create_relational_field(self, name, relation_type, rel_model_id, rel_name_id, required, quote=True):
         assert relation_type in ['o2o', 'm2m', 'fk']
         identifier = self.namespace.new_identifier(name)
         f = DjangoRelatedField(
-            identifier, relation_type, rel_model_id, rel_name_id, required=required, parent_model=self)
+            identifier, relation_type, rel_model_id, rel_name_id, required=required, parent_model=self, quote=quote)
         self.fields.append(f)
         return f
 

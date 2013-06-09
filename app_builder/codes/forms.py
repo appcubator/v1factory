@@ -28,6 +28,7 @@ class DjangoLoginForm(DjangoForm):
 
     def __init__(self, identifier):
         self.identifier = identifier
+        self.namespace = naming.Namespace(parent_namespace=identifier.ns) # this is necessary so the coder can get imports from the namespace
         self.code_path = 'webapp/forms.py'
 
     def render(self):

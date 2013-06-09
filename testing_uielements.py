@@ -246,7 +246,7 @@ test_json = r"""
             "name": "create a company",
             "url": {
                 "urlparts": [
-                    "create_a company"
+                    "create_a_company"
                 ]
             },
             "access_level": "all",
@@ -333,7 +333,7 @@ test_json = r"""
             "name": "create a tweet",
             "url": {
                 "urlparts": [
-                    "create_a tweet"
+                    "create_a_tweet"
                 ]
             },
             "access_level": "all",

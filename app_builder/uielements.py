@@ -70,7 +70,6 @@ class Form(DictInited, Hooked):
               'create form receiver',
               'create url for form receiver',
               'add the relation things to the form recevier',
-              'save the things that were modified in the relation step',
               # add the url to the action attribute, this happens in the "create url" phase
              )
 
