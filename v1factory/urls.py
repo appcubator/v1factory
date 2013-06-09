@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^tutorial/$', 'v1factory.base_views.tutorial'),
     url(r'^ping/$', 'v1factory.base_views.ping'),
     url(r'^whatisthis/$', 'v1factory.base_views.marketing'),
+    url(r'^backend/', include('app_builder.urls')),
 )
 
 urlpatterns += patterns('v1factory.views',

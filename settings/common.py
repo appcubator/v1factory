@@ -113,7 +113,7 @@ INSTALLED_APPS = (
     'south',
     'djcelery',
     'kombu.transport.django',
-    'less'
+    'less',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
