@@ -53,8 +53,8 @@ function(FormFieldCollection, ActionCollection) {
     getRelationalActions: function(pageModel) {
       var entity = this.get('entity');
       var possibleActions = [];
-
       var userFields = pageModel.getFields();
+
       _(userFields).each(function(field) {
         if(field.get('entity_name') == entity.get('name')) {
           var action = { "set_fk": "this." + field.get('related_name'),
@@ -63,9 +63,18 @@ function(FormFieldCollection, ActionCollection) {
         }
       });
 
-      console.log(possibleActions);
+      entity.get('fields').each(function(field) {
+        if(field.get('entity_name') == "User") {
+          var nlDescr = "Add to CurrentUser." + field.get('related_name');
+          var action = { "type": "relation",
+                         "set_fk": "this." + field.get('name'),
+                         "to_obj": "CurrentUser",
+                         "nl_description": nlDescr};
+          possibleActions.push(action);
+        }
+      });
 
-      return [];
+      return possibleActions;
     },
 
     toJSON: function() {

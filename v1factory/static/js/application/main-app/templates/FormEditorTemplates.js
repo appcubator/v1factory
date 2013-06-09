@@ -52,8 +52,8 @@ FormEditorTemplates.redirectActions = [
 ].join('\n');
 
 FormEditorTemplates.relationalActions = [
-  '<% _(possibleActions).each(function(action) {  %>',
-    '<li class="action page-redirect" id="page-<%= page.cid %>">Go to <%= page.get("name") %><div class="add-to-list"></div></li>',
+  '<% _(possibleActions).each(function(action, ind) { %>',
+    '<li class="action relations" id="action-<%= ind %>"><%= action.nl_description %><div class="add-to-list"></div></li>',
   '<% });%>'
 ].join('\n');
 
