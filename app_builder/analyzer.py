@@ -3,6 +3,7 @@
 from dict_inited import DictInited
 import os
 import os.path
+import re
 
 from app_builder.analyzer_utils import encode_braces, decode_braces
 from app_builder.resolving import Resolvable, LinkLang, EntityLang
@@ -111,6 +112,16 @@ class Page(DictInited):
             "urlparts": {"_type": [], "_each": {"_one_of": [{"_type": ""}, {"_type": EntityLang}]}}
         }
 
+        def is_valid(self):
+            for u in self.urlparts:
+                try:
+                    if not re.match(r'^[a-zA-Z0-9-_]+$', u):
+                        return False
+                except TypeError:
+                    pass
+            return True
+
+
     _schema = {
         "name": {"_type": ""},
         "url": {"_type": URL},
@@ -167,6 +178,9 @@ class App(DictInited):
     def create_from_dict(cls, data, *args, **kwargs):
         # preprocess data
         self = super(App, cls).create_from_dict(data, *args, **kwargs)
+
+        for p in self.pages:
+            assert p.url.is_valid(), "Url not valid: %r" % p.url.urlparts
 
         # create the user entity based on userconfig
         userdict = {

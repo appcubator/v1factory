@@ -17,15 +17,30 @@
     {% endblock %}
 
         {% block do_stuff_with_valid_form %}
-        {{obj}} = form.save(commit=False)
-        {% for l,r in fr.relation_assignments %}
-        {{ l() }} = {{ r() }}
+        {{obj}} = form.save({% if not fr.commit %}commit=False{% endif %})
+
+        {% for x in fr.pre_relation_assignments %}
+        {% if loop.first %}
+        # bind some variables
+        {% endif %}
+        {{ x }}
         {% endfor %}
-        {% for l in fr.before_save_saves %}
-        {{ l() }}.save()
+
+        {% for x in fr.relation_assignments %}
+        {% if loop.first %}
+        # set foreign keys
+        {% endif %}
+        {{ x }}
         {% endfor %}
-        {{obj}}.save()
+
+        {% if not fr.commit %}
+        {{obj}}.save() # persist the object to the DB
+        {% endif %}
+
         {% for l in fr.after_save_saves %}
+        {% if loop.first %}
+        # save the related objects
+        {% endif %}
         {{ l() }}.save()
         {% endfor %}
         # TODO: redirect or refresh page.

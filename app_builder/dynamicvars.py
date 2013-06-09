@@ -6,6 +6,7 @@ Page.<name of ent>.<property_of_ent>+   (need to be passed in tables and page)  
 NYI: Loop.
 """
 
+from codes.utils import FnCodeChunk
 
 class Translator(object):
     """
@@ -15,18 +16,28 @@ class Translator(object):
     def __init__(self, tables):
         self.tables = tables
 
+    def tokenize(self, s):
+        return s.split('.')
+
+    def toks_to_django_toks_w_types(self, tokens):
+        """Page.book.stores => [(None, book obj), (get_stores(), store list)] """
+
+    def toks_to_exp(self, tokens):
+        """Page.book.stores => lambda x: [(x, book obj), (get_stores(), store list)] """
+
+
     def v1script_to_app_component(self, s, django_request_handler, py=False, this_entity=None, inst_only=False):
         tokens = s.split('.')
         if tokens[0] == 'CurrentUser':
             # hard coding some shit for users
             if s == 'CurrentUser.First Name':
-                return lambda: 'user.first_name'
+                return FnCodeChunk(lambda: 'user.first_name')
             if s == 'CurrentUser.Last Name':
-                return lambda: 'user.last_name'
+                return FnCodeChunk(lambda: 'user.last_name')
             if s == 'CurrentUser.username':
-                return lambda: 'user.username'
+                return FnCodeChunk(lambda: 'user.username')
             if s == 'CurrentUser.Email':
-                return lambda: 'user.email'
+                return FnCodeChunk(lambda: 'user.email')
             ent = filter(lambda e: e.is_user, self.tables)[0]
             if py:
                 assert django_request_handler is not None, "Need to get the request id on the django_request_handler"
@@ -87,4 +98,4 @@ class Translator(object):
 
             output_ids.append(i)
 
-        return lambda: '.'.join([str(i) for i in output_ids])
+        return FnCodeChunk(lambda: '.'.join([str(i) for i in output_ids]))

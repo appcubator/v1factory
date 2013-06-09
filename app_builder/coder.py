@@ -40,10 +40,9 @@ class Coder(object):
             code = '\n\n'.join([ c.render() for c in codes ])
 
             if relative_path.endswith('.py'):
-                # try to compile the code to prevent syntax errors
-                # TODO Fix the modules
                 try:
                     try:
+                        # get the base imports
                         imports = codes[0].namespace.imports().items() # tuples (import symbol, identifier to use)
                     except AttributeError:
                         imports = []
@@ -73,8 +72,9 @@ class Coder(object):
                     try:
                         compile(code + "\n", relative_path, "exec")
                     except IndentationError:
+                        traceback.print_exc()
                         print code
-                        raise
+                        continue
 
                 except SyntaxError:
                     traceback.print_exc()
