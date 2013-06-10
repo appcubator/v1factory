@@ -3,7 +3,7 @@ from app_builder.analyzer import App
 from app_builder.controller import create_codes
 from app_builder.coder import Coder, write_to_fs
 import traceback
-from shell import shell
+from shell import Shell
 import os.path
 
 
@@ -32,10 +32,29 @@ def main():
         return (4, "Could not write code. Traceback: %s" % traceback.format_exc())
 
     # syncdb
+
+    sh = Shell()
+    cd = "cd %s" % tmp_dir
+    chdir_then = lambda x: "%s ; %s" % (cd, x)
+
+    sh.run(chdir_then('python manage.py syncdb --noinput'))
+    errors = sh.errors()
+    if len(errors) > 0:
+        return (5, repr(errors))
+
+    sh.run(chdir_then('python manage.py runserver'))
+    errors = sh.errors()
+    if len(errors) > 0:
+        return (6, repr(errors))
+
+    sh.run(chdir_then('python manage.py test webapp'))
+    errors = sh.errors()
+    if len(errors) > 0:
+        return (7, repr(errors))
     # runserver
     # run tests
 
-    return (0, "success")
+    return (0, "success: %s" % tmp_dir)
 
 
 
