@@ -11,7 +11,8 @@ require.config({
     "editor" : "./../editor",
     "dicts" : "../../dicts",
     "mixins" : "../../mixins",
-    "key" : "../../libs/keymaster/keymaster"
+    "key" : "../../libs/keymaster/keymaster",
+    "prettyCheckable" : "../../libs/jquery/prettyCheckable"
   },
 
   shim: {
@@ -28,6 +29,9 @@ require.config({
     },
     "bootstrap" : {
       deps: ["jquery"]
+    },
+    "prettyCheckable" : {
+      deps: ["jquery"]
     }
   }
 
@@ -35,11 +39,13 @@ require.config({
 
 require([
   'mixins/SimpleModalView',
-  'app/main-app/LoginModalView'
+  'app/main-app/LoginModalView',
+  'prettyCheckable'
 ],
 function(SimpleModalView, LoginModalView) {
 
   var HomeMain = function() {
+
     var xTrans = -30;
     var yTrans = 45;
     var pageHeight = $(window).height();
@@ -105,6 +111,10 @@ function(SimpleModalView, LoginModalView) {
     $('#login-btn').on('click', function() {
       new LoginModalView();
     });
+
+    iui.loadCSS('prettyCheckable');
+    $('input[type=checkbox]').prettyCheckable();
+    $('input[type=radio]').prettyCheckable();
   };
 
   new HomeMain();

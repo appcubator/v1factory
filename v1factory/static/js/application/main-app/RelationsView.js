@@ -8,7 +8,7 @@ function(SelectView) {
     tagName    : 'div',
     collection : null,
     parentName : "",
-    className  : 'span58 pane relation-pane',
+    className  : 'span58 relation-pane',
 
     events : {
 

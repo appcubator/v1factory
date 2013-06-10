@@ -49,6 +49,7 @@ define([
 			var self = this;
 			$('#save').on('click', this.save);
 			$('#tutorial').on('click', this.showTutorial);
+      keyDispatcher.key('⌘+s, ctrl+s', this.save);
 		},
 
 		index: function () {
@@ -173,7 +174,7 @@ define([
 				});
 		},
 
-		save: function() {
+		save: function(e) {
 			iui.startAjaxLoading();
 			appState = v1State.toJSON();
 			$.ajax({
@@ -191,6 +192,8 @@ define([
 					},
 					dataType: "JSON"
 			});
+
+			e.preventDefault();
 		},
 
 		showTutorial: function(e, inp) {

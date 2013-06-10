@@ -72,12 +72,12 @@ function (AppModel,
   v1State.set('pages', new PageCollection(appState.pages||[]));
   v1State.set('mobilePages', new MobilePageCollection(appState.mobilePages||[]));
 
-  v1 = {};
-  v1 = new AppRouter();
-
   g_guides = {};
   keyDispatcher  = new KeyDispatcher();
   mouseDispatcher  = new MouseDispatcher();
+
+  v1 = {};
+  v1 = new AppRouter();
   routeLogger = new RouteLogger({router: v1});
 
   Backbone.history.start({pushState: true});

@@ -171,18 +171,25 @@ TableTemplates.NewRelationTemplate = [
 ].join('\n');
 
 TableTemplates.relationalNL = {};
+
 TableTemplates.relationalNL["o2o"] = [
+'<div class="pane span58 hi4 hboff2">',
   "<%= owner_entity %> has a <%= entity_name %>, called <%= name %>,",
-  " and <%= entity_name %> has a <%= owner_entity %> called <%= related_name %>"
+  " and <%= entity_name %> has a <%= owner_entity %> called <%= related_name %>",
+'</div>'
 ].join('\n');
 
 TableTemplates.relationalNL["fk"] = [
+'<div class="pane span58 hi4 hboff2">',
   "<%= owner_entity %> has a <%= entity_name %>, called <%= name %>,",
-  " and <%= entity_name %> has many <%= owner_entity %>(s) called <%= related_name %>"
+  " and <%= entity_name %> has many <%= owner_entity %>(s) called <%= related_name %>",
+'</div>'
 ].join('\n');
 
 
 TableTemplates.relationalNL["m2m"] = [
+'<div class="pane span58 hi4 hboff2">',
   "<%= owner_entity %> has many <%= entity_name %>(s), called <%= name %>,",
-  " and <%= entity_name %> has many <%= owner_entity %>(s) called <%= related_name %>"
+  " and <%= entity_name %> has many <%= owner_entity %>(s) called <%= related_name %>",
+'</div>'
 ].join('\n');
