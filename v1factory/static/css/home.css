@@ -452,12 +452,15 @@ background-image: -webkit-linear-gradient(top, #fafafa,#ffffff 25%);
 }
 
 .slide-last .sign-up-form {
-  width: 600px;
   display: inline-block;
   color: #fff;
   margin-top: 80px;
   text-align: center;
   vertical-align: middle;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 4px;
 }
 
 .sign-up-form .left-side {
@@ -543,8 +546,40 @@ background-image: -webkit-linear-gradient(top, #fafafa,#ffffff 25%);
   width: 140px;
 }
 
+.gray-bg {
+  position: absolute;
+  background-color: rgba(30, 30, 30, 0.8);
+  color: #fff;
+  text-shadow: black 0 1px 1px;
+  display: inline-block;
+  font-size: 20px;
+  border-radius: 6px;
+  bottom: 30px;
+  height: 50px;
+  line-height: 50px;
+  opacity: 0.6;
+  text-align: center;
+  cursor: pointer;
+  left: 50%;
+  width: 154px;
+  margin-left: -77px;
+}
 
+.gray-bg .icon-down {
+  background-image: url(../img/arrow-small.png);
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-size: 100% 100%;
+  vertical-align: top;
+  margin-top: 10px;
+  margin-left: 6px;
+}
 
+.gray-bg:hover {
+  opacity: 1;
+
+}
 
 img.logo {
   margin-top: 20px;
@@ -563,8 +598,16 @@ img.logo {
   background-color: #3B5998;
 }
 
+.btn-facebook:hover {
+  background-color: #2B4988;
+}
+
 .btn-linkedin {
   background-color: #007bb6;
+}
+
+.btn-linkedin:hover {
+  background-color: #006ba6;
 }
 
 @-moz-keyframes spinningH {
@@ -645,12 +688,6 @@ img.logo {
   margin: 0 auto;
   height: 50px;
   width: 50px;
-/*
-  -webkit-transition  : -webkit-transform 2s linear;
-  -moz-transition     : -moz-transform 2s linear;
-  -o-transition       : -o-transform 2s linear;
-  -ms-transition      : -ms-transform 2s linear;
-  transition          : transform 2s linear;*/
 
   -webkit-transform-style : preserve-3d;
   -moz-transform-style    : preserve-3d;
