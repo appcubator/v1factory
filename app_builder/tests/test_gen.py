@@ -47,18 +47,22 @@ class TestGenerator(object):
         s['pages'] = []
         s['entities'] = []
         s['users'] = {}
-        s['tables']
+        s['tables'] = []
         s['info'] = {}
+
+        return s
 
 
 class IsComprehensiveTestCase(unittest.TestCase):
 
     def setUp(self):
         t = TestGenerator()
-        d = t.make_state()
-        self.app = App.create_from_dict(d)
+        self.d = t.make_state()
+        #self.app = App.create_from_dict(d)
 
     def test_has_multiple_entities(self):
+        import pprint
+        pprint.pprint(self.d)
         pass
 
     def test_each_entity_has_multiple_primitive_fields_of_all_types(self):
