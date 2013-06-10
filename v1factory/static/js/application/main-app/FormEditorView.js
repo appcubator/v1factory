@@ -366,6 +366,7 @@ function(FormFieldModel, TutorialView) {
       this.entity.get('fields').each(function(field) {
         html += '<li><input type="radio" class="new-field-option" name="tablefields" id="tablefield-'+field.cid+'"><label for="tablefield-'+field.cid+'">'+ field.get('name') +'</label></li>';
       });
+      html += '<li><input type="radio" class="new-field-option" name="tablefields" id="new-tablefield"><label for="new-tablefield">Add A New Field</label></li>';
       html += '</ul>';
       this.$el.find('.details-panel').append(html);
     }
